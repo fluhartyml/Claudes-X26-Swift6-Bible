@@ -137,6 +137,27 @@ struct VaultWebView: PlatformViewRepresentable {
           if (!body) return;
           body.contentEditable = 'true';
           body.spellcheck = true;
+
+          // In contentEditable, tapping a link normally puts the cursor
+          // inside instead of navigating. Mark every <a> contentEditable=
+          // 'false' so taps behave as ordinary link activations and
+          // VaultWebView's WKNavigationDelegate picks them up. Re-run on
+          // each DOM mutation so newly-inserted links are treated the
+          // same way.
+          function fixLinks(root){
+            var links = (root || document).querySelectorAll('a');
+            for (var i = 0; i < links.length; i++) {
+              links[i].setAttribute('contenteditable', 'false');
+            }
+          }
+          fixLinks(document);
+          var mo = new MutationObserver(function(muts){
+            for (var i = 0; i < muts.length; i++) {
+              fixLinks(muts[i].target);
+            }
+          });
+          mo.observe(body, { childList: true, subtree: true });
+
           var timer = null;
           function send(){
             try {
