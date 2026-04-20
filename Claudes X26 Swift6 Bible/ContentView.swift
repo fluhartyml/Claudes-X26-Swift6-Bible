@@ -65,28 +65,30 @@ struct ContentView: View {
     }
 
     private var vaultPicker: some View {
-        VStack(spacing: 16) {
+        VStack(spacing: 14) {
             Spacer()
             Image(systemName: "books.vertical")
-                .font(.system(size: 48))
+                .font(.system(size: 36))
                 .foregroundStyle(.secondary)
-            Text("Choose the Bible vault folder.")
+            Text("Choose a vault")
                 .font(.headline)
-            Text("Expected location:\n~/Developer.complex/Claudes-Xcode-26-Swift-Bible/")
-                .font(.caption)
                 .multilineTextAlignment(.center)
-                .foregroundStyle(.secondary)
-            Button("Choose Vault…") {
+                .lineLimit(2)
+            Button {
                 #if os(macOS)
                 vault.chooseVaultRoot()
                 #else
                 showingFolderImporter = true
                 #endif
+            } label: {
+                Text("Choose…")
+                    .frame(maxWidth: .infinity)
             }
             .buttonStyle(.borderedProminent)
             Spacer()
         }
         .padding()
+        .frame(maxWidth: .infinity)
     }
 
     private func findNode(id: VaultNode.ID, in node: VaultNode) -> VaultNode? {
@@ -168,19 +170,23 @@ struct ContentView: View {
     }
 
     private var emptyVault: some View {
-        VStack(spacing: 12) {
-            Text("No vault open.")
-                .font(.title2)
-            Text("Use the sidebar Choose Vault… button to pick the Bible vault folder.")
+        VStack(spacing: 10) {
+            Text("No vault open")
+                .font(.title3)
+            Text("Use the sidebar to choose one.")
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)
-                .padding(.horizontal, 32)
         }
+        .padding()
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 
     private var emptyDocument: some View {
         Text("Pick a Book from the sidebar to start reading.")
             .foregroundStyle(.secondary)
+            .multilineTextAlignment(.center)
+            .padding()
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 }
 
