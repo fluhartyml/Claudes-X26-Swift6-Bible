@@ -157,6 +157,14 @@ struct ContentView: View {
                 .labelStyle(.iconOnly)
                 .help("Highlight selection")
 
+                if let doc = vault.currentDocument {
+                    ShareLink(item: doc) {
+                        Label("Share", systemImage: "square.and.arrow.up")
+                    }
+                    .labelStyle(.iconOnly)
+                    .help("Share this page")
+                }
+
                 Button {
                     textScale = max(minScale, textScale - scaleStep)
                 } label: {
@@ -223,13 +231,13 @@ struct ContentView: View {
 // MARK: - Recursive outline row
 
 struct VaultTreeOutline: View {
+    @EnvironmentObject var vault: VaultModel
     let node: VaultNode
     var isRoot: Bool = false
 
     var body: some View {
         if node.isDirectory {
             if isRoot {
-                // Don't show the root folder itself — just its children.
                 ForEach(node.children) { child in
                     VaultTreeOutline(node: child)
                 }
@@ -243,8 +251,14 @@ struct VaultTreeOutline: View {
                 }
             }
         } else {
-            labelFor(node)
-                .tag(node.id)
+            Button {
+                vault.open(node.url)
+            } label: {
+                labelFor(node)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .contentShape(Rectangle())
+            }
+            .buttonStyle(.plain)
         }
     }
 
@@ -256,9 +270,11 @@ struct VaultTreeOutline: View {
     }
 
     /// Readable display name for sidebar rows — spaces instead of dashes,
-    /// full wording, wraps to 2+ lines as needed. No abbreviations.
+    /// full wording, wraps to 2+ lines as needed. File extensions hidden.
     private func displayName(_ node: VaultNode) -> String {
-        node.name.replacingOccurrences(of: "-", with: " ")
+        let base = node.isDirectory
+            ? node.name
+            : (node.name as NSString).deletingPathExtension
+        return base.replacingOccurrences(of: "-", with: " ")
     }
-
 }
