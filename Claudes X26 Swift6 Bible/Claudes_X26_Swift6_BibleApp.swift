@@ -10,18 +10,31 @@ import SwiftUI
 @main
 struct Claudes_X26_Swift6_BibleApp: App {
     @StateObject private var vault = VaultModel()
+    @AppStorage("hasSeenOnboarding") private var hasSeenOnboarding = false
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
-                .environmentObject(vault)
-                .preferredColorScheme(.dark)
-                .frame(minWidth: 900, minHeight: 720)
+            ZStack {
+                ContentView()
+                    .environmentObject(vault)
+                    .preferredColorScheme(.dark)
+                    .frame(minWidth: 900, minHeight: 720)
+                if !hasSeenOnboarding {
+                    OnboardingView(onDismiss: { hasSeenOnboarding = true })
+                        .transition(.opacity)
+                        .zIndex(1)
+                }
+            }
         }
         #if os(macOS)
         .windowResizability(.contentSize)
         .commands {
             CommandGroup(replacing: .newItem) { }
+            CommandGroup(replacing: .appInfo) {
+                Button("About Claude's X26 Swift6 Bible") {
+                    NotificationCenter.default.post(name: .showAbout, object: nil)
+                }
+            }
             CommandMenu("Vault") {
                 Button("Go to Table of Contents") { vault.goHome() }
                     .keyboardShortcut("h", modifiers: [.command])
@@ -36,4 +49,8 @@ struct Claudes_X26_Swift6_BibleApp: App {
         }
         #endif
     }
+}
+
+extension Notification.Name {
+    static let showAbout = Notification.Name("showAbout")
 }

@@ -31,6 +31,7 @@ final class VaultModel: ObservableObject {
     // MARK: - Defaults keys
 
     private let bookmarkKey = "vaultRootBookmark"
+    private let lastPathKey = "lastDocumentPath"
 
     // MARK: - Init
 
@@ -80,7 +81,14 @@ final class VaultModel: ObservableObject {
     func setVaultRoot(_ url: URL) {
         vaultRoot = url
         rootNode = VaultNode.buildTree(at: url)
-        // Default document: table-of-contents.html, fall back to atlas or first HTML.
+        // Priority: last document the reader viewed > table of contents > atlas.
+        if let lastRel = UserDefaults.standard.string(forKey: lastPathKey) {
+            let lastURL = url.appending(path: lastRel)
+            if FileManager.default.fileExists(atPath: lastURL.path) {
+                currentDocument = lastURL
+                return
+            }
+        }
         let tocURL = url.appending(path: "table-of-contents.html")
         if FileManager.default.fileExists(atPath: tocURL.path) {
             currentDocument = tocURL
@@ -90,6 +98,16 @@ final class VaultModel: ObservableObject {
                 currentDocument = atlasURL
             }
         }
+    }
+
+    private func saveLastDocument(_ url: URL) {
+        guard let root = vaultRoot else { return }
+        let rootPath = root.path
+        let docPath = url.path
+        guard docPath.hasPrefix(rootPath) else { return }
+        var rel = String(docPath.dropFirst(rootPath.count))
+        if rel.hasPrefix("/") { rel = String(rel.dropFirst()) }
+        UserDefaults.standard.set(rel, forKey: lastPathKey)
     }
 
     /// Save a security-scoped bookmark to the chosen URL so next launch restores it.
@@ -147,6 +165,7 @@ final class VaultModel: ObservableObject {
         }
         forwardHistory.removeAll()
         currentDocument = url
+        saveLastDocument(url)
     }
 
     func goBack() {

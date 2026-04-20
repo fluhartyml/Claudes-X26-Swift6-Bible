@@ -12,6 +12,7 @@ import UniformTypeIdentifiers
 struct ContentView: View {
     @EnvironmentObject var vault: VaultModel
     @State private var showingUnderTheHood = false
+    @State private var showingAbout = false
     #if !os(macOS)
     @State private var showingFolderImporter = false
     #endif
@@ -25,6 +26,12 @@ struct ContentView: View {
         }
         .sheet(isPresented: $showingUnderTheHood) {
             UnderTheHoodView()
+        }
+        .sheet(isPresented: $showingAbout) {
+            AboutView()
+        }
+        .onReceive(NotificationCenter.default.publisher(for: .showAbout)) { _ in
+            showingAbout = true
         }
         #if !os(macOS)
         .fileImporter(
@@ -146,6 +153,14 @@ struct ContentView: View {
             }
             .labelStyle(.iconOnly)
             .help("Under the Hood — Developer Notes")
+
+            Button {
+                showingAbout = true
+            } label: {
+                Label("About", systemImage: "info.circle")
+            }
+            .labelStyle(.iconOnly)
+            .help("About")
         }
         .padding(.horizontal, 12)
         .padding(.vertical, 8)
