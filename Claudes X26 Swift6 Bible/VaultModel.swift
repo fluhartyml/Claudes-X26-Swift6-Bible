@@ -246,7 +246,7 @@ struct VaultNode: Identifiable, Hashable {
                 includingPropertiesForKeys: [.isDirectoryKey],
                 options: [.skipsHiddenFiles]
             )
-            .filter { !$0.lastPathComponent.hasPrefix("_build-") }
+            .filter { shouldShowInSidebar($0) }
             .sorted { lhs, rhs in
                 // Directories first, then logical-reading order for known
                 // top-level folders (Parts I–VI then Appendices at the
@@ -279,5 +279,22 @@ struct VaultNode: Identifiable, Hashable {
         if name.hasPrefix("Part-VI-")  { return 60 }
         if name == "Appendices"        { return 90 }
         return 100
+    }
+
+    /// Whether a URL should appear in the sidebar file tree.
+    /// Hides raw Markdown sources, asset folders, build scripts, and
+    /// legacy root-level duplicates.
+    private static func shouldShowInSidebar(_ url: URL) -> Bool {
+        let name = url.lastPathComponent
+        if name.hasPrefix(".") { return false }
+        if name.hasPrefix("_build-") { return false }
+        if name.hasSuffix(".md") { return false }                 // raw Markdown sources
+        if name == "cover.jpg" { return false }
+        if name == "figures" { return false }                     // asset folder
+        if name == "Screenshots" { return false }                 // asset folder
+        if name == "_shared" { return false }                     // shared assets
+        // Legacy root-level HTML duplicates of the Appendix content.
+        if name.hasPrefix("appendix-") && name.hasSuffix(".html") { return false }
+        return true
     }
 }
