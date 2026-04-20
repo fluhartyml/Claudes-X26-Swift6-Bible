@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Claude's Xcode 26 Swift Bible — Table of Contents</title>
 <style>
   :root {
@@ -14,6 +15,7 @@
     --hover: #332200;
   }
   * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
   body {
     background: var(--bg);
     color: var(--fg);
@@ -21,10 +23,13 @@
                  "Fira Code", "Menlo", "Courier New", monospace;
     font-size: 18pt;
     line-height: 1.55;
-    max-width: 1200px;
     margin: 0 auto;
-    padding: 2rem 2.5rem 6rem 2.5rem;
+    padding: 1rem 1.25rem 4rem 1.25rem;
     text-shadow: 0 0 1px rgba(255, 176, 0, 0.35);
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
   }
   h1 { color: var(--bright); font-weight: normal; font-size: 32pt; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; margin: 1rem 0 2rem 0; }
   h2 { color: var(--bright); font-weight: normal; font-size: 22pt; border-bottom: 1px solid var(--border); padding-bottom: 0.3rem; margin-top: 2.5rem; }
@@ -37,49 +42,61 @@
   header, footer { color: var(--dim); font-size: 13pt; }
   header { margin-bottom: 1.2rem; padding-bottom: 0.7rem; border-bottom: 1px solid var(--border); }
   footer { margin-top: 3rem; padding-top: 1rem; border-top: 1px solid var(--border); }
-  .books {
-    list-style: none;
-    padding: 0;
-    margin: 0.6rem 0;
-  }
+  /* Flowing list layout — no fixed columns, text reflows at any width. */
+  .books { list-style: none; padding: 0; margin: 0.6rem 0; }
   .books li {
-    padding: 0.4rem 0;
+    padding: 0.6rem 0;
     border-bottom: 1px dashed #1a1000;
-    display: grid;
-    grid-template-columns: 5rem 1fr auto;
-    gap: 1rem;
-    align-items: baseline;
+    overflow-wrap: break-word;
   }
   .books li:last-child { border-bottom: none; }
-  .book-num { color: var(--dim); font-size: 15pt; }
-  .book-title a { font-size: 16pt; }
-  .book-status { color: var(--dim); font-size: 13pt; font-style: italic; text-align: right; }
-  .meta-row { display: grid; grid-template-columns: 1fr auto; gap: 1rem; align-items: baseline; padding: 0.3rem 0; border-bottom: 1px dashed #1a1000; }
-  .meta-row:last-child { border-bottom: none; }
-  .meta-status { color: var(--dim); font-size: 13pt; font-style: italic; }
-  .part-note { color: var(--dim); font-size: 13pt; font-style: italic; margin-bottom: 0.4rem; }
-
-  /* Narrow-width layout (iPad sidebar split, iPhone, etc.) -------- */
-  @media (max-width: 820px) {
-    body { font-size: 19pt; padding: 1rem; line-height: 1.45; }
-    h1 { font-size: 26pt; }
-    h2 { font-size: 20pt; }
-    .intro { font-size: 15pt; }
-    .part-note { font-size: 14pt; }
-    .books li {
-      grid-template-columns: 1fr;
-      gap: 0.3rem 0;
-      padding: 0.7rem 0;
-    }
-    .book-num { font-size: 13pt; }
-    .book-title a { font-size: 19pt; }
-    .book-status { text-align: left; font-size: 13pt; }
-    .meta-row { grid-template-columns: 1fr; padding: 0.5rem 0; }
-    .meta-status { text-align: left; font-size: 13pt; }
+  .book-num { color: var(--dim); display: inline; }
+  .book-num::after { content: " — "; color: var(--dim); }
+  .book-title a { overflow-wrap: break-word; }
+  .book-status { color: var(--dim); font-style: italic; display: block; margin-top: 0.2rem; }
+  .meta-row {
+    padding: 0.6rem 0;
+    border-bottom: 1px dashed #1a1000;
+    overflow-wrap: break-word;
   }
+  .meta-row:last-child { border-bottom: none; }
+  .meta-status { color: var(--dim); font-style: italic; display: block; margin-top: 0.2rem; }
+  .part-note { color: var(--dim); font-style: italic; margin-bottom: 0.4rem; }
 </style>
 </head>
 <body>
+
+<div id="font-debug" style="padding:0.6rem 0.9rem; background:#1a0d00; border:1px solid #FFB000; color:#FFD060; margin-bottom:1rem; font-size:14pt;">
+  font-debug — loading…
+</div>
+<script>
+  (function(){
+    var body = document.body;
+    var debug = document.getElementById('font-debug');
+    function update(){
+      var cs = window.getComputedStyle(body);
+      var computedPx = parseFloat(cs.fontSize);
+      var vv = window.visualViewport;
+      var scale = vv ? vv.scale : 1;
+      var actualPx = (computedPx * scale).toFixed(1);
+      debug.innerHTML =
+        '<strong>computed:</strong> ' + cs.fontSize +
+        ' &nbsp; <strong>actual:</strong> ' + actualPx + 'px' +
+        ' &nbsp; <strong>pinch:</strong> ' + scale.toFixed(2) + '&times;' +
+        ' &nbsp; <strong>vp:</strong> ' + window.innerWidth + '&times;' + window.innerHeight +
+        ' &nbsp; <strong>dpr:</strong> ' + (window.devicePixelRatio || 1) +
+        ' &nbsp; <strong>body.zoom:</strong> ' + (body.style.zoom || '1') +
+        ' &nbsp; <strong>tsa:</strong> ' + (cs.webkitTextSizeAdjust || cs.textSizeAdjust || 'unset');
+    }
+    update();
+    window.addEventListener('resize', update);
+    if (window.visualViewport) {
+      window.visualViewport.addEventListener('resize', update);
+      window.visualViewport.addEventListener('scroll', update);
+    }
+    setInterval(update, 500);
+  })();
+</script>
 
 <header>
   File: <code>Claudes-Xcode-26-Swift-Bible/table-of-contents.html</code> &middot; the reader's entry point

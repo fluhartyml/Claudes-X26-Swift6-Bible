@@ -8,19 +8,27 @@
 
 import SwiftUI
 import UniformTypeIdentifiers
+#if canImport(UIKit)
+import UIKit
+#endif
 
 struct ContentView: View {
     @EnvironmentObject var vault: VaultModel
     @State private var showingUnderTheHood = false
     @State private var showingAbout = false
+    @AppStorage("textScale") private var textScale: Double = 1.0
     #if !os(macOS)
     @State private var showingFolderImporter = false
     #endif
 
+    private let minScale: Double = 0.7
+    private let maxScale: Double = 2.2
+    private let scaleStep: Double = 0.15
+
     var body: some View {
         NavigationSplitView {
             sidebar
-                .navigationTitle("Bible")
+                .navigationTitle("Library")
         } detail: {
             detail
         }
@@ -50,18 +58,41 @@ struct ContentView: View {
     @ViewBuilder
     private var sidebar: some View {
         if let root = vault.rootNode {
-            List(selection: $vault.selectedNodeID) {
-                VaultTreeOutline(node: root, isRoot: true)
-            }
-            .listStyle(.sidebar)
-            .onChange(of: vault.selectedNodeID) { _, newID in
-                if let id = newID, let node = findNode(id: id, in: root), !node.isDirectory {
-                    vault.open(node.url)
+            VStack(spacing: 0) {
+                debugBar
+                List(selection: $vault.selectedNodeID) {
+                    VaultTreeOutline(node: root, isRoot: true)
+                }
+                .listStyle(.sidebar)
+                .onChange(of: vault.selectedNodeID) { _, newID in
+                    if let id = newID, let node = findNode(id: id, in: root), !node.isDirectory {
+                        vault.open(node.url)
+                    }
                 }
             }
         } else {
             vaultPicker
         }
+    }
+
+    private var debugBar: some View {
+        VStack(alignment: .leading, spacing: 2) {
+            Text("DEBUG")
+                .font(.caption2).bold()
+                .foregroundStyle(Color.orange)
+            Text("textScale: \(textScale, specifier: "%.2f")")
+                .font(.caption.monospaced())
+            Text("sidebar row: .body (Dynamic Type)")
+                .font(.caption.monospaced())
+            #if canImport(UIKit)
+            Text("row pt: \(UIFont.preferredFont(forTextStyle: .body).pointSize, specifier: "%.0f")")
+                .font(.caption.monospaced())
+            #endif
+        }
+        .padding(.horizontal, 10)
+        .padding(.vertical, 8)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(Color.orange.opacity(0.15))
     }
 
     private var vaultPicker: some View {
@@ -110,6 +141,7 @@ struct ContentView: View {
                 VaultWebView(
                     documentURL: doc,
                     vaultRoot: vault.vaultRoot,
+                    textScale: textScale,
                     onInternalNavigate: { url in vault.open(url) }
                 )
             }
@@ -121,50 +153,60 @@ struct ContentView: View {
     }
 
     private var toolbar: some View {
-        HStack(spacing: 8) {
-            Button(action: vault.goBack) {
-                Image(systemName: "chevron.left")
-            }
-            .disabled(!vault.canGoBack)
+        VStack(spacing: 4) {
+            HStack(spacing: 8) {
+                Button(action: vault.goBack) {
+                    Image(systemName: "chevron.left")
+                }
+                .disabled(!vault.canGoBack)
 
-            Button(action: vault.goForward) {
-                Image(systemName: "chevron.right")
-            }
-            .disabled(!vault.canGoForward)
+                Button(action: vault.goForward) {
+                    Image(systemName: "chevron.right")
+                }
+                .disabled(!vault.canGoForward)
 
-            Button(action: vault.goHome) {
-                Image(systemName: "house")
+                Button(action: vault.goHome) {
+                    Image(systemName: "house")
+                }
+
+                Spacer()
+
+                Button {
+                    textScale = max(minScale, textScale - scaleStep)
+                } label: {
+                    Label("Smaller text", systemImage: "textformat.size.smaller")
+                }
+                .labelStyle(.iconOnly)
+                .help("Smaller text")
+                .disabled(textScale <= minScale + 0.001)
+
+                Button {
+                    textScale = min(maxScale, textScale + scaleStep)
+                } label: {
+                    Label("Larger text", systemImage: "textformat.size.larger")
+                }
+                .labelStyle(.iconOnly)
+                .help("Larger text")
+                .disabled(textScale >= maxScale - 0.001)
+
+                Menu {
+                    Button("About") { showingAbout = true }
+                    Button("Under the Hood") { showingUnderTheHood = true }
+                } label: {
+                    Label("Info", systemImage: "info.circle")
+                }
+                .labelStyle(.iconOnly)
+                .help("About & Developer Notes")
             }
 
             if let doc = vault.currentDocument {
-                Spacer(minLength: 6)
                 Text(vault.displayPath(for: doc))
-                    .font(.system(size: 10, weight: .regular, design: .monospaced))
+                    .font(.caption.monospaced())
                     .foregroundStyle(.secondary)
                     .lineLimit(1)
                     .truncationMode(.middle)
-                    .layoutPriority(1)
-                    .frame(maxWidth: .infinity)
-                Spacer(minLength: 6)
-            } else {
-                Spacer()
+                    .frame(maxWidth: .infinity, alignment: .leading)
             }
-
-            Button {
-                showingUnderTheHood = true
-            } label: {
-                Label("Under the Hood", systemImage: "gearshape.2")
-            }
-            .labelStyle(.iconOnly)
-            .help("Under the Hood — Developer Notes")
-
-            Button {
-                showingAbout = true
-            } label: {
-                Label("About", systemImage: "info.circle")
-            }
-            .labelStyle(.iconOnly)
-            .help("About")
         }
         .padding(.horizontal, 12)
         .padding(.vertical, 8)
@@ -221,60 +263,16 @@ struct VaultTreeOutline: View {
     }
 
     private func labelFor(_ node: VaultNode) -> some View {
-        Label(displayName(node), systemImage: node.symbolName)
-            .font(.footnote)
-            .lineLimit(1)
-            .truncationMode(.middle)
+        Text(displayName(node))
+            .lineLimit(nil)
+            .fixedSize(horizontal: false, vertical: true)
             .help(node.name)
     }
 
-    /// Shorter display name for folders whose raw name is unwieldy in the sidebar.
-    /// Target: ≤20 characters per `feedback_short_titles_20_chars` memory.
+    /// Readable display name for sidebar rows — spaces instead of dashes,
+    /// full wording, wraps to 2+ lines as needed. No abbreviations.
     private func displayName(_ node: VaultNode) -> String {
-        let name = node.name
-        if let short = Self.shortNames[name] { return short }
-        if name.hasPrefix("Chapter-") {
-            return name.replacingOccurrences(of: "-", with: " ")  // "Chapter A"
-        }
-        return name
+        node.name.replacingOccurrences(of: "-", with: " ")
     }
 
-    /// Manual short-title map. Every entry here is ≤20 chars.
-    private static let shortNames: [String: String] = [
-        // Parts
-        "Part-I-The-Swift-Language":    "I · Swift Language",
-        "Part-II-Introduction":         "II · Intro",
-        "Part-III-The-User-Interface":  "III · Interface",
-        "Part-IV-The-Application":      "IV · App",
-        "Part-V-Advanced-Techniques":   "V · Advanced",
-        "Part-VI-The-Modern-Toolchain": "VI · Toolchain",
-        // Books (Parts II–VI)
-        "Book-01-Introducing-Swift-And-Xcode":               "01 · Swift & Xcode",
-        "Book-02-Introducing-SwiftUI-Views":                 "02 · SwiftUI Views",
-        "Book-03-Introducing-Scenes-And-Windows":            "03 · Scenes & Windows",
-        "Book-04-Gestures-And-Input":                        "04 · Gestures",
-        "Book-05-Menus-And-Navigation":                      "05 · Menus",
-        "Book-06-Controls-Buttons-Toggles-Pickers":          "06 · Controls",
-        "Book-07-Toolbars-And-Tab-Views":                    "07 · Toolbars",
-        "Book-08-Lists-Grids-And-ForEach":                   "08 · Lists & Grids",
-        "Book-09-Text-And-TextField":                        "09 · Text",
-        "Book-10-TextEditor-And-AttributedString":           "10 · TextEditor",
-        "Book-11-FileManager-And-Documents":                 "11 · Files",
-        "Book-12-Sheets-Alerts-And-Confirmations":           "12 · Sheets",
-        "Book-13-Multi-Window-And-NavigationSplitView":      "13 · Windows",
-        "Book-14-Clipboard-DragDrop-ShareSheet":             "14 · Clipboard",
-        "Book-15-SwiftData-And-CoreData":                    "15 · SwiftData",
-        "Book-16-Extensions-And-Packages":                   "16 · Extensions",
-        "Book-17-Swift-Charts-And-PDFKit":                   "17 · Charts & PDF",
-        "Book-18-Error-Handling-And-Result-Type":            "18 · Errors",
-        "Book-19-Building-Custom-Views-And-Modifiers":       "19 · Custom Views",
-        "Book-20-Performance-Instruments-And-Best-Practices":"20 · Performance",
-        "Book-21-Git-And-GitHub":                            "21 · Git & GitHub",
-        "Book-22-AI-Chatbot-Integration":                    "22 · AI Chatbots",
-        // Appendices
-        "Appendix-A-GitHub-Setup":       "A · GitHub Setup",
-        "Appendix-B-Claudes-Web-Wrapper":"B · Web Wrapper",
-        "Appendix-C-QuickNote":          "C · QuickNote",
-        "Appendix-D-LockBox":            "D · LockBox",
-    ]
 }

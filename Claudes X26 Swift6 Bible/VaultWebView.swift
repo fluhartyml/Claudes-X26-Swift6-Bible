@@ -24,17 +24,36 @@ typealias PlatformViewRepresentable = UIViewRepresentable
 struct VaultWebView: PlatformViewRepresentable {
     let documentURL: URL?
     let vaultRoot: URL?
+    let textScale: Double
     let onInternalNavigate: (URL) -> Void
 
     // MARK: - Platform bridges
 
     #if os(macOS)
     func makeNSView(context: Context) -> WKWebView { makeWebView(context: context) }
-    func updateNSView(_ webView: WKWebView, context: Context) { loadIfNeeded(webView) }
+    func updateNSView(_ webView: WKWebView, context: Context) {
+        loadIfNeeded(webView)
+        applyTextScale(webView)
+    }
     #else
     func makeUIView(context: Context) -> WKWebView { makeWebView(context: context) }
-    func updateUIView(_ webView: WKWebView, context: Context) { loadIfNeeded(webView) }
+    func updateUIView(_ webView: WKWebView, context: Context) {
+        loadIfNeeded(webView)
+        applyTextScale(webView)
+    }
     #endif
+
+    private func applyTextScale(_ webView: WKWebView) {
+        let js = """
+        (function(){
+          var id='__claude-text-scale';
+          var s=document.getElementById(id);
+          if(!s){s=document.createElement('style');s.id=id;document.head.appendChild(s);}
+          s.textContent='body{zoom:\(textScale);}';
+        })();
+        """
+        webView.evaluateJavaScript(js)
+    }
 
     func makeCoordinator() -> Coordinator { Coordinator(self) }
 
@@ -67,6 +86,10 @@ struct VaultWebView: PlatformViewRepresentable {
     final class Coordinator: NSObject, WKNavigationDelegate {
         let parent: VaultWebView
         init(_ parent: VaultWebView) { self.parent = parent }
+
+        func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+            parent.applyTextScale(webView)
+        }
 
         func webView(
             _ webView: WKWebView,
