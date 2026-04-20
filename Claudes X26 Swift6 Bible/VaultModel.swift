@@ -43,11 +43,17 @@ final class VaultModel: ObservableObject {
 
     /// Try to locate a vault root on launch. Priority:
     ///  1. Security-scoped bookmark (user-picked vault).
-    ///  2. Bundled vault (BibleContent.bundle inside the app) — ship-path.
-    ///  3. nil — user must pick.
+    ///  2. Extracted vault in Application Support (works on both iOS + macOS).
+    ///  3. Bundled BibleContent.bundle (macOS filesystem-sync preserves it).
+    ///  4. nil — user must pick.
     private func resolveVaultRoot() {
         if let url = restoreBookmarkedRoot() {
             setVaultRoot(url)
+            return
+        }
+        if let extracted = VaultBundleExtractor.ensureExtracted(),
+           FileManager.default.fileExists(atPath: extracted.appending(path: "table-of-contents.html").path) {
+            setVaultRoot(extracted)
             return
         }
         if let bundled = Bundle.main.url(forResource: "BibleContent", withExtension: "bundle") {
