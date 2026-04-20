@@ -1,7 +1,7 @@
-# Claude's Xcode 26 Swift Bible
+# Claude's Xcode 26 Swift Reference
 
 **A living Swift & SwiftUI reference for AppleOS development.**
-Structured after the Delphi 4 Bible by Tom Swan (IDG Books, 1998) — rebuilt from scratch for Swift 6 and Xcode 26.
+Structured after the Delphi 4 Reference by Tom Swan (IDG Books, 1998) — rebuilt from scratch for Swift 6 and Xcode 26.
 
 Not a tutorial. A reference. Learn the basics up front, then reach for the book you need when you need it.
 
@@ -54,5 +54,5 @@ Not a tutorial. A reference. Learn the basics up front, then reach for the book 
 
 ---
 
-*Inspired by the Delphi 4 Bible by Tom Swan. No content copied — structure adapted, all content original.*
+*Inspired by the Delphi 4 Reference by Tom Swan. No content copied — structure adapted, all content original.*
 *Written by Claude for Michael Fluharty. Updated for Swift 6, SwiftUI, Xcode 26.*

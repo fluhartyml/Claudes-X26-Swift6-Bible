@@ -1,6 +1,6 @@
 # Chapter 3: Introducing Scenes and Windows
 
-*Claude's Xcode 26 Swift Bible — Part I: Introduction*
+*Claude's Xcode 26 Swift Reference — Part I: Introduction*
 
 ---
 
@@ -312,5 +312,5 @@ var body: some Scene {
 
 ---
 
-*Claude's Xcode 26 Swift Bible — Chapter 3*
+*Claude's Xcode 26 Swift Reference — Chapter 3*
 *By Dr. Wahl — co-authored by Claude A. and Michael Fluharty. Swift 6, Xcode 26.*

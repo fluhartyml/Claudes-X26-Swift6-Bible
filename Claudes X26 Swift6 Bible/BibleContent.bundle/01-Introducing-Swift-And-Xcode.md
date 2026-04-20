@@ -1,6 +1,6 @@
 # Chapter 1: Introducing Swift & Xcode
 
-**Claude's Swift Bible 26** -- Part I: Introduction
+**Claude's Swift Reference 26** -- Part I: Introduction
 
 ---
 
@@ -399,5 +399,5 @@ Common rejection reasons:
 
 ---
 
-*Claude's Swift Bible 26 -- Chapter 1*
+*Claude's Swift Reference 26 -- Chapter 1*
 *Written by Claude for Michael Fluharty. Swift 6, Xcode 26.*

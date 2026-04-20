@@ -1,6 +1,6 @@
 # Appendix: Building Claude's Web Wrapper (Wraply) — A Web Browser from Xcode to App Store
 
-*Claude's Xcode 26 Swift Bible — Appendix Project*
+*Claude's Xcode 26 Swift Reference — Appendix Project*
 
 ---
 
@@ -841,7 +841,7 @@ This is the first **Teaching Moment** of the submission. Apple's pre-flight catc
 
 13.7 Click **Cancel** to get out of the Validate flow. You need to change the Display Name. Go back to Xcode, click the blue Wraply project icon, click the Wraply target, go to the **General** tab (from Section 13.1), and find the **Display Name** field under the **Identity** section. Change it from **Wraply** to **Claude's Web Wrapper** (see Fig. W.24).
 
-We picked **Claude's Web Wrapper** because this app ships as a companion to Claude's X26 Swift6 Bible — tying the storefront name to the book and its author (Claude) kept the branding consistent. When you do this for your own app, the only rule is that the display name you pick must not already be taken on the App Store.
+We picked **Claude's Web Wrapper** because this app ships as a companion to Claude's X26 Swift6 Reference — tying the storefront name to the book and its author (Claude) kept the branding consistent. When you do this for your own app, the only rule is that the display name you pick must not already be taken on the App Store.
 
 While you're here, you can also check the **App Category** picker in the same Identity section. Set it to something reasonable; we will lock it in on the App Store Connect side later too. For a web browser / source code viewer, Education is the strongest choice. Books is tempting — this *is* a book companion — but Apple reads "Books" as "ebook reader or library" and tends to reject under Guideline 4.2 Minimum Functionality when the category does not match the content. We talked ourselves out of Books before the first submission attempt, and you should too.
 
@@ -913,8 +913,8 @@ Your archive is now on Apple's servers. The rest of the submission happens in th
 
 13.18 Click **Claude's Web Wrapper** to open the app page. You will see a left sidebar with sections (App Information, Pricing and Availability, App Privacy, Age Rating, App Review) and a main content area for the iOS 1.0 version page. Work through the fields:
 
-- **Promotional Text** (170 character maximum, can be updated without resubmitting): `Claude's Web Wrapper — browse the web, save bookmarks, and explore the app's own Swift source code. Companion app for Claude's X26 Swift6 Bible.`
-- **Description** (4000 character maximum): `A web browser built as a companion app for Claude's X26 Swift6 Bible. Browse any website, save bookmarks, and share pages. Under the Hood lets you read and copy every Swift source file — paste into Xcode and learn by building. Educational tool for iOS development.`
+- **Promotional Text** (170 character maximum, can be updated without resubmitting): `Claude's Web Wrapper — browse the web, save bookmarks, and explore the app's own Swift source code. Companion app for Claude's X26 Swift6 Reference.`
+- **Description** (4000 character maximum): `A web browser built as a companion app for Claude's X26 Swift6 Reference. Browse any website, save bookmarks, and share pages. Under the Hood lets you read and copy every Swift source file — paste into Xcode and learn by building. Educational tool for iOS development.`
 - **Keywords** (100 character maximum total, comma-separated with **no spaces** after the commas): `swift,xcode,learn,code,browser,bookmark,source,education,ios,development`
 - **Support URL:** `https://fluharty.me/projects/swift-bible.html` (or your own page)
 - **Marketing URL:** optional, leave blank

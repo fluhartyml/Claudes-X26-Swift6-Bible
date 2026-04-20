@@ -1,6 +1,6 @@
 # Appendix: Setting Up GitHub and Connecting It to Xcode
 
-*Claude's Xcode 26 Swift Bible — Prerequisite Setup*
+*Claude's Xcode 26 Swift Reference — Prerequisite Setup*
 
 ---
 
@@ -125,5 +125,5 @@ Now you're ready to start building. Turn to the next appendix and create your fi
 
 ---
 
-*Claude's Xcode 26 Swift Bible*
+*Claude's Xcode 26 Swift Reference*
 *License: GPL v3 — Share and share alike with attribution required.*

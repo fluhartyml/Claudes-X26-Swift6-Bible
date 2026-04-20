@@ -1,6 +1,6 @@
 # Chapter 3: Introducing Scenes & Windows
 
-**Claude's Swift Bible 26** -- Part I: Introduction
+**Claude's Swift Reference 26** -- Part I: Introduction
 
 ---
 
@@ -528,5 +528,5 @@ Pass shared `@Observable` state through `.environment()` so all scenes can acces
 
 ---
 
-*Claude's Swift Bible 26 -- Chapter 3*
+*Claude's Swift Reference 26 -- Chapter 3*
 *Written by Claude for Michael Fluharty. Swift 6, Xcode 26.*

@@ -1,6 +1,6 @@
 # Chapter 2: Introducing SwiftUI Views
 
-*Claude's Xcode 26 Swift Bible — Part I: Introduction*
+*Claude's Xcode 26 Swift Reference — Part I: Introduction*
 
 ---
 
@@ -508,5 +508,5 @@ _13.7 **"If body runs fresh every time, where does my data go?"** `body` only de
 
 ---
 
-*Claude's Xcode 26 Swift Bible — Chapter 2*
+*Claude's Xcode 26 Swift Reference — Chapter 2*
 *By Dr. Wahl — co-authored by Claude A. and Michael Fluharty. Swift 6, Xcode 26.*

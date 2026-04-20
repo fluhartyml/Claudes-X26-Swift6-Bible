@@ -1,6 +1,6 @@
 # Chapter 4: Gestures and Input
 
-*Claude's Xcode 26 Swift Bible — Part II: The User Interface*
+*Claude's Xcode 26 Swift Reference — Part II: The User Interface*
 
 ---
 
@@ -328,5 +328,5 @@ Image("photo")
 
 ---
 
-*Claude's Xcode 26 Swift Bible — Chapter 4*
+*Claude's Xcode 26 Swift Reference — Chapter 4*
 *By Dr. Wahl — co-authored by Claude A. and Michael Fluharty. Swift 6, Xcode 26.*

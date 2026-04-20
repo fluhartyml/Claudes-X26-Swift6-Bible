@@ -6,7 +6,7 @@ This appendix walks through the complete lifecycle of an iOS app — from the fi
 
 ## The Brainstorm
 
-QuickNote started as the Swift Bible's first example app. Dual purpose: a teaching vehicle for the book AND a real App Store utility. Not a throwaway exercise — a published app that readers can download and compare against the source code.
+QuickNote started as the Swift reference's first example app. Dual purpose: a teaching vehicle for the book AND a real App Store utility. Not a throwaway exercise — a published app that readers can download and compare against the source code.
 
 **v1.0 spec:**
 - Text notes with titles and dates
@@ -17,7 +17,7 @@ QuickNote started as the Swift Bible's first example app. Dual purpose: a teachi
 - Pre-dating: place notes on your future timeline (doctor visits, grocery runs)
 - Sort by dateCreated descending, not dateModified
 
-**v2.0 deferred:** Camera, document scanner, OCR (VisionKit chapters). Each Swift Bible example app gets revisited when later chapters add relevant features.
+**v2.0 deferred:** Camera, document scanner, OCR (VisionKit chapters). Each Swift Reference example app gets revisited when later chapters add relevant features.
 
 ---
 
@@ -194,7 +194,7 @@ You'll land in a different reviewer's queue. This isn't gaming the system — Ap
 
 ## Lessons for All Example Apps
 
-Every Swift Bible example app will face these same hurdles. Plan for them:
+Every Swift Reference example app will face these same hurdles. Plan for them:
 
 - **Minimum functionality** — a utility app needs more than just CRUD. Add a widget, add a Learn tab, add something that differentiates it.
 - **Apple trademark compliance** — don't use "Apple TV," "iPhone," or other Apple trademarks in your subtitle or promotional text. Use "your TV" or "your phone."

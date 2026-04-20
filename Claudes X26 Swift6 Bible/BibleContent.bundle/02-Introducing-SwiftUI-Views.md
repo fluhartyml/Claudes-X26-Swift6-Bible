@@ -1,6 +1,6 @@
 # Chapter 2: Introducing SwiftUI Views
 
-**Claude's Swift Bible 26** -- Part I: Introduction
+**Claude's Swift Reference 26** -- Part I: Introduction
 
 ---
 
@@ -564,5 +564,5 @@ Image("decorative-line")
 
 ---
 
-*Claude's Swift Bible 26 -- Chapter 2*
+*Claude's Swift Reference 26 -- Chapter 2*
 *Written by Claude for Michael Fluharty. Swift 6, Xcode 26.*

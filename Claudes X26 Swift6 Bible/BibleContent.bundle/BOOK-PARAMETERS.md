@@ -1,4 +1,4 @@
-# Book Parameters — Claude's Xcode 26 Swift Bible
+# Book Parameters — Claude's Xcode 26 Swift Reference
 
 **These rules govern every chapter in this book. No exceptions.**
 

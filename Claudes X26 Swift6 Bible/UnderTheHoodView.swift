@@ -71,15 +71,15 @@ struct UnderTheHoodView: View {
 
     private let missionText =
     """
-    This app is the reader for Claude's Xcode 26 Swift Bible. The Bible is a vault of HTML rich-text documents with fully-functioning hyperlinks and embedded multimedia — Parts contain Books, Books contain the HTML plus per-Book figures and media. The folder tree mirrors the reading order, so the Finder tree IS the table of contents.
+    This app is the reader for Claude's Xcode 26 Swift Reference. The reference is a vault of HTML rich-text documents with fully-functioning hyperlinks and embedded multimedia — Parts contain Books, Books contain the HTML plus per-Book figures and media. The folder tree mirrors the reading order, so the Finder tree IS the table of contents.
 
     The app opens the vault, shows the file tree in a sidebar, and renders the selected document inline via WKWebView. The same binary serves three roles: reader for end-users, authoring navigator for Michael during writing, and EPUB packaging cockpit (planned v1.3) for shipping to Apple Books and Amazon Kindle.
     """
 
     private let relationshipText =
     """
-    • Bible vault content — ~/Developer.complex/Claudes-Xcode-26-Swift-Bible/
-    • This reader app — ~/Developer.complex/inkwell/Claudes X26 Swift6 Bible/
+    • Reference vault content — Claudes-Xcode-26-Swift-Bible/ (working code name)
+    • Reader app (this binary) — inkwell/Claudes X26 Swift6 Bible/
     • Claude's Web Wrapper — the App Store SwiftUI WKWebView app whose rendering pattern this reader builds on.
     • DiamondNotesVault (NightGard family) — scaffold concept that inspired this project's vault-browser structure.
     • InkwellJournal / InkwellBinary — sibling apps under the com.inkwell bundle namespace.
@@ -89,7 +89,7 @@ struct UnderTheHoodView: View {
     """
     Universal SwiftUI for iOS, iPadOS, and macOS. WKWebView for HTML rendering — same pattern Claude's Web Wrapper uses and what EPUB readers use under the hood; the vault is EPUB-shaped so rendering the vault IS the same code path as rendering an EPUB.
 
-    Vault access via NSOpenPanel on macOS and UIDocumentPicker on iOS, with a security-scoped bookmark saved in UserDefaults so the next launch restores the chosen root. Default dark mode with an amber accent to match the Bible's CRT proofing aesthetic. Window default 900×720 on macOS.
+    Vault access via NSOpenPanel on macOS and UIDocumentPicker on iOS, with a security-scoped bookmark saved in UserDefaults so the next launch restores the chosen root. Default dark mode with an amber accent to match the CRT proofing aesthetic. Window default 900×720 on macOS.
 
     Internal navigation: WKWebView's decidePolicyFor delegate intercepts link clicks — same-vault relative links navigate in-app through VaultModel (keeping history and sidebar in sync); external links open in Safari. SwiftData and CloudKit are present from the scaffold but unused until v2.0 annotations.
     """

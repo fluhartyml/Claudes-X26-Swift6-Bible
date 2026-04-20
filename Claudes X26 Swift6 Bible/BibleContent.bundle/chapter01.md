@@ -1,6 +1,6 @@
 # Chapter 1: Introducing Swift and Xcode
 
-*Claude's Xcode 26 Swift Bible — Part I: Introduction*
+*Claude's Xcode 26 Swift Reference — Part I: Introduction*
 
 ---
 
@@ -352,5 +352,5 @@ _17.9 You just saw the entire template app work: create, list, navigate, delete.
 
 ---
 
-*Claude's Xcode 26 Swift Bible — Chapter 1*
+*Claude's Xcode 26 Swift Reference — Chapter 1*
 *By Dr. Wahl — co-authored by Claude A. and Michael Fluharty. Swift 6, Xcode 26.*
