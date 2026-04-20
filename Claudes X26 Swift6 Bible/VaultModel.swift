@@ -42,22 +42,18 @@ final class VaultModel: ObservableObject {
     // MARK: - Vault-root resolution
 
     /// Try to locate a vault root on launch. Priority:
-    ///  1. Security-scoped bookmark saved in UserDefaults.
-    ///  2. Known dev path (~/Developer.complex/Claudes-Xcode-26-Swift-Bible/) on macOS.
+    ///  1. Security-scoped bookmark (user-picked vault).
+    ///  2. Bundled vault (BibleContent.bundle inside the app) — ship-path.
     ///  3. nil — user must pick.
     private func resolveVaultRoot() {
         if let url = restoreBookmarkedRoot() {
             setVaultRoot(url)
             return
         }
-        #if os(macOS)
-        let home = FileManager.default.homeDirectoryForCurrentUser
-        let devPath = home.appending(path: "Developer.complex/Claudes-Xcode-26-Swift-Bible")
-        if FileManager.default.fileExists(atPath: devPath.path) {
-            setVaultRoot(devPath)
+        if let bundled = Bundle.main.url(forResource: "BibleContent", withExtension: "bundle") {
+            setVaultRoot(bundled)
             return
         }
-        #endif
     }
 
     private func restoreBookmarkedRoot() -> URL? {
