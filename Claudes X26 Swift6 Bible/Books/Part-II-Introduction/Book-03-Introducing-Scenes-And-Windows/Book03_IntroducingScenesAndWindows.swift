@@ -14,7 +14,7 @@ import SwiftUI
 struct Book03_IntroducingScenesAndWindows: View {
     var body: some View {
         BookPlaceholderView(
-            title: "Book 03: Introducing Scenes & Windows",
+            title: "Book 03: Scenes & Windows",
             vaultRelativePath: "Part-II-Introduction/Book-03-Introducing-Scenes-And-Windows/Book-03-Introducing-Scenes-And-Windows.html",
             status: "Placeholder — Markdown source exists in vault root; HTML migration is Phase 1."
         )

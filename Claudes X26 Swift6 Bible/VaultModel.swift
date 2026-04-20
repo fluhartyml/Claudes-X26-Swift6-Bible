@@ -248,10 +248,17 @@ struct VaultNode: Identifiable, Hashable {
             )
             .filter { !$0.lastPathComponent.hasPrefix("_build-") }
             .sorted { lhs, rhs in
-                // Directories first, then alphabetical.
+                // Directories first, then logical-reading order for known
+                // top-level folders (Parts I–VI then Appendices at the
+                // back), then alphabetical for everything else.
                 let lIsDir = (try? lhs.resourceValues(forKeys: [.isDirectoryKey]).isDirectory) ?? false
                 let rIsDir = (try? rhs.resourceValues(forKeys: [.isDirectoryKey]).isDirectory) ?? false
                 if lIsDir != rIsDir { return lIsDir }
+                if lIsDir {
+                    let lKey = sortKey(lhs.lastPathComponent)
+                    let rKey = sortKey(rhs.lastPathComponent)
+                    if lKey != rKey { return lKey < rKey }
+                }
                 return lhs.lastPathComponent.localizedStandardCompare(rhs.lastPathComponent) == .orderedAscending
             }
             children = entries.compactMap { buildTree(at: $0) }
@@ -259,5 +266,18 @@ struct VaultNode: Identifiable, Hashable {
             children = []
         }
         return VaultNode(id: url, url: url, name: url.lastPathComponent, isDirectory: true, children: children)
+    }
+
+    /// Logical-reading-order sort key for top-level vault folders.
+    /// Lower number sorts earlier. Unknowns fall through to alphabetical.
+    private static func sortKey(_ name: String) -> Int {
+        if name.hasPrefix("Part-I-")   { return 10 }
+        if name.hasPrefix("Part-II-")  { return 20 }
+        if name.hasPrefix("Part-III-") { return 30 }
+        if name.hasPrefix("Part-IV-")  { return 40 }
+        if name.hasPrefix("Part-V-")   { return 50 }
+        if name.hasPrefix("Part-VI-")  { return 60 }
+        if name == "Appendices"        { return 90 }
+        return 100
     }
 }
