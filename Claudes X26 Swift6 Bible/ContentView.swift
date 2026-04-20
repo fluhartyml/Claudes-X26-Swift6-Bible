@@ -137,15 +137,15 @@ struct ContentView: View {
             }
 
             if let doc = vault.currentDocument {
-                Spacer(minLength: 8)
+                Spacer(minLength: 6)
                 Text(vault.displayPath(for: doc))
-                    .font(.caption.monospaced())
+                    .font(.system(size: 10, weight: .regular, design: .monospaced))
                     .foregroundStyle(.secondary)
                     .lineLimit(1)
                     .truncationMode(.middle)
                     .layoutPriority(1)
                     .frame(maxWidth: .infinity)
-                Spacer(minLength: 8)
+                Spacer(minLength: 6)
             } else {
                 Spacer()
             }
@@ -222,6 +222,7 @@ struct VaultTreeOutline: View {
 
     private func labelFor(_ node: VaultNode) -> some View {
         Label(displayName(node), systemImage: node.symbolName)
+            .font(.footnote)
             .lineLimit(1)
             .truncationMode(.middle)
             .help(node.name)
