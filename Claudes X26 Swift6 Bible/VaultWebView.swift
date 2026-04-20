@@ -10,6 +10,7 @@
 
 import SwiftUI
 import WebKit
+import Combine
 
 #if os(macOS)
 import AppKit
@@ -26,6 +27,34 @@ struct VaultWebView: PlatformViewRepresentable {
     let vaultRoot: URL?
     let textScale: Double
     let onInternalNavigate: (URL) -> Void
+
+    /// Shared bridge that holds a reference to the live WebView so the
+    /// SwiftUI toolbar can trigger actions (Highlight) on it.
+    final class Bridge: ObservableObject {
+        weak var webView: WKWebView?
+        func highlightSelection() {
+            let js = """
+            (function(){
+              var sel = window.getSelection();
+              if (!sel || sel.rangeCount === 0 || sel.toString().length === 0) return;
+              var range = sel.getRangeAt(0);
+              var mark = document.createElement('mark');
+              mark.className = 'user-hl';
+              try { range.surroundContents(mark); }
+              catch (e) {
+                // Selection spans multiple elements — fallback: extract+wrap.
+                var frag = range.extractContents();
+                mark.appendChild(frag);
+                range.insertNode(mark);
+              }
+              sel.removeAllRanges();
+              // Trigger our save path.
+              document.body.dispatchEvent(new Event('input', { bubbles: true }));
+            })();
+            """
+            webView?.evaluateJavaScript(js)
+        }
+    }
 
     // MARK: - Platform bridges
 
@@ -59,6 +88,8 @@ struct VaultWebView: PlatformViewRepresentable {
 
     // MARK: - Shared
 
+    @EnvironmentObject private var bridge: Bridge
+
     private func makeWebView(context: Context) -> WKWebView {
         let config = WKWebViewConfiguration()
         config.defaultWebpagePreferences.allowsContentJavaScript = true
@@ -67,9 +98,11 @@ struct VaultWebView: PlatformViewRepresentable {
         // anywhere on the page and we can persist the change.
         config.userContentController.add(context.coordinator, name: "pageEdit")
         config.userContentController.addUserScript(Self.editableScript)
+        config.userContentController.addUserScript(Self.highlightStyleScript)
 
         let webView = WKWebView(frame: .zero, configuration: config)
         webView.navigationDelegate = context.coordinator
+        bridge.webView = webView
         #if os(macOS)
         webView.setValue(false, forKey: "drawsBackground")
         #else
@@ -79,6 +112,19 @@ struct VaultWebView: PlatformViewRepresentable {
         #endif
         return webView
     }
+
+    /// Inject a minimal style for <mark class="user-hl"> so reader highlights
+    /// render in amber on black without clashing with existing vault CSS.
+    private static let highlightStyleScript: WKUserScript = {
+        let source = """
+        (function(){
+          var s = document.createElement('style');
+          s.textContent = 'mark.user-hl{background:#FFB000;color:#000;padding:0 0.1em;border-radius:2px;}';
+          document.head.appendChild(s);
+        })();
+        """
+        return WKUserScript(source: source, injectionTime: .atDocumentEnd, forMainFrameOnly: true)
+    }()
 
     /// Script that runs at document end on every page load — makes body
     /// editable, enables spellcheck (lets Scribble work with Apple Pencil),

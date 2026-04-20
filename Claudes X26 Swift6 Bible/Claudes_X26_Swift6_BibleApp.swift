@@ -10,6 +10,7 @@ import SwiftUI
 @main
 struct Claudes_X26_Swift6_BibleApp: App {
     @StateObject private var vault = VaultModel()
+    @StateObject private var webViewBridge = VaultWebView.Bridge()
     @AppStorage("hasSeenOnboarding") private var hasSeenOnboarding = false
 
     var body: some Scene {
@@ -17,6 +18,7 @@ struct Claudes_X26_Swift6_BibleApp: App {
             ZStack {
                 ContentView()
                     .environmentObject(vault)
+                    .environmentObject(webViewBridge)
                     .preferredColorScheme(.dark)
                     #if os(macOS)
                     .frame(minWidth: 900, minHeight: 720)

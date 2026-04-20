@@ -14,6 +14,7 @@ import UIKit
 
 struct ContentView: View {
     @EnvironmentObject var vault: VaultModel
+    @EnvironmentObject var webViewBridge: VaultWebView.Bridge
     @State private var showingUnderTheHood = false
     @State private var showingAbout = false
     @AppStorage("textScale") private var textScale: Double = 1.0
@@ -170,6 +171,14 @@ struct ContentView: View {
                 }
 
                 Spacer()
+
+                Button {
+                    webViewBridge.highlightSelection()
+                } label: {
+                    Label("Highlight", systemImage: "highlighter")
+                }
+                .labelStyle(.iconOnly)
+                .help("Highlight selection")
 
                 Button {
                     textScale = max(minScale, textScale - scaleStep)
