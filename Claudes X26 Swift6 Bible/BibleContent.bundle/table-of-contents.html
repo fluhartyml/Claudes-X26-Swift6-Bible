@@ -42,25 +42,25 @@
   header, footer { color: var(--dim); font-size: 13pt; }
   header { margin-bottom: 1.2rem; padding-bottom: 0.7rem; border-bottom: 1px solid var(--border); }
   footer { margin-top: 3rem; padding-top: 1rem; border-top: 1px solid var(--border); }
-  /* Flowing list layout — no fixed columns, text reflows at any width. */
+  /* Each entry stacks vertically: num / title / status, separator between. */
   .books { list-style: none; padding: 0; margin: 0.6rem 0; }
   .books li {
-    padding: 0.6rem 0;
-    border-bottom: 1px dashed #1a1000;
+    padding: 0.8rem 0;
+    border-bottom: 1px solid var(--border);
     overflow-wrap: break-word;
   }
   .books li:last-child { border-bottom: none; }
-  .book-num { color: var(--dim); display: inline; }
-  .book-num::after { content: " — "; color: var(--dim); }
+  .book-num { color: var(--dim); display: block; }
+  .book-title { display: block; margin-top: 0.25rem; }
   .book-title a { overflow-wrap: break-word; }
-  .book-status { color: var(--dim); font-style: italic; display: block; margin-top: 0.2rem; }
+  .book-status { color: var(--dim); font-style: italic; display: block; margin-top: 0.25rem; }
   .meta-row {
-    padding: 0.6rem 0;
-    border-bottom: 1px dashed #1a1000;
+    padding: 0.8rem 0;
+    border-bottom: 1px solid var(--border);
     overflow-wrap: break-word;
   }
   .meta-row:last-child { border-bottom: none; }
-  .meta-status { color: var(--dim); font-style: italic; display: block; margin-top: 0.2rem; }
+  .meta-status { color: var(--dim); font-style: italic; display: block; margin-top: 0.25rem; }
   .part-note { color: var(--dim); font-style: italic; margin-bottom: 0.4rem; }
 </style>
 </head>
