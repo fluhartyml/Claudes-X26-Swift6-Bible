@@ -278,6 +278,7 @@ struct VaultNode: Identifiable, Hashable {
         if name.hasPrefix("Part-V-")   { return 50 }
         if name.hasPrefix("Part-VI-")  { return 60 }
         if name == "Appendices"        { return 90 }
+        if name == "figures"           { return 95 }   // appendix-style image gallery
         return 100
     }
 
@@ -290,7 +291,6 @@ struct VaultNode: Identifiable, Hashable {
         if name.hasPrefix("_build-") { return false }
         if name.hasSuffix(".md") { return false }                 // raw Markdown sources
         if name == "cover.jpg" { return false }
-        if name == "figures" { return false }                     // asset folder
         if name == "Screenshots" { return false }                 // asset folder
         if name == "_shared" { return false }                     // shared assets
         // Legacy root-level HTML duplicates of the Appendix content.
