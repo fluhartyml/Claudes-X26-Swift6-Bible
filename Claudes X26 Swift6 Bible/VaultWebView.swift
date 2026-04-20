@@ -62,6 +62,12 @@ struct VaultWebView: PlatformViewRepresentable {
     private func makeWebView(context: Context) -> WKWebView {
         let config = WKWebViewConfiguration()
         config.defaultWebpagePreferences.allowsContentJavaScript = true
+
+        // Wire up the content-edit bridge so the reader can type / Scribble
+        // anywhere on the page and we can persist the change.
+        config.userContentController.add(context.coordinator, name: "pageEdit")
+        config.userContentController.addUserScript(Self.editableScript)
+
         let webView = WKWebView(frame: .zero, configuration: config)
         webView.navigationDelegate = context.coordinator
         #if os(macOS)
@@ -74,6 +80,34 @@ struct VaultWebView: PlatformViewRepresentable {
         return webView
     }
 
+    /// Script that runs at document end on every page load — makes body
+    /// editable, enables spellcheck (lets Scribble work with Apple Pencil),
+    /// and posts the updated HTML back to Swift when the user commits an
+    /// edit (blur) or after a short debounce while typing.
+    private static let editableScript: WKUserScript = {
+        let source = """
+        (function(){
+          var body = document.body;
+          if (!body) return;
+          body.contentEditable = 'true';
+          body.spellcheck = true;
+          var timer = null;
+          function send(){
+            try {
+              var html = document.documentElement.outerHTML;
+              window.webkit.messageHandlers.pageEdit.postMessage(html);
+            } catch (e) {}
+          }
+          body.addEventListener('input', function(){
+            if (timer) clearTimeout(timer);
+            timer = setTimeout(send, 1200);
+          });
+          body.addEventListener('blur', send, true);
+        })();
+        """
+        return WKUserScript(source: source, injectionTime: .atDocumentEnd, forMainFrameOnly: true)
+    }()
+
     private func loadIfNeeded(_ webView: WKWebView) {
         guard let url = documentURL, let root = vaultRoot else { return }
         // Only reload if the target URL differs from what's currently loaded.
@@ -83,9 +117,24 @@ struct VaultWebView: PlatformViewRepresentable {
 
     // MARK: - Coordinator — intercepts navigations
 
-    final class Coordinator: NSObject, WKNavigationDelegate {
+    final class Coordinator: NSObject, WKNavigationDelegate, WKScriptMessageHandler {
         let parent: VaultWebView
         init(_ parent: VaultWebView) { self.parent = parent }
+
+        // Persist edits back to the document file in the vault.
+        func userContentController(
+            _ userContentController: WKUserContentController,
+            didReceive message: WKScriptMessage
+        ) {
+            guard message.name == "pageEdit",
+                  let html = message.body as? String,
+                  let url = parent.documentURL else { return }
+            do {
+                try html.write(to: url, atomically: true, encoding: .utf8)
+            } catch {
+                // Best-effort save; ignore failures (e.g. bundle is read-only).
+            }
+        }
 
         func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
             parent.applyTextScale(webView)
