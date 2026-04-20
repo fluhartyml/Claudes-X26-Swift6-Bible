@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Swift Section Mapping — The Swift Words, Operators, and Punctuation</title>
+<style>
+  :root {
+    --bg: #000000;
+    --fg: #FFB000;
+    --bright: #FFD060;
+    --dim: #996600;
+    --codebg: #1a0d00;
+    --border: #664500;
+    --hover: #332200;
+  }
+  * { box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: "FiraCode Nerd Font Mono", "FiraCode Nerd Font",
+                 "Fira Code", "Menlo", "Courier New", monospace;
+    font-size: 18pt;
+    line-height: 1.55;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem 2.5rem 6rem 2.5rem;
+    -webkit-font-smoothing: none;
+    text-shadow: 0 0 1px rgba(255, 176, 0, 0.35);
+  }
+  h1, h2, h3, h4 {
+    color: var(--bright);
+    font-weight: normal;
+    letter-spacing: 0.02em;
+    margin: 0;
+  }
+  h1 { font-size: 28pt; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+  h2 { font-size: 22pt; border-bottom: 1px solid var(--border); padding-bottom: 0.3rem; }
+  h3 { font-size: 19pt; color: var(--fg); }
+  h4 { font-size: 17pt; color: var(--dim); text-transform: uppercase; letter-spacing: 0.1em; }
+  a {
+    color: var(--bright);
+    text-decoration: none;
+    border-bottom: 1px dotted var(--dim);
+  }
+  a:hover { background: var(--hover); }
+  .note { color: var(--dim); font-style: italic; margin: 0; }
+  .count { color: var(--dim); font-size: 14pt; }
+  code, .w {
+    color: var(--bright);
+    background: var(--codebg);
+    padding: 0.08em 0.35em;
+    border: 1px solid #3a2400;
+    border-radius: 3px;
+    font-size: 0.92em;
+  }
+  p { margin: 0; }
+
+  /* Line-numbered proofing list ------------------------------------------ */
+  ol.lines {
+    counter-reset: line;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  ol.lines > li {
+    counter-increment: line;
+    position: relative;
+    padding: 0.45rem 0 0.45rem 5rem;
+    border-bottom: 1px solid #1a1000;
+    min-height: 2.2rem;
+  }
+  ol.lines > li::before {
+    content: counter(line);
+    position: absolute;
+    left: 0;
+    top: 0.45rem;
+    width: 4rem;
+    text-align: right;
+    color: var(--dim);
+    font-size: 13pt;
+    padding-right: 0.8rem;
+    border-right: 1px solid var(--border);
+    user-select: none;
+  }
+  ol.lines > li:hover { background: #0a0600; }
+  ol.lines > li.spacer { min-height: 1rem; padding-top: 0.2rem; padding-bottom: 0.2rem; }
+
+  /* Grid of words ------------------------------------------------------- */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 0.35rem 1rem;
+  }
+  .grid .w { font-size: 14pt; text-align: left; }
+
+  /* Table of contents --------------------------------------------------- */
+  .toc {
+    border: 1px solid var(--border);
+    padding: 1rem 1.4rem;
+    background: #0a0600;
+  }
+  .toc ol { margin: 0; padding-left: 1.6rem; }
+  .toc li { margin: 0.2rem 0; font-size: 15pt; }
+
+  /* Clusters ------------------------------------------------------------ */
+  .cluster {
+    border: 1px solid var(--border);
+    padding: 0.8rem 1.1rem;
+    background: #060400;
+  }
+  .cluster h4 { color: var(--bright); text-transform: none; letter-spacing: 0; font-size: 18pt; }
+  .rel { color: var(--dim); }
+
+  /* Tag --------------------------------------------------------------- */
+  .tag {
+    display: inline-block;
+    font-size: 10pt;
+    padding: 0.1rem 0.4rem;
+    border: 1px solid var(--dim);
+    color: var(--dim);
+    margin-left: 0.3rem;
+    vertical-align: middle;
+    font-style: italic;
+    border-radius: 2px;
+  }
+
+  /* Punctuation table --------------------------------------------------- */
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    font-size: 15pt;
+  }
+  th, td {
+    border: 1px solid var(--border);
+    padding: 0.4rem 0.7rem;
+    text-align: left;
+    vertical-align: top;
+  }
+  th { color: var(--bright); background: #0a0600; }
+
+  /* Legend -------------------------------------------------------------- */
+  .legend { font-size: 13pt; color: var(--dim); }
+
+  header, footer {
+    color: var(--dim);
+    font-size: 13pt;
+  }
+  header {
+    margin-bottom: 1.2rem;
+    padding-bottom: 0.7rem;
+    border-bottom: 1px solid var(--border);
+  }
+  footer { margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--border); }
+
+  /* Section outline numbers --------------------------------------------- */
+  .sec { color: var(--bright); }
+  .sub { color: var(--dim); font-size: 0.85em; margin-right: 0.4rem; }
+</style>
+</head>
+<body>
+
+<header>
+  File: <code>Claudes-Xcode-26-Swift-Bible/swift-section-mapping.html</code> &middot; Swift section (Part I) mapping
+</header>
+
+<ol class="lines">
+
+<li><h1>Swift Section Mapping</h1></li>
+<li><p class="note">Working reference for the Swift section of Claude&rsquo;s Xcode 26 Swift Bible. Not content &mdash; raw material for deciding the 26-Book A&ndash;Z structure. Updated 2026-04-20.</p></li>
+<li><p class="legend">Bright amber = headword. <span class="tag">SwiftUI</span> = property wrapper specific to SwiftUI. <span class="tag">SwiftData</span> = SwiftData macro. Everything else is Swift-language proper. Proof by line number: &ldquo;N yes&rdquo; = lock, &ldquo;N huh?&rdquo; = explain, &ldquo;N change to X&rdquo; = edit.</p></li>
+<li class="spacer"></li>
+
+<li>
+  <div class="toc">
+    <strong>Contents</strong>
+    <ol>
+      <li>1. Declarations</li>
+      <li>2. Access Levels</li>
+      <li>3. Member Qualifiers &amp; Modifiers</li>
+      <li>4. Control Flow</li>
+      <li>5. Error Handling</li>
+      <li>6. Concurrency</li>
+      <li>7. Type Casting &amp; Identity</li>
+      <li>8. Literals</li>
+      <li>9. Built-in Types &mdash; Primitive</li>
+      <li>10. Built-in Types &mdash; Collection &amp; Generic</li>
+      <li>11. Common Standard-Library Protocols</li>
+      <li>12. Standard-Library Functions (high-frequency)</li>
+      <li>13. Attributes (<code>@</code> prefix)</li>
+      <li>14. SwiftUI Property Wrappers</li>
+      <li>15. SwiftData Macros</li>
+      <li>16. Swift Language Macros</li>
+      <li>17. Compiler Directives (<code>#</code> prefix)</li>
+      <li>18. Operators
+        <ol style="padding-left: 1.5rem;">
+          <li>18.1 Arithmetic</li>
+          <li>18.2 Unary</li>
+          <li>18.3 Assignment</li>
+          <li>18.4 Comparison</li>
+          <li>18.5 Logical</li>
+          <li>18.6 Optional</li>
+          <li>18.7 Range</li>
+          <li>18.8 Ternary</li>
+          <li>18.9 Bitwise</li>
+          <li>18.10 Overflow</li>
+          <li>18.11 Reference / <code>inout</code></li>
+          <li>18.12 Custom-operator keywords</li>
+        </ol>
+      </li>
+      <li>19. Punctuation</li>
+      <li>20. Relationship Clusters (cross-references)</li>
+      <li>21. Open Mapping Questions</li>
+    </ol>
+  </div>
+</li>
+<li class="spacer"></li>
+
+<!-- ============================================================ -->
+<li><h2 id="s1">1. Declarations <span class="count">(15)</span></h2></li>
+<li><p class="note">Words that <em>bring new things into existence</em> &mdash; constants, variables, functions, types, and members.</p></li>
+<li>
+  <div class="grid">
+    <span class="w">let</span>
+    <span class="w">var</span>
+    <span class="w">func</span>
+    <span class="w">class</span>
+    <span class="w">struct</span>
+    <span class="w">enum</span>
+    <span class="w">actor</span>
+    <span class="w">protocol</span>
+    <span class="w">extension</span>
+    <span class="w">typealias</span>
+    <span class="w">associatedtype</span>
+    <span class="w">init</span>
+    <span class="w">deinit</span>
+    <span class="w">subscript</span>
+    <span class="w">operator</span>
+  </div>
+</li>
+<li class="spacer"></li>
+
+<!-- ============================================================ -->
+<li><h2 id="s2">2. Access Levels <span class="count">(5)</span></h2></li>
+<li><p class="note">Who is allowed to see the thing.</p></li>
+<li>
+  <div class="grid">
+    <span class="w">open</span>
+    <span class="w">public</span>
+    <span class="w">internal</span>
+    <span class="w">fileprivate</span>
+    <span class="w">private</span>
+  </div>
+</li>
+<li class="spacer"></li>
+
+<!-- ============================================================ -->
+<li><h2 id="s3">3. Member Qualifiers &amp; Modifiers <span class="count">(14)</span></h2></li>
+<li><p class="note">Tweaks that change <em>how</em> a declaration behaves &mdash; inheritance, mutability, storage, dispatch.</p></li>
+<li>
+  <div class="grid">
+    <span class="w">static</span>
+    <span class="w">class</span> <span class="note">(modifier sense)</span>
+    <span class="w">final</span>
+    <span class="w">override</span>
+    <span class="w">required</span>
+    <span class="w">convenience</span>
+    <span class="w">dynamic</span>
+    <span class="w">lazy</span>
+    <span class="w">indirect</span>
+    <span class="w">mutating</span>
+    <span class="w">nonmutating</span>
+    <span class="w">inout</span>
+    <span class="w">weak</span>
+    <span class="w">unowned</span>
+  </div>
+</li>
+<li class="spacer"></li>
+
+<!-- ============================================================ -->
+<li><h2 id="s4">4. Control Flow <span class="count">(15)</span></h2></li>
+<li><p class="note">Branching, looping, matching, short-circuiting.</p></li>
+<li>
+  <div class="grid">
+    <span class="w">if</span>
+    <span class="w">else</span>
+    <span class="w">guard</span>
+    <span class="w">while</span>
+    <span class="w">for</span>
+    <span class="w">in</span>
+    <span class="w">switch</span>
+    <span class="w">case</span>
+    <span class="w">default</span>
+    <span class="w">break</span>
+    <span class="w">continue</span>
+    <span class="w">return</span>
+    <span class="w">fallthrough</span>
+    <span class="w">repeat</span>
+    <span class="w">where</span>
+  </div>
+</li>
+<li class="spacer"></li>
+
+<!-- ============================================================ -->
+<li><h2 id="s5">5. Error Handling <span class="count">(9)</span></h2></li>
+<li><p class="note">Typed-throwing-failure machinery.</p></li>
+<li>
+  <div class="grid">
+    <span class="w">throw</span>
+    <span class="w">throws</span>
+    <span class="w">rethrows</span>
+    <span class="w">try</span>
+    <span class="w">try?</span>
+    <span class="w">try!</span>
+    <span class="w">do</span>
+    <span class="w">catch</span>
+    <span class="w">defer</span>
+  </div>
+</li>
+<li class="spacer"></li>
+
+<!-- ============================================================ -->
+<li><h2 id="s6">6. Concurrency <span class="count">(12)</span></h2></li>
+<li><p class="note">Swift 5.5+ concurrency: async functions, actor isolation, structured tasks.</p></li>
+<li>
+  <div class="grid">
+    <span class="w">async</span>
+    <span class="w">await</span>
+    <span class="w">actor</span>
+    <span class="w">Task</span>
+    <span class="w">TaskGroup</span>
+    <span class="w">MainActor</span>
+    <span class="w">GlobalActor</span>
+    <span class="w">Sendable</span>
+    <span class="w">@Sendable</span>
+    <span class="w">@MainActor</span>
+    <span class="w">isolated</span>
+    <span class="w">nonisolated</span>
+  </div>
+</li>
+<li class="spacer"></li>
+
+<!-- ============================================================ -->
+<li><h2 id="s7">7. Type Casting &amp; Identity <span class="count">(7)</span></h2></li>
+<li><p class="note">Runtime type questions and self-reference.</p></li>
+<li>
+  <div class="grid">
+    <span class="w">as</span>
+    <span class="w">as?</span>
+    <span class="w">as!</span>
+    <span class="w">is</span>
+    <span class="w">self</span>
+    <span class="w">Self</span>
+    <span class="w">super</span>
+  </div>
+</li>
+<li class="spacer"></li>
+
+<!-- ============================================================ -->
+<li><h2 id="s8">8. Literals <span class="count">(3)</span></h2></li>
+<li><p class="note">Built-in constant values.</p></li>
+<li>
+  <div class="grid">
+    <span class="w">true</span>
+    <span class="w">false</span>
+    <span class="w">nil</span>
+  </div>
+</li>
+<li class="spacer"></li>
+
+<!-- ============================================================ -->
+<li><h2 id="s9">9. Built-in Types &mdash; Primitive <span class="count">(12)</span></h2></li>
+<li>
+  <div class="grid">
+    <span class="w">Int</span>
+    <span class="w">Int8 / 16 / 32 / 64</span>
+    <span class="w">UInt</span>
+    <span class="w">Double</span>
+    <span class="w">Float</span>
+    <span class="w">Bool</span>
+    <span class="w">Character</span>
+    <span class="w">String</span>
+    <span class="w">Void</span>
+    <span class="w">Never</span>
+    <span class="w">Any</span>
+    <span class="w">AnyObject</span>
+  </div>
+</li>
+<li class="spacer"></li>
+
+<!-- ============================================================ -->
+<li><h2 id="s10">10. Built-in Types &mdash; Collection &amp; Generic <span class="count">(8)</span></h2></li>
+<li>
+  <div class="grid">
+    <span class="w">Array</span>
+    <span class="w">Dictionary</span>
+    <span class="w">Set</span>
+    <span class="w">Optional</span>
+    <span class="w">Result</span>
+    <span class="w">Range</span>
+    <span class="w">ClosedRange</span>
+    <span class="w">KeyPath</span>
+  </div>
+</li>
+<li class="spacer"></li>
+
+<!-- ============================================================ -->
+<li><h2 id="s11">11. Common Standard-Library Protocols <span class="count">(~18 hot ones)</span></h2></li>
+<li><p class="note">Protocols readers will see over and over. Not the full stdlib protocol list &mdash; the ones that actually show up in SwiftUI / SwiftData apps.</p></li>
+<li>
+  <div class="grid">
+    <span class="w">Equatable</span>
+    <span class="w">Hashable</span>
+    <span class="w">Comparable</span>
+    <span class="w">Codable</span>
+    <span class="w">Encodable</span>
+    <span class="w">Decodable</span>
+    <span class="w">Identifiable</span>
+    <span class="w">Sendable</span>
+    <span class="w">Error</span>
+    <span class="w">CaseIterable</span>
+    <span class="w">CustomStringConvertible</span>
+    <span class="w">RawRepresentable</span>
+    <span class="w">Collection</span>
+    <span class="w">Sequence</span>
+    <span class="w">IteratorProtocol</span>
+    <span class="w">ExpressibleByStringLiteral</span>
+    <span class="w">ExpressibleByArrayLiteral</span>
+    <span class="w">ExpressibleByDictionaryLiteral</span>
+  </div>
+</li>
+<li class="spacer"></li>
+
+<!-- ============================================================ -->
+<li><h2 id="s12">12. Standard-Library Functions (high-frequency) <span class="count">(~15)</span></h2></li>
+<li><p class="note">Not a full stdlib dump &mdash; functions readers encounter constantly.</p></li>
+<li>
+  <div class="grid">
+    <span class="w">print</span>
+    <span class="w">map</span>
+    <span class="w">filter</span>
+    <span class="w">reduce</span>
+    <span class="w">sorted</span>
+    <span class="w">forEach</span>
+    <span class="w">compactMap</span>
+    <span class="w">flatMap</span>
+    <span class="w">zip</span>
+    <span class="w">min</span>
+    <span class="w">max</span>
+    <span class="w">abs</span>
+    <span class="w">assert</span>
+    <span class="w">precondition</span>
+    <span class="w">fatalError</span>
+  </div>
+</li>
+<li class="spacer"></li>
+
+<!-- ============================================================ -->
+<li><h2 id="s13">13. Attributes &mdash; the <code>@</code> words (Swift proper) <span class="count">(~17)</span></h2></li>
+<li><p class="note">Written <code>@Something</code>. Swift-language attributes (not SwiftUI wrappers &mdash; those live in the next section).</p></li>
+<li>
+  <div class="grid">
+    <span class="w">@escaping</span>
+    <span class="w">@autoclosure</span>
+    <span class="w">@discardableResult</span>
+    <span class="w">@frozen</span>
+    <span class="w">@inlinable</span>
+    <span class="w">@testable</span>
+    <span class="w">@main</span>
+    <span class="w">@MainActor</span>
+    <span class="w">@Sendable</span>
+    <span class="w">@objc</span>
+    <span class="w">@available</span>
+    <span class="w">@attached</span>
+    <span class="w">@propertyWrapper</span>
+    <span class="w">@resultBuilder</span>
+    <span class="w">@dynamicCallable</span>
+    <span class="w">@dynamicMemberLookup</span>
+    <span class="w">@Observable</span>
+  </div>
+</li>
+<li class="spacer"></li>
+
+<!-- ============================================================ -->
+<li><h2 id="s14">14. SwiftUI Property Wrappers <span class="count">(11)</span> <span class="tag">SwiftUI</span></h2></li>
+<li><p class="note">Framework-level, not Swift-language. Live in the Swift section only if we decide they do &mdash; see open question #1.</p></li>
+<li>
+  <div class="grid">
+    <span class="w">@State</span>
+    <span class="w">@Binding</span>
+    <span class="w">@StateObject</span>
+    <span class="w">@ObservedObject</span>
+    <span class="w">@EnvironmentObject</span>
+    <span class="w">@Environment</span>
+    <span class="w">@Published</span>
+    <span class="w">@AppStorage</span>
+    <span class="w">@SceneStorage</span>
+    <span class="w">@FocusState</span>
+    <span class="w">@GestureState</span>
+  </div>
+</li>
+<li class="spacer"></li>
+
+<!-- ============================================================ -->
+<li><h2 id="s15">15. SwiftData Macros <span class="count">(2)</span> <span class="tag">SwiftData</span></h2></li>
+<li>
+  <div class="grid">
+    <span class="w">@Model</span>
+    <span class="w">@Query</span>
+  </div>
+</li>
+<li class="spacer"></li>
+
+<!-- ============================================================ -->
+<li><h2 id="s16">16. Swift Language Macros <span class="count">(3)</span></h2></li>
+<li><p class="note">Swift 5.9+ macros &mdash; expand into generated code at compile time.</p></li>
+<li>
+  <div class="grid">
+    <span class="w">#Preview</span>
+    <span class="w">#Predicate</span>
+    <span class="w">@Observable</span> <span class="note">(macro form)</span>
+  </div>
+</li>
+<li class="spacer"></li>
+
+<!-- ============================================================ -->
+<li><h2 id="s17">17. Compiler Directives &mdash; the <code>#</code> words <span class="count">(~13)</span></h2></li>
+<li><p class="note">Written <code>#something</code>. Tell the compiler what to do at compile time (not run time).</p></li>
+<li>
+  <div class="grid">
+    <span class="w">#if</span>
+    <span class="w">#else</span>
+    <span class="w">#elseif</span>
+    <span class="w">#endif</span>
+    <span class="w">#available</span>
+    <span class="w">#selector</span>
+    <span class="w">#file</span>
+    <span class="w">#line</span>
+    <span class="w">#function</span>
+    <span class="w">#column</span>
+    <span class="w">#error</span>
+    <span class="w">#warning</span>
+    <span class="w">#keyPath</span>
+  </div>
+</li>
+<li class="spacer"></li>
+
+<!-- ============================================================ -->
+<li><h2 id="s18">18. Operators</h2></li>
+<li><p class="note">Built-in operators come in families. Swift also lets you define custom ones &mdash; that's covered by the <code>operator</code> / <code>prefix</code> / <code>postfix</code> / <code>infix</code> / <code>precedencegroup</code> keywords.</p></li>
+
+<li><h4>18.1 Arithmetic <span class="count">(5)</span></h4></li>
+<li>
+  <div class="grid">
+    <span class="w">+</span>
+    <span class="w">-</span>
+    <span class="w">*</span>
+    <span class="w">/</span>
+    <span class="w">%</span>
+  </div>
+</li>
+
+<li><h4>18.2 Unary <span class="count">(3)</span></h4></li>
+<li>
+  <div class="grid">
+    <span class="w">+x</span>
+    <span class="w">-x</span>
+    <span class="w">!x</span>
+  </div>
+</li>
+
+<li><h4>18.3 Assignment <span class="count">(8)</span></h4></li>
+<li>
+  <div class="grid">
+    <span class="w">=</span>
+    <span class="w">+=</span>
+    <span class="w">-=</span>
+    <span class="w">*=</span>
+    <span class="w">/=</span>
+    <span class="w">%=</span>
+    <span class="w">&amp;&amp;=</span>
+    <span class="w">||=</span>
+  </div>
+</li>
+
+<li><h4>18.4 Comparison <span class="count">(8)</span></h4></li>
+<li>
+  <div class="grid">
+    <span class="w">==</span>
+    <span class="w">!=</span>
+    <span class="w">&lt;</span>
+    <span class="w">&gt;</span>
+    <span class="w">&lt;=</span>
+    <span class="w">&gt;=</span>
+    <span class="w">===</span>
+    <span class="w">!==</span>
+  </div>
+</li>
+
+<li><h4>18.5 Logical <span class="count">(3)</span></h4></li>
+<li>
+  <div class="grid">
+    <span class="w">&amp;&amp;</span>
+    <span class="w">||</span>
+    <span class="w">!</span>
+  </div>
+</li>
+
+<li><h4>18.6 Optional <span class="count">(4)</span></h4></li>
+<li>
+  <div class="grid">
+    <span class="w">?</span>
+    <span class="w">!</span>
+    <span class="w">??</span>
+    <span class="w">?.</span>
+  </div>
+</li>
+
+<li><h4>18.7 Range <span class="count">(2)</span></h4></li>
+<li>
+  <div class="grid">
+    <span class="w">...</span>
+    <span class="w">..&lt;</span>
+  </div>
+</li>
+
+<li><h4>18.8 Ternary <span class="count">(1)</span></h4></li>
+<li>
+  <div class="grid">
+    <span class="w">cond ? a : b</span>
+  </div>
+</li>
+
+<li><h4>18.9 Bitwise <span class="count">(6)</span></h4></li>
+<li>
+  <div class="grid">
+    <span class="w">&amp;</span>
+    <span class="w">|</span>
+    <span class="w">^</span>
+    <span class="w">~</span>
+    <span class="w">&lt;&lt;</span>
+    <span class="w">&gt;&gt;</span>
+  </div>
+</li>
+
+<li><h4>18.10 Overflow <span class="count">(5)</span></h4></li>
+<li>
+  <div class="grid">
+    <span class="w">&amp;+</span>
+    <span class="w">&amp;-</span>
+    <span class="w">&amp;*</span>
+    <span class="w">&amp;&lt;&lt;</span>
+    <span class="w">&amp;&gt;&gt;</span>
+  </div>
+</li>
+
+<li><h4>18.11 Reference / <code>inout</code> <span class="count">(1)</span></h4></li>
+<li>
+  <div class="grid">
+    <span class="w">&amp;value</span> <span class="note">(pass as inout)</span>
+  </div>
+</li>
+
+<li><h4>18.12 Custom-operator keywords <span class="count">(5)</span></h4></li>
+<li>
+  <div class="grid">
+    <span class="w">prefix</span>
+    <span class="w">postfix</span>
+    <span class="w">infix</span>
+    <span class="w">operator</span>
+    <span class="w">precedencegroup</span>
+  </div>
+</li>
+<li class="spacer"></li>
+
+<!-- ============================================================ -->
+<li><h2 id="s19">19. Punctuation</h2></li>
+<li><p class="note">Not alphabetizable the same way, but each mark carries meaning and deserves an entry.</p></li>
+<li>
+  <table>
+    <thead><tr><th>Mark</th><th>Name</th><th>Primary uses in Swift</th></tr></thead>
+    <tbody>
+      <tr><td><code>:</code></td><td>Colon</td><td>Type annotation (<code>x: Int</code>), dictionary pair, inheritance (<code>class A: B</code>), labeled statement, ternary</td></tr>
+      <tr><td><code>;</code></td><td>Semicolon</td><td>Optional statement terminator; required only to put multiple statements on one line</td></tr>
+      <tr><td><code>,</code></td><td>Comma</td><td>Separator in argument lists, tuple elements, collection literals</td></tr>
+      <tr><td><code>.</code></td><td>Dot</td><td>Member access, enum case shorthand (<code>.red</code>), decimal point</td></tr>
+      <tr><td><code>( )</code></td><td>Parentheses</td><td>Grouping expressions, tuple literals, function parameters and calls</td></tr>
+      <tr><td><code>[ ]</code></td><td>Square brackets</td><td>Array literals, dictionary literals, subscript access</td></tr>
+      <tr><td><code>{ }</code></td><td>Braces</td><td>Blocks, closures, type bodies, <code>get/set</code> blocks</td></tr>
+      <tr><td><code>&lt; &gt;</code></td><td>Angle brackets</td><td>Generic type parameters (<code>Array&lt;Int&gt;</code>), generic constraints</td></tr>
+      <tr><td><code>-&gt;</code></td><td>Arrow</td><td>Function return type (<code>func foo() -&gt; Int</code>), closure return type</td></tr>
+      <tr><td><code>=&gt;</code></td><td>Fat arrow</td><td>Not a Swift operator &mdash; mentioned so readers know it isn't. Use <code>-&gt;</code>.</td></tr>
+      <tr><td><code>_</code></td><td>Underscore</td><td>Wildcard in patterns, ignored parameter label, unused binding</td></tr>
+      <tr><td><code>...</code></td><td>Ellipsis</td><td>Closed range, variadic parameters</td></tr>
+      <tr><td><code>..&lt;</code></td><td>Half-open range</td><td>Range excluding the upper bound</td></tr>
+      <tr><td><code>@</code></td><td>At sign</td><td>Attribute prefix (<code>@State</code>, <code>@main</code>, <code>@MainActor</code>)</td></tr>
+      <tr><td><code>#</code></td><td>Hash</td><td>Compiler directive / macro prefix (<code>#if</code>, <code>#Preview</code>)</td></tr>
+      <tr><td><code>`name`</code></td><td>Backticks</td><td>Escape a reserved word so it can be used as an identifier</td></tr>
+      <tr><td><code>"..."</code></td><td>Double quotes</td><td>String literal (supports interpolation <code>\(expr)</code> and multi-line <code>"""</code>)</td></tr>
+      <tr><td><code>\(...)</code></td><td>Backslash-paren</td><td>String interpolation expression</td></tr>
+      <tr><td><code>\</code></td><td>Backslash</td><td>KeyPath prefix (<code>\.foo</code>), string-interpolation escape</td></tr>
+    </tbody>
+  </table>
+</li>
+<li class="spacer"></li>
+
+<!-- ============================================================ -->
+<li><h2 id="s20">20. Relationship Clusters (cross-references)</h2></li>
+<li><p class="note">The way readers will actually use the lexicon &mdash; not one word at a time, but families. Every entry in these clusters cross-links to the others.</p></li>
+
+<li>
+  <div class="cluster">
+    <h4>20.1 Optional family</h4>
+    <p><code>Optional</code> &middot; <code>nil</code> &middot; <code>?</code> &middot; <code>!</code> &middot; <code>??</code> &middot; <code>?.</code> &middot; <code>if let</code> &middot; <code>guard let</code> &middot; <code>try?</code> &middot; <code>as?</code></p>
+    <p class="rel">The single most important cluster for new readers. Optionals are Swift's defining feature.</p>
+  </div>
+</li>
+
+<li>
+  <div class="cluster">
+    <h4>20.2 Value-type family</h4>
+    <p><code>struct</code> &middot; <code>enum</code> &middot; <code>let</code> &middot; <code>var</code> &middot; <code>mutating</code> &middot; Copy-on-Write <span class="note">(behavior)</span></p>
+    <p class="rel">What Swift chose instead of reference semantics for most things.</p>
+  </div>
+</li>
+
+<li>
+  <div class="cluster">
+    <h4>20.3 Reference-type family</h4>
+    <p><code>class</code> &middot; <code>actor</code> &middot; <code>weak</code> &middot; <code>unowned</code> &middot; <code>final</code> &middot; <code>override</code> &middot; <code>super</code> &middot; <code>convenience</code> &middot; <code>required</code> &middot; <code>deinit</code></p>
+  </div>
+</li>
+
+<li>
+  <div class="cluster">
+    <h4>20.4 Concurrency family</h4>
+    <p><code>async</code> &middot; <code>await</code> &middot; <code>Task</code> &middot; <code>TaskGroup</code> &middot; <code>actor</code> &middot; <code>@MainActor</code> &middot; <code>GlobalActor</code> &middot; <code>Sendable</code> &middot; <code>@Sendable</code> &middot; <code>isolated</code> &middot; <code>nonisolated</code></p>
+  </div>
+</li>
+
+<li>
+  <div class="cluster">
+    <h4>20.5 Error-handling family</h4>
+    <p><code>Error</code> &middot; <code>throw</code> &middot; <code>throws</code> &middot; <code>rethrows</code> &middot; <code>try</code> &middot; <code>try?</code> &middot; <code>try!</code> &middot; <code>do</code> &middot; <code>catch</code> &middot; <code>defer</code> &middot; <code>Result</code></p>
+  </div>
+</li>
+
+<li>
+  <div class="cluster">
+    <h4>20.6 Closure / function family</h4>
+    <p><code>func</code> &middot; closure &middot; <code>@escaping</code> &middot; <code>@autoclosure</code> &middot; trailing-closure syntax &middot; <code>inout</code> &middot; variadics (<code>...</code>) &middot; <code>-&gt;</code></p>
+  </div>
+</li>
+
+<li>
+  <div class="cluster">
+    <h4>20.7 Protocol family</h4>
+    <p><code>protocol</code> &middot; <code>extension</code> &middot; <code>associatedtype</code> &middot; <code>some</code> &middot; <code>any</code> &middot; conformance syntax &middot; protocol-oriented programming (concept)</p>
+  </div>
+</li>
+
+<li>
+  <div class="cluster">
+    <h4>20.8 Access-level family</h4>
+    <p><code>open</code> &middot; <code>public</code> &middot; <code>internal</code> &middot; <code>fileprivate</code> &middot; <code>private</code></p>
+    <p class="rel">Ordered from most permissive to most restrictive.</p>
+  </div>
+</li>
+
+<li>
+  <div class="cluster">
+    <h4>20.9 Pattern-matching family</h4>
+    <p><code>switch</code> &middot; <code>case</code> &middot; <code>default</code> &middot; <code>where</code> &middot; <code>if case</code> &middot; <code>guard case</code> &middot; <code>for case</code> &middot; <code>_</code> &middot; <code>is</code> &middot; <code>as</code></p>
+  </div>
+</li>
+
+<li>
+  <div class="cluster">
+    <h4>20.10 SwiftUI state family <span class="tag">SwiftUI</span></h4>
+    <p><code>@State</code> &middot; <code>@Binding</code> &middot; <code>@Observable</code> &middot; <code>@ObservedObject</code> &middot; <code>@StateObject</code> &middot; <code>@EnvironmentObject</code> &middot; <code>@Environment</code> &middot; <code>@Published</code> &middot; <code>@AppStorage</code> &middot; <code>@SceneStorage</code></p>
+    <p class="rel">Only lives in the Swift section if we decide it does &mdash; see open question #1.</p>
+  </div>
+</li>
+
+<li>
+  <div class="cluster">
+    <h4>20.11 Identity family</h4>
+    <p><code>self</code> &middot; <code>Self</code> &middot; <code>super</code> &middot; <code>type(of:)</code> &middot; <code>===</code> &middot; <code>!==</code></p>
+  </div>
+</li>
+
+<li>
+  <div class="cluster">
+    <h4>20.12 Functional-collection family</h4>
+    <p><code>map</code> &middot; <code>filter</code> &middot; <code>reduce</code> &middot; <code>forEach</code> &middot; <code>compactMap</code> &middot; <code>flatMap</code> &middot; <code>sorted</code> &middot; <code>zip</code></p>
+  </div>
+</li>
+<li class="spacer"></li>
+
+<!-- ============================================================ -->
+<li><h2 id="s21">21. Open Mapping Questions</h2></li>
+
+<li><strong>21.1 &mdash; SwiftUI wrappers in the Swift lexicon, yes or no?</strong>
+  <p class="note">If yes, the S Book gets <code>@State</code>, <code>@StateObject</code>, <code>@SceneStorage</code>, and the E Book gets <code>@Environment</code>, <code>@EnvironmentObject</code>. If no, the lexicon stays Swift-language-pure and SwiftUI gets its own mini-lexicon inside Book 2 (SwiftUI Views).</p>
+</li>
+
+<li><strong>21.2 &mdash; Operators: their own Book, an appendix, or sprinkled into letter Books?</strong>
+  <p class="note">Operators aren't alphabetizable. Three shapes: (a) one &ldquo;Book of Operators&rdquo; that sits after Z; (b) an appendix at the end of the Swift section; (c) each family cross-linked into the alphabetized Books where the controlling keyword lives (e.g. the Optional operators sit in Book O next to <code>Optional</code>).</p>
+</li>
+
+<li><strong>21.3 &mdash; Punctuation: same question.</strong>
+  <p class="note">Probably wants the same answer as operators, whatever that ends up being.</p>
+</li>
+
+<li><strong>21.4 &mdash; Thin letters (Q, X, Y, Z): keep the empty Books for the encyclopedia feel, or collapse?</strong>
+  <p class="note">Real encyclopedias ship W-X-Y-Z as one slim volume. We could mirror that.</p>
+</li>
+
+<li><strong>21.5 &mdash; Concurrency types with capital first letters (<code>Task</code>, <code>TaskGroup</code>, <code>MainActor</code>): alphabetize with the other types, or group them?</strong></li>
+
+<li><strong>21.6 &mdash; Where does the Swift section sit in the overall Bible?</strong>
+  <p class="note">Options: (a) new Part I before current Part I; (b) companion volume / Volume Two of the Bible; (c) back-of-book reference section.</p>
+</li>
+
+<li><strong>21.7 &mdash; Entry format: what fields per entry?</strong>
+  <p class="note">Candidate fields: headword, category tag, plain-English definition, tiny example, related words, double-citation sources. To be decided once the above are settled.</p>
+</li>
+
+<li><strong>21.8 &mdash; Style-of-truth for concept words that aren&rsquo;t actually Swift keywords.</strong>
+  <p class="note">Words like <code>closure</code>, <code>generic</code>, <code>property wrapper</code>, <code>protocol-oriented programming</code>, <code>Copy-on-Write</code> are concepts, not tokens. They probably earn entries anyway &mdash; readers will look them up &mdash; but they need a different entry shape than a keyword.</p>
+</li>
+<li class="spacer"></li>
+
+<li>
+  <footer>
+    Amber monochrome mapping doc &mdash; Claude&rsquo;s Xcode 26 Swift Bible, Swift section.<br>
+    File: <code>swift-section-mapping.html</code>. Edit &middot; refresh &middot; proof by line number.
+  </footer>
+</li>
+
+</ol>
+
+</body>
+</html>

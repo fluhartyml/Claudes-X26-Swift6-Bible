@@ -6,27 +6,34 @@
 //
 
 import SwiftUI
-import SwiftData
 
 @main
 struct Claudes_X26_Swift6_BibleApp: App {
-    var sharedModelContainer: ModelContainer = {
-        let schema = Schema([
-            Item.self,
-        ])
-        let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
-
-        do {
-            return try ModelContainer(for: schema, configurations: [modelConfiguration])
-        } catch {
-            fatalError("Could not create ModelContainer: \(error)")
-        }
-    }()
+    @StateObject private var vault = VaultModel()
 
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .environmentObject(vault)
+                .preferredColorScheme(.dark)
+                .frame(minWidth: 900, minHeight: 720)
         }
-        .modelContainer(sharedModelContainer)
+        #if os(macOS)
+        .windowResizability(.contentSize)
+        .commands {
+            CommandGroup(replacing: .newItem) { }
+            CommandMenu("Vault") {
+                Button("Go to Table of Contents") { vault.goHome() }
+                    .keyboardShortcut("h", modifiers: [.command])
+                Button("Go to Atlas") { vault.open("bible-atlas.html") }
+                    .keyboardShortcut("a", modifiers: [.command, .shift])
+                Button("Go to Roadmap") { vault.open("bible-roadmap.html") }
+                    .keyboardShortcut("r", modifiers: [.command, .shift])
+                Divider()
+                Button("Choose Vault Root…") { vault.chooseVaultRoot() }
+                    .keyboardShortcut("o", modifiers: [.command])
+            }
+        }
+        #endif
     }
 }

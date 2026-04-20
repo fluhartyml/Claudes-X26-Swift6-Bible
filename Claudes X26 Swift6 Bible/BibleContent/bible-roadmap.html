@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Claude's Xcode 26 Swift Bible — Roadmap</title>
+<style>
+  :root {
+    --bg: #000000;
+    --fg: #FFB000;
+    --bright: #FFD060;
+    --dim: #996600;
+    --codebg: #1a0d00;
+    --border: #664500;
+    --hover: #332200;
+  }
+  * { box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: "FiraCode Nerd Font Mono", "FiraCode Nerd Font",
+                 "Fira Code", "Menlo", "Courier New", monospace;
+    font-size: 18pt;
+    line-height: 1.55;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem 2.5rem 6rem 2.5rem;
+    -webkit-font-smoothing: none;
+    text-shadow: 0 0 1px rgba(255, 176, 0, 0.35);
+  }
+  h1, h2, h3, h4 {
+    color: var(--bright);
+    font-weight: normal;
+    letter-spacing: 0.02em;
+    margin: 0;
+  }
+  h1 { font-size: 28pt; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
+  h2 { font-size: 22pt; border-bottom: 1px solid var(--border); padding-bottom: 0.3rem; }
+  h3 { font-size: 19pt; color: var(--fg); }
+  h4 { font-size: 17pt; color: var(--dim); text-transform: uppercase; letter-spacing: 0.1em; }
+  a { color: var(--bright); text-decoration: none; border-bottom: 1px dotted var(--dim); }
+  a:hover { background: var(--hover); }
+  p { margin: 0; }
+  code {
+    color: var(--bright);
+    background: var(--codebg);
+    padding: 0.08em 0.35em;
+    border: 1px solid #3a2400;
+    border-radius: 3px;
+    font-size: 0.92em;
+  }
+  pre {
+    background: var(--codebg);
+    color: var(--bright);
+    padding: 1rem 1.2rem;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    font-size: 14pt;
+    overflow-x: auto;
+    margin: 0;
+    line-height: 1.4;
+  }
+  .note { color: var(--dim); font-style: italic; }
+
+  /* Line-numbered proofing list */
+  ol.lines { counter-reset: line; list-style: none; margin: 0; padding: 0; }
+  ol.lines > li {
+    counter-increment: line;
+    position: relative;
+    padding: 0.45rem 0 0.45rem 5rem;
+    border-bottom: 1px solid #1a1000;
+    min-height: 2.2rem;
+  }
+  ol.lines > li::before {
+    content: counter(line);
+    position: absolute;
+    left: 0;
+    top: 0.45rem;
+    width: 4rem;
+    text-align: right;
+    color: var(--dim);
+    font-size: 13pt;
+    padding-right: 0.8rem;
+    border-right: 1px solid var(--border);
+    user-select: none;
+  }
+  ol.lines > li:hover { background: #0a0600; }
+  ol.lines > li.spacer { min-height: 1rem; padding-top: 0.2rem; padding-bottom: 0.2rem; }
+
+  .box {
+    border: 1px solid var(--border);
+    padding: 0.8rem 1.1rem;
+    background: #060400;
+  }
+  .box h4 { color: var(--bright); text-transform: none; letter-spacing: 0; font-size: 18pt; margin-bottom: 0.3rem; }
+
+  .legend { font-size: 13pt; color: var(--dim); }
+
+  header, footer {
+    color: var(--dim);
+    font-size: 13pt;
+  }
+  header {
+    margin-bottom: 1.2rem;
+    padding-bottom: 0.7rem;
+    border-bottom: 1px solid var(--border);
+  }
+  footer { margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--border); }
+
+  .tag {
+    display: inline-block;
+    font-size: 10pt;
+    padding: 0.1rem 0.4rem;
+    border: 1px solid var(--dim);
+    color: var(--dim);
+    margin-left: 0.3rem;
+    vertical-align: middle;
+    font-style: italic;
+    border-radius: 2px;
+  }
+  .tag.locked { color: #80FF60; border-color: #80FF60; background: #061600; }
+  .tag.open   { color: var(--fg); border-color: var(--border); }
+
+  /* FIVE-STATE FLAG SYSTEM --------------------------------------- */
+  /* Applied to <li> rows to mark proofing state. */
+
+  /* 1. Locked: Michael said "N yes" — decision saved to memory */
+  ol.lines > li.locked {
+    color: #80FF60;
+    background: linear-gradient(to right, #06180a 0%, transparent 60%);
+    border-left: 4px solid #80FF60;
+    padding-left: 4.7rem;
+  }
+  ol.lines > li.locked code { color: #B0FFA0; }
+
+  /* 2. Discussed: touched this session but not yet locked */
+  ol.lines > li.discussed {
+    color: #FFFF80;
+    background: linear-gradient(to right, #1a1600 0%, transparent 60%);
+    border-left: 4px solid #FFFF80;
+    padding-left: 4.7rem;
+  }
+
+  /* 3. Claude's interpretation, pending Michael's reaction */
+  ol.lines > li.interp {
+    font-style: italic;
+    border-left: 4px dashed #FFA040;
+    padding-left: 4.7rem;
+    background: linear-gradient(to right, #1a0a00 0%, transparent 60%);
+  }
+
+  /* 4. Approved interpretation: Claude proposed, Michael said yes */
+  ol.lines > li.approved {
+    color: #80FF60;
+    font-style: italic;
+    border-left: 4px solid #80FF60;
+    padding-left: 4.7rem;
+    background: linear-gradient(to right, #06180a 0%, transparent 60%);
+  }
+
+  /* 5. Default (no class) stays the original amber — no styling needed. */
+
+  /* Legend swatches */
+  .flag-legend {
+    border: 1px solid var(--border);
+    padding: 0.8rem 1.1rem;
+    background: #060400;
+    font-size: 14pt;
+  }
+  .flag-legend .swatch {
+    display: inline-block;
+    width: 1.1rem; height: 1.1rem;
+    vertical-align: middle;
+    margin-right: 0.4rem;
+    border: 1px solid var(--border);
+  }
+  .flag-legend .locked-sw   { background: #80FF60; }
+  .flag-legend .discussed-sw{ background: #FFFF80; }
+  .flag-legend .interp-sw   { background: #FFA040; border-style: dashed; }
+  .flag-legend .approved-sw { background: #80FF60; border-style: dotted; }
+  .flag-legend .default-sw  { background: var(--fg); }
+  .flag-legend > div { margin: 0.25rem 0; }
+</style>
+</head>
+<body>
+
+<header>
+  File: <code>Claudes-Xcode-26-Swift-Bible/bible-roadmap.html</code> &middot; Bible-wide roadmap
+</header>
+
+<ol class="lines">
+
+<li><h1>Claude&rsquo;s Xcode 26 Swift Bible &mdash; Roadmap</h1></li>
+<li><p class="note">Whole-product roadmap. Destination, architecture, and order of work. Proof by line number: &ldquo;N yes&rdquo; = lock, &ldquo;N huh?&rdquo; = explain, &ldquo;N change to X&rdquo; = edit. Updated 2026-04-20.</p></li>
+<li>
+  <div class="flag-legend">
+    <strong>Proofing flag system</strong> &mdash; refresh the page after Claude edits to see color changes:
+    <div><span class="swatch locked-sw"></span><strong>GREEN</strong> &mdash; <em>locked</em>: Michael said &ldquo;N yes&rdquo;, decision saved to memory, final.</div>
+    <div><span class="swatch discussed-sw"></span><strong>YELLOW</strong> &mdash; <em>discussed</em>: touched this session, not yet locked.</div>
+    <div><span class="swatch interp-sw"></span><strong>ORANGE DASHED</strong> &mdash; <em>Claude's interpretation</em>: Claude is proposing, Michael hasn&rsquo;t reacted yet.</div>
+    <div><span class="swatch approved-sw"></span><strong>GREEN ITALIC</strong> &mdash; <em>approved interpretation</em>: Claude proposed, Michael approved.</div>
+    <div><span class="swatch default-sw"></span><strong>AMBER (default)</strong> &mdash; <em>original / not yet discussed</em>.</div>
+  </div>
+</li>
+<li><p class="note">Inline tags: <span class="tag locked">LOCKED</span> = individual decision already in memory (these predate the flag system).</p></li>
+<li class="spacer"></li>
+
+<!-- ============================================================ -->
+<li><h2>1. North Star &mdash; The Final Product</h2></li>
+
+<li class="locked"><strong>1.1 &mdash; Final shipping format is EPUB.</strong>
+  <p class="note">One source of truth, packaged as EPUB for multi-venue distribution.</p>
+</li>
+
+<li class="locked"><strong>1.2 &mdash; Target publishing venues: Apple Books, Amazon Kindle, any other venue that accepts EPUB.</strong></li>
+
+<li class="locked"><strong>1.3 &mdash; During-making authoring environment is a vault of HTML rich-text documents.</strong>
+  <p class="note">Not plain markdown. HTML with fully-functioning hyperlinks between Books, and multimedia (images, and as appropriate video/audio) embedded directly. Vault style similar in concept to Ulysses / Scrivener / Obsidian &mdash; but the vault is plain HTML so no tool lock-in and the files double as the EPUB source.</p>
+</li>
+
+<li class="locked"><strong>1.4 &mdash; Two-layer model.</strong>
+  <p class="note"><strong>Source layer:</strong> HTML vault. <strong>Publishing layer:</strong> EPUB built by packaging the HTML vault &mdash; zipping XHTML + CSS + media + manifest. No format translation at publish time; EPUB is just packaging.</p>
+</li>
+<li class="spacer"></li>
+
+<!-- ============================================================ -->
+<li><h2>2. Vault Architecture</h2></li>
+
+<li class="locked"><strong>2.1 &mdash; Folder tree mirrors the reading order. The Finder/browser tree IS the table of contents.</strong></li>
+
+<li class="locked"><strong>2.2 &mdash; Folder tree (confirmed 2026-04-20):</strong>
+<pre>Claudes-Xcode-26-Swift-Bible/
+&boxvr;&boxh;&boxh; Part-I-The-Swift-Language/
+&boxv;   &boxvr;&boxh;&boxh; Book-A/
+&boxv;   &boxvr;&boxh;&boxh; Book-B/
+&boxv;   &boxvr;&boxh;&boxh; ... (26 Books A&ndash;Z)
+&boxv;   &boxur;&boxh;&boxh; Book-Z/
+&boxvr;&boxh;&boxh; Part-II-Introduction/              (current Part I, renamed)
+&boxv;   &boxvr;&boxh;&boxh; Book-01-Introducing-Swift-And-Xcode/
+&boxv;   &boxvr;&boxh;&boxh; Book-02-Introducing-SwiftUI-Views/
+&boxv;   &boxur;&boxh;&boxh; Book-03-Introducing-Scenes-And-Windows/
+&boxvr;&boxh;&boxh; Part-III-The-User-Interface/       (current Part II)
+&boxv;   &boxur;&boxh;&boxh; ...
+&boxvr;&boxh;&boxh; Part-IV-The-Application/
+&boxvr;&boxh;&boxh; Part-V-Advanced-Techniques/
+&boxvr;&boxh;&boxh; Part-VI-The-Modern-Toolchain/
+&boxvr;&boxh;&boxh; Appendices/
+&boxv;   &boxvr;&boxh;&boxh; Appendix-A-GitHub-Setup/
+&boxv;   &boxvr;&boxh;&boxh; Appendix-B-Claudes-Web-Wrapper/
+&boxv;   &boxur;&boxh;&boxh; Appendix-C-QuickNote/
+&boxur;&boxh;&boxh; _shared/                            (or similar)
+    &boxvr;&boxh;&boxh; css/
+    &boxvr;&boxh;&boxh; fonts/
+    &boxvr;&boxh;&boxh; cover.jpg
+    &boxur;&boxh;&boxh; figures-shared/</pre>
+</li>
+
+<li><strong>2.3 Each Book's folder is a self-contained unit.</strong>
+  <p class="note">Holds its own HTML file(s), <code>figures/</code>, <code>media/</code>. Moving, duplicating, or handing off a Book doesn't break references.</p>
+</li>
+<li class="spacer"></li>
+
+<!-- ============================================================ -->
+<li><h2>3. Architecture Decisions Still Open</h2></li>
+
+<li><strong>3.1 Part numbering.</strong>
+  <p class="note">The new Swift section pushes everything down. Options: (a) Swift becomes <strong>Part I</strong>, existing Part I-V slide down to Parts II-VI. (b) Swift is <strong>Volume Zero / Prelude</strong>, unnumbered, and existing Parts keep their numbers. (c) Total renumber into a new scheme.</p>
+</li>
+
+<li><strong>3.2 Shared assets location.</strong>
+  <p class="note">Cover image, stylesheets, embedded fonts (FiraCode Nerd Font), hero graphics, figures used by multiple Books &mdash; where do they live? Options: top-level <code>_shared/</code> folder (proposed in 2.2); top-level <code>_assets/</code>; or each Book gets a copy.</p>
+</li>
+
+<li><strong>3.3 Cross-linking convention.</strong>
+  <p class="note">How one Book refers to another. Options: plain relative <code>&lt;a href=&quot;../Book-B/Book-B.html&quot;&gt;</code>; CSS-classed links (<code>class=&quot;see-also&quot;</code>, <code>class=&quot;defined-in&quot;</code>, <code>class=&quot;cross-ref&quot;</code>); or a data-attribute system that lets us style/index them.</p>
+</li>
+
+<li><strong>3.4 Multimedia scope.</strong>
+  <p class="note">Images are given (figures/ already exists). What else? Options: (a) images only; (b) images + video (short MP4s of Xcode demos, SwiftUI animation clips); (c) images + video + audio. EPUB supports all of them but Kindle has uneven video support &mdash; this affects what we include in the Kindle build vs. the Apple Books build.</p>
+</li>
+
+<li class="locked"><strong>3.5 &mdash; Vault viewer: Obsidian now (open Bible root as vault), Claude Web Wrapper derivative later if/when volume justifies it.</strong>
+  <p class="note">Confirmed 2026-04-20. Obsidian gives file tree + search for free while content is built out; clicking an HTML file launches it in the browser where line-numbered proofing already works. The custom reader app is deferred until the vault is large enough that the file-tree-plus-browser flow starts to feel clunky.</p>
+</li>
+
+<li><strong>3.6 Entry format for Swift lexicon Books.</strong>
+  <p class="note">Still open from the Swift section mapping doc &mdash; candidate fields: headword, category tag, plain-English definition, tiny example, related words, double-citation sources.</p>
+</li>
+<li class="spacer"></li>
+
+<!-- ============================================================ -->
+<li><h2>4. Existing Content &mdash; What We Already Have</h2></li>
+
+<li><strong>4.1 22 chapters in Markdown.</strong>
+  <p class="note">Files <code>01-Introducing-Swift-And-Xcode.md</code> through <code>22-AI-Chatbot-Integration.md</code>. Content is proofed and polished. Will need migration to HTML.</p>
+</li>
+
+<li><strong>4.2 3 appendices.</strong>
+  <p class="note">GitHub Setup (<code>.md</code> + <code>.html</code>), Claude&rsquo;s Web Wrapper (<code>.md</code> + <code>.html</code> v2), QuickNote (<code>.md</code>).</p>
+</li>
+
+<li><strong>4.3 EPUB builds v1&ndash;v6.</strong>
+  <p class="note">Existing EPUB pipeline produces output. That pipeline (whatever it is &mdash; likely a script) will need a rewrite when the source layer becomes HTML vault.</p>
+</li>
+
+<li><strong>4.4 Figures folder, Screenshots folder, cover.jpg.</strong>
+  <p class="note">All present, all reusable in the HTML vault.</p>
+</li>
+
+<li><strong>4.5 BOOK-PARAMETERS.md governs style.</strong>
+  <p class="note">Double-citation standard, 18pt minimum, FiraCode Nerd Font (embedded, SIL OFL 1.1), GPL v3 license, Michael&rsquo;s plain-American voice. All still applies.</p>
+</li>
+<li class="spacer"></li>
+
+<!-- ============================================================ -->
+<li><h2>5. Proposed Phases</h2></li>
+<li><p class="note">Draft order of work &mdash; not locked. Each phase is a mappable milestone.</p></li>
+
+<li>
+  <div class="box">
+    <h4>Phase 0 &mdash; Architecture Setup</h4>
+    <p>Create the vault folder tree. Build the shared CSS stylesheet (print-ready + screen-reading + amber-proofing modes). Lock the hyperlink convention. Set up embedded FiraCode Nerd Font. Draft the EPUB packaging script. No book content written yet.</p>
+  </div>
+</li>
+
+<li>
+  <div class="box">
+    <h4>Phase 1 &mdash; Migration</h4>
+    <p>Convert the 22 existing <code>.md</code> chapters to HTML in their new Book folders. Wire up internal cross-references. Move figures/media into per-Book folders. Keep <code>.md</code> files as an archive until migration is verified.</p>
+  </div>
+</li>
+
+<li>
+  <div class="box">
+    <h4>Phase 2 &mdash; Swift Section Build (26 Books A&ndash;Z)</h4>
+    <p>Build out Part I: The Swift Language. Entry format locked first, then sample Book (likely Book A) proofed HTML-style, then the rest. Double-citation sources for each entry.</p>
+  </div>
+</li>
+
+<li>
+  <div class="box">
+    <h4>Phase 3 &mdash; Content Gaps &amp; New Books</h4>
+    <p>Chapter 16 proofing, Chapter 2 rebuild, LockBox build-process docs (Books 13&ndash;15), Web Wrapper appendix success-path rewrite. Any new Books identified during roadmap proofing.</p>
+  </div>
+</li>
+
+<li>
+  <div class="box">
+    <h4>Phase 4 &mdash; Multimedia Pass</h4>
+    <p>Where appropriate, add video/audio/interactive media to existing Books. Scope set by answer to 3.4.</p>
+  </div>
+</li>
+
+<li>
+  <div class="box">
+    <h4>Phase 5 &mdash; Proofing Sweep</h4>
+    <p>Full-book HTML proofing using the line-numbered technique. Double-citation verification pass. Accessibility pass (alt text, reading order, semantic markup). Style consistency.</p>
+  </div>
+</li>
+
+<li>
+  <div class="box">
+    <h4>Phase 6 &mdash; EPUB Build &amp; Publish</h4>
+    <p>Final EPUB v1.0 package. Apple Books submission. Amazon Kindle (KDP) submission. Any additional venues. Launch.</p>
+  </div>
+</li>
+
+<li>
+  <div class="box">
+    <h4>Phase 7 &mdash; Living Book</h4>
+    <p>Bible is versioned. New Swift/SwiftUI/Xcode releases update relevant Books. Re-package and re-submit on release cadence.</p>
+  </div>
+</li>
+<li class="spacer"></li>
+
+<!-- ============================================================ -->
+<li><h2>6. Companion-App Constellation (context, not roadmap items)</h2></li>
+
+<li><strong>6.1 Already shipping</strong> &mdash; QuickNote, Claude&rsquo;s Web Wrapper, LockBox. Each has (or will have) a dedicated Appendix in the Bible showing the build-along.</li>
+
+<li><strong>6.2 Queued as future companion apps</strong> &mdash; Claude&rsquo;s SketchPad, Claude&rsquo;s PulseBoard, TapTally (from MORNING-NOTES). Build order TBD; may produce more appendices.</li>
+
+<li><strong>6.3 Non-companion apps</strong> shipping in parallel (CryoTunes Player, Tally Matrix, Snap&amp;ScanKeeper, NightGard Library Commander). These are not in the Bible&rsquo;s build-along scope but may be referenced as real-world Swift code examples per Swift Bible Appendix B rewrite.</li>
+<li class="spacer"></li>
+
+<!-- ============================================================ -->
+<li><h2>7. Questions For Michael</h2></li>
+<li><p class="note">These are the open decisions that unblock the next layer of mapping. Answer on the line that follows each one.</p></li>
+
+<li><strong>7.1 Part numbering &mdash; which option from 3.1?</strong>
+  <p class="note">(a) Swift = Part I, existing Parts slide to II-VI. (b) Swift = Volume Zero, existing Parts keep their numbers. (c) Total renumber.</p>
+</li>
+
+<li><strong>7.2 Shared assets location &mdash; which option from 3.2?</strong></li>
+
+<li><strong>7.3 Cross-linking convention &mdash; which option from 3.3, or a different one?</strong></li>
+
+<li><strong>7.4 Multimedia scope &mdash; (a) images only, (b) +video, or (c) +video+audio?</strong></li>
+
+<li class="locked"><strong>7.5 &mdash; Vault viewer: answered. Obsidian for now, Web Wrapper derivative later. See 3.5.</strong></li>
+
+<li><strong>7.6 SwiftUI property wrappers in the Swift lexicon &mdash; yes (live in letter Books) or no (separate SwiftUI mini-lexicon)?</strong>
+  <p class="note">Inherited question from the Swift-section mapping doc. Needed before Phase 2 starts.</p>
+</li>
+
+<li><strong>7.7 Operators and punctuation &mdash; (a) their own Book, (b) an appendix, or (c) sprinkled into letter Books?</strong></li>
+
+<li><strong>7.8 Thin letters Q/X/Y/Z &mdash; (a) keep four empty Books for the encyclopedia feel, or (b) collapse into one slim W-X-Y-Z Book like Britannica?</strong></li>
+
+<li><strong>7.9 Is there anything missing from this roadmap that's already in your head?</strong></li>
+<li class="spacer"></li>
+
+<li>
+  <footer>
+    Amber monochrome roadmap &mdash; Claude&rsquo;s Xcode 26 Swift Bible.<br>
+    File: <code>bible-roadmap.html</code>. Edit &middot; refresh &middot; proof by line number.
+  </footer>
+</li>
+
+</ol>
+
+</body>
+</html>

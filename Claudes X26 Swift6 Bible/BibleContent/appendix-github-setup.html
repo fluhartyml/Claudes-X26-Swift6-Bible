@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Appendix: Setting Up GitHub and Connecting It to Xcode</title>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  html {
+    font-size: 18px;
+  }
+
+  body {
+    background-color: #000000;
+    color: #00FF00;
+    font-family: 'Fira Code', 'Fira Mono', 'Courier New', monospace;
+    line-height: 1.7;
+    padding: 2rem;
+    max-width: 960px;
+    margin: 0 auto;
+  }
+
+  h1 {
+    color: #00FF00;
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-top: 2.5rem;
+    margin-bottom: 1rem;
+    border-bottom: 2px solid #00FF00;
+    padding-bottom: 0.5rem;
+  }
+
+  h2 {
+    color: #00FF00;
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin-top: 2.5rem;
+    margin-bottom: 1rem;
+  }
+
+  p {
+    margin-bottom: 1rem;
+  }
+
+  strong {
+    color: #FFFFFF;
+    font-weight: 700;
+  }
+
+  em {
+    color: #88FF88;
+    font-style: italic;
+  }
+
+  a {
+    color: #39FF14;
+    text-decoration: underline;
+  }
+
+  a:hover {
+    color: #FFFFFF;
+  }
+
+  hr {
+    border: none;
+    border-top: 1px solid #333333;
+    margin: 2rem 0;
+  }
+
+  code {
+    font-family: 'Fira Code', monospace;
+    background-color: #0a0a0a;
+    color: #39FF14;
+    padding: 0.15em 0.4em;
+    border-radius: 4px;
+    font-size: 0.9rem;
+  }
+
+  pre {
+    background-color: #111111;
+    color: #00FF41;
+    padding: 1.2rem;
+    border-radius: 8px;
+    overflow-x: auto;
+    margin-bottom: 1.5rem;
+    border: 1px solid #222222;
+    line-height: 1.5;
+  }
+
+  pre code {
+    background: none;
+    color: inherit;
+    padding: 0;
+    font-size: 0.85rem;
+  }
+
+  ul, ol {
+    color: #00FF00;
+    margin-bottom: 1rem;
+    padding-left: 2rem;
+  }
+
+  li {
+    margin-bottom: 0.5rem;
+  }
+
+  .figure-placeholder {
+    border: 2px dashed #00FF00;
+    border-radius: 8px;
+    padding: 1rem 1.5rem;
+    margin: 1.5rem 0;
+    text-align: center;
+    color: #88FF88;
+    font-style: italic;
+    background-color: #0a0a0a;
+  }
+
+  .subtitle {
+    color: #88FF88;
+    font-style: italic;
+    margin-bottom: 1.5rem;
+  }
+
+  .footer {
+    margin-top: 3rem;
+    padding-top: 1rem;
+    border-top: 1px solid #333333;
+    color: #88FF88;
+    font-style: italic;
+  }
+
+  .footer p {
+    margin-bottom: 0.3rem;
+  }
+
+  .step {
+    margin-bottom: 1rem;
+  }
+
+  @media (max-width: 768px) {
+    body {
+      padding: 1rem;
+    }
+    pre {
+      font-size: 0.75rem;
+      padding: 0.8rem;
+    }
+    h1 { font-size: 1.5rem; }
+    h2 { font-size: 1.25rem; }
+  }
+</style>
+</head>
+<body>
+
+<h1>Appendix: Setting Up GitHub and Connecting It to Xcode</h1>
+
+<p class="subtitle">Claude&rsquo;s Xcode 26 Swift Bible &mdash; Prerequisite Setup</p>
+
+<hr>
+
+<p>This appendix gets you set up with GitHub and connected to Xcode before you write a single line of code. Every app appendix in this book assumes this is already done. Do this once and you never think about it again.</p>
+
+<p>If you already have a GitHub account connected to Xcode, skip this appendix. Otherwise, follow along &mdash; it takes about ten minutes.</p>
+
+<hr>
+
+<h2>1. What GitHub Is</h2>
+
+<p class="step">1.1 GitHub is where your code lives online. Think of it as a backup drive that also tracks every change you ever make. You save a version, it remembers it. You break something next Tuesday, you roll back to last Tuesday. That&rsquo;s it.</p>
+
+<p class="step">1.2 The free account does everything you need. Unlimited public repositories, unlimited private repositories. You&rsquo;re not hitting a paywall here.</p>
+
+<p class="step">1.3 One thing that trips people up: <strong>Git</strong> and <strong>GitHub</strong> are not the same thing. Git is the tool &mdash; it runs on your Mac, inside Xcode, tracking changes locally. GitHub is the website that hosts your Git repositories online. Git is the engine. GitHub is the parking garage. Xcode talks to both.</p>
+
+<hr>
+
+<h2>2. Creating a GitHub Account</h2>
+
+<p class="step">2.1 Open a browser and go to <strong>github.com</strong>. Click <strong>Sign up</strong> in the top-right corner.</p>
+
+<p class="step">2.2 GitHub walks you through it:</p>
+
+<ul>
+<li><strong>Email:</strong> Use whatever email you check regularly. This is where verification and notifications go.</li>
+<li><strong>Password:</strong> Pick something strong. You know the drill.</li>
+<li><strong>Username:</strong> This one matters. Your username becomes part of every repository URL you create &mdash; <code>github.com/yourname/YourApp</code>. Pick something professional. If you&rsquo;re building a portfolio, this is what people see.</li>
+</ul>
+
+<p class="step">2.3 Pick the <strong>Free</strong> plan. That&rsquo;s the one you want. The paid tiers are for teams and enterprises &mdash; you don&rsquo;t need them.</p>
+
+<p class="step">2.4 GitHub sends a verification email. Open it, click the link. You&rsquo;re in.</p>
+
+<p class="step">2.5 Your profile lives at <code>github.com/yourname</code>. Every repository you create shows up there. When you publish an app and someone asks &ldquo;where&rsquo;s the source code?&rdquo; &mdash; you point them here.</p>
+
+<div class="figure-placeholder">[Fig. GS.1 &mdash; GitHub signup page]</div>
+
+<hr>
+
+<h2>3. Creating a Personal Access Token</h2>
+
+<p class="step">3.1 GitHub doesn&rsquo;t let you sign in from Xcode with just your password. You need a <strong>personal access token</strong> &mdash; a long generated string that acts as your password. It&rsquo;s like an API key. GitHub uses it to verify that Xcode is authorized to push code to your account.</p>
+
+<p class="step">3.2 Here&rsquo;s the path. It&rsquo;s buried in settings, so follow exactly:</p>
+
+<ol>
+<li>Click your <strong>avatar</strong> (top-right corner of any GitHub page)</li>
+<li>Click <strong>Settings</strong></li>
+<li>Scroll down the left sidebar to <strong>Developer settings</strong> (very bottom)</li>
+<li>Click <strong>Personal access tokens</strong></li>
+<li>Click <strong>Tokens (classic)</strong></li>
+<li>Click <strong>Generate new token</strong> &gt; <strong>Generate new token (classic)</strong></li>
+</ol>
+
+<p class="step">3.3 Fill it in:</p>
+
+<ul>
+<li><strong>Note:</strong> Give it a name like <code>Xcode</code> so you remember what it&rsquo;s for six months from now.</li>
+<li><strong>Expiration:</strong> 90 days is reasonable. Or pick <strong>No expiration</strong> if you don&rsquo;t want to deal with regenerating it. Your call. No expiration is less hassle; 90 days is more secure.</li>
+<li><strong>Scopes:</strong> Check these two boxes:
+  <ul>
+    <li><code>repo</code> &mdash; Full control of private repositories. This is the one that matters. Without it, Xcode can&rsquo;t push code.</li>
+    <li><code>workflow</code> &mdash; Optional, but check it if you ever plan to use GitHub Actions for automated builds or testing.</li>
+  </ul>
+</li>
+</ul>
+
+<p class="step">3.4 Click <strong>Generate token</strong> at the bottom.</p>
+
+<div class="figure-placeholder">[Fig. GS.2 &mdash; Personal access token settings: scopes selected]</div>
+
+<p class="step">3.5 GitHub shows you the token exactly once. It&rsquo;s a long string starting with <code>ghp_</code>. <strong>Copy it now.</strong> Right now. Not in a minute. Now.</p>
+
+<p class="step">3.6 If you navigate away without copying it, that token is gone. You can&rsquo;t retrieve it. You&rsquo;d have to generate a new one. So copy it and save it somewhere safe &mdash; Notes app, password manager, a text file you won&rsquo;t delete. Whatever works for you, just don&rsquo;t lose it.</p>
+
+<div class="figure-placeholder">[Fig. GS.3 &mdash; Generated token displayed (copy it immediately)]</div>
+
+<hr>
+
+<h2>4. Adding GitHub to Xcode</h2>
+
+<p class="step">4.1 Open Xcode. Go to <strong>Settings</strong> (Cmd+Comma, or <strong>Xcode &gt; Settings</strong> from the menu bar). Click the <strong>Accounts</strong> tab.</p>
+
+<p class="step">4.2 Click the <strong>+</strong> button in the bottom-left corner. A dropdown appears with account types &mdash; Apple ID, GitHub, GitHub Enterprise, Bitbucket Cloud, Bitbucket Server. Pick <strong>GitHub</strong>.</p>
+
+<div class="figure-placeholder">[Fig. GS.4 &mdash; Xcode Settings &gt; Accounts: empty, before adding GitHub]</div>
+
+<p class="step">4.3 Xcode asks for two things:</p>
+
+<ul>
+<li><strong>Account:</strong> Your GitHub username (the one you picked in section 2.2).</li>
+<li><strong>Token:</strong> Paste the personal access token you copied in section 3.5.</li>
+</ul>
+
+<p class="step">4.4 Click <strong>Sign In</strong>.</p>
+
+<p class="step">4.5 Your GitHub account appears in the accounts list. You&rsquo;ll see your username with a GitHub icon next to it. If everything worked, there&rsquo;s no error message &mdash; just your account sitting there, connected and ready.</p>
+
+<div class="figure-placeholder">[Fig. GS.5 &mdash; Xcode Settings &gt; Accounts: GitHub account added with green checkmark]</div>
+
+<hr>
+
+<h2>5. Verifying the Connection</h2>
+
+<p class="step">5.1 Still in <strong>Xcode &gt; Settings &gt; Accounts</strong>, click on your GitHub account in the list. The right side shows your account details &mdash; your username, the server (github.com), and your repositories.</p>
+
+<p class="step">5.2 If you just created your GitHub account, the repository list will be empty. That&rsquo;s normal. Once you start creating projects and pushing them, they show up here.</p>
+
+<p class="step">5.3 If you see a red error instead of your account details, check two things:</p>
+
+<ul>
+<li><strong>Token scopes:</strong> Go back to GitHub (section 3.2) and verify your token has the <code>repo</code> scope checked. If it doesn&rsquo;t, generate a new token with the right scopes.</li>
+<li><strong>Token expiration:</strong> If your token expired, you&rsquo;ll need to generate a fresh one and update it in Xcode. Delete the old account entry (select it, click the <strong>&minus;</strong> button), then add it again with the new token.</li>
+</ul>
+
+<p class="step">5.4 Close Settings. You&rsquo;re done with setup.</p>
+
+<hr>
+
+<h2>6. What You Just Set Up</h2>
+
+<p class="step">6.1 Your code has an online backup from day one. Every project you create in Xcode can push to GitHub with a couple of clicks. No FTP, no manual file copying, no emailing zip files to yourself. You commit, you push, it&rsquo;s up there.</p>
+
+<p class="step">6.2 Every change is tracked. Git records what you changed, when you changed it, and what it looked like before. If you delete a function on Wednesday and need it back on Friday, it&rsquo;s still there in the history. This isn&rsquo;t theoretical &mdash; you will use this, and you&rsquo;ll be glad it was running the whole time.</p>
+
+<p class="step">6.3 If the repository is public, other people can see your code. That&rsquo;s how you build a portfolio. When you apply for a gig or want to show someone what you can do, you hand them a GitHub link. The code speaks for itself.</p>
+
+<p class="step">6.4 This is a one-time setup. You won&rsquo;t touch these settings again unless you switch to a new Mac or your token expires. Every app you build from here on out &mdash; Claude's Web Wrapper (Wraply), Tally Matrix, whatever comes next &mdash; uses this same connection.</p>
+
+<hr>
+
+<p>Now you&rsquo;re ready to start building. Turn to the next appendix and create your first app.</p>
+
+<hr>
+
+<div class="footer">
+<p>Claude&rsquo;s Xcode 26 Swift Bible</p>
+<p>License: GPL v3 &mdash; Share and share alike with attribution required.</p>
+</div>
+
+</body>
+</html>

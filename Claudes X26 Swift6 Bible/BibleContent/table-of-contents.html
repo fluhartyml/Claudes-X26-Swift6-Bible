@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Claude's Xcode 26 Swift Bible — Table of Contents</title>
+<style>
+  :root {
+    --bg: #000000;
+    --fg: #FFB000;
+    --bright: #FFD060;
+    --dim: #996600;
+    --codebg: #1a0d00;
+    --border: #664500;
+    --hover: #332200;
+  }
+  * { box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: "FiraCode Nerd Font Mono", "FiraCode Nerd Font",
+                 "Fira Code", "Menlo", "Courier New", monospace;
+    font-size: 18pt;
+    line-height: 1.55;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem 2.5rem 6rem 2.5rem;
+    text-shadow: 0 0 1px rgba(255, 176, 0, 0.35);
+  }
+  h1 { color: var(--bright); font-weight: normal; font-size: 32pt; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; margin: 1rem 0 2rem 0; }
+  h2 { color: var(--bright); font-weight: normal; font-size: 22pt; border-bottom: 1px solid var(--border); padding-bottom: 0.3rem; margin-top: 2.5rem; }
+  h3 { color: var(--fg); font-weight: normal; font-size: 18pt; margin-top: 1.3rem; margin-bottom: 0.4rem; }
+  p { margin: 0.4rem 0; }
+  a { color: var(--bright); text-decoration: none; border-bottom: 1px dotted var(--dim); }
+  a:hover { background: var(--hover); }
+  .intro { color: var(--dim); font-style: italic; margin-bottom: 2rem; }
+  code { color: var(--bright); background: var(--codebg); padding: 0.08em 0.35em; border: 1px solid #3a2400; border-radius: 3px; font-size: 0.92em; }
+  header, footer { color: var(--dim); font-size: 13pt; }
+  header { margin-bottom: 1.2rem; padding-bottom: 0.7rem; border-bottom: 1px solid var(--border); }
+  footer { margin-top: 3rem; padding-top: 1rem; border-top: 1px solid var(--border); }
+  .books {
+    list-style: none;
+    padding: 0;
+    margin: 0.6rem 0;
+  }
+  .books li {
+    padding: 0.4rem 0;
+    border-bottom: 1px dashed #1a1000;
+    display: grid;
+    grid-template-columns: 5rem 1fr auto;
+    gap: 1rem;
+    align-items: baseline;
+  }
+  .books li:last-child { border-bottom: none; }
+  .book-num { color: var(--dim); font-size: 15pt; }
+  .book-title a { font-size: 16pt; }
+  .book-status { color: var(--dim); font-size: 13pt; font-style: italic; text-align: right; }
+  .meta-row { display: grid; grid-template-columns: 1fr auto; gap: 1rem; align-items: baseline; padding: 0.3rem 0; border-bottom: 1px dashed #1a1000; }
+  .meta-row:last-child { border-bottom: none; }
+  .meta-status { color: var(--dim); font-size: 13pt; font-style: italic; }
+  .part-note { color: var(--dim); font-size: 13pt; font-style: italic; margin-bottom: 0.4rem; }
+</style>
+</head>
+<body>
+
+<header>
+  File: <code>Claudes-Xcode-26-Swift-Bible/table-of-contents.html</code> &middot; the reader's entry point
+</header>
+
+<h1>Claude's Xcode 26 Swift Bible</h1>
+<p class="intro">Table of Contents. Every Book, every Appendix. Click a Book to open it &mdash; unwritten Books show a placeholder page that tells you what's planned. This page is for readers; the <a href="bible-atlas.html">Atlas</a> is for tracking what's written vs. planned at a deeper level.</p>
+
+<!-- ============================================================ -->
+<h2>Meta &amp; Mapping Documents</h2>
+<p class="part-note">The scaffolding docs that track what the Bible is and what's in it. Not book content &mdash; tools for building the book.</p>
+<div class="meta-row"><div><a href="bible-atlas.html">Bible Atlas</a> &mdash; master index of every file in the vault, status + relationships</div><div class="meta-status">EXISTS</div></div>
+<div class="meta-row"><div><a href="bible-roadmap.html">Bible Roadmap</a> &mdash; whole-product roadmap, architecture decisions, open questions</div><div class="meta-status">EXISTS</div></div>
+<div class="meta-row"><div><a href="swift-section-mapping.html">Swift Section Mapping</a> &mdash; mapping doc for Part I (every Swift word/operator/punctuation)</div><div class="meta-status">EXISTS</div></div>
+
+<!-- ============================================================ -->
+<h2>Part I &mdash; The Swift Language</h2>
+<p class="part-note">Encyclopedia-style Swift lexicon. 26 Books, A&ndash;Z. A reference, not a tutorial. Part numbering is tentative (open question 3.1 &mdash; may become "Volume Zero" instead).</p>
+<ul class="books">
+  <li><span class="book-num">Book A</span><span class="book-title"><a href="Part-I-The-Swift-Language/Chapter-A/Chapter-A.html">The Swift Lexicon &mdash; A</a></span><span class="book-status">Placeholder</span></li>
+  <li><span class="book-num">Book B</span><span class="book-title"><a href="Part-I-The-Swift-Language/Chapter-B/Chapter-B.html">The Swift Lexicon &mdash; B</a></span><span class="book-status">Placeholder</span></li>
+  <li><span class="book-num">Book C</span><span class="book-title"><a href="Part-I-The-Swift-Language/Chapter-C/Chapter-C.html">The Swift Lexicon &mdash; C</a></span><span class="book-status">Placeholder</span></li>
+  <li><span class="book-num">Book D</span><span class="book-title"><a href="Part-I-The-Swift-Language/Chapter-D/Chapter-D.html">The Swift Lexicon &mdash; D</a></span><span class="book-status">Placeholder</span></li>
+  <li><span class="book-num">Book E</span><span class="book-title"><a href="Part-I-The-Swift-Language/Chapter-E/Chapter-E.html">The Swift Lexicon &mdash; E</a></span><span class="book-status">Placeholder</span></li>
+  <li><span class="book-num">Book F</span><span class="book-title"><a href="Part-I-The-Swift-Language/Chapter-F/Chapter-F.html">The Swift Lexicon &mdash; F</a></span><span class="book-status">Placeholder</span></li>
+  <li><span class="book-num">Book G</span><span class="book-title"><a href="Part-I-The-Swift-Language/Chapter-G/Chapter-G.html">The Swift Lexicon &mdash; G</a></span><span class="book-status">Placeholder</span></li>
+  <li><span class="book-num">Book H</span><span class="book-title"><a href="Part-I-The-Swift-Language/Chapter-H/Chapter-H.html">The Swift Lexicon &mdash; H</a></span><span class="book-status">Placeholder</span></li>
+  <li><span class="book-num">Book I</span><span class="book-title"><a href="Part-I-The-Swift-Language/Chapter-I/Chapter-I.html">The Swift Lexicon &mdash; I</a></span><span class="book-status">Placeholder</span></li>
+  <li><span class="book-num">Book J</span><span class="book-title"><a href="Part-I-The-Swift-Language/Chapter-J/Chapter-J.html">The Swift Lexicon &mdash; J</a></span><span class="book-status">Placeholder (thin)</span></li>
+  <li><span class="book-num">Book K</span><span class="book-title"><a href="Part-I-The-Swift-Language/Chapter-K/Chapter-K.html">The Swift Lexicon &mdash; K</a></span><span class="book-status">Placeholder</span></li>
+  <li><span class="book-num">Book L</span><span class="book-title"><a href="Part-I-The-Swift-Language/Chapter-L/Chapter-L.html">The Swift Lexicon &mdash; L</a></span><span class="book-status">Placeholder</span></li>
+  <li><span class="book-num">Book M</span><span class="book-title"><a href="Part-I-The-Swift-Language/Chapter-M/Chapter-M.html">The Swift Lexicon &mdash; M</a></span><span class="book-status">Placeholder</span></li>
+  <li><span class="book-num">Book N</span><span class="book-title"><a href="Part-I-The-Swift-Language/Chapter-N/Chapter-N.html">The Swift Lexicon &mdash; N</a></span><span class="book-status">Placeholder</span></li>
+  <li><span class="book-num">Book O</span><span class="book-title"><a href="Part-I-The-Swift-Language/Chapter-O/Chapter-O.html">The Swift Lexicon &mdash; O</a></span><span class="book-status">Placeholder</span></li>
+  <li><span class="book-num">Book P</span><span class="book-title"><a href="Part-I-The-Swift-Language/Chapter-P/Chapter-P.html">The Swift Lexicon &mdash; P</a></span><span class="book-status">Placeholder</span></li>
+  <li><span class="book-num">Book Q</span><span class="book-title"><a href="Part-I-The-Swift-Language/Chapter-Q/Chapter-Q.html">The Swift Lexicon &mdash; Q</a></span><span class="book-status">Placeholder (thin)</span></li>
+  <li><span class="book-num">Book R</span><span class="book-title"><a href="Part-I-The-Swift-Language/Chapter-R/Chapter-R.html">The Swift Lexicon &mdash; R</a></span><span class="book-status">Placeholder</span></li>
+  <li><span class="book-num">Book S</span><span class="book-title"><a href="Part-I-The-Swift-Language/Chapter-S/Chapter-S.html">The Swift Lexicon &mdash; S</a></span><span class="book-status">Placeholder (heavy)</span></li>
+  <li><span class="book-num">Book T</span><span class="book-title"><a href="Part-I-The-Swift-Language/Chapter-T/Chapter-T.html">The Swift Lexicon &mdash; T</a></span><span class="book-status">Placeholder</span></li>
+  <li><span class="book-num">Book U</span><span class="book-title"><a href="Part-I-The-Swift-Language/Chapter-U/Chapter-U.html">The Swift Lexicon &mdash; U</a></span><span class="book-status">Placeholder</span></li>
+  <li><span class="book-num">Book V</span><span class="book-title"><a href="Part-I-The-Swift-Language/Chapter-V/Chapter-V.html">The Swift Lexicon &mdash; V</a></span><span class="book-status">Placeholder</span></li>
+  <li><span class="book-num">Book W</span><span class="book-title"><a href="Part-I-The-Swift-Language/Chapter-W/Chapter-W.html">The Swift Lexicon &mdash; W</a></span><span class="book-status">Placeholder</span></li>
+  <li><span class="book-num">Book X</span><span class="book-title"><a href="Part-I-The-Swift-Language/Chapter-X/Chapter-X.html">The Swift Lexicon &mdash; X</a></span><span class="book-status">Placeholder (thin)</span></li>
+  <li><span class="book-num">Book Y</span><span class="book-title"><a href="Part-I-The-Swift-Language/Chapter-Y/Chapter-Y.html">The Swift Lexicon &mdash; Y</a></span><span class="book-status">Placeholder (thin)</span></li>
+  <li><span class="book-num">Book Z</span><span class="book-title"><a href="Part-I-The-Swift-Language/Chapter-Z/Chapter-Z.html">The Swift Lexicon &mdash; Z</a></span><span class="book-status">Placeholder (thin)</span></li>
+</ul>
+
+<!-- ============================================================ -->
+<h2>Part II &mdash; Introduction</h2>
+<p class="part-note">Welcome-aboard chapters. Swift &amp; Xcode, SwiftUI views, scenes &amp; windows. Content exists as Markdown; HTML migration is Phase 1.</p>
+<ul class="books">
+  <li><span class="book-num">Book 01</span><span class="book-title"><a href="Part-II-Introduction/Book-01-Introducing-Swift-And-Xcode/Book-01-Introducing-Swift-And-Xcode.html">Introducing Swift &amp; Xcode</a></span><span class="book-status">Migration pending</span></li>
+  <li><span class="book-num">Book 02</span><span class="book-title"><a href="Part-II-Introduction/Book-02-Introducing-SwiftUI-Views/Book-02-Introducing-SwiftUI-Views.html">Introducing SwiftUI Views</a></span><span class="book-status">Migration pending</span></li>
+  <li><span class="book-num">Book 03</span><span class="book-title"><a href="Part-II-Introduction/Book-03-Introducing-Scenes-And-Windows/Book-03-Introducing-Scenes-And-Windows.html">Introducing Scenes &amp; Windows</a></span><span class="book-status">Migration pending</span></li>
+</ul>
+
+<!-- ============================================================ -->
+<h2>Part III &mdash; The User Interface</h2>
+<p class="part-note">Controls, gestures, text, menus, navigation, lists, sheets. Content exists as Markdown.</p>
+<ul class="books">
+  <li><span class="book-num">Book 04</span><span class="book-title"><a href="Part-III-The-User-Interface/Book-04-Gestures-And-Input/Book-04-Gestures-And-Input.html">Gestures &amp; Input</a></span><span class="book-status">Migration pending</span></li>
+  <li><span class="book-num">Book 05</span><span class="book-title"><a href="Part-III-The-User-Interface/Book-05-Menus-And-Navigation/Book-05-Menus-And-Navigation.html">Menus &amp; Navigation</a></span><span class="book-status">Migration pending</span></li>
+  <li><span class="book-num">Book 06</span><span class="book-title"><a href="Part-III-The-User-Interface/Book-06-Controls-Buttons-Toggles-Pickers/Book-06-Controls-Buttons-Toggles-Pickers.html">Controls: Buttons, Toggles, Pickers</a></span><span class="book-status">Migration pending</span></li>
+  <li><span class="book-num">Book 07</span><span class="book-title"><a href="Part-III-The-User-Interface/Book-07-Toolbars-And-Tab-Views/Book-07-Toolbars-And-Tab-Views.html">Toolbars &amp; Tab Views</a></span><span class="book-status">Migration pending</span></li>
+  <li><span class="book-num">Book 08</span><span class="book-title"><a href="Part-III-The-User-Interface/Book-08-Lists-Grids-And-ForEach/Book-08-Lists-Grids-And-ForEach.html">Lists, Grids &amp; ForEach</a></span><span class="book-status">Migration pending</span></li>
+  <li><span class="book-num">Book 09</span><span class="book-title"><a href="Part-III-The-User-Interface/Book-09-Text-And-TextField/Book-09-Text-And-TextField.html">Text &amp; TextField</a></span><span class="book-status">Migration pending</span></li>
+  <li><span class="book-num">Book 10</span><span class="book-title"><a href="Part-III-The-User-Interface/Book-10-TextEditor-And-AttributedString/Book-10-TextEditor-And-AttributedString.html">TextEditor &amp; AttributedString</a></span><span class="book-status">Migration pending</span></li>
+  <li><span class="book-num">Book 11</span><span class="book-title"><a href="Part-III-The-User-Interface/Book-11-FileManager-And-Documents/Book-11-FileManager-And-Documents.html">FileManager &amp; Documents</a></span><span class="book-status">Migration pending</span></li>
+  <li><span class="book-num">Book 12</span><span class="book-title"><a href="Part-III-The-User-Interface/Book-12-Sheets-Alerts-And-Confirmations/Book-12-Sheets-Alerts-And-Confirmations.html">Sheets, Alerts &amp; Confirmations</a></span><span class="book-status">Migration pending</span></li>
+</ul>
+
+<!-- ============================================================ -->
+<h2>Part IV &mdash; The Application</h2>
+<p class="part-note">Window-level architecture, data, extensions, charts. Content exists as Markdown.</p>
+<ul class="books">
+  <li><span class="book-num">Book 13</span><span class="book-title"><a href="Part-IV-The-Application/Book-13-Multi-Window-And-NavigationSplitView/Book-13-Multi-Window-And-NavigationSplitView.html">Multi-Window &amp; NavigationSplitView</a></span><span class="book-status">Migration pending</span></li>
+  <li><span class="book-num">Book 14</span><span class="book-title"><a href="Part-IV-The-Application/Book-14-Clipboard-DragDrop-ShareSheet/Book-14-Clipboard-DragDrop-ShareSheet.html">Clipboard, Drag &amp; Drop, Share Sheet</a></span><span class="book-status">Migration pending</span></li>
+  <li><span class="book-num">Book 15</span><span class="book-title"><a href="Part-IV-The-Application/Book-15-SwiftData-And-CoreData/Book-15-SwiftData-And-CoreData.html">SwiftData &amp; Core Data</a></span><span class="book-status">Migration pending</span></li>
+  <li><span class="book-num">Book 16</span><span class="book-title"><a href="Part-IV-The-Application/Book-16-Extensions-And-Packages/Book-16-Extensions-And-Packages.html">Extensions &amp; Packages</a></span><span class="book-status">Migration pending</span></li>
+  <li><span class="book-num">Book 17</span><span class="book-title"><a href="Part-IV-The-Application/Book-17-Swift-Charts-And-PDFKit/Book-17-Swift-Charts-And-PDFKit.html">Swift Charts &amp; PDFKit</a></span><span class="book-status">Migration pending</span></li>
+</ul>
+
+<!-- ============================================================ -->
+<h2>Part V &mdash; Advanced Techniques</h2>
+<p class="part-note">Error handling, custom views and modifiers, performance. Content exists as Markdown.</p>
+<ul class="books">
+  <li><span class="book-num">Book 18</span><span class="book-title"><a href="Part-V-Advanced-Techniques/Book-18-Error-Handling-And-Result-Type/Book-18-Error-Handling-And-Result-Type.html">Error Handling &amp; Result Type</a></span><span class="book-status">Migration pending</span></li>
+  <li><span class="book-num">Book 19</span><span class="book-title"><a href="Part-V-Advanced-Techniques/Book-19-Building-Custom-Views-And-Modifiers/Book-19-Building-Custom-Views-And-Modifiers.html">Building Custom Views &amp; Modifiers</a></span><span class="book-status">Migration pending</span></li>
+  <li><span class="book-num">Book 20</span><span class="book-title"><a href="Part-V-Advanced-Techniques/Book-20-Performance-Instruments-And-Best-Practices/Book-20-Performance-Instruments-And-Best-Practices.html">Performance, Instruments &amp; Best Practices</a></span><span class="book-status">Migration pending</span></li>
+</ul>
+
+<!-- ============================================================ -->
+<h2>Part VI &mdash; The Modern Toolchain</h2>
+<p class="part-note">Git, GitHub, AI integration. Content exists as Markdown.</p>
+<ul class="books">
+  <li><span class="book-num">Book 21</span><span class="book-title"><a href="Part-VI-The-Modern-Toolchain/Book-21-Git-And-GitHub/Book-21-Git-And-GitHub.html">Git &amp; GitHub</a></span><span class="book-status">Migration pending</span></li>
+  <li><span class="book-num">Book 22</span><span class="book-title"><a href="Part-VI-The-Modern-Toolchain/Book-22-AI-Chatbot-Integration/Book-22-AI-Chatbot-Integration.html">AI Chatbot Integration</a></span><span class="book-status">Migration pending</span></li>
+</ul>
+
+<!-- ============================================================ -->
+<h2>Appendices</h2>
+<p class="part-note">Build-along walkthroughs that ship with the Bible. Each appendix pairs with a companion app (App Store).</p>
+<ul class="books">
+  <li><span class="book-num">App. A</span><span class="book-title"><a href="Appendices/Appendix-A-GitHub-Setup/Appendix-A-GitHub-Setup.html">GitHub Setup</a></span><span class="book-status">Placeholder (source at root)</span></li>
+  <li><span class="book-num">App. B</span><span class="book-title"><a href="Appendices/Appendix-B-Claudes-Web-Wrapper/Appendix-B-Claudes-Web-Wrapper.html">Claude's Web Wrapper</a></span><span class="book-status">Placeholder (source at root)</span></li>
+  <li><span class="book-num">App. C</span><span class="book-title"><a href="Appendices/Appendix-C-QuickNote/Appendix-C-QuickNote.html">QuickNote</a></span><span class="book-status">Placeholder (MD at root)</span></li>
+  <li><span class="book-num">App. D</span><span class="book-title"><a href="Appendices/Appendix-D-LockBox/Appendix-D-LockBox.html">Claude's LockBox</a></span><span class="book-status">Placeholder (not yet written)</span></li>
+</ul>
+
+<footer>
+  File: <code>Claudes-Xcode-26-Swift-Bible/table-of-contents.html</code> &middot; the reader's entry point &middot; 52 Books + 4 Appendices + 3 Meta docs<br>
+  Related: <a href="bible-atlas.html">bible-atlas.html</a> &middot; <a href="bible-roadmap.html">bible-roadmap.html</a> &middot; <a href="swift-section-mapping.html">swift-section-mapping.html</a>
+</footer>
+
+</body>
+</html>

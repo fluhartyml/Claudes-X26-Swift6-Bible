@@ -1,0 +1,11 @@
+# Xcode
+.DS_Store
+xcuserdata/
+*.xcworkspace/xcuserdata/
+build/
+DerivedData/
+*.xcuserstate
+
+# Python (build scripts)
+__pycache__/
+*.pyc
