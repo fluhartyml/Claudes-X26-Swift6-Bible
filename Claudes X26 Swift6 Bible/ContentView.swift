@@ -136,17 +136,19 @@ struct ContentView: View {
                 Image(systemName: "house")
             }
 
-            Spacer()
-
             if let doc = vault.currentDocument {
+                Spacer(minLength: 8)
                 Text(vault.displayPath(for: doc))
                     .font(.caption.monospaced())
                     .foregroundStyle(.secondary)
                     .lineLimit(1)
                     .truncationMode(.middle)
+                    .layoutPriority(1)
+                    .frame(maxWidth: .infinity)
+                Spacer(minLength: 8)
+            } else {
+                Spacer()
             }
-
-            Spacer()
 
             Button {
                 showingUnderTheHood = true
@@ -209,12 +211,69 @@ struct VaultTreeOutline: View {
                         VaultTreeOutline(node: child)
                     }
                 } label: {
-                    Label(node.name, systemImage: node.symbolName)
+                    labelFor(node)
                 }
             }
         } else {
-            Label(node.name, systemImage: node.symbolName)
+            labelFor(node)
                 .tag(node.id)
         }
     }
+
+    private func labelFor(_ node: VaultNode) -> some View {
+        Label(displayName(node), systemImage: node.symbolName)
+            .lineLimit(1)
+            .truncationMode(.middle)
+            .help(node.name)
+    }
+
+    /// Shorter display name for folders whose raw name is unwieldy in the sidebar.
+    /// Target: ≤20 characters per `feedback_short_titles_20_chars` memory.
+    private func displayName(_ node: VaultNode) -> String {
+        let name = node.name
+        if let short = Self.shortNames[name] { return short }
+        if name.hasPrefix("Chapter-") {
+            return name.replacingOccurrences(of: "-", with: " ")  // "Chapter A"
+        }
+        return name
+    }
+
+    /// Manual short-title map. Every entry here is ≤20 chars.
+    private static let shortNames: [String: String] = [
+        // Parts
+        "Part-I-The-Swift-Language":    "I · Swift Language",
+        "Part-II-Introduction":         "II · Intro",
+        "Part-III-The-User-Interface":  "III · Interface",
+        "Part-IV-The-Application":      "IV · App",
+        "Part-V-Advanced-Techniques":   "V · Advanced",
+        "Part-VI-The-Modern-Toolchain": "VI · Toolchain",
+        // Books (Parts II–VI)
+        "Book-01-Introducing-Swift-And-Xcode":               "01 · Swift & Xcode",
+        "Book-02-Introducing-SwiftUI-Views":                 "02 · SwiftUI Views",
+        "Book-03-Introducing-Scenes-And-Windows":            "03 · Scenes & Windows",
+        "Book-04-Gestures-And-Input":                        "04 · Gestures",
+        "Book-05-Menus-And-Navigation":                      "05 · Menus",
+        "Book-06-Controls-Buttons-Toggles-Pickers":          "06 · Controls",
+        "Book-07-Toolbars-And-Tab-Views":                    "07 · Toolbars",
+        "Book-08-Lists-Grids-And-ForEach":                   "08 · Lists & Grids",
+        "Book-09-Text-And-TextField":                        "09 · Text",
+        "Book-10-TextEditor-And-AttributedString":           "10 · TextEditor",
+        "Book-11-FileManager-And-Documents":                 "11 · Files",
+        "Book-12-Sheets-Alerts-And-Confirmations":           "12 · Sheets",
+        "Book-13-Multi-Window-And-NavigationSplitView":      "13 · Windows",
+        "Book-14-Clipboard-DragDrop-ShareSheet":             "14 · Clipboard",
+        "Book-15-SwiftData-And-CoreData":                    "15 · SwiftData",
+        "Book-16-Extensions-And-Packages":                   "16 · Extensions",
+        "Book-17-Swift-Charts-And-PDFKit":                   "17 · Charts & PDF",
+        "Book-18-Error-Handling-And-Result-Type":            "18 · Errors",
+        "Book-19-Building-Custom-Views-And-Modifiers":       "19 · Custom Views",
+        "Book-20-Performance-Instruments-And-Best-Practices":"20 · Performance",
+        "Book-21-Git-And-GitHub":                            "21 · Git & GitHub",
+        "Book-22-AI-Chatbot-Integration":                    "22 · AI Chatbots",
+        // Appendices
+        "Appendix-A-GitHub-Setup":       "A · GitHub Setup",
+        "Appendix-B-Claudes-Web-Wrapper":"B · Web Wrapper",
+        "Appendix-C-QuickNote":          "C · QuickNote",
+        "Appendix-D-LockBox":            "D · LockBox",
+    ]
 }

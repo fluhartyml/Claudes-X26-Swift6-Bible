@@ -18,7 +18,9 @@ struct Claudes_X26_Swift6_BibleApp: App {
                 ContentView()
                     .environmentObject(vault)
                     .preferredColorScheme(.dark)
+                    #if os(macOS)
                     .frame(minWidth: 900, minHeight: 720)
+                    #endif
                 if !hasSeenOnboarding {
                     OnboardingView(onDismiss: { hasSeenOnboarding = true })
                         .transition(.opacity)
