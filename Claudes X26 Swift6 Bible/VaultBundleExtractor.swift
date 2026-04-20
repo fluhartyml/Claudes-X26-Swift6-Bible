@@ -18,7 +18,7 @@ import Foundation
 enum VaultBundleExtractor {
     static let folderName = "BibleContent"
     /// Bump this when content mapping rules change so the next launch re-extracts.
-    static let currentVersion = 7
+    static let currentVersion = 8
     private static let versionFileName = ".extraction-version"
 
     /// Make sure the extracted vault exists at a known location, then return
@@ -92,8 +92,8 @@ enum VaultBundleExtractor {
     static func targetPath(forFlat filename: String) -> String? {
         // Root-level mapping docs and metadata.
         let rootExact: Set<String> = [
-            "bible-atlas.html",
-            "bible-roadmap.html",
+            "claudex26-atlas.html",
+            "claudex26-roadmap.html",
             "swift-section-mapping.html",
             "table-of-contents.html",
             "BOOK-PARAMETERS.md",

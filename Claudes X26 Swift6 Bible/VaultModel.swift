@@ -95,7 +95,7 @@ final class VaultModel: ObservableObject {
         if FileManager.default.fileExists(atPath: tocURL.path) {
             currentDocument = tocURL
         } else {
-            let atlasURL = url.appending(path: "bible-atlas.html")
+            let atlasURL = url.appending(path: "claudex26-atlas.html")
             if FileManager.default.fileExists(atPath: atlasURL.path) {
                 currentDocument = atlasURL
             }
