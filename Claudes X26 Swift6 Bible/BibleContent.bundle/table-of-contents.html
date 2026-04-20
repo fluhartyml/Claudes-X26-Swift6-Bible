@@ -66,38 +66,6 @@
 </head>
 <body>
 
-<div id="font-debug" style="padding:0.6rem 0.9rem; background:#1a0d00; border:1px solid #FFB000; color:#FFD060; margin-bottom:1rem; font-size:14pt;">
-  font-debug — loading…
-</div>
-<script>
-  (function(){
-    var body = document.body;
-    var debug = document.getElementById('font-debug');
-    function update(){
-      var cs = window.getComputedStyle(body);
-      var computedPx = parseFloat(cs.fontSize);
-      var vv = window.visualViewport;
-      var scale = vv ? vv.scale : 1;
-      var actualPx = (computedPx * scale).toFixed(1);
-      debug.innerHTML =
-        '<strong>computed:</strong> ' + cs.fontSize +
-        ' &nbsp; <strong>actual:</strong> ' + actualPx + 'px' +
-        ' &nbsp; <strong>pinch:</strong> ' + scale.toFixed(2) + '&times;' +
-        ' &nbsp; <strong>vp:</strong> ' + window.innerWidth + '&times;' + window.innerHeight +
-        ' &nbsp; <strong>dpr:</strong> ' + (window.devicePixelRatio || 1) +
-        ' &nbsp; <strong>body.zoom:</strong> ' + (body.style.zoom || '1') +
-        ' &nbsp; <strong>tsa:</strong> ' + (cs.webkitTextSizeAdjust || cs.textSizeAdjust || 'unset');
-    }
-    update();
-    window.addEventListener('resize', update);
-    if (window.visualViewport) {
-      window.visualViewport.addEventListener('resize', update);
-      window.visualViewport.addEventListener('scroll', update);
-    }
-    setInterval(update, 500);
-  })();
-</script>
-
 <header>
   File: <code>Claudes-Xcode-26-Swift-Bible/table-of-contents.html</code> &middot; the reader's entry point
 </header>

@@ -59,41 +59,18 @@ struct ContentView: View {
     @ViewBuilder
     private var sidebar: some View {
         if let root = vault.rootNode {
-            VStack(spacing: 0) {
-                debugBar
-                List(selection: $vault.selectedNodeID) {
-                    VaultTreeOutline(node: root, isRoot: true)
-                }
-                .listStyle(.sidebar)
-                .onChange(of: vault.selectedNodeID) { _, newID in
-                    if let id = newID, let node = findNode(id: id, in: root), !node.isDirectory {
-                        vault.open(node.url)
-                    }
+            List(selection: $vault.selectedNodeID) {
+                VaultTreeOutline(node: root, isRoot: true)
+            }
+            .listStyle(.sidebar)
+            .onChange(of: vault.selectedNodeID) { _, newID in
+                if let id = newID, let node = findNode(id: id, in: root), !node.isDirectory {
+                    vault.open(node.url)
                 }
             }
         } else {
             vaultPicker
         }
-    }
-
-    private var debugBar: some View {
-        VStack(alignment: .leading, spacing: 2) {
-            Text("DEBUG")
-                .font(.caption2).bold()
-                .foregroundStyle(Color.orange)
-            Text("textScale: \(textScale, specifier: "%.2f")")
-                .font(.caption.monospaced())
-            Text("sidebar row: .body (Dynamic Type)")
-                .font(.caption.monospaced())
-            #if canImport(UIKit)
-            Text("row pt: \(UIFont.preferredFont(forTextStyle: .body).pointSize, specifier: "%.0f")")
-                .font(.caption.monospaced())
-            #endif
-        }
-        .padding(.horizontal, 10)
-        .padding(.vertical, 8)
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .background(Color.orange.opacity(0.15))
     }
 
     private var vaultPicker: some View {
