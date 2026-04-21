@@ -179,7 +179,11 @@ struct VaultWebView: PlatformViewRepresentable {
         guard let url = documentURL, let root = vaultRoot else { return }
         // Only reload if the target URL differs from what's currently loaded.
         if webView.url?.standardizedFileURL == url.standardizedFileURL { return }
-        webView.loadFileURL(url, allowingReadAccessTo: root)
+        // Grant read access to the parent of the vault root so WKWebView's
+        // sandbox check passes for sibling files reached via in-page links
+        // before our navigation delegate can cancel and re-route.
+        let accessScope = root.deletingLastPathComponent()
+        webView.loadFileURL(url, allowingReadAccessTo: accessScope)
     }
 
     // MARK: - Coordinator — intercepts navigations
