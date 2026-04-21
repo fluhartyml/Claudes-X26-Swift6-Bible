@@ -27,6 +27,7 @@ struct ContentView: View {
     @State private var showingAbout = false
     @State private var wholeBookShareURL: URL?
     @State private var preparingWholeBookShare = false
+    @State private var columnVisibility: NavigationSplitViewVisibility = .automatic
     @AppStorage("textScale") private var textScale: Double = 1.0
     #if !os(macOS)
     @State private var showingFolderImporter = false
@@ -37,9 +38,21 @@ struct ContentView: View {
     private let scaleStep: Double = 0.15
 
     var body: some View {
-        NavigationSplitView {
+        NavigationSplitView(columnVisibility: $columnVisibility) {
             sidebar
                 .navigationTitle("Library")
+                .toolbar {
+                    ToolbarItem(placement: .principal) {
+                        Text("Library")
+                            .font(.headline)
+                            .foregroundStyle(Color.libraryBright)
+                            .frame(maxWidth: .infinity)
+                            .contentShape(Rectangle())
+                            .onTapGesture {
+                                columnVisibility = .detailOnly
+                            }
+                    }
+                }
         } detail: {
             detail
         }
@@ -58,6 +71,17 @@ struct ContentView: View {
         .onReceive(NotificationCenter.default.publisher(for: .showAbout)) { _ in
             showingAbout = true
         }
+        #if os(iOS)
+        // On iPhone, collapse the sidebar when the reader opens a page
+        // so the amber reading pane takes over — swipe or the sidebar
+        // toolbar icon can bring it back.
+        .onChange(of: vault.currentDocument) { _, newDoc in
+            guard newDoc != nil else { return }
+            if UIDevice.current.userInterfaceIdiom == .phone {
+                columnVisibility = .detailOnly
+            }
+        }
+        #endif
         #if !os(macOS)
         .fileImporter(
             isPresented: $showingFolderImporter,
