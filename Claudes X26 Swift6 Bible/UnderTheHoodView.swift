@@ -12,12 +12,14 @@ import SwiftUI
 
 struct UnderTheHoodView: View {
     @Environment(\.dismiss) private var dismiss
+    @EnvironmentObject var vault: VaultModel
 
     var body: some View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: 16) {
                     header
+                    bookRoadmapLink
                     section(title: "Mission", body: missionText)
                     section(title: "Relationship to Other Projects", body: relationshipText)
                     section(title: "Architecture Decisions", body: architectureText)
@@ -51,6 +53,17 @@ struct UnderTheHoodView: View {
                 .font(.footnote)
                 .foregroundStyle(.secondary)
         }
+    }
+
+    private var bookRoadmapLink: some View {
+        Button {
+            dismiss()
+            vault.open("claudex26-roadmap.html")
+        } label: {
+            Label("Open Book Roadmap", systemImage: "map")
+                .frame(maxWidth: .infinity)
+        }
+        .buttonStyle(.borderedProminent)
     }
 
     @ViewBuilder

@@ -95,9 +95,9 @@ final class VaultModel: ObservableObject {
         if FileManager.default.fileExists(atPath: tocURL.path) {
             currentDocument = tocURL
         } else {
-            let atlasURL = url.appending(path: "claudex26-atlas.html")
-            if FileManager.default.fileExists(atPath: atlasURL.path) {
-                currentDocument = atlasURL
+            let indexURL = url.appending(path: "claudex26-index.html")
+            if FileManager.default.fileExists(atPath: indexURL.path) {
+                currentDocument = indexURL
             }
         }
     }
@@ -248,17 +248,17 @@ struct VaultNode: Identifiable, Hashable {
             )
             .filter { shouldShowInSidebar($0) }
             .sorted { lhs, rhs in
-                // Directories first, then logical-reading order for known
-                // top-level folders (Parts I–VI then Appendices at the
-                // back), then alphabetical for everything else.
+                // Known items (TOC, Parts, Appendices, figures) take their
+                // logical sort key; other files/folders go to the end
+                // alphabetically. A known file can outrank a directory,
+                // so we compare the sortKey first before falling back to
+                // directories-first.
+                let lKey = sortKey(lhs.lastPathComponent)
+                let rKey = sortKey(rhs.lastPathComponent)
+                if lKey != rKey { return lKey < rKey }
                 let lIsDir = (try? lhs.resourceValues(forKeys: [.isDirectoryKey]).isDirectory) ?? false
                 let rIsDir = (try? rhs.resourceValues(forKeys: [.isDirectoryKey]).isDirectory) ?? false
                 if lIsDir != rIsDir { return lIsDir }
-                if lIsDir {
-                    let lKey = sortKey(lhs.lastPathComponent)
-                    let rKey = sortKey(rhs.lastPathComponent)
-                    if lKey != rKey { return lKey < rKey }
-                }
                 return lhs.lastPathComponent.localizedStandardCompare(rhs.lastPathComponent) == .orderedAscending
             }
             children = entries.compactMap { buildTree(at: $0) }
@@ -268,9 +268,10 @@ struct VaultNode: Identifiable, Hashable {
         return VaultNode(id: url, url: url, name: url.lastPathComponent, isDirectory: true, children: children)
     }
 
-    /// Logical-reading-order sort key for top-level vault folders.
+    /// Logical-reading-order sort key for top-level vault items.
     /// Lower number sorts earlier. Unknowns fall through to alphabetical.
     private static func sortKey(_ name: String) -> Int {
+        if name == "table-of-contents.html" { return 1 }  // #1 in the sidebar
         if name.hasPrefix("Part-I-")   { return 10 }
         if name.hasPrefix("Part-II-")  { return 20 }
         if name.hasPrefix("Part-III-") { return 30 }

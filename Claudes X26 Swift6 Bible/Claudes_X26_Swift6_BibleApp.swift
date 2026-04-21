@@ -42,7 +42,7 @@ struct Claudes_X26_Swift6_BibleApp: App {
             CommandMenu("Vault") {
                 Button("Go to Table of Contents") { vault.goHome() }
                     .keyboardShortcut("h", modifiers: [.command])
-                Button("Go to Atlas") { vault.open("claudex26-atlas.html") }
+                Button("Go to Index") { vault.open("claudex26-index.html") }
                     .keyboardShortcut("a", modifiers: [.command, .shift])
                 Button("Go to Roadmap") { vault.open("claudex26-roadmap.html") }
                     .keyboardShortcut("r", modifiers: [.command, .shift])

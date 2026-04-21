@@ -18,7 +18,7 @@ import Foundation
 enum VaultBundleExtractor {
     static let folderName = "BibleContent"
     /// Bump this when content mapping rules change so the next launch re-extracts.
-    static let currentVersion = 10
+    static let currentVersion = 17
     private static let versionFileName = ".extraction-version"
 
     /// Make sure the extracted vault exists at a known location, then return
@@ -92,12 +92,11 @@ enum VaultBundleExtractor {
     static func targetPath(forFlat filename: String) -> String? {
         // Root-level mapping docs and metadata.
         let rootExact: Set<String> = [
-            "claudex26-atlas.html",
+            "claudex26-index.html",
             "claudex26-roadmap.html",
             "swift-section-mapping.html",
             "table-of-contents.html",
             "BOOK-PARAMETERS.md",
-            "book-parameters.html",
             "INDEX.md",
             "cover.jpg",
             "appendix-github-setup.html",
@@ -125,7 +124,7 @@ enum VaultBundleExtractor {
         if filename.hasPrefix("Chapter-"), filename.hasSuffix(".html"),
            filename.count == "Chapter-A.html".count {
             let letter = filename.dropFirst("Chapter-".count).prefix(1)
-            return "Part-I-The-Swift-Language/Chapter-\(letter)/\(filename)"
+            return "Part-II-The-Swift-Language/Chapter-\(letter)/\(filename)"
         }
 
         // Numbered Books — Book-NN-*.html.
@@ -135,7 +134,7 @@ enum VaultBundleExtractor {
             if let num = Int(digits) {
                 let partFolder: String
                 switch num {
-                case 1...3:   partFolder = "Part-II-Introduction"
+                case 0...3:   partFolder = "Part-I-Introduction"
                 case 4...12:  partFolder = "Part-III-The-User-Interface"
                 case 13...17: partFolder = "Part-IV-The-Application"
                 case 18...20: partFolder = "Part-V-Advanced-Techniques"

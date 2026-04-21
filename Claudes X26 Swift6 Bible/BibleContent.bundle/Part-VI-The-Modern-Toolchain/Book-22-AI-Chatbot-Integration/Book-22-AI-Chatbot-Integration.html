@@ -3,68 +3,99 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Book 22: AI Chatbot Integration — Claude's Xcode 26 Swift Reference</title>
+<title>Book 22: AI Chatbot Integration &mdash; Claude's Xcode 26 Swift Bible</title>
 <style>
-  :root {
-    --bg: #000000;
-    --fg: #FFB000;
-    --bright: #FFD060;
-    --dim: #996600;
-    --codebg: #1a0d00;
-    --border: #664500;
-  }
-  * { box-sizing: border-box; }
-  body {
-    background: var(--bg);
-    color: var(--fg);
-    font-family: "FiraCode Nerd Font Mono", "FiraCode Nerd Font",
-                 "Fira Code", "Menlo", "Courier New", monospace;
-    font-size: 18pt;
-    line-height: 1.55;
-    max-width: 1100px;
-    margin: 0 auto;
-    padding: 2rem 2.5rem 6rem 2.5rem;
-    text-shadow: 0 0 1px rgba(255, 176, 0, 0.35);
-  }
-  h1 { color: var(--bright); font-weight: normal; font-size: 32pt; margin: 1rem 0; }
-  h2 { color: var(--bright); font-weight: normal; font-size: 22pt; border-bottom: 1px solid var(--border); padding-bottom: 0.3rem; }
-  p { margin: 0.6rem 0; }
-  a { color: var(--bright); text-decoration: none; border-bottom: 1px dotted var(--dim); }
-  a:hover { background: #332200; }
-  code { color: var(--bright); background: var(--codebg); padding: 0.08em 0.35em; border: 1px solid #3a2400; border-radius: 3px; font-size: 0.92em; }
-  header, footer { color: var(--dim); font-size: 13pt; }
-  header { margin-bottom: 1.2rem; padding-bottom: 0.7rem; border-bottom: 1px solid var(--border); }
-  footer { margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--border); }
-  .status { color: var(--dim); font-style: italic; font-size: 15pt; border-left: 3px solid var(--dim); padding-left: 0.8rem; margin: 1.5rem 0; }
-  .roll-call { border: 1px solid var(--border); padding: 0.9rem 1.2rem; margin: 1rem 0; background: #060400; font-size: 15pt; }
-  .roll-call strong { color: var(--bright); }
-  .nav { display: flex; gap: 2rem; margin-top: 2rem; font-size: 15pt; }
+:root {
+  --bg: #000000;
+  --fg: #FFB000;
+  --bright: #FFD060;
+  --dim: #996600;
+  --codebg: #1a0d00;
+  --border: #664500;
+  --gutter: #4a3300;
+  --headerbg: #0a0600;
+}
+* { box-sizing: border-box; }
+html, body { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: "FiraCode Nerd Font Mono", "FiraCode Nerd Font", "Fira Code", "Menlo", "Courier New", monospace;
+  font-size: 18pt;
+  line-height: 1.55;
+  margin: 0;
+  padding: 0;
+  text-shadow: 0 0 1px rgba(255, 176, 0, 0.35);
+}
+header.page, footer.page {
+  background: var(--headerbg);
+  color: var(--dim);
+  border-bottom: 1px solid var(--border);
+  padding: 0.7rem 1.1rem;
+  font-size: 13pt;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+footer.page { border-bottom: 0; border-top: 1px solid var(--border); margin-top: 2rem; }
+header.page .path, footer.page .path { color: var(--fg); word-break: break-all; overflow-wrap: break-word; }
+header.page .pos, footer.page .pos { color: var(--bright); }
+.content { padding: 0.8rem 1rem 2rem 1rem; max-width: 1100px; margin: 0 auto; }
+h1 { color: var(--bright); font-weight: normal; font-size: 26pt; margin: 0.6rem 0 1rem 0; }
+h2 { color: var(--bright); font-weight: normal; font-size: 20pt; border-bottom: 1px solid var(--border); padding-bottom: 0.3rem; margin-top: 1.5rem; counter-reset: h3 para; }
+h2::before { counter-increment: h2; content: counter(h2) ". "; color: var(--fg); }
+h3 { color: var(--bright); font-weight: normal; font-size: 18pt; margin-top: 1rem; counter-reset: para; }
+h3::before { counter-increment: h3; content: counter(h2) "." counter(h3) " "; color: var(--fg); }
+p { margin: 0.4rem 0; counter-increment: para; }
+p::before { content: counter(h2) "." counter(h3) "." counter(para) " "; color: var(--dim); font-size: 13pt; margin-right: 0.4em; }
+code { color: var(--bright); background: var(--codebg); padding: 0.08em 0.35em; border: 1px solid #3a2400; border-radius: 3px; font-size: 0.92em; }
+pre { background: var(--codebg); border: 1px solid #3a2400; border-radius: 4px; padding: 0.7rem 0.9rem; overflow-x: auto; font-size: 14pt; }
+pre code { background: transparent; border: 0; padding: 0; }
+ul, ol.body-list { margin: 0.4rem 0 0.4rem 1.4rem; padding: 0; }
+a { color: var(--bright); text-decoration: none; border-bottom: 1px dotted var(--dim); }
+a:hover { background: #332200; }
+strong { color: var(--bright); }
+em { color: var(--fg); font-style: italic; }
+hr { border: 0; border-top: 1px solid var(--border); margin: 1rem 0; }
+ol.lines { list-style: none; counter-reset: line h2; padding: 0; margin: 0; }
+ol.lines > li { counter-increment: line; padding: 0.15rem 0 0.15rem 3.6rem; position: relative; min-height: 1.2em; }
+ol.lines > li::before { content: counter(line); position: absolute; left: 0; top: 0.25rem; width: 2.8rem; text-align: right; color: var(--gutter); font-size: 13pt; padding-right: 0.5rem; border-right: 1px solid #2a1e00; }
+ol.lines > li > p, ol.lines > li > h2, ol.lines > li > h3, ol.lines > li > ul, ol.lines > li > ol, ol.lines > li > pre, ol.lines > li > hr { margin: 0; }
+.scope-note { border-left: 3px solid var(--bright); padding: 0.7rem 1rem; background: #140c00; margin: 0.6rem 0; color: var(--bright); }
+.nav { display: flex; gap: 0.9rem; flex-wrap: wrap; margin-top: 0.8rem; font-size: 14pt; }
 </style>
 </head>
 <body>
-<header>File: <code>Part-VI-The-Modern-Toolchain/Book-22-AI-Chatbot-Integration/Book-22-AI-Chatbot-Integration.html</code> &middot; Placeholder</header>
 
-<p class="status">Status: Placeholder — Markdown source exists at <code>22-AI-Chatbot-Integration.md</code>; HTML migration is Phase 1.</p>
+<header class="page">
+  <div class="path">Part-VI-The-Modern-Toolchain/Book-22-AI-Chatbot-Integration/Book-22-AI-Chatbot-Integration</div>
+  <div class="pos">Part VI &middot; Book 22 &middot; Proposed Scope</div>
+</header>
 
-<h1>Book 22: AI Chatbot Integration</h1>
-
-
-<p>Content for <strong>Book 22: AI Chatbot Integration</strong> currently lives as Markdown at <code>22-AI-Chatbot-Integration.md</code> in the vault root.</p>
-
-<div class="roll-call">
-  <strong>Migration status:</strong> HTML migration from <code>22-AI-Chatbot-Integration.md</code> is Phase 1 of the roadmap. Until migration, use the Markdown file directly.
+<div class="content">
+<ol class="lines">
+  <li><h1>Book 22: AI Chatbot Integration</h1></li>
+  <li><div class="scope-note">This Book is <strong>proposed-scope</strong>. The outline below is what will be written. Leave <code>MICHAEL:</code> notes anywhere and I will fold them in before writing the prose.</div></li>
+  <li><h2>Why This Book Exists</h2></li>
+  <li><p>The final Book closes the loop: using AI assistance as part of the development loop, and integrating LLM-backed features into shipping apps.</p></li>
+  <li><h2>Planned Sections</h2></li>
+  <li><h3>Using AI to Build the App</h3></li>
+  <li><ul><li>Claude Code and the terminal workflow</li><li>Xcode + LLM integrations</li><li>Prompt patterns that work for Swift code</li></ul></li>
+  <li><h3>Integrating LLMs Into Apps</h3></li>
+  <li><ul><li>Anthropic API basics in Swift</li><li>Streaming responses in SwiftUI</li><li>Privacy: on-device vs cloud, PII handling</li></ul></li>
+  <li><h3>Design Patterns</h3></li>
+  <li><ul><li>Conversations as state</li><li>Tool use and function calling</li><li>Guardrails and prompt hygiene</li></ul></li>
+  <li><h2>Planned Code Examples</h2></li>
+  <li><ul><li>Minimal chat view that streams from the Anthropic API</li><li>Swift function exposed as a tool to the model</li></ul></li>
+  <li><h2>Planned Figures</h2></li>
+  <li><ul><li>Claude Code terminal interacting with an Xcode project</li><li>Streaming chat view in SwiftUI</li></ul></li>
+</ol>
 </div>
 
-<p>When migration lands, this page gets the full HTML version with embedded figures, cross-references to the Swift Lexicon (Part I), and the rest of the vault. Multimedia scope (images only vs. + video vs. + audio) is open question 3.4.</p>
-
-
-<div class="nav">
-  <a href="../../table-of-contents.html">&larr; Table of Contents</a>
-  <a href="../../claudex26-atlas.html">Atlas</a>
-  <a href="../../claudex26-roadmap.html">Roadmap</a>
-</div>
-
-<footer>File: <code>Part-VI-The-Modern-Toolchain/Book-22-AI-Chatbot-Integration/Book-22-AI-Chatbot-Integration.html</code> &middot; Claude's Xcode 26 Swift Reference &middot; Placeholder
+<footer class="page">
+  <div class="path">Part-VI-The-Modern-Toolchain/Book-22-AI-Chatbot-Integration/Book-22-AI-Chatbot-Integration</div>
+  <div class="pos">Part VI &middot; Book 22 &middot; Proposed Scope</div>
+  <div class="nav"><a href="../../table-of-contents">&larr; Contents</a><a href="../../claudex26-index">Index</a></div>
 </footer>
 
 </body>

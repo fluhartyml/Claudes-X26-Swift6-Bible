@@ -3,66 +3,796 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Appendix B: Claude's Web Wrapper — Claude's Xcode 26 Swift Reference</title>
+<title>Appendix B: Claudes Web Wrapper &mdash; Claude's Xcode 26 Swift Bible</title>
 <style>
-  :root {
-    --bg: #000000;
-    --fg: #FFB000;
-    --bright: #FFD060;
-    --dim: #996600;
-    --codebg: #1a0d00;
-    --border: #664500;
-  }
-  * { box-sizing: border-box; }
-  body {
-    background: var(--bg);
-    color: var(--fg);
-    font-family: "FiraCode Nerd Font Mono", "FiraCode Nerd Font",
-                 "Fira Code", "Menlo", "Courier New", monospace;
-    font-size: 18pt;
-    line-height: 1.55;
-    max-width: 1100px;
-    margin: 0 auto;
-    padding: 2rem 2.5rem 6rem 2.5rem;
-    text-shadow: 0 0 1px rgba(255, 176, 0, 0.35);
-  }
-  h1 { color: var(--bright); font-weight: normal; font-size: 32pt; margin: 1rem 0; }
-  h2 { color: var(--bright); font-weight: normal; font-size: 22pt; border-bottom: 1px solid var(--border); padding-bottom: 0.3rem; }
-  p { margin: 0.6rem 0; }
-  a { color: var(--bright); text-decoration: none; border-bottom: 1px dotted var(--dim); }
-  a:hover { background: #332200; }
-  code { color: var(--bright); background: var(--codebg); padding: 0.08em 0.35em; border: 1px solid #3a2400; border-radius: 3px; font-size: 0.92em; }
-  header, footer { color: var(--dim); font-size: 13pt; }
-  header { margin-bottom: 1.2rem; padding-bottom: 0.7rem; border-bottom: 1px solid var(--border); }
-  footer { margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--border); }
-  .status { color: var(--dim); font-style: italic; font-size: 15pt; border-left: 3px solid var(--dim); padding-left: 0.8rem; margin: 1.5rem 0; }
-  .roll-call { border: 1px solid var(--border); padding: 0.9rem 1.2rem; margin: 1rem 0; background: #060400; font-size: 15pt; }
-  .roll-call strong { color: var(--bright); }
-  .nav { display: flex; gap: 2rem; margin-top: 2rem; font-size: 15pt; }
+:root {
+  --bg: #000000;
+  --fg: #FFB000;
+  --bright: #FFD060;
+  --dim: #996600;
+  --codebg: #1a0d00;
+  --border: #664500;
+  --gutter: #4a3300;
+  --headerbg: #0a0600;
+}
+* { box-sizing: border-box; }
+html, body { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: "FiraCode Nerd Font Mono", "FiraCode Nerd Font", "Fira Code", "Menlo", "Courier New", monospace;
+  font-size: 18pt;
+  line-height: 1.55;
+  margin: 0;
+  padding: 0;
+  text-shadow: 0 0 1px rgba(255, 176, 0, 0.35);
+}
+header.page, footer.page {
+  background: var(--headerbg);
+  color: var(--dim);
+  border-bottom: 1px solid var(--border);
+  padding: 0.7rem 1.1rem;
+  font-size: 13pt;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+footer.page { border-bottom: 0; border-top: 1px solid var(--border); margin-top: 2rem; }
+header.page .path, footer.page .path { color: var(--fg); word-break: break-all; overflow-wrap: break-word; }
+header.page .pos, footer.page .pos { color: var(--bright); }
+.content { padding: 0.8rem 1rem 2rem 1rem; max-width: 1100px; margin: 0 auto; }
+h1 { color: var(--bright); font-weight: normal; font-size: 26pt; margin: 0.6rem 0 1rem 0; }
+h2 { color: var(--bright); font-weight: normal; font-size: 20pt; border-bottom: 1px solid var(--border); padding-bottom: 0.3rem; margin-top: 1.5rem; counter-reset: h3 para; }
+h2::before { counter-increment: h2; content: counter(h2) ". "; color: var(--fg); }
+h3 { color: var(--bright); font-weight: normal; font-size: 18pt; margin-top: 1rem; counter-reset: para; }
+h3::before { counter-increment: h3; content: counter(h2) "." counter(h3) " "; color: var(--fg); }
+p { margin: 0.4rem 0; counter-increment: para; }
+p::before { content: counter(h2) "." counter(h3) "." counter(para) " "; color: var(--dim); font-size: 13pt; margin-right: 0.4em; }
+code { color: var(--bright); background: var(--codebg); padding: 0.08em 0.35em; border: 1px solid #3a2400; border-radius: 3px; font-size: 0.92em; }
+pre { background: var(--codebg); border: 1px solid #3a2400; border-radius: 4px; padding: 0.7rem 0.9rem; overflow-x: auto; font-size: 14pt; }
+pre code { background: transparent; border: 0; padding: 0; }
+ul, ol.body-list { margin: 0.4rem 0 0.4rem 1.4rem; padding: 0; }
+a { color: var(--bright); text-decoration: none; border-bottom: 1px dotted var(--dim); }
+a:hover { background: #332200; }
+strong { color: var(--bright); }
+em { color: var(--fg); font-style: italic; }
+hr { border: 0; border-top: 1px solid var(--border); margin: 1rem 0; }
+ol.lines { list-style: none; counter-reset: line h2; padding: 0; margin: 0; }
+ol.lines > li { counter-increment: line; padding: 0.15rem 0 0.15rem 3.6rem; position: relative; min-height: 1.2em; }
+ol.lines > li::before { content: counter(line); position: absolute; left: 0; top: 0.25rem; width: 2.8rem; text-align: right; color: var(--gutter); font-size: 13pt; padding-right: 0.5rem; border-right: 1px solid #2a1e00; }
+ol.lines > li > p, ol.lines > li > h2, ol.lines > li > h3, ol.lines > li > ul, ol.lines > li > ol, ol.lines > li > pre, ol.lines > li > hr { margin: 0; }
+.scope-note { border-left: 3px solid var(--bright); padding: 0.7rem 1rem; background: #140c00; margin: 0.6rem 0; color: var(--bright); }
+.nav { display: flex; gap: 0.9rem; flex-wrap: wrap; margin-top: 0.8rem; font-size: 14pt; }
 </style>
 </head>
 <body>
-<header>File: <code>Appendices/Appendix-B-Claudes-Web-Wrapper/Appendix-B-Claudes-Web-Wrapper.html</code> &middot; Placeholder</header>
 
-<p class="status">Status: Placeholder — existing file at vault root: <code>appendix-claudes-web-wrapper-v2.html</code></p>
+<header class="page">
+  <div class="path">Appendices/Appendix-B-Claudes-Web-Wrapper/Appendix-B-Claudes-Web-Wrapper</div>
+  <div class="pos">Appendix B</div>
+</header>
 
-<h1>Appendix B: Claude's Web Wrapper</h1>
+<div class="content">
+<ol class="lines">
+  <li><h1>Appendix: Building Claude's Web Wrapper (Wraply) — A Web Browser from Xcode to App Store</h1></li>
+  <li><p><em>Claude's Xcode 26 Swift Reference — Appendix Project</em></p></li>
+  <li><hr></li>
+  <li><p>This appendix walks you through building a complete web browser app called <strong>Claude's Web Wrapper (Wraply)</strong> from an empty Xcode project to a published App Store listing. Every step is here. No jumping to other chapters, no assumptions about what you already know. Follow along in order and you'll have a working app on your phone by the end.</p></li>
+  <li><p>Claude's Web Wrapper (Wraply) lets you browse the web, save bookmarks, and share pages. It also has a "kiosk mode" where you can lock it to a single website — useful if you want to wrap a company site into its own app icon on your home screen. That's where the name comes from: you're wrapping a website.</p></li>
+  <li><hr></li>
+  <li><h2>1. Creating the Project</h2></li>
+  <li><p>1.1 Open Xcode. You'll see the Welcome screen with three options on the left and your recent projects on the right.</p></li>
+  <li><p><strong>[Fig. W.1 — Xcode 26.3 Welcome Screen]</strong></p></li>
+  <li><p>1.2 Click <strong>Create New Project</strong>. A template picker appears. Along the top you'll see platform tabs — Multiplatform, iOS, macOS, watchOS, tvOS, visionOS, DriverKit, Other. Pick <strong>Multiplatform</strong>. Under Application, pick <strong>App</strong>. Click <strong>Next</strong>.</p></li>
+  <li><p><strong>[Fig. W.2 — Template Picker: Multiplatform &gt; App]</strong></p></li>
+  <li><p>1.3 Now you fill in the project details:</p></li>
+  <li><ul><li><strong>Product Name:</strong> <code>Wraply</code></li><li><strong>Team:</strong> Your Apple Developer account name (e.g., "Michael Fluharty")</li><li><strong>Organization Identifier:</strong> Pick something unique to you. We're using <code>com.ClaudeX26Bible</code>. Yours might be <code>com.yourname</code> or <code>com.yourcompany</code>. This never changes after submission, so pick it once and stick with it.</li><li><strong>Bundle Identifier:</strong> Xcode builds this automatically — it's your Organization Identifier + Product Name. You'll see <code>com.ClaudeX26Bible.Wraply</code> (or whatever yours is). This is how Apple tells your app apart from every other app in the world.</li><li><strong>Testing System:</strong> Swift Testing with XCTest UI Tests (the default is fine)</li><li><strong>Storage:</strong> SwiftData</li><li><strong>Host in CloudKit:</strong> Check this if you want bookmarks to sync across devices. Leave it unchecked if you don't care about sync yet — you can add it later.</li></ul></li>
+  <li><p><strong>[Fig. W.3 — Project Options: Wraply filled in]</strong></p></li>
+  <li><p>1.4 Click <strong>Next</strong>. Xcode asks where to save the project. Pick a folder — we're using a folder called <code>Xcode26</code> inside the book's project directory, but any folder works. Make sure <strong>"Create Git repository on my Mac"</strong> is checked at the bottom. This gives your project version control from day one. Click <strong>Create</strong>.</p></li>
+  <li><p>1.5 Xcode opens the workspace. Take a second to look at what it made for you:</p></li>
+  <li><p><strong>[Fig. W.4 — Xcode Workspace: Wraply project open]</strong></p></li>
+  <li><ul><li><strong>Left panel (Navigator):</strong> Your project's file tree. You'll see a <code>Wraply</code> folder with <code>Assets.xcassets</code>, <code>ContentView.swift</code>, <code>Info.plist</code>, <code>Item.swift</code>, <code>WraplyApp.swift</code>, and the entitlements file.</li><li><strong>Center (Editor):</strong> Whatever file you have selected. Right now it's showing <code>ContentView.swift</code> — the template code Xcode generated.</li><li><strong>Right panel (Inspectors):</strong> Properties of the selected file or UI element. This is Xcode's version of Delphi's Object Inspector — same idea, different skin.</li><li><strong>Top bar:</strong> Run/stop buttons, scheme selector (Wraply &gt; iPhone 16e), and status messages.</li></ul></li>
+  <li><hr></li>
+  <li><h2>_2. Creating and Connecting the Remote GitHub Repository</h2></li>
+  <li><p>_2.1 Your project has a local Git repository — Xcode created it in section 1.4 when you checked "Create Git repository on my Mac." Now attach it to a remote repository on GitHub so your code lives online too. If you haven't set up your GitHub account in Xcode yet, see the previous appendix (Setting Up GitHub in Xcode) first.</p></li>
+  <li><p>_2.2 See the icon in the Navigator that looks like a square with an X in it? That's the <strong>Source Control navigator</strong>. Click it (or press Cmd+2). Then click the <strong>Repositories</strong> tab at the top. You'll see your Wraply repository listed with a "main" branch.</p></li>
+  <li><p><strong>[Fig. W.10 — Source Control navigator: Repositories tab showing Wraply main]</strong></p></li>
+  <li><p>_2.3 Right-click <strong>Wraply</strong> in the list and choose <strong>New Remote</strong>. A dialog appears.</p></li>
+  <li><p>_2.4 Fill it in:</p></li>
+  <li><ul><li><strong>Account:</strong> Your GitHub account (e.g., "fluhartyml")</li><li><strong>Name:</strong> <code>Wraply</code></li><li><strong>Visibility:</strong> Public</li></ul></li>
+  <li><p>Click <strong>Create</strong>. Xcode pushes the template project to GitHub — your first backup.</p></li>
+  <li><p><strong>[Fig. W.7 — Create Remote dialog: fluhartyml/Wraply]</strong></p></li>
+  <li><p>_2.5 Open a browser and go to your GitHub profile. The Wraply repo is live with the template files.</p></li>
+  <li><p><strong>[Fig. W.8 — GitHub repo: fluhartyml/Wraply live]</strong></p></li>
+  <li><p>_2.6 From here on, every time you commit in Xcode (<strong>Source Control &gt; Commit</strong>, or Cmd+Option+C), check "Push to remote" to send your changes to GitHub in the same step. The icon, the code, the bookmarks model — it all goes up together as you build.</p></li>
+  <li><hr></li>
+  <li><h2>3. Setting Up the App Icon</h2></li>
+  <li><p>3.1 Before writing any code, give your app an icon. An app without an icon looks unfinished and Apple will reject it during review.</p></li>
+  <li><p>3.2 You need a <strong>1024x1024 pixel PNG image</strong>. No transparency, no rounded corners — Apple applies the corner rounding automatically. If you don't have an icon yet, design one in any image editor (Pixelmator, Photoshop, even Preview) or use an AI image generator. Save it somewhere you can find it.</p></li>
+  <li><p>3.3 In Xcode's Project Navigator (left panel), expand the <code>Wraply</code> folder and click on <strong>Assets.xcassets</strong>. This opens the asset catalog — it's where your app stores images, colors, and icons.</p></li>
+  <li><p>3.4 Click on <strong>AppIcon</strong> in the left sidebar of the asset catalog. You'll see a grid of empty slots — one for iOS (labeled "Any Appearance"), optional dark and tinted variants, and several Mac sizes at different scales (16pt, 32pt, 128pt, 256pt, 512pt at 1x and 2x).</p></li>
+  <li><p>3.5 Open Finder and navigate to your 1024x1024 icon PNG. <strong>Drag the file from Finder directly into the iOS "Any Appearance" slot</strong> at the top of the grid. Xcode imports it.</p></li>
+  <li><p><strong>[Fig. W.5 — AppIcon in Asset Catalog: iOS slot filled]</strong></p></li>
+  <li><p>3.6 For the Mac sizes — drag the same 1024x1024 image into each empty Mac slot. Xcode will show yellow caution triangles because the image is oversized for the smaller slots (you're putting a 1024px image in a 16pt slot). This is fine. Xcode downscales automatically at build time. The warnings are cosmetic, not errors. Your app will build, run, and pass App Store review.</p></li>
+  <li><p><strong>[Fig. W.6 — AppIcon in Asset Catalog: All slots filled, caution triangles on Mac sizes]</strong></p></li>
+  <li><p>3.7 If you want to be thorough and eliminate the warnings, you can create properly sized versions of your icon in an image editor:</p></li>
+  <li><ul><li>16x16, 32x32 (for 16pt 1x and 2x)</li><li>32x32, 64x64 (for 32pt 1x and 2x)</li><li>128x128, 256x256 (for 128pt 1x and 2x)</li><li>256x256, 512x512 (for 256pt 1x and 2x)</li><li>512x512, 1024x1024 (for 512pt 1x and 2x)</li></ul></li>
+  <li><p>Drag each sized image into its matching slot. But again — one 1024x1024 image in every slot works. Don't let the warnings stop you.</p></li>
+  <li><p>3.8 The <strong>Dark</strong> and <strong>Tinted</strong> appearance slots are optional. If you want your icon to look different in Dark Mode or when the user has tinted icons enabled in iOS settings, drag variant images into those slots. Otherwise leave them empty — your default icon shows everywhere.</p></li>
+  <li><hr></li>
+  <li><h2>4. Understanding the Template Code</h2></li>
+  <li><p><strong>[Fig. W.9 — ContentView.swift with the template code Xcode generated]</strong></p></li>
+  <li><p>_4.1 Click on <strong>ContentView.swift</strong> in the Navigator. Xcode generated this when you created the project. It's the first screen your app shows. Right now it's a SwiftData template with a list of Items — not a web browser. We're going to replace all of it, but first let's understand what's here.</p></li>
+  <li><p>4.2 The top of the file:</p></li>
+  <li><pre><code class="lang-swift">import SwiftUI
+import SwiftData</code></pre></li>
+  <li><p>These two lines load the tools you need. <code>SwiftUI</code> draws the screen. <code>SwiftData</code> saves data to disk. Think of <code>import</code> like plugging in a power tool — Swift is the workbench, these are the tools on it.</p></li>
+  <li><p>4.3 The struct:</p></li>
+  <li><pre><code class="lang-swift">struct ContentView: View {</code></pre></li>
+  <li><p>This creates a <strong>view</strong> — a thing that draws on screen. The <code>: View</code> part is a promise: "this struct will have a <code>body</code> property that returns something visible." It's like Delphi's <code>TForm</code> — a container that holds your UI.</p></li>
+  <li><p>4.4 Everything inside <code>var body: some View { }</code> is what appears on screen. The template has a <code>NavigationSplitView</code> with a list — we don't need any of that. We're building a browser.</p></li>
+  <li><hr></li>
+  <li><h2>_5. Creating the Web View Wrapper</h2></li>
+  <li><p><strong>CAUTION:</strong> We're creating this file BEFORE we touch ContentView. Here's why — the new ContentView code we're about to write in section 6 calls <code>WebViewRepresentable</code>. If that file doesn't exist yet, Xcode throws an error: "Cannot find 'WebViewRepresentable' in scope." Xcode doesn't care that you're about to create it — if a file references something that doesn't exist right now, it won't compile. Always create dependencies first, then the code that uses them.</p></li>
+  <li><p>_5.1 SwiftUI doesn't have a built-in web view. Apple's web view is <code>WKWebView</code> from WebKit — it's a UIKit component. To use a UIKit component in SwiftUI, you wrap it in a <code>UIViewRepresentable</code>. This is a bridge between the old world (UIKit) and the new world (SwiftUI).</p></li>
+  <li><p>_5.2 Create a new Swift file: <strong>File &gt; New &gt; File</strong> (or Cmd+N). Pick <strong>Swift File</strong>. Name it <code>WebViewRepresentable.swift</code>. Click <strong>Create</strong>.</p></li>
+  <li><p>_5.3 Replace the contents with:</p></li>
+  <li><pre><code class="lang-swift">//
+//  WebViewRepresentable.swift
+//  Wraply
+//
 
+import SwiftUI
+import WebKit
 
-<p>Appendix B: Claude's Web Wrapper — a build-along walkthrough that ships with the reference.</p>
+struct WebViewRepresentable: UIViewRepresentable {
+    let webView: WKWebView
+    
+    func makeUIView(context: Context) -&gt; WKWebView {
+        webView.allowsBackForwardNavigationGestures = true
+        return webView
+    }
+    
+    func updateUIView(_ uiView: WKWebView, context: Context) {
+        // SwiftUI calls this when state changes.
+        // We handle loading in ContentView, so nothing needed here.
+    }
+}</code></pre></li>
+  <li><p>_5.4 That's the whole bridge. <code>makeUIView</code> creates the web view once. <code>updateUIView</code> gets called when SwiftUI's state changes — we don't need it because <code>ContentView</code> handles loading. The <code>allowsBackForwardNavigationGestures</code> line lets the user swipe left/right to go back and forward, just like Safari.</p></li>
+  <li><hr></li>
+  <li><h2>_6. Building the Browser View</h2></li>
+  <li><p>_6.1 Now we replace ContentView. Delete everything inside <code>ContentView.swift</code>. Replace it with this:</p></li>
+  <li><pre><code class="lang-swift">//
+//  ContentView.swift
+//  Wraply
+//
+//  Created by [Your Name] on [Today's Date].
+//
 
-<div class="roll-call">
-  <strong>Existing file:</strong> <a href="../../appendix-claudes-web-wrapper-v2.html">appendix-claudes-web-wrapper-v2.html</a> currently holds the content at the vault root. When the Part/Book migration completes, this location becomes the canonical home.
+import SwiftUI
+import WebKit
+
+struct ContentView: View {
+    @State private var urlString: String = "https://www.apple.com"
+    @State private var webView = WKWebView()
+    
+    var body: some View {
+        VStack(spacing: 0) {
+            // URL Bar
+            HStack {
+                TextField("Enter URL", text: $urlString)
+                    .textFieldStyle(.roundedBorder)
+                    .autocorrectionDisabled()
+                    .textInputAutocapitalization(.never)
+                    .keyboardType(.URL)
+                    .onSubmit {
+                        loadURL()
+                    }
+                    .font(.system(size: 18))
+                
+                Button("Go") {
+                    loadURL()
+                }
+                .font(.system(size: 18))
+                .buttonStyle(.borderedProminent)
+            }
+            .padding()
+            
+            // Web View
+            WebViewRepresentable(webView: webView)
+        }
+        .onAppear {
+            loadURL()
+        }
+    }
+    
+    private func loadURL() {
+        var address = urlString.trimmingCharacters(in: .whitespacesAndNewlines)
+        if !address.hasPrefix("http://") &amp;&amp; !address.hasPrefix("https://") {
+            address = "https://" + address
+        }
+        if let url = URL(string: address) {
+            webView.load(URLRequest(url: url))
+        }
+    }
+}</code></pre></li>
+  <li><p>_6.2 Let's break that down:</p></li>
+  <li><ul><li><code>@State private var urlString</code> — this holds the text in the URL bar. The <code>@State</code> wrapper means SwiftUI watches it — when it changes, the screen updates. Same concept as Delphi's <code>Edit1.Text</code> property, but SwiftUI tracks changes automatically instead of you writing an <code>OnChange</code> event.</li><li><code>TextField("Enter URL", text: $urlString)</code> — the URL input field. The <code>$</code> means two-way binding — typing in the field updates <code>urlString</code>, and changing <code>urlString</code> in code updates the field. The modifiers (<code>.autocorrectionDisabled()</code>, <code>.textInputAutocapitalization(.never)</code>, <code>.keyboardType(.URL)</code>) tell the keyboard not to autocorrect URLs, not to capitalize, and to show the URL keyboard with <code>.com</code> and <code>/</code> keys.</li><li><code>Button("Go")</code> — triggers <code>loadURL()</code> when tapped.</li><li><code>loadURL()</code> — takes whatever's in the URL bar, adds <code>https://</code> if missing, and tells the web view to load it.</li></ul></li>
+  <li><p>_6.3 Notice that <code>WebViewRepresentable(webView: webView)</code> works now — you created that file in section 5. If you'd tried this code first, Xcode would have thrown "Cannot find 'WebViewRepresentable' in scope" because the file didn't exist yet. Order matters.</p></li>
+  <li><hr></li>
+  <li><h2>7. Adding Navigation Controls</h2></li>
+  <li><p>7.1 A browser needs back, forward, and refresh buttons. Open <code>ContentView.swift</code> and add a toolbar below the URL bar.</p></li>
+  <li><p>7.2 Replace the <code>VStack</code> in <code>body</code> with:</p></li>
+  <li><pre><code class="lang-swift">var body: some View {
+    VStack(spacing: 0) {
+        // Toolbar
+        HStack {
+            Button(action: { webView.goBack() }) {
+                Image(systemName: "chevron.left")
+                    .font(.system(size: 20))
+            }
+            .disabled(!webView.canGoBack)
+            
+            Button(action: { webView.goForward() }) {
+                Image(systemName: "chevron.right")
+                    .font(.system(size: 20))
+            }
+            .disabled(!webView.canGoForward)
+            
+            Button(action: { webView.reload() }) {
+                Image(systemName: "arrow.clockwise")
+                    .font(.system(size: 20))
+            }
+            
+            Spacer()
+            
+            // URL Bar
+            TextField("Enter URL", text: $urlString)
+                .textFieldStyle(.roundedBorder)
+                .autocorrectionDisabled()
+                .textInputAutocapitalization(.never)
+                .keyboardType(.URL)
+                .onSubmit {
+                    loadURL()
+                }
+                .font(.system(size: 18))
+            
+            Button("Go") {
+                loadURL()
+            }
+            .font(.system(size: 18))
+            .buttonStyle(.borderedProminent)
+        }
+        .padding(.horizontal)
+        .padding(.vertical, 8)
+        
+        Divider()
+        
+        // Web View
+        WebViewRepresentable(webView: webView)
+    }
+    .onAppear {
+        loadURL()
+    }
+}</code></pre></li>
+  <li><p>7.3 Now you have back (chevron left), forward (chevron right), and refresh (arrow clockwise) buttons to the left of the URL bar. The <code>.disabled</code> modifier grays out back/forward when there's nothing to go back or forward to — the web view tracks its own navigation history.</p></li>
+  <li><p>7.4 The <code>Image(systemName:)</code> uses <strong>SF Symbols</strong> — Apple's built-in icon library. Over 5,000 icons, all free, all scale with Dynamic Type. You don't need to ship any icon assets for UI buttons.</p></li>
+  <li><hr></li>
+  <li><h2>8. Adding the Share Sheet</h2></li>
+  <li><p>8.1 A browser should let you share the current page. Add a share button to the toolbar.</p></li>
+  <li><p>8.2 Add this state variable at the top of <code>ContentView</code>:</p></li>
+  <li><pre><code class="lang-swift">@State private var showShareSheet = false</code></pre></li>
+  <li><p>8.3 Add the share button after the refresh button in the HStack:</p></li>
+  <li><pre><code class="lang-swift">Button(action: { showShareSheet = true }) {
+    Image(systemName: "square.and.arrow.up")
+        .font(.system(size: 20))
+}</code></pre></li>
+  <li><p>8.4 Add the share sheet modifier to the <code>VStack</code>, right before <code>.onAppear</code>:</p></li>
+  <li><pre><code class="lang-swift">.sheet(isPresented: $showShareSheet) {
+    if let url = webView.url {
+        ShareLink(item: url)
+    }
+}</code></pre></li>
+  <li><p>8.5 Now tapping the share icon opens the standard iOS share sheet with the current URL. The user can AirDrop it, copy it, send it in Messages, save it to Notes — all the system share extensions work automatically.</p></li>
+  <li><hr></li>
+  <li><h2>9. Adding Bookmarks with SwiftData</h2></li>
+  <li><p>9.1 A browser needs bookmarks. We already picked SwiftData when creating the project, so the infrastructure is there. We need a data model and a bookmarks view.</p></li>
+  <li><p>9.2 Delete <code>Item.swift</code> (the template model) — select it in the Navigator, press Delete, choose "Move to Trash."</p></li>
+  <li><p>9.3 Create a new file: <strong>File &gt; New &gt; File &gt; Swift File</strong>. Name it <code>Bookmark.swift</code>:</p></li>
+  <li><pre><code class="lang-swift">//
+//  Bookmark.swift
+//  Wraply
+//
+
+import SwiftData
+import Foundation
+
+@Model
+class Bookmark {
+    var title: String
+    var urlString: String
+    var dateAdded: Date
+    
+    init(title: String, urlString: String, dateAdded: Date = .now) {
+        self.title = title
+        self.urlString = urlString
+        self.dateAdded = dateAdded
+    }
+}</code></pre></li>
+  <li><p>9.4 The <code>@Model</code> macro tells SwiftData to persist this class — save it to disk, load it back, track changes. Three properties: a title, a URL string, and when it was saved. That's it. No Core Data XML files, no migration code, no fetch request boilerplate. SwiftData handles all of it.</p></li>
+  <li><p>9.5 Create another new file: <code>BookmarksView.swift</code>:</p></li>
+  <li><pre><code class="lang-swift">//
+//  BookmarksView.swift
+//  Wraply
+//
+
+import SwiftUI
+import SwiftData
+
+struct BookmarksView: View {
+    @Environment(\.modelContext) private var modelContext
+    @Environment(\.dismiss) private var dismiss
+    @Query(sort: \Bookmark.dateAdded, order: .reverse) private var bookmarks: [Bookmark]
+    
+    var onSelect: (String) -&gt; Void
+    
+    var body: some View {
+        NavigationStack {
+            List {
+                if bookmarks.isEmpty {
+                    Text("No bookmarks yet.")
+                        .foregroundStyle(.secondary)
+                        .font(.system(size: 18))
+                } else {
+                    ForEach(bookmarks) { bookmark in
+                        Button {
+                            onSelect(bookmark.urlString)
+                            dismiss()
+                        } label: {
+                            VStack(alignment: .leading) {
+                                Text(bookmark.title)
+                                    .font(.system(size: 18))
+                                Text(bookmark.urlString)
+                                    .font(.system(size: 14))
+                                    .foregroundStyle(.secondary)
+                            }
+                        }
+                    }
+                    .onDelete(perform: deleteBookmarks)
+                }
+            }
+            .navigationTitle("Bookmarks")
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button("Done") { dismiss() }
+                        .font(.system(size: 18))
+                }
+            }
+        }
+    }
+    
+    private func deleteBookmarks(offsets: IndexSet) {
+        for index in offsets {
+            modelContext.delete(bookmarks[index])
+        }
+    }
+}</code></pre></li>
+  <li><p>9.6 Back in <code>ContentView.swift</code>, add these state variables:</p></li>
+  <li><pre><code class="lang-swift">@Environment(\.modelContext) private var modelContext
+@State private var showBookmarks = false</code></pre></li>
+  <li><p>9.7 Add a bookmark button and a bookmarks list button to the toolbar (after the share button):</p></li>
+  <li><pre><code class="lang-swift">Button(action: { saveBookmark() }) {
+    Image(systemName: "bookmark.fill")
+        .font(.system(size: 20))
+}
+
+Button(action: { showBookmarks = true }) {
+    Image(systemName: "book")
+        .font(.system(size: 20))
+}</code></pre></li>
+  <li><p>9.8 Add the <code>saveBookmark</code> function:</p></li>
+  <li><pre><code class="lang-swift">private func saveBookmark() {
+    let title = webView.title ?? urlString
+    let url = webView.url?.absoluteString ?? urlString
+    let bookmark = Bookmark(title: title, urlString: url)
+    modelContext.insert(bookmark)
+}</code></pre></li>
+  <li><p>9.9 Add the bookmarks sheet modifier (after the share sheet):</p></li>
+  <li><pre><code class="lang-swift">.sheet(isPresented: $showBookmarks) {
+    BookmarksView { urlString in
+        self.urlString = urlString
+        loadURL()
+    }
+}</code></pre></li>
+  <li><p>9.10 Build and run (Cmd+R). You now have a working browser with back/forward/refresh, a URL bar, share sheet, and persistent bookmarks that survive app restarts.</p></li>
+  <li><hr></li>
+  <li><h2>10. Adding the About Section and Send Feedback</h2></li>
+  <li><p>10.1 Every app needs an About screen with a way for users to send feedback. Create a new file: <code>FeedbackView.swift</code>:</p></li>
+  <li><pre><code class="lang-swift">//
+//  FeedbackView.swift
+//  Wraply
+//
+
+import SwiftUI
+import MessageUI
+
+struct FeedbackView: View {
+    @Environment(\.dismiss) private var dismiss
+    @State private var feedbackType = "Bug Report"
+    @State private var feedbackText = ""
+    @State private var showMailCompose = false
+    @State private var showMailUnavailable = false
+    
+    let feedbackTypes = ["Bug Report", "Feature Request"]
+    let feedbackEmail = "michael.fluharty@mac.com"
+    
+    var body: some View {
+        NavigationStack {
+            Form {
+                Picker("Type", selection: $feedbackType) {
+                    ForEach(feedbackTypes, id: \.self) { type in
+                        Text(type)
+                    }
+                }
+                .pickerStyle(.segmented)
+                .font(.system(size: 18))
+                
+                Section("Your Feedback") {
+                    TextEditor(text: $feedbackText)
+                        .frame(minHeight: 150)
+                        .font(.system(size: 18))
+                }
+                
+                Button("Send") {
+                    if MFMailComposeViewController.canSendMail() {
+                        showMailCompose = true
+                    } else {
+                        showMailUnavailable = true
+                    }
+                }
+                .font(.system(size: 18))
+                .disabled(feedbackText.isEmpty)
+            }
+            .navigationTitle("Send Feedback")
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button("Cancel") { dismiss() }
+                        .font(.system(size: 18))
+                }
+            }
+            .sheet(isPresented: $showMailCompose) {
+                MailComposeView(
+                    recipient: feedbackEmail,
+                    subject: "Wraply \(feedbackType) — v\(appVersion)",
+                    body: feedbackText + "\n\n" + deviceInfo
+                )
+            }
+            .alert("Mail Not Available", isPresented: $showMailUnavailable) {
+                Button("OK") {}
+            } message: {
+                Text("Email \(feedbackEmail) directly.")
+            }
+        }
+    }
+    
+    private var appVersion: String {
+        let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "?"
+        let build = Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "?"
+        return "\(version) (\(build))"
+    }
+    
+    private var deviceInfo: String {
+        let device = UIDevice.current
+        var systemInfo = utsname()
+        uname(&amp;systemInfo)
+        let model = withUnsafePointer(to: &amp;systemInfo.machine) {
+            $0.withMemoryRebound(to: CChar.self, capacity: 1) {
+                String(validatingCString: $0) ?? "Unknown"
+            }
+        }
+        let storage = (try? URL(fileURLWithPath: NSHomeDirectory())
+            .resourceValues(forKeys: [.volumeAvailableCapacityForImportantUsageKey])
+            .volumeAvailableCapacityForImportantUsage)
+            .map { ByteCountFormatter.string(fromByteCount: $0, countStyle: .file) } ?? "Unknown"
+        
+        return """
+        --- Device Info ---
+        App: Wraply v\(appVersion)
+        Device: \(model)
+        System: \(device.systemName) \(device.systemVersion)
+        Storage Available: \(storage)
+        Locale: \(Locale.current.identifier)
+        """
+    }
+}
+
+struct MailComposeView: UIViewControllerRepresentable {
+    let recipient: String
+    let subject: String
+    let body: String
+    @Environment(\.dismiss) private var dismiss
+    
+    func makeUIViewController(context: Context) -&gt; MFMailComposeViewController {
+        let vc = MFMailComposeViewController()
+        vc.setToRecipients([recipient])
+        vc.setSubject(subject)
+        vc.setMessageBody(body, isHTML: false)
+        vc.mailComposeDelegate = context.coordinator
+        return vc
+    }
+    
+    func updateUIViewController(_ uiViewController: MFMailComposeViewController, context: Context) {}
+    
+    func makeCoordinator() -&gt; Coordinator { Coordinator(dismiss: dismiss) }
+    
+    class Coordinator: NSObject, MFMailComposeViewControllerDelegate {
+        let dismiss: DismissAction
+        init(dismiss: DismissAction) { self.dismiss = dismiss }
+        func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
+            dismiss()
+        }
+    }
+}</code></pre></li>
+  <li><p>10.2 Create <code>AboutView.swift</code>:</p></li>
+  <li><pre><code class="lang-swift">//
+//  AboutView.swift
+//  Wraply
+//
+
+import SwiftUI
+
+struct AboutView: View {
+    @Environment(\.dismiss) private var dismiss
+    @State private var showFeedback = false
+    
+    var body: some View {
+        NavigationStack {
+            List {
+                Section {
+                    VStack(spacing: 8) {
+                        if let icon = Bundle.main.icon {
+                            Image(uiImage: icon)
+                                .resizable()
+                                .frame(width: 80, height: 80)
+                                .clipShape(RoundedRectangle(cornerRadius: 18))
+                        }
+                        Text("Wraply")
+                            .font(.system(size: 24, weight: .bold))
+                        Text("v\(appVersion)")
+                            .font(.system(size: 16))
+                            .foregroundStyle(.secondary)
+                    }
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical)
+                }
+                
+                Section {
+                    Text("Michael Lee Fluharty")
+                        .font(.system(size: 18))
+                    Text("Engineered with Claude by Anthropic")
+                        .font(.system(size: 18))
+                        .foregroundStyle(.secondary)
+                }
+                
+                Section {
+                    Button {
+                        showFeedback = true
+                    } label: {
+                        Label("Send Feedback", systemImage: "envelope")
+                            .font(.system(size: 18))
+                    }
+                }
+            }
+            .navigationTitle("About")
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button("Done") { dismiss() }
+                        .font(.system(size: 18))
+                }
+            }
+            .sheet(isPresented: $showFeedback) {
+                FeedbackView()
+            }
+        }
+    }
+    
+    private var appVersion: String {
+        let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "?"
+        let build = Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "?"
+        return "\(version) (\(build))"
+    }
+}
+
+extension Bundle {
+    var icon: UIImage? {
+        if let icons = infoDictionary?["CFBundleIcons"] as? [String: Any],
+           let primary = icons["CFBundlePrimaryIcon"] as? [String: Any],
+           let files = primary["CFBundleIconFiles"] as? [String],
+           let last = files.last {
+            return UIImage(named: last)
+        }
+        return nil
+    }
+}</code></pre></li>
+  <li><p>10.3 Back in <code>ContentView.swift</code>, add a state variable:</p></li>
+  <li><pre><code class="lang-swift">@State private var showAbout = false</code></pre></li>
+  <li><p>10.4 Add an info button to the toolbar (at the end of the HStack):</p></li>
+  <li><pre><code class="lang-swift">Button(action: { showAbout = true }) {
+    Image(systemName: "info.circle")
+        .font(.system(size: 20))
+}</code></pre></li>
+  <li><p>10.5 Add the About sheet modifier:</p></li>
+  <li><pre><code class="lang-swift">.sheet(isPresented: $showAbout) {
+    AboutView()
+}</code></pre></li>
+  <li><hr></li>
+  <li><h2>11. Updating the App Entry Point</h2></li>
+  <li><p>11.1 Open <code>WraplyApp.swift</code>. The template code references <code>Item</code> which we deleted. Replace the contents:</p></li>
+  <li><pre><code class="lang-swift">//
+//  WraplyApp.swift
+//  Wraply
+//
+
+import SwiftUI
+import SwiftData
+
+@main
+struct WraplyApp: App {
+    var body: some Scene {
+        WindowGroup {
+            ContentView()
+        }
+        .modelContainer(for: Bookmark.self)
+    }
+}</code></pre></li>
+  <li><p>11.2 The <code>.modelContainer(for: Bookmark.self)</code> line tells SwiftData to set up persistence for our <code>Bookmark</code> model. Every view below <code>ContentView</code> can now read and write bookmarks.</p></li>
+  <li><hr></li>
+  <li><h2>12. Build, Run, and Test</h2></li>
+  <li><p>12.1 Press <strong>Cmd+B</strong> to build. Fix any errors — the most common ones:</p></li>
+  <li><ul><li><strong>"Cannot find 'Item' in scope"</strong> — you have a leftover reference to the deleted <code>Item.swift</code>. Search for <code>Item</code> in the project and remove it.</li><li><strong>"No such module 'WebKit'"</strong> — make sure you wrote <code>import WebKit</code> at the top of <code>ContentView.swift</code> and <code>WebViewRepresentable.swift</code>.</li></ul></li>
+  <li><p>12.2 Press <strong>Cmd+R</strong> to run on the simulator or your device. You should see:</p></li>
+  <li><ul><li>A URL bar at the top with back/forward/refresh/share/bookmark/bookmarks/about buttons</li><li>Apple.com loading in the web view below</li><li>Swipe left/right to navigate back and forward</li></ul></li>
+  <li><p>12.3 Test the full flow: 1) Type a URL in the bar, tap Go — page loads 2) Tap the bookmark icon — saves the current page 3) Tap the book icon — bookmarks list opens, tap one to navigate 4) Tap the share icon — share sheet opens 5) Tap the info icon — About screen with Send Feedback 6) Swipe right on the web view — goes back</p></li>
+  <li><hr></li>
+  <li><h2>13. Submitting to the App Store</h2></li>
+  <li><p>At this point you have a working app. It builds, runs on your phone, and does what it's supposed to do — browses the web, saves bookmarks, and shares pages. That's the easy part. Getting it onto the App Store is a separate skill, and the first time you do it, something will go wrong. The submission walked through in this section went wrong in three different ways before it finally took — a name collision and two whitespace rejections — and all three are recorded here on purpose. A sanitized "click Submit and wait" walkthrough would not prepare you for what actually happens.</p></li>
+  <li><p>One thing to keep in mind throughout this section: the app has three different names, and they do not all change together.</p></li>
+  <li><ul><li>The <strong>Xcode project name</strong> is <code>Wraply</code>. That's what you see in the Navigator and in folder paths on disk. It does not change.</li><li>The <strong>Bundle Identifier</strong> is <code>com.ClaudeX26Bible.Wraply</code>. That's Apple's internal unique ID for the app. It does not change either.</li><li>The <strong>Display Name</strong> is what shows under the app icon on the home screen and on the App Store listing. Originally that was <code>Wraply</code> too — but "Wraply" was already taken on the App Store, so we changed the Display Name to <code>Claude's Web Wrapper</code> while leaving the project name and bundle ID alone.</li></ul></li>
+  <li><p>Throughout the rest of this book the app is called <strong>Claude's Web Wrapper</strong> — that's the storefront name. This project started out named Wraply. When we tried to submit it to the App Store, Apple rejected the name because another developer already owns "Wraply" on the store. We changed the Display Name to <strong>Claude's Web Wrapper</strong> and left everything else alone — the Xcode project folder, the target, the bundle ID, the archive name, the Swift source files. All of those still say Wraply. So inside this section you will see <strong>Wraply</strong> a lot, because that's what Xcode shows in the Navigator, in archive rows, in the Validate dialog's auto-populated Name field, and in success messages after upload. Both refer to the same app.</p></li>
+  <li><p>&gt; <strong>Building this to publish?</strong> Keeping your Xcode project named Wraply is fine — that's internal and doesn't conflict with anything. But <strong>do not</strong> submit your build to the App Store with "Wraply" or "Claude's Web Wrapper" as the Display Name. Both are already claimed. Pick your own Display Name before you archive, the same way Apple forced us to pick one. Your bundle identifier will be different from ours anyway (it uses your Organization Identifier from Section 1.3), so Apple sees it as a distinct app — just give it a distinct name too.</p></li>
+  <li><p>13.1 Before you archive, open the project settings and check a handful of values. Here is how you get there:</p></li>
+  <li><p><strong>[Fig. W.18 — Xcode Project Navigator: the blue Wraply project icon at the top]</strong></p></li>
+  <li><ul><li>In the <strong>Project Navigator</strong> (the leftmost sidebar, the folder-tree icon — or press <strong>Cmd+1</strong>), click the very top entry: the blue Xcode project icon labeled <strong>Wraply</strong> (see Fig. W.18). Not the folder below it, the blue icon.</li><li>The center of the window changes. At the top you will see two columns of headings: <strong>PROJECT</strong> (with "Wraply" under it) and <strong>TARGETS</strong> (with "Wraply" under it as well). Click the <strong>Wraply</strong> under <strong>TARGETS</strong>.</li><li>Now a row of tabs appears across the top of the editor: <strong>General</strong>, <strong>Signing &amp; Capabilities</strong>, <strong>Resource Tags</strong>, <strong>Info</strong>, <strong>Build Settings</strong>, <strong>Build Phases</strong>, <strong>Build Rules</strong>, <strong>Package Dependencies</strong>. Click <strong>General</strong>. This is "the General tab." Every time the book says "go to the General tab," this is where it means.</li></ul></li>
+  <li><p>Check these values on the General tab:</p></li>
+  <li><ul><li><strong>Display Name:</strong> Claude's Web Wrapper</li><li><strong>Bundle Identifier:</strong> com.ClaudeX26Bible.Wraply (or yours)</li><li><strong>Version:</strong> 1.0</li><li><strong>Build:</strong> 1</li><li><strong>Minimum Deployments:</strong> iOS 17.0 (SwiftData requires it)</li><li><strong>Supported Destinations:</strong> iPhone, iPad</li></ul></li>
+  <li><p>13.2 Set the scheme to <strong>Any iOS Device (arm64)</strong> in the top bar of Xcode (between the Run/Stop buttons and the status area). You cannot archive with a simulator selected — the archive command will be grayed out.</p></li>
+  <li><p>13.3 <strong>Product &gt; Archive</strong>. Xcode builds the release version and opens the <strong>Organizer</strong> window when done. The Organizer is where your archives live. At the top of the Archives tab you will see your new archive: <strong>Wraply</strong>, <strong>1.0 (1)</strong>, today's date, iOS App Archive (see Fig. W.20). On the right side of the window you will see two action buttons: <strong>Distribute App</strong> and <strong>Validate App</strong>.</p></li>
+  <li><p><strong>[Fig. W.20 — Organizer window with freshly archived Wraply 1.0 (1)]</strong></p></li>
+  <li><p>13.4 Click <strong>Validate App</strong> — not Distribute App. Validate App is a pre-flight check that talks to Apple's servers and verifies that your archive is ready to submit: signing is valid, the bundle ID is registered, assets are correct, and — critically — the display name is available. Running Validate first is cheaper than running Distribute. If something is wrong, Validate tells you in a minute or two, before you have committed to uploading a gigabyte of binary.</p></li>
+  <li><p>A dialog opens titled <strong>Select a method for validation:</strong> with two options — <strong>Validate</strong> (recommended, uses default App Store Connect settings) and <strong>Custom</strong> (see Fig. W.21). Leave Validate selected and click the <strong>Validate</strong> button in the bottom right.</p></li>
+  <li><p><strong>[Fig. W.21 — Select a method for validation dialog]</strong></p></li>
+  <li><p>13.5 Xcode shows a form titled <strong>Validate with App Store Connect</strong> with this message: "Your app must be registered with App Store Connect before it can be uploaded. Xcode will create an app record with the following properties."</p></li>
+  <li><p>Below the message you will see four fields, auto-populated (some editable, some locked):</p></li>
+  <li><ul><li><strong>Name:</strong> Wraply</li><li><strong>SKU:</strong> com.ClaudeX26Bible.Wraply</li><li><strong>Primary Language:</strong> English (United States)</li><li><strong>Bundle Identifier:</strong> com.ClaudeX26Bible.Wraply</li></ul></li>
+  <li><p>Some of these fields are editable right there in the dialog. <strong>Name</strong> and <strong>SKU</strong> can be retyped; <strong>Primary Language</strong> has a dropdown. <strong>Bundle Identifier</strong> is locked — it is read directly from your archive's Info.plist and cannot be changed here. The Name field is the one that will be used as your App Store listing name. Xcode pre-fills it with your target name — which is Wraply (see Fig. W.22).</p></li>
+  <li><p><strong>[Fig. W.22 — Validate form: Name field populated with "Wraply"]</strong></p></li>
+  <li><p>13.6 Click <strong>Next</strong>. Xcode talks to Apple's servers for a few seconds, then stops and shows you a red X and this error:</p></li>
+  <li><p><strong>App Record Creation Error</strong> — App Record Creation failed due to request containing an attribute already in use. The App Name you entered is already being used. If you have trademark rights to this name and would like it released for your use, submit a claim (see Fig. W.23).</p></li>
+  <li><p>Someone else has the name "Wraply" on the App Store. You cannot use it, and Apple caught it here at the pre-flight stage rather than two days from now in Review.</p></li>
+  <li><p><strong>[Fig. W.23 — App Record Creation Error: name already in use]</strong></p></li>
+  <li><p>This is the first <strong>Teaching Moment</strong> of the submission. Apple's pre-flight catches the name collision here rather than after a full upload. If you had clicked Distribute first instead of Validate, you would have gone through the whole upload flow — minutes of signing and pushing bytes — only to hit this same error at the end. That's why you Validate first.</p></li>
+  <li><p>13.7 Click <strong>Cancel</strong> to get out of the Validate flow. You need to change the Display Name. Go back to Xcode, click the blue Wraply project icon, click the Wraply target, go to the <strong>General</strong> tab (from Section 13.1), and find the <strong>Display Name</strong> field under the <strong>Identity</strong> section. Change it from <strong>Wraply</strong> to <strong>Claude's Web Wrapper</strong> (see Fig. W.24).</p></li>
+  <li><p>We picked <strong>Claude's Web Wrapper</strong> because this app ships as a companion to Claude's X26 Swift6 Reference — tying the storefront name to the book and its author (Claude) kept the branding consistent. When you do this for your own app, the only rule is that the display name you pick must not already be taken on the App Store.</p></li>
+  <li><p>While you're here, you can also check the <strong>App Category</strong> picker in the same Identity section. Set it to something reasonable; we will lock it in on the App Store Connect side later too. For a web browser / source code viewer, Education is the strongest choice. Books is tempting — this <em>is</em> a book companion — but Apple reads "Books" as "ebook reader or library" and tends to reject under Guideline 4.2 Minimum Functionality when the category does not match the content. We talked ourselves out of Books before the first submission attempt, and you should too.</p></li>
+  <li><p><strong>[Fig. W.24 — Xcode General tab: Display Name updated to "Claude's Web Wrapper"]</strong></p></li>
+  <li><p>13.8 Re-archive the project. <strong>Product &gt; Archive</strong> again. Changing the Display Name invalidates the existing archive — the old archive still has "Wraply" baked into its metadata, and Xcode will happily let you validate it and hit the same error again. A fresh archive picks up the new Display Name.</p></li>
+  <li><p>When the archive completes, the Organizer opens with both archives listed — the old one (still named Wraply) and the new one (still named Wraply on the archive row, because the archive row shows the <em>target</em> name, which hasn't changed). Click the newest archive. The action buttons — Distribute App and Validate App — come back up on the right.</p></li>
+  <li><p>Click <strong>Validate App</strong>. Select the Validate method. Click Validate.</p></li>
+  <li><p>13.9 The <strong>Validate with App Store Connect</strong> form appears again. Check the Name field.</p></li>
+  <li><p>It still says <strong>Wraply</strong> (see Fig. W.25).</p></li>
+  <li><p>This is the single most important thing to know about submitting to the App Store. The Display Name you set in the General tab does <strong>not</strong> automatically flow into the Name field of the Validate or Distribute dialog. The dialog pre-fills its Name field from the target name (which is still "Wraply"), not from the Display Name. You have to change it here too.</p></li>
+  <li><p><strong>[Fig. W.25 — Validate form: Name still auto-populates as "Wraply"]</strong></p></li>
+  <li><p>&gt; <strong>The trap you will fall into.</strong> The first time this happens, you will assume something didn't save. You will close the dialog, go back to General, confirm that Display Name really does say Claude's Web Wrapper, re-type it anyway, re-archive, open Organizer, click Validate, watch "Wraply" reappear in the Name field, and start to lose your mind. Maybe you delete the old archive thinking it's stale. Maybe you clean the build folder. None of it helps. The Organizer fills up with stacked "Wraply 1.0 (1)" archives from every re-attempt — none of them are wrong, they just were not the problem (see Fig. W.25b).</p></li>
+  <li><p><strong>[Fig. W.25b — Multiple Wraply archives stacking in the Organizer from re-archive attempts]</strong></p></li>
+  <li><p>&gt; <strong>Tip: use the Build number as an archive label.</strong> Before each re-archive, bump the <strong>Build</strong> field in the General tab by one (1 → 2 → 3 → ...). The Organizer shows the build number alongside each archive, so 1.0 (1), 1.0 (2), 1.0 (3) become visually distinct rows. You can then tell at a glance which archive is the newest, click it, and right-click → Delete on the older ones without wondering which is which. Apple doesn't care about gaps in your build numbers — they only care that a build number isn't reused.</p></li>
+  <li><p>&gt; The Name field is not reading from anywhere you can change outside this dialog. <strong>The only fix is to type the new name into this Name field, every single time you run Validate or Distribute, until your submission is accepted.</strong> That is the bug. It is not your fault, and you are not missing a setting somewhere.</p></li>
+  <li><p>13.10 Click inside the Name field. Select the whole word "Wraply" and delete it. The field will show just a cursor (see Fig. W.26).</p></li>
+  <li><p><strong>[Fig. W.26 — Name field mid-edit: backspaced down to "W"]</strong></p></li>
+  <li><p>13.11 Type <strong>Claude's Web Wrapper</strong> (see Fig. W.27). Press <strong>Tab</strong> to move focus to the next field and commit the change. Do not press Enter — that may submit the form prematurely on some systems.</p></li>
+  <li><p><strong>[Fig. W.27 — Name field: "Claude's Web Wrapper" typed cleanly]</strong></p></li>
+  <li><p>&gt; <strong>Whitespace warning.</strong> If you are backspacing and retyping fast, you can easily leave an invisible leading or trailing space in the Name field. You will not see it. Apple's pre-flight validator doesn't always catch it either. What happens later is that your build uploads successfully, Apple starts processing it, and then emails you an <strong>ITMS-90694: Invalid bundle display name</strong> rejection and your build silently disappears from App Store Connect. This is covered in detail below — but you can avoid it here by clearing the field completely with <strong>Cmd+A Delete</strong>, retyping cleanly, and then clicking somewhere else in the dialog to blur the field before clicking Next.</p></li>
+  <li><p>13.12 Click <strong>Next</strong>. Xcode shows a progress dialog labeled <strong>Validate with App Store Connect</strong> with the status <strong>Preparing — Locating signing assets...</strong> (see Fig. W.28). This step can take anywhere from ten seconds to a minute. Let it run.</p></li>
+  <li><p><strong>[Fig. W.28 — Preparing, Locating signing assets]</strong></p></li>
+  <li><p>13.13 When validation finishes, the dialog shows a green check and the message <strong>App validation complete: Wraply 1.0 (1) validated. Your app successfully passed all validation checks.</strong> (see Fig. W.29). Click <strong>Done</strong>.</p></li>
+  <li><p><strong>[Fig. W.29 — App validation complete: Wraply 1.0 (1) validated]</strong></p></li>
+  <li><p>The internal name "Wraply" still appears in this message. That is fine. The validation is about the archive (which is named Wraply on disk) and the bundle identifier, not the display name. Your Claude's Web Wrapper display name is registered with App Store Connect; that's what matters.</p></li>
+  <li><p>13.14 Now you can upload. Click <strong>Distribute App</strong> in the Organizer. A dialog appears titled <strong>Select a method for distribution:</strong> with six icons: <strong>App Store Connect</strong>, <strong>TestFlight Internal Only</strong>, <strong>Release Testing</strong>, <strong>Enterprise</strong>, <strong>Debugging</strong>, <strong>Custom</strong> (see Fig. W.30).</p></li>
+  <li><p>Click <strong>App Store Connect</strong> and then click the <strong>Distribute</strong> button in the bottom right.</p></li>
+  <li><p><strong>[Fig. W.30 — Select a method for distribution: App Store Connect]</strong></p></li>
+  <li><p>13.15 Xcode shows a progress dialog labeled <strong>Upload for App Store Connect</strong> with the status <strong>Processing — Signing Wraply.app...</strong> followed by upload progress (see Fig. W.31). This step takes one to three minutes depending on your connection speed and the size of the build.</p></li>
+  <li><p><strong>[Fig. W.31 — Processing, Signing Wraply.app]</strong></p></li>
+  <li><p>13.16 When the upload finishes, the dialog shows a green check and the message <strong>App upload complete: Wraply 1.0 (1) uploaded</strong> (see Fig. W.32). Click <strong>Done</strong>.</p></li>
+  <li><p><strong>[Fig. W.32 — App upload complete: Wraply 1.0 (1) uploaded]</strong></p></li>
+  <li><p>Your archive is now on Apple's servers. The rest of the submission happens in the browser, at <strong>appstoreconnect.apple.com</strong>.</p></li>
+  <li><p>13.17 Open a browser and go to <strong>appstoreconnect.apple.com</strong>. Log in with your Apple Developer account. Click <strong>Apps</strong> in the top navigation. You will see a grid of app tiles — any apps you have previously submitted, plus the one you just created.</p></li>
+  <li><p><strong>Claude's Web Wrapper</strong> should be in the grid with a status badge saying <strong>iOS 1.0 — Prepare for Submission</strong>. The app icon slot will be empty (a wireframe placeholder, see Fig. W.33) because the uploaded build hasn't been processed yet.</p></li>
+  <li><p><strong>[Fig. W.33 — App Store Connect Apps list with Claude's Web Wrapper]</strong></p></li>
+  <li><p>13.18 Click <strong>Claude's Web Wrapper</strong> to open the app page. You will see a left sidebar with sections (App Information, Pricing and Availability, App Privacy, Age Rating, App Review) and a main content area for the iOS 1.0 version page. Work through the fields:</p></li>
+  <li><ul><li><strong>Promotional Text</strong> (170 character maximum, can be updated without resubmitting): <code>Claude's Web Wrapper — browse the web, save bookmarks, and explore the app's own Swift source code. Companion app for Claude's X26 Swift6 Reference.</code></li><li><strong>Description</strong> (4000 character maximum): <code>A web browser built as a companion app for Claude's X26 Swift6 Reference. Browse any website, save bookmarks, and share pages. Under the Hood lets you read and copy every Swift source file — paste into Xcode and learn by building. Educational tool for iOS development.</code></li><li><strong>Keywords</strong> (100 character maximum total, comma-separated with <strong>no spaces</strong> after the commas): <code>swift,xcode,learn,code,browser,bookmark,source,education,ios,development</code></li><li><strong>Support URL:</strong> <code>https://fluharty.me/projects/swift-bible.html</code> (or your own page)</li><li><strong>Marketing URL:</strong> optional, leave blank</li><li><strong>Version:</strong> 1.0</li><li><strong>Copyright:</strong> 2026 Michael Fluharty (or your name) <em>(see Fig. W.34)</em></li></ul></li>
+  <li><p><strong>[Fig. W.34 — iOS 1.0 Version page with promotional text, description, keywords filled in]</strong></p></li>
+  <li><p>13.19 Scroll down to the <strong>Build</strong> section of the iOS 1.0 page. If your upload has finished processing, you will see a <strong>+ Add Build</strong> button or a dropdown listing your build. Click it, select <strong>1.0 (1)</strong>, answer the <strong>Encryption</strong> compliance prompt (<strong>None of the algorithms mentioned above</strong>), and confirm.</p></li>
+  <li><p>If the Build section is still empty — just the sentence "Upload your builds using one of several tools" — processing has not finished yet. Normal processing time is under ten minutes.</p></li>
+  <li><p><strong>If processing takes more than thirty minutes, something is wrong.</strong> Apple does not show processing failures in App Store Connect. They email you. Switch to your inbox (see Fig. W.35). This is the second <strong>Teaching Moment</strong>: a build that does not appear is never a build that is "still processing." It is a build that was silently rejected by email.</p></li>
+  <li><p><strong>[Fig. W.35 — Build section empty after a long wait: something is wrong]</strong></p></li>
+  <li><p>13.20 Check your email. If there is a message from <strong>App Store Connect</strong> titled "Apple Developer Relations" about your build, open it. The body tells you the exact failure.</p></li>
+  <li><p>In this submission, the message read:</p></li>
+  <li><p>&gt; <strong>ITMS-90694: Invalid bundle display name</strong> — <code>' Claude's Web Wrapper '</code> starts with a whitespace character. <em>(see Fig. W.36)</em></p></li>
+  <li><p>The leading and trailing quote marks in the message are Apple's way of showing you what the display name looks like — including whitespace. The space before the <code>C</code> is a leading space that snuck into the Name field during the backspace-and-retype in Section 13.10. You didn't see it when you typed. Apple's validator didn't catch it during pre-flight validation either — that check looks at the Name value being sent, but a leading space is a legal string. The silent rejection happens later, at the bundle processing stage.</p></li>
+  <li><p><strong>[Fig. W.36 — ITMS-90694 rejection email: whitespace in display name]</strong></p></li>
+  <li><p>&gt; <strong>The invisible whitespace problem.</strong> Typing names into validation dialogs is fragile. When you backspace through an auto-populated value and retype, the field can end up with a leading or trailing space from before the first character or after the last one. You will never see it on screen. App Store Connect will never show you the error in its UI. The build will upload, pass its quick pre-flight, start processing, and then silently vanish from the Build dropdown while Apple emails you. The rule is: always check your inbox when a build hasn't appeared in App Store Connect within thirty minutes.</p></li>
+  <li><p>13.21 Back in Xcode, fix the whitespace. Go to the <strong>General</strong> tab, click inside the <strong>Display Name</strong> field, press <strong>Cmd+A</strong> to select everything, <strong>Delete</strong> to clear, then type <strong>Claude's Web Wrapper</strong> fresh. Click anywhere outside the field to commit. Also bump the <strong>Build</strong> number from <strong>1</strong> to <strong>2</strong> — you cannot re-upload the same build number, and Apple tracks build numbers strictly.</p></li>
+  <li><p>If you re-archive and hit the same ITMS-90694 whitespace rejection again, you likely still have an invisible trailing space. The real submission documented here hit this loop twice. At one point the problem looked like it might be the apostrophe in "Claude's" — special characters in display names have been known to cause trouble — but stripping the apostrophe to try "Claudes Web Wrapper" did not fix it either. The actual cause was always a stray space. The fix is always the same: clear with <strong>Cmd+A Delete</strong>, type cleanly, tab out, archive. Slow down.</p></li>
+  <li><p>&gt; <strong>Do not delete the app record from App Store Connect to "reset" things.</strong> When a submission is stuck, it is tempting to open App Store Connect, delete the app record, and try again from Xcode thinking a clean slate will fix it. It will not. Apple tracks deleted records by bundle identifier. Once your bundle ID is tied to a record in <strong>Removed Apps</strong> state, any new Validate or Distribute attempt comes back with "App record with bundle identifier ... was previously removed from App Store Connect. Go to App Store Connect to restore the app." The only fix is in the web: <strong>Apps → filter Removed Apps → click your app → Restore</strong> (see Fig. W.37). Then retry Validate. Leave the app record alone until the submission is through review.</p></li>
+  <li><p><strong>[Fig. W.37 — The "previously removed" error, triggered by deleting the app record]</strong></p></li>
+  <li><p>&gt; <strong>The nuclear option.</strong> If the submission has completely collapsed — bundle ID tangled, nothing you try in Validate works, Restore doesn't help — you can start fresh: create a new Xcode project with a different Product Name (giving you a new Organization Identifier + Product Name combination, and therefore a fresh bundle ID), copy your source files over, and submit that. It's a hard reset, and you lose your prior archive history, but it always works. We planned on this as the fallback during the real submission and didn't end up needing it.</p></li>
+  <li><p>13.22 Back in the Organizer, with your Build 2 archive selected, click <strong>Validate App</strong>. Pick the Validate method, fill in the Name field cleanly (<strong>Claude's Web Wrapper</strong>), and click <strong>Next</strong>. Validation completes: <strong>Wraply 1.0 (2) validated</strong>. Click Done. Then click <strong>Distribute App</strong>, choose <strong>App Store Connect</strong>, click Distribute. Xcode signs and uploads Build 2.</p></li>
+  <li><p>When the upload dialog reports <strong>App upload complete: Wraply 1.0 (2) uploaded</strong> (see Fig. W.38), you are done in Xcode for this submission.</p></li>
+  <li><p><strong>[Fig. W.38 — Build 2 uploaded successfully]</strong></p></li>
+  <li><p>13.23 In the upload-complete dialog, below the green check, you'll see the text <strong>Show in App Store Connect</strong> with a small <strong>arrow-in-a-circle</strong> icon next to it. Click that icon. It launches your default web browser, opens <strong>appstoreconnect.apple.com</strong>, and prompts you to log in with your Apple Developer account if you aren't already (see Fig. W.32b).</p></li>
+  <li><p><strong>[Fig. W.32b — App Store Connect login prompt after clicking the arrow link]</strong></p></li>
+  <li><p>Once you're in, you land on your <strong>Apps</strong> grid — a tiled list of every app you've ever created in App Store Connect.</p></li>
+  <li><p>Find <strong>Claude's Web Wrapper</strong> in the grid. Its icon slot will be a wireframe placeholder (see Fig. W.33) because your app icon hasn't been processed as an App Store listing icon yet — that comes after the build is attached to the version. Click the tile.</p></li>
+  <li><p>You're now on the app's page. The default tab is <strong>Distribution</strong> — that's where you were headed. Wait a few minutes for Apple to finish processing Build 2; this time processing should succeed because the whitespace is fixed and the app record has been restored. You'll get a <strong>"The following build has completed processing"</strong> email when it's ready.</p></li>
+  <li><p>13.24 Scroll down to the <strong>Build</strong> section of the iOS 1.0 page. If processing has completed, you will see the <strong>+ Add Build</strong> button (a small blue circle with a plus sign) next to the section title, and an <strong>Add Build</strong> button inside the section.</p></li>
+  <li><p><strong>[Fig. W.38b — iOS App Version 1.0 page: Build section with + Add Build button visible]</strong></p></li>
+  <li><p>&gt; <strong>If the Add Build button doesn't appear</strong>, App Store Connect is holding onto unsaved edits. Scroll up, click <strong>Save</strong> in the top right of the page to commit everything you've typed so far (promotional text, description, keywords, screenshots — none of it is saved automatically), then <strong>reload the page in your browser</strong>. The + Add Build button should now be there. This is a pattern to remember: any time a button or status on an App Store Connect page seems to be missing, try Save → reload.</p></li>
+  <li><p>Click <strong>+ Add Build</strong>. A modal titled <strong>Add Build</strong> appears with a list of available builds and a note about encryption compliance. Pick <strong>2</strong> from the list.</p></li>
+  <li><p><strong>[Fig. W.39 — Add Build dialog: 1.0 (2) selected with "Missing Compliance" before answering encryption]</strong></p></li>
+  <li><p>13.25 Now fill in the remaining required sections in App Store Connect. In the left sidebar:</p></li>
+  <li><ul><li><strong>App Information</strong> — set <strong>Primary Category</strong> to <strong>Education</strong>. Scroll to <strong>Content Rights Information</strong> and choose <strong>This app does not contain, show, or access third-party content</strong>. (If you pick Books, Apple reads it as "ebook reader or library" and tends to reject under Guideline 4.2 Minimum Functionality. Education is the safe choice for a companion app.)</li></ul></li>
+  <li><p><strong>[Fig. W.39c — Content Rights Information: "No, it does not contain, show, or access third-party content"]</strong></p></li>
+  <li><ul><li><strong>Pricing and Availability</strong> — set <strong>Availability</strong> first, then <strong>Price</strong>. If you set Price before Availability, the Availability wizard later asks you additional questions about where your pricing applies (including EU-specific requirements that vary by region), adding steps. Configuring Availability first lets you pick your regions cleanly, and the Price step then applies across that selection in one pass.</li></ul></li>
+  <li><p>- <strong>App Availability</strong> → click <strong>Set Up Availability</strong> → choose <strong>Specific Countries or Regions</strong> and select <strong>United States</strong> and <strong>Canada</strong> first. Skip the European Union, United Kingdom, and other regions on your first submission. Those regions have their own legal compliance requirements (GDPR data processing disclosures, EU Digital Services Act, digital service taxes in some countries) that are better dealt with as a follow-up once your app is live in North America. You can always extend availability to more regions later from the same page, without resubmitting. - <strong>Price Schedule</strong> → click <strong>Add Pricing</strong> → choose <strong>Free</strong> (or your tier). The tier applies across the countries you selected.</p></li>
+  <li><p><strong>[Fig. W.39d — Pricing and Availability page after selecting US and Canada: App Availability shows "2 Available, 173 Not Available"]</strong></p></li>
+  <li><ul><li><strong>App Privacy</strong> — enter a <strong>Privacy Policy URL</strong>. You need one even if your app collects nothing. A page on your portfolio that says the app does not collect personal data is enough.</li></ul></li>
+  <li><p><strong>[Fig. W.39e — App Privacy page with Privacy Policy URL filled in (fluharty.me/privacy) and "Data Not Collected"]</strong></p></li>
+  <li><ul><li><strong>Age Rating</strong> — answer every question <strong>No</strong> for this app; you land at <strong>4+</strong>.</li></ul></li>
+  <li><p><strong>[Fig. W.39f — Age Ratings wizard: answering content questions (e.g. Violence step — all None)]</strong></p></li>
+  <li><ul><li><strong>App Review Information</strong> — scroll to the bottom of the iOS 1.0 Version page. This section has two important parts:</li></ul></li>
+  <li><p>- <strong>Sign-In Information</strong> — this is a <strong>radio button selector</strong>. The <strong>Sign-in required</strong> option is selected by default. If your app does not require users to sign in (Claude's Web Wrapper does not — it has no accounts), verify that Sign-in required is <strong>not</strong> selected before you submit. If it stays selected, the reviewer will expect a test username and password in your notes; when they don't find one, the app gets rejected. - <strong>Contact Information</strong> — fill in first name, last name, phone, and email. Notes are optional — put anything a reviewer should know (test credentials if sign-in is required, unusual features, permissions explanations).</p></li>
+  <li><p><strong>[Fig. W.39g — App Review Information: Sign-in required radio deselected, Contact Information filled in]</strong></p></li>
+  <li><p>13.26 Scroll up to the top of the iOS 1.0 page. You also need <strong>Screenshots</strong>. Find the <strong>App Preview and Screenshots</strong> section. Apple requires screenshots for every display size your app supports. For a universal iPhone + iPad app, the minimum is one <strong>6.5" iPhone Display</strong> (1284 × 2778) screenshot and one <strong>13" iPad Display</strong> screenshot.</p></li>
+  <li><p>Upload the four iPhone screenshots you captured in Section 12 into the <strong>iPhone 6.5" Display</strong> slot.</p></li>
+  <li><p>For the <strong>13" iPad Display</strong> slot, App Store Connect will block your submission if it's empty — and it will <strong>not</strong> accept your iPhone-aspect screenshots in the iPad slot (the upload gets rejected for wrong dimensions). You have two real options:</p></li>
+  <li><ol class="body-list"><li><strong>Capture iPad simulator screenshots.</strong> Boot an iPad simulator in Xcode (for example iPad Pro 13"), run the app, press <strong>Cmd+S</strong> in the simulator to save a screenshot, repeat for the scenes you want (browser, Under the Hood, source viewer, share sheet). Upload those into the iPad slot.</li><li><strong>Disable iPad compatibility in Xcode.</strong> Go to the project's General tab (Section 13.1), find <strong>Supported Destinations</strong>, and remove <strong>iPad</strong>. Re-archive, upload a new build, and submit as iPhone-only. App Store Connect then drops the iPad screenshot requirement entirely.</li></ol></li>
+  <li><p>Option 1 is the right call if you want your app on iPad. Option 2 is the right call if you have not tested on iPad and don't want to ship something half-finished there. Picking option 2 and then adding iPad support in a later version is a clean path.</p></li>
+  <li><p><strong>[Fig. W.39h — Previews and Screenshots with iPhone 6.5" Display populated: 4 screenshots of Claude's Web Wrapper visible, iPad tab also available]</strong></p></li>
+  <li><p>13.27 Click <strong>Add for Review</strong> in the top right. App Store Connect checks your submission and shows you a modal listing anything still missing. Common ones on a first submission:</p></li>
+  <li><ul><li>You must upload a screenshot for 13-inch iPad displays.</li><li>You must complete the Contact Information section.</li><li>You must enter a Privacy Policy URL in App Privacy.</li><li>You must set up Content Rights Information in App Information.</li><li>You must select a primary category for your app.</li></ul></li>
+  <li><p><strong>[Fig. W.39b — "Unable to Add for Review" checklist listing remaining required items]</strong></p></li>
+  <li><p>Fix each one, scroll back up, click <strong>Add for Review</strong> again. Repeat until App Store Connect stops complaining.</p></li>
+  <li><p>13.28 When there are no more missing fields, <strong>Add for Review</strong> changes to <strong>Submit for Review</strong> (or a <strong>Draft Submission</strong> panel slides in from the right with a <strong>Submit for Review</strong> button at the bottom). Click it. Confirm the submission.</p></li>
+  <li><p><strong>[Fig. W.40b — Draft Submission panel: iOS App 1.0 (2) listed as "Ready to Submit" with Submit for Review button]</strong></p></li>
+  <li><p>The iOS 1.0 page now shows the status <strong>Waiting for Review</strong>. The Distribution tab shows the submission ID and the exact time you submitted. Apple's reviewers will look at your build, usually within 24 to 48 hours, and email you when it is approved or rejected.</p></li>
+  <li><p><strong>[Fig. W.40 — Waiting for Review, submission confirmed]</strong></p></li>
+  <li><hr></li>
+  <li><p><strong>Learning moments from the Claude's Web Wrapper submission:</strong></p></li>
+  <li><ol class="body-list"><li><strong>Validate App before Distribute App.</strong> Validate is a cheap pre-flight. Distribute is a full upload. Run Validate first to catch name collisions, signing issues, and missing assets before you commit to an upload.</li><li><strong>Display Name in Xcode General does not flow into the Validate/Distribute Name field.</strong> You must change it in both places. The Name field in the validation dialog auto-populates from the target name, which does not change.</li><li><strong>Whitespace is invisible and deadly.</strong> Clearing with Cmd+A Delete, retyping cleanly, and tabbing out of the field is the only reliable way. Do not backspace.</li><li><strong>Processing rejections are silent in App Store Connect.</strong> Apple emails them. If a build hasn't appeared in the Build dropdown within thirty minutes, check your inbox.</li><li><strong>Do not delete your app record in App Store Connect to reset a bad submission.</strong> It leaves the bundle ID in a Removed Apps state and blocks any new submission until you restore the record.</li><li><strong>Books category triggers Guideline 4.2 (Minimum Functionality).</strong> Pick Education for companion apps.</li></ol></li>
+  <li><p>None of these are in Apple's documentation in any way you would find before hitting them. Now they are.</p></li>
+  <li><hr></li>
+  <li><h2>14. What You Built</h2></li>
+  <li><p>14.1 Claude's Web Wrapper (Wraply) is a real app. It browses the web, saves bookmarks that persist across launches, shares URLs, and has a feedback channel to the developer. It's built with:</p></li>
+  <li><ul><li><strong>SwiftUI</strong> — the user interface (Chapters 2, 6, 7, 9)</li><li><strong>WebKit</strong> — WKWebView for rendering web pages (Appendix: WebKit)</li><li><strong>SwiftData</strong> — bookmark persistence (Chapter 15)</li><li><strong>MessageUI</strong> — email feedback (Chapter 12)</li><li><strong>UIViewRepresentable</strong> — bridging UIKit into SwiftUI (Chapter 18)</li><li><strong>SF Symbols</strong> — toolbar icons (Chapter 6)</li><li><strong>Git</strong> — version control from day one (Chapter 20)</li></ul></li>
+  <li><p>14.2 From an empty Xcode project to a published app. Every app in this book follows the same path.</p></li>
+  <li><hr></li>
+  <li><p><em>App Store listing: Claude's Web Wrapper</em> <em>Xcode project name: Wraply</em> <em>Source code: github.com/fluhartyml/Wraply</em> <em>Bundle ID: com.ClaudeX26Bible.Wraply</em> <em>License: GPL v3 — Share and share alike with attribution required.</em></p></li>
+</ol>
 </div>
 
-
-<div class="nav">
-  <a href="../../table-of-contents.html">&larr; Table of Contents</a>
-  <a href="../../claudex26-atlas.html">Atlas</a>
-  <a href="../../claudex26-roadmap.html">Roadmap</a>
-</div>
-
-<footer>File: <code>Appendices/Appendix-B-Claudes-Web-Wrapper/Appendix-B-Claudes-Web-Wrapper.html</code> &middot; Claude's Xcode 26 Swift Reference &middot; Placeholder
+<footer class="page">
+  <div class="path">Appendices/Appendix-B-Claudes-Web-Wrapper/Appendix-B-Claudes-Web-Wrapper</div>
+  <div class="pos">Appendix B</div>
+  <div class="nav"><a href="../../table-of-contents">&larr; Contents</a><a href="../../claudex26-index">Index</a></div>
 </footer>
 
 </body>

@@ -12,6 +12,14 @@ import UniformTypeIdentifiers
 import UIKit
 #endif
 
+extension Color {
+    static let libraryBg     = Color(red: 0x00/255, green: 0x07/255, blue: 0x1A/255)
+    static let libraryFg     = Color(red: 0x60/255, green: 0x8F/255, blue: 0xFF/255)
+    static let libraryBright = Color(red: 0x80/255, green: 0xB8/255, blue: 0xFF/255)
+    static let libraryDim    = Color(red: 0x00/255, green: 0x33/255, blue: 0x99/255)
+    static let libraryBorder = Color(red: 0x00/255, green: 0x22/255, blue: 0x66/255)
+}
+
 struct ContentView: View {
     @EnvironmentObject var vault: VaultModel
     @EnvironmentObject var webViewBridge: VaultWebView.Bridge
@@ -61,8 +69,13 @@ struct ContentView: View {
         if let root = vault.rootNode {
             List(selection: $vault.selectedNodeID) {
                 VaultTreeOutline(node: root, isRoot: true)
+                    .listRowBackground(Color.libraryBg)
             }
             .listStyle(.sidebar)
+            .scrollContentBackground(.hidden)
+            .background(Color.libraryBg)
+            .foregroundStyle(Color.libraryFg)
+            .tint(Color.libraryBright)
             .onChange(of: vault.selectedNodeID) { _, newID in
                 if let id = newID, let node = findNode(id: id, in: root), !node.isDirectory {
                     vault.open(node.url)
@@ -266,6 +279,7 @@ struct VaultTreeOutline: View {
         Text(displayName(node))
             .lineLimit(nil)
             .fixedSize(horizontal: false, vertical: true)
+            .foregroundStyle(node.isDirectory ? Color.libraryBright : Color.libraryFg)
             .help(node.name)
     }
 
