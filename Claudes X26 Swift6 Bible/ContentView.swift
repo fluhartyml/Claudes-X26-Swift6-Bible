@@ -337,22 +337,40 @@ struct VaultTreeOutline: View {
                     VaultTreeOutline(node: child)
                 }
             } else {
-                DisclosureGroup {
+                DisclosureGroup(
+                    isExpanded: bindingForExpansion(of: node)
+                ) {
                     ForEach(node.children) { child in
                         VaultTreeOutline(node: child)
                     }
                 } label: {
                     labelFor(node)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .contentShape(Rectangle())
+                        .onTapGesture {
+                            vault.toggleExpanded(node.id)
+                        }
                 }
             }
         } else {
             labelFor(node)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .contentShape(Rectangle())
+                .tag(node.id)
                 .onTapGesture {
                     vault.open(node.url)
                 }
         }
+    }
+
+    private func bindingForExpansion(of node: VaultNode) -> Binding<Bool> {
+        Binding<Bool>(
+            get: { vault.expandedNodeIDs.contains(node.id) },
+            set: { newValue in
+                if newValue { vault.expandedNodeIDs.insert(node.id) }
+                else        { vault.expandedNodeIDs.remove(node.id) }
+            }
+        )
     }
 
     private func labelFor(_ node: VaultNode) -> some View {

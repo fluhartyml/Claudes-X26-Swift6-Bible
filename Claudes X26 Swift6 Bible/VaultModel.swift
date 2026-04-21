@@ -24,6 +24,15 @@ final class VaultModel: ObservableObject {
     @Published var rootNode: VaultNode?
     @Published var currentDocument: URL?
     @Published var selectedNodeID: VaultNode.ID?
+    @Published var expandedNodeIDs: Set<VaultNode.ID> = []
+
+    func toggleExpanded(_ id: VaultNode.ID) {
+        if expandedNodeIDs.contains(id) {
+            expandedNodeIDs.remove(id)
+        } else {
+            expandedNodeIDs.insert(id)
+        }
+    }
 
     private var history: [URL] = []
     private var forwardHistory: [URL] = []
