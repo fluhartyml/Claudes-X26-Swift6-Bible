@@ -209,6 +209,19 @@ struct VaultWebView: PlatformViewRepresentable {
 
         func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
             parent.applyTextScale(webView)
+            print("[wv] didFinish: \(webView.url?.lastPathComponent ?? "nil")")
+        }
+
+        func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
+            print("[wv] didFail: \(error.localizedDescription)")
+        }
+
+        func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) {
+            print("[wv] didFailProvisionalNavigation: \(error.localizedDescription)")
+        }
+
+        func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
+            print("[wv] didStart: \(webView.url?.lastPathComponent ?? "nil")")
         }
 
         func webView(

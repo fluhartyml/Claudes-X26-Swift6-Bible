@@ -41,18 +41,17 @@ struct ContentView: View {
         NavigationSplitView(columnVisibility: $columnVisibility) {
             sidebar
                 .navigationTitle("Library")
+                #if os(iOS)
                 .toolbar {
-                    ToolbarItem(placement: .principal) {
-                        Text("Library")
-                            .font(.headline)
-                            .foregroundStyle(Color.libraryBright)
-                            .frame(maxWidth: .infinity)
-                            .contentShape(Rectangle())
-                            .onTapGesture {
-                                columnVisibility = .detailOnly
-                            }
+                    ToolbarItem(placement: .topBarTrailing) {
+                        Button {
+                            columnVisibility = .detailOnly
+                        } label: {
+                            Label("Hide Sidebar", systemImage: "sidebar.leading")
+                        }
                     }
                 }
+                #endif
         } detail: {
             detail
         }
