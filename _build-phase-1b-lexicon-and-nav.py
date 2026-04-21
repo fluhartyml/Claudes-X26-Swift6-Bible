@@ -504,7 +504,7 @@ def render_toc():
 
     blocks = [
         '<h1>Table of Contents</h1>',
-        '<p>Every Part, Book, Chapter, Page, and Appendix in the Bible. '
+        '<p>Every Part, Book, Chapter, Page, and Appendix in Claude&rsquo;s X26 Swift6 Bible. '
         'Each entry is clickable. Status tags indicate whether an entry is '
         '<span class="status-written">written</span> (real prose ready to read), '
         '<span class="status-scope">scope</span> (outline of what will be '
@@ -610,7 +610,7 @@ def render_index():
 
     blocks = [
         '<h1>Index</h1>',
-        '<p>Alphabetical index of every addressable entry in the Bible: '
+        '<p>Alphabetical index of every addressable entry in Claude&rsquo;s X26 Swift6 Bible: '
         'Lexicon Pages (Part II), Books (Parts I, III–VI), and Appendices. '
         'Every entry is clickable.</p>',
     ]
