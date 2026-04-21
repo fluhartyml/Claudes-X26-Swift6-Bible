@@ -196,14 +196,22 @@ final class VaultModel: ObservableObject {
     // MARK: - Display
 
     func displayPath(for url: URL) -> String {
-        guard let root = vaultRoot else { return url.lastPathComponent }
+        let stripped = (url.lastPathComponent as NSString).deletingPathExtension
+        let ext = url.pathExtension
+        guard let root = vaultRoot else { return stripped }
         let rootPath = root.path
         let fullPath = url.path
         if fullPath.hasPrefix(rootPath) {
-            let rel = String(fullPath.dropFirst(rootPath.count))
-            return rel.hasPrefix("/") ? String(rel.dropFirst()) : rel
+            var rel = String(fullPath.dropFirst(rootPath.count))
+            if rel.hasPrefix("/") { rel.removeFirst() }
+            // Strip the extension from the last component only — paths
+            // display without ".html" per the universal page template rule.
+            if !ext.isEmpty, rel.hasSuffix("." + ext) {
+                rel.removeLast(ext.count + 1)
+            }
+            return rel
         }
-        return url.lastPathComponent
+        return stripped
     }
 }
 
