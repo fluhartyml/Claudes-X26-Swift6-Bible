@@ -3,70 +3,96 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Chapter C — The Swift Lexicon — Claude's Xcode 26 Swift Reference</title>
+<title>Chapter C — Swift Lexicon &mdash; Claude's Xcode 26 Swift Bible</title>
 <style>
-  :root {
-    --bg: #000000;
-    --fg: #FFB000;
-    --bright: #FFD060;
-    --dim: #996600;
-    --codebg: #1a0d00;
-    --border: #664500;
-  }
-  * { box-sizing: border-box; }
-  body {
-    background: var(--bg);
-    color: var(--fg);
-    font-family: "FiraCode Nerd Font Mono", "FiraCode Nerd Font",
-                 "Fira Code", "Menlo", "Courier New", monospace;
-    font-size: 18pt;
-    line-height: 1.55;
-    max-width: 1100px;
-    margin: 0 auto;
-    padding: 2rem 2.5rem 6rem 2.5rem;
-    text-shadow: 0 0 1px rgba(255, 176, 0, 0.35);
-  }
-  h1 { color: var(--bright); font-weight: normal; font-size: 32pt; margin: 1rem 0; }
-  h2 { color: var(--bright); font-weight: normal; font-size: 22pt; border-bottom: 1px solid var(--border); padding-bottom: 0.3rem; }
-  p { margin: 0.6rem 0; }
-  a { color: var(--bright); text-decoration: none; border-bottom: 1px dotted var(--dim); }
-  a:hover { background: #332200; }
-  code { color: var(--bright); background: var(--codebg); padding: 0.08em 0.35em; border: 1px solid #3a2400; border-radius: 3px; font-size: 0.92em; }
-  header, footer { color: var(--dim); font-size: 13pt; }
-  header { margin-bottom: 1.2rem; padding-bottom: 0.7rem; border-bottom: 1px solid var(--border); }
-  footer { margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--border); }
-  .status { color: var(--dim); font-style: italic; font-size: 15pt; border-left: 3px solid var(--dim); padding-left: 0.8rem; margin: 1.5rem 0; }
-  .roll-call { border: 1px solid var(--border); padding: 0.9rem 1.2rem; margin: 1rem 0; background: #060400; font-size: 15pt; }
-  .roll-call strong { color: var(--bright); }
-  .nav { display: flex; gap: 2rem; margin-top: 2rem; font-size: 15pt; }
+:root {
+  --bg: #000000;
+  --fg: #FFB000;
+  --bright: #FFD060;
+  --dim: #996600;
+  --codebg: #1a0d00;
+  --border: #664500;
+  --gutter: #4a3300;
+  --headerbg: #0a0600;
+  --scope: #A06030;
+  --skeleton: #606060;
+}
+* { box-sizing: border-box; }
+html, body { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: "FiraCode Nerd Font Mono", "FiraCode Nerd Font", "Fira Code", "Menlo", "Courier New", monospace;
+  font-size: 18pt;
+  line-height: 1.55;
+  margin: 0;
+  padding: 0;
+  text-shadow: 0 0 1px rgba(255, 176, 0, 0.35);
+}
+header.page, footer.page {
+  background: var(--headerbg);
+  color: var(--dim);
+  border-bottom: 1px solid var(--border);
+  padding: 0.7rem 1.1rem;
+  font-size: 13pt;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+footer.page { border-bottom: 0; border-top: 1px solid var(--border); margin-top: 2rem; }
+header.page .path, footer.page .path { color: var(--fg); word-break: break-all; overflow-wrap: break-word; }
+header.page .pos, footer.page .pos { color: var(--bright); }
+.content { padding: 0.8rem 1rem 2rem 1rem; max-width: 1100px; margin: 0 auto; }
+h1 { color: var(--bright); font-weight: normal; font-size: 26pt; margin: 0.6rem 0 1rem 0; }
+h2 { color: var(--bright); font-weight: normal; font-size: 20pt; border-bottom: 1px solid var(--border); padding-bottom: 0.3rem; margin-top: 1.5rem; counter-reset: h3 para; }
+h2::before { counter-increment: h2; content: counter(h2) ". "; color: var(--fg); }
+h3 { color: var(--bright); font-weight: normal; font-size: 18pt; margin-top: 1rem; counter-reset: para; }
+h3::before { counter-increment: h3; content: counter(h2) "." counter(h3) " "; color: var(--fg); }
+p { margin: 0.4rem 0; counter-increment: para; }
+p::before { content: counter(h2) "." counter(h3) "." counter(para) " "; color: var(--dim); font-size: 13pt; margin-right: 0.4em; }
+code { color: var(--bright); background: var(--codebg); padding: 0.08em 0.35em; border: 1px solid #3a2400; border-radius: 3px; font-size: 0.92em; }
+pre { background: var(--codebg); border: 1px solid #3a2400; border-radius: 4px; padding: 0.7rem 0.9rem; overflow-x: auto; font-size: 14pt; }
+pre code { background: transparent; border: 0; padding: 0; }
+ul, ol.body-list { margin: 0.4rem 0 0.4rem 1.4rem; padding: 0; }
+a { color: var(--bright); text-decoration: none; border-bottom: 1px dotted var(--dim); }
+a:hover { background: #332200; }
+strong { color: var(--bright); }
+em { color: var(--fg); font-style: italic; }
+hr { border: 0; border-top: 1px solid var(--border); margin: 1rem 0; }
+ol.lines { list-style: none; counter-reset: line h2; padding: 0; margin: 0; }
+ol.lines > li { counter-increment: line; padding: 0.15rem 0 0.15rem 3.6rem; position: relative; min-height: 1.2em; }
+ol.lines > li::before { content: counter(line); position: absolute; left: 0; top: 0.25rem; width: 2.8rem; text-align: right; color: var(--gutter); font-size: 13pt; padding-right: 0.5rem; border-right: 1px solid #2a1e00; }
+ol.lines > li > p, ol.lines > li > h1, ol.lines > li > h2, ol.lines > li > h3, ol.lines > li > ul, ol.lines > li > ol, ol.lines > li > pre, ol.lines > li > hr { margin: 0; }
+.scope-note { border-left: 3px solid var(--bright); padding: 0.7rem 1rem; background: #140c00; margin: 0.6rem 0; color: var(--bright); }
+.slot { color: var(--dim); font-style: italic; }
+.kind { color: var(--dim); font-size: 14pt; margin-top: -0.3rem; }
+.nav { display: flex; gap: 0.9rem; flex-wrap: wrap; margin-top: 0.8rem; font-size: 14pt; }
+.status-written  { color: var(--bright); }
+.status-scope    { color: var(--scope); }
+.status-skeleton { color: var(--skeleton); }
+.status-tag { font-size: 13pt; margin-left: 0.4em; }
 </style>
 </head>
 <body>
-<header>File: <code>Part-II-The-Swift-Language/Chapter-C/Chapter-C.html</code> &middot; Placeholder</header>
 
-<p class="status">Status: Placeholder — Book not yet written. Scheduled for Phase 2.</p>
+<header class="page">
+  <div class="path">Part-II-The-Swift-Language/Chapter-C/Chapter-C</div>
+  <div class="pos">Part II &middot; Chapter C</div>
+</header>
 
-<h1>Chapter C — The Swift Lexicon</h1>
-
-
-<p>This is Chapter C of the Swift Lexicon — the encyclopedia-style section of the reference where every Swift word/operator/punctuation mark gets an entry.</p>
-
-<div class="roll-call">
-  <strong>Planned entries:</strong> <code>case</code> &middot; <code>catch</code> &middot; <code>Character</code> &middot; <code>class</code> &middot; <code>closure</code> &middot; <code>Codable</code> &middot; <code>Collection</code> &middot; <code>Comparable</code> &middot; <code>continue</code> &middot; <code>convenience</code> &middot; <code>CaseIterable</code>
+<div class="content">
+<ol class="lines">
+  <li><h1>Chapter C</h1></li>
+  <li><h2>Entries</h2></li>
+  <li><p>11 entries beginning with <strong>C</strong>:</p></li>
+  <li><ul><li><a href="Pages/Page-case">case</a> <em>(keyword)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li><li><a href="Pages/Page-catch">catch</a> <em>(keyword)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li><li><a href="Pages/Page-Character">Character</a> <em>(type)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li><li><a href="Pages/Page-class">class</a> <em>(keyword)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li><li><a href="Pages/Page-closure">closure</a> <em>(concept)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li><li><a href="Pages/Page-Codable">Codable</a> <em>(protocol)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li><li><a href="Pages/Page-Collection">Collection</a> <em>(protocol)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li><li><a href="Pages/Page-Comparable">Comparable</a> <em>(protocol)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li><li><a href="Pages/Page-continue">continue</a> <em>(keyword)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li><li><a href="Pages/Page-convenience">convenience</a> <em>(modifier)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li><li><a href="Pages/Page-CaseIterable">CaseIterable</a> <em>(protocol)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li></ul></li>
+</ol>
 </div>
 
-<p>Entry format, cross-linking convention, and whether SwiftUI property wrappers (marked <code>*</code>) live here or in a SwiftUI mini-lexicon are all open questions (see roadmap 3.3, 3.6, 7.6).</p>
-
-<p>This Book is part of <strong>Part I: The Swift Language</strong> — tentative; Part numbering is open question 3.1 in the roadmap (may become "Volume Zero" instead).</p>
-
-
-<div class="nav">
-  <a href="../../table-of-contents.html">&larr; Table of Contents</a>
-  <a href="../../claudex26-index.html">Index</a>
-  <a href="../../claudex26-roadmap.html">Roadmap</a>
-</div>
-
-<footer>File: <code>Part-II-The-Swift-Language/Chapter-C/Chapter-C.html</code> &middot; Claude's Xcode 26 Swift Reference &middot; Placeholder
+<footer class="page">
+  <div class="path">Part-II-The-Swift-Language/Chapter-C/Chapter-C</div>
+  <div class="pos">Part II &middot; Chapter C</div>
+  <div class="nav"><a href="../../table-of-contents">Contents</a><a href="../../claudex26-index">Index</a></div>
 </footer>
 
 </body>

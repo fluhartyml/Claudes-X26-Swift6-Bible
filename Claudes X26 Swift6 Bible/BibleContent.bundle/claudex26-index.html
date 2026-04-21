@@ -3,651 +3,139 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Index — Every File, Every Relationship</title>
+<title>Index — Claude's Xcode 26 Swift Bible &mdash; Claude's Xcode 26 Swift Bible</title>
 <style>
-  :root {
-    --bg: #000000;
-    --fg: #FFB000;
-    --bright: #FFD060;
-    --dim: #996600;
-    --codebg: #1a0d00;
-    --border: #664500;
-    --hover: #332200;
-    --exists: #80FF60;
-    --planned: #FFB000;
-    --stub: #996600;
-  }
-  * { box-sizing: border-box; }
-  body {
-    background: var(--bg);
-    color: var(--fg);
-    font-family: "FiraCode Nerd Font Mono", "FiraCode Nerd Font",
-                 "Fira Code", "Menlo", "Courier New", monospace;
-    font-size: 18pt;
-    line-height: 1.55;
-    max-width: 1300px;
-    margin: 0 auto;
-    padding: 2rem 2.5rem 6rem 2.5rem;
-    -webkit-font-smoothing: none;
-    text-shadow: 0 0 1px rgba(255, 176, 0, 0.35);
-  }
-  h1, h2, h3, h4 {
-    color: var(--bright);
-    font-weight: normal;
-    letter-spacing: 0.02em;
-    margin: 0;
-  }
-  h1 { font-size: 28pt; border-bottom: 2px solid var(--border); padding-bottom: 0.4rem; }
-  h2 { font-size: 22pt; border-bottom: 1px solid var(--border); padding-bottom: 0.3rem; }
-  h3 { font-size: 19pt; color: var(--fg); }
-  h4 { font-size: 17pt; color: var(--dim); text-transform: uppercase; letter-spacing: 0.1em; }
-  a { color: var(--bright); text-decoration: none; border-bottom: 1px dotted var(--dim); }
-  a:hover { background: var(--hover); }
-  p { margin: 0; }
-  code {
-    color: var(--bright);
-    background: var(--codebg);
-    padding: 0.08em 0.35em;
-    border: 1px solid #3a2400;
-    border-radius: 3px;
-    font-size: 0.92em;
-  }
-  .note { color: var(--dim); font-style: italic; }
-
-  ol.lines { counter-reset: line; list-style: none; margin: 0; padding: 0; }
-  ol.lines > li {
-    counter-increment: line;
-    position: relative;
-    padding: 0.45rem 0 0.45rem 5rem;
-    border-bottom: 1px solid #1a1000;
-    min-height: 2.2rem;
-  }
-  ol.lines > li::before {
-    content: counter(line);
-    position: absolute;
-    left: 0;
-    top: 0.45rem;
-    width: 4rem;
-    text-align: right;
-    color: var(--dim);
-    font-size: 13pt;
-    padding-right: 0.8rem;
-    border-right: 1px solid var(--border);
-    user-select: none;
-  }
-  ol.lines > li:hover { background: #0a0600; }
-  ol.lines > li.spacer { min-height: 1rem; padding-top: 0.2rem; padding-bottom: 0.2rem; }
-
-  header, footer {
-    color: var(--dim);
-    font-size: 13pt;
-  }
-  header {
-    margin-bottom: 1.2rem;
-    padding-bottom: 0.7rem;
-    border-bottom: 1px solid var(--border);
-  }
-  footer {
-    margin-top: 2rem;
-    padding-top: 1rem;
-    border-top: 1px solid var(--border);
-  }
-
-  /* Status pills --------------------------------------------- */
-  .pill {
-    display: inline-block;
-    font-size: 11pt;
-    padding: 0.1rem 0.5rem;
-    border: 1px solid;
-    border-radius: 2px;
-    margin-right: 0.4rem;
-    font-style: italic;
-    letter-spacing: 0.05em;
-  }
-  .pill.exists  { color: var(--exists);  border-color: var(--exists); }
-  .pill.planned { color: var(--planned); border-color: var(--border); }
-  .pill.stub    { color: var(--stub);    border-color: var(--stub); }
-  .pill.meta    { color: var(--bright);  border-color: var(--bright); }
-  .pill.shared  { color: var(--dim);     border-color: var(--dim); }
-
-  /* Atlas row -------------------------------------------------- */
-  .row {
-    display: grid;
-    grid-template-columns: 1.2fr 0.8fr 1.4fr 1fr;
-    gap: 0.5rem 1rem;
-    align-items: start;
-  }
-  .row.header-row {
-    color: var(--bright);
-    font-weight: normal;
-    padding-bottom: 0.2rem;
-    border-bottom: 1px dashed var(--border);
-    font-size: 15pt;
-  }
-  .row .path   { color: var(--bright); font-size: 15pt; word-break: break-all; }
-  .row .status { font-size: 13pt; }
-  .row .role   { color: var(--fg); font-size: 15pt; }
-  .row .rel    { color: var(--dim); font-size: 13pt; word-break: break-word; }
-
-  .part-header { color: var(--bright); font-size: 20pt; padding-top: 0.3rem; }
-
-  .legend-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-    gap: 0.4rem 1.2rem;
-    font-size: 14pt;
-  }
+:root {
+  --bg: #000000;
+  --fg: #FFB000;
+  --bright: #FFD060;
+  --dim: #996600;
+  --codebg: #1a0d00;
+  --border: #664500;
+  --gutter: #4a3300;
+  --headerbg: #0a0600;
+  --scope: #A06030;
+  --skeleton: #606060;
+}
+* { box-sizing: border-box; }
+html, body { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: "FiraCode Nerd Font Mono", "FiraCode Nerd Font", "Fira Code", "Menlo", "Courier New", monospace;
+  font-size: 18pt;
+  line-height: 1.55;
+  margin: 0;
+  padding: 0;
+  text-shadow: 0 0 1px rgba(255, 176, 0, 0.35);
+}
+header.page, footer.page {
+  background: var(--headerbg);
+  color: var(--dim);
+  border-bottom: 1px solid var(--border);
+  padding: 0.7rem 1.1rem;
+  font-size: 13pt;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+footer.page { border-bottom: 0; border-top: 1px solid var(--border); margin-top: 2rem; }
+header.page .path, footer.page .path { color: var(--fg); word-break: break-all; overflow-wrap: break-word; }
+header.page .pos, footer.page .pos { color: var(--bright); }
+.content { padding: 0.8rem 1rem 2rem 1rem; max-width: 1100px; margin: 0 auto; }
+h1 { color: var(--bright); font-weight: normal; font-size: 26pt; margin: 0.6rem 0 1rem 0; }
+h2 { color: var(--bright); font-weight: normal; font-size: 20pt; border-bottom: 1px solid var(--border); padding-bottom: 0.3rem; margin-top: 1.5rem; counter-reset: h3 para; }
+h2::before { counter-increment: h2; content: counter(h2) ". "; color: var(--fg); }
+h3 { color: var(--bright); font-weight: normal; font-size: 18pt; margin-top: 1rem; counter-reset: para; }
+h3::before { counter-increment: h3; content: counter(h2) "." counter(h3) " "; color: var(--fg); }
+p { margin: 0.4rem 0; counter-increment: para; }
+p::before { content: counter(h2) "." counter(h3) "." counter(para) " "; color: var(--dim); font-size: 13pt; margin-right: 0.4em; }
+code { color: var(--bright); background: var(--codebg); padding: 0.08em 0.35em; border: 1px solid #3a2400; border-radius: 3px; font-size: 0.92em; }
+pre { background: var(--codebg); border: 1px solid #3a2400; border-radius: 4px; padding: 0.7rem 0.9rem; overflow-x: auto; font-size: 14pt; }
+pre code { background: transparent; border: 0; padding: 0; }
+ul, ol.body-list { margin: 0.4rem 0 0.4rem 1.4rem; padding: 0; }
+a { color: var(--bright); text-decoration: none; border-bottom: 1px dotted var(--dim); }
+a:hover { background: #332200; }
+strong { color: var(--bright); }
+em { color: var(--fg); font-style: italic; }
+hr { border: 0; border-top: 1px solid var(--border); margin: 1rem 0; }
+ol.lines { list-style: none; counter-reset: line h2; padding: 0; margin: 0; }
+ol.lines > li { counter-increment: line; padding: 0.15rem 0 0.15rem 3.6rem; position: relative; min-height: 1.2em; }
+ol.lines > li::before { content: counter(line); position: absolute; left: 0; top: 0.25rem; width: 2.8rem; text-align: right; color: var(--gutter); font-size: 13pt; padding-right: 0.5rem; border-right: 1px solid #2a1e00; }
+ol.lines > li > p, ol.lines > li > h1, ol.lines > li > h2, ol.lines > li > h3, ol.lines > li > ul, ol.lines > li > ol, ol.lines > li > pre, ol.lines > li > hr { margin: 0; }
+.scope-note { border-left: 3px solid var(--bright); padding: 0.7rem 1rem; background: #140c00; margin: 0.6rem 0; color: var(--bright); }
+.slot { color: var(--dim); font-style: italic; }
+.kind { color: var(--dim); font-size: 14pt; margin-top: -0.3rem; }
+.nav { display: flex; gap: 0.9rem; flex-wrap: wrap; margin-top: 0.8rem; font-size: 14pt; }
+.status-written  { color: var(--bright); }
+.status-scope    { color: var(--scope); }
+.status-skeleton { color: var(--skeleton); }
+.status-tag { font-size: 13pt; margin-left: 0.4em; }
 </style>
 </head>
 <body>
 
-<header>
-  File: <code>Claudes-Xcode-26-Swift-Bible/claudex26-index.html</code> &middot; the master index &middot; everything in the reference vault lives here
+<header class="page">
+  <div class="path">claudex26-index</div>
+  <div class="pos">Back Matter &middot; Index</div>
 </header>
 
+<div class="content">
 <ol class="lines">
-
-<li><h1>Index</h1></li>
-<li><p class="note">Master index of every HTML document in the reference vault. Status of each file, role it plays, relationship to other files. When Michael says &ldquo;I&rsquo;m on line X of file Y,&rdquo; this atlas is the shared reference point. Updated 2026-04-20.</p></li>
-<li><p class="note">Proofing convention: &ldquo;atlas line N yes&rdquo; locks the entry; &ldquo;atlas line N huh?&rdquo; asks for explanation; &ldquo;atlas line N change to X&rdquo; edits.</p></li>
-<li class="spacer"></li>
-
-<!-- ============================================================ -->
-<li><h2>1. Legend</h2></li>
-<li>
-  <div class="legend-grid">
-    <div><span class="pill exists">EXISTS</span> file is written and live</div>
-    <div><span class="pill stub">STUB</span> partial / placeholder file</div>
-    <div><span class="pill planned">PLANNED</span> not written yet</div>
-    <div><span class="pill meta">META</span> mapping / roadmap / atlas doc (not book content)</div>
-    <div><span class="pill shared">SHARED</span> vault-wide asset (CSS, fonts, cover)</div>
-  </div>
-</li>
-<li class="spacer"></li>
-
-<!-- ============================================================ -->
-<li><h2>2. Meta &amp; Mapping Documents (not book content &mdash; tools for building the book)</h2></li>
-
-<li>
-  <div class="row header-row">
-    <div>File</div>
-    <div>Status</div>
-    <div>Role</div>
-    <div>Related to</div>
-  </div>
-</li>
-
-<li>
-  <div class="row">
-    <div class="path"><a href="claudex26-index.html">claudex26-index.html</a></div>
-    <div class="status"><span class="pill exists">EXISTS</span><span class="pill meta">META</span></div>
-    <div class="role">This file. Master index of the vault.</div>
-    <div class="rel">Referenced by every other doc&rsquo;s header</div>
-  </div>
-</li>
-
-<li>
-  <div class="row">
-    <div class="path"><a href="claudex26-roadmap.html">claudex26-roadmap.html</a></div>
-    <div class="status"><span class="pill exists">EXISTS</span><span class="pill meta">META</span></div>
-    <div class="role">Whole-product roadmap. Phases 0&ndash;7, architecture decisions, open questions.</div>
-    <div class="rel">atlas, swift-section-mapping</div>
-  </div>
-</li>
-
-<li>
-  <div class="row">
-    <div class="path"><a href="swift-section-mapping.html">swift-section-mapping.html</a></div>
-    <div class="status"><span class="pill exists">EXISTS</span><span class="pill meta">META</span></div>
-    <div class="role">Mapping doc for the Swift section (future Part I). Every Swift word, operator, punctuation; 21 sections; 8 open questions.</div>
-    <div class="rel">atlas, roadmap, Part-I Books A&ndash;Z (all planned)</div>
-  </div>
-</li>
-
-<li>
-  <div class="row">
-    <div class="path"><code>BOOK-PARAMETERS.md</code></div>
-    <div class="status"><span class="pill exists">EXISTS</span><span class="pill meta">META</span></div>
-    <div class="role">Style bible. Double-citation standard, font, voice, license.</div>
-    <div class="rel">All Books; referenced at vault root</div>
-  </div>
-</li>
-
-<li>
-  <div class="row">
-    <div class="path"><code>INDEX.md</code></div>
-    <div class="status"><span class="pill exists">EXISTS</span><span class="pill meta">META</span></div>
-    <div class="role">Current table of contents (Markdown-era). Will be replaced by atlas or by an HTML <code>index.html</code>.</div>
-    <div class="rel">atlas supersedes this</div>
-  </div>
-</li>
-<li class="spacer"></li>
-
-<!-- ============================================================ -->
-<li><h2>3. Part I &mdash; The Swift Language <span class="note">(new; 26 Books A&ndash;Z)</span></h2></li>
-<li><p class="note">The encyclopedia-style Swift lexicon. All 26 Books planned; none written yet. Book assignments subject to change based on open question 7.1 in the roadmap.</p></li>
-
-<li>
-  <div class="row header-row">
-    <div>Planned path</div>
-    <div>Status</div>
-    <div>Contents</div>
-    <div>Related</div>
-  </div>
-</li>
-
-<li>
-  <div class="row">
-    <div class="path">Part-II-The-Swift-Language/Chapter-A/</div>
-    <div class="status"><span class="pill planned">PLANNED</span></div>
-    <div class="role"><code>actor</code>, <code>any</code>, <code>Any</code>, <code>AnyObject</code>, <code>as</code>, <code>async</code>, <code>await</code>, <code>@autoclosure</code>, <code>@available</code>, <code>array</code>/<code>Array</code>, etc.</div>
-    <div class="rel">Books B&ndash;Z; Concurrency cluster; Cast cluster</div>
-  </div>
-</li>
-
-<li>
-  <div class="row">
-    <div class="path">Part-II-The-Swift-Language/Chapter-B/</div>
-    <div class="status"><span class="pill planned">PLANNED</span></div>
-    <div class="role"><code>Bool</code>, <code>break</code>, <code>@Binding</code> <span class="note">(if SwiftUI wrappers in lexicon)</span></div>
-    <div class="rel">Books A, C; SwiftUI state cluster</div>
-  </div>
-</li>
-
-<li>
-  <div class="row">
-    <div class="path">Part-II-The-Swift-Language/Chapter-C/</div>
-    <div class="status"><span class="pill planned">PLANNED</span></div>
-    <div class="role"><code>case</code>, <code>catch</code>, <code>Character</code>, <code>class</code>, <code>closure</code>, <code>Codable</code>, <code>Collection</code>, <code>Comparable</code>, <code>continue</code>, <code>convenience</code>, <code>CaseIterable</code></div>
-    <div class="rel">Reference-type cluster; Protocol cluster</div>
-  </div>
-</li>
-
-<li>
-  <div class="row">
-    <div class="path">Part-II-The-Swift-Language/Chapter-D/</div>
-    <div class="status"><span class="pill planned">PLANNED</span></div>
-    <div class="role"><code>defer</code>, <code>deinit</code>, <code>Decodable</code>, <code>default</code>, <code>Dictionary</code>, <code>do</code>, <code>Double</code>, <code>dynamic</code>, <code>@discardableResult</code></div>
-    <div class="rel">Error cluster; Collection types</div>
-  </div>
-</li>
-
-<li>
-  <div class="row">
-    <div class="path">Part-II-The-Swift-Language/Chapter-E/</div>
-    <div class="status"><span class="pill planned">PLANNED</span></div>
-    <div class="role"><code>else</code>, <code>Encodable</code>, <code>enum</code>, <code>Equatable</code>, <code>Error</code>, <code>extension</code>, <code>@escaping</code>, <code>@Environment</code>*, <code>@EnvironmentObject</code>*, <code>ExpressibleBy*</code>, <code>#elseif</code>, <code>#endif</code>, <code>#error</code></div>
-    <div class="rel">Value-type cluster; Error cluster</div>
-  </div>
-</li>
-
-<li>
-  <div class="row">
-    <div class="path">Part-II-The-Swift-Language/Chapter-F/</div>
-    <div class="status"><span class="pill planned">PLANNED</span></div>
-    <div class="role"><code>fallthrough</code>, <code>false</code>, <code>fileprivate</code>, <code>final</code>, <code>Float</code>, <code>for</code>, <code>func</code>, <code>@frozen</code>, <code>@FocusState</code>*, <code>#file</code>, <code>#function</code></div>
-    <div class="rel">Closure/func cluster; Access-level cluster</div>
-  </div>
-</li>
-
-<li>
-  <div class="row">
-    <div class="path">Part-II-The-Swift-Language/Chapter-G/</div>
-    <div class="status"><span class="pill planned">PLANNED</span></div>
-    <div class="role">generic (concept), <code>get</code>, <code>guard</code>, <code>@GestureState</code>*</div>
-    <div class="rel">Optional cluster (guard let)</div>
-  </div>
-</li>
-
-<li>
-  <div class="row">
-    <div class="path">Part-II-The-Swift-Language/Chapter-H/</div>
-    <div class="status"><span class="pill planned">PLANNED</span></div>
-    <div class="role"><code>Hashable</code></div>
-    <div class="rel">Protocol cluster</div>
-  </div>
-</li>
-
-<li>
-  <div class="row">
-    <div class="path">Part-II-The-Swift-Language/Chapter-I/</div>
-    <div class="status"><span class="pill planned">PLANNED</span></div>
-    <div class="role"><code>if</code>, <code>import</code>, <code>in</code>, <code>indirect</code>, <code>infix</code>, <code>init</code>, <code>inout</code>, <code>Int</code>, <code>internal</code>, <code>is</code>, <code>Identifiable</code>, <code>@inlinable</code></div>
-    <div class="rel">Control-flow cluster; Access-level cluster</div>
-  </div>
-</li>
-
-<li>
-  <div class="row">
-    <div class="path">Part-II-The-Swift-Language/Chapter-J/</div>
-    <div class="status"><span class="pill planned">PLANNED</span></div>
-    <div class="role">Thin. JSON cross-ref via <code>Codable</code>.</div>
-    <div class="rel">Book C (Codable)</div>
-  </div>
-</li>
-
-<li>
-  <div class="row">
-    <div class="path">Part-II-The-Swift-Language/Chapter-K/</div>
-    <div class="status"><span class="pill planned">PLANNED</span></div>
-    <div class="role"><code>KeyPath</code>, keyword (concept)</div>
-    <div class="rel">Punctuation (<code>\.</code> backslash prefix)</div>
-  </div>
-</li>
-
-<li>
-  <div class="row">
-    <div class="path">Part-II-The-Swift-Language/Chapter-L/</div>
-    <div class="status"><span class="pill planned">PLANNED</span></div>
-    <div class="role"><code>lazy</code>, <code>let</code>, <code>#line</code></div>
-    <div class="rel">Value-type cluster (let as immutable)</div>
-  </div>
-</li>
-
-<li>
-  <div class="row">
-    <div class="path">Part-II-The-Swift-Language/Chapter-M/</div>
-    <div class="status"><span class="pill planned">PLANNED</span></div>
-    <div class="role"><code>map</code>, <code>mutating</code>, <code>@main</code>, <code>@MainActor</code></div>
-    <div class="rel">Concurrency cluster; Functional-collection cluster</div>
-  </div>
-</li>
-
-<li>
-  <div class="row">
-    <div class="path">Part-II-The-Swift-Language/Chapter-N/</div>
-    <div class="status"><span class="pill planned">PLANNED</span></div>
-    <div class="role"><code>Never</code>, <code>nil</code>, <code>nonmutating</code></div>
-    <div class="rel">Optional cluster</div>
-  </div>
-</li>
-
-<li>
-  <div class="row">
-    <div class="path">Part-II-The-Swift-Language/Chapter-O/</div>
-    <div class="status"><span class="pill planned">PLANNED</span></div>
-    <div class="role"><code>open</code>, <code>operator</code>, <code>Optional</code>, <code>override</code>, <code>@objc</code>, <code>@Observable</code>, <code>@ObservedObject</code>*</div>
-    <div class="rel">Optional cluster; Access-level cluster</div>
-  </div>
-</li>
-
-<li>
-  <div class="row">
-    <div class="path">Part-II-The-Swift-Language/Chapter-P/</div>
-    <div class="status"><span class="pill planned">PLANNED</span></div>
-    <div class="role"><code>postfix</code>, <code>precedencegroup</code>, <code>prefix</code>, <code>print</code>, <code>private</code>, <code>protocol</code>, property wrapper (concept), <code>@Published</code>*, <code>public</code>, <code>#Predicate</code>, <code>#Preview</code></div>
-    <div class="rel">Protocol cluster; Access-level cluster</div>
-  </div>
-</li>
-
-<li>
-  <div class="row">
-    <div class="path">Part-II-The-Swift-Language/Chapter-Q/</div>
-    <div class="status"><span class="pill planned">PLANNED</span></div>
-    <div class="role">Thin. <code>@Query</code> (SwiftData)</div>
-    <div class="rel">Book M (@Model)</div>
-  </div>
-</li>
-
-<li>
-  <div class="row">
-    <div class="path">Part-II-The-Swift-Language/Chapter-R/</div>
-    <div class="status"><span class="pill planned">PLANNED</span></div>
-    <div class="role"><code>Range</code>, <code>ClosedRange</code>, <code>RawRepresentable</code>, <code>repeat</code>, <code>required</code>, <code>Result</code>, <code>rethrows</code>, <code>return</code>, <code>@resultBuilder</code></div>
-    <div class="rel">Error cluster; Collection types</div>
-  </div>
-</li>
-
-<li>
-  <div class="row">
-    <div class="path">Part-II-The-Swift-Language/Chapter-S/</div>
-    <div class="status"><span class="pill planned">PLANNED</span></div>
-    <div class="role">Heaviest letter. <code>Self</code>, <code>self</code>, <code>Sendable</code>, <code>Sequence</code>, <code>Set</code>, <code>some</code>, <code>static</code>, <code>String</code>, <code>struct</code>, <code>subscript</code>, <code>super</code>, <code>switch</code>, <code>@State</code>*, <code>@StateObject</code>*, <code>@SceneStorage</code>*, <code>@Sendable</code>, <code>#selector</code></div>
-    <div class="rel">Value-type cluster; Identity cluster; Concurrency cluster</div>
-  </div>
-</li>
-
-<li>
-  <div class="row">
-    <div class="path">Part-II-The-Swift-Language/Chapter-T/</div>
-    <div class="status"><span class="pill planned">PLANNED</span></div>
-    <div class="role"><code>Task</code>, <code>TaskGroup</code>, <code>throw</code>, <code>throws</code>, <code>true</code>, <code>try</code>, <code>typealias</code>, <code>@testable</code></div>
-    <div class="rel">Concurrency cluster; Error cluster</div>
-  </div>
-</li>
-
-<li>
-  <div class="row">
-    <div class="path">Part-II-The-Swift-Language/Chapter-U/</div>
-    <div class="status"><span class="pill planned">PLANNED</span></div>
-    <div class="role"><code>unowned</code>, <code>@UIApplicationMain</code> (legacy)</div>
-    <div class="rel">Reference-type cluster</div>
-  </div>
-</li>
-
-<li>
-  <div class="row">
-    <div class="path">Part-II-The-Swift-Language/Chapter-V/</div>
-    <div class="status"><span class="pill planned">PLANNED</span></div>
-    <div class="role"><code>var</code>, <code>Void</code></div>
-    <div class="rel">Value-type cluster</div>
-  </div>
-</li>
-
-<li>
-  <div class="row">
-    <div class="path">Part-II-The-Swift-Language/Chapter-W/</div>
-    <div class="status"><span class="pill planned">PLANNED</span></div>
-    <div class="role"><code>weak</code>, <code>where</code>, <code>while</code>, <code>#warning</code></div>
-    <div class="rel">Reference-type cluster; Pattern-match cluster</div>
-  </div>
-</li>
-
-<li>
-  <div class="row">
-    <div class="path">Part-II-The-Swift-Language/Chapter-X/</div>
-    <div class="status"><span class="pill planned">PLANNED</span></div>
-    <div class="role">Thin / likely empty.</div>
-    <div class="rel">(may collapse with Y/Z &mdash; see roadmap Q 7.8)</div>
-  </div>
-</li>
-
-<li>
-  <div class="row">
-    <div class="path">Part-II-The-Swift-Language/Chapter-Y/</div>
-    <div class="status"><span class="pill planned">PLANNED</span></div>
-    <div class="role">Thin / likely empty.</div>
-    <div class="rel">(may collapse with X/Z)</div>
-  </div>
-</li>
-
-<li>
-  <div class="row">
-    <div class="path">Part-II-The-Swift-Language/Chapter-Z/</div>
-    <div class="status"><span class="pill planned">PLANNED</span></div>
-    <div class="role">Thin / likely empty.</div>
-    <div class="rel">(may collapse with X/Y)</div>
-  </div>
-</li>
-<li class="spacer"></li>
-
-<!-- ============================================================ -->
-<li><h2>4. Part II &mdash; Introduction <span class="note">(current Part I, renamed)</span></h2></li>
-
-<li>
-  <div class="row header-row">
-    <div>Current file / planned path</div>
-    <div>Status</div>
-    <div>Role</div>
-    <div>Related</div>
-  </div>
-</li>
-
-<li>
-  <div class="row">
-    <div class="path"><code>01-Introducing-Swift-And-Xcode.md</code> &rarr; Book-01/index.html</div>
-    <div class="status"><span class="pill exists">EXISTS</span> <span class="note">(in Markdown)</span></div>
-    <div class="role">Swift &amp; Xcode. Mostly Xcode-focused.</div>
-    <div class="rel">Book 2, 3; Part I (new Swift section)</div>
-  </div>
-</li>
-
-<li>
-  <div class="row">
-    <div class="path"><code>02-Introducing-SwiftUI-Views.md</code> &rarr; Book-02/index.html</div>
-    <div class="status"><span class="pill exists">EXISTS</span> <span class="note">(in Markdown)</span></div>
-    <div class="role">SwiftUI Views. View protocol, @State, @Binding, @Observable, layout, modifiers, previews, UIKit interop, accessibility.</div>
-    <div class="rel">Books in Part III; Part I (Swift lexicon for wrappers)</div>
-  </div>
-</li>
-
-<li>
-  <div class="row">
-    <div class="path"><code>03-Introducing-Scenes-And-Windows.md</code> &rarr; Book-03/index.html</div>
-    <div class="status"><span class="pill exists">EXISTS</span> <span class="note">(in Markdown)</span></div>
-    <div class="role">App protocol, Scene, WindowGroup, DocumentGroup, Settings, MenuBarExtra, lifecycle, multi-platform conditional compilation.</div>
-    <div class="rel">Books 1, 2; Part IV multi-window</div>
-  </div>
-</li>
-<li class="spacer"></li>
-
-<!-- ============================================================ -->
-<li><h2>5. Part III &mdash; The User Interface <span class="note">(current Part II)</span></h2></li>
-<li>
-  <div class="row header-row">
-    <div>Current file / planned path</div>
-    <div>Status</div>
-    <div>Role</div>
-    <div>Related</div>
-  </div>
-</li>
-<li><div class="row"><div class="path"><code>04-Gestures-And-Input.md</code> &rarr; Book-04/</div><div class="status"><span class="pill exists">EXISTS</span> <span class="note">(.md)</span></div><div class="role">Tap, long-press, drag, magnify, rotate, combining, tvOS focus, macOS keyboard, accessibility actions</div><div class="rel">Book 5, 6</div></div></li>
-<li><div class="row"><div class="path"><code>05-Menus-And-Navigation.md</code> &rarr; Book-05/</div><div class="status"><span class="pill exists">EXISTS</span> <span class="note">(.md)</span></div><div class="role">Menus, navigation, routing</div><div class="rel">Book 4, 7</div></div></li>
-<li><div class="row"><div class="path"><code>06-Controls-Buttons-Toggles-Pickers.md</code> &rarr; Book-06/</div><div class="status"><span class="pill exists">EXISTS</span> <span class="note">(.md)</span></div><div class="role">Buttons, toggles, pickers, sliders, steppers</div><div class="rel">Book 2 (@State), Book 9</div></div></li>
-<li><div class="row"><div class="path"><code>07-Toolbars-And-Tab-Views.md</code> &rarr; Book-07/</div><div class="status"><span class="pill exists">EXISTS</span> <span class="note">(.md)</span></div><div class="role">Toolbars, tab views</div><div class="rel">Book 5, 13</div></div></li>
-<li><div class="row"><div class="path"><code>08-Lists-Grids-And-ForEach.md</code> &rarr; Book-08/</div><div class="status"><span class="pill exists">EXISTS</span> <span class="note">(.md)</span></div><div class="role">List, LazyVGrid, LazyHGrid, ForEach</div><div class="rel">Book 15, Book 17</div></div></li>
-<li><div class="row"><div class="path"><code>09-Text-And-TextField.md</code> &rarr; Book-09/</div><div class="status"><span class="pill exists">EXISTS</span> <span class="note">(.md)</span></div><div class="role">Text styling, TextField</div><div class="rel">Book 10</div></div></li>
-<li><div class="row"><div class="path"><code>10-TextEditor-And-AttributedString.md</code> &rarr; Book-10/</div><div class="status"><span class="pill exists">EXISTS</span> <span class="note">(.md)</span></div><div class="role">TextEditor, AttributedString</div><div class="rel">Book 9</div></div></li>
-<li><div class="row"><div class="path"><code>11-FileManager-And-Documents.md</code> &rarr; Book-11/</div><div class="status"><span class="pill exists">EXISTS</span> <span class="note">(.md)</span></div><div class="role">FileManager, DocumentGroup, file I/O</div><div class="rel">Book 3, Book 14</div></div></li>
-<li><div class="row"><div class="path"><code>12-Sheets-Alerts-And-Confirmations.md</code> &rarr; Book-12/</div><div class="status"><span class="pill exists">EXISTS</span> <span class="note">(.md)</span></div><div class="role">Sheets, alerts, confirmationDialog</div><div class="rel">Book 5, Book 13</div></div></li>
-<li class="spacer"></li>
-
-<!-- ============================================================ -->
-<li><h2>6. Part IV &mdash; The Application <span class="note">(current Part III)</span></h2></li>
-<li>
-  <div class="row header-row">
-    <div>Current file / planned path</div>
-    <div>Status</div>
-    <div>Role</div>
-    <div>Related</div>
-  </div>
-</li>
-<li><div class="row"><div class="path"><code>13-Multi-Window-And-NavigationSplitView.md</code> &rarr; Book-13/</div><div class="status"><span class="pill exists">EXISTS</span> <span class="note">(.md)</span></div><div class="role">NavigationSplitView, multi-window, macOS window management</div><div class="rel">Book 3, Book 7</div></div></li>
-<li><div class="row"><div class="path"><code>14-Clipboard-DragDrop-ShareSheet.md</code> &rarr; Book-14/</div><div class="status"><span class="pill exists">EXISTS</span> <span class="note">(.md)</span></div><div class="role">Pasteboard, drag &amp; drop, ShareLink</div><div class="rel">Book 11</div></div></li>
-<li><div class="row"><div class="path"><code>15-SwiftData-And-CoreData.md</code> &rarr; Book-15/</div><div class="status"><span class="pill exists">EXISTS</span> <span class="note">(.md)</span></div><div class="role">SwiftData, CoreData basics</div><div class="rel">Part I (Book Q, @Query; Book M, @Model)</div></div></li>
-<li><div class="row"><div class="path"><code>16-Extensions-And-Packages.md</code> &rarr; Book-16/</div><div class="status"><span class="pill exists">EXISTS</span> <span class="note">(.md; needs proofing)</span></div><div class="role">Extensions, Swift packages, frameworks</div><div class="rel">Part I (Book E, extension)</div></div></li>
-<li><div class="row"><div class="path"><code>17-Swift-Charts-And-PDFKit.md</code> &rarr; Book-17/</div><div class="status"><span class="pill exists">EXISTS</span> <span class="note">(.md)</span></div><div class="role">Swift Charts, PDFKit</div><div class="rel">Book 8</div></div></li>
-<li class="spacer"></li>
-
-<!-- ============================================================ -->
-<li><h2>7. Part V &mdash; Advanced Techniques <span class="note">(current Part IV)</span></h2></li>
-<li>
-  <div class="row header-row">
-    <div>Current file / planned path</div>
-    <div>Status</div>
-    <div>Role</div>
-    <div>Related</div>
-  </div>
-</li>
-<li><div class="row"><div class="path"><code>18-Error-Handling-And-Result-Type.md</code> &rarr; Book-18/</div><div class="status"><span class="pill exists">EXISTS</span> <span class="note">(.md)</span></div><div class="role">do/try/catch, throws/rethrows, Result</div><div class="rel">Part I (Error cluster: Books D, E, R, T)</div></div></li>
-<li><div class="row"><div class="path"><code>19-Building-Custom-Views-And-Modifiers.md</code> &rarr; Book-19/</div><div class="status"><span class="pill exists">EXISTS</span> <span class="note">(.md)</span></div><div class="role">ViewModifier, custom view composition, protocol extensions on View</div><div class="rel">Book 2, Part I (Book P protocol)</div></div></li>
-<li><div class="row"><div class="path"><code>20-Performance-Instruments-And-Best-Practices.md</code> &rarr; Book-20/</div><div class="status"><span class="pill exists">EXISTS</span> <span class="note">(.md)</span></div><div class="role">Instruments, Xcode profiling, performance tips</div><div class="rel">Book 1</div></div></li>
-<li class="spacer"></li>
-
-<!-- ============================================================ -->
-<li><h2>8. Part VI &mdash; The Modern Toolchain <span class="note">(current Part V)</span></h2></li>
-<li>
-  <div class="row header-row">
-    <div>Current file / planned path</div>
-    <div>Status</div>
-    <div>Role</div>
-    <div>Related</div>
-  </div>
-</li>
-<li><div class="row"><div class="path"><code>21-Git-And-GitHub.md</code> &rarr; Book-21/</div><div class="status"><span class="pill exists">EXISTS</span> <span class="note">(.md)</span></div><div class="role">Git basics, GitHub workflow</div><div class="rel">Appendix A</div></div></li>
-<li><div class="row"><div class="path"><code>22-AI-Chatbot-Integration.md</code> &rarr; Book-22/</div><div class="status"><span class="pill exists">EXISTS</span> <span class="note">(.md)</span></div><div class="role">Integrating AI chatbots into apps (Claude API, OpenAI, etc.)</div><div class="rel">Appendix B (Web Wrapper shows a chat-UI pattern)</div></div></li>
-<li class="spacer"></li>
-
-<!-- ============================================================ -->
-<li><h2>9. Appendices</h2></li>
-<li>
-  <div class="row header-row">
-    <div>Current file / planned path</div>
-    <div>Status</div>
-    <div>Role</div>
-    <div>Related</div>
-  </div>
-</li>
-<li><div class="row"><div class="path"><a href="appendix-github-setup.html">appendix-github-setup.html</a></div><div class="status"><span class="pill exists">EXISTS</span></div><div class="role">Appendix A. GitHub setup walkthrough.</div><div class="rel">Book 21</div></div></li>
-<li><div class="row"><div class="path"><code>appendix-github-setup.md</code></div><div class="status"><span class="pill exists">EXISTS</span> <span class="note">(.md source)</span></div><div class="role">Markdown source for Appendix A HTML</div><div class="rel">appendix-github-setup.html</div></div></li>
-<li><div class="row"><div class="path"><a href="appendix-claudes-web-wrapper-v2.html">appendix-claudes-web-wrapper-v2.html</a></div><div class="status"><span class="pill exists">EXISTS</span></div><div class="role">Appendix B. Claude&rsquo;s Web Wrapper build-along.</div><div class="rel">Book 22</div></div></li>
-<li><div class="row"><div class="path"><code>appendix-claudes-web-wrapper.md</code></div><div class="status"><span class="pill exists">EXISTS</span> <span class="note">(.md source)</span></div><div class="role">Markdown source for Appendix B</div><div class="rel">Appendix B HTML</div></div></li>
-<li><div class="row"><div class="path"><code>appendix-quicknote.md</code></div><div class="status"><span class="pill exists">EXISTS</span> <span class="note">(.md; no HTML yet)</span></div><div class="role">Appendix C. QuickNote build-along.</div><div class="rel">Book 6, Book 15</div></div></li>
-<li><div class="row"><div class="path">appendix-lockbox.html <span class="note">(future)</span></div><div class="status"><span class="pill planned">PLANNED</span></div><div class="role">Appendix D. LockBox build-along (app is live; docs pending for Books 13&ndash;15).</div><div class="rel">Book 13, 14, 15</div></div></li>
-<li class="spacer"></li>
-
-<!-- ============================================================ -->
-<li><h2>10. Shared Vault Assets</h2></li>
-<li>
-  <div class="row header-row">
-    <div>Path</div>
-    <div>Status</div>
-    <div>Role</div>
-    <div>Related</div>
-  </div>
-</li>
-<li><div class="row"><div class="path"><code>cover.jpg</code></div><div class="status"><span class="pill exists">EXISTS</span><span class="pill shared">SHARED</span></div><div class="role">Reference cover image</div><div class="rel">EPUB manifest</div></div></li>
-<li><div class="row"><div class="path"><code>figures/</code></div><div class="status"><span class="pill exists">EXISTS</span><span class="pill shared">SHARED</span></div><div class="role">Figures from various chapters (current scheme)</div><div class="rel">All Books</div></div></li>
-<li><div class="row"><div class="path"><code>Screenshots/</code></div><div class="status"><span class="pill exists">EXISTS</span><span class="pill shared">SHARED</span></div><div class="role">Screenshot assets for chapter figures</div><div class="rel">All Books, Appendices</div></div></li>
-<li><div class="row"><div class="path"><code>proofing/</code></div><div class="status"><span class="pill exists">EXISTS</span><span class="pill shared">SHARED</span></div><div class="role">HTML proofing artifacts from past sessions</div><div class="rel">Various Books</div></div></li>
-<li><div class="row"><div class="path"><code>OEBPS/</code>, <code>META-INF/</code></div><div class="status"><span class="pill exists">EXISTS</span><span class="pill shared">SHARED</span></div><div class="role">EPUB build output scaffolding</div><div class="rel">EPUB v1&ndash;v6</div></div></li>
-<li><div class="row"><div class="path"><code>Xcode26/</code></div><div class="status"><span class="pill exists">EXISTS</span><span class="pill shared">SHARED</span></div><div class="role">Xcode sample projects / screenshots source</div><div class="rel">Book 1, Appendix C</div></div></li>
-<li><div class="row"><div class="path"><code>_shared/css/</code></div><div class="status"><span class="pill planned">PLANNED</span></div><div class="role">Vault-wide stylesheet(s): screen + print + amber-proofing modes</div><div class="rel">All Books</div></div></li>
-<li><div class="row"><div class="path"><code>_shared/fonts/FiraCodeNerdFontMono-*.ttf</code></div><div class="status"><span class="pill planned">PLANNED</span></div><div class="role">Embedded FiraCode Nerd Font Mono (SIL OFL 1.1)</div><div class="rel">All Books, EPUB manifest</div></div></li>
-<li class="spacer"></li>
-
-<!-- ============================================================ -->
-<li><h2>11. EPUB Releases (shipping artifacts, not source)</h2></li>
-<li>
-  <div class="row header-row">
-    <div>File</div>
-    <div>Status</div>
-    <div>Role</div>
-    <div>Related</div>
-  </div>
-</li>
-<li><div class="row"><div class="path"><code>Claudes-Xcode-26-Swift-Bible-v6.epub</code></div><div class="status"><span class="pill exists">EXISTS</span></div><div class="role">Latest current EPUB build</div><div class="rel">All Books</div></div></li>
-<li><div class="row"><div class="path"><code>Claudes-Xcode-26-Swift-Bible-v5.epub</code></div><div class="status"><span class="pill exists">EXISTS</span></div><div class="role">Prior EPUB build</div><div class="rel">&mdash;</div></div></li>
-<li><div class="row"><div class="path"><code>Claudes-Xcode-26-Swift-Bible-v1..v4.epub</code></div><div class="status"><span class="pill exists">EXISTS</span></div><div class="role">Earlier EPUB builds (history)</div><div class="rel">&mdash;</div></div></li>
-<li class="spacer"></li>
-
-<!-- ============================================================ -->
-<li><h2>12. How to Use This Atlas</h2></li>
-<li><p>&bull; <strong>To identify which file you&rsquo;re looking at:</strong> the header and footer of every HTML doc shows its filename. Match it to a row in this atlas.</p></li>
-<li><p>&bull; <strong>To point Claude at a file:</strong> &ldquo;I&rsquo;m on <code>swift-section-mapping.html</code> line 82&rdquo; &mdash; or if the file name is long, &ldquo;atlas line 17 &mdash; that one, line 82.&rdquo;</p></li>
-<li><p>&bull; <strong>To see relationships:</strong> the &ldquo;Related&rdquo; column of each row points at other entries. Each row is cross-referenced.</p></li>
-<li><p>&bull; <strong>To claim / approve / edit an atlas row:</strong> &ldquo;atlas line N yes&rdquo; locks the entry; &ldquo;atlas line N change to X&rdquo; edits; &ldquo;atlas line N huh?&rdquo; prompts a plain-English explanation.</p></li>
-<li><p>&bull; <strong>To add a new file to the vault:</strong> tell Claude, and the atlas gets a new row.</p></li>
-<li class="spacer"></li>
-
-<li>
-  <footer>
-    File: <code>Claudes-Xcode-26-Swift-Bible/claudex26-index.html</code> &middot; master index &middot; updated 2026-04-20<br>
-    Edit &middot; refresh &middot; proof by line number. Related: <a href="claudex26-roadmap.html">claudex26-roadmap.html</a> &middot; <a href="swift-section-mapping.html">swift-section-mapping.html</a>
-  </footer>
-</li>
-
+  <li><h1>Index</h1></li>
+  <li><p>Alphabetical index of every addressable entry in the Bible: Lexicon Pages (Part II), Books (Parts I, III–VI), and Appendices. Every entry is clickable.</p></li>
+  <li><h2>A</h2></li>
+  <li><ul><li><a href="Part-II-The-Swift-Language/Chapter-A/Pages/Page-actor">actor</a> <em>(Lexicon &middot; Chapter A &middot; keyword)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-A/Pages/Page-any">any</a> <em>(Lexicon &middot; Chapter A &middot; keyword)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-A/Pages/Page-Any">Any</a> <em>(Lexicon &middot; Chapter A &middot; type)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-A/Pages/Page-AnyObject">AnyObject</a> <em>(Lexicon &middot; Chapter A &middot; type)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li><li><a href="Appendices/Appendix-A-GitHub-Setup/Appendix-A-GitHub-Setup">Appendix A — GitHub Setup</a> <em>(Appendices)</em> <span class="status-tag status-written">[Written]</span></li><li><a href="Appendices/Appendix-B-Claudes-Web-Wrapper/Appendix-B-Claudes-Web-Wrapper">Appendix B — Claudes Web Wrapper</a> <em>(Appendices)</em> <span class="status-tag status-written">[Written]</span></li><li><a href="Appendices/Appendix-C-QuickNote/Appendix-C-QuickNote">Appendix C — QuickNote</a> <em>(Appendices)</em> <span class="status-tag status-written">[Written]</span></li><li><a href="Appendices/Appendix-D-LockBox/Appendix-D-LockBox">Appendix D — LockBox</a> <em>(Appendices)</em> <span class="status-tag status-scope">[Scope]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-A/Pages/Page-Array">Array</a> <em>(Lexicon &middot; Chapter A &middot; type)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-A/Pages/Page-as">as</a> <em>(Lexicon &middot; Chapter A &middot; keyword)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-A/Pages/Page-async">async</a> <em>(Lexicon &middot; Chapter A &middot; keyword)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-A/Pages/Page-autoclosure">@autoclosure</a> <em>(Lexicon &middot; Chapter A &middot; attribute)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-A/Pages/Page-available">@available</a> <em>(Lexicon &middot; Chapter A &middot; attribute)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-A/Pages/Page-await">await</a> <em>(Lexicon &middot; Chapter A &middot; keyword)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li></ul></li>
+  <li><h2>B</h2></li>
+  <li><ul><li><a href="Part-II-The-Swift-Language/Chapter-B/Pages/Page-Binding">@Binding</a> <em>(Lexicon &middot; Chapter B &middot; attribute-swiftui)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li><li><a href="Part-I-Introduction/Book-01-Introducing-Swift-And-Xcode/Book-01-Introducing-Swift-And-Xcode">Book 01 — Introducing Swift And Xcode</a> <em>(Part I — Introduction)</em> <span class="status-tag status-written">[Written]</span></li><li><a href="Part-I-Introduction/Book-02-Introducing-SwiftUI-Views/Book-02-Introducing-SwiftUI-Views">Book 02 — Introducing SwiftUI Views</a> <em>(Part I — Introduction)</em> <span class="status-tag status-written">[Written]</span></li><li><a href="Part-I-Introduction/Book-03-Introducing-Scenes-And-Windows/Book-03-Introducing-Scenes-And-Windows">Book 03 — Introducing Scenes And Windows</a> <em>(Part I — Introduction)</em> <span class="status-tag status-written">[Written]</span></li><li><a href="Part-III-The-User-Interface/Book-04-Gestures-And-Input/Book-04-Gestures-And-Input">Book 04 — Gestures And Input</a> <em>(Part III — The User Interface)</em> <span class="status-tag status-scope">[Scope]</span></li><li><a href="Part-III-The-User-Interface/Book-05-Menus-And-Navigation/Book-05-Menus-And-Navigation">Book 05 — Menus And Navigation</a> <em>(Part III — The User Interface)</em> <span class="status-tag status-written">[Written]</span></li><li><a href="Part-III-The-User-Interface/Book-06-Controls-Buttons-Toggles-Pickers/Book-06-Controls-Buttons-Toggles-Pickers">Book 06 — Controls Buttons Toggles Pickers</a> <em>(Part III — The User Interface)</em> <span class="status-tag status-written">[Written]</span></li><li><a href="Part-III-The-User-Interface/Book-07-Toolbars-And-Tab-Views/Book-07-Toolbars-And-Tab-Views">Book 07 — Toolbars And Tab Views</a> <em>(Part III — The User Interface)</em> <span class="status-tag status-written">[Written]</span></li><li><a href="Part-III-The-User-Interface/Book-08-Lists-Grids-And-ForEach/Book-08-Lists-Grids-And-ForEach">Book 08 — Lists Grids And ForEach</a> <em>(Part III — The User Interface)</em> <span class="status-tag status-written">[Written]</span></li><li><a href="Part-III-The-User-Interface/Book-09-Text-And-TextField/Book-09-Text-And-TextField">Book 09 — Text And TextField</a> <em>(Part III — The User Interface)</em> <span class="status-tag status-written">[Written]</span></li><li><a href="Part-III-The-User-Interface/Book-10-TextEditor-And-AttributedString/Book-10-TextEditor-And-AttributedString">Book 10 — TextEditor And AttributedString</a> <em>(Part III — The User Interface)</em> <span class="status-tag status-written">[Written]</span></li><li><a href="Part-III-The-User-Interface/Book-11-FileManager-And-Documents/Book-11-FileManager-And-Documents">Book 11 — FileManager And Documents</a> <em>(Part III — The User Interface)</em> <span class="status-tag status-written">[Written]</span></li><li><a href="Part-III-The-User-Interface/Book-12-Sheets-Alerts-And-Confirmations/Book-12-Sheets-Alerts-And-Confirmations">Book 12 — Sheets Alerts And Confirmations</a> <em>(Part III — The User Interface)</em> <span class="status-tag status-written">[Written]</span></li><li><a href="Part-IV-The-Application/Book-13-Multi-Window-And-NavigationSplitView/Book-13-Multi-Window-And-NavigationSplitView">Book 13 — Multi Window And NavigationSplitView</a> <em>(Part IV — The Application)</em> <span class="status-tag status-scope">[Scope]</span></li><li><a href="Part-IV-The-Application/Book-14-Clipboard-DragDrop-ShareSheet/Book-14-Clipboard-DragDrop-ShareSheet">Book 14 — Clipboard DragDrop ShareSheet</a> <em>(Part IV — The Application)</em> <span class="status-tag status-scope">[Scope]</span></li><li><a href="Part-IV-The-Application/Book-15-SwiftData-And-CoreData/Book-15-SwiftData-And-CoreData">Book 15 — SwiftData And CoreData</a> <em>(Part IV — The Application)</em> <span class="status-tag status-scope">[Scope]</span></li><li><a href="Part-IV-The-Application/Book-16-Extensions-And-Packages/Book-16-Extensions-And-Packages">Book 16 — Extensions And Packages</a> <em>(Part IV — The Application)</em> <span class="status-tag status-written">[Written]</span></li><li><a href="Part-IV-The-Application/Book-17-Swift-Charts-And-PDFKit/Book-17-Swift-Charts-And-PDFKit">Book 17 — Swift Charts And PDFKit</a> <em>(Part IV — The Application)</em> <span class="status-tag status-scope">[Scope]</span></li><li><a href="Part-V-Advanced-Techniques/Book-18-Error-Handling-And-Result-Type/Book-18-Error-Handling-And-Result-Type">Book 18 — Error Handling And Result Type</a> <em>(Part V — Advanced Techniques)</em> <span class="status-tag status-scope">[Scope]</span></li><li><a href="Part-V-Advanced-Techniques/Book-19-Building-Custom-Views-And-Modifiers/Book-19-Building-Custom-Views-And-Modifiers">Book 19 — Building Custom Views And Modifiers</a> <em>(Part V — Advanced Techniques)</em> <span class="status-tag status-scope">[Scope]</span></li><li><a href="Part-V-Advanced-Techniques/Book-20-Performance-Instruments-And-Best-Practices/Book-20-Performance-Instruments-And-Best-Practices">Book 20 — Performance Instruments And Best Practices</a> <em>(Part V — Advanced Techniques)</em> <span class="status-tag status-scope">[Scope]</span></li><li><a href="Part-VI-The-Modern-Toolchain/Book-21-Git-And-GitHub/Book-21-Git-And-GitHub">Book 21 — Git And GitHub</a> <em>(Part VI — The Modern Toolchain)</em> <span class="status-tag status-scope">[Scope]</span></li><li><a href="Part-VI-The-Modern-Toolchain/Book-22-AI-Chatbot-Integration/Book-22-AI-Chatbot-Integration">Book 22 — AI Chatbot Integration</a> <em>(Part VI — The Modern Toolchain)</em> <span class="status-tag status-scope">[Scope]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-B/Pages/Page-Bool">Bool</a> <em>(Lexicon &middot; Chapter B &middot; type)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-B/Pages/Page-break">break</a> <em>(Lexicon &middot; Chapter B &middot; keyword)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li></ul></li>
+  <li><h2>C</h2></li>
+  <li><ul><li><a href="Part-II-The-Swift-Language/Chapter-C/Pages/Page-case">case</a> <em>(Lexicon &middot; Chapter C &middot; keyword)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-C/Pages/Page-CaseIterable">CaseIterable</a> <em>(Lexicon &middot; Chapter C &middot; protocol)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-C/Pages/Page-catch">catch</a> <em>(Lexicon &middot; Chapter C &middot; keyword)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-A/Chapter-A">Chapter A</a> <em>(Lexicon landing page &middot; 10 entries)</em> <span class="status-tag status-written">[Written]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-B/Chapter-B">Chapter B</a> <em>(Lexicon landing page &middot; 3 entries)</em> <span class="status-tag status-written">[Written]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-C/Chapter-C">Chapter C</a> <em>(Lexicon landing page &middot; 11 entries)</em> <span class="status-tag status-written">[Written]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-D/Chapter-D">Chapter D</a> <em>(Lexicon landing page &middot; 9 entries)</em> <span class="status-tag status-written">[Written]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-E/Chapter-E">Chapter E</a> <em>(Lexicon landing page &middot; 13 entries)</em> <span class="status-tag status-written">[Written]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-F/Chapter-F">Chapter F</a> <em>(Lexicon landing page &middot; 11 entries)</em> <span class="status-tag status-written">[Written]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-G/Chapter-G">Chapter G</a> <em>(Lexicon landing page &middot; 4 entries)</em> <span class="status-tag status-written">[Written]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-H/Chapter-H">Chapter H</a> <em>(Lexicon landing page &middot; 1 entries)</em> <span class="status-tag status-written">[Written]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-I/Chapter-I">Chapter I</a> <em>(Lexicon landing page &middot; 12 entries)</em> <span class="status-tag status-written">[Written]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-J/Chapter-J">Chapter J</a> <em>(Lexicon landing page &middot; 0 entries)</em> <span class="status-tag status-scope">[Scope]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-K/Chapter-K">Chapter K</a> <em>(Lexicon landing page &middot; 1 entries)</em> <span class="status-tag status-written">[Written]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-L/Chapter-L">Chapter L</a> <em>(Lexicon landing page &middot; 3 entries)</em> <span class="status-tag status-written">[Written]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-M/Chapter-M">Chapter M</a> <em>(Lexicon landing page &middot; 4 entries)</em> <span class="status-tag status-written">[Written]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-N/Chapter-N">Chapter N</a> <em>(Lexicon landing page &middot; 3 entries)</em> <span class="status-tag status-written">[Written]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-O/Chapter-O">Chapter O</a> <em>(Lexicon landing page &middot; 7 entries)</em> <span class="status-tag status-written">[Written]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-P/Chapter-P">Chapter P</a> <em>(Lexicon landing page &middot; 10 entries)</em> <span class="status-tag status-written">[Written]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-Q/Chapter-Q">Chapter Q</a> <em>(Lexicon landing page &middot; 1 entries)</em> <span class="status-tag status-written">[Written]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-R/Chapter-R">Chapter R</a> <em>(Lexicon landing page &middot; 9 entries)</em> <span class="status-tag status-written">[Written]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-S/Chapter-S">Chapter S</a> <em>(Lexicon landing page &middot; 17 entries)</em> <span class="status-tag status-written">[Written]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-T/Chapter-T">Chapter T</a> <em>(Lexicon landing page &middot; 8 entries)</em> <span class="status-tag status-written">[Written]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-U/Chapter-U">Chapter U</a> <em>(Lexicon landing page &middot; 2 entries)</em> <span class="status-tag status-written">[Written]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-V/Chapter-V">Chapter V</a> <em>(Lexicon landing page &middot; 2 entries)</em> <span class="status-tag status-written">[Written]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-W/Chapter-W">Chapter W</a> <em>(Lexicon landing page &middot; 4 entries)</em> <span class="status-tag status-written">[Written]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-X/Chapter-X">Chapter X</a> <em>(Lexicon landing page &middot; 0 entries)</em> <span class="status-tag status-scope">[Scope]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-Y/Chapter-Y">Chapter Y</a> <em>(Lexicon landing page &middot; 0 entries)</em> <span class="status-tag status-scope">[Scope]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-Z/Chapter-Z">Chapter Z</a> <em>(Lexicon landing page &middot; 0 entries)</em> <span class="status-tag status-scope">[Scope]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-C/Pages/Page-Character">Character</a> <em>(Lexicon &middot; Chapter C &middot; type)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-C/Pages/Page-class">class</a> <em>(Lexicon &middot; Chapter C &middot; keyword)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li><li><a href="Front-Matter/Claude-X26-Parameters/Claude-X26-Parameters">Claude X26 Parameters</a> <em>(Front Matter)</em> <span class="status-tag status-written">[Written]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-R/Pages/Page-ClosedRange">ClosedRange</a> <em>(Lexicon &middot; Chapter R &middot; type)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-C/Pages/Page-closure">closure</a> <em>(Lexicon &middot; Chapter C &middot; concept)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-C/Pages/Page-Codable">Codable</a> <em>(Lexicon &middot; Chapter C &middot; protocol)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-C/Pages/Page-Collection">Collection</a> <em>(Lexicon &middot; Chapter C &middot; protocol)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-C/Pages/Page-Comparable">Comparable</a> <em>(Lexicon &middot; Chapter C &middot; protocol)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-C/Pages/Page-continue">continue</a> <em>(Lexicon &middot; Chapter C &middot; keyword)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-C/Pages/Page-convenience">convenience</a> <em>(Lexicon &middot; Chapter C &middot; modifier)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li></ul></li>
+  <li><h2>D</h2></li>
+  <li><ul><li><a href="Part-II-The-Swift-Language/Chapter-D/Pages/Page-Decodable">Decodable</a> <em>(Lexicon &middot; Chapter D &middot; protocol)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-D/Pages/Page-default">default</a> <em>(Lexicon &middot; Chapter D &middot; keyword)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-D/Pages/Page-defer">defer</a> <em>(Lexicon &middot; Chapter D &middot; keyword)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-D/Pages/Page-deinit">deinit</a> <em>(Lexicon &middot; Chapter D &middot; keyword)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-D/Pages/Page-Dictionary">Dictionary</a> <em>(Lexicon &middot; Chapter D &middot; type)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-D/Pages/Page-discardableResult">@discardableResult</a> <em>(Lexicon &middot; Chapter D &middot; attribute)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-D/Pages/Page-do">do</a> <em>(Lexicon &middot; Chapter D &middot; keyword)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-D/Pages/Page-Double">Double</a> <em>(Lexicon &middot; Chapter D &middot; type)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-D/Pages/Page-dynamic">dynamic</a> <em>(Lexicon &middot; Chapter D &middot; modifier)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li></ul></li>
+  <li><h2>E</h2></li>
+  <li><ul><li><a href="Part-II-The-Swift-Language/Chapter-E/Pages/Page-else">else</a> <em>(Lexicon &middot; Chapter E &middot; keyword)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-E/Pages/Page-elseif">#elseif</a> <em>(Lexicon &middot; Chapter E &middot; directive)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-E/Pages/Page-Encodable">Encodable</a> <em>(Lexicon &middot; Chapter E &middot; protocol)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-E/Pages/Page-endif">#endif</a> <em>(Lexicon &middot; Chapter E &middot; directive)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-E/Pages/Page-enum">enum</a> <em>(Lexicon &middot; Chapter E &middot; keyword)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-E/Pages/Page-Environment">@Environment</a> <em>(Lexicon &middot; Chapter E &middot; attribute-swiftui)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-E/Pages/Page-EnvironmentObject">@EnvironmentObject</a> <em>(Lexicon &middot; Chapter E &middot; attribute-swiftui)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-E/Pages/Page-Equatable">Equatable</a> <em>(Lexicon &middot; Chapter E &middot; protocol)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-E/Pages/Page-Error">Error</a> <em>(Lexicon &middot; Chapter E &middot; protocol)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-E/Pages/Page-error">#error</a> <em>(Lexicon &middot; Chapter E &middot; directive)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-E/Pages/Page-escaping">@escaping</a> <em>(Lexicon &middot; Chapter E &middot; attribute)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-E/Pages/Page-ExpressibleByStringLiteral">ExpressibleByStringLiteral</a> <em>(Lexicon &middot; Chapter E &middot; protocol)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-E/Pages/Page-extension">extension</a> <em>(Lexicon &middot; Chapter E &middot; keyword)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li></ul></li>
+  <li><h2>F</h2></li>
+  <li><ul><li><a href="Part-II-The-Swift-Language/Chapter-F/Pages/Page-fallthrough">fallthrough</a> <em>(Lexicon &middot; Chapter F &middot; keyword)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-F/Pages/Page-false">false</a> <em>(Lexicon &middot; Chapter F &middot; literal)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-F/Pages/Page-file">#file</a> <em>(Lexicon &middot; Chapter F &middot; directive)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-F/Pages/Page-fileprivate">fileprivate</a> <em>(Lexicon &middot; Chapter F &middot; access-level)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-F/Pages/Page-final">final</a> <em>(Lexicon &middot; Chapter F &middot; modifier)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-F/Pages/Page-Float">Float</a> <em>(Lexicon &middot; Chapter F &middot; type)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-F/Pages/Page-FocusState">@FocusState</a> <em>(Lexicon &middot; Chapter F &middot; attribute-swiftui)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-F/Pages/Page-for">for</a> <em>(Lexicon &middot; Chapter F &middot; keyword)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-F/Pages/Page-frozen">@frozen</a> <em>(Lexicon &middot; Chapter F &middot; attribute)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-F/Pages/Page-func">func</a> <em>(Lexicon &middot; Chapter F &middot; keyword)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-F/Pages/Page-function">#function</a> <em>(Lexicon &middot; Chapter F &middot; directive)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li></ul></li>
+  <li><h2>G</h2></li>
+  <li><ul><li><a href="Part-II-The-Swift-Language/Chapter-G/Pages/Page-generic">generic</a> <em>(Lexicon &middot; Chapter G &middot; concept)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-G/Pages/Page-GestureState">@GestureState</a> <em>(Lexicon &middot; Chapter G &middot; attribute-swiftui)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-G/Pages/Page-get">get</a> <em>(Lexicon &middot; Chapter G &middot; accessor)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-G/Pages/Page-guard">guard</a> <em>(Lexicon &middot; Chapter G &middot; keyword)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li></ul></li>
+  <li><h2>H</h2></li>
+  <li><ul><li><a href="Part-II-The-Swift-Language/Chapter-H/Pages/Page-Hashable">Hashable</a> <em>(Lexicon &middot; Chapter H &middot; protocol)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li></ul></li>
+  <li><h2>I</h2></li>
+  <li><ul><li><a href="Part-II-The-Swift-Language/Chapter-I/Pages/Page-Identifiable">Identifiable</a> <em>(Lexicon &middot; Chapter I &middot; protocol)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-I/Pages/Page-if">if</a> <em>(Lexicon &middot; Chapter I &middot; keyword)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-I/Pages/Page-import">import</a> <em>(Lexicon &middot; Chapter I &middot; keyword)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-I/Pages/Page-in">in</a> <em>(Lexicon &middot; Chapter I &middot; keyword)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-I/Pages/Page-indirect">indirect</a> <em>(Lexicon &middot; Chapter I &middot; modifier)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-I/Pages/Page-infix">infix</a> <em>(Lexicon &middot; Chapter I &middot; keyword)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-I/Pages/Page-init">init</a> <em>(Lexicon &middot; Chapter I &middot; keyword)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-I/Pages/Page-inlinable">@inlinable</a> <em>(Lexicon &middot; Chapter I &middot; attribute)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-I/Pages/Page-inout">inout</a> <em>(Lexicon &middot; Chapter I &middot; keyword)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-I/Pages/Page-Int">Int</a> <em>(Lexicon &middot; Chapter I &middot; type)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-I/Pages/Page-internal">internal</a> <em>(Lexicon &middot; Chapter I &middot; access-level)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-I/Pages/Page-is">is</a> <em>(Lexicon &middot; Chapter I &middot; keyword)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li></ul></li>
+  <li><h2>K</h2></li>
+  <li><ul><li><a href="Part-II-The-Swift-Language/Chapter-K/Pages/Page-KeyPath">KeyPath</a> <em>(Lexicon &middot; Chapter K &middot; type)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li></ul></li>
+  <li><h2>L</h2></li>
+  <li><ul><li><a href="Part-II-The-Swift-Language/Chapter-L/Pages/Page-lazy">lazy</a> <em>(Lexicon &middot; Chapter L &middot; modifier)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-L/Pages/Page-let">let</a> <em>(Lexicon &middot; Chapter L &middot; keyword)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-L/Pages/Page-line">#line</a> <em>(Lexicon &middot; Chapter L &middot; directive)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li></ul></li>
+  <li><h2>M</h2></li>
+  <li><ul><li><a href="Part-II-The-Swift-Language/Chapter-M/Pages/Page-main">@main</a> <em>(Lexicon &middot; Chapter M &middot; attribute)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-M/Pages/Page-MainActor">@MainActor</a> <em>(Lexicon &middot; Chapter M &middot; attribute)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-M/Pages/Page-map">map</a> <em>(Lexicon &middot; Chapter M &middot; function)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-M/Pages/Page-mutating">mutating</a> <em>(Lexicon &middot; Chapter M &middot; modifier)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li></ul></li>
+  <li><h2>N</h2></li>
+  <li><ul><li><a href="Part-II-The-Swift-Language/Chapter-N/Pages/Page-Never">Never</a> <em>(Lexicon &middot; Chapter N &middot; type)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-N/Pages/Page-nil">nil</a> <em>(Lexicon &middot; Chapter N &middot; literal)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-N/Pages/Page-nonmutating">nonmutating</a> <em>(Lexicon &middot; Chapter N &middot; modifier)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li></ul></li>
+  <li><h2>O</h2></li>
+  <li><ul><li><a href="Part-II-The-Swift-Language/Chapter-O/Pages/Page-objc">@objc</a> <em>(Lexicon &middot; Chapter O &middot; attribute)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-O/Pages/Page-Observable">@Observable</a> <em>(Lexicon &middot; Chapter O &middot; attribute)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-O/Pages/Page-ObservedObject">@ObservedObject</a> <em>(Lexicon &middot; Chapter O &middot; attribute-swiftui)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-O/Pages/Page-open">open</a> <em>(Lexicon &middot; Chapter O &middot; access-level)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-O/Pages/Page-operator">operator</a> <em>(Lexicon &middot; Chapter O &middot; keyword)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-O/Pages/Page-Optional">Optional</a> <em>(Lexicon &middot; Chapter O &middot; type)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-O/Pages/Page-override">override</a> <em>(Lexicon &middot; Chapter O &middot; modifier)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li></ul></li>
+  <li><h2>P</h2></li>
+  <li><ul><li><a href="Part-II-The-Swift-Language/Chapter-P/Pages/Page-postfix">postfix</a> <em>(Lexicon &middot; Chapter P &middot; keyword)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-P/Pages/Page-precedencegroup">precedencegroup</a> <em>(Lexicon &middot; Chapter P &middot; keyword)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-P/Pages/Page-Predicate">#Predicate</a> <em>(Lexicon &middot; Chapter P &middot; macro)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-P/Pages/Page-prefix">prefix</a> <em>(Lexicon &middot; Chapter P &middot; keyword)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-P/Pages/Page-Preview">#Preview</a> <em>(Lexicon &middot; Chapter P &middot; macro)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-P/Pages/Page-print">print</a> <em>(Lexicon &middot; Chapter P &middot; function)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-P/Pages/Page-private">private</a> <em>(Lexicon &middot; Chapter P &middot; access-level)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-P/Pages/Page-protocol">protocol</a> <em>(Lexicon &middot; Chapter P &middot; keyword)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-P/Pages/Page-public">public</a> <em>(Lexicon &middot; Chapter P &middot; access-level)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-P/Pages/Page-Published">@Published</a> <em>(Lexicon &middot; Chapter P &middot; attribute-swiftui)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li></ul></li>
+  <li><h2>Q</h2></li>
+  <li><ul><li><a href="Part-II-The-Swift-Language/Chapter-Q/Pages/Page-Query">@Query</a> <em>(Lexicon &middot; Chapter Q &middot; attribute-swiftdata)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li></ul></li>
+  <li><h2>R</h2></li>
+  <li><ul><li><a href="Part-II-The-Swift-Language/Chapter-R/Pages/Page-Range">Range</a> <em>(Lexicon &middot; Chapter R &middot; type)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-R/Pages/Page-RawRepresentable">RawRepresentable</a> <em>(Lexicon &middot; Chapter R &middot; protocol)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-R/Pages/Page-repeat">repeat</a> <em>(Lexicon &middot; Chapter R &middot; keyword)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-R/Pages/Page-required">required</a> <em>(Lexicon &middot; Chapter R &middot; modifier)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-R/Pages/Page-Result">Result</a> <em>(Lexicon &middot; Chapter R &middot; type)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-R/Pages/Page-resultBuilder">@resultBuilder</a> <em>(Lexicon &middot; Chapter R &middot; attribute)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-R/Pages/Page-rethrows">rethrows</a> <em>(Lexicon &middot; Chapter R &middot; keyword)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-R/Pages/Page-return">return</a> <em>(Lexicon &middot; Chapter R &middot; keyword)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li></ul></li>
+  <li><h2>S</h2></li>
+  <li><ul><li><a href="Part-II-The-Swift-Language/Chapter-S/Pages/Page-SceneStorage">@SceneStorage</a> <em>(Lexicon &middot; Chapter S &middot; attribute-swiftui)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-S/Pages/Page-selector">#selector</a> <em>(Lexicon &middot; Chapter S &middot; directive)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-S/Pages/Page-Self">Self</a> <em>(Lexicon &middot; Chapter S &middot; keyword)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-S/Pages/Page-self">self</a> <em>(Lexicon &middot; Chapter S &middot; keyword)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-S/Pages/Page-Sendable">Sendable</a> <em>(Lexicon &middot; Chapter S &middot; protocol)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-S/Pages/Page-Sendable">@Sendable</a> <em>(Lexicon &middot; Chapter S &middot; attribute)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-S/Pages/Page-Sequence">Sequence</a> <em>(Lexicon &middot; Chapter S &middot; protocol)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-S/Pages/Page-Set">Set</a> <em>(Lexicon &middot; Chapter S &middot; type)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-S/Pages/Page-some">some</a> <em>(Lexicon &middot; Chapter S &middot; keyword)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-S/Pages/Page-State">@State</a> <em>(Lexicon &middot; Chapter S &middot; attribute-swiftui)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-S/Pages/Page-StateObject">@StateObject</a> <em>(Lexicon &middot; Chapter S &middot; attribute-swiftui)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-S/Pages/Page-static">static</a> <em>(Lexicon &middot; Chapter S &middot; modifier)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-S/Pages/Page-String">String</a> <em>(Lexicon &middot; Chapter S &middot; type)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-S/Pages/Page-struct">struct</a> <em>(Lexicon &middot; Chapter S &middot; keyword)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-S/Pages/Page-subscript">subscript</a> <em>(Lexicon &middot; Chapter S &middot; keyword)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-S/Pages/Page-super">super</a> <em>(Lexicon &middot; Chapter S &middot; keyword)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-S/Pages/Page-switch">switch</a> <em>(Lexicon &middot; Chapter S &middot; keyword)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li></ul></li>
+  <li><h2>T</h2></li>
+  <li><ul><li><a href="Part-II-The-Swift-Language/Chapter-T/Pages/Page-Task">Task</a> <em>(Lexicon &middot; Chapter T &middot; type)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-T/Pages/Page-TaskGroup">TaskGroup</a> <em>(Lexicon &middot; Chapter T &middot; type)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-T/Pages/Page-testable">@testable</a> <em>(Lexicon &middot; Chapter T &middot; attribute)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-T/Pages/Page-throw">throw</a> <em>(Lexicon &middot; Chapter T &middot; keyword)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-T/Pages/Page-throws">throws</a> <em>(Lexicon &middot; Chapter T &middot; keyword)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-T/Pages/Page-true">true</a> <em>(Lexicon &middot; Chapter T &middot; literal)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-T/Pages/Page-try">try</a> <em>(Lexicon &middot; Chapter T &middot; keyword)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-T/Pages/Page-typealias">typealias</a> <em>(Lexicon &middot; Chapter T &middot; keyword)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li></ul></li>
+  <li><h2>U</h2></li>
+  <li><ul><li><a href="Part-II-The-Swift-Language/Chapter-U/Pages/Page-UIApplicationMain">@UIApplicationMain</a> <em>(Lexicon &middot; Chapter U &middot; attribute)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-U/Pages/Page-unowned">unowned</a> <em>(Lexicon &middot; Chapter U &middot; modifier)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li></ul></li>
+  <li><h2>V</h2></li>
+  <li><ul><li><a href="Part-II-The-Swift-Language/Chapter-V/Pages/Page-var">var</a> <em>(Lexicon &middot; Chapter V &middot; keyword)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-V/Pages/Page-Void">Void</a> <em>(Lexicon &middot; Chapter V &middot; type)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li></ul></li>
+  <li><h2>W</h2></li>
+  <li><ul><li><a href="Part-II-The-Swift-Language/Chapter-W/Pages/Page-warning">#warning</a> <em>(Lexicon &middot; Chapter W &middot; directive)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-W/Pages/Page-weak">weak</a> <em>(Lexicon &middot; Chapter W &middot; modifier)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-W/Pages/Page-where">where</a> <em>(Lexicon &middot; Chapter W &middot; keyword)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li><li><a href="Part-II-The-Swift-Language/Chapter-W/Pages/Page-while">while</a> <em>(Lexicon &middot; Chapter W &middot; keyword)</em> <span class="status-tag status-skeleton">[Skeleton]</span></li></ul></li>
 </ol>
+</div>
+
+<footer class="page">
+  <div class="path">claudex26-index</div>
+  <div class="pos">Back Matter &middot; Index</div>
+  <div class="nav"><a href="table-of-contents">Contents</a></div>
+</footer>
 
 </body>
 </html>

@@ -18,7 +18,7 @@ import Foundation
 enum VaultBundleExtractor {
     static let folderName = "BibleContent"
     /// Bump this when content mapping rules change so the next launch re-extracts.
-    static let currentVersion = 17
+    static let currentVersion = 18
     private static let versionFileName = ".extraction-version"
 
     /// Make sure the extracted vault exists at a known location, then return
@@ -107,6 +107,11 @@ enum VaultBundleExtractor {
         ]
         if rootExact.contains(filename) { return filename }
 
+        // Front Matter — Claude-X26-Parameters.html lives under Front-Matter/.
+        if filename == "Claude-X26-Parameters.html" {
+            return "Front-Matter/Claude-X26-Parameters/\(filename)"
+        }
+
         // Markdown chapter sources "01-*.md" through "22-*.md".
         if filename.hasSuffix(".md"),
            let first = filename.first, first.isNumber,
@@ -125,6 +130,22 @@ enum VaultBundleExtractor {
            filename.count == "Chapter-A.html".count {
             let letter = filename.dropFirst("Chapter-".count).prefix(1)
             return "Part-II-The-Swift-Language/Chapter-\(letter)/\(filename)"
+        }
+
+        // Swift Lexicon Pages — Page-*.html. The chapter letter is the
+        // first alphabetic character of the entry name (after "Page-"),
+        // uppercased; e.g. Page-actor.html -> Chapter A, Page-State.html
+        // -> Chapter S, Page-Predicate.html -> Chapter P.
+        if filename.hasPrefix("Page-"), filename.hasSuffix(".html") {
+            let rest = filename.dropFirst("Page-".count)
+            if let firstChar = rest.first {
+                let letter = String(firstChar).uppercased()
+                if letter.count == 1,
+                   let scalar = letter.unicodeScalars.first,
+                   CharacterSet.uppercaseLetters.contains(scalar) {
+                    return "Part-II-The-Swift-Language/Chapter-\(letter)/Pages/\(filename)"
+                }
+            }
         }
 
         // Numbered Books — Book-NN-*.html.
