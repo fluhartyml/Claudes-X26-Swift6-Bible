@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Book 08: Lists Grids And ForEach &mdash; Claude's Xcode 26 Swift Bible</title>
+<style>
+:root {
+  --bg: #000000;
+  --fg: #FFB000;
+  --bright: #FFD060;
+  --dim: #996600;
+  --codebg: #1a0d00;
+  --border: #664500;
+  --gutter: #4a3300;
+  --headerbg: #0a0600;
+}
+* { box-sizing: border-box; }
+html, body { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: "FiraCode Nerd Font Mono", "FiraCode Nerd Font", "Fira Code", "Menlo", "Courier New", monospace;
+  font-size: 18pt;
+  line-height: 1.55;
+  margin: 0;
+  padding: 0;
+  text-shadow: 0 0 1px rgba(255, 176, 0, 0.35);
+}
+header.page, footer.page {
+  background: var(--headerbg);
+  color: var(--dim);
+  border-bottom: 1px solid var(--border);
+  padding: 0.7rem 1.1rem;
+  font-size: 13pt;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+footer.page { border-bottom: 0; border-top: 1px solid var(--border); margin-top: 2rem; }
+header.page .path, footer.page .path { color: var(--fg); word-break: break-all; overflow-wrap: break-word; }
+header.page .pos, footer.page .pos { color: var(--bright); }
+.content { padding: 0.8rem 1rem 2rem 1rem; max-width: 1100px; margin: 0 auto; }
+h1 { color: var(--bright); font-weight: normal; font-size: 26pt; margin: 0.6rem 0 1rem 0; }
+h2 { color: var(--bright); font-weight: normal; font-size: 20pt; border-bottom: 1px solid var(--border); padding-bottom: 0.3rem; margin-top: 1.5rem; counter-reset: h3 para; }
+h2::before { counter-increment: h2; content: counter(h2) ". "; color: var(--fg); }
+h3 { color: var(--bright); font-weight: normal; font-size: 18pt; margin-top: 1rem; counter-reset: para; }
+h3::before { counter-increment: h3; content: counter(h2) "." counter(h3) " "; color: var(--fg); }
+p { margin: 0.4rem 0; counter-increment: para; }
+p::before { content: counter(h2) "." counter(h3) "." counter(para) " "; color: var(--dim); font-size: 13pt; margin-right: 0.4em; }
+code { color: var(--bright); background: var(--codebg); padding: 0.08em 0.35em; border: 1px solid #3a2400; border-radius: 3px; font-size: 0.92em; }
+pre { background: var(--codebg); border: 1px solid #3a2400; border-radius: 4px; padding: 0.7rem 0.9rem; overflow-x: auto; font-size: 14pt; }
+pre code { background: transparent; border: 0; padding: 0; }
+ul, ol.body-list { margin: 0.4rem 0 0.4rem 1.4rem; padding: 0; }
+a { color: var(--bright); font-weight: bold; text-decoration: none; border-bottom: 1px dotted var(--dim); }
+a:hover { background: #332200; }
+strong { color: var(--bright); }
+em { color: var(--fg); font-style: italic; }
+hr { border: 0; border-top: 1px solid var(--border); margin: 1rem 0; }
+ol.lines { list-style: none; counter-reset: line h2; padding: 0; margin: 0; }
+ol.lines > li { counter-increment: line; padding: 0.15rem 0 0.15rem 3.6rem; position: relative; min-height: 1.2em; }
+ol.lines > li::before { content: counter(line); position: absolute; left: 0; top: 0.25rem; width: 2.8rem; text-align: right; color: var(--gutter); font-size: 13pt; padding-right: 0.5rem; border-right: 1px solid #2a1e00; }
+ol.lines > li > p, ol.lines > li > h2, ol.lines > li > h3, ol.lines > li > ul, ol.lines > li > ol, ol.lines > li > pre, ol.lines > li > hr { margin: 0; }
+.scope-note { border-left: 3px solid var(--bright); padding: 0.7rem 1rem; background: #140c00; margin: 0.6rem 0; color: var(--bright); }
+.nav { display: flex; gap: 0.9rem; flex-wrap: wrap; margin-top: 0.8rem; font-size: 14pt; }
+</style>
+</head>
+<body>
+
+<header class="page">
+  <div class="path">Part-III-The-User-Interface/Book-08-Lists-Grids-And-ForEach</div>
+  <div class="pos">Part III &middot; Book 08</div>
+</header>
+
+<div class="content">
+<ol class="lines">
+  <li><h1>Chapter 08: Lists, Grids, and ForEach</h1></li>
+  <li><h2>List</h2></li>
+  <li><p>The workhorse of data display in SwiftUI. Provides scrolling, cell recycling, selection, swipe actions, and platform-native styling for free.</p></li>
+  <li><h3>Basic List</h3></li>
+  <li><pre><code class="lang-swift">struct ItemListView: View {
+    let items: [Item]
+
+    var body: some View {
+        List(items) { item in
+            Text(item.name)
+        }
+    }
+}</code></pre></li>
+  <li><p>This requires <code>Item</code> to conform to <code>Identifiable</code>. If it does not, provide a key path:</p></li>
+  <li><pre><code class="lang-swift">List(names, id: \.self) { name in
+    Text(name)
+}</code></pre></li>
+  <li><h3>Static Content</h3></li>
+  <li><pre><code class="lang-swift">List {
+    Text("First")
+    Text("Second")
+    Text("Third")
+}</code></pre></li>
+  <li><h3>Mixed Static and Dynamic</h3></li>
+  <li><pre><code class="lang-swift">List {
+    Section("Favorites") {
+        ForEach(favorites) { item in
+            Text(item.name)
+        }
+    }
+
+    Section("All Items") {
+        ForEach(allItems) { item in
+            Text(item.name)
+        }
+    }
+}</code></pre></li>
+  <li><hr></li>
+  <li><h2>ForEach</h2></li>
+  <li><p><code>ForEach</code> is not a loop — it is a view that generates views from a collection.</p></li>
+  <li><h3>With Identifiable Data</h3></li>
+  <li><pre><code class="lang-swift">ForEach(recipes) { recipe in
+    RecipeRow(recipe: recipe)
+}</code></pre></li>
+  <li><h3>With id Key Path</h3></li>
+  <li><pre><code class="lang-swift">ForEach(names, id: \.self) { name in
+    Text(name)
+}</code></pre></li>
+  <li><h3>With Index</h3></li>
+  <li><pre><code class="lang-swift">ForEach(Array(items.enumerated()), id: \.element.id) { index, item in
+    Text("\(index + 1). \(item.name)")
+}</code></pre></li>
+  <li><h3>Range-Based</h3></li>
+  <li><pre><code class="lang-swift">ForEach(0..&lt;5) { index in
+    Text("Row \(index)")
+}</code></pre></li>
+  <li><h3>Watch Out</h3></li>
+  <li><ul><li><code>ForEach</code> with a range (<code>0..&lt;count</code>) requires the range to be constant. If <code>count</code> changes, use <code>ForEach(0..&lt;count, id: \.self)</code> — but better yet, use a real data collection.</li><li>The <code>id</code> parameter is critical for performance. SwiftUI uses it to track which rows changed. If two items share the same ID, you get undefined behavior — wrong rows update, animations break.</li></ul></li>
+  <li><hr></li>
+  <li><h2>Identifiable Protocol</h2></li>
+  <li><pre><code class="lang-swift">struct Recipe: Identifiable {
+    let id = UUID()
+    var name: String
+    var cuisine: String
+}</code></pre></li>
+  <li><p><code>Identifiable</code> requires a single property: <code>id</code>. It can be any <code>Hashable</code> type — <code>UUID</code>, <code>Int</code>, <code>String</code>.</p></li>
+  <li><h3>Watch Out</h3></li>
+  <li><ul><li><code>let id = UUID()</code> generates a new ID every time the struct is created. If you recreate structs from network data, use a stable identifier from the server instead.</li></ul></li>
+  <li><hr></li>
+  <li><h2>Sections</h2></li>
+  <li><pre><code class="lang-swift">List {
+    Section("Breakfast") {
+        ForEach(breakfastItems) { item in
+            Text(item.name)
+        }
+    }
+
+    Section {
+        ForEach(lunchItems) { item in
+            Text(item.name)
+        }
+    } header: {
+        Text("Lunch")
+    } footer: {
+        Text("All items under 500 calories")
+    }
+}</code></pre></li>
+  <li><h3>Collapsible Sections (iOS 17+)</h3></li>
+  <li><pre><code class="lang-swift">Section("Advanced", isExpanded: $isAdvancedExpanded) {
+    Toggle("Debug Mode", isOn: $debugMode)
+    Toggle("Verbose Logging", isOn: $verboseLogging)
+}</code></pre></li>
+  <li><hr></li>
+  <li><h2>Swipe Actions</h2></li>
+  <li><pre><code class="lang-swift">List {
+    ForEach(messages) { message in
+        MessageRow(message: message)
+            .swipeActions(edge: .trailing) {
+                Button(role: .destructive) {
+                    delete(message)
+                } label: {
+                    Label("Delete", systemImage: "trash")
+                }
+
+                Button {
+                    archive(message)
+                } label: {
+                    Label("Archive", systemImage: "archivebox")
+                }
+                .tint(.blue)
+            }
+            .swipeActions(edge: .leading) {
+                Button {
+                    toggleRead(message)
+                } label: {
+                    Label("Read", systemImage: "envelope.open")
+                }
+                .tint(.green)
+            }
+    }
+}</code></pre></li>
+  <li><h3>Watch Out</h3></li>
+  <li><ul><li>The first trailing swipe action with <code>role: .destructive</code> gets a full-swipe gesture for quick deletion. Be careful — users may trigger it accidentally.</li><li>Swipe actions only work inside a <code>List</code>. They do nothing in a <code>ScrollView</code> or <code>LazyVStack</code>.</li></ul></li>
+  <li><hr></li>
+  <li><h2>onDelete and onMove</h2></li>
+  <li><p>The classic List editing modifiers. These work on <code>ForEach</code>, not on <code>List</code> directly.</p></li>
+  <li><pre><code class="lang-swift">List {
+    ForEach(items) { item in
+        Text(item.name)
+    }
+    .onDelete(perform: deleteItems)
+    .onMove(perform: moveItems)
+}
+.toolbar {
+    EditButton()
+}
+
+func deleteItems(at offsets: IndexSet) {
+    items.remove(atOffsets: offsets)
+}
+
+func moveItems(from source: IndexSet, to destination: Int) {
+    items.move(fromOffsets: source, toOffset: destination)
+}</code></pre></li>
+  <li><h3>Watch Out</h3></li>
+  <li><ul><li><code>onDelete</code> adds the standard swipe-to-delete gesture. If you also use <code>.swipeActions</code>, <code>onDelete</code> is ignored — <code>.swipeActions</code> takes priority.</li><li><code>onMove</code> only works when the List is in edit mode. Add an <code>EditButton()</code> to the toolbar.</li></ul></li>
+  <li><hr></li>
+  <li><h2>Refreshable</h2></li>
+  <li><p>Pull-to-refresh. The closure is <code>async</code>, so you can <code>await</code> network calls directly.</p></li>
+  <li><pre><code class="lang-swift">List(items) { item in
+    Text(item.name)
+}
+.refreshable {
+    await loadItems()
+}</code></pre></li>
+  <li><h3>Watch Out</h3></li>
+  <li><ul><li><code>.refreshable</code> only works on scrollable views (<code>List</code>, <code>ScrollView</code>). It does nothing on a plain <code>VStack</code>.</li><li>The refresh indicator stays visible until the <code>async</code> closure completes. If your network call is fast, the spinner may flash briefly. That is expected.</li></ul></li>
+  <li><hr></li>
+  <li><h2>Searchable</h2></li>
+  <li><p>Adds a search bar to a <code>NavigationStack</code> or <code>NavigationSplitView</code>.</p></li>
+  <li><pre><code class="lang-swift">struct RecipeListView: View {
+    @State private var searchText = ""
+    let recipes: [Recipe]
+
+    var filteredRecipes: [Recipe] {
+        if searchText.isEmpty {
+            return recipes
+        }
+        return recipes.filter { $0.name.localizedCaseInsensitiveContains(searchText) }
+    }
+
+    var body: some View {
+        NavigationStack {
+            List(filteredRecipes) { recipe in
+                Text(recipe.name)
+            }
+            .navigationTitle("Recipes")
+            .searchable(text: $searchText, prompt: "Find a recipe")
+        }
+    }
+}</code></pre></li>
+  <li><h3>Search Suggestions</h3></li>
+  <li><pre><code class="lang-swift">.searchable(text: $searchText) {
+    ForEach(suggestions, id: \.self) { suggestion in
+        Text(suggestion).searchCompletion(suggestion)
+    }
+}</code></pre></li>
+  <li><h3>Search Scopes</h3></li>
+  <li><pre><code class="lang-swift">.searchable(text: $searchText)
+.searchScopes($searchScope) {
+    Text("All").tag(SearchScope.all)
+    Text("Name").tag(SearchScope.name)
+    Text("Ingredient").tag(SearchScope.ingredient)
+}</code></pre></li>
+  <li><h3>Watch Out</h3></li>
+  <li><ul><li><code>.searchable</code> must be inside a <code>NavigationStack</code> or <code>NavigationSplitView</code>. Outside of navigation, the search bar does not appear.</li><li>The search bar placement varies by platform. On iOS it is under the navigation title; on macOS it is in the toolbar.</li></ul></li>
+  <li><hr></li>
+  <li><h2>List Styles</h2></li>
+  <li><pre><code class="lang-swift">List { ... }
+    .listStyle(.plain)          // no grouped background
+    .listStyle(.inset)          // padded from edges
+    .listStyle(.grouped)        // iOS grouped sections
+    .listStyle(.insetGrouped)   // rounded grouped sections (iOS default in many contexts)
+    .listStyle(.sidebar)        // macOS sidebar style, disclosure triangles</code></pre></li>
+  <li><h3>Row Customization</h3></li>
+  <li><pre><code class="lang-swift">List {
+    ForEach(items) { item in
+        Text(item.name)
+            .listRowBackground(Color.yellow.opacity(0.2))
+            .listRowSeparator(.hidden)
+            .listRowInsets(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16))
+    }
+}</code></pre></li>
+  <li><hr></li>
+  <li><h2>Selection</h2></li>
+  <li><h3>Single Selection</h3></li>
+  <li><pre><code class="lang-swift">@State private var selected: Item.ID?
+
+List(items, selection: $selected) { item in
+    Text(item.name)
+}</code></pre></li>
+  <li><h3>Multiple Selection</h3></li>
+  <li><pre><code class="lang-swift">@State private var selected: Set&lt;Item.ID&gt; = []
+
+List(items, selection: $selected) { item in
+    Text(item.name)
+}
+.toolbar { EditButton() }</code></pre></li>
+  <li><p>Multiple selection requires edit mode on iOS. On macOS, it works directly with Command-click and Shift-click.</p></li>
+  <li><hr></li>
+  <li><h2>LazyVGrid and LazyHGrid</h2></li>
+  <li><p>For grid layouts. These live inside a <code>ScrollView</code>, not a <code>List</code>.</p></li>
+  <li><h3>LazyVGrid (Vertical Scrolling Grid)</h3></li>
+  <li><pre><code class="lang-swift">let columns = [
+    GridItem(.adaptive(minimum: 150))
+]
+
+ScrollView {
+    LazyVGrid(columns: columns, spacing: 16) {
+        ForEach(photos) { photo in
+            PhotoCard(photo: photo)
+        }
+    }
+    .padding()
+}</code></pre></li>
+  <li><h3>LazyHGrid (Horizontal Scrolling Grid)</h3></li>
+  <li><pre><code class="lang-swift">let rows = [
+    GridItem(.fixed(100)),
+    GridItem(.fixed(100))
+]
+
+ScrollView(.horizontal) {
+    LazyHGrid(rows: rows, spacing: 12) {
+        ForEach(items) { item in
+            ItemCard(item: item)
+        }
+    }
+    .padding()
+}</code></pre></li>
+  <li><hr></li>
+  <li><h2>GridItem</h2></li>
+  <li><p><code>GridItem</code> defines how columns (in <code>LazyVGrid</code>) or rows (in <code>LazyHGrid</code>) are sized.</p></li>
+  <li><h3>.fixed</h3></li>
+  <li><p>Exact size. The column is always this wide.</p></li>
+  <li><pre><code class="lang-swift">GridItem(.fixed(120))</code></pre></li>
+  <li><h3>.flexible</h3></li>
+  <li><p>Grows to fill available space, within optional min/max bounds.</p></li>
+  <li><pre><code class="lang-swift">GridItem(.flexible())                           // fills available space
+GridItem(.flexible(minimum: 100, maximum: 200)) // bounded</code></pre></li>
+  <li><h3>.adaptive</h3></li>
+  <li><p>Fits as many columns as possible within the available width. This is the most useful for responsive grids.</p></li>
+  <li><pre><code class="lang-swift">GridItem(.adaptive(minimum: 150))
+// On a 390pt iPhone: 2 columns
+// On a 1024pt iPad: 6 columns
+// Adjusts automatically when the device rotates</code></pre></li>
+  <li><h3>Combining Grid Items</h3></li>
+  <li><pre><code class="lang-swift">let columns = [
+    GridItem(.fixed(60)),           // narrow first column
+    GridItem(.flexible()),          // fills remaining space
+    GridItem(.flexible())           // shares remaining space
+]</code></pre></li>
+  <li><h3>Watch Out</h3></li>
+  <li><ul><li><code>.adaptive</code> creates as many columns as fit. You do not control the exact count — it is calculated from available width and the minimum size. If you want exactly 3 columns, use three <code>.flexible()</code> items.</li><li>Grid items accept <code>spacing</code> and <code>alignment</code> parameters: <code>GridItem(.flexible(), spacing: 8, alignment: .top)</code>.</li></ul></li>
+  <li><hr></li>
+  <li><h2>ScrollView</h2></li>
+  <li><h3>Basic Scroll View</h3></li>
+  <li><pre><code class="lang-swift">ScrollView {
+    VStack(spacing: 12) {
+        ForEach(items) { item in
+            ItemCard(item: item)
+        }
+    }
+    .padding()
+}</code></pre></li>
+  <li><h3>Horizontal Scroll</h3></li>
+  <li><pre><code class="lang-swift">ScrollView(.horizontal, showsIndicators: false) {
+    HStack(spacing: 16) {
+        ForEach(featured) { item in
+            FeaturedCard(item: item)
+                .frame(width: 280)
+        }
+    }
+    .padding(.horizontal)
+}</code></pre></li>
+  <li><h3>Scroll Position (iOS 17+)</h3></li>
+  <li><pre><code class="lang-swift">@State private var scrollPosition: Item.ID?
+
+ScrollView {
+    LazyVStack {
+        ForEach(items) { item in
+            ItemRow(item: item)
+        }
+    }
+    .scrollTargetLayout()
+}
+.scrollPosition(id: $scrollPosition)</code></pre></li>
+  <li><p>Programmatically scroll by setting <code>scrollPosition</code> to an item's ID.</p></li>
+  <li><h3>Watch Out</h3></li>
+  <li><ul><li><code>ScrollView</code> does not recycle views. Every view in a <code>ScrollView</code> is created immediately unless you use <code>LazyVStack</code> or <code>LazyHStack</code> inside it.</li><li><code>.scrollIndicators(.hidden)</code> hides the scrollbar. Use it for horizontal carousels. Avoid hiding it for vertical content — users need the scrollbar to orient themselves.</li></ul></li>
+  <li><hr></li>
+  <li><h2>LazyVStack and LazyHStack</h2></li>
+  <li><p>These create views on demand as they scroll into view. Essential for large data sets.</p></li>
+  <li><pre><code class="lang-swift">ScrollView {
+    LazyVStack(spacing: 12) {
+        ForEach(items) { item in
+            ItemRow(item: item)
+        }
+    }
+}</code></pre></li>
+  <li><h3>Pinned Headers</h3></li>
+  <li><pre><code class="lang-swift">ScrollView {
+    LazyVStack(spacing: 12, pinnedViews: [.sectionHeaders]) {
+        ForEach(sections) { section in
+            Section {
+                ForEach(section.items) { item in
+                    ItemRow(item: item)
+                }
+            } header: {
+                Text(section.title)
+                    .font(.headline)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding()
+                    .background(.bar)
+            }
+        }
+    }
+}</code></pre></li>
+  <li><h3>Performance: Lazy vs Eager</h3></li>
+  <li><p>| Container | View Creation | Use When | |-----------|--------------|----------| | <code>VStack</code> | All at once | Small collections (under 50 items) | | <code>LazyVStack</code> | On demand | Large or unbounded collections | | <code>List</code> | On demand (with recycling) | Data lists needing swipe actions, selection | | <code>LazyVGrid</code> | On demand | Grid layouts in ScrollView |</p></li>
+  <li><h3>Watch Out</h3></li>
+  <li><ul><li><code>LazyVStack</code> creates views as they scroll in, but does not destroy them when they scroll out. For very long lists (thousands of items), memory grows over time. <code>List</code> handles this better because it recycles cells.</li><li>Do not put a <code>LazyVStack</code> inside a <code>List</code>. The List already handles lazy loading. Nesting them causes layout conflicts.</li><li><code>LazyVStack</code> does not support swipe actions, onDelete, or onMove. Those are <code>List</code>-only features.</li><li><code>LazyVStack</code> alignment defaults to <code>.center</code>. For left-aligned content, use <code>LazyVStack(alignment: .leading)</code>.</li></ul></li>
+  <li><hr></li>
+  <li><h2>Practical Tips</h2></li>
+  <li><ol class="body-list"><li><strong>Use <code>List</code> by default</strong> for data that needs selection, swipe actions, or editing. Switch to <code>ScrollView</code> + <code>LazyVStack</code> when you need custom layouts or grid arrangements.</li></ol></li>
+  <li><ol class="body-list"><li><strong>Always provide stable IDs.</strong> Using array indices as IDs causes incorrect animations and state bugs when items are inserted or removed.</li></ol></li>
+  <li><ol class="body-list"><li><strong><code>.adaptive</code> GridItem is your friend</strong> for responsive layouts that work across iPhone, iPad, and Mac without conditional logic.</li></ol></li>
+  <li><ol class="body-list"><li><strong>Combine <code>.searchable</code> and <code>.refreshable</code></strong> on the same List for a standard data browsing experience with minimal code.</li></ol></li>
+  <li><ol class="body-list"><li><strong>Test with large data sets.</strong> A list that works fine with 10 items may stutter at 10,000. Profile with Instruments if scrolling feels slow.</li></ol></li>
+  <li><ol class="body-list"><li><strong>Prefer <code>LazyVStack</code> over <code>VStack</code></strong> inside a <code>ScrollView</code> any time the content count is dynamic or could grow. The memory difference is significant.</li></ol></li>
+  <li><ol class="body-list"><li><strong>Section headers and footers</strong> in List get automatic styling. In <code>LazyVStack</code> with <code>pinnedViews</code>, you style them yourself — but you get sticky headers for free.</li></ol></li>
+</ol>
+</div>
+
+<footer class="page">
+  <div class="path">Part-III-The-User-Interface/Book-08-Lists-Grids-And-ForEach</div>
+  <div class="pos">Part III &middot; Book 08</div>
+  <div class="nav"><a href="../table-of-contents.html">&larr; Contents</a><a href="../claudex26-index.html">Index</a></div>
+</footer>
+
+</body>
+</html>

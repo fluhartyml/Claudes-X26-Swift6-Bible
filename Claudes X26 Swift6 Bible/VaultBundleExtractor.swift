@@ -18,7 +18,7 @@ import Foundation
 enum VaultBundleExtractor {
     static let folderName = "BibleContent"
     /// Bump this when content mapping rules change so the next launch re-extracts.
-    static let currentVersion = 20
+    static let currentVersion = 23
     private static let versionFileName = ".extraction-version"
 
     /// Make sure the extracted vault exists at a known location, then return
@@ -109,7 +109,7 @@ enum VaultBundleExtractor {
 
         // Front Matter — Claude-X26-Parameters.html lives under Front-Matter/.
         if filename == "Claude-X26-Parameters.html" {
-            return "Front-Matter/Claude-X26-Parameters/\(filename)"
+            return "Front-Matter/\(filename)"
         }
 
         // Markdown chapter sources "01-*.md" through "22-*.md".
@@ -125,15 +125,9 @@ enum VaultBundleExtractor {
             return filename
         }
 
-        // Swift Lexicon chapter placeholders — Chapter-A.html through Chapter-Z.html.
-        if filename.hasPrefix("Chapter-"), filename.hasSuffix(".html"),
-           filename.count == "Chapter-A.html".count {
-            let letter = filename.dropFirst("Chapter-".count).prefix(1)
-            return "Part-II-The-Swift-Language/Chapter-\(letter)/\(filename)"
-        }
-
-        // Swift Lexicon Pages — Page-*.html. The chapter letter is the
-        // first alphabetic character of the entry name (after "Page-"),
+        // Swift Lexicon Pages — Page-*.html land directly inside
+        // Part-II-The-Swift-Language/Chapter-{X}/. The chapter letter is
+        // the first alphabetic character of the entry name (after "Page-"),
         // uppercased; e.g. Page-actor.html -> Chapter A, Page-State.html
         // -> Chapter S, Page-Predicate.html -> Chapter P.
         if filename.hasPrefix("Page-"), filename.hasSuffix(".html") {
@@ -143,34 +137,33 @@ enum VaultBundleExtractor {
                 if letter.count == 1,
                    let scalar = letter.unicodeScalars.first,
                    CharacterSet.uppercaseLetters.contains(scalar) {
-                    return "Part-II-The-Swift-Language/Chapter-\(letter)/Pages/\(filename)"
+                    return "Part-II-The-Swift-Language/Chapter-\(letter)/\(filename)"
                 }
             }
         }
 
-        // Numbered Books — Book-NN-*.html.
+        // Numbered Books — Book-NN-*.html. Lands flat under its Part folder
+        // (no per-Book sub-folder).
         if filename.hasPrefix("Book-"), filename.hasSuffix(".html") {
             let rest = filename.dropFirst("Book-".count)
             let digits = rest.prefix { $0.isNumber }
             if let num = Int(digits) {
                 let partFolder: String
                 switch num {
-                case 0...3:   partFolder = "Part-I-Introduction"
+                case 1...3:   partFolder = "Part-I-Introduction"
                 case 4...12:  partFolder = "Part-III-The-User-Interface"
                 case 13...17: partFolder = "Part-IV-The-Application"
                 case 18...20: partFolder = "Part-V-Advanced-Techniques"
                 case 21...22: partFolder = "Part-VI-The-Modern-Toolchain"
                 default: return nil
                 }
-                let bookFolder = String(filename.dropLast(".html".count))
-                return "\(partFolder)/\(bookFolder)/\(filename)"
+                return "\(partFolder)/\(filename)"
             }
         }
 
-        // Appendices — Appendix-X-*.html.
+        // Appendices — Appendix-X-*.html lands flat under Appendices/.
         if filename.hasPrefix("Appendix-"), filename.hasSuffix(".html") {
-            let bookFolder = String(filename.dropLast(".html".count))
-            return "Appendices/\(bookFolder)/\(filename)"
+            return "Appendices/\(filename)"
         }
 
         // Figures / screenshots — keep them in a figures subfolder.

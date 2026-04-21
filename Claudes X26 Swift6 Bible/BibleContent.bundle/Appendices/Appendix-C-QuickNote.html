@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Appendix C: QuickNote &mdash; Claude's Xcode 26 Swift Bible</title>
+<style>
+:root {
+  --bg: #000000;
+  --fg: #FFB000;
+  --bright: #FFD060;
+  --dim: #996600;
+  --codebg: #1a0d00;
+  --border: #664500;
+  --gutter: #4a3300;
+  --headerbg: #0a0600;
+}
+* { box-sizing: border-box; }
+html, body { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: "FiraCode Nerd Font Mono", "FiraCode Nerd Font", "Fira Code", "Menlo", "Courier New", monospace;
+  font-size: 18pt;
+  line-height: 1.55;
+  margin: 0;
+  padding: 0;
+  text-shadow: 0 0 1px rgba(255, 176, 0, 0.35);
+}
+header.page, footer.page {
+  background: var(--headerbg);
+  color: var(--dim);
+  border-bottom: 1px solid var(--border);
+  padding: 0.7rem 1.1rem;
+  font-size: 13pt;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+footer.page { border-bottom: 0; border-top: 1px solid var(--border); margin-top: 2rem; }
+header.page .path, footer.page .path { color: var(--fg); word-break: break-all; overflow-wrap: break-word; }
+header.page .pos, footer.page .pos { color: var(--bright); }
+.content { padding: 0.8rem 1rem 2rem 1rem; max-width: 1100px; margin: 0 auto; }
+h1 { color: var(--bright); font-weight: normal; font-size: 26pt; margin: 0.6rem 0 1rem 0; }
+h2 { color: var(--bright); font-weight: normal; font-size: 20pt; border-bottom: 1px solid var(--border); padding-bottom: 0.3rem; margin-top: 1.5rem; counter-reset: h3 para; }
+h2::before { counter-increment: h2; content: counter(h2) ". "; color: var(--fg); }
+h3 { color: var(--bright); font-weight: normal; font-size: 18pt; margin-top: 1rem; counter-reset: para; }
+h3::before { counter-increment: h3; content: counter(h2) "." counter(h3) " "; color: var(--fg); }
+p { margin: 0.4rem 0; counter-increment: para; }
+p::before { content: counter(h2) "." counter(h3) "." counter(para) " "; color: var(--dim); font-size: 13pt; margin-right: 0.4em; }
+code { color: var(--bright); background: var(--codebg); padding: 0.08em 0.35em; border: 1px solid #3a2400; border-radius: 3px; font-size: 0.92em; }
+pre { background: var(--codebg); border: 1px solid #3a2400; border-radius: 4px; padding: 0.7rem 0.9rem; overflow-x: auto; font-size: 14pt; }
+pre code { background: transparent; border: 0; padding: 0; }
+ul, ol.body-list { margin: 0.4rem 0 0.4rem 1.4rem; padding: 0; }
+a { color: var(--bright); font-weight: bold; text-decoration: none; border-bottom: 1px dotted var(--dim); }
+a:hover { background: #332200; }
+strong { color: var(--bright); }
+em { color: var(--fg); font-style: italic; }
+hr { border: 0; border-top: 1px solid var(--border); margin: 1rem 0; }
+ol.lines { list-style: none; counter-reset: line h2; padding: 0; margin: 0; }
+ol.lines > li { counter-increment: line; padding: 0.15rem 0 0.15rem 3.6rem; position: relative; min-height: 1.2em; }
+ol.lines > li::before { content: counter(line); position: absolute; left: 0; top: 0.25rem; width: 2.8rem; text-align: right; color: var(--gutter); font-size: 13pt; padding-right: 0.5rem; border-right: 1px solid #2a1e00; }
+ol.lines > li > p, ol.lines > li > h2, ol.lines > li > h3, ol.lines > li > ul, ol.lines > li > ol, ol.lines > li > pre, ol.lines > li > hr { margin: 0; }
+.scope-note { border-left: 3px solid var(--bright); padding: 0.7rem 1rem; background: #140c00; margin: 0.6rem 0; color: var(--bright); }
+.nav { display: flex; gap: 0.9rem; flex-wrap: wrap; margin-top: 0.8rem; font-size: 14pt; }
+</style>
+</head>
+<body>
+
+<header class="page">
+  <div class="path">Appendices/Appendix-C-QuickNote</div>
+  <div class="pos">Appendix C</div>
+</header>
+
+<div class="content">
+<ol class="lines">
+  <li><h1>Appendix: QuickNote — From Brainstorm to App Store</h1></li>
+  <li><p>This appendix walks through the complete lifecycle of an iOS app — from the first brainstorm to App Store submission, rejection, and resubmission. QuickNote by Claude is a real app you can download. Every decision, every mistake, and every fix is documented here because that's how software actually gets built.</p></li>
+  <li><hr></li>
+  <li><h2>The Brainstorm</h2></li>
+  <li><p>QuickNote started as the Swift reference's first example app. Dual purpose: a teaching vehicle for the book AND a real App Store utility. Not a throwaway exercise — a published app that readers can download and compare against the source code.</p></li>
+  <li><p><strong>v1.0 spec:</strong></p></li>
+  <li><ul><li>Text notes with titles and dates</li><li>SwiftData persistence</li><li>iCloud sync</li><li>Share sheet</li><li>Multiplatform (iOS, iPadOS, macOS)</li><li>Pre-dating: place notes on your future timeline (doctor visits, grocery runs)</li><li>Sort by dateCreated descending, not dateModified</li></ul></li>
+  <li><p><strong>v2.0 deferred:</strong> Camera, document scanner, OCR (VisionKit chapters). Each Swift Reference example app gets revisited when later chapters add relevant features.</p></li>
+  <li><hr></li>
+  <li><h2>The Data Model</h2></li>
+  <li><p>Four properties, in this order everywhere:</p></li>
+  <li><pre><code class="lang-swift">@Model
+final class Note {
+    var title: String
+    var dateCreated: Date
+    var body: String
+    var dateModified: Date
+
+    init(title: String = "", dateCreated: Date = .now,
+         body: String = "", dateModified: Date = .now) {
+        self.title = title
+        self.dateCreated = dateCreated
+        self.body = body
+        self.dateModified = dateModified
+    }
+}</code></pre></li>
+  <li><p><code>dateCreated</code> is user-editable — the DatePicker lets you pre-date or back-date. <code>dateModified</code> updates automatically via <code>.onChange</code> modifiers on the title, date, and body fields.</p></li>
+  <li><hr></li>
+  <li><h2>Build Errors That Taught Something</h2></li>
+  <li><p>These aren't bugs — they're lessons. Each one appears in the relevant chapter earlier in this book and is collected here for reference.</p></li>
+  <li><h3>1. Date.FormatStyle Properties Aren't Assignable</h3></li>
+  <li><p><strong>What happened:</strong> Tried to build a custom date format using <code>Date.FormatStyle</code> property chaining. The properties are read-only — you can't assign to them.</p></li>
+  <li><p><strong>Fix:</strong> Use <code>DateFormatter</code> with a <code>dateFormat</code> string:</p></li>
+  <li><pre><code class="lang-swift">let quickNoteDateFormatter: DateFormatter = {
+    let f = DateFormatter()
+    f.dateFormat = "yyyy MMM dd HHmm"
+    f.locale = Locale(identifier: "en_US_POSIX")
+    return f
+}()</code></pre></li>
+  <li><p><strong>See:</strong> Chapter 2, Date Formatting section.</p></li>
+  <li><h3>2. DateFormatter Returns Title Case</h3></li>
+  <li><p><strong>What happened:</strong> <code>DateFormatter</code> returns "Apr" not "APR". The design called for uppercase month abbreviations.</p></li>
+  <li><p><strong>Fix:</strong> <code>.uppercased()</code> on the formatted string.</p></li>
+  <li><pre><code class="lang-swift">Text(quickNoteDateFormatter.string(from: note.dateCreated).uppercased())</code></pre></li>
+  <li><h3>3. NavigationSplitView Sidebar Truncation</h3></li>
+  <li><p><strong>What happened:</strong> Long note titles got cut off in the sidebar because <code>NavigationSplitView</code> defaults to a narrow column width.</p></li>
+  <li><p><strong>Fix:</strong> <code>.navigationSplitViewColumnWidth(min: 350, ideal: 380)</code></p></li>
+  <li><p><strong>See:</strong> Chapter 5, NavigationSplitView section.</p></li>
+  <li><h3>4. TextField(axis: .vertical) Treats Return as Submit</h3></li>
+  <li><p><strong>What happened:</strong> Used <code>TextField(axis: .vertical)</code> for the note body. Pressing Return exits the field instead of creating a new line.</p></li>
+  <li><p><strong>Fix:</strong> Use <code>TextEditor</code> for real multiline input. <code>TextField</code> is for single-line input, even with the vertical axis hint.</p></li>
+  <li><p><strong>See:</strong> Chapter 9 (Text &amp; TextField) and Chapter 10 (TextEditor &amp; AttributedString).</p></li>
+  <li><h3>5. App Name Conflicts</h3></li>
+  <li><p><strong>What happened:</strong> "QuickNote" was already taken on the App Store. Archive &gt; Validate App caught it.</p></li>
+  <li><p><strong>Fix:</strong> Renamed to "QuickNote by Claude" in the Display Name field. The bundle ID stayed <code>com.ClaudeX26Bible.QuickNote</code>.</p></li>
+  <li><h3>6. Missing App Icons Fail Validation</h3></li>
+  <li><p><strong>What happened:</strong> Validate App failed because the asset catalog was missing the required icon sizes — 1024x1024 for iOS and all sizes for Mac.</p></li>
+  <li><p><strong>Fix:</strong> Add the icons to the asset catalog before archiving. Xcode won't warn you during development — only during validation.</p></li>
+  <li><h3>7. Simulator Screenshots Don't Match App Store Sizes</h3></li>
+  <li><p><strong>What happened:</strong> iPhone simulator screenshots are 1320x2868. App Store Connect requires 1284x2778 for the 6.5" display.</p></li>
+  <li><p><strong>Fix:</strong> Batch resize with <code>sips</code>:</p></li>
+  <li><pre><code class="lang-bash">sips -z 2778 1284 screenshot.png --out screenshot.png</code></pre></li>
+  <li><h3>8. Export Compliance</h3></li>
+  <li><p><strong>What happened:</strong> App Store Connect asks about encryption every time you select a build. For a notes app: "None of the algorithms mentioned above."</p></li>
+  <li><h3>9. Privacy Policy URL Requires HTTPS</h3></li>
+  <li><p><strong>What happened:</strong> Entered an <code>http://</code> URL for the privacy policy. App Store Connect requires <code>https://</code>.</p></li>
+  <li><p><strong>Fix:</strong> Host the privacy policy on the app's GitHub wiki — GitHub provides HTTPS by default.</p></li>
+  <li><h3>10. Do App Privacy + Pricing BEFORE Distribution Metadata</h3></li>
+  <li><p><strong>What happened:</strong> Filled out the Distribution page first (screenshots, description, keywords). Hit Save. Nothing saved. No error message.</p></li>
+  <li><p><strong>Fix:</strong> Complete App Privacy and Pricing sections first. The Distribution page won't save until those are done. App Store Connect doesn't tell you this — it just silently fails.</p></li>
+  <li><h3>11. App Store Connect Caches Errors</h3></li>
+  <li><p><strong>What happened:</strong> Fixed an issue, went back to the submission page. The error was still showing.</p></li>
+  <li><p><strong>Fix:</strong> Refresh the browser page. App Store Connect caches aggressively.</p></li>
+  <li><hr></li>
+  <li><h2>The Rejection</h2></li>
+  <li><p>QuickNote v1.0 was rejected under <strong>Guideline 4.2 — Design: Minimum Functionality</strong>.</p></li>
+  <li><p>&gt; The usefulness of the app is limited by the minimal functionality it currently provides. Specifically, the app primarily offers content for users to view or use, but there isn't enough of this content currently available in the app to make it useful to users.</p></li>
+  <li><p>Translation: a notes app that just creates, edits, and deletes text notes isn't enough. Apple Notes already does that. What makes yours different?</p></li>
+  <li><h3>The Fix</h3></li>
+  <li><p>Three features added in response:</p></li>
+  <li><ol class="body-list"><li><strong>Under the Hood tab</strong> — a source code browser that displays every Swift file in the app. Pop the hood, see the engine. The book (this book) is the Chilton's manual. The app is the car.</li></ol></li>
+  <li><ol class="body-list"><li><strong>Home screen widget</strong> — shows the 3 most recent notes. Built with WidgetKit (see Chapter 16). Uses SwiftData to read from the same store as the main app.</li></ol></li>
+  <li><ol class="body-list"><li><strong>Contact Developer</strong> — a feedback form that composes a mailto: URL with the user's message and device info. Same pattern used in CryoTunes Player.</li></ol></li>
+  <li><p>The app category was also changed from Utilities to Education to match the teaching purpose.</p></li>
+  <li><h3>The Resubmission</h3></li>
+  <li><p>App Review notes explained exactly what changed and why:</p></li>
+  <li><p>&gt; This app was previously rejected under Guideline 4.2 (Minimum Functionality). We have added the following features in response: &gt; 1. Under the Hood tab — users can browse the app's own Swift source code &gt; 2. Home screen widget — displays the 3 most recent notes &gt; 3. Contact Developer — built-in feedback form &gt; This app serves as a companion app for an iOS development book.</p></li>
+  <li><p><strong>Build number gotcha:</strong> The new build wasn't immediately available in App Store Connect after uploading from Xcode. There's a processing delay — sometimes a few minutes. If you rush to resubmit, you might grab the old build by accident. Wait for the new build number to appear in the Add Build dialog.</p></li>
+  <li><hr></li>
+  <li><h2>The Reject-and-Resubmit Strategy</h2></li>
+  <li><p>Sometimes an app sits in "Waiting for Review" for days with no movement. This happened with Tally Matrix Clock — all rejection issues fixed, resubmitted, and then silence for two days.</p></li>
+  <li><p>The fix: <strong>Developer Reject</strong> your own submission, then resubmit. This puts you into a fresh review queue.</p></li>
+  <li><p><strong>How to do it:</strong></p></li>
+  <li><ol class="body-list"><li>Go to App Store Connect &gt; Your App &gt; App Review</li><li>Click on the submission that's stuck</li><li>Scroll to the bottom — click "Cancel Submission"</li><li>Confirm the cancellation</li><li>Status changes from "Waiting for Review" → "Processing" → "Developer Rejected"</li><li>Now go to Distribution, attach the new build, and submit again</li></ol></li>
+  <li><p>You'll land in a different reviewer's queue. This isn't gaming the system — Apple expects developers to use this when submissions stall.</p></li>
+  <li><hr></li>
+  <li><h2>Lessons for All Example Apps</h2></li>
+  <li><p>Every Swift Reference example app will face these same hurdles. Plan for them:</p></li>
+  <li><ul><li><strong>Minimum functionality</strong> — a utility app needs more than just CRUD. Add a widget, add a Learn tab, add something that differentiates it.</li><li><strong>Apple trademark compliance</strong> — don't use "Apple TV," "iPhone," or other Apple trademarks in your subtitle or promotional text. Use "your TV" or "your phone."</li><li><strong>Screenshots must match App Store dimensions</strong> — simulator screenshots won't be the right size. Keep <code>sips</code> in your toolbox.</li><li><strong>Build numbers must match</strong> — if your app embeds an extension (widget, share extension), both must have the same <code>CFBundleVersion</code>.</li><li><strong>Do privacy and pricing first</strong> — before touching the Distribution page.</li><li><strong>The review queue can stall</strong> — give it 48 hours, then reject and resubmit.</li></ul></li>
+  <li><hr></li>
+  <li><hr></li>
+  <li><h2>v1.1 — The Widget Fix and Photo Attachments</h2></li>
+  <li><p>QuickNote v1.0 shipped with a broken widget. The widget showed "No Notes" even when the app had notes. Apple didn't catch it during review — they likely didn't test adding a note and checking the widget.</p></li>
+  <li><h3>The Bug</h3></li>
+  <li><p>The widget extension and the main app were using <strong>separate SwiftData stores</strong>. Each target created its own <code>ModelContainer</code> with no shared location:</p></li>
+  <li><pre><code class="lang-swift">// v1.0 — BROKEN: each target gets its own private database
+let config = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)</code></pre></li>
+  <li><p>The app wrote notes to its sandbox. The widget read from its own sandbox. Two empty rooms in the same building with no hallway between them.</p></li>
+  <li><h3>The Fix: App Groups + groupContainer</h3></li>
+  <li><p>Three things had to happen:</p></li>
+  <li><ol class="body-list"><li><strong>Register an App Group</strong> on developer.apple.com — <code>group.com.ClaudeX26Bible.QuickNote</code></li><li><strong>Enable App Groups</strong> in Xcode's Signing &amp; Capabilities for both the app and widget extension targets</li><li><strong>Use <code>groupContainer</code></strong> in the <code>ModelConfiguration</code>:</li></ol></li>
+  <li><pre><code class="lang-swift">// v1.1 — FIXED: both targets share the same database
+let config = ModelConfiguration(
+    schema: schema,
+    groupContainer: .identifier("group.com.ClaudeX26Bible.QuickNote")
+)</code></pre></li>
+  <li><p>That single parameter change — <code>groupContainer: .identifier(...)</code> — tells SwiftData to put the database in the shared App Group container instead of each target's private sandbox.</p></li>
+  <li><p>The widget also needed <code>WidgetCenter.shared.reloadAllTimelines()</code> called after every note insert, edit, and delete so it refreshes immediately instead of waiting 30 minutes.</p></li>
+  <li><h3>Debugging the Fix</h3></li>
+  <li><p>The fix didn't work on the first try. Three attempts:</p></li>
+  <li><ol class="body-list"><li><strong>Manual URL approach</strong> — built the container URL with <code>FileManager.default.containerURL(forSecurityApplicationGroupIdentifier:)</code> and <code>appending(path:)</code>. SwiftData couldn't find the store.</li><li><strong>Named ModelConfiguration</strong> — added a name parameter. Caused a mismatch between app and widget.</li><li><strong><code>groupContainer: .identifier(...)</code></strong> — the API SwiftData actually provides for this exact use case. Worked immediately.</li></ol></li>
+  <li><p>The lesson: don't build your own paths when the framework has a dedicated API. The <code>groupContainer</code> parameter exists because Apple knew developers would need to share data between app and extension targets.</p></li>
+  <li><h3>Photo Attachments</h3></li>
+  <li><p>v1.1 also added photo attachments:</p></li>
+  <li><ul><li><strong>PhotosPicker</strong> from PhotosUI for selecting library images</li><li><strong>Camera capture</strong> via <code>UIImagePickerController</code> wrapped in <code>UIViewControllerRepresentable</code></li><li>Images stored as <code>[Data]</code> with <code>@Attribute(.externalStorage)</code> so binary data doesn't bloat the SwiftData row</li><li>Adaptive grid display above the note body with per-image delete buttons</li></ul></li>
+  <li><p>The model gained one property:</p></li>
+  <li><pre><code class="lang-swift">@Attribute(.externalStorage) var imageData: [Data]</code></pre></li>
+  <li><p>This is a schema change — existing installs need to delete and reinstall to migrate. For a production app with users, you'd write a migration plan. For a v1.1 with one user (the developer testing it), a fresh install is fine.</p></li>
+  <li><h3>What v1.1 Teaches</h3></li>
+  <li><ul><li><strong>App Groups are not optional for extensions</strong> — if your extension needs app data, configure this from day one</li><li><strong>The developer portal and Xcode must agree</strong> — register the group online, then add it in Signing &amp; Capabilities</li><li><strong>Don't ship features you haven't tested end-to-end</strong> — the widget looked correct in the preview but was broken on the home screen</li><li><strong><code>@Attribute(.externalStorage)</code></strong> keeps binary data efficient in SwiftData</li><li><strong>PhotosPicker is the modern replacement for UIImagePickerController</strong> — except for camera, which still needs the UIKit bridge</li></ul></li>
+  <li><hr></li>
+  <li><p><em>QuickNote by Claude is available on the App Store. Download it, open the Under the Hood tab, and follow along with this appendix.</em></p></li>
+</ol>
+</div>
+
+<footer class="page">
+  <div class="path">Appendices/Appendix-C-QuickNote</div>
+  <div class="pos">Appendix C</div>
+  <div class="nav"><a href="../table-of-contents.html">&larr; Contents</a><a href="../claudex26-index.html">Index</a></div>
+</footer>
+
+</body>
+</html>

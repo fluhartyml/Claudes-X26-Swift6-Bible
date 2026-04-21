@@ -502,7 +502,7 @@ code { color: var(--bright); background: var(--codebg); padding: 0.08em 0.35em; 
 pre { background: var(--codebg); border: 1px solid #3a2400; border-radius: 4px; padding: 0.7rem 0.9rem; overflow-x: auto; font-size: 14pt; }
 pre code { background: transparent; border: 0; padding: 0; }
 ul, ol.body-list { margin: 0.4rem 0 0.4rem 1.4rem; padding: 0; }
-a { color: var(--bright); text-decoration: none; border-bottom: 1px dotted var(--dim); }
+a { color: var(--bright); font-weight: bold; text-decoration: none; border-bottom: 1px dotted var(--dim); }
 a:hover { background: #332200; }
 strong { color: var(--bright); }
 em { color: var(--fg); font-style: italic; }
@@ -561,10 +561,9 @@ def render_page(title, path_display, pos_label, body_blocks, nav_html):
 
 
 def nav_for_book(n, part, slug):
-    # extension-less links
     return (
-        f'<a href="../../table-of-contents.html">&larr; Contents</a>'
-        f'<a href="../../claudex26-index.html">Index</a>'
+        f'<a href="../table-of-contents.html">&larr; Contents</a>'
+        f'<a href="../claudex26-index.html">Index</a>'
     )
 
 
@@ -596,11 +595,10 @@ def scope_blocks(n, slug, data):
 # ---------- Write pages ----------
 
 def write_book(n, part, slug):
-    folder_name = f"Book-{n:02d}-{slug}"
     file_name   = f"Book-{n:02d}-{slug}.html"
-    path_display = f"{part}/{folder_name}/{folder_name}"
+    path_display = f"{part}/Book-{n:02d}-{slug}"
 
-    out_dir = BUNDLE / part / folder_name
+    out_dir = BUNDLE / part
     out_dir.mkdir(parents=True, exist_ok=True)
     out_file = out_dir / file_name
 
@@ -633,11 +631,10 @@ def write_book(n, part, slug):
 
 
 def write_appendix(letter, slug, md_name):
-    folder_name = f"Appendix-{letter}-{slug}"
     file_name   = f"Appendix-{letter}-{slug}.html"
-    path_display = f"Appendices/{folder_name}/{folder_name}"
+    path_display = f"Appendices/Appendix-{letter}-{slug}"
 
-    out_dir = BUNDLE / "Appendices" / folder_name
+    out_dir = BUNDLE / "Appendices"
     out_dir.mkdir(parents=True, exist_ok=True)
     out_file = out_dir / file_name
 
@@ -653,8 +650,8 @@ def write_appendix(letter, slug, md_name):
                   '<div class="scope-note">Appendix D (LockBox build-along) is planned but not yet written.</div>']
 
     pos = f"Appendix {letter}"
-    nav = ('<a href="../../table-of-contents.html">&larr; Contents</a>'
-           '<a href="../../claudex26-index.html">Index</a>')
+    nav = ('<a href="../table-of-contents.html">&larr; Contents</a>'
+           '<a href="../claudex26-index.html">Index</a>')
     html = render_page(
         title=f"Appendix {letter}: {slug.replace('-', ' ')}",
         path_display=path_display,

@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Book 02: Introducing SwiftUI Views &mdash; Claude's Xcode 26 Swift Bible</title>
+<style>
+:root {
+  --bg: #000000;
+  --fg: #FFB000;
+  --bright: #FFD060;
+  --dim: #996600;
+  --codebg: #1a0d00;
+  --border: #664500;
+  --gutter: #4a3300;
+  --headerbg: #0a0600;
+}
+* { box-sizing: border-box; }
+html, body { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: "FiraCode Nerd Font Mono", "FiraCode Nerd Font", "Fira Code", "Menlo", "Courier New", monospace;
+  font-size: 18pt;
+  line-height: 1.55;
+  margin: 0;
+  padding: 0;
+  text-shadow: 0 0 1px rgba(255, 176, 0, 0.35);
+}
+header.page, footer.page {
+  background: var(--headerbg);
+  color: var(--dim);
+  border-bottom: 1px solid var(--border);
+  padding: 0.7rem 1.1rem;
+  font-size: 13pt;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+footer.page { border-bottom: 0; border-top: 1px solid var(--border); margin-top: 2rem; }
+header.page .path, footer.page .path { color: var(--fg); word-break: break-all; overflow-wrap: break-word; }
+header.page .pos, footer.page .pos { color: var(--bright); }
+.content { padding: 0.8rem 1rem 2rem 1rem; max-width: 1100px; margin: 0 auto; }
+h1 { color: var(--bright); font-weight: normal; font-size: 26pt; margin: 0.6rem 0 1rem 0; }
+h2 { color: var(--bright); font-weight: normal; font-size: 20pt; border-bottom: 1px solid var(--border); padding-bottom: 0.3rem; margin-top: 1.5rem; counter-reset: h3 para; }
+h2::before { counter-increment: h2; content: counter(h2) ". "; color: var(--fg); }
+h3 { color: var(--bright); font-weight: normal; font-size: 18pt; margin-top: 1rem; counter-reset: para; }
+h3::before { counter-increment: h3; content: counter(h2) "." counter(h3) " "; color: var(--fg); }
+p { margin: 0.4rem 0; counter-increment: para; }
+p::before { content: counter(h2) "." counter(h3) "." counter(para) " "; color: var(--dim); font-size: 13pt; margin-right: 0.4em; }
+code { color: var(--bright); background: var(--codebg); padding: 0.08em 0.35em; border: 1px solid #3a2400; border-radius: 3px; font-size: 0.92em; }
+pre { background: var(--codebg); border: 1px solid #3a2400; border-radius: 4px; padding: 0.7rem 0.9rem; overflow-x: auto; font-size: 14pt; }
+pre code { background: transparent; border: 0; padding: 0; }
+ul, ol.body-list { margin: 0.4rem 0 0.4rem 1.4rem; padding: 0; }
+a { color: var(--bright); font-weight: bold; text-decoration: none; border-bottom: 1px dotted var(--dim); }
+a:hover { background: #332200; }
+strong { color: var(--bright); }
+em { color: var(--fg); font-style: italic; }
+hr { border: 0; border-top: 1px solid var(--border); margin: 1rem 0; }
+ol.lines { list-style: none; counter-reset: line h2; padding: 0; margin: 0; }
+ol.lines > li { counter-increment: line; padding: 0.15rem 0 0.15rem 3.6rem; position: relative; min-height: 1.2em; }
+ol.lines > li::before { content: counter(line); position: absolute; left: 0; top: 0.25rem; width: 2.8rem; text-align: right; color: var(--gutter); font-size: 13pt; padding-right: 0.5rem; border-right: 1px solid #2a1e00; }
+ol.lines > li > p, ol.lines > li > h2, ol.lines > li > h3, ol.lines > li > ul, ol.lines > li > ol, ol.lines > li > pre, ol.lines > li > hr { margin: 0; }
+.scope-note { border-left: 3px solid var(--bright); padding: 0.7rem 1rem; background: #140c00; margin: 0.6rem 0; color: var(--bright); }
+.nav { display: flex; gap: 0.9rem; flex-wrap: wrap; margin-top: 0.8rem; font-size: 14pt; }
+</style>
+</head>
+<body>
+
+<header class="page">
+  <div class="path">Part-I-Introduction/Book-02-Introducing-SwiftUI-Views</div>
+  <div class="pos">Part I &middot; Book 02</div>
+</header>
+
+<div class="content">
+<ol class="lines">
+  <li><h1>Chapter 2: Introducing SwiftUI Views</h1></li>
+  <li><p><strong>Claude's Swift Reference 26</strong> -- Part I: Introduction</p></li>
+  <li><hr></li>
+  <li><h2>What SwiftUI Is</h2></li>
+  <li><p>SwiftUI is Apple's declarative UI framework. You describe <em>what</em> you want the interface to look like, and SwiftUI figures out <em>how</em> to render it and <em>when</em> to update it.</p></li>
+  <li><p>It shipped in 2019 and has matured significantly. As of Swift 6 / Xcode 26, SwiftUI is the primary way to build Apple apps. UIKit still exists and works, but new projects should start with SwiftUI.</p></li>
+  <li><h3>Declarative vs. Imperative</h3></li>
+  <li><p><strong>UIKit (imperative):</strong> You create a button, configure it, add it to a view, write code to handle layout changes, and manually update it when data changes.</p></li>
+  <li><pre><code class="lang-swift">// UIKit way -- you manage everything yourself
+let label = UILabel()
+label.text = "Score: 0"
+label.font = .systemFont(ofSize: 18)
+view.addSubview(label)
+// ...later, when score changes:
+label.text = "Score: \(newScore)"</code></pre></li>
+  <li><p><strong>SwiftUI (declarative):</strong> You describe the view once. SwiftUI watches your data and re-renders automatically when it changes.</p></li>
+  <li><pre><code class="lang-swift">// SwiftUI way -- describe it, SwiftUI handles the rest
+Text("Score: \(score)")
+    .font(.system(size: 18))</code></pre></li>
+  <li><p>When <code>score</code> changes, SwiftUI updates the <code>Text</code> automatically. You never manually set the text.</p></li>
+  <li><hr></li>
+  <li><h2>The View Protocol</h2></li>
+  <li><p>Every piece of UI in SwiftUI conforms to the <code>View</code> protocol. The protocol has one requirement: a computed property called <code>body</code> that returns some other <code>View</code>.</p></li>
+  <li><pre><code class="lang-swift">struct ScoreCard: View {
+    var body: some View {
+        Text("Hello, Michael")
+            .font(.system(size: 18, weight: .bold))
+    }
+}</code></pre></li>
+  <li><p>That is a complete SwiftUI view. A few things to notice:</p></li>
+  <li><ul><li><strong>struct, not class.</strong> SwiftUI views are value types. They are lightweight and frequently recreated. Do not put heavy logic in a view's initializer.</li><li><strong>some View.</strong> This is an "opaque return type." It means "I return a specific View type, but I am not telling you which one." The compiler figures it out.</li><li><strong>body is computed.</strong> It has no stored value. SwiftUI calls it whenever it needs to know what this view looks like right now.</li></ul></li>
+  <li><h3>Watch Out For</h3></li>
+  <li><ul><li>The <code>body</code> property must return exactly <strong>one</strong> root view. If you need multiple views, wrap them in a container (<code>VStack</code>, <code>HStack</code>, <code>ZStack</code>, <code>Group</code>).</li><li>Do not put side effects (network calls, file writes, print statements) inside <code>body</code>. It can be called many times. Use <code>.onAppear</code>, <code>.task</code>, or event handlers instead.</li></ul></li>
+  <li><hr></li>
+  <li><h2>View Composition</h2></li>
+  <li><p>SwiftUI is built on composition. You build small views and combine them into larger ones.</p></li>
+  <li><pre><code class="lang-swift">struct PlayerRow: View {
+    let name: String
+    let score: Int
+
+    var body: some View {
+        HStack {
+            Text(name)
+                .font(.system(size: 18))
+            Spacer()
+            Text("\(score)")
+                .font(.system(size: 18, weight: .bold))
+                .foregroundStyle(.secondary)
+        }
+        .padding()
+    }
+}
+
+struct Scoreboard: View {
+    var body: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            PlayerRow(name: "Michael", score: 42)
+            PlayerRow(name: "Claude", score: 38)
+        }
+        .padding()
+    }
+}</code></pre></li>
+  <li><p>There is no limit to nesting depth. Break views into separate structs whenever a <code>body</code> gets hard to read -- generally past 30-40 lines.</p></li>
+  <li><hr></li>
+  <li><h2>Layout Containers</h2></li>
+  <li><p>SwiftUI provides three primary layout containers:</p></li>
+  <li><h3>HStack -- Horizontal</h3></li>
+  <li><pre><code class="lang-swift">HStack(spacing: 12) {
+    Image(systemName: "star.fill")
+    Text("Favorites")
+        .font(.system(size: 18))
+}</code></pre></li>
+  <li><h3>VStack -- Vertical</h3></li>
+  <li><pre><code class="lang-swift">VStack(alignment: .leading, spacing: 8) {
+    Text("Title")
+        .font(.system(size: 24, weight: .bold))
+    Text("Subtitle")
+        .font(.system(size: 18))
+        .foregroundStyle(.secondary)
+}</code></pre></li>
+  <li><h3>ZStack -- Overlapping (Z-axis)</h3></li>
+  <li><pre><code class="lang-swift">ZStack {
+    Color.blue
+    Text("Overlay")
+        .font(.system(size: 18))
+        .foregroundStyle(.white)
+}</code></pre></li>
+  <li><p>Later children in a ZStack render on top of earlier ones.</p></li>
+  <li><h3>Grid -- Two-Dimensional Layout (iOS 16+)</h3></li>
+  <li><pre><code class="lang-swift">Grid(alignment: .leading, horizontalSpacing: 16, verticalSpacing: 8) {
+    GridRow {
+        Text("Name")
+            .font(.system(size: 18, weight: .bold))
+        Text("Score")
+            .font(.system(size: 18, weight: .bold))
+    }
+    GridRow {
+        Text("Michael")
+            .font(.system(size: 18))
+        Text("42")
+            .font(.system(size: 18))
+    }
+}</code></pre></li>
+  <li><h3>Watch Out For</h3></li>
+  <li><ul><li><code>VStack</code> and <code>HStack</code> have a <strong>10-child limit</strong> in their <code>@ViewBuilder</code> closure. If you need more, wrap groups in <code>Group {}</code> or use <code>ForEach</code>.</li><li><code>Spacer()</code> in an <code>HStack</code> pushes content to the edges. It is the most common way to achieve "left-align this, right-align that" layouts.</li></ul></li>
+  <li><hr></li>
+  <li><h2>@State -- View-Local Mutable Data</h2></li>
+  <li><p>By default, view structs are immutable. If you need a value that changes and triggers re-rendering, mark it <code>@State</code>.</p></li>
+  <li><pre><code class="lang-swift">struct CounterView: View {
+    @State private var count = 0
+
+    var body: some View {
+        VStack(spacing: 16) {
+            Text("Count: \(count)")
+                .font(.system(size: 24, weight: .bold))
+
+            Button("Add One") {
+                count += 1
+            }
+            .font(.system(size: 18))
+        }
+    }
+}</code></pre></li>
+  <li><p>When <code>count</code> changes, SwiftUI re-evaluates <code>body</code> and updates only the parts that changed (the <code>Text</code> in this case).</p></li>
+  <li><h3>Rules of @State</h3></li>
+  <li><ol class="body-list"><li>Always mark <code>@State</code> properties <code>private</code>. They belong to this view and no one else.</li><li><code>@State</code> survives view re-creation. SwiftUI stores the actual value separately from the struct.</li><li>Initialize <code>@State</code> with a default value. Do not try to set it from outside the view (use <code>@Binding</code> or <code>@Observable</code> for that).</li></ol></li>
+  <li><h3>Watch Out For</h3></li>
+  <li><ul><li><code>@State</code> is for <strong>simple, view-local</strong> values: a toggle boolean, a text field string, a counter. If multiple views need to share the same data, use <code>@Observable</code> (see below).</li><li>Mutating <code>@State</code> inside <code>body</code> (outside of a closure like a button action) causes an infinite loop. SwiftUI re-evaluates <code>body</code>, which changes state, which re-evaluates <code>body</code>, forever.</li></ul></li>
+  <li><hr></li>
+  <li><h2>@Binding -- Two-Way Connection</h2></li>
+  <li><p>A <code>@Binding</code> creates a two-way connection to someone else's <code>@State</code>. The child view can read and write the value, and changes flow back to the owner.</p></li>
+  <li><pre><code class="lang-swift">struct ToggleRow: View {
+    let label: String
+    @Binding var isOn: Bool
+
+    var body: some View {
+        Toggle(label, isOn: $isOn)
+            .font(.system(size: 18))
+    }
+}
+
+struct SettingsView: View {
+    @State private var darkMode = false
+    @State private var notifications = true
+
+    var body: some View {
+        VStack(spacing: 12) {
+            ToggleRow(label: "Dark Mode", isOn: $darkMode)
+            ToggleRow(label: "Notifications", isOn: $notifications)
+        }
+        .padding()
+    }
+}</code></pre></li>
+  <li><p>The <code>$</code> prefix creates a binding from a <code>@State</code> property. <code>$darkMode</code> is a <code>Binding&lt;Bool&gt;</code> that reads and writes the underlying <code>darkMode</code> state.</p></li>
+  <li><h3>Watch Out For</h3></li>
+  <li><ul><li>You cannot create a <code>@Binding</code> out of thin air. It must connect to a source of truth (<code>@State</code>, <code>@Observable</code> property, etc.).</li><li>For previews and testing, use <code>.constant()</code>: <code>ToggleRow(label: "Test", isOn: .constant(true))</code>.</li></ul></li>
+  <li><hr></li>
+  <li><h2>@Observable -- Shared Data Model (iOS 17+)</h2></li>
+  <li><p><code>@Observable</code> is the modern way to share data across multiple views. It replaces the older <code>ObservableObject</code> / <code>@Published</code> / <code>@ObservedObject</code> pattern.</p></li>
+  <li><pre><code class="lang-swift">@Observable
+class GameState {
+    var score = 0
+    var playerName = "Michael"
+    var isPlaying = false
+}</code></pre></li>
+  <li><p>That is it. No <code>@Published</code> wrappers. The <code>@Observable</code> macro automatically tracks which properties each view reads, and only re-renders views that actually use changed properties.</p></li>
+  <li><h3>Using @Observable in Views</h3></li>
+  <li><pre><code class="lang-swift">struct GameView: View {
+    var game: GameState
+
+    var body: some View {
+        VStack(spacing: 16) {
+            Text("\(game.playerName)'s Score: \(game.score)")
+                .font(.system(size: 24, weight: .bold))
+
+            Button("Score Point") {
+                game.score += 1
+            }
+            .font(.system(size: 18))
+        }
+    }
+}
+
+struct ContentView: View {
+    @State private var game = GameState()
+
+    var body: some View {
+        GameView(game: game)
+    }
+}</code></pre></li>
+  <li><p>The top-level view owns the <code>GameState</code> as <code>@State</code>. Child views receive it as a plain property. SwiftUI tracks dependencies automatically.</p></li>
+  <li><h3>@Environment for Deep Passing</h3></li>
+  <li><p>If you need to pass an <code>@Observable</code> object deep into the view hierarchy without threading it through every intermediate view:</p></li>
+  <li><pre><code class="lang-swift">// In the top-level view:
+GameView()
+    .environment(game)
+
+// In any descendant view:
+struct DeepChildView: View {
+    @Environment(GameState.self) private var game
+
+    var body: some View {
+        Text("Score: \(game.score)")
+            .font(.system(size: 18))
+    }
+}</code></pre></li>
+  <li><h3>Watch Out For</h3></li>
+  <li><ul><li><code>@Observable</code> requires iOS 17 / macOS 14 minimum. If you need to support older OS versions, use <code>ObservableObject</code> with <code>@Published</code> properties.</li><li><code>@Observable</code> classes are reference types (classes, not structs). Multiple views holding the same instance see the same data. This is the point.</li><li>If an <code>@Observable</code> property changes but no view reads it, no re-render happens. This is efficient and intentional.</li></ul></li>
+  <li><hr></li>
+  <li><h2>View Modifiers</h2></li>
+  <li><p>View modifiers are methods you chain onto views to change their appearance or behavior. Each modifier returns a new view wrapping the original.</p></li>
+  <li><pre><code class="lang-swift">Text("Important Notice")
+    .font(.system(size: 20, weight: .bold))
+    .foregroundStyle(.red)
+    .padding()
+    .background(.yellow.opacity(0.3))
+    .clipShape(RoundedRectangle(cornerRadius: 8))</code></pre></li>
+  <li><h3>Order Matters</h3></li>
+  <li><p>Modifiers apply from inside out. This catches people constantly.</p></li>
+  <li><pre><code class="lang-swift">// Padding THEN background: background includes the padding
+Text("Hello")
+    .padding()
+    .background(.blue)
+
+// Background THEN padding: background is tight to the text, padding is outside
+Text("Hello")
+    .background(.blue)
+    .padding()</code></pre></li>
+  <li><p>These produce visually different results. The first has a blue box with padding inside. The second has a tight blue background with empty space around it.</p></li>
+  <li><h3>Common Modifiers</h3></li>
+  <li><p>| Modifier | What It Does | |----------|-------------| | <code>.font(.system(size: 18))</code> | Sets font size (use 18+ for accessibility) | | <code>.foregroundStyle(.primary)</code> | Text/icon color | | <code>.padding()</code> | Adds space around the view | | <code>.padding(.horizontal, 16)</code> | Adds space on specific edges | | <code>.frame(width:height:alignment:)</code> | Constrains or expands the view's size | | <code>.background(...)</code> | Puts something behind the view | | <code>.overlay(...)</code> | Puts something on top of the view | | <code>.clipShape(...)</code> | Clips to a shape (circle, rounded rect) | | <code>.opacity(0.5)</code> | Transparency | | <code>.hidden()</code> | Hides the view (still takes up space) | | <code>.disabled(true)</code> | Grays out and disables interaction | | <code>.accessibilityLabel("...")</code> | VoiceOver label |</p></li>
+  <li><h3>Writing Custom Modifiers</h3></li>
+  <li><p>For reusable styling, create a <code>ViewModifier</code>:</p></li>
+  <li><pre><code class="lang-swift">struct CardStyle: ViewModifier {
+    func body(content: Content) -&gt; some View {
+        content
+            .padding()
+            .background(.background)
+            .clipShape(RoundedRectangle(cornerRadius: 12))
+            .shadow(radius: 2)
+    }
+}
+
+extension View {
+    func cardStyle() -&gt; some View {
+        modifier(CardStyle())
+    }
+}
+
+// Usage:
+Text("Hello")
+    .font(.system(size: 18))
+    .cardStyle()</code></pre></li>
+  <li><hr></li>
+  <li><h2>Previews</h2></li>
+  <li><p>SwiftUI Previews let you see your views in Xcode without running the app. They update in real-time as you type.</p></li>
+  <li><pre><code class="lang-swift">#Preview {
+    ContentView()
+}
+
+// Named preview:
+#Preview("Dark Mode") {
+    ContentView()
+        .preferredColorScheme(.dark)
+}
+
+// Multiple previews:
+#Preview("Large Text") {
+    ContentView()
+        .environment(\.dynamicTypeSize, .accessibility3)
+}</code></pre></li>
+  <li><h3>Preview Tips</h3></li>
+  <li><ul><li>Wrap previews in a <code>NavigationStack</code> if your view expects to be inside one.</li><li>Pass mock data to previews, not real network calls.</li><li>If previews refuse to load, try: Resume (click the "Resume" button), clean build (Cmd+Shift+K), or restart Xcode.</li><li>Previews run in Debug configuration. They can be slow with complex views.</li></ul></li>
+  <li><h3>Watch Out For</h3></li>
+  <li><ul><li>Previews crash if your view requires an <code>@Environment</code> value that is not provided. Always supply required environment values in your preview.</li><li>Previews do not support all device features (camera, Bluetooth, etc.).</li><li>If previews show "Cannot preview in this file," there is usually a compile error somewhere. Check the build log.</li></ul></li>
+  <li><hr></li>
+  <li><h2>The View Hierarchy</h2></li>
+  <li><p>SwiftUI builds a tree of views. Understanding this tree helps you reason about layout, updates, and performance.</p></li>
+  <li><pre><code class="lang-">App
+  WindowGroup
+    ContentView
+      NavigationStack
+        VStack
+          Text("Title")
+          List
+            ForEach
+              PlayerRow
+                HStack
+                  Text(name)
+                  Spacer
+                  Text(score)</code></pre></li>
+  <li><h3>How Updates Flow</h3></li>
+  <li><ol class="body-list"><li>A <code>@State</code> or <code>@Observable</code> property changes</li><li>SwiftUI identifies which views read that property</li><li>Those views have their <code>body</code> re-evaluated</li><li>SwiftUI diffs the old and new view trees</li><li>Only the actual differences are rendered on screen</li></ol></li>
+  <li><p>This is why you should keep <code>body</code> cheap. It may be called frequently, but SwiftUI only does real rendering work when the output actually changes.</p></li>
+  <li><h3>Identity and Lifetime</h3></li>
+  <li><p>SwiftUI uses <strong>structural identity</strong> (position in the view tree) to track views across updates. If you use <code>ForEach</code> with an <code>id</code> parameter, that <code>id</code> is how SwiftUI knows which item is which.</p></li>
+  <li><pre><code class="lang-swift">ForEach(players, id: \.name) { player in
+    PlayerRow(player: player)
+}</code></pre></li>
+  <li><p>If two views swap positions but keep their IDs, SwiftUI animates the swap rather than destroying and recreating them.</p></li>
+  <li><h3>Watch Out For</h3></li>
+  <li><ul><li>Using <code>ForEach(0..&lt;array.count)</code> instead of <code>ForEach(array, id: \.self)</code> (or a proper <code>Identifiable</code> conformance) breaks animations and can cause visual glitches. Always give SwiftUI stable identifiers.</li><li>Deeply nested view hierarchies are fine for readability but can slow down the compiler. If Xcode says "expression too complex," break the view into smaller sub-views.</li></ul></li>
+  <li><hr></li>
+  <li><h2>UIKit Interop</h2></li>
+  <li><p>Sometimes you need a UIKit view in SwiftUI (for features SwiftUI does not cover yet). Use <code>UIViewRepresentable</code>:</p></li>
+  <li><pre><code class="lang-swift">import UIKit
+import SwiftUI
+
+struct ActivityIndicator: UIViewRepresentable {
+    func makeUIView(context: Context) -&gt; UIActivityIndicatorView {
+        let indicator = UIActivityIndicatorView(style: .large)
+        indicator.startAnimating()
+        return indicator
+    }
+
+    func updateUIView(_ uiView: UIActivityIndicatorView, context: Context) {
+        // Update the view if needed when SwiftUI state changes
+    }
+}</code></pre></li>
+  <li><p>There is also <code>UIViewControllerRepresentable</code> for wrapping full UIKit view controllers. Use these as bridges, not as a primary development strategy.</p></li>
+  <li><hr></li>
+  <li><h2>Accessibility Essentials</h2></li>
+  <li><p>SwiftUI has strong accessibility support built in, but you need to be intentional about it.</p></li>
+  <li><h3>Font Sizing</h3></li>
+  <li><p>Use <code>Dynamic Type</code> sizes or explicit minimums. Michael's 18pt minimum means:</p></li>
+  <li><pre><code class="lang-swift">// Good -- explicit minimum size
+Text("Readable text")
+    .font(.system(size: 18))
+
+// Also good -- use a text style that scales
+Text("Readable text")
+    .font(.title3) // 20pt default, scales with Dynamic Type</code></pre></li>
+  <li><p>Font sizes below <code>.title3</code> (which is 20pt) drop below 18pt at default Dynamic Type. The safe "always 18pt+" text styles are: <code>.largeTitle</code>, <code>.title</code>, <code>.title2</code>, <code>.title3</code>.</p></li>
+  <li><p>If you use <code>.body</code> (17pt default), it drops below 18pt at default settings. Either use <code>.system(size: 18)</code> explicitly or use <code>.title3</code> and up.</p></li>
+  <li><h3>Accessibility Modifiers</h3></li>
+  <li><pre><code class="lang-swift">Image(systemName: "star.fill")
+    .accessibilityLabel("Favorite")
+
+// Group related content for VoiceOver:
+HStack {
+    Text("Score:")
+    Text("\(score)")
+}
+.accessibilityElement(children: .combine)
+
+// Hide decorative elements:
+Image("decorative-line")
+    .accessibilityHidden(true)</code></pre></li>
+  <li><h3>Watch Out For</h3></li>
+  <li><ul><li>Do not use <code>.font(.caption)</code> or <code>.font(.footnote)</code> for anything the user actually needs to read. They are 12pt and 13pt respectively -- too small.</li><li>Always test with VoiceOver at least once before shipping. Simulator &gt; Settings &gt; Accessibility &gt; VoiceOver.</li><li>Color alone should never be the only way to convey information. Pair it with text, icons, or shapes.</li></ul></li>
+  <li><hr></li>
+  <li><h2>Practical Tips</h2></li>
+  <li><ol class="body-list"><li><strong>Start with the data, then build the view.</strong> Define your model types first, then write the views that display them. SwiftUI works best when your data flow is clear.</li></ol></li>
+  <li><ol class="body-list"><li><strong>One source of truth.</strong> Every piece of data should have exactly one owner. Other views get a binding or a reference, never a copy they also mutate.</li></ol></li>
+  <li><ol class="body-list"><li><strong>Extract early, extract often.</strong> When a view body gets past 30 lines, pull part of it into a separate struct. This is free in SwiftUI -- small structs cost nothing.</li></ol></li>
+  <li><ol class="body-list"><li><strong>Use <code>@Observable</code> for shared state, <code>@State</code> for local state.</strong> If only one view cares about a value, it is <code>@State</code>. If multiple views share it, it is <code>@Observable</code>.</li></ol></li>
+  <li><ol class="body-list"><li><strong>Previews are your rapid feedback loop.</strong> Set up multiple previews (light mode, dark mode, large text) so you catch layout issues without running the app.</li></ol></li>
+  <li><ol class="body-list"><li><strong>When something looks wrong, check modifier order.</strong> Swapping <code>.padding()</code> and <code>.background()</code> changes the result. Read modifiers bottom-to-top to understand layering.</li></ol></li>
+  <li><hr></li>
+  <li><p><em>Claude's Swift Reference 26 -- Chapter 2</em> <em>Written by Claude for Michael Fluharty. Swift 6, Xcode 26.</em></p></li>
+</ol>
+</div>
+
+<footer class="page">
+  <div class="path">Part-I-Introduction/Book-02-Introducing-SwiftUI-Views</div>
+  <div class="pos">Part I &middot; Book 02</div>
+  <div class="nav"><a href="../table-of-contents.html">&larr; Contents</a><a href="../claudex26-index.html">Index</a></div>
+</footer>
+
+</body>
+</html>

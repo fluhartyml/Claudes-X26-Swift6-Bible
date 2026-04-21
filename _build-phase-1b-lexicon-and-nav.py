@@ -329,7 +329,7 @@ code { color: var(--bright); background: var(--codebg); padding: 0.08em 0.35em; 
 pre { background: var(--codebg); border: 1px solid #3a2400; border-radius: 4px; padding: 0.7rem 0.9rem; overflow-x: auto; font-size: 14pt; }
 pre code { background: transparent; border: 0; padding: 0; }
 ul, ol.body-list { margin: 0.4rem 0 0.4rem 1.4rem; padding: 0; }
-a { color: var(--bright); text-decoration: none; border-bottom: 1px dotted var(--dim); }
+a { color: var(--bright); font-weight: bold; text-decoration: none; border-bottom: 1px dotted var(--dim); }
 a:hover { background: #332200; }
 strong { color: var(--bright); }
 em { color: var(--fg); font-style: italic; }
@@ -412,7 +412,7 @@ def status_tag(status):
 
 def render_lexicon_page(chapter, entry, kind):
     safe = safe_filename(entry)
-    folder_rel = f"Part-II-The-Swift-Language/Chapter-{chapter}/Pages"
+    folder_rel = f"Part-II-The-Swift-Language/Chapter-{chapter}"
     filename = f"Page-{safe}.html"
     path_display = f"{folder_rel}/Page-{safe}"
     title = f"{entry} — Swift Lexicon"
@@ -447,9 +447,8 @@ def render_lexicon_page(chapter, entry, kind):
     ]
 
     nav = (
-        f'<a href="../Chapter-{chapter}.html">&larr; Chapter {chapter}</a>'
-        f'<a href="../../../table-of-contents.html">Contents</a>'
-        f'<a href="../../../claudex26-index.html">Index</a>'
+        f'<a href="../../table-of-contents.html">Contents</a>'
+        f'<a href="../../claudex26-index.html">Index</a>'
     )
 
     out_dir = BUNDLE / folder_rel
@@ -518,7 +517,7 @@ def render_toc():
     fm_items = []
     for slug, status in FRONT_MATTER:
         display = slug.replace('-', ' ')
-        href = f"Front-Matter/{slug}/{slug}.html"
+        href = f"Front-Matter/{slug}.html"
         fm_items.append(
             f'<li><a href="{href}">{esc(display)}</a> {status_tag(status)}</li>'
         )
@@ -531,7 +530,7 @@ def render_toc():
         if part != "Part-I-Introduction":
             continue
         display = f"Book {n:02d} — {slug.replace('-', ' ')}"
-        href = f"Part-I-Introduction/Book-{n:02d}-{slug}/Book-{n:02d}-{slug}.html"
+        href = f"Part-I-Introduction/Book-{n:02d}-{slug}.html"
         toc_books.append(
             f'<li><a href="{href}">{esc(display)}</a> {status_tag(status)}</li>'
         )
@@ -541,20 +540,19 @@ def render_toc():
     blocks.append('<h2>Part II — The Swift Language (Lexicon)</h2>')
     blocks.append('<p>26 Chapters, A–Z; one Page per Swift word. Every Page is clickable.</p>')
     for ch in sorted(ENTRIES.keys()):
-        ch_href = f"Part-II-The-Swift-Language/Chapter-{ch}/Chapter-{ch}.html"
         entries = ENTRIES[ch]
         if not entries:
             note = CHAPTER_NOTES.get(ch, "empty")
             blocks.append(
-                f'<h3><a href="{ch_href}">Chapter {ch}</a></h3>'
+                f'<h3>Chapter {ch}</h3>'
                 f'<p class="slot">{esc(note)}</p>'
             )
             continue
-        blocks.append(f'<h3><a href="{ch_href}">Chapter {ch}</a> — {len(entries)} entries</h3>')
+        blocks.append(f'<h3>Chapter {ch} — {len(entries)} entries</h3>')
         items = []
         for entry, kind in entries:
             safe = safe_filename(entry)
-            page_href = f"Part-II-The-Swift-Language/Chapter-{ch}/Pages/Page-{safe}.html"
+            page_href = f"Part-II-The-Swift-Language/Chapter-{ch}/Page-{safe}.html"
             items.append(
                 f'<li><a href="{page_href}">{esc(entry)}</a> '
                 f'<em>({esc(kind)})</em> {status_tag("skeleton")}</li>'
@@ -570,7 +568,7 @@ def render_toc():
             if part != pk:
                 continue
             display = f"Book {n:02d} — {slug.replace('-', ' ')}"
-            href = f"{pk}/Book-{n:02d}-{slug}/Book-{n:02d}-{slug}.html"
+            href = f"{pk}/Book-{n:02d}-{slug}.html"
             items.append(
                 f'<li><a href="{href}">{esc(display)}</a> {status_tag(status)}</li>'
             )
@@ -581,7 +579,7 @@ def render_toc():
     items = []
     for letter, slug, status in APPENDICES:
         display = f"Appendix {letter} — {slug.replace('-', ' ')}"
-        href = f"Appendices/Appendix-{letter}-{slug}/Appendix-{letter}-{slug}.html"
+        href = f"Appendices/Appendix-{letter}-{slug}.html"
         items.append(
             f'<li><a href="{href}">{esc(display)}</a> {status_tag(status)}</li>'
         )
@@ -622,33 +620,26 @@ def render_index():
     for ch in sorted(ENTRIES.keys()):
         for entry, kind in ENTRIES[ch]:
             safe = safe_filename(entry)
-            href = f"Part-II-The-Swift-Language/Chapter-{ch}/Pages/Page-{safe}.html"
+            href = f"Part-II-The-Swift-Language/Chapter-{ch}/Page-{safe}.html"
             all_entries.append((entry, href, f"Lexicon &middot; Chapter {ch} &middot; {esc(kind)}", "skeleton"))
 
     # Books
     for n, part, slug, status in BOOKS:
         display = f"Book {n:02d} — {slug.replace('-', ' ')}"
-        href = f"{part}/Book-{n:02d}-{slug}/Book-{n:02d}-{slug}.html"
+        href = f"{part}/Book-{n:02d}-{slug}.html"
         all_entries.append((display, href, PART_TITLES[part], status))
 
     # Front Matter
     for slug, status in FRONT_MATTER:
         display = slug.replace('-', ' ')
-        href = f"Front-Matter/{slug}/{slug}.html"
+        href = f"Front-Matter/{slug}.html"
         all_entries.append((display, href, "Front Matter", status))
 
     # Appendices
     for letter, slug, status in APPENDICES:
         display = f"Appendix {letter} — {slug.replace('-', ' ')}"
-        href = f"Appendices/Appendix-{letter}-{slug}/Appendix-{letter}-{slug}.html"
+        href = f"Appendices/Appendix-{letter}-{slug}.html"
         all_entries.append((display, href, "Appendices", status))
-
-    # Chapters themselves (A–Z landing pages)
-    for ch in sorted(ENTRIES.keys()):
-        href = f"Part-II-The-Swift-Language/Chapter-{ch}/Chapter-{ch}.html"
-        all_entries.append((f"Chapter {ch}", href,
-                            f"Lexicon landing page &middot; {len(ENTRIES[ch])} entries",
-                            "written" if ENTRIES[ch] else "scope"))
 
     # Sort by display, case-insensitive, stripping @ and # for alphabetization
     def sort_key(item):
@@ -692,10 +683,8 @@ def main():
             total_pages += 1
     print(f"  wrote {total_pages} Lexicon Pages")
 
-    print("\nGenerating Chapter index pages...")
-    for ch, entries in ENTRIES.items():
-        render_chapter_index(ch, entries)
-    print(f"  wrote {len(ENTRIES)} Chapter pages")
+    # Chapter landing pages no longer generated — TOC's Part II section
+    # lists every Page directly under each chapter heading.
 
     print("\nRegenerating table-of-contents.html...")
     render_toc()
