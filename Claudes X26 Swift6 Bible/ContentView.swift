@@ -25,6 +25,8 @@ struct ContentView: View {
     @EnvironmentObject var webViewBridge: VaultWebView.Bridge
     @State private var showingUnderTheHood = false
     @State private var showingAbout = false
+    @State private var wholeBookShareURL: URL?
+    @State private var preparingWholeBookShare = false
     @AppStorage("textScale") private var textScale: Double = 1.0
     #if !os(macOS)
     @State private var showingFolderImporter = false
@@ -46,6 +48,12 @@ struct ContentView: View {
         }
         .sheet(isPresented: $showingAbout) {
             AboutView()
+        }
+        .sheet(item: Binding(
+            get: { wholeBookShareURL.map(WholeBookShareItem.init) },
+            set: { wholeBookShareURL = $0?.url }
+        )) { item in
+            WholeBookShareSheet(url: item.url) { wholeBookShareURL = nil }
         }
         .onReceive(NotificationCenter.default.publisher(for: .showAbout)) { _ in
             showingAbout = true
@@ -119,6 +127,37 @@ struct ContentView: View {
             if let hit = findNode(id: id, in: child) { return hit }
         }
         return nil
+    }
+
+    // MARK: - Share whole book
+
+    /// Zip the entire vault folder and present the system share sheet.
+    /// NSFileCoordinator's .forUploading read option produces a standard
+    /// .zip archive of a directory; works on iOS and macOS.
+    private func shareWholeBook() {
+        guard let root = vault.vaultRoot, !preparingWholeBookShare else { return }
+        preparingWholeBookShare = true
+        DispatchQueue.global(qos: .userInitiated).async {
+            let coordinator = NSFileCoordinator()
+            var nsError: NSError?
+            var producedURL: URL?
+            coordinator.coordinate(
+                readingItemAt: root,
+                options: [.forUploading],
+                error: &nsError
+            ) { zipURL in
+                let fm = FileManager.default
+                let tmp = fm.temporaryDirectory
+                    .appending(path: "Claudes-X26-Swift6-Bible-\(Int(Date().timeIntervalSince1970)).zip")
+                try? fm.removeItem(at: tmp)
+                try? fm.copyItem(at: zipURL, to: tmp)
+                producedURL = tmp
+            }
+            DispatchQueue.main.async {
+                preparingWholeBookShare = false
+                wholeBookShareURL = producedURL
+            }
+        }
     }
 
     // MARK: - Detail
@@ -199,11 +238,18 @@ struct ContentView: View {
                 Menu {
                     Button("About") { showingAbout = true }
                     Button("Under the Hood") { showingUnderTheHood = true }
+                    Divider()
+                    Button(preparingWholeBookShare
+                           ? "Preparing Whole Book…"
+                           : "Share Whole Book") {
+                        shareWholeBook()
+                    }
+                    .disabled(preparingWholeBookShare || vault.vaultRoot == nil)
                 } label: {
                     Label("Info", systemImage: "info.circle")
                 }
                 .labelStyle(.iconOnly)
-                .help("About & Developer Notes")
+                .help("About, Developer Notes, Share Whole Book")
             }
 
             if let doc = vault.currentDocument {
@@ -240,6 +286,44 @@ struct ContentView: View {
             .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 }
+
+// MARK: - Share whole book helpers
+
+/// Identifiable wrapper so `.sheet(item:)` fires when the URL changes.
+private struct WholeBookShareItem: Identifiable {
+    let url: URL
+    var id: URL { url }
+}
+
+#if os(iOS)
+private struct WholeBookShareSheet: UIViewControllerRepresentable {
+    let url: URL
+    let onDismiss: () -> Void
+    func makeUIViewController(context: Context) -> UIActivityViewController {
+        let vc = UIActivityViewController(activityItems: [url], applicationActivities: nil)
+        vc.completionWithItemsHandler = { _, _, _, _ in onDismiss() }
+        return vc
+    }
+    func updateUIViewController(_ vc: UIActivityViewController, context: Context) {}
+}
+#else
+private struct WholeBookShareSheet: View {
+    let url: URL
+    let onDismiss: () -> Void
+    var body: some View {
+        VStack(spacing: 14) {
+            Text("Share Whole Book")
+                .font(.headline)
+            ShareLink(item: url) {
+                Label("Share .zip", systemImage: "square.and.arrow.up")
+            }
+            Button("Done") { onDismiss() }
+        }
+        .padding(24)
+        .frame(minWidth: 320)
+    }
+}
+#endif
 
 // MARK: - Recursive outline row
 

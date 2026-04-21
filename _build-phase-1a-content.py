@@ -563,8 +563,8 @@ def render_page(title, path_display, pos_label, body_blocks, nav_html):
 def nav_for_book(n, part, slug):
     # extension-less links
     return (
-        f'<a href="../../table-of-contents">&larr; Contents</a>'
-        f'<a href="../../claudex26-index">Index</a>'
+        f'<a href="../../table-of-contents.html">&larr; Contents</a>'
+        f'<a href="../../claudex26-index.html">Index</a>'
     )
 
 
@@ -653,8 +653,8 @@ def write_appendix(letter, slug, md_name):
                   '<div class="scope-note">Appendix D (LockBox build-along) is planned but not yet written.</div>']
 
     pos = f"Appendix {letter}"
-    nav = ('<a href="../../table-of-contents">&larr; Contents</a>'
-           '<a href="../../claudex26-index">Index</a>')
+    nav = ('<a href="../../table-of-contents.html">&larr; Contents</a>'
+           '<a href="../../claudex26-index.html">Index</a>')
     html = render_page(
         title=f"Appendix {letter}: {slug.replace('-', ' ')}",
         path_display=path_display,

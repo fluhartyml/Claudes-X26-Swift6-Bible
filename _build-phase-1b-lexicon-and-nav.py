@@ -447,9 +447,9 @@ def render_lexicon_page(chapter, entry, kind):
     ]
 
     nav = (
-        f'<a href="../Chapter-{chapter}">&larr; Chapter {chapter}</a>'
-        f'<a href="../../../table-of-contents">Contents</a>'
-        f'<a href="../../../claudex26-index">Index</a>'
+        f'<a href="../Chapter-{chapter}.html">&larr; Chapter {chapter}</a>'
+        f'<a href="../../../table-of-contents.html">Contents</a>'
+        f'<a href="../../../claudex26-index.html">Index</a>'
     )
 
     out_dir = BUNDLE / folder_rel
@@ -480,14 +480,14 @@ def render_chapter_index(chapter, entries):
         for entry, kind in entries:
             safe = safe_filename(entry)
             items.append(
-                f'<li><a href="Pages/Page-{safe}">{esc(entry)}</a> '
+                f'<li><a href="Pages/Page-{safe}.html">{esc(entry)}</a> '
                 f'<em>({esc(kind)})</em> {status_tag("skeleton")}</li>'
             )
         blocks.append('<ul>' + "".join(items) + '</ul>')
 
     nav = (
-        f'<a href="../../table-of-contents">Contents</a>'
-        f'<a href="../../claudex26-index">Index</a>'
+        f'<a href="../../table-of-contents.html">Contents</a>'
+        f'<a href="../../claudex26-index.html">Index</a>'
     )
 
     out_dir = BUNDLE / folder_rel
@@ -518,7 +518,7 @@ def render_toc():
     fm_items = []
     for slug, status in FRONT_MATTER:
         display = slug.replace('-', ' ')
-        href = f"Front-Matter/{slug}/{slug}"
+        href = f"Front-Matter/{slug}/{slug}.html"
         fm_items.append(
             f'<li><a href="{href}">{esc(display)}</a> {status_tag(status)}</li>'
         )
@@ -531,7 +531,7 @@ def render_toc():
         if part != "Part-I-Introduction":
             continue
         display = f"Book {n:02d} — {slug.replace('-', ' ')}"
-        href = f"Part-I-Introduction/Book-{n:02d}-{slug}/Book-{n:02d}-{slug}"
+        href = f"Part-I-Introduction/Book-{n:02d}-{slug}/Book-{n:02d}-{slug}.html"
         toc_books.append(
             f'<li><a href="{href}">{esc(display)}</a> {status_tag(status)}</li>'
         )
@@ -541,7 +541,7 @@ def render_toc():
     blocks.append('<h2>Part II — The Swift Language (Lexicon)</h2>')
     blocks.append('<p>26 Chapters, A–Z; one Page per Swift word. Every Page is clickable.</p>')
     for ch in sorted(ENTRIES.keys()):
-        ch_href = f"Part-II-The-Swift-Language/Chapter-{ch}/Chapter-{ch}"
+        ch_href = f"Part-II-The-Swift-Language/Chapter-{ch}/Chapter-{ch}.html"
         entries = ENTRIES[ch]
         if not entries:
             note = CHAPTER_NOTES.get(ch, "empty")
@@ -554,7 +554,7 @@ def render_toc():
         items = []
         for entry, kind in entries:
             safe = safe_filename(entry)
-            page_href = f"Part-II-The-Swift-Language/Chapter-{ch}/Pages/Page-{safe}"
+            page_href = f"Part-II-The-Swift-Language/Chapter-{ch}/Pages/Page-{safe}.html"
             items.append(
                 f'<li><a href="{page_href}">{esc(entry)}</a> '
                 f'<em>({esc(kind)})</em> {status_tag("skeleton")}</li>'
@@ -570,7 +570,7 @@ def render_toc():
             if part != pk:
                 continue
             display = f"Book {n:02d} — {slug.replace('-', ' ')}"
-            href = f"{pk}/Book-{n:02d}-{slug}/Book-{n:02d}-{slug}"
+            href = f"{pk}/Book-{n:02d}-{slug}/Book-{n:02d}-{slug}.html"
             items.append(
                 f'<li><a href="{href}">{esc(display)}</a> {status_tag(status)}</li>'
             )
@@ -581,7 +581,7 @@ def render_toc():
     items = []
     for letter, slug, status in APPENDICES:
         display = f"Appendix {letter} — {slug.replace('-', ' ')}"
-        href = f"Appendices/Appendix-{letter}-{slug}/Appendix-{letter}-{slug}"
+        href = f"Appendices/Appendix-{letter}-{slug}/Appendix-{letter}-{slug}.html"
         items.append(
             f'<li><a href="{href}">{esc(display)}</a> {status_tag(status)}</li>'
         )
@@ -591,11 +591,11 @@ def render_toc():
     blocks.append('<h2>Back Matter</h2>')
     blocks.append(
         '<ul>'
-        '<li><a href="claudex26-index">Index</a> — alphabetical list of every Page, Book, and Appendix</li>'
+        '<li><a href="claudex26-index.html">Index</a> — alphabetical list of every Page, Book, and Appendix</li>'
         '</ul>'
     )
 
-    nav = '<a href="claudex26-index">Index</a>'
+    nav = '<a href="claudex26-index.html">Index</a>'
     (BUNDLE / "table-of-contents.html").write_text(
         render_page(title, path_display, pos, blocks, nav)
     )
@@ -622,30 +622,30 @@ def render_index():
     for ch in sorted(ENTRIES.keys()):
         for entry, kind in ENTRIES[ch]:
             safe = safe_filename(entry)
-            href = f"Part-II-The-Swift-Language/Chapter-{ch}/Pages/Page-{safe}"
+            href = f"Part-II-The-Swift-Language/Chapter-{ch}/Pages/Page-{safe}.html"
             all_entries.append((entry, href, f"Lexicon &middot; Chapter {ch} &middot; {esc(kind)}", "skeleton"))
 
     # Books
     for n, part, slug, status in BOOKS:
         display = f"Book {n:02d} — {slug.replace('-', ' ')}"
-        href = f"{part}/Book-{n:02d}-{slug}/Book-{n:02d}-{slug}"
+        href = f"{part}/Book-{n:02d}-{slug}/Book-{n:02d}-{slug}.html"
         all_entries.append((display, href, PART_TITLES[part], status))
 
     # Front Matter
     for slug, status in FRONT_MATTER:
         display = slug.replace('-', ' ')
-        href = f"Front-Matter/{slug}/{slug}"
+        href = f"Front-Matter/{slug}/{slug}.html"
         all_entries.append((display, href, "Front Matter", status))
 
     # Appendices
     for letter, slug, status in APPENDICES:
         display = f"Appendix {letter} — {slug.replace('-', ' ')}"
-        href = f"Appendices/Appendix-{letter}-{slug}/Appendix-{letter}-{slug}"
+        href = f"Appendices/Appendix-{letter}-{slug}/Appendix-{letter}-{slug}.html"
         all_entries.append((display, href, "Appendices", status))
 
     # Chapters themselves (A–Z landing pages)
     for ch in sorted(ENTRIES.keys()):
-        href = f"Part-II-The-Swift-Language/Chapter-{ch}/Chapter-{ch}"
+        href = f"Part-II-The-Swift-Language/Chapter-{ch}/Chapter-{ch}.html"
         all_entries.append((f"Chapter {ch}", href,
                             f"Lexicon landing page &middot; {len(ENTRIES[ch])} entries",
                             "written" if ENTRIES[ch] else "scope"))
@@ -677,7 +677,7 @@ def render_index():
             )
         blocks.append('<ul>' + "".join(items) + '</ul>')
 
-    nav = '<a href="table-of-contents">Contents</a>'
+    nav = '<a href="table-of-contents.html">Contents</a>'
     (BUNDLE / "claudex26-index.html").write_text(
         render_page(title, path_display, pos, blocks, nav)
     )
