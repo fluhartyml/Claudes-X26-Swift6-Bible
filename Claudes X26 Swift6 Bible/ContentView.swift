@@ -77,12 +77,10 @@ struct ContentView: View {
         if let root = vault.rootNode {
             List(selection: $vault.selectedNodeID) {
                 VaultTreeOutline(node: root, isRoot: true)
-                    .listRowBackground(Color.libraryBg)
             }
             .listStyle(.sidebar)
             .scrollContentBackground(.hidden)
             .background(Color.libraryBg)
-            .foregroundStyle(Color.libraryFg)
             .tint(Color.libraryBright)
             .onChange(of: vault.selectedNodeID) { _, newID in
                 if let id = newID, let node = findNode(id: id, in: root), !node.isDirectory {
@@ -348,14 +346,12 @@ struct VaultTreeOutline: View {
                 }
             }
         } else {
-            Button {
-                vault.open(node.url)
-            } label: {
-                labelFor(node)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .contentShape(Rectangle())
-            }
-            .buttonStyle(.plain)
+            labelFor(node)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .contentShape(Rectangle())
+                .onTapGesture {
+                    vault.open(node.url)
+                }
         }
     }
 
