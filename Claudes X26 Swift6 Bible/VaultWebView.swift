@@ -231,6 +231,7 @@ struct VaultWebView: PlatformViewRepresentable {
                 // Internal vault link — bubble up so VaultModel can update history and sidebar.
                 if url.path.hasPrefix(root.path) {
                     decisionHandler(.cancel)
+                    print("[tap] Link: \(url.lastPathComponent)")
                     parent.onInternalNavigate(url)
                     return
                 }

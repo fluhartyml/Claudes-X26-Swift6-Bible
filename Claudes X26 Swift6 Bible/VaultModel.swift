@@ -34,6 +34,13 @@ final class VaultModel: ObservableObject {
         }
     }
 
+    /// Print a tap/navigation event to the Xcode console so Michael can
+    /// trace which buttons/links routed through the app. Prefix tells
+    /// the source layer (Folder / File / Link / Open).
+    func logTap(_ message: String) {
+        print("[tap] \(message)")
+    }
+
     private var history: [URL] = []
     private var forwardHistory: [URL] = []
 
@@ -171,6 +178,7 @@ final class VaultModel: ObservableObject {
     }
 
     func open(_ url: URL) {
+        logTap("Open: \(url.lastPathComponent)")
         if let cur = currentDocument {
             history.append(cur)
         }

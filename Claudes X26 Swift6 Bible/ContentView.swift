@@ -348,6 +348,7 @@ struct VaultTreeOutline: View {
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .contentShape(Rectangle())
                         .onTapGesture {
+                            vault.logTap("Folder: \(node.name)")
                             vault.toggleExpanded(node.id)
                         }
                 }
@@ -358,6 +359,7 @@ struct VaultTreeOutline: View {
                 .contentShape(Rectangle())
                 .tag(node.id)
                 .onTapGesture {
+                    vault.logTap("File: \(node.name)")
                     vault.open(node.url)
                 }
         }
