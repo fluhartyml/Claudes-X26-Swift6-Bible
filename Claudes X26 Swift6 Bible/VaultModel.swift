@@ -53,6 +53,55 @@ final class VaultModel: ObservableObject {
 
     init() {
         resolveVaultRoot()
+        startObservingCloudLastPath()
+    }
+
+    // MARK: - iCloud last-page sync
+
+    /// Write the latest last-page relative path to both the local
+    /// UserDefaults (immediate, offline-safe) and the ubiquitous store
+    /// (propagates to every iCloud-signed-in device running the app).
+    private func persistLastPath(_ rel: String) {
+        UserDefaults.standard.set(rel, forKey: lastPathKey)
+        NSUbiquitousKeyValueStore.default.set(rel, forKey: lastPathKey)
+        NSUbiquitousKeyValueStore.default.synchronize()
+    }
+
+    /// Read the last-page relative path, preferring the ubiquitous store
+    /// if it has a value — that's the "most recent across all devices"
+    /// signal. Falls back to local UserDefaults on first run / offline.
+    private func readLastPath() -> String? {
+        if let cloud = NSUbiquitousKeyValueStore.default.string(forKey: lastPathKey),
+           !cloud.isEmpty {
+            return cloud
+        }
+        return UserDefaults.standard.string(forKey: lastPathKey)
+    }
+
+    /// Listen for updates from other devices. When iCloud pushes a new
+    /// last-page value while the app is running, jump to it if the file
+    /// exists under the current vault root.
+    private func startObservingCloudLastPath() {
+        NotificationCenter.default.addObserver(
+            forName: NSUbiquitousKeyValueStore.didChangeExternallyNotification,
+            object: NSUbiquitousKeyValueStore.default,
+            queue: .main
+        ) { [weak self] _ in
+            Task { @MainActor [weak self] in
+                guard let self,
+                      let root = self.vaultRoot,
+                      let rel = NSUbiquitousKeyValueStore.default.string(forKey: self.lastPathKey),
+                      !rel.isEmpty else { return }
+                let url = root.appending(path: rel)
+                if FileManager.default.fileExists(atPath: url.path),
+                   url.standardizedFileURL != self.currentDocument?.standardizedFileURL {
+                    self.logTap("iCloud resume: \(url.lastPathComponent)")
+                    self.currentDocument = url
+                }
+            }
+        }
+        // Pull any pending external changes immediately at launch.
+        NSUbiquitousKeyValueStore.default.synchronize()
     }
 
     // MARK: - Vault-root resolution
@@ -99,8 +148,9 @@ final class VaultModel: ObservableObject {
     func setVaultRoot(_ url: URL) {
         vaultRoot = url
         rootNode = VaultNode.buildTree(at: url)
-        // Priority: last document the reader viewed > table of contents > atlas.
-        if let lastRel = UserDefaults.standard.string(forKey: lastPathKey) {
+        // Priority: last document the reader viewed (iCloud-synced) >
+        // table of contents > atlas.
+        if let lastRel = readLastPath() {
             let lastURL = url.appending(path: lastRel)
             if FileManager.default.fileExists(atPath: lastURL.path) {
                 currentDocument = lastURL
@@ -125,7 +175,7 @@ final class VaultModel: ObservableObject {
         guard docPath.hasPrefix(rootPath) else { return }
         var rel = String(docPath.dropFirst(rootPath.count))
         if rel.hasPrefix("/") { rel = String(rel.dropFirst()) }
-        UserDefaults.standard.set(rel, forKey: lastPathKey)
+        persistLastPath(rel)
     }
 
     /// Save a security-scoped bookmark to the chosen URL so next launch restores it.
