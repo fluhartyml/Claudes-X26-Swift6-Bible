@@ -100,18 +100,18 @@ func logAndReturn(_ message: String) -&gt; String {
 logAndReturn(&quot;hi&quot;) // no warning even though we ignore the return</code></pre></li>
   <li><h2>Rosetta Stone</h2></li>
   <li><h3>Pascal / Delphi</h3></li>
-  <li><p class="slot">Equivalent or closest cousin pending.</p></li>
+  <li><p>No cousin. Delphi doesn't warn on unused function results; the attribute would be a no-op.</p></li>
   <li><h3>BASIC</h3></li>
-  <li><p class="slot">Equivalent or closest cousin pending.</p></li>
+  <li><p>No cousin. VB.NET's compiler doesn't warn on unused return values.</p></li>
   <li><h3>C / C++</h3></li>
-  <li><p class="slot">Equivalent or closest cousin pending.</p></li>
+  <li><p>`__attribute__((warn_unused_result))` in GCC/Clang is the opposite: it WARNS on unused returns. No suppress flag; you just don't apply the attribute.</p></li>
   <li><h2>Related</h2></li>
-  <li><p class="slot">Cross-references to other Lexicon entries and Books pending.</p></li>
+  <li><p>Other Lexicon entries in the same topic cluster:</p></li>
+  <li><ul><li><a href="../../Part-II-The-Swift-Language/Chapter-A/Page-autoclosure.html"><code>@autoclosure</code></a></li><li><a href="../../Part-II-The-Swift-Language/Chapter-C/Page-closure.html"><code>closure</code></a></li><li><a href="../../Part-II-The-Swift-Language/Chapter-E/Page-escaping.html"><code>@escaping</code></a></li><li><a href="../../Part-II-The-Swift-Language/Chapter-F/Page-func.html"><code>func</code></a></li><li><a href="../../Part-II-The-Swift-Language/Chapter-I/Page-inlinable.html"><code>@inlinable</code></a></li><li><a href="../../Part-II-The-Swift-Language/Chapter-I/Page-inout.html"><code>inout</code></a></li><li><a href="../../Part-II-The-Swift-Language/Chapter-R/Page-rethrows.html"><code>rethrows</code></a></li></ul></li>
+  <li><p>Book chapters that cover this topic:</p></li>
+  <li><ul><li><a href="../../Part-III-The-User-Interface/Book-04-Gestures-And-Input.html">Book 04 — Gestures And Input</a></li></ul></li>
   <li><h2>Sources</h2></li>
-  <li><ul class="slot"></li>
-  <li>  <li>Apple Developer documentation — URL pending</li></li>
-  <li>  <li>Swift.org / Swift Evolution / WWDC — URL pending</li></li>
-  <li></ul></li>
+  <li><ul><li><a href="https://docs.swift.org/swift-book/documentation/the-swift-programming-language/attributes">The Swift Programming Language</a></li></ul></li>
 </ol>
 </div>
 

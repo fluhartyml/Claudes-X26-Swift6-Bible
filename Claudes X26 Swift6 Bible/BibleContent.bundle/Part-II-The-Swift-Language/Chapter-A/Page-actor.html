@@ -102,18 +102,18 @@ let current = await counter.value
 print(current) // 1</code></pre></li>
   <li><h2>Rosetta Stone</h2></li>
   <li><h3>Pascal / Delphi</h3></li>
-  <li><p class="slot">Equivalent or closest cousin pending.</p></li>
+  <li><p>No direct cousin. Delphi threading relies on TThread plus manual critical sections (TCriticalSection); you hand-roll what Swift's compiler enforces for you.</p></li>
   <li><h3>BASIC</h3></li>
-  <li><p class="slot">Equivalent or closest cousin pending.</p></li>
+  <li><p>No cousin. Classic BASIC is single-threaded; Visual Basic .NET has SyncLock blocks but no type-level isolation guarantee.</p></li>
   <li><h3>C / C++</h3></li>
-  <li><p class="slot">Equivalent or closest cousin pending.</p></li>
+  <li><p>Closest is pthread_mutex_t or std::mutex wrapped around a struct. The compiler doesn't check that every access goes through the mutex — that's on you. `actor` makes that check mandatory.</p></li>
   <li><h2>Related</h2></li>
-  <li><p class="slot">Cross-references to other Lexicon entries and Books pending.</p></li>
+  <li><p>Other Lexicon entries in the same topic cluster:</p></li>
+  <li><ul><li><a href="../../Part-II-The-Swift-Language/Chapter-A/Page-async.html"><code>async</code></a></li><li><a href="../../Part-II-The-Swift-Language/Chapter-A/Page-await.html"><code>await</code></a></li><li><a href="../../Part-II-The-Swift-Language/Chapter-C/Page-class.html"><code>class</code></a></li><li><a href="../../Part-II-The-Swift-Language/Chapter-E/Page-enum.html"><code>enum</code></a></li><li><a href="../../Part-II-The-Swift-Language/Chapter-F/Page-final.html"><code>final</code></a></li><li><a href="../../Part-II-The-Swift-Language/Chapter-I/Page-indirect.html"><code>indirect</code></a></li><li><a href="../../Part-II-The-Swift-Language/Chapter-M/Page-MainActor.html"><code>@MainActor</code></a></li><li><a href="../../Part-II-The-Swift-Language/Chapter-O/Page-open.html"><code>open</code></a></li><li><a href="../../Part-II-The-Swift-Language/Chapter-S/Page-Sendable.html"><code>Sendable</code></a></li><li><a href="../../Part-II-The-Swift-Language/Chapter-S/Page-Sendable.html"><code>@Sendable</code></a></li><li><a href="../../Part-II-The-Swift-Language/Chapter-S/Page-struct.html"><code>struct</code></a></li><li><a href="../../Part-II-The-Swift-Language/Chapter-T/Page-Task.html"><code>Task</code></a></li><li><a href="../../Part-II-The-Swift-Language/Chapter-T/Page-TaskGroup.html"><code>TaskGroup</code></a></li></ul></li>
+  <li><p>Book chapters that cover this topic:</p></li>
+  <li><ul><li><a href="../../Part-I-Introduction/Book-02-Introducing-SwiftUI-Views.html">Book 02 — Introducing SwiftUI Views</a></li><li><a href="../../Part-V-Advanced-Techniques/Book-18-Error-Handling-And-Result-Type.html">Book 18 — Error Handling And Result Type</a></li><li><a href="../../Part-V-Advanced-Techniques/Book-20-Performance-Instruments-And-Best-Practices.html">Book 20 — Performance Instruments And Best Practices</a></li></ul></li>
   <li><h2>Sources</h2></li>
-  <li><ul class="slot"></li>
-  <li>  <li>Apple Developer documentation — URL pending</li></li>
-  <li>  <li>Swift.org / Swift Evolution / WWDC — URL pending</li></li>
-  <li></ul></li>
+  <li><ul><li><a href="https://docs.swift.org/swift-book/documentation/the-swift-programming-language/concurrency">The Swift Programming Language</a></li><li><a href="https://developer.apple.com/documentation/swift/actor">Swift.Actor (std lib)</a></li><li><a href="https://github.com/apple/swift-evolution/blob/main/proposals/0306-actors.md">Swift Evolution: Actors (SE-0306)</a></li></ul></li>
 </ol>
 </div>
 

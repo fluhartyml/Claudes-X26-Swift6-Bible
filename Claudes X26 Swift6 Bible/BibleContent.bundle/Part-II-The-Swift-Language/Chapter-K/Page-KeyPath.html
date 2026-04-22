@@ -100,18 +100,16 @@ print(names)                  // [&quot;Ada&quot;, &quot;Max&quot;]
 print(byAge.first?.name ?? &quot;&quot;) // Max</code></pre></li>
   <li><h2>Rosetta Stone</h2></li>
   <li><h3>Pascal / Delphi</h3></li>
-  <li><p class="slot">Equivalent or closest cousin pending.</p></li>
+  <li><p>No cousin in Delphi. RTTI traversal (`TRttiType.GetField`) by string name is the runtime equivalent — but unchecked.</p></li>
   <li><h3>BASIC</h3></li>
-  <li><p class="slot">Equivalent or closest cousin pending.</p></li>
+  <li><p>VB.NET `Expression(Of Func(Of T, TProp))` lambdas capture member access similarly, but they're runtime ASTs, not keypath values.</p></li>
   <li><h3>C / C++</h3></li>
-  <li><p class="slot">Equivalent or closest cousin pending.</p></li>
+  <li><p>No cousin. C++ pointer-to-member (`int Foo::*p = &amp;Foo::x;`) is the conceptual match.</p></li>
   <li><h2>Related</h2></li>
-  <li><p class="slot">Cross-references to other Lexicon entries and Books pending.</p></li>
+  <li><p>Other Lexicon entries in the same topic cluster:</p></li>
+  <li><ul><li><a href="../../Part-II-The-Swift-Language/Chapter-A/Page-Array.html"><code>Array</code></a></li><li><a href="../../Part-II-The-Swift-Language/Chapter-R/Page-ClosedRange.html"><code>ClosedRange</code></a></li><li><a href="../../Part-II-The-Swift-Language/Chapter-D/Page-Dictionary.html"><code>Dictionary</code></a></li><li><a href="../../Part-II-The-Swift-Language/Chapter-R/Page-Range.html"><code>Range</code></a></li><li><a href="../../Part-II-The-Swift-Language/Chapter-S/Page-Set.html"><code>Set</code></a></li></ul></li>
   <li><h2>Sources</h2></li>
-  <li><ul class="slot"></li>
-  <li>  <li>Apple Developer documentation — URL pending</li></li>
-  <li>  <li>Swift.org / Swift Evolution / WWDC — URL pending</li></li>
-  <li></ul></li>
+  <li><ul><li><a href="https://developer.apple.com/documentation/swift/keypath">Swift.KeyPath (std lib)</a></li><li><a href="https://docs.swift.org/swift-book/documentation/the-swift-programming-language/subscripts">The Swift Programming Language</a></li></ul></li>
 </ol>
 </div>
 

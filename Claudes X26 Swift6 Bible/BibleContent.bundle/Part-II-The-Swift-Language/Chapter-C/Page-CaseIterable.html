@@ -99,18 +99,18 @@ for d in Direction.allCases { print(d) }
 print(Direction.allCases.count) // 4</code></pre></li>
   <li><h2>Rosetta Stone</h2></li>
   <li><h3>Pascal / Delphi</h3></li>
-  <li><p class="slot">Equivalent or closest cousin pending.</p></li>
+  <li><p>Delphi generics don't synthesize this. Use `TRttiEnumerationType.GetValues&lt;T&gt;` via RTTI.</p></li>
   <li><h3>BASIC</h3></li>
-  <li><p class="slot">Equivalent or closest cousin pending.</p></li>
+  <li><p>`System.Enum.GetValues(typeof(T))` in VB.NET returns the enum case list.</p></li>
   <li><h3>C / C++</h3></li>
-  <li><p class="slot">Equivalent or closest cousin pending.</p></li>
+  <li><p>No cousin. Enumerate manually with sentinel values (`MAX_COUNT`) or compile-time arrays.</p></li>
   <li><h2>Related</h2></li>
-  <li><p class="slot">Cross-references to other Lexicon entries and Books pending.</p></li>
+  <li><p>Other Lexicon entries in the same topic cluster:</p></li>
+  <li><ul><li><a href="../../Part-II-The-Swift-Language/Chapter-C/Page-case.html"><code>case</code></a></li><li><a href="../../Part-II-The-Swift-Language/Chapter-C/Page-Codable.html"><code>Codable</code></a></li><li><a href="../../Part-II-The-Swift-Language/Chapter-C/Page-Collection.html"><code>Collection</code></a></li><li><a href="../../Part-II-The-Swift-Language/Chapter-C/Page-Comparable.html"><code>Comparable</code></a></li><li><a href="../../Part-II-The-Swift-Language/Chapter-D/Page-Decodable.html"><code>Decodable</code></a></li><li><a href="../../Part-II-The-Swift-Language/Chapter-E/Page-Encodable.html"><code>Encodable</code></a></li><li><a href="../../Part-II-The-Swift-Language/Chapter-E/Page-enum.html"><code>enum</code></a></li><li><a href="../../Part-II-The-Swift-Language/Chapter-E/Page-Equatable.html"><code>Equatable</code></a></li><li><a href="../../Part-II-The-Swift-Language/Chapter-E/Page-Error.html"><code>Error</code></a></li><li><a href="../../Part-II-The-Swift-Language/Chapter-E/Page-ExpressibleByStringLiteral.html"><code>ExpressibleByStringLiteral</code></a></li><li><a href="../../Part-II-The-Swift-Language/Chapter-H/Page-Hashable.html"><code>Hashable</code></a></li><li><a href="../../Part-II-The-Swift-Language/Chapter-I/Page-Identifiable.html"><code>Identifiable</code></a></li><li><a href="../../Part-II-The-Swift-Language/Chapter-I/Page-indirect.html"><code>indirect</code></a></li><li><a href="../../Part-II-The-Swift-Language/Chapter-P/Page-protocol.html"><code>protocol</code></a></li><li><a href="../../Part-II-The-Swift-Language/Chapter-R/Page-RawRepresentable.html"><code>RawRepresentable</code></a></li><li><a href="../../Part-II-The-Swift-Language/Chapter-S/Page-Sendable.html"><code>Sendable</code></a></li><li><a href="../../Part-II-The-Swift-Language/Chapter-S/Page-Sequence.html"><code>Sequence</code></a></li></ul></li>
+  <li><p>Book chapters that cover this topic:</p></li>
+  <li><ul><li><a href="../../Part-IV-The-Application/Book-15-SwiftData-And-CoreData.html">Book 15 — SwiftData And CoreData</a></li><li><a href="../../Part-V-Advanced-Techniques/Book-19-Building-Custom-Views-And-Modifiers.html">Book 19 — Building Custom Views And Modifiers</a></li></ul></li>
   <li><h2>Sources</h2></li>
-  <li><ul class="slot"></li>
-  <li>  <li>Apple Developer documentation — URL pending</li></li>
-  <li>  <li>Swift.org / Swift Evolution / WWDC — URL pending</li></li>
-  <li></ul></li>
+  <li><ul><li><a href="https://developer.apple.com/documentation/swift/caseiterable">Swift.CaseIterable protocol</a></li></ul></li>
 </ol>
 </div>
 

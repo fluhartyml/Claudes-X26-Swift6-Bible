@@ -34,6 +34,22 @@ except ModuleNotFoundError:
     _spec.loader.exec_module(_mod)                 # type: ignore
     DEFS = _mod.DEFS
 
+# Per-entry Rosetta Stone, topic clusters, book cross-refs, and source URLs.
+try:
+    from _lexicon_extras import ROSETTA, CLUSTERS, BOOK_REFS, SOURCE_MAP  # type: ignore
+except ModuleNotFoundError:
+    import importlib.util
+    _spec2 = importlib.util.spec_from_file_location(
+        "_lexicon_extras",
+        Path(__file__).resolve().parent / "_lexicon-extras.py"
+    )
+    _mod2 = importlib.util.module_from_spec(_spec2)  # type: ignore
+    _spec2.loader.exec_module(_mod2)                 # type: ignore
+    ROSETTA    = _mod2.ROSETTA
+    CLUSTERS   = _mod2.CLUSTERS
+    BOOK_REFS  = _mod2.BOOK_REFS
+    SOURCE_MAP = _mod2.SOURCE_MAP
+
 BUNDLE = Path(
     "/Users/michaelfluharty/Developer.complex/inkwell/"
     "Claudes X26 Swift6 Bible/Claudes X26 Swift6 Bible/BibleContent.bundle"
@@ -430,6 +446,50 @@ def safe_filename(entry):
     return re.sub(r"^[@#]", "", entry)
 
 
+# ---------- Related / Sources helpers ----------
+
+def related_for(entry: str):
+    """
+    Walk CLUSTERS to find every other entry that shares a cluster with `entry`.
+    Return (lexicon_entries, book_refs) as two lists of (link_text, href) tuples.
+    """
+    # Reverse lookup: entry -> set of cluster names it appears in.
+    entry_clusters = [name for name, members in CLUSTERS.items() if entry in members]
+
+    # Lexicon cousins: union of other cluster members.
+    cousins: dict[str, str] = {}   # name -> chapter letter, for link building
+    for cname in entry_clusters:
+        for member in CLUSTERS[cname]:
+            if member == entry:
+                continue
+            # Find the chapter letter from ENTRIES.
+            for ch, entries in ENTRIES.items():
+                if any(e == member for e, _ in entries):
+                    cousins[member] = ch
+                    break
+    lexicon_links = []
+    for name in sorted(cousins.keys(), key=lambda n: re.sub(r"^[@#]", "", n).lower()):
+        ch = cousins[name]
+        safe = safe_filename(name)
+        href = f"../../Part-II-The-Swift-Language/Chapter-{ch}/Page-{safe}.html"
+        lexicon_links.append((name, href))
+
+    # Book refs: union of BOOK_REFS for each cluster.
+    seen_books: set[int] = set()
+    book_links = []
+    for cname in entry_clusters:
+        for (n, part, slug) in BOOK_REFS.get(cname, []):
+            if n in seen_books:
+                continue
+            seen_books.add(n)
+            display = f"Book {n:02d} — {slug.replace('-', ' ')}"
+            href = f"../../{part}/Book-{n:02d}-{slug}.html"
+            book_links.append((display, href))
+    book_links.sort(key=lambda x: x[0])
+
+    return lexicon_links, book_links
+
+
 # ---------- Lexicon Page generation ----------
 
 def status_tag(status):
@@ -464,21 +524,62 @@ def render_lexicon_page(chapter, entry, kind):
             f'<p>{definition_html}</p>',
             '<h2>Swift Example</h2>',
             f'<pre><code>{example_html}</code></pre>',
-            '<h2>Rosetta Stone</h2>',
-            '<h3>Pascal / Delphi</h3>',
-            '<p class="slot">Equivalent or closest cousin pending.</p>',
-            '<h3>BASIC</h3>',
-            '<p class="slot">Equivalent or closest cousin pending.</p>',
-            '<h3>C / C++</h3>',
-            '<p class="slot">Equivalent or closest cousin pending.</p>',
-            '<h2>Related</h2>',
-            '<p class="slot">Cross-references to other Lexicon entries and Books pending.</p>',
-            '<h2>Sources</h2>',
-            '<ul class="slot">',
-            '  <li>Apple Developer documentation — URL pending</li>',
-            '  <li>Swift.org / Swift Evolution / WWDC — URL pending</li>',
-            '</ul>',
         ]
+
+        # Rosetta Stone
+        rosetta = ROSETTA.get(entry)
+        if rosetta:
+            blocks += [
+                '<h2>Rosetta Stone</h2>',
+                '<h3>Pascal / Delphi</h3>',
+                f'<p>{esc(rosetta["pascal"])}</p>',
+                '<h3>BASIC</h3>',
+                f'<p>{esc(rosetta["basic"])}</p>',
+                '<h3>C / C++</h3>',
+                f'<p>{esc(rosetta["c"])}</p>',
+            ]
+        else:
+            blocks += [
+                '<h2>Rosetta Stone</h2>',
+                '<h3>Pascal / Delphi</h3>',
+                '<p class="slot">Not written.</p>',
+                '<h3>BASIC</h3>',
+                '<p class="slot">Not written.</p>',
+                '<h3>C / C++</h3>',
+                '<p class="slot">Not written.</p>',
+            ]
+
+        # Related
+        cousins, book_links = related_for(entry)
+        if cousins or book_links:
+            blocks.append('<h2>Related</h2>')
+            if cousins:
+                items = [f'<li><a href="{h}"><code>{esc(n)}</code></a></li>' for n, h in cousins]
+                blocks.append('<p>Other Lexicon entries in the same topic cluster:</p>')
+                blocks.append('<ul>' + "".join(items) + '</ul>')
+            if book_links:
+                items = [f'<li><a href="{h}">{esc(n)}</a></li>' for n, h in book_links]
+                blocks.append('<p>Book chapters that cover this topic:</p>')
+                blocks.append('<ul>' + "".join(items) + '</ul>')
+        else:
+            blocks += [
+                '<h2>Related</h2>',
+                '<p class="slot">Not written.</p>',
+            ]
+
+        # Sources
+        sources = SOURCE_MAP.get(entry)
+        if sources:
+            items = [f'<li><a href="{url}">{esc(label)}</a></li>' for url, label in sources]
+            blocks += [
+                '<h2>Sources</h2>',
+                '<ul>' + "".join(items) + '</ul>',
+            ]
+        else:
+            blocks += [
+                '<h2>Sources</h2>',
+                '<ul class="slot"><li>Not written.</li></ul>',
+            ]
     else:
         blocks += [
             '<div class="scope-note">This Page is a <strong>skeleton</strong>. '

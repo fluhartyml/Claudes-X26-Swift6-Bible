@@ -100,18 +100,18 @@ let obj = try JSONSerialization.jsonObject(with: raw) as? [String: Any]
 if let count = obj?[&quot;count&quot;] as? Int { print(count) } // 3</code></pre></li>
   <li><h2>Rosetta Stone</h2></li>
   <li><h3>Pascal / Delphi</h3></li>
-  <li><p class="slot">Equivalent or closest cousin pending.</p></li>
+  <li><p>`TJSONValue` hierarchy (`TJSONObject`, `TJSONArray`, etc.) is the untyped tree equivalent.</p></li>
   <li><h3>BASIC</h3></li>
-  <li><p class="slot">Equivalent or closest cousin pending.</p></li>
+  <li><p>`System.Text.Json.JsonDocument` / `JsonElement` for untyped tree traversal.</p></li>
   <li><h3>C / C++</h3></li>
-  <li><p class="slot">Equivalent or closest cousin pending.</p></li>
+  <li><p>cJSON's root `cJSON *` pointer traversed via `-&gt;child` / `-&gt;next`. nlohmann::json's `json` type.</p></li>
   <li><h2>Related</h2></li>
-  <li><p class="slot">Cross-references to other Lexicon entries and Books pending.</p></li>
+  <li><p>Other Lexicon entries in the same topic cluster:</p></li>
+  <li><ul><li><a href="../../Part-II-The-Swift-Language/Chapter-C/Page-Codable.html"><code>Codable</code></a></li><li><a href="../../Part-II-The-Swift-Language/Chapter-D/Page-Decodable.html"><code>Decodable</code></a></li><li><a href="../../Part-II-The-Swift-Language/Chapter-E/Page-Encodable.html"><code>Encodable</code></a></li><li><a href="../../Part-II-The-Swift-Language/Chapter-J/Page-JSONDecoder.html"><code>JSONDecoder</code></a></li><li><a href="../../Part-II-The-Swift-Language/Chapter-J/Page-JSONEncoder.html"><code>JSONEncoder</code></a></li></ul></li>
+  <li><p>Book chapters that cover this topic:</p></li>
+  <li><ul><li><a href="../../Part-IV-The-Application/Book-14-Clipboard-DragDrop-ShareSheet.html">Book 14 — Clipboard DragDrop ShareSheet</a></li></ul></li>
   <li><h2>Sources</h2></li>
-  <li><ul class="slot"></li>
-  <li>  <li>Apple Developer documentation — URL pending</li></li>
-  <li>  <li>Swift.org / Swift Evolution / WWDC — URL pending</li></li>
-  <li></ul></li>
+  <li><ul><li><a href="https://developer.apple.com/documentation/foundation/jsonserialization">Foundation.JSONSerialization</a></li></ul></li>
 </ol>
 </div>
 

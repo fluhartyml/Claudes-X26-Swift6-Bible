@@ -104,18 +104,18 @@ case .failure(let e): print(&quot;error: \(e)&quot;)
 }</code></pre></li>
   <li><h2>Rosetta Stone</h2></li>
   <li><h3>Pascal / Delphi</h3></li>
-  <li><p class="slot">Equivalent or closest cousin pending.</p></li>
+  <li><p>No cousin in the standard library. Spring4D's `TOption&lt;T&gt;` plus exceptions approximate it.</p></li>
   <li><h3>BASIC</h3></li>
-  <li><p class="slot">Equivalent or closest cousin pending.</p></li>
+  <li><p>No direct cousin; `Try`/`Catch` is idiomatic. `Nullable(Of T)` handles the success-or-nothing subset.</p></li>
   <li><h3>C / C++</h3></li>
-  <li><p class="slot">Equivalent or closest cousin pending.</p></li>
+  <li><p>No cousin. Paired return codes (`int err`) plus out-parameters, or `std::expected&lt;T, E&gt;` in C++23.</p></li>
   <li><h2>Related</h2></li>
-  <li><p class="slot">Cross-references to other Lexicon entries and Books pending.</p></li>
+  <li><p>Other Lexicon entries in the same topic cluster:</p></li>
+  <li><ul><li><a href="../../Part-II-The-Swift-Language/Chapter-A/Page-Any.html"><code>Any</code></a></li><li><a href="../../Part-II-The-Swift-Language/Chapter-A/Page-AnyObject.html"><code>AnyObject</code></a></li><li><a href="../../Part-II-The-Swift-Language/Chapter-C/Page-catch.html"><code>catch</code></a></li><li><a href="../../Part-II-The-Swift-Language/Chapter-D/Page-do.html"><code>do</code></a></li><li><a href="../../Part-II-The-Swift-Language/Chapter-E/Page-Error.html"><code>Error</code></a></li><li><a href="../../Part-II-The-Swift-Language/Chapter-N/Page-Never.html"><code>Never</code></a></li><li><a href="../../Part-II-The-Swift-Language/Chapter-O/Page-Optional.html"><code>Optional</code></a></li><li><a href="../../Part-II-The-Swift-Language/Chapter-R/Page-rethrows.html"><code>rethrows</code></a></li><li><a href="../../Part-II-The-Swift-Language/Chapter-T/Page-throw.html"><code>throw</code></a></li><li><a href="../../Part-II-The-Swift-Language/Chapter-T/Page-throws.html"><code>throws</code></a></li><li><a href="../../Part-II-The-Swift-Language/Chapter-T/Page-try.html"><code>try</code></a></li><li><a href="../../Part-II-The-Swift-Language/Chapter-V/Page-Void.html"><code>Void</code></a></li></ul></li>
+  <li><p>Book chapters that cover this topic:</p></li>
+  <li><ul><li><a href="../../Part-V-Advanced-Techniques/Book-18-Error-Handling-And-Result-Type.html">Book 18 — Error Handling And Result Type</a></li></ul></li>
   <li><h2>Sources</h2></li>
-  <li><ul class="slot"></li>
-  <li>  <li>Apple Developer documentation — URL pending</li></li>
-  <li>  <li>Swift.org / Swift Evolution / WWDC — URL pending</li></li>
-  <li></ul></li>
+  <li><ul><li><a href="https://developer.apple.com/documentation/swift/result">Swift.Result (std lib)</a></li></ul></li>
 </ol>
 </div>
 
