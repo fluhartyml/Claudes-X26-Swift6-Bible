@@ -532,7 +532,6 @@ PAGE = """<!DOCTYPE html>
 
 <header class="page">
   <div class="path">{path}</div>
-  <div class="pos">{pos}</div>
 </header>
 
 <div class="content">
@@ -542,7 +541,6 @@ PAGE = """<!DOCTYPE html>
 </div>
 
 <footer class="page">
-  <div class="path">{path}</div>
   <div class="pos">{pos}</div>
   <div class="nav">{nav}</div>
 </footer>

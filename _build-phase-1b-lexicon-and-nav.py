@@ -320,6 +320,8 @@ body {
   margin: 0;
   padding: 0;
   text-shadow: 0 0 1px rgba(255, 176, 0, 0.35);
+  display: flex;
+  flex-direction: column;
 }
 header.page, footer.page {
   background: var(--headerbg);
@@ -380,7 +382,6 @@ PAGE = """<!DOCTYPE html>
 
 <header class="page">
   <div class="path">{path}</div>
-  <div class="pos">{pos}</div>
 </header>
 
 <div class="content">
@@ -390,7 +391,6 @@ PAGE = """<!DOCTYPE html>
 </div>
 
 <footer class="page">
-  <div class="path">{path}</div>
   <div class="pos">{pos}</div>
   <div class="nav">{nav}</div>
 </footer>
