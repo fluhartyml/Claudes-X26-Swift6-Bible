@@ -249,7 +249,7 @@ BOOKS = [
     (1,  "Part-I-Introduction",          "Introducing-Swift-And-Xcode",   "written"),
     (2,  "Part-I-Introduction",          "Introducing-SwiftUI-Views",     "written"),
     (3,  "Part-I-Introduction",          "Introducing-Scenes-And-Windows","written"),
-    (4,  "Part-III-The-User-Interface",  "Gestures-And-Input",            "scope"),
+    (4,  "Part-III-The-User-Interface",  "Gestures-And-Input",            "written"),
     (5,  "Part-III-The-User-Interface",  "Menus-And-Navigation",          "written"),
     (6,  "Part-III-The-User-Interface",  "Controls-Buttons-Toggles-Pickers","written"),
     (7,  "Part-III-The-User-Interface",  "Toolbars-And-Tab-Views",        "written"),
