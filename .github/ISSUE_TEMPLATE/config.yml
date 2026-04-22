@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: "Ask a question / reader-to-reader help"
+    url: "https://github.com/fluhartyml/Claudes-X26-Swift6-Bible/discussions"
+    about: "Post in Discussions — open-ended questions, show-and-tell, community help."
+  - name: "Email Michael directly"
+    url: "mailto:michael.fluharty@mac.com?subject=%5BX26%20Bible%20feedback%5D"
+    about: "Private feedback or anything you'd rather not post publicly."
