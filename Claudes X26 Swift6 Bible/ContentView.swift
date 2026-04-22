@@ -158,6 +158,22 @@ struct ContentView: View {
 
     // MARK: - Share whole book
 
+    /// Open a mailto: URL with the current page path pre-filled in the subject
+    /// so readers can flag errata or ask questions without copy/paste ceremony.
+    private func sendFeedback() {
+        let pagePath = vault.currentDocument.map { vault.displayPath(for: $0) } ?? "(no page open)"
+        let subject = "[X26 Bible feedback] \(pagePath)"
+        let encodedSubject = subject.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)
+            ?? subject
+        let urlString = "mailto:michael.fluharty@mac.com?subject=\(encodedSubject)"
+        guard let url = URL(string: urlString) else { return }
+        #if os(macOS)
+        NSWorkspace.shared.open(url)
+        #else
+        UIApplication.shared.open(url)
+        #endif
+    }
+
     /// Zip the entire vault folder and present the system share sheet.
     /// NSFileCoordinator's .forUploading read option produces a standard
     /// .zip archive of a directory; works on iOS and macOS.
@@ -265,6 +281,8 @@ struct ContentView: View {
                 Menu {
                     Button("About") { showingAbout = true }
                     Button("Under the Hood") { showingUnderTheHood = true }
+                    Divider()
+                    Button("Send Feedback") { sendFeedback() }
                     Divider()
                     Button(preparingWholeBookShare
                            ? "Preparing Whole Book…"

@@ -754,6 +754,7 @@ def render_toc():
         '<ul>'
         '<li><a href="../claudex26-index.html">Index</a> — alphabetical index of every Page, Book, Appendix, plus every Swift identifier that appears in the prose</li>'
         '<li><a href="../bibliography.html">Bibliography</a> — primary sources the book draws from</li>'
+        '<li><a href="../feedback.html">Feedback &amp; Errata</a> — how to flag errors, ask questions, or reach Michael</li>'
         '</ul>'
     )
 
@@ -1053,6 +1054,72 @@ def render_bibliography():
     )
 
 
+# ---------- Feedback & Errata ----------
+
+def render_feedback():
+    path_display = "feedback"
+    title = "Feedback & Errata — Claude's Xcode 26 Swift Bible"
+    pos = "Back Matter &middot; Feedback &amp; Errata"
+
+    repo = "https://github.com/fluhartyml/Claudes-X26-Swift6-Bible"
+    wiki = f"{repo}/wiki"
+    issues = f"{repo}/issues/new/choose"
+    discussions = f"{repo}/discussions"
+    mailto = "mailto:michael.fluharty@mac.com?subject=%5BX26%20Bible%20feedback%5D"
+
+    blocks = [
+        '<h1>Feedback &amp; Errata</h1>',
+        '<p>This book is a living reference. If something reads wrong, confuses you, '
+        'or turns out to have drifted out of date, please flag it — corrections are '
+        'welcome at any scale, from a single typo to a whole-chapter rewrite suggestion.</p>',
+
+        '<h2>Three channels, pick the right one</h2>',
+
+        '<h3>1. Errata &amp; bugs — GitHub Issues</h3>',
+        '<p>Use Issues when something is clearly wrong and needs a fix: a broken link, '
+        'code that doesn&rsquo;t compile, a factual error, a stale API reference.</p>',
+        f'<ul><li><a href="{issues}">Open an issue</a></li></ul>',
+
+        '<h3>2. Questions &amp; reader-to-reader help — GitHub Discussions</h3>',
+        '<p>Use Discussions for open-ended questions, show-and-tell of what you&rsquo;re '
+        'building from the book, or to help another reader who&rsquo;s stuck. '
+        'This is where the community talks to itself.</p>',
+        f'<ul><li><a href="{discussions}">Browse or post a discussion</a></li></ul>',
+
+        '<h3>3. Private feedback — email</h3>',
+        '<p>For anything you&rsquo;d rather not post publicly — a correction you want to '
+        'flag quietly, a question about the book&rsquo;s direction, a suggestion you&rsquo;d '
+        'like to run by Michael directly — email works. The reader app&rsquo;s Info menu '
+        'includes a <strong>Send Feedback</strong> action that pre-fills the subject line with '
+        'whichever page you&rsquo;re looking at.</p>',
+        f'<ul><li><a href="{mailto}">michael.fluharty@mac.com</a></li></ul>',
+
+        '<h2>What helps</h2>',
+        '<p>When you report something, knowing these makes the fix faster:</p>',
+        '<ul>'
+        '<li>The exact page (the header at the top of every page shows the path)</li>'
+        '<li>The line number (every paragraph in this book is line-numbered)</li>'
+        '<li>What you expected vs. what you saw</li>'
+        '<li>If it&rsquo;s a code sample: the Xcode version and the platform you ran it on</li>'
+        '</ul>',
+
+        '<h2>Project resources</h2>',
+        f'<ul>'
+        f'<li><a href="{repo}">Source repository</a></li>'
+        f'<li><a href="{wiki}">Wiki</a> — Home page, Developer Notes, web-readable chapter copies</li>'
+        f'<li><a href="{discussions}">Discussions</a></li>'
+        f'<li><a href="{issues}">Issues</a></li>'
+        f'</ul>',
+
+        '<p><em>GPL v3. Share and share alike, attribution required.</em></p>',
+    ]
+
+    nav = f'<a href="Front-of-Book/table-of-contents.html">Contents</a> <a href="claudex26-index.html">Index</a> <a href="bibliography.html">Bibliography</a>'
+    (BUNDLE / "feedback.html").write_text(
+        render_page(title, path_display, pos, blocks, nav)
+    )
+
+
 def main():
     print("Generating Lexicon Pages...")
     total_pages = 0
@@ -1073,6 +1140,9 @@ def main():
 
     print("Regenerating bibliography.html...")
     render_bibliography()
+
+    print("Regenerating feedback.html...")
+    render_feedback()
 
     print("\nPhase 1b complete.")
 

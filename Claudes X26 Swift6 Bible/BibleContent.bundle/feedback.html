@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Feedback & Errata — Claude's Xcode 26 Swift Bible &mdash; Claude's Xcode 26 Swift Bible</title>
+<style>
+:root {
+  --bg: #000000;
+  --fg: #FFB000;
+  --bright: #FFD060;
+  --dim: #996600;
+  --codebg: #1a0d00;
+  --border: #664500;
+  --gutter: #4a3300;
+  --headerbg: #0a0600;
+  --scope: #A06030;
+  --skeleton: #606060;
+}
+* { box-sizing: border-box; }
+html, body { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; height: 100%; }
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: "FiraCode Nerd Font Mono", "FiraCode Nerd Font", "Fira Code", "Menlo", "Courier New", monospace;
+  font-size: 18pt;
+  line-height: 1.55;
+  margin: 0;
+  padding: 0;
+  text-shadow: 0 0 1px rgba(255, 176, 0, 0.35);
+  display: flex;
+  flex-direction: column;
+}
+header.page, footer.page {
+  background: var(--headerbg);
+  color: var(--dim);
+  padding: 0.55rem 1.1rem;
+  font-size: 13pt;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  flex: 0 0 auto;
+  z-index: 10;
+}
+header.page { border-bottom: 1px solid var(--border); }
+footer.page { border-top: 1px solid var(--border); padding-bottom: calc(0.55rem + env(safe-area-inset-bottom)); }
+header.page .path, footer.page .path { color: var(--fg); word-break: break-all; overflow-wrap: break-word; }
+header.page .pos, footer.page .pos { color: var(--bright); }
+/* The middle scrolls; header and footer stay put. */
+.content { flex: 1 1 auto; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 0.8rem 1rem 2rem 1rem; max-width: 1100px; margin: 0 auto; width: 100%; }
+h1 { color: var(--bright); font-weight: normal; font-size: 26pt; margin: 0.6rem 0 1rem 0; }
+h2 { color: var(--bright); font-weight: normal; font-size: 20pt; border-bottom: 1px solid var(--border); padding-bottom: 0.3rem; margin-top: 1.5rem; counter-reset: h3 para; }
+h2::before { counter-increment: h2; content: counter(h2) ". "; color: var(--fg); }
+h3 { color: var(--bright); font-weight: normal; font-size: 18pt; margin-top: 1rem; counter-reset: para; }
+h3::before { counter-increment: h3; content: counter(h2) "." counter(h3) " "; color: var(--fg); }
+p { margin: 0.4rem 0; counter-increment: para; }
+p::before { content: counter(h2) "." counter(h3) "." counter(para) " "; color: var(--dim); font-size: 13pt; margin-right: 0.4em; }
+code { color: var(--bright); background: var(--codebg); padding: 0.08em 0.35em; border: 1px solid #3a2400; border-radius: 3px; font-size: 0.92em; }
+pre { background: var(--codebg); border: 1px solid #3a2400; border-radius: 4px; padding: 0.7rem 0.9rem; overflow-x: auto; font-size: 14pt; }
+pre code { background: transparent; border: 0; padding: 0; }
+ul, ol.body-list { margin: 0.4rem 0 0.4rem 1.4rem; padding: 0; }
+a { color: var(--bright); font-weight: bold; text-decoration: none; border-bottom: 1px dotted var(--dim); }
+a:hover { background: #332200; }
+strong { color: var(--bright); }
+em { color: var(--fg); font-style: italic; }
+hr { border: 0; border-top: 1px solid var(--border); margin: 1rem 0; }
+ol.lines { list-style: none; counter-reset: line h2; padding: 0; margin: 0; }
+ol.lines > li { counter-increment: line; padding: 0.15rem 0 0.15rem 3.6rem; position: relative; min-height: 1.2em; }
+ol.lines > li::before { content: counter(line); position: absolute; left: 0; top: 0.25rem; width: 2.8rem; text-align: right; color: var(--gutter); font-size: 13pt; padding-right: 0.5rem; border-right: 1px solid #2a1e00; }
+ol.lines > li > p, ol.lines > li > h1, ol.lines > li > h2, ol.lines > li > h3, ol.lines > li > ul, ol.lines > li > ol, ol.lines > li > pre, ol.lines > li > hr { margin: 0; }
+.scope-note { border-left: 3px solid var(--bright); padding: 0.7rem 1rem; background: #140c00; margin: 0.6rem 0; color: var(--bright); }
+.slot { color: var(--dim); font-style: italic; }
+.kind { color: var(--dim); font-size: 14pt; margin-top: -0.3rem; }
+.nav { display: flex; gap: 0.9rem; flex-wrap: wrap; margin-top: 0.8rem; font-size: 14pt; }
+.status-written  { color: var(--bright); }
+.status-scope    { color: var(--scope); }
+.status-skeleton { color: var(--skeleton); }
+.status-tag { font-size: 13pt; margin-left: 0.4em; }
+</style>
+</head>
+<body>
+
+<header class="page">
+  <div class="path">feedback</div>
+</header>
+
+<div class="content">
+<ol class="lines">
+  <li><h1>Feedback &amp; Errata</h1></li>
+  <li><p>This book is a living reference. If something reads wrong, confuses you, or turns out to have drifted out of date, please flag it — corrections are welcome at any scale, from a single typo to a whole-chapter rewrite suggestion.</p></li>
+  <li><h2>Three channels, pick the right one</h2></li>
+  <li><h3>1. Errata &amp; bugs — GitHub Issues</h3></li>
+  <li><p>Use Issues when something is clearly wrong and needs a fix: a broken link, code that doesn&rsquo;t compile, a factual error, a stale API reference.</p></li>
+  <li><ul><li><a href="https://github.com/fluhartyml/Claudes-X26-Swift6-Bible/issues/new/choose">Open an issue</a></li></ul></li>
+  <li><h3>2. Questions &amp; reader-to-reader help — GitHub Discussions</h3></li>
+  <li><p>Use Discussions for open-ended questions, show-and-tell of what you&rsquo;re building from the book, or to help another reader who&rsquo;s stuck. This is where the community talks to itself.</p></li>
+  <li><ul><li><a href="https://github.com/fluhartyml/Claudes-X26-Swift6-Bible/discussions">Browse or post a discussion</a></li></ul></li>
+  <li><h3>3. Private feedback — email</h3></li>
+  <li><p>For anything you&rsquo;d rather not post publicly — a correction you want to flag quietly, a question about the book&rsquo;s direction, a suggestion you&rsquo;d like to run by Michael directly — email works. The reader app&rsquo;s Info menu includes a <strong>Send Feedback</strong> action that pre-fills the subject line with whichever page you&rsquo;re looking at.</p></li>
+  <li><ul><li><a href="mailto:michael.fluharty@mac.com?subject=%5BX26%20Bible%20feedback%5D">michael.fluharty@mac.com</a></li></ul></li>
+  <li><h2>What helps</h2></li>
+  <li><p>When you report something, knowing these makes the fix faster:</p></li>
+  <li><ul><li>The exact page (the header at the top of every page shows the path)</li><li>The line number (every paragraph in this book is line-numbered)</li><li>What you expected vs. what you saw</li><li>If it&rsquo;s a code sample: the Xcode version and the platform you ran it on</li></ul></li>
+  <li><h2>Project resources</h2></li>
+  <li><ul><li><a href="https://github.com/fluhartyml/Claudes-X26-Swift6-Bible">Source repository</a></li><li><a href="https://github.com/fluhartyml/Claudes-X26-Swift6-Bible/wiki">Wiki</a> — Home page, Developer Notes, web-readable chapter copies</li><li><a href="https://github.com/fluhartyml/Claudes-X26-Swift6-Bible/discussions">Discussions</a></li><li><a href="https://github.com/fluhartyml/Claudes-X26-Swift6-Bible/issues/new/choose">Issues</a></li></ul></li>
+  <li><p><em>GPL v3. Share and share alike, attribution required.</em></p></li>
+</ol>
+</div>
+
+<footer class="page">
+  <div class="pos">Back Matter &middot; Feedback &amp; Errata</div>
+  <div class="nav"><a href="Front-of-Book/table-of-contents.html">Contents</a> <a href="claudex26-index.html">Index</a> <a href="bibliography.html">Bibliography</a></div>
+</footer>
+
+</body>
+</html>
