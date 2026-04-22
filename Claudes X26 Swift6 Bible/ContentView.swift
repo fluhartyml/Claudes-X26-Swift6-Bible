@@ -41,6 +41,22 @@ struct ContentView: View {
         NavigationSplitView(columnVisibility: $columnVisibility) {
             sidebar
                 .navigationTitle("Library")
+                #if os(iOS)
+                .toolbar {
+                    ToolbarItem(placement: .topBarLeading) {
+                        Button {
+                            withAnimation {
+                                columnVisibility = (columnVisibility == .detailOnly)
+                                    ? .automatic
+                                    : .detailOnly
+                            }
+                        } label: {
+                            Image(systemName: "sidebar.leading")
+                        }
+                        .accessibilityLabel("Toggle Sidebar")
+                    }
+                }
+                #endif
         } detail: {
             detail
         }
