@@ -262,14 +262,11 @@ struct ContentView: View {
                 .help("About, Developer Notes, Share Whole Book")
             }
 
-            if let doc = vault.currentDocument {
-                Text(vault.displayPath(for: doc))
-                    .font(.caption.monospaced())
-                    .foregroundStyle(.secondary)
-                    .lineLimit(1)
-                    .truncationMode(.middle)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-            }
+            // Toolbar used to show the vault-relative path here, but it
+            // duplicated the HTML header rendered inside every page. The
+            // HTML header + footer are the rule-locked source of truth for
+            // identifying a page in a screenshot; the toolbar keeps its
+            // nav chrome only.
         }
         .padding(.horizontal, 12)
         .padding(.vertical, 8)

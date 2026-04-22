@@ -466,7 +466,7 @@ CSS = """
   --headerbg: #0a0600;
 }
 * { box-sizing: border-box; }
-html, body { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+html, body { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; height: 100%; }
 body {
   background: var(--bg);
   color: var(--fg);
@@ -476,21 +476,26 @@ body {
   margin: 0;
   padding: 0;
   text-shadow: 0 0 1px rgba(255, 176, 0, 0.35);
+  display: flex;
+  flex-direction: column;
 }
 header.page, footer.page {
   background: var(--headerbg);
   color: var(--dim);
-  border-bottom: 1px solid var(--border);
-  padding: 0.7rem 1.1rem;
+  padding: 0.55rem 1.1rem;
   font-size: 13pt;
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
+  gap: 0.2rem;
+  flex: 0 0 auto;
+  z-index: 10;
 }
-footer.page { border-bottom: 0; border-top: 1px solid var(--border); margin-top: 2rem; }
+header.page { border-bottom: 1px solid var(--border); }
+footer.page { border-top: 1px solid var(--border); padding-bottom: calc(0.55rem + env(safe-area-inset-bottom)); }
 header.page .path, footer.page .path { color: var(--fg); word-break: break-all; overflow-wrap: break-word; }
 header.page .pos, footer.page .pos { color: var(--bright); }
-.content { padding: 0.8rem 1rem 2rem 1rem; max-width: 1100px; margin: 0 auto; }
+/* The middle scrolls; header and footer stay put. */
+.content { flex: 1 1 auto; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 0.8rem 1rem 2rem 1rem; max-width: 1100px; margin: 0 auto; width: 100%; }
 h1 { color: var(--bright); font-weight: normal; font-size: 26pt; margin: 0.6rem 0 1rem 0; }
 h2 { color: var(--bright); font-weight: normal; font-size: 20pt; border-bottom: 1px solid var(--border); padding-bottom: 0.3rem; margin-top: 1.5rem; counter-reset: h3 para; }
 h2::before { counter-increment: h2; content: counter(h2) ". "; color: var(--fg); }
@@ -550,10 +555,12 @@ PAGE = """<!DOCTYPE html>
 def render_page(title, path_display, pos_label, body_blocks, nav_html):
     # Wrap each block in <li>
     body = "\n".join(f"  <li>{b}</li>" for b in body_blocks)
+    # Reader-visible path uses spaces where the filesystem uses dashes.
+    visible_path = path_display.replace("-", " ")
     return PAGE.format(
         title=title,
         css=CSS,
-        path=path_display,
+        path=visible_path,
         pos=pos_label,
         body=body,
         nav=nav_html,
