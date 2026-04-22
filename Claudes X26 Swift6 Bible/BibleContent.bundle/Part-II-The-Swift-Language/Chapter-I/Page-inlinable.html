@@ -77,18 +77,20 @@ ol.lines > li > p, ol.lines > li > h1, ol.lines > li > h2, ol.lines > li > h3, o
 
 <header class="page">
   <div class="path">Part-II-The-Swift-Language/Chapter-I/Page-inlinable</div>
-  <div class="pos">Part II &middot; Chapter I &middot; Page @inlinable <span class="status-tag status-skeleton">[Skeleton]</span></div>
+  <div class="pos">Part II &middot; Chapter I &middot; Page @inlinable <span class="status-tag status-written">[Written]</span></div>
 </header>
 
 <div class="content">
 <ol class="lines">
   <li><h1>@inlinable</h1></li>
   <li><div class="kind">Kind: attribute</div></li>
-  <li><div class="scope-note">This Page is a <strong>skeleton</strong>. Real definition, example, and Rosetta Stone content fills in over time. Leave <code>MICHAEL:</code> notes anywhere and they fold into the next draft.</div></li>
   <li><h2>Definition</h2></li>
-  <li><p class="slot">Plain-English definition of <code>@inlinable</code> pending.</p></li>
+  <li><p>An attribute that promises a public function's body won't change incompatibly, letting callers in other modules inline the body across module boundaries. Commonly used in small, hot-path library code.</p></li>
   <li><h2>Swift Example</h2></li>
-  <li><pre class="slot"><code>// Minimal Swift example using @inlinable pending</code></pre></li>
+  <li><pre><code>@inlinable
+public func clamp&lt;T: Comparable&gt;(_ x: T, min lo: T, max hi: T) -&gt; T {
+    return x &lt; lo ? lo : (x &gt; hi ? hi : x)
+}</code></pre></li>
   <li><h2>Rosetta Stone</h2></li>
   <li><h3>Pascal / Delphi</h3></li>
   <li><p class="slot">Equivalent or closest cousin pending.</p></li>
@@ -108,8 +110,8 @@ ol.lines > li > p, ol.lines > li > h1, ol.lines > li > h2, ol.lines > li > h3, o
 
 <footer class="page">
   <div class="path">Part-II-The-Swift-Language/Chapter-I/Page-inlinable</div>
-  <div class="pos">Part II &middot; Chapter I &middot; Page @inlinable <span class="status-tag status-skeleton">[Skeleton]</span></div>
-  <div class="nav"><a href="../../table-of-contents.html">Contents</a><a href="../../claudex26-index.html">Index</a></div>
+  <div class="pos">Part II &middot; Chapter I &middot; Page @inlinable <span class="status-tag status-written">[Written]</span></div>
+  <div class="nav"><a href="../../Front-of-Book/table-of-contents.html">Contents</a><a href="../../claudex26-index.html">Index</a></div>
 </footer>
 
 </body>

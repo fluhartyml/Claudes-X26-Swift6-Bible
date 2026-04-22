@@ -77,18 +77,27 @@ ol.lines > li > p, ol.lines > li > h1, ol.lines > li > h2, ol.lines > li > h3, o
 
 <header class="page">
   <div class="path">Part-II-The-Swift-Language/Chapter-N/Page-Never</div>
-  <div class="pos">Part II &middot; Chapter N &middot; Page Never <span class="status-tag status-skeleton">[Skeleton]</span></div>
+  <div class="pos">Part II &middot; Chapter N &middot; Page Never <span class="status-tag status-written">[Written]</span></div>
 </header>
 
 <div class="content">
 <ol class="lines">
   <li><h1>Never</h1></li>
   <li><div class="kind">Kind: type</div></li>
-  <li><div class="scope-note">This Page is a <strong>skeleton</strong>. Real definition, example, and Rosetta Stone content fills in over time. Leave <code>MICHAEL:</code> notes anywhere and they fold into the next draft.</div></li>
   <li><h2>Definition</h2></li>
-  <li><p class="slot">Plain-English definition of <code>Never</code> pending.</p></li>
+  <li><p>The type of values that never exist. A function returning `Never` doesn't return — it aborts (`fatalError`), exits (`exit`), or loops forever. Because `Never` has no values, it converts to anything, which is useful in exhaustive switches.</p></li>
   <li><h2>Swift Example</h2></li>
-  <li><pre class="slot"><code>// Minimal Swift example using Never pending</code></pre></li>
+  <li><pre><code>func crash(_ reason: String) -&gt; Never {
+    fatalError(reason)
+}
+
+func pickNumber(_ n: Int) -&gt; String {
+    switch n {
+    case 1: return &quot;one&quot;
+    case 2: return &quot;two&quot;
+    default: crash(&quot;unexpected \(n)&quot;)
+    }
+}</code></pre></li>
   <li><h2>Rosetta Stone</h2></li>
   <li><h3>Pascal / Delphi</h3></li>
   <li><p class="slot">Equivalent or closest cousin pending.</p></li>
@@ -108,8 +117,8 @@ ol.lines > li > p, ol.lines > li > h1, ol.lines > li > h2, ol.lines > li > h3, o
 
 <footer class="page">
   <div class="path">Part-II-The-Swift-Language/Chapter-N/Page-Never</div>
-  <div class="pos">Part II &middot; Chapter N &middot; Page Never <span class="status-tag status-skeleton">[Skeleton]</span></div>
-  <div class="nav"><a href="../../table-of-contents.html">Contents</a><a href="../../claudex26-index.html">Index</a></div>
+  <div class="pos">Part II &middot; Chapter N &middot; Page Never <span class="status-tag status-written">[Written]</span></div>
+  <div class="nav"><a href="../../Front-of-Book/table-of-contents.html">Contents</a><a href="../../claudex26-index.html">Index</a></div>
 </footer>
 
 </body>

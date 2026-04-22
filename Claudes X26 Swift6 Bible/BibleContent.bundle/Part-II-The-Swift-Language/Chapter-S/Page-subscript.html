@@ -77,18 +77,28 @@ ol.lines > li > p, ol.lines > li > h1, ol.lines > li > h2, ol.lines > li > h3, o
 
 <header class="page">
   <div class="path">Part-II-The-Swift-Language/Chapter-S/Page-subscript</div>
-  <div class="pos">Part II &middot; Chapter S &middot; Page subscript <span class="status-tag status-skeleton">[Skeleton]</span></div>
+  <div class="pos">Part II &middot; Chapter S &middot; Page subscript <span class="status-tag status-written">[Written]</span></div>
 </header>
 
 <div class="content">
 <ol class="lines">
   <li><h1>subscript</h1></li>
   <li><div class="kind">Kind: keyword</div></li>
-  <li><div class="scope-note">This Page is a <strong>skeleton</strong>. Real definition, example, and Rosetta Stone content fills in over time. Leave <code>MICHAEL:</code> notes anywhere and they fold into the next draft.</div></li>
   <li><h2>Definition</h2></li>
-  <li><p class="slot">Plain-English definition of <code>subscript</code> pending.</p></li>
+  <li><p>A special method that lets a type be indexed with `[…]` syntax. Subscripts can take multiple parameters, be read-only or read-write, and be generic.</p></li>
   <li><h2>Swift Example</h2></li>
-  <li><pre class="slot"><code>// Minimal Swift example using subscript pending</code></pre></li>
+  <li><pre><code>struct Board {
+    var cells: [[Int]]
+    subscript(row: Int, col: Int) -&gt; Int {
+        get { cells[row][col] }
+        set { cells[row][col] = newValue }
+    }
+}
+
+var b = Board(cells: [[1,2],[3,4]])
+print(b[0, 1]) // 2
+b[1, 1] = 99
+print(b.cells)</code></pre></li>
   <li><h2>Rosetta Stone</h2></li>
   <li><h3>Pascal / Delphi</h3></li>
   <li><p class="slot">Equivalent or closest cousin pending.</p></li>
@@ -108,8 +118,8 @@ ol.lines > li > p, ol.lines > li > h1, ol.lines > li > h2, ol.lines > li > h3, o
 
 <footer class="page">
   <div class="path">Part-II-The-Swift-Language/Chapter-S/Page-subscript</div>
-  <div class="pos">Part II &middot; Chapter S &middot; Page subscript <span class="status-tag status-skeleton">[Skeleton]</span></div>
-  <div class="nav"><a href="../../table-of-contents.html">Contents</a><a href="../../claudex26-index.html">Index</a></div>
+  <div class="pos">Part II &middot; Chapter S &middot; Page subscript <span class="status-tag status-written">[Written]</span></div>
+  <div class="nav"><a href="../../Front-of-Book/table-of-contents.html">Contents</a><a href="../../claudex26-index.html">Index</a></div>
 </footer>
 
 </body>

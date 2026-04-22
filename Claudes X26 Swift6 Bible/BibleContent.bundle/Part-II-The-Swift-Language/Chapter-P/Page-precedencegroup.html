@@ -77,18 +77,30 @@ ol.lines > li > p, ol.lines > li > h1, ol.lines > li > h2, ol.lines > li > h3, o
 
 <header class="page">
   <div class="path">Part-II-The-Swift-Language/Chapter-P/Page-precedencegroup</div>
-  <div class="pos">Part II &middot; Chapter P &middot; Page precedencegroup <span class="status-tag status-skeleton">[Skeleton]</span></div>
+  <div class="pos">Part II &middot; Chapter P &middot; Page precedencegroup <span class="status-tag status-written">[Written]</span></div>
 </header>
 
 <div class="content">
 <ol class="lines">
   <li><h1>precedencegroup</h1></li>
   <li><div class="kind">Kind: keyword</div></li>
-  <li><div class="scope-note">This Page is a <strong>skeleton</strong>. Real definition, example, and Rosetta Stone content fills in over time. Leave <code>MICHAEL:</code> notes anywhere and they fold into the next draft.</div></li>
   <li><h2>Definition</h2></li>
-  <li><p class="slot">Plain-English definition of <code>precedencegroup</code> pending.</p></li>
+  <li><p>Declares a named precedence group — the binding strength and associativity that an `infix` operator belongs to. Rarely needed unless you're building a DSL; usually you reuse existing groups like `AdditionPrecedence`.</p></li>
   <li><h2>Swift Example</h2></li>
-  <li><pre class="slot"><code>// Minimal Swift example using precedencegroup pending</code></pre></li>
+  <li><pre><code>precedencegroup PowerPrecedence {
+    higherThan: MultiplicationPrecedence
+    associativity: right
+}
+
+infix operator ** : PowerPrecedence
+
+func ** (base: Int, exp: Int) -&gt; Int {
+    var r = 1
+    for _ in 0..&lt;exp { r *= base }
+    return r
+}
+
+print(2 ** 3 * 4) // 32 — ** binds tighter than *</code></pre></li>
   <li><h2>Rosetta Stone</h2></li>
   <li><h3>Pascal / Delphi</h3></li>
   <li><p class="slot">Equivalent or closest cousin pending.</p></li>
@@ -108,8 +120,8 @@ ol.lines > li > p, ol.lines > li > h1, ol.lines > li > h2, ol.lines > li > h3, o
 
 <footer class="page">
   <div class="path">Part-II-The-Swift-Language/Chapter-P/Page-precedencegroup</div>
-  <div class="pos">Part II &middot; Chapter P &middot; Page precedencegroup <span class="status-tag status-skeleton">[Skeleton]</span></div>
-  <div class="nav"><a href="../../table-of-contents.html">Contents</a><a href="../../claudex26-index.html">Index</a></div>
+  <div class="pos">Part II &middot; Chapter P &middot; Page precedencegroup <span class="status-tag status-written">[Written]</span></div>
+  <div class="nav"><a href="../../Front-of-Book/table-of-contents.html">Contents</a><a href="../../claudex26-index.html">Index</a></div>
 </footer>
 
 </body>

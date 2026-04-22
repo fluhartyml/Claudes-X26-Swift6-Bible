@@ -77,18 +77,25 @@ ol.lines > li > p, ol.lines > li > h1, ol.lines > li > h2, ol.lines > li > h3, o
 
 <header class="page">
   <div class="path">Part-II-The-Swift-Language/Chapter-L/Page-let</div>
-  <div class="pos">Part II &middot; Chapter L &middot; Page let <span class="status-tag status-skeleton">[Skeleton]</span></div>
+  <div class="pos">Part II &middot; Chapter L &middot; Page let <span class="status-tag status-written">[Written]</span></div>
 </header>
 
 <div class="content">
 <ol class="lines">
   <li><h1>let</h1></li>
   <li><div class="kind">Kind: keyword</div></li>
-  <li><div class="scope-note">This Page is a <strong>skeleton</strong>. Real definition, example, and Rosetta Stone content fills in over time. Leave <code>MICHAEL:</code> notes anywhere and they fold into the next draft.</div></li>
   <li><h2>Definition</h2></li>
-  <li><p class="slot">Plain-English definition of <code>let</code> pending.</p></li>
+  <li><p>Declares a constant — a binding whose value can't be reassigned. `let` doesn't mean the referenced object is deeply immutable (a `let` on a class reference still lets you mutate the instance's properties); it means the binding itself is fixed.</p></li>
   <li><h2>Swift Example</h2></li>
-  <li><pre class="slot"><code>// Minimal Swift example using let pending</code></pre></li>
+  <li><pre><code>let pi = 3.14159
+// pi = 3.14 // error: cannot assign
+
+let array = [1, 2, 3]
+// array.append(4) // error — arrays are value types, let forbids mutation
+
+let view = UIView()   // let on a class
+// view = UIView()   // error: cannot reassign
+view.backgroundColor = .red // allowed — mutating the instance</code></pre></li>
   <li><h2>Rosetta Stone</h2></li>
   <li><h3>Pascal / Delphi</h3></li>
   <li><p class="slot">Equivalent or closest cousin pending.</p></li>
@@ -108,8 +115,8 @@ ol.lines > li > p, ol.lines > li > h1, ol.lines > li > h2, ol.lines > li > h3, o
 
 <footer class="page">
   <div class="path">Part-II-The-Swift-Language/Chapter-L/Page-let</div>
-  <div class="pos">Part II &middot; Chapter L &middot; Page let <span class="status-tag status-skeleton">[Skeleton]</span></div>
-  <div class="nav"><a href="../../table-of-contents.html">Contents</a><a href="../../claudex26-index.html">Index</a></div>
+  <div class="pos">Part II &middot; Chapter L &middot; Page let <span class="status-tag status-written">[Written]</span></div>
+  <div class="nav"><a href="../../Front-of-Book/table-of-contents.html">Contents</a><a href="../../claudex26-index.html">Index</a></div>
 </footer>
 
 </body>

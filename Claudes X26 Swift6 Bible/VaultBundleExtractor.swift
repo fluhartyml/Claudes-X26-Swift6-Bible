@@ -18,7 +18,7 @@ import Foundation
 enum VaultBundleExtractor {
     static let folderName = "BibleContent"
     /// Bump this when content mapping rules change so the next launch re-extracts.
-    static let currentVersion = 24
+    static let currentVersion = 25
     private static let versionFileName = ".extraction-version"
 
     /// Make sure the extracted vault exists at a known location, then return
@@ -35,7 +35,7 @@ enum VaultBundleExtractor {
         let root = support.appending(path: folderName)
 
         if isCurrentVersion(at: root),
-           fm.fileExists(atPath: root.appending(path: "table-of-contents.html").path) {
+           fm.fileExists(atPath: root.appending(path: "Front-of-Book/table-of-contents.html").path) {
             return root
         }
 
@@ -95,7 +95,6 @@ enum VaultBundleExtractor {
             "claudex26-index.html",
             "claudex26-roadmap.html",
             "swift-section-mapping.html",
-            "table-of-contents.html",
             "BOOK-PARAMETERS.md",
             "INDEX.md",
             "cover.jpg",
@@ -107,7 +106,10 @@ enum VaultBundleExtractor {
         ]
         if rootExact.contains(filename) { return filename }
 
-        // Front of Book — Claude-X26-Parameters.html lives under Front-of-Book/.
+        // Front of Book — TOC + Claude-X26-Parameters live under Front-of-Book/.
+        if filename == "table-of-contents.html" {
+            return "Front-of-Book/\(filename)"
+        }
         if filename == "Claude-X26-Parameters.html" {
             return "Front-of-Book/\(filename)"
         }

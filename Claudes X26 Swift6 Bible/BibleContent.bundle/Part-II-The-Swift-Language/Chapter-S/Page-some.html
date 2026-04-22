@@ -77,18 +77,25 @@ ol.lines > li > p, ol.lines > li > h1, ol.lines > li > h2, ol.lines > li > h3, o
 
 <header class="page">
   <div class="path">Part-II-The-Swift-Language/Chapter-S/Page-some</div>
-  <div class="pos">Part II &middot; Chapter S &middot; Page some <span class="status-tag status-skeleton">[Skeleton]</span></div>
+  <div class="pos">Part II &middot; Chapter S &middot; Page some <span class="status-tag status-written">[Written]</span></div>
 </header>
 
 <div class="content">
 <ol class="lines">
   <li><h1>some</h1></li>
   <li><div class="kind">Kind: keyword</div></li>
-  <li><div class="scope-note">This Page is a <strong>skeleton</strong>. Real definition, example, and Rosetta Stone content fills in over time. Leave <code>MICHAEL:</code> notes anywhere and they fold into the next draft.</div></li>
   <li><h2>Definition</h2></li>
-  <li><p class="slot">Plain-English definition of <code>some</code> pending.</p></li>
+  <li><p>Marks an opaque type — the function returns "some specific type conforming to the given protocol, but the caller doesn't get to know which type." The concrete type is fixed per call site; SwiftUI's `some View` is the standard example.</p></li>
   <li><h2>Swift Example</h2></li>
-  <li><pre class="slot"><code>// Minimal Swift example using some pending</code></pre></li>
+  <li><pre><code>protocol Shape { func area() -&gt; Double }
+struct Square: Shape { let side: Double; func area() -&gt; Double { side * side } }
+
+func unitShape() -&gt; some Shape {
+    Square(side: 1)
+}
+
+let s = unitShape()
+print(s.area()) // 1.0</code></pre></li>
   <li><h2>Rosetta Stone</h2></li>
   <li><h3>Pascal / Delphi</h3></li>
   <li><p class="slot">Equivalent or closest cousin pending.</p></li>
@@ -108,8 +115,8 @@ ol.lines > li > p, ol.lines > li > h1, ol.lines > li > h2, ol.lines > li > h3, o
 
 <footer class="page">
   <div class="path">Part-II-The-Swift-Language/Chapter-S/Page-some</div>
-  <div class="pos">Part II &middot; Chapter S &middot; Page some <span class="status-tag status-skeleton">[Skeleton]</span></div>
-  <div class="nav"><a href="../../table-of-contents.html">Contents</a><a href="../../claudex26-index.html">Index</a></div>
+  <div class="pos">Part II &middot; Chapter S &middot; Page some <span class="status-tag status-written">[Written]</span></div>
+  <div class="nav"><a href="../../Front-of-Book/table-of-contents.html">Contents</a><a href="../../claudex26-index.html">Index</a></div>
 </footer>
 
 </body>

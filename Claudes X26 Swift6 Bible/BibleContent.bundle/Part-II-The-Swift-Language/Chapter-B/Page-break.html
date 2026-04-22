@@ -77,18 +77,27 @@ ol.lines > li > p, ol.lines > li > h1, ol.lines > li > h2, ol.lines > li > h3, o
 
 <header class="page">
   <div class="path">Part-II-The-Swift-Language/Chapter-B/Page-break</div>
-  <div class="pos">Part II &middot; Chapter B &middot; Page break <span class="status-tag status-skeleton">[Skeleton]</span></div>
+  <div class="pos">Part II &middot; Chapter B &middot; Page break <span class="status-tag status-written">[Written]</span></div>
 </header>
 
 <div class="content">
 <ol class="lines">
   <li><h1>break</h1></li>
   <li><div class="kind">Kind: keyword</div></li>
-  <li><div class="scope-note">This Page is a <strong>skeleton</strong>. Real definition, example, and Rosetta Stone content fills in over time. Leave <code>MICHAEL:</code> notes anywhere and they fold into the next draft.</div></li>
   <li><h2>Definition</h2></li>
-  <li><p class="slot">Plain-English definition of <code>break</code> pending.</p></li>
+  <li><p>A control-flow statement that exits the enclosing loop or switch immediately. Inside nested loops, you can break to a labeled loop to exit more than one level at once.</p></li>
   <li><h2>Swift Example</h2></li>
-  <li><pre class="slot"><code>// Minimal Swift example using break pending</code></pre></li>
+  <li><pre><code>for n in 1...10 {
+    if n == 5 { break }
+    print(n)
+}
+// prints 1 2 3 4
+
+outer: for row in 0..&lt;3 {
+    for col in 0..&lt;3 {
+        if row == col { break outer }
+    }
+}</code></pre></li>
   <li><h2>Rosetta Stone</h2></li>
   <li><h3>Pascal / Delphi</h3></li>
   <li><p class="slot">Equivalent or closest cousin pending.</p></li>
@@ -108,8 +117,8 @@ ol.lines > li > p, ol.lines > li > h1, ol.lines > li > h2, ol.lines > li > h3, o
 
 <footer class="page">
   <div class="path">Part-II-The-Swift-Language/Chapter-B/Page-break</div>
-  <div class="pos">Part II &middot; Chapter B &middot; Page break <span class="status-tag status-skeleton">[Skeleton]</span></div>
-  <div class="nav"><a href="../../table-of-contents.html">Contents</a><a href="../../claudex26-index.html">Index</a></div>
+  <div class="pos">Part II &middot; Chapter B &middot; Page break <span class="status-tag status-written">[Written]</span></div>
+  <div class="nav"><a href="../../Front-of-Book/table-of-contents.html">Contents</a><a href="../../claudex26-index.html">Index</a></div>
 </footer>
 
 </body>

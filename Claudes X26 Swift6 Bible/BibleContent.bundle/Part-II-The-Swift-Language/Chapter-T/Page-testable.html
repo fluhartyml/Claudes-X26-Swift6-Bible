@@ -77,18 +77,24 @@ ol.lines > li > p, ol.lines > li > h1, ol.lines > li > h2, ol.lines > li > h3, o
 
 <header class="page">
   <div class="path">Part-II-The-Swift-Language/Chapter-T/Page-testable</div>
-  <div class="pos">Part II &middot; Chapter T &middot; Page @testable <span class="status-tag status-skeleton">[Skeleton]</span></div>
+  <div class="pos">Part II &middot; Chapter T &middot; Page @testable <span class="status-tag status-written">[Written]</span></div>
 </header>
 
 <div class="content">
 <ol class="lines">
   <li><h1>@testable</h1></li>
   <li><div class="kind">Kind: attribute</div></li>
-  <li><div class="scope-note">This Page is a <strong>skeleton</strong>. Real definition, example, and Rosetta Stone content fills in over time. Leave <code>MICHAEL:</code> notes anywhere and they fold into the next draft.</div></li>
   <li><h2>Definition</h2></li>
-  <li><p class="slot">Plain-English definition of <code>@testable</code> pending.</p></li>
+  <li><p>An attribute on `import`, written `@testable import MyModule`, that exposes the module's `internal` declarations to the importing (test) module. Use only in test targets.</p></li>
   <li><h2>Swift Example</h2></li>
-  <li><pre class="slot"><code>// Minimal Swift example using @testable pending</code></pre></li>
+  <li><pre><code>// In MyAppTests/SomeTests.swift:
+@testable import MyApp
+
+final class MyTests: XCTestCase {
+    func testInternalThing() {
+        // Can call internal helpers of MyApp here.
+    }
+}</code></pre></li>
   <li><h2>Rosetta Stone</h2></li>
   <li><h3>Pascal / Delphi</h3></li>
   <li><p class="slot">Equivalent or closest cousin pending.</p></li>
@@ -108,8 +114,8 @@ ol.lines > li > p, ol.lines > li > h1, ol.lines > li > h2, ol.lines > li > h3, o
 
 <footer class="page">
   <div class="path">Part-II-The-Swift-Language/Chapter-T/Page-testable</div>
-  <div class="pos">Part II &middot; Chapter T &middot; Page @testable <span class="status-tag status-skeleton">[Skeleton]</span></div>
-  <div class="nav"><a href="../../table-of-contents.html">Contents</a><a href="../../claudex26-index.html">Index</a></div>
+  <div class="pos">Part II &middot; Chapter T &middot; Page @testable <span class="status-tag status-written">[Written]</span></div>
+  <div class="nav"><a href="../../Front-of-Book/table-of-contents.html">Contents</a><a href="../../claudex26-index.html">Index</a></div>
 </footer>
 
 </body>

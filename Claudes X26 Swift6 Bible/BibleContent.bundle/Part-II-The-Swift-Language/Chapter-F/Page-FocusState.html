@@ -77,18 +77,29 @@ ol.lines > li > p, ol.lines > li > h1, ol.lines > li > h2, ol.lines > li > h3, o
 
 <header class="page">
   <div class="path">Part-II-The-Swift-Language/Chapter-F/Page-FocusState</div>
-  <div class="pos">Part II &middot; Chapter F &middot; Page @FocusState <span class="status-tag status-skeleton">[Skeleton]</span></div>
+  <div class="pos">Part II &middot; Chapter F &middot; Page @FocusState <span class="status-tag status-written">[Written]</span></div>
 </header>
 
 <div class="content">
 <ol class="lines">
   <li><h1>@FocusState</h1></li>
   <li><div class="kind">Kind: attribute-swiftui</div></li>
-  <li><div class="scope-note">This Page is a <strong>skeleton</strong>. Real definition, example, and Rosetta Stone content fills in over time. Leave <code>MICHAEL:</code> notes anywhere and they fold into the next draft.</div></li>
   <li><h2>Definition</h2></li>
-  <li><p class="slot">Plain-English definition of <code>@FocusState</code> pending.</p></li>
+  <li><p>A SwiftUI property wrapper that binds to the currently-focused form control. Write to it to programmatically move focus; read it to tell which field is focused.</p></li>
   <li><h2>Swift Example</h2></li>
-  <li><pre class="slot"><code>// Minimal Swift example using @FocusState pending</code></pre></li>
+  <li><pre><code>struct LoginForm: View {
+    enum Field { case username, password }
+    @FocusState private var focus: Field?
+    @State private var u = &quot;&quot;, p = &quot;&quot;
+
+    var body: some View {
+        VStack {
+            TextField(&quot;user&quot;, text: $u).focused($focus, equals: .username)
+            SecureField(&quot;pw&quot;, text: $p).focused($focus, equals: .password)
+            Button(&quot;Go&quot;) { focus = .username }
+        }
+    }
+}</code></pre></li>
   <li><h2>Rosetta Stone</h2></li>
   <li><h3>Pascal / Delphi</h3></li>
   <li><p class="slot">Equivalent or closest cousin pending.</p></li>
@@ -108,8 +119,8 @@ ol.lines > li > p, ol.lines > li > h1, ol.lines > li > h2, ol.lines > li > h3, o
 
 <footer class="page">
   <div class="path">Part-II-The-Swift-Language/Chapter-F/Page-FocusState</div>
-  <div class="pos">Part II &middot; Chapter F &middot; Page @FocusState <span class="status-tag status-skeleton">[Skeleton]</span></div>
-  <div class="nav"><a href="../../table-of-contents.html">Contents</a><a href="../../claudex26-index.html">Index</a></div>
+  <div class="pos">Part II &middot; Chapter F &middot; Page @FocusState <span class="status-tag status-written">[Written]</span></div>
+  <div class="nav"><a href="../../Front-of-Book/table-of-contents.html">Contents</a><a href="../../claudex26-index.html">Index</a></div>
 </footer>
 
 </body>

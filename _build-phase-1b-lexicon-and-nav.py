@@ -14,8 +14,25 @@ Every page uses the universal template: line numbers, outline numbering,
 matching header+footer with file path (extension hidden) and position.
 """
 
+import html
 import re
+import sys
 from pathlib import Path
+
+# Make the sibling data file importable regardless of where we're invoked from.
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+try:
+    from _lexicon_definitions import DEFS  # type: ignore
+except ModuleNotFoundError:
+    # Fall back to the hyphenated filename (Python allows import via path helper).
+    import importlib.util
+    _spec = importlib.util.spec_from_file_location(
+        "_lexicon_definitions",
+        Path(__file__).resolve().parent / "_lexicon-definitions.py"
+    )
+    _mod = importlib.util.module_from_spec(_spec)  # type: ignore
+    _spec.loader.exec_module(_mod)                 # type: ignore
+    DEFS = _mod.DEFS
 
 BUNDLE = Path(
     "/Users/michaelfluharty/Developer.complex/inkwell/"
@@ -416,38 +433,70 @@ def render_lexicon_page(chapter, entry, kind):
     filename = f"Page-{safe}.html"
     path_display = f"{folder_rel}/Page-{safe}"
     title = f"{entry} — Swift Lexicon"
+
+    has_content = entry in DEFS
+    entry_status = "written" if has_content else "skeleton"
+
     pos = (f'Part II &middot; Chapter {chapter} &middot; '
-           f'Page {esc(entry)} {status_tag("skeleton")}')
+           f'Page {esc(entry)} {status_tag(entry_status)}')
 
     blocks = [
         f'<h1>{esc(entry)}</h1>',
         f'<div class="kind">Kind: {esc(kind)}</div>',
-        '<div class="scope-note">This Page is a <strong>skeleton</strong>. '
-        'Real definition, example, and Rosetta Stone content fills in over '
-        'time. Leave <code>MICHAEL:</code> notes anywhere and they fold into '
-        'the next draft.</div>',
-        '<h2>Definition</h2>',
-        f'<p class="slot">Plain-English definition of <code>{esc(entry)}</code> pending.</p>',
-        '<h2>Swift Example</h2>',
-        f'<pre class="slot"><code>// Minimal Swift example using {esc(entry)} pending</code></pre>',
-        '<h2>Rosetta Stone</h2>',
-        '<h3>Pascal / Delphi</h3>',
-        '<p class="slot">Equivalent or closest cousin pending.</p>',
-        '<h3>BASIC</h3>',
-        '<p class="slot">Equivalent or closest cousin pending.</p>',
-        '<h3>C / C++</h3>',
-        '<p class="slot">Equivalent or closest cousin pending.</p>',
-        '<h2>Related</h2>',
-        '<p class="slot">Cross-references to other Lexicon entries and Books pending.</p>',
-        '<h2>Sources</h2>',
-        '<ul class="slot">',
-        '  <li>Apple Developer documentation — URL pending</li>',
-        '  <li>Swift.org / Swift Evolution / WWDC — URL pending</li>',
-        '</ul>',
     ]
 
+    if has_content:
+        d = DEFS[entry]
+        definition_html = esc(d["def"])
+        example_html = html.escape(d["ex"])
+        blocks += [
+            '<h2>Definition</h2>',
+            f'<p>{definition_html}</p>',
+            '<h2>Swift Example</h2>',
+            f'<pre><code>{example_html}</code></pre>',
+            '<h2>Rosetta Stone</h2>',
+            '<h3>Pascal / Delphi</h3>',
+            '<p class="slot">Equivalent or closest cousin pending.</p>',
+            '<h3>BASIC</h3>',
+            '<p class="slot">Equivalent or closest cousin pending.</p>',
+            '<h3>C / C++</h3>',
+            '<p class="slot">Equivalent or closest cousin pending.</p>',
+            '<h2>Related</h2>',
+            '<p class="slot">Cross-references to other Lexicon entries and Books pending.</p>',
+            '<h2>Sources</h2>',
+            '<ul class="slot">',
+            '  <li>Apple Developer documentation — URL pending</li>',
+            '  <li>Swift.org / Swift Evolution / WWDC — URL pending</li>',
+            '</ul>',
+        ]
+    else:
+        blocks += [
+            '<div class="scope-note">This Page is a <strong>skeleton</strong>. '
+            'Real definition, example, and Rosetta Stone content fills in over '
+            'time. Leave <code>MICHAEL:</code> notes anywhere and they fold into '
+            'the next draft.</div>',
+            '<h2>Definition</h2>',
+            f'<p class="slot">Plain-English definition of <code>{esc(entry)}</code> pending.</p>',
+            '<h2>Swift Example</h2>',
+            f'<pre class="slot"><code>// Minimal Swift example using {esc(entry)} pending</code></pre>',
+            '<h2>Rosetta Stone</h2>',
+            '<h3>Pascal / Delphi</h3>',
+            '<p class="slot">Equivalent or closest cousin pending.</p>',
+            '<h3>BASIC</h3>',
+            '<p class="slot">Equivalent or closest cousin pending.</p>',
+            '<h3>C / C++</h3>',
+            '<p class="slot">Equivalent or closest cousin pending.</p>',
+            '<h2>Related</h2>',
+            '<p class="slot">Cross-references to other Lexicon entries and Books pending.</p>',
+            '<h2>Sources</h2>',
+            '<ul class="slot">',
+            '  <li>Apple Developer documentation — URL pending</li>',
+            '  <li>Swift.org / Swift Evolution / WWDC — URL pending</li>',
+            '</ul>',
+        ]
+
     nav = (
-        f'<a href="../../table-of-contents.html">Contents</a>'
+        f'<a href="../../Front-of-Book/table-of-contents.html">Contents</a>'
         f'<a href="../../claudex26-index.html">Index</a>'
     )
 
@@ -478,14 +527,15 @@ def render_chapter_index(chapter, entries):
         items = []
         for entry, kind in entries:
             safe = safe_filename(entry)
+            st = "written" if entry in DEFS else "skeleton"
             items.append(
                 f'<li><a href="Pages/Page-{safe}.html">{esc(entry)}</a> '
-                f'<em>({esc(kind)})</em> {status_tag("skeleton")}</li>'
+                f'<em>({esc(kind)})</em> {status_tag(st)}</li>'
             )
         blocks.append('<ul>' + "".join(items) + '</ul>')
 
     nav = (
-        f'<a href="../../table-of-contents.html">Contents</a>'
+        f'<a href="../../Front-of-Book/table-of-contents.html">Contents</a>'
         f'<a href="../../claudex26-index.html">Index</a>'
     )
 
@@ -497,9 +547,9 @@ def render_chapter_index(chapter, entries):
 # ---------- Table of Contents ----------
 
 def render_toc():
-    path_display = "table-of-contents"
+    path_display = "Front-of-Book/table-of-contents"
     title = "Table of Contents — Claude's Xcode 26 Swift Bible"
-    pos = "Front Matter &middot; Table of Contents"
+    pos = "Front of Book &middot; Table of Contents"
 
     blocks = [
         '<h1>Table of Contents</h1>',
@@ -512,25 +562,25 @@ def render_toc():
         'content fills in over time).</p>',
     ]
 
-    # Front Matter
-    blocks.append('<h2>Front Matter</h2>')
+    # Front of Book — TOC lives here, so siblings need no ../
+    blocks.append('<h2>Front of Book</h2>')
     fm_items = []
     for slug, status in FRONT_MATTER:
         display = slug.replace('-', ' ')
-        href = f"Front-Matter/{slug}.html"
+        href = f"{slug}.html"
         fm_items.append(
             f'<li><a href="{href}">{esc(display)}</a> {status_tag(status)}</li>'
         )
     blocks.append('<ul>' + "".join(fm_items) + '</ul>')
 
-    # Part I - Introduction
+    # Part I - Introduction (one level up from Front-of-Book)
     blocks.append('<h2>Part I — Introduction</h2>')
     toc_books = []
     for n, part, slug, status in BOOKS:
         if part != "Part-I-Introduction":
             continue
         display = f"Book {n:02d} — {slug.replace('-', ' ')}"
-        href = f"Part-I-Introduction/Book-{n:02d}-{slug}.html"
+        href = f"../Part-I-Introduction/Book-{n:02d}-{slug}.html"
         toc_books.append(
             f'<li><a href="{href}">{esc(display)}</a> {status_tag(status)}</li>'
         )
@@ -552,10 +602,11 @@ def render_toc():
         items = []
         for entry, kind in entries:
             safe = safe_filename(entry)
-            page_href = f"Part-II-The-Swift-Language/Chapter-{ch}/Page-{safe}.html"
+            page_href = f"../Part-II-The-Swift-Language/Chapter-{ch}/Page-{safe}.html"
+            st = "written" if entry in DEFS else "skeleton"
             items.append(
                 f'<li><a href="{page_href}">{esc(entry)}</a> '
-                f'<em>({esc(kind)})</em> {status_tag("skeleton")}</li>'
+                f'<em>({esc(kind)})</em> {status_tag(st)}</li>'
             )
         blocks.append('<ul>' + "".join(items) + '</ul>')
 
@@ -568,7 +619,7 @@ def render_toc():
             if part != pk:
                 continue
             display = f"Book {n:02d} — {slug.replace('-', ' ')}"
-            href = f"{pk}/Book-{n:02d}-{slug}.html"
+            href = f"../{pk}/Book-{n:02d}-{slug}.html"
             items.append(
                 f'<li><a href="{href}">{esc(display)}</a> {status_tag(status)}</li>'
             )
@@ -579,7 +630,7 @@ def render_toc():
     items = []
     for letter, slug, status in APPENDICES:
         display = f"Appendix {letter} — {slug.replace('-', ' ')}"
-        href = f"Appendices/Appendix-{letter}-{slug}.html"
+        href = f"../Appendices/Appendix-{letter}-{slug}.html"
         items.append(
             f'<li><a href="{href}">{esc(display)}</a> {status_tag(status)}</li>'
         )
@@ -589,14 +640,14 @@ def render_toc():
     blocks.append('<h2>Back Matter</h2>')
     blocks.append(
         '<ul>'
-        '<li><a href="claudex26-index.html">Index</a> — alphabetical list of every Page, Book, and Appendix</li>'
+        '<li><a href="../claudex26-index.html">Index</a> — alphabetical list of every Page, Book, and Appendix</li>'
         '</ul>'
     )
 
-    nav = '<a href="claudex26-index.html">Index</a>'
-    (BUNDLE / "table-of-contents.html").write_text(
-        render_page(title, path_display, pos, blocks, nav)
-    )
+    nav = '<a href="../claudex26-index.html">Index</a>'
+    out_path = BUNDLE / "Front-of-Book" / "table-of-contents.html"
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    out_path.write_text(render_page(title, path_display, pos, blocks, nav))
 
 
 # ---------- Index (alphabetical) ----------
@@ -621,7 +672,8 @@ def render_index():
         for entry, kind in ENTRIES[ch]:
             safe = safe_filename(entry)
             href = f"Part-II-The-Swift-Language/Chapter-{ch}/Page-{safe}.html"
-            all_entries.append((entry, href, f"Lexicon &middot; Chapter {ch} &middot; {esc(kind)}", "skeleton"))
+            st = "written" if entry in DEFS else "skeleton"
+            all_entries.append((entry, href, f"Lexicon &middot; Chapter {ch} &middot; {esc(kind)}", st))
 
     # Books
     for n, part, slug, status in BOOKS:
@@ -629,11 +681,11 @@ def render_index():
         href = f"{part}/Book-{n:02d}-{slug}.html"
         all_entries.append((display, href, PART_TITLES[part], status))
 
-    # Front Matter
+    # Front of Book
     for slug, status in FRONT_MATTER:
         display = slug.replace('-', ' ')
-        href = f"Front-Matter/{slug}.html"
-        all_entries.append((display, href, "Front Matter", status))
+        href = f"Front-of-Book/{slug}.html"
+        all_entries.append((display, href, "Front of Book", status))
 
     # Appendices
     for letter, slug, status in APPENDICES:
@@ -668,7 +720,7 @@ def render_index():
             )
         blocks.append('<ul>' + "".join(items) + '</ul>')
 
-    nav = '<a href="table-of-contents.html">Contents</a>'
+    nav = '<a href="Front-of-Book/table-of-contents.html">Contents</a>'
     (BUNDLE / "claudex26-index.html").write_text(
         render_page(title, path_display, pos, blocks, nav)
     )

@@ -77,18 +77,26 @@ ol.lines > li > p, ol.lines > li > h1, ol.lines > li > h2, ol.lines > li > h3, o
 
 <header class="page">
   <div class="path">Part-II-The-Swift-Language/Chapter-F/Page-for</div>
-  <div class="pos">Part II &middot; Chapter F &middot; Page for <span class="status-tag status-skeleton">[Skeleton]</span></div>
+  <div class="pos">Part II &middot; Chapter F &middot; Page for <span class="status-tag status-written">[Written]</span></div>
 </header>
 
 <div class="content">
 <ol class="lines">
   <li><h1>for</h1></li>
   <li><div class="kind">Kind: keyword</div></li>
-  <li><div class="scope-note">This Page is a <strong>skeleton</strong>. Real definition, example, and Rosetta Stone content fills in over time. Leave <code>MICHAEL:</code> notes anywhere and they fold into the next draft.</div></li>
   <li><h2>Definition</h2></li>
-  <li><p class="slot">Plain-English definition of <code>for</code> pending.</p></li>
+  <li><p>Iterates over a sequence — arrays, ranges, strings, dictionaries, or anything conforming to `Sequence`. The `for-in` form binds each element to a constant; `for case` adds pattern matching.</p></li>
   <li><h2>Swift Example</h2></li>
-  <li><pre class="slot"><code>// Minimal Swift example using for pending</code></pre></li>
+  <li><pre><code>for i in 1...5 { print(i) }
+
+let names = [&quot;Ada&quot;, &quot;Max&quot;, &quot;Zoe&quot;]
+for name in names where name.count &gt; 2 { print(name) }
+
+// for case — only iterate matching cases:
+let results: [Result&lt;Int, Error&gt;] = [.success(1), .failure(NSError()), .success(3)]
+for case .success(let v) in results { print(v) }
+// 1
+// 3</code></pre></li>
   <li><h2>Rosetta Stone</h2></li>
   <li><h3>Pascal / Delphi</h3></li>
   <li><p class="slot">Equivalent or closest cousin pending.</p></li>
@@ -108,8 +116,8 @@ ol.lines > li > p, ol.lines > li > h1, ol.lines > li > h2, ol.lines > li > h3, o
 
 <footer class="page">
   <div class="path">Part-II-The-Swift-Language/Chapter-F/Page-for</div>
-  <div class="pos">Part II &middot; Chapter F &middot; Page for <span class="status-tag status-skeleton">[Skeleton]</span></div>
-  <div class="nav"><a href="../../table-of-contents.html">Contents</a><a href="../../claudex26-index.html">Index</a></div>
+  <div class="pos">Part II &middot; Chapter F &middot; Page for <span class="status-tag status-written">[Written]</span></div>
+  <div class="nav"><a href="../../Front-of-Book/table-of-contents.html">Contents</a><a href="../../claudex26-index.html">Index</a></div>
 </footer>
 
 </body>

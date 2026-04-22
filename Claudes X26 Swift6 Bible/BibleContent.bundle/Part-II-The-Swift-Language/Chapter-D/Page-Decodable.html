@@ -77,18 +77,21 @@ ol.lines > li > p, ol.lines > li > h1, ol.lines > li > h2, ol.lines > li > h3, o
 
 <header class="page">
   <div class="path">Part-II-The-Swift-Language/Chapter-D/Page-Decodable</div>
-  <div class="pos">Part II &middot; Chapter D &middot; Page Decodable <span class="status-tag status-skeleton">[Skeleton]</span></div>
+  <div class="pos">Part II &middot; Chapter D &middot; Page Decodable <span class="status-tag status-written">[Written]</span></div>
 </header>
 
 <div class="content">
 <ol class="lines">
   <li><h1>Decodable</h1></li>
   <li><div class="kind">Kind: protocol</div></li>
-  <li><div class="scope-note">This Page is a <strong>skeleton</strong>. Real definition, example, and Rosetta Stone content fills in over time. Leave <code>MICHAEL:</code> notes anywhere and they fold into the next draft.</div></li>
   <li><h2>Definition</h2></li>
-  <li><p class="slot">Plain-English definition of <code>Decodable</code> pending.</p></li>
+  <li><p>A protocol that describes a type that can be created from an external representation (like JSON). A decoder (e.g. `JSONDecoder`) reads the representation and produces an instance. Conformance is synthesized for types whose stored properties are all `Decodable`.</p></li>
   <li><h2>Swift Example</h2></li>
-  <li><pre class="slot"><code>// Minimal Swift example using Decodable pending</code></pre></li>
+  <li><pre><code>struct Point: Decodable { let x: Double; let y: Double }
+
+let json = #&quot;{ &quot;x&quot;: 1.5, &quot;y&quot;: 2.5 }&quot;#.data(using: .utf8)!
+let p = try JSONDecoder().decode(Point.self, from: json)
+print(p.x, p.y) // 1.5 2.5</code></pre></li>
   <li><h2>Rosetta Stone</h2></li>
   <li><h3>Pascal / Delphi</h3></li>
   <li><p class="slot">Equivalent or closest cousin pending.</p></li>
@@ -108,8 +111,8 @@ ol.lines > li > p, ol.lines > li > h1, ol.lines > li > h2, ol.lines > li > h3, o
 
 <footer class="page">
   <div class="path">Part-II-The-Swift-Language/Chapter-D/Page-Decodable</div>
-  <div class="pos">Part II &middot; Chapter D &middot; Page Decodable <span class="status-tag status-skeleton">[Skeleton]</span></div>
-  <div class="nav"><a href="../../table-of-contents.html">Contents</a><a href="../../claudex26-index.html">Index</a></div>
+  <div class="pos">Part II &middot; Chapter D &middot; Page Decodable <span class="status-tag status-written">[Written]</span></div>
+  <div class="nav"><a href="../../Front-of-Book/table-of-contents.html">Contents</a><a href="../../claudex26-index.html">Index</a></div>
 </footer>
 
 </body>

@@ -117,7 +117,7 @@ final class VaultModel: ObservableObject {
             return
         }
         if let extracted = VaultBundleExtractor.ensureExtracted(),
-           FileManager.default.fileExists(atPath: extracted.appending(path: "table-of-contents.html").path) {
+           FileManager.default.fileExists(atPath: extracted.appending(path: "Front-of-Book/table-of-contents.html").path) {
             setVaultRoot(extracted)
             return
         }
@@ -157,7 +157,7 @@ final class VaultModel: ObservableObject {
                 return
             }
         }
-        let tocURL = url.appending(path: "table-of-contents.html")
+        let tocURL = url.appending(path: "Front-of-Book/table-of-contents.html")
         if FileManager.default.fileExists(atPath: tocURL.path) {
             currentDocument = tocURL
         } else {
@@ -257,7 +257,7 @@ final class VaultModel: ObservableObject {
     var canGoForward: Bool { !forwardHistory.isEmpty }
 
     func goHome() {
-        open("table-of-contents.html")
+        open("Front-of-Book/table-of-contents.html")
     }
 
     // MARK: - Display
@@ -346,7 +346,7 @@ struct VaultNode: Identifiable, Hashable {
     /// Logical-reading-order sort key for top-level vault items.
     /// Lower number sorts earlier. Unknowns fall through to alphabetical.
     private static func sortKey(_ name: String) -> Int {
-        if name == "table-of-contents.html" { return 1 }  // #1 in the sidebar
+        if name == "table-of-contents.html" { return 1 }  // #1 inside Front-of-Book
         if name == "Front-of-Book"     { return 5 }   // before Part I
         if name.hasPrefix("Part-I-")   { return 10 }
         if name.hasPrefix("Part-II-")  { return 20 }

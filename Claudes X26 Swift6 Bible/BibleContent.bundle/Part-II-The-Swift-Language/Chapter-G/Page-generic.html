@@ -77,18 +77,26 @@ ol.lines > li > p, ol.lines > li > h1, ol.lines > li > h2, ol.lines > li > h3, o
 
 <header class="page">
   <div class="path">Part-II-The-Swift-Language/Chapter-G/Page-generic</div>
-  <div class="pos">Part II &middot; Chapter G &middot; Page generic <span class="status-tag status-skeleton">[Skeleton]</span></div>
+  <div class="pos">Part II &middot; Chapter G &middot; Page generic <span class="status-tag status-written">[Written]</span></div>
 </header>
 
 <div class="content">
 <ol class="lines">
   <li><h1>generic</h1></li>
   <li><div class="kind">Kind: concept</div></li>
-  <li><div class="scope-note">This Page is a <strong>skeleton</strong>. Real definition, example, and Rosetta Stone content fills in over time. Leave <code>MICHAEL:</code> notes anywhere and they fold into the next draft.</div></li>
   <li><h2>Definition</h2></li>
-  <li><p class="slot">Plain-English definition of <code>generic</code> pending.</p></li>
+  <li><p>Code that works with a placeholder type parameter rather than a specific concrete type. Generics let you write one `Stack&lt;Element&gt;` instead of one stack per element type, while keeping full type safety at each use site.</p></li>
   <li><h2>Swift Example</h2></li>
-  <li><pre class="slot"><code>// Minimal Swift example using generic pending</code></pre></li>
+  <li><pre><code>func pairUp&lt;T&gt;(_ a: T, _ b: T) -&gt; [T] { [a, b] }
+
+print(pairUp(1, 2))        // [1, 2]
+print(pairUp(&quot;hi&quot;, &quot;bye&quot;)) // [&quot;hi&quot;, &quot;bye&quot;]
+
+struct Stack&lt;Element&gt; {
+    private var items: [Element] = []
+    mutating func push(_ x: Element) { items.append(x) }
+    mutating func pop() -&gt; Element? { items.popLast() }
+}</code></pre></li>
   <li><h2>Rosetta Stone</h2></li>
   <li><h3>Pascal / Delphi</h3></li>
   <li><p class="slot">Equivalent or closest cousin pending.</p></li>
@@ -108,8 +116,8 @@ ol.lines > li > p, ol.lines > li > h1, ol.lines > li > h2, ol.lines > li > h3, o
 
 <footer class="page">
   <div class="path">Part-II-The-Swift-Language/Chapter-G/Page-generic</div>
-  <div class="pos">Part II &middot; Chapter G &middot; Page generic <span class="status-tag status-skeleton">[Skeleton]</span></div>
-  <div class="nav"><a href="../../table-of-contents.html">Contents</a><a href="../../claudex26-index.html">Index</a></div>
+  <div class="pos">Part II &middot; Chapter G &middot; Page generic <span class="status-tag status-written">[Written]</span></div>
+  <div class="nav"><a href="../../Front-of-Book/table-of-contents.html">Contents</a><a href="../../claudex26-index.html">Index</a></div>
 </footer>
 
 </body>

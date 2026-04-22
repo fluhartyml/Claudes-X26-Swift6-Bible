@@ -77,18 +77,24 @@ ol.lines > li > p, ol.lines > li > h1, ol.lines > li > h2, ol.lines > li > h3, o
 
 <header class="page">
   <div class="path">Part-II-The-Swift-Language/Chapter-S/Page-selector</div>
-  <div class="pos">Part II &middot; Chapter S &middot; Page #selector <span class="status-tag status-skeleton">[Skeleton]</span></div>
+  <div class="pos">Part II &middot; Chapter S &middot; Page #selector <span class="status-tag status-written">[Written]</span></div>
 </header>
 
 <div class="content">
 <ol class="lines">
   <li><h1>#selector</h1></li>
   <li><div class="kind">Kind: directive</div></li>
-  <li><div class="scope-note">This Page is a <strong>skeleton</strong>. Real definition, example, and Rosetta Stone content fills in over time. Leave <code>MICHAEL:</code> notes anywhere and they fold into the next draft.</div></li>
   <li><h2>Definition</h2></li>
-  <li><p class="slot">Plain-English definition of <code>#selector</code> pending.</p></li>
+  <li><p>A compile-time-checked selector expression for Objective-C interop. The method it names must be `@objc`. Prefer modern Swift APIs; `#selector` is still needed for `Timer`, some `Notification` APIs, and gesture recognizers via UIKit bridging.</p></li>
   <li><h2>Swift Example</h2></li>
-  <li><pre class="slot"><code>// Minimal Swift example using #selector pending</code></pre></li>
+  <li><pre><code>import Foundation
+
+class Alarm: NSObject {
+    @objc func ring() { print(&quot;rrring&quot;) }
+}
+
+let a = Alarm()
+_ = #selector(Alarm.ring) // compile-checked</code></pre></li>
   <li><h2>Rosetta Stone</h2></li>
   <li><h3>Pascal / Delphi</h3></li>
   <li><p class="slot">Equivalent or closest cousin pending.</p></li>
@@ -108,8 +114,8 @@ ol.lines > li > p, ol.lines > li > h1, ol.lines > li > h2, ol.lines > li > h3, o
 
 <footer class="page">
   <div class="path">Part-II-The-Swift-Language/Chapter-S/Page-selector</div>
-  <div class="pos">Part II &middot; Chapter S &middot; Page #selector <span class="status-tag status-skeleton">[Skeleton]</span></div>
-  <div class="nav"><a href="../../table-of-contents.html">Contents</a><a href="../../claudex26-index.html">Index</a></div>
+  <div class="pos">Part II &middot; Chapter S &middot; Page #selector <span class="status-tag status-written">[Written]</span></div>
+  <div class="nav"><a href="../../Front-of-Book/table-of-contents.html">Contents</a><a href="../../claudex26-index.html">Index</a></div>
 </footer>
 
 </body>

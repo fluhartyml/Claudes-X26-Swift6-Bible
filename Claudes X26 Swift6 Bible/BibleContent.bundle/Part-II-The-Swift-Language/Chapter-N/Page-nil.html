@@ -77,18 +77,26 @@ ol.lines > li > p, ol.lines > li > h1, ol.lines > li > h2, ol.lines > li > h3, o
 
 <header class="page">
   <div class="path">Part-II-The-Swift-Language/Chapter-N/Page-nil</div>
-  <div class="pos">Part II &middot; Chapter N &middot; Page nil <span class="status-tag status-skeleton">[Skeleton]</span></div>
+  <div class="pos">Part II &middot; Chapter N &middot; Page nil <span class="status-tag status-written">[Written]</span></div>
 </header>
 
 <div class="content">
 <ol class="lines">
   <li><h1>nil</h1></li>
   <li><div class="kind">Kind: literal</div></li>
-  <li><div class="scope-note">This Page is a <strong>skeleton</strong>. Real definition, example, and Rosetta Stone content fills in over time. Leave <code>MICHAEL:</code> notes anywhere and they fold into the next draft.</div></li>
   <li><h2>Definition</h2></li>
-  <li><p class="slot">Plain-English definition of <code>nil</code> pending.</p></li>
+  <li><p>The absence of a value for an Optional type. `nil` is not zero, and it's not a pointer — it's a discriminator that says "this Optional is the `.none` case." Only Optional types can be `nil`.</p></li>
   <li><h2>Swift Example</h2></li>
-  <li><pre class="slot"><code>// Minimal Swift example using nil pending</code></pre></li>
+  <li><pre><code>var name: String? = &quot;Ada&quot;
+name = nil
+
+if name == nil {
+    print(&quot;no name&quot;)
+}
+
+let count: Int? = nil
+let doubled = count.map { $0 * 2 } ?? 0
+print(doubled) // 0</code></pre></li>
   <li><h2>Rosetta Stone</h2></li>
   <li><h3>Pascal / Delphi</h3></li>
   <li><p class="slot">Equivalent or closest cousin pending.</p></li>
@@ -108,8 +116,8 @@ ol.lines > li > p, ol.lines > li > h1, ol.lines > li > h2, ol.lines > li > h3, o
 
 <footer class="page">
   <div class="path">Part-II-The-Swift-Language/Chapter-N/Page-nil</div>
-  <div class="pos">Part II &middot; Chapter N &middot; Page nil <span class="status-tag status-skeleton">[Skeleton]</span></div>
-  <div class="nav"><a href="../../table-of-contents.html">Contents</a><a href="../../claudex26-index.html">Index</a></div>
+  <div class="pos">Part II &middot; Chapter N &middot; Page nil <span class="status-tag status-written">[Written]</span></div>
+  <div class="nav"><a href="../../Front-of-Book/table-of-contents.html">Contents</a><a href="../../claudex26-index.html">Index</a></div>
 </footer>
 
 </body>

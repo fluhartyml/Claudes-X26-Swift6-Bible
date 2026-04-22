@@ -77,18 +77,25 @@ ol.lines > li > p, ol.lines > li > h1, ol.lines > li > h2, ol.lines > li > h3, o
 
 <header class="page">
   <div class="path">Part-II-The-Swift-Language/Chapter-A/Page-Any</div>
-  <div class="pos">Part II &middot; Chapter A &middot; Page Any <span class="status-tag status-skeleton">[Skeleton]</span></div>
+  <div class="pos">Part II &middot; Chapter A &middot; Page Any <span class="status-tag status-written">[Written]</span></div>
 </header>
 
 <div class="content">
 <ol class="lines">
   <li><h1>Any</h1></li>
   <li><div class="kind">Kind: type</div></li>
-  <li><div class="scope-note">This Page is a <strong>skeleton</strong>. Real definition, example, and Rosetta Stone content fills in over time. Leave <code>MICHAEL:</code> notes anywhere and they fold into the next draft.</div></li>
   <li><h2>Definition</h2></li>
-  <li><p class="slot">Plain-English definition of <code>Any</code> pending.</p></li>
+  <li><p>The universal type — an instance of `Any` can hold a value of any type at all, including class types, struct types, enums, function types, and optionals. Use it sparingly; reaching for `Any` usually means the type system has something more specific to offer.</p></li>
   <li><h2>Swift Example</h2></li>
-  <li><pre class="slot"><code>// Minimal Swift example using Any pending</code></pre></li>
+  <li><pre><code>let bag: [Any] = [42, &quot;hello&quot;, 3.14, true]
+
+for item in bag {
+    if let n = item as? Int {
+        print(&quot;int: \(n)&quot;)
+    } else if let s = item as? String {
+        print(&quot;string: \(s)&quot;)
+    }
+}</code></pre></li>
   <li><h2>Rosetta Stone</h2></li>
   <li><h3>Pascal / Delphi</h3></li>
   <li><p class="slot">Equivalent or closest cousin pending.</p></li>
@@ -108,8 +115,8 @@ ol.lines > li > p, ol.lines > li > h1, ol.lines > li > h2, ol.lines > li > h3, o
 
 <footer class="page">
   <div class="path">Part-II-The-Swift-Language/Chapter-A/Page-Any</div>
-  <div class="pos">Part II &middot; Chapter A &middot; Page Any <span class="status-tag status-skeleton">[Skeleton]</span></div>
-  <div class="nav"><a href="../../table-of-contents.html">Contents</a><a href="../../claudex26-index.html">Index</a></div>
+  <div class="pos">Part II &middot; Chapter A &middot; Page Any <span class="status-tag status-written">[Written]</span></div>
+  <div class="nav"><a href="../../Front-of-Book/table-of-contents.html">Contents</a><a href="../../claudex26-index.html">Index</a></div>
 </footer>
 
 </body>

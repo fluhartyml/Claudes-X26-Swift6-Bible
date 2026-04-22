@@ -77,18 +77,25 @@ ol.lines > li > p, ol.lines > li > h1, ol.lines > li > h2, ol.lines > li > h3, o
 
 <header class="page">
   <div class="path">Part-II-The-Swift-Language/Chapter-T/Page-throws</div>
-  <div class="pos">Part II &middot; Chapter T &middot; Page throws <span class="status-tag status-skeleton">[Skeleton]</span></div>
+  <div class="pos">Part II &middot; Chapter T &middot; Page throws <span class="status-tag status-written">[Written]</span></div>
 </header>
 
 <div class="content">
 <ol class="lines">
   <li><h1>throws</h1></li>
   <li><div class="kind">Kind: keyword</div></li>
-  <li><div class="scope-note">This Page is a <strong>skeleton</strong>. Real definition, example, and Rosetta Stone content fills in over time. Leave <code>MICHAEL:</code> notes anywhere and they fold into the next draft.</div></li>
   <li><h2>Definition</h2></li>
-  <li><p class="slot">Plain-English definition of <code>throws</code> pending.</p></li>
+  <li><p>A modifier on a function declaration saying the function may throw an error. Callers must use `try` (or `try?` / `try!`) and handle or propagate the error.</p></li>
   <li><h2>Swift Example</h2></li>
-  <li><pre class="slot"><code>// Minimal Swift example using throws pending</code></pre></li>
+  <li><pre><code>func parse(_ s: String) throws -&gt; Int {
+    guard let n = Int(s) else {
+        throw NSError(domain: &quot;parse&quot;, code: 1)
+    }
+    return n
+}
+
+let n = try? parse(&quot;42&quot;) // Optional(42)
+let bad = try? parse(&quot;nope&quot;) // nil</code></pre></li>
   <li><h2>Rosetta Stone</h2></li>
   <li><h3>Pascal / Delphi</h3></li>
   <li><p class="slot">Equivalent or closest cousin pending.</p></li>
@@ -108,8 +115,8 @@ ol.lines > li > p, ol.lines > li > h1, ol.lines > li > h2, ol.lines > li > h3, o
 
 <footer class="page">
   <div class="path">Part-II-The-Swift-Language/Chapter-T/Page-throws</div>
-  <div class="pos">Part II &middot; Chapter T &middot; Page throws <span class="status-tag status-skeleton">[Skeleton]</span></div>
-  <div class="nav"><a href="../../table-of-contents.html">Contents</a><a href="../../claudex26-index.html">Index</a></div>
+  <div class="pos">Part II &middot; Chapter T &middot; Page throws <span class="status-tag status-written">[Written]</span></div>
+  <div class="nav"><a href="../../Front-of-Book/table-of-contents.html">Contents</a><a href="../../claudex26-index.html">Index</a></div>
 </footer>
 
 </body>
