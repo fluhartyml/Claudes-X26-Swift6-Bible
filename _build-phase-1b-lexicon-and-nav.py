@@ -134,7 +134,11 @@ ENTRIES = {
         ('Identifiable', 'protocol'),
         ('@inlinable', 'attribute'),
     ],
-    'J': [],
+    'J': [
+        ('JSONEncoder', 'type'),
+        ('JSONDecoder', 'type'),
+        ('JSONSerialization', 'type'),
+    ],
     'K': [
         ('KeyPath', 'type'),
     ],
@@ -232,9 +236,13 @@ ENTRIES = {
         ('while', 'keyword'),
         ('#warning', 'directive'),
     ],
-    'X': [],
+    'X': [
+        ('XMLParser', 'type'),
+    ],
     'Y': [],
-    'Z': [],
+    'Z': [
+        ('ZStack', 'view-swiftui'),
+    ],
 }
 
 # ---------- Book structure + status ----------
@@ -287,10 +295,7 @@ PART_TITLES = {
 }
 
 CHAPTER_NOTES = {
-    'J': "No entries. JSON handling is cross-referenced from Chapter C — see Codable.",
-    'X': "Thin chapter — no entries yet.",
-    'Y': "Thin chapter — no entries yet.",
-    'Z': "Thin chapter — no entries yet.",
+    'Y': "No standard Swift entries at publication of this book.",
 }
 
 
@@ -603,7 +608,8 @@ def render_toc():
                 f'<p class="slot">{esc(note)}</p>'
             )
             continue
-        blocks.append(f'<h3>Chapter {ch} — {len(entries)} entries</h3>')
+        noun = "entry" if len(entries) == 1 else "entries"
+        blocks.append(f'<h3>Chapter {ch} — {len(entries)} {noun}</h3>')
         items = []
         for entry, kind in entries:
             safe = safe_filename(entry)

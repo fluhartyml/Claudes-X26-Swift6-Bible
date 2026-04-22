@@ -821,6 +821,41 @@ public func clamp<T: Comparable>(_ x: T, min lo: T, max hi: T) -> T {
 }"""
     },
 
+    # ---------- J ----------
+    'JSONEncoder': {
+        'def': "A Foundation class that turns a `Encodable` value into JSON `Data`. You configure its output format (pretty-printed, sorted keys, date strategy) once and reuse the instance. Pair with `JSONDecoder` to round-trip.",
+        'ex': """import Foundation
+
+struct User: Codable { let id: Int; let name: String }
+
+let encoder = JSONEncoder()
+encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
+
+let user = User(id: 7, name: "Ada")
+let data = try encoder.encode(user)
+print(String(data: data, encoding: .utf8) ?? "")"""
+    },
+    'JSONDecoder': {
+        'def': "A Foundation class that reads JSON `Data` back into an `Decodable` type. Configure how it interprets dates, keys, and raw numbers once, then reuse. The dual of `JSONEncoder`.",
+        'ex': """import Foundation
+
+struct User: Codable { let id: Int; let name: String }
+
+let json = #\"{ \"id\": 7, \"name\": \"Ada\" }\"#.data(using: .utf8)!
+let user = try JSONDecoder().decode(User.self, from: json)
+print(user.name) // Ada"""
+    },
+    'JSONSerialization': {
+        'def': "The lower-level Foundation API for JSON, predating `Codable`. It converts between `Data` and untyped `Any` / `[String: Any]` / `[Any]` — useful when you don't have (or want) a Swift type and just need to inspect a JSON payload.",
+        'ex': """import Foundation
+
+let raw = #\"{ \"ok\": true, \"count\": 3, \"items\": [\"a\", \"b\"] }\"#
+    .data(using: .utf8)!
+
+let obj = try JSONSerialization.jsonObject(with: raw) as? [String: Any]
+if let count = obj?[\"count\"] as? Int { print(count) } // 3"""
+    },
+
     # ---------- K ----------
     'KeyPath': {
         'def': "A type-safe, compiler-checked reference to a property of a type, written `\\Type.property`. Use key paths with `map`, `sorted(by:)`, SwiftUI bindings, and property observation APIs.",
@@ -1615,6 +1650,51 @@ func log2(_ s: String) { print(s) }
 
 let callback: () -> Void = { print("done") }
 callback()"""
+    },
+
+    # ---------- X ----------
+    'XMLParser': {
+        'def': "A Foundation class that reads XML by streaming events (start-element, characters, end-element) to a delegate. Lower-level than `JSONDecoder` — you walk the tree yourself — but the standard way to read XML on Apple platforms. Use a third-party library (e.g. `XMLCoder`) for Codable-style XML.",
+        'ex': """import Foundation
+
+final class Handler: NSObject, XMLParserDelegate {
+    var titles: [String] = []
+    private var inTitle = false
+    func parser(_ p: XMLParser, didStartElement name: String,
+                namespaceURI: String?, qualifiedName qName: String?,
+                attributes: [String: String] = [:]) {
+        inTitle = (name == \"title\")
+    }
+    func parser(_ p: XMLParser, foundCharacters s: String) {
+        if inTitle { titles.append(s) }
+    }
+}
+
+let xml = \"\"\"<feed><title>Hi</title><title>There</title></feed>\"\"\"
+    .data(using: .utf8)!
+let p = XMLParser(data: xml)
+let h = Handler(); p.delegate = h
+p.parse()
+print(h.titles) // [\"Hi\", \"There\"]"""
+    },
+
+    # ---------- Z ----------
+    'ZStack': {
+        'def': "A SwiftUI container that lays out its children on top of each other along the Z-axis — the one pointing out of the screen. The first child renders at the back, the last at the front. Use for overlays, badges, and stacked images.",
+        'ex': """import SwiftUI
+
+struct Avatar: View {
+    var body: some View {
+        ZStack(alignment: .bottomTrailing) {
+            Circle()
+                .fill(.blue)
+                .frame(width: 80, height: 80)
+            Image(systemName: \"checkmark.seal.fill\")
+                .foregroundStyle(.green)
+                .background(Circle().fill(.white))
+        }
+    }
+}"""
     },
 
     # ---------- W ----------
