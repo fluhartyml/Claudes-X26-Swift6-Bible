@@ -347,7 +347,7 @@ struct VaultNode: Identifiable, Hashable {
     /// Lower number sorts earlier. Unknowns fall through to alphabetical.
     private static func sortKey(_ name: String) -> Int {
         if name == "table-of-contents.html" { return 1 }  // #1 in the sidebar
-        if name == "Front-Matter"      { return 5 }   // before Part I
+        if name == "Front-of-Book"     { return 5 }   // before Part I
         if name.hasPrefix("Part-I-")   { return 10 }
         if name.hasPrefix("Part-II-")  { return 20 }
         if name.hasPrefix("Part-III-") { return 30 }

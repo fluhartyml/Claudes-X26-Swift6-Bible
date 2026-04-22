@@ -100,6 +100,12 @@ struct VaultWebView: PlatformViewRepresentable {
         config.userContentController.addUserScript(Self.editableScript)
         config.userContentController.addUserScript(Self.highlightStyleScript)
 
+        // Serve vault content via a custom URL scheme so iOS's file://
+        // sandbox-extension quirks in subdirectories stop biting us.
+        let handler = VaultURLSchemeHandler { [vaultRoot] in vaultRoot }
+        config.setURLSchemeHandler(handler, forURLScheme: VaultURLSchemeHandler.scheme)
+        context.coordinator.schemeHandler = handler
+
         let webView = WKWebView(frame: .zero, configuration: config)
         webView.navigationDelegate = context.coordinator
         bridge.webView = webView
@@ -177,19 +183,18 @@ struct VaultWebView: PlatformViewRepresentable {
 
     private func loadIfNeeded(_ webView: WKWebView) {
         guard let url = documentURL, let root = vaultRoot else { return }
+        guard let schemeURL = VaultURLSchemeHandler.url(for: url, root: root) else { return }
         // Only reload if the target URL differs from what's currently loaded.
-        if webView.url?.standardizedFileURL == url.standardizedFileURL { return }
-        // Grant read access to the parent of the vault root so WKWebView's
-        // sandbox check passes for sibling files reached via in-page links
-        // before our navigation delegate can cancel and re-route.
-        let accessScope = root.deletingLastPathComponent()
-        webView.loadFileURL(url, allowingReadAccessTo: accessScope)
+        if webView.url == schemeURL { return }
+        webView.load(URLRequest(url: schemeURL))
     }
 
     // MARK: - Coordinator — intercepts navigations
 
     final class Coordinator: NSObject, WKNavigationDelegate, WKScriptMessageHandler {
         let parent: VaultWebView
+        /// Retained so the WKWebViewConfiguration's handler reference stays alive.
+        var schemeHandler: VaultURLSchemeHandler?
         init(_ parent: VaultWebView) { self.parent = parent }
 
         // Persist edits back to the document file in the vault.
@@ -240,8 +245,19 @@ struct VaultWebView: PlatformViewRepresentable {
                 return
             }
 
+            // Internal vault link arrives as bible:// — route through VaultModel.
+            if url.scheme == VaultURLSchemeHandler.scheme, let root = parent.vaultRoot {
+                if let fileURL = VaultURLSchemeHandler.fileURL(for: url, root: root) {
+                    decisionHandler(.cancel)
+                    print("[tap] Link: \(fileURL.lastPathComponent)")
+                    parent.onInternalNavigate(fileURL)
+                    return
+                }
+            }
+
+            // Legacy file:// links (if any survive in hand-authored HTML) —
+            // resolve to vault-relative and bubble up.
             if url.isFileURL, let root = parent.vaultRoot {
-                // Internal vault link — bubble up so VaultModel can update history and sidebar.
                 if url.path.hasPrefix(root.path) {
                     decisionHandler(.cancel)
                     print("[tap] Link: \(url.lastPathComponent)")

@@ -18,7 +18,7 @@ import Foundation
 enum VaultBundleExtractor {
     static let folderName = "BibleContent"
     /// Bump this when content mapping rules change so the next launch re-extracts.
-    static let currentVersion = 23
+    static let currentVersion = 24
     private static let versionFileName = ".extraction-version"
 
     /// Make sure the extracted vault exists at a known location, then return
@@ -107,9 +107,9 @@ enum VaultBundleExtractor {
         ]
         if rootExact.contains(filename) { return filename }
 
-        // Front Matter — Claude-X26-Parameters.html lives under Front-Matter/.
+        // Front of Book — Claude-X26-Parameters.html lives under Front-of-Book/.
         if filename == "Claude-X26-Parameters.html" {
-            return "Front-Matter/\(filename)"
+            return "Front-of-Book/\(filename)"
         }
 
         // Markdown chapter sources "01-*.md" through "22-*.md".
