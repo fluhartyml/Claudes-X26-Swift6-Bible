@@ -42,8 +42,9 @@ struct ContentView: View {
             sidebar
                 .navigationTitle("Library")
                 #if os(iOS)
+                .navigationBarTitleDisplayMode(.inline)
                 .toolbar {
-                    ToolbarItem(placement: .topBarLeading) {
+                    ToolbarItem(placement: .topBarTrailing) {
                         Button {
                             withAnimation {
                                 columnVisibility = (columnVisibility == .detailOnly)

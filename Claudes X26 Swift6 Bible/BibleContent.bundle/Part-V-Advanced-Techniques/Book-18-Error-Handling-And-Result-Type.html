@@ -78,26 +78,219 @@ ol.lines > li > p, ol.lines > li > h2, ol.lines > li > h3, ol.lines > li > ul, o
 
 <div class="content">
 <ol class="lines">
-  <li><h1>Book 18: Error Handling And Result Type</h1></li>
-  <li><div class="scope-note">This Book is <strong>proposed-scope</strong>. The outline below is what will be written. Leave <code>MICHAEL:</code> notes anywhere and I will fold them in before writing the prose.</div></li>
-  <li><h2>Why This Book Exists</h2></li>
-  <li><p>Real apps handle real failure. Book 18 turns to Swift's error surface: throws / try / catch, the Result type, and how errors flow through async code without losing context.</p></li>
-  <li><h2>Planned Sections</h2></li>
-  <li><h3>Thrown Errors</h3></li>
-  <li><ul><li>The Error protocol</li><li>throws, try, try?, try!</li><li>do / catch with multiple patterns</li></ul></li>
-  <li><h3>Result&lt;T, E&gt;</h3></li>
-  <li><ul><li>When Result beats thrown errors</li><li>Bridging between the two styles</li><li>Result in completion-handler code</li></ul></li>
-  <li><h3>Errors in async Code</h3></li>
-  <li><ul><li>async throws</li><li>Cancellation as an error</li><li>Structured concurrency and task groups</li></ul></li>
-  <li><h2>Planned Code Examples</h2></li>
-  <li><ul><li>File loader that throws typed errors</li><li>Networking call returning Result&lt;Response, NetworkError&gt;</li><li>async fetch with cancellation handling</li></ul></li>
-  <li><h2>Planned Figures</h2></li>
-  <li><ul><li>Error flow diagram: thrown vs Result vs async</li></ul></li>
+  <li><h1>Chapter 18: Error Handling &amp; Result Type</h1></li>
+  <li><p><strong>Claude's Swift Reference 26</strong> -- Part V: Advanced Techniques</p></li>
+  <li><hr></li>
+  <li><h2>What You'll Learn</h2></li>
+  <li><p>By the end of this chapter you can:</p></li>
+  <li><ul><li>Define custom error types with <code>enum</code> and the <code>Error</code> protocol.</li><li>Throw errors from functions with <code>throws</code>, and handle them with <code>do</code> / <code>try</code> / <code>catch</code>.</li><li>Understand the difference between <code>try</code>, <code>try?</code>, and <code>try!</code>, and when to reach for each.</li><li>Use Swift 6's typed throws (<code>throws(MyError)</code>) to declare exactly which errors can escape a function.</li><li>Use <code>Result&lt;Success, Failure&gt;</code> for callback-era APIs and cross-thread boundaries.</li></ul></li>
+  <li><hr></li>
+  <li><h2>Why Swift Throws Instead of Returning <code>nil</code></h2></li>
+  <li><p>Swift functions that might fail have two honest ways to say so:</p></li>
+  <li><ol class="body-list"><li>Return an <code>Optional</code> -- "here's a value, or nothing."</li><li>Throw an error -- "here's a value, or a specific reason for the failure."</li></ol></li>
+  <li><p>Optionals are great when there's only one failure mode and the reason doesn't matter. A dictionary lookup returning <code>nil</code> is fine -- the key either exists or it doesn't.</p></li>
+  <li><p>Errors are better when the caller needs to know <strong>why</strong> something failed: a file was missing, the network was down, the JSON was malformed. The error itself carries that story.</p></li>
+  <li><hr></li>
+  <li><h2>Defining an Error Type</h2></li>
+  <li><p>Any type conforming to the empty <code>Error</code> protocol can be thrown. Enums are the idiomatic choice:</p></li>
+  <li><pre><code class="lang-swift">enum ParseError: Error {
+    case empty
+    case notANumber(String)
+    case outOfRange(value: Int, max: Int)
+}</code></pre></li>
+  <li><p>Associated values carry the details of the failure -- the offending string, the number that was out of range, whatever the caller needs to explain or recover.</p></li>
+  <li><p>For better error messages, conform to <code>LocalizedError</code>:</p></li>
+  <li><pre><code class="lang-swift">extension ParseError: LocalizedError {
+    var errorDescription: String? {
+        switch self {
+        case .empty:
+            return "Input was empty."
+        case .notANumber(let s):
+            return "\"\(s)\" isn't a number."
+        case .outOfRange(let v, let max):
+            return "\(v) is out of range (max \(max))."
+        }
+    }
+}</code></pre></li>
+  <li><p>Now printing the error or showing it to the user reads as plain prose.</p></li>
+  <li><hr></li>
+  <li><h2>Throwing Errors</h2></li>
+  <li><p>A function that might throw declares it with <code>throws</code>:</p></li>
+  <li><pre><code class="lang-swift">func parse(_ input: String, max: Int) throws -&gt; Int {
+    guard !input.isEmpty else {
+        throw ParseError.empty
+    }
+    guard let n = Int(input) else {
+        throw ParseError.notANumber(input)
+    }
+    guard n &lt;= max else {
+        throw ParseError.outOfRange(value: n, max: max)
+    }
+    return n
+}</code></pre></li>
+  <li><p><code>throws</code> is part of the function's type. Callers have to acknowledge it with <code>try</code> or the compiler rejects the call.</p></li>
+  <li><p>Computed properties and initializers can throw too:</p></li>
+  <li><pre><code class="lang-swift">init(fromJSON data: Data) throws {
+    // ...
+}
+
+var size: Int {
+    get throws {
+        // ...
+    }
+}</code></pre></li>
+  <li><hr></li>
+  <li><h2>Handling Errors</h2></li>
+  <li><h3>do / try / catch</h3></li>
+  <li><p>The default form is <code>do</code> / <code>try</code> / <code>catch</code>:</p></li>
+  <li><pre><code class="lang-swift">do {
+    let value = try parse("42", max: 100)
+    print("parsed:", value)
+} catch ParseError.empty {
+    print("input was empty")
+} catch ParseError.notANumber(let s) {
+    print("not a number:", s)
+} catch {
+    print("other:", error)
+}</code></pre></li>
+  <li><p>Catch clauses are patterns, just like <code>case</code> clauses in <code>switch</code>. A plain <code>catch</code> binds the error as <code>error</code> and acts as the catch-all. Swift checks that the <code>do</code> block's errors are all handled (or that the enclosing function also throws).</p></li>
+  <li><h3>try? -- Turn Errors into <code>nil</code></h3></li>
+  <li><p>When you don't care about the reason for failure:</p></li>
+  <li><pre><code class="lang-swift">let maybe = try? parse("abc", max: 100)   // Optional&lt;Int&gt;, nil on any throw</code></pre></li>
+  <li><p><code>try?</code> converts the call into an optional. Handy when you were going to check for <code>nil</code> anyway.</p></li>
+  <li><h3>try! -- Force It</h3></li>
+  <li><p>When you're absolutely sure the call can't fail (and you want to trap if you're wrong):</p></li>
+  <li><pre><code class="lang-swift">let count = try! parse("42", max: 100)    // traps if parse throws</code></pre></li>
+  <li><p>Use <code>try!</code> sparingly. It's appropriate for things like reading a file bundled with the app that you know exists. It's not appropriate for user input, network calls, or anything with uncertainty.</p></li>
+  <li><h3>Rethrowing</h3></li>
+  <li><p>A function whose throwing behavior depends on a closure argument uses <code>rethrows</code>:</p></li>
+  <li><pre><code class="lang-swift">func retry&lt;T&gt;(_ body: () throws -&gt; T) rethrows -&gt; T {
+    do   { return try body() }
+    catch { return try body() }
+}
+
+let x = retry { 42 }                    // non-throwing closure: caller doesn't need try
+let y = try retry { try parse("7", max: 10) } // throwing closure: caller needs try</code></pre></li>
+  <li><p><code>rethrows</code> keeps callers free of <code>try</code> when their closure isn't throwing.</p></li>
+  <li><hr></li>
+  <li><h2>Typed Throws (Swift 6)</h2></li>
+  <li><p>Swift 6 lets you declare exactly which error type a function throws:</p></li>
+  <li><pre><code class="lang-swift">func parse(_ input: String, max: Int) throws(ParseError) -&gt; Int {
+    guard !input.isEmpty else { throw .empty }
+    guard let n = Int(input) else { throw .notANumber(input) }
+    guard n &lt;= max else { throw .outOfRange(value: n, max: max) }
+    return n
+}</code></pre></li>
+  <li><p>Two things that change:</p></li>
+  <li><ul><li>Inside the function you can write <code>.empty</code> instead of <code>ParseError.empty</code> (Swift infers the type).</li><li>The caller catches the concrete type without an <code>as?</code> cast:</li></ul></li>
+  <li><p>``<code>swift do { let v = try parse("42", max: 10) } catch let error: ParseError { // error is ParseError here, no cast needed } </code>``</p></li>
+  <li><p>Plain <code>throws</code> is shorthand for <code>throws(any Error)</code> -- "might throw anything." Use typed throws when your function has a fixed, bounded set of failures and you want the compiler to check that callers handle each one.</p></li>
+  <li><hr></li>
+  <li><h2>Result -- The Errors-as-Values Type</h2></li>
+  <li><p><code>Result&lt;Success, Failure&gt;</code> is a standard-library enum with two cases:</p></li>
+  <li><pre><code class="lang-swift">public enum Result&lt;Success, Failure: Error&gt; {
+    case success(Success)
+    case failure(Failure)
+}</code></pre></li>
+  <li><p>It represents the same information as a throwing function, but as a <strong>value</strong> you can pass around, store, and hand to a callback. Three common places you reach for it:</p></li>
+  <li><h3>1. Callback-Based APIs</h3></li>
+  <li><p>Older callback APIs (pre-<code>async</code>/<code>await</code>) use <code>Result</code> as the payload:</p></li>
+  <li><pre><code class="lang-swift">func fetch(completion: @escaping (Result&lt;Data, NetworkError&gt;) -&gt; Void) {
+    // ... some URLSession-style call
+}
+
+fetch { result in
+    switch result {
+    case .success(let data): print("got", data.count, "bytes")
+    case .failure(let e):    print("failed:", e)
+    }
+}</code></pre></li>
+  <li><h3>2. Crossing Thread Boundaries</h3></li>
+  <li><p>Throwing across a boundary can be awkward because errors don't flow easily across task or queue hops. Wrapping the value in <code>Result</code> turns it into something you can hand across the gap:</p></li>
+  <li><pre><code class="lang-swift">let result: Result&lt;Int, Error&gt; = .success(42)
+DispatchQueue.main.async {
+    handle(result)   // thread-safe: it's just a value
+}</code></pre></li>
+  <li><h3>3. Converting Between Styles</h3></li>
+  <li><p><code>Result</code> has two convenience bridges:</p></li>
+  <li><pre><code class="lang-swift">// Throwing call → Result
+let r = Result { try parse("42", max: 100) }
+
+// Result → throwing
+let n = try r.get()</code></pre></li>
+  <li><p><code>Result(_ body:)</code> runs the throwing closure and bundles the outcome; <code>.get()</code> re-throws the error out of the Result.</p></li>
+  <li><h3>When NOT to Use Result</h3></li>
+  <li><p>In modern Swift code, prefer <code>async throws</code> over <code>Result</code> for anything new. <code>async throws</code> reads more naturally:</p></li>
+  <li><pre><code class="lang-swift">// Old
+func fetch(completion: (Result&lt;Data, Error&gt;) -&gt; Void)
+
+// New
+func fetch() async throws -&gt; Data</code></pre></li>
+  <li><p>Reach for <code>Result</code> when you're bridging to older callback APIs, storing the outcome, or sending it across a boundary that doesn't play well with throw.</p></li>
+  <li><hr></li>
+  <li><h2>Chapter Mini-Example -- Parsing with Real Diagnostics</h2></li>
+  <li><pre><code class="lang-swift">import SwiftUI
+
+enum ParseError: LocalizedError {
+    case empty
+    case notANumber(String)
+    case outOfRange(Int)
+
+    var errorDescription: String? {
+        switch self {
+        case .empty:             return "Please enter a number."
+        case .notANumber(let s): return "\"\(s)\" isn't a number."
+        case .outOfRange(let n): return "\(n) is too big (max 100)."
+        }
+    }
+}
+
+func parse(_ raw: String) throws(ParseError) -&gt; Int {
+    guard !raw.isEmpty else { throw .empty }
+    guard let n = Int(raw) else { throw .notANumber(raw) }
+    guard n &lt;= 100 else { throw .outOfRange(n) }
+    return n
+}
+
+struct NumberInput: View {
+    @State private var input = ""
+    @State private var result: String = "—"
+    @State private var error: String?
+
+    var body: some View {
+        Form {
+            TextField("Enter a number up to 100", text: $input)
+                .keyboardType(.numberPad)
+
+            Button("Parse") {
+                do {
+                    let n = try parse(input)
+                    result = "Got \(n)"
+                    error  = nil
+                } catch {
+                    error = error.localizedDescription
+                    result = "—"
+                }
+            }
+
+            if let error {
+                Label(error, systemImage: "exclamationmark.triangle.fill")
+                    .foregroundStyle(.red)
+            } else {
+                Text(result)
+            }
+        }
+    }
+}</code></pre></li>
+  <li><p>One throwing function, one typed error, one <code>do / catch</code>, real messages the user can actually act on. That's the full pattern; the rest is just more of it.</p></li>
+  <li><hr></li>
+  <li><h2>What Book 19 Does</h2></li>
+  <li><p>Errors are behavior that happens in response to bad input; Book 19 is about behavior you ship on purpose: custom views, custom modifiers, and the SwiftUI techniques that let you build your own widgets instead of always reaching for built-ins.</p></li>
 </ol>
 </div>
 
 <footer class="page">
-  <div class="pos">Part V &middot; Book 18 &middot; Proposed Scope</div>
+  <div class="pos">Part V &middot; Book 18</div>
   <div class="nav"><a href="../Front-of-Book/table-of-contents.html">&larr; Contents</a><a href="../claudex26-index.html">Index</a></div>
 </footer>
 

@@ -78,26 +78,129 @@ ol.lines > li > p, ol.lines > li > h2, ol.lines > li > h3, ol.lines > li > ul, o
 
 <div class="content">
 <ol class="lines">
-  <li><h1>Book 20: Performance Instruments And Best Practices</h1></li>
-  <li><div class="scope-note">This Book is <strong>proposed-scope</strong>. The outline below is what will be written. Leave <code>MICHAEL:</code> notes anywhere and I will fold them in before writing the prose.</div></li>
-  <li><h2>Why This Book Exists</h2></li>
-  <li><p>Book 19 built composable pieces; Book 20 measures them. Instruments, Time Profiler, and the discipline of not guessing about performance.</p></li>
-  <li><h2>Planned Sections</h2></li>
-  <li><h3>Instruments</h3></li>
-  <li><ul><li>Time Profiler for CPU hot spots</li><li>Allocations for memory growth</li><li>SwiftUI template for view body churn</li></ul></li>
-  <li><h3>Common Traps</h3></li>
-  <li><ul><li>Unnecessary view recomputation</li><li>Sorting inside body</li><li>Synchronous work on the main actor</li></ul></li>
-  <li><h3>Best Practices</h3></li>
-  <li><ul><li>Measure before optimizing</li><li>Profile builds in Release configuration</li><li>Ship with profiling hooks (OSSignposter)</li></ul></li>
-  <li><h2>Planned Code Examples</h2></li>
-  <li><ul><li>Profile a laggy List and pinpoint the body call</li><li>Reduce recomputation with Equatable views</li></ul></li>
-  <li><h2>Planned Figures</h2></li>
-  <li><ul><li>Instruments Time Profiler screenshot</li><li>SwiftUI body-count template screenshot</li></ul></li>
+  <li><h1>Chapter 20: Performance, Instruments, &amp; Best Practices</h1></li>
+  <li><p><strong>Claude's Swift Reference 26</strong> -- Part V: Advanced Techniques</p></li>
+  <li><hr></li>
+  <li><h2>What You'll Learn</h2></li>
+  <li><p>By the end of this chapter you can:</p></li>
+  <li><ul><li>Launch Instruments from Xcode and read the three templates you'll actually use most: Time Profiler, Allocations, and SwiftUI.</li><li>Spot and stop unnecessary SwiftUI <code>body</code> recomputations.</li><li>Avoid the two most common <code>@StateObject</code> / <code>@ObservedObject</code> mistakes.</li><li>Keep actors from becoming bottlenecks in Swift 6 concurrency.</li><li>Apply a small set of habits that make an app stay smooth as it grows.</li></ul></li>
+  <li><hr></li>
+  <li><h2>When to Start Profiling</h2></li>
+  <li><p>Don't profile before there's a problem. The old saying "premature optimization is the root of all evil" applies: guessing what's slow is usually wrong, and guessing-based changes make code harder to read without making it faster.</p></li>
+  <li><p>Start profiling when you see one of these:</p></li>
+  <li><ul><li>The UI stutters while scrolling, typing, or animating.</li><li>The Xcode Debug Navigator shows CPU or memory climbing past what feels reasonable.</li><li>A specific action (save, open, search) feels laggy.</li></ul></li>
+  <li><p>Profile with real user scenarios on a real device, not the simulator. The simulator gives you roughly the host Mac's speed, which hides problems that bite on an actual iPhone.</p></li>
+  <li><hr></li>
+  <li><h2>Launching Instruments</h2></li>
+  <li><p>From Xcode: <strong>Product &gt; Profile</strong> (<code>⌘I</code>) with a physical device attached. Instruments opens the template picker. The three templates you use 95% of the time:</p></li>
+  <li><ul><li><strong>Time Profiler</strong> -- where is the app spending CPU?</li><li><strong>Allocations</strong> -- what objects are being created, how many, and how long do they live?</li><li><strong>SwiftUI</strong> -- which views are re-rendering, and how often?</li></ul></li>
+  <li><p>Start with Time Profiler when the symptom is "slow or stuttering." Start with SwiftUI when the symptom is "the screen flickers or my animations jump." Start with Allocations when memory is climbing.</p></li>
+  <li><hr></li>
+  <li><h2>Time Profiler</h2></li>
+  <li><p>Click Record, use the app the way the slow case uses it, click Stop. You get a flame-graph-style view: tall columns are where the CPU spent the most time.</p></li>
+  <li><h3>Reading the Trace</h3></li>
+  <li><ul><li><strong>Call tree</strong> in the bottom pane. Expand it by heaviest-first (right-click &gt; "Invert Call Tree" if you want the hottest leaves at the top).</li><li><strong>Bold entries</strong> are your app's code. Grayed-out entries are Apple frameworks.</li><li><strong>Percentage column</strong> tells you what fraction of wall-clock time was spent in that function.</li></ul></li>
+  <li><p>Look for code you wrote consuming a surprising percentage. If <code>ContentView.body</code> is eating 40% of CPU during a scroll, that's your fix.</p></li>
+  <li><h3>Flame-Graph View</h3></li>
+  <li><p>Switch the display to Flamegraph for a scrollable, visual summary. Wider bars = more time. Click a bar to jump to the source file.</p></li>
+  <li><hr></li>
+  <li><h2>SwiftUI Instrument</h2></li>
+  <li><p>The SwiftUI template records every view-body call. Two columns matter:</p></li>
+  <li><ul><li><strong>Call count</strong> -- how many times each view's <code>body</code> ran.</li><li><strong>Duration</strong> -- total time spent in that body.</li></ul></li>
+  <li><p>If a single <code>Text</code> row's <code>body</code> is being called thousands of times during a short interaction, something above it is re-rendering unnecessarily. That's almost always a fix in the parent: an observable-object update that's too coarse-grained, or a state change that shouldn't be triggering a repaint.</p></li>
+  <li><hr></li>
+  <li><h2>Common SwiftUI Performance Mistakes</h2></li>
+  <li><h3><code>@StateObject</code> vs. <code>@ObservedObject</code></h3></li>
+  <li><p><strong>Rule:</strong> if the view creates the object, use <code>@StateObject</code>. If the object is handed in from outside, use <code>@ObservedObject</code>.</p></li>
+  <li><p>Wrong (object recreates on every parent re-render):</p></li>
+  <li><pre><code class="lang-swift">struct BadParent: View {
+    var body: some View {
+        Child()
+    }
+}
+
+struct Child: View {
+    @ObservedObject var model = Model()   // ← recreated every render
+    var body: some View { Text(model.title) }
+}</code></pre></li>
+  <li><p>Right:</p></li>
+  <li><pre><code class="lang-swift">struct Child: View {
+    @StateObject private var model = Model()   // ← created once, persists
+    var body: some View { Text(model.title) }
+}</code></pre></li>
+  <li><p>The <code>@Observable</code> macro (Swift 5.9+) avoids this trap entirely:</p></li>
+  <li><pre><code class="lang-swift">@Observable
+final class Model { var title = "" }
+
+struct Child: View {
+    @State private var model = Model()
+    var body: some View { Text(model.title) }
+}</code></pre></li>
+  <li><h3>Passing Too Much Into a View</h3></li>
+  <li><p>The more properties a view takes, the more reasons it has to re-render. If <code>ProfileCard(user: user)</code> takes the whole user but only renders the name, SwiftUI re-renders when any user property changes. Pass only what you need:</p></li>
+  <li><pre><code class="lang-swift">ProfileCard(name: user.name)</code></pre></li>
+  <li><p>Or split the model into smaller <code>@Observable</code> classes so only the relevant piece triggers updates.</p></li>
+  <li><h3>Lists That Aren't Stable</h3></li>
+  <li><p><code>List</code> and <code>ForEach</code> rely on stable <code>id</code> values to animate inserts, deletes, and updates without re-rendering the whole list. Give every row a real identity:</p></li>
+  <li><pre><code class="lang-swift">ForEach(items, id: \.id) { item in Row(item: item) }</code></pre></li>
+  <li><p>Using <code>id: \.self</code> on mutable value types, or generating a fresh <code>UUID</code> on every render, defeats the identity check and forces a full redraw.</p></li>
+  <li><h3><code>AsyncImage</code> Without Caching</h3></li>
+  <li><p><code>AsyncImage</code> does no caching. If the user scrolls past an image, then back, it re-downloads. For serious image use, reach for a caching library (Kingfisher, Nuke) or cache manually in a model.</p></li>
+  <li><hr></li>
+  <li><h2>Actor Contention</h2></li>
+  <li><p>Swift 6's concurrency makes actors safe. It can also make them slow if a single actor is a choke point.</p></li>
+  <li><h3>The Problem</h3></li>
+  <li><pre><code class="lang-swift">actor ImageCache {
+    private var cache: [URL: UIImage] = [:]
+    func image(for url: URL) async -&gt; UIImage { /* load and store */ }
+}</code></pre></li>
+  <li><p>If every view on screen asks the cache for its image, they all serialize through this one actor. The first one gets serviced fast, the rest queue up.</p></li>
+  <li><h3>The Fixes</h3></li>
+  <li><ol class="body-list"><li><strong>Narrow the <code>await</code>.</strong> If the work you do on the actor is just "look up in a dictionary," let the actor return the cached value fast, but perform the expensive load off-actor.</li></ol></li>
+  <li><ol class="body-list"><li><strong>Split the actor.</strong> Two actors can't compete with each other, and each serves a different slice of the work.</li></ol></li>
+  <li><ol class="body-list"><li><strong>Use <code>nonisolated</code> methods for reads that don't touch mutable state.</strong> Those don't go through the actor's execution queue.</li></ol></li>
+  <li><ol class="body-list"><li><strong>Use <code>.task</code> with IDs to cancel in-flight work.</strong> When a row scrolls offscreen, cancel the image load rather than letting it finish.</li></ol></li>
+  <li><hr></li>
+  <li><h2>Everyday Habits</h2></li>
+  <li><p>The cheapest performance wins aren't about profiling; they're habits that keep an app fast by default.</p></li>
+  <li><ul><li><strong>Keep view hierarchies shallow.</strong> Deep nesting makes SwiftUI's diffing more expensive and makes the code harder to read.</li><li><strong>Pull state up only as far as it needs to go.</strong> State owned by a grandparent triggers more re-renders than state owned by the immediate parent.</li><li><strong>Avoid expensive computations in <code>body</code>.</strong> Compute once in a helper method (or outside the view) and pass the result in.</li><li><strong>Prefer <code>@Observable</code> over <code>ObservableObject</code>.</strong> Finer-grained tracking means fewer spurious re-renders.</li><li><strong>Measure before and after.</strong> If you "optimized" something, run Instruments again to confirm. Most optimizations don't help; some make things worse.</li></ul></li>
+  <li><hr></li>
+  <li><h2>Chapter Mini-Example -- A Fast List With 10,000 Items</h2></li>
+  <li><p>A <code>List</code> that renders 10,000 rows smoothly, because it does the right things by default:</p></li>
+  <li><pre><code class="lang-swift">import SwiftUI
+
+struct Row: Identifiable {
+    let id: Int
+    let title: String
+    let subtitle: String
+}
+
+struct BigList: View {
+    let rows: [Row] = (0..&lt;10_000).map {
+        Row(id: $0, title: "Item \($0)", subtitle: "Subtitle \($0)")
+    }
+
+    var body: some View {
+        List(rows) { row in
+            HStack {
+                Text(row.title).font(.headline)
+                Spacer()
+                Text(row.subtitle).foregroundStyle(.secondary)
+            }
+        }
+    }
+}</code></pre></li>
+  <li><p>Why this is fast:</p></li>
+  <li><ul><li><code>Row</code> has a stable <code>id: Int</code>. <code>List</code> can diff efficiently on inserts / deletes.</li><li>The row view has no <code>@ObservedObject</code> or heavy computation.</li><li>We don't wrap the list in a <code>GeometryReader</code> or force it into a custom layout.</li><li>The strings are computed up front, not rebuilt in <code>body</code>.</li></ul></li>
+  <li><p>Run Instruments (Time Profiler) on this; scrolling should spend near-zero CPU. That's the shape you're aiming for when your own lists feel slow.</p></li>
+  <li><hr></li>
+  <li><h2>What Book 21 Does</h2></li>
+  <li><p>Part V closes with performance. Part VI is the toolchain beyond the code itself. Book 21 covers Git and GitHub -- how to version your work, share it with a remote, and participate in the standard open-source workflow.</p></li>
 </ol>
 </div>
 
 <footer class="page">
-  <div class="pos">Part V &middot; Book 20 &middot; Proposed Scope</div>
+  <div class="pos">Part V &middot; Book 20</div>
   <div class="nav"><a href="../Front-of-Book/table-of-contents.html">&larr; Contents</a><a href="../claudex26-index.html">Index</a></div>
 </footer>
 

@@ -78,26 +78,254 @@ ol.lines > li > p, ol.lines > li > h2, ol.lines > li > h3, ol.lines > li > ul, o
 
 <div class="content">
 <ol class="lines">
-  <li><h1>Book 13: Multi Window And NavigationSplitView</h1></li>
-  <li><div class="scope-note">This Book is <strong>proposed-scope</strong>. The outline below is what will be written. Leave <code>MICHAEL:</code> notes anywhere and I will fold them in before writing the prose.</div></li>
-  <li><h2>Why This Book Exists</h2></li>
-  <li><p>Books 04-12 have covered interaction and controls. Book 13 scales the app up: multi-column layouts for iPad and Mac, multi-window on platforms that support it, and how a single SwiftUI codebase shapes itself to each form factor.</p></li>
-  <li><h2>Planned Sections</h2></li>
-  <li><h3>NavigationSplitView</h3></li>
-  <li><ul><li>Two-column and three-column layouts</li><li>NavigationSplitViewVisibility</li><li>Column-width controls and sidebar behavior</li><li>Programmatic selection across columns</li></ul></li>
-  <li><h3>Multi-Window (iPad and Mac)</h3></li>
-  <li><ul><li>WindowGroup and Scene composition</li><li>Opening a new window with openWindow</li><li>Per-window state vs shared state</li><li>Restoring windows across launches</li></ul></li>
-  <li><h3>Platform Adaptation</h3></li>
-  <li><ul><li>Compact vs regular size classes</li><li>Adaptive layouts using ViewThatFits</li><li>Conditional modifiers per platform</li></ul></li>
-  <li><h2>Planned Code Examples</h2></li>
-  <li><ul><li>Three-column reader shell (Library | Books | Page)</li><li>Settings window spawned from a toolbar button</li><li>Layout that collapses to a single column on iPhone</li></ul></li>
-  <li><h2>Planned Figures</h2></li>
-  <li><ul><li>iPad three-column layout</li><li>Mac multi-window scene with two inspectors</li><li>iPhone compact layout of the same app</li></ul></li>
+  <li><h1>Chapter 13: Multi-Window &amp; NavigationSplitView</h1></li>
+  <li><p><strong>Claude's Swift Reference 26</strong> -- Part IV: The Application</p></li>
+  <li><hr></li>
+  <li><h2>What You'll Learn</h2></li>
+  <li><p>By the end of this chapter you can:</p></li>
+  <li><ul><li>Open more than one window of the same app (Mac and iPad).</li><li>Lay out a three-column reader with <code>NavigationSplitView</code> that resizes cleanly on iPhone, iPad, and Mac.</li><li>Open, close, and bring windows to the front from code.</li><li>Keep the user's window state across launches so they pick up where they left off.</li></ul></li>
+  <li><p>If you have already built LockBox (Appendix D) or QuickNote (Appendix C), this chapter is the one that teaches them how to grow up into a proper Mac / iPad application with sidebars, detail panes, and multiple open windows.</p></li>
+  <li><hr></li>
+  <li><h2>Scenes, Windows, and the App</h2></li>
+  <li><p>Every Apple app has one <code>App</code> type as its entry point. Inside it you declare one or more <strong>scenes</strong> -- the top-level containers that SwiftUI manages for you. A scene ends up as a window on Mac and iPad, and as the app's root screen on iPhone.</p></li>
+  <li><p>The simplest app has exactly one scene:</p></li>
+  <li><pre><code class="lang-swift">import SwiftUI
+
+@main
+struct MyApp: App {
+    var body: some Scene {
+        WindowGroup {
+            ContentView()
+        }
+    }
+}</code></pre></li>
+  <li><p><code>WindowGroup</code> is the scene type for "a window the user can open more than one of." On Mac, File &gt; New Window opens a second one. On iPad, it takes part in Split View / Slide Over / Stage Manager. On iPhone there is only one window; <code>WindowGroup</code> still works, it just never gets a sibling.</p></li>
+  <li><h3>The Other Scene Types</h3></li>
+  <li><p>You will meet three other scene types over a typical app's lifetime:</p></li>
+  <li><ul><li><code>Window</code> -- a single-instance window. Think Preferences on Mac; you don't want two of them open at once.</li><li><code>DocumentGroup</code> -- a scene wired to a file document type. Each open document gets its own window automatically. Covered in Book 11.</li><li><code>Settings</code> -- Mac's Preferences scene. Shows under the app menu as <code>⌘,</code>.</li></ul></li>
+  <li><p>For most of this chapter we stay with <code>WindowGroup</code>, which covers the common case.</p></li>
+  <li><hr></li>
+  <li><h2>NavigationSplitView -- Sidebar, Content, Detail</h2></li>
+  <li><p><code>NavigationSplitView</code> is SwiftUI's answer to the three-column layout you see in Mail, Notes, Files, and every well-built Mac / iPad app. It gives you a sidebar on the left, a content column in the middle, and a detail pane on the right.</p></li>
+  <li><h3>The Two-Column Form</h3></li>
+  <li><p>The simplest form has two columns -- sidebar and detail:</p></li>
+  <li><pre><code class="lang-swift">struct Library: View {
+    let books = ["Swift in 26 Days", "SwiftUI by Example", "The Pragmatic Programmer"]
+    @State private var selected: String?
+
+    var body: some View {
+        NavigationSplitView {
+            List(books, id: \.self, selection: $selected) { title in
+                Text(title)
+            }
+            .navigationTitle("Library")
+        } detail: {
+            if let book = selected {
+                Text(book)
+                    .font(.title)
+            } else {
+                Text("Select a book")
+                    .foregroundStyle(.secondary)
+            }
+        }
+    }
+}</code></pre></li>
+  <li><p>On iPad and Mac: sidebar and detail appear side by side. On iPhone: the sidebar is the first screen and the detail is pushed when you tap a row.</p></li>
+  <li><p>The <code>selection:</code> binding is what makes the detail update when the user picks something in the sidebar. No <code>NavigationLink</code> needed.</p></li>
+  <li><h3>The Three-Column Form</h3></li>
+  <li><p>When your app has a real hierarchy -- categories, items, item-detail -- reach for the three-column form:</p></li>
+  <li><pre><code class="lang-swift">struct Mailbox: View {
+    let folders = ["Inbox", "Sent", "Drafts"]
+    @State private var folder: String?
+    @State private var messageID: Int?
+
+    var body: some View {
+        NavigationSplitView {
+            List(folders, id: \.self, selection: $folder) { Text($0) }
+                .navigationTitle("Mailboxes")
+        } content: {
+            if let folder {
+                List(1...20, id: \.self, selection: $messageID) { i in
+                    Text("\(folder) message #\(i)")
+                }
+                .navigationTitle(folder)
+            } else {
+                Text("Pick a mailbox").foregroundStyle(.secondary)
+            }
+        } detail: {
+            if let messageID {
+                Text("Message body #\(messageID)").font(.title2)
+            } else {
+                Text("Pick a message").foregroundStyle(.secondary)
+            }
+        }
+    }
+}</code></pre></li>
+  <li><p>Three columns on Mac and iPad Pro. Two columns on iPad regular width. Single column pushed through a stack on iPhone. You write the layout once; SwiftUI adapts it to the device.</p></li>
+  <li><h3>columnVisibility -- Controlling What's Open</h3></li>
+  <li><p><code>NavigationSplitView</code> takes a binding for <strong>column visibility</strong>. The cases cover the possible states:</p></li>
+  <li><ul><li><code>.all</code> -- every column visible (only actually shown when there is room).</li><li><code>.automatic</code> -- SwiftUI picks based on size class.</li><li><code>.detailOnly</code> -- sidebar and content hidden, detail takes the whole window.</li><li><code>.doubleColumn</code> -- sidebar hidden, content + detail visible.</li></ul></li>
+  <li><p>The binding lets you drive the UI in code:</p></li>
+  <li><pre><code class="lang-swift">struct Reader: View {
+    @State private var columns: NavigationSplitViewVisibility = .automatic
+
+    var body: some View {
+        NavigationSplitView(columnVisibility: $columns) {
+            sidebar
+        } detail: {
+            detail
+        }
+        .toolbar {
+            ToolbarItem {
+                Button("Focus") { columns = .detailOnly }
+            }
+        }
+    }
+
+    private var sidebar: some View { Text("Sidebar") }
+    private var detail: some View { Text("Detail") }
+}</code></pre></li>
+  <li><p>Tapping Focus hides the sidebar so the reader can concentrate. The system still lets the user reveal it again via edge swipe (iOS) or the default sidebar icon (iPad / Mac).</p></li>
+  <li><hr></li>
+  <li><h2>Opening Extra Windows</h2></li>
+  <li><p>On Mac and iPad you can open additional windows of your app's scenes. There are two sides to this: letting the user do it, and doing it in code.</p></li>
+  <li><h3>Letting the User Open Windows</h3></li>
+  <li><p><code>WindowGroup</code> already provides this. On Mac, File &gt; New Window appears automatically. On iPad, the user can drag the app's Dock icon to open a second window in Split View. You don't write any code.</p></li>
+  <li><h3>Opening a Window in Code</h3></li>
+  <li><p>Use the <code>openWindow</code> environment action.</p></li>
+  <li><pre><code class="lang-swift">struct Root: View {
+    @Environment(\.openWindow) private var openWindow
+
+    var body: some View {
+        Button("New Note Window") {
+            openWindow(id: "note")
+        }
+    }
+}</code></pre></li>
+  <li><p>For this to work, the scene has to have an <code>id:</code> parameter on the <code>App</code>:</p></li>
+  <li><pre><code class="lang-swift">@main
+struct NotesApp: App {
+    var body: some Scene {
+        WindowGroup("Library", id: "library") {
+            LibraryView()
+        }
+
+        WindowGroup("Note", id: "note") {
+            NoteView()
+        }
+    }
+}</code></pre></li>
+  <li><p>Now <code>openWindow(id: "note")</code> creates a new window with a fresh <code>NoteView</code>.</p></li>
+  <li><h3>Opening a Window With a Value</h3></li>
+  <li><p>If the opened window needs a value -- say, "open this specific note" -- give the scene a <code>for:</code> type:</p></li>
+  <li><pre><code class="lang-swift">@main
+struct NotesApp: App {
+    var body: some Scene {
+        WindowGroup("Library") { LibraryView() }
+
+        WindowGroup(for: Note.ID.self) { $noteID in
+            if let id = noteID { NoteView(noteID: id) }
+        }
+    }
+}</code></pre></li>
+  <li><p>Then open it with a value:</p></li>
+  <li><pre><code class="lang-swift">@Environment(\.openWindow) private var openWindow
+// ...
+openWindow(value: note.id)</code></pre></li>
+  <li><p>Swift picks the <code>WindowGroup</code> whose <code>for:</code> type matches. The window is restored across launches because the value conforms to <code>Codable</code>.</p></li>
+  <li><h3>Dismissing a Window</h3></li>
+  <li><p>From inside the window you want to close:</p></li>
+  <li><pre><code class="lang-swift">@Environment(\.dismissWindow) private var dismissWindow
+
+Button("Close") { dismissWindow() }</code></pre></li>
+  <li><p>From outside, pass the same <code>id:</code> or <code>value:</code> you opened with:</p></li>
+  <li><pre><code class="lang-swift">dismissWindow(id: "note")</code></pre></li>
+  <li><hr></li>
+  <li><h2>State Restoration</h2></li>
+  <li><p>Users expect the app to come back the way they left it -- the same window open, same document, same scroll position. SwiftUI restores most of this automatically as long as you use the right property wrappers.</p></li>
+  <li><p><code>@SceneStorage</code> is the one you reach for most. It's like <code>@State</code> except SwiftUI persists it per scene across launches:</p></li>
+  <li><pre><code class="lang-swift">struct NoteView: View {
+    @SceneStorage("draft") private var draft = ""
+    @SceneStorage("scrollPosition") private var scroll = 0
+
+    var body: some View {
+        TextEditor(text: $draft)
+    }
+}</code></pre></li>
+  <li><p>Close the window, relaunch, the text is still there.</p></li>
+  <li><p>For app-wide preferences -- "last-used color scheme," "font size" -- use <code>@AppStorage</code> instead; that writes into <code>UserDefaults</code> and is shared across every window.</p></li>
+  <li><hr></li>
+  <li><h2>Chapter Mini-Example -- A Two-Window Reader</h2></li>
+  <li><p>Putting the pieces together, here is a small app with a library window and a detail window that opens when you click a book.</p></li>
+  <li><pre><code class="lang-swift">import SwiftUI
+
+struct Book: Identifiable, Hashable, Codable {
+    let id: Int
+    let title: String
+}
+
+@main
+struct BookShelfApp: App {
+    var body: some Scene {
+        WindowGroup("Library", id: "library") {
+            LibraryView()
+        }
+
+        WindowGroup(for: Book.self) { $book in
+            if let book = book {
+                BookDetailView(book: book)
+            }
+        }
+    }
+}
+
+struct LibraryView: View {
+    @Environment(\.openWindow) private var openWindow
+
+    private let books = [
+        Book(id: 1, title: "Swift in 26 Days"),
+        Book(id: 2, title: "SwiftUI by Example"),
+        Book(id: 3, title: "The Pragmatic Programmer"),
+    ]
+
+    var body: some View {
+        NavigationSplitView {
+            List(books) { book in
+                Button(book.title) { openWindow(value: book) }
+                    .buttonStyle(.plain)
+            }
+            .navigationTitle("Library")
+        } detail: {
+            Text("Pick a book to open it in its own window.")
+                .foregroundStyle(.secondary)
+                .padding()
+        }
+    }
+}
+
+struct BookDetailView: View {
+    let book: Book
+    @SceneStorage("progress") private var progress = 0.0
+
+    var body: some View {
+        VStack(alignment: .leading) {
+            Text(book.title).font(.largeTitle)
+            Slider(value: $progress, in: 0...1)
+            Text("Progress: \(Int(progress * 100))%")
+        }
+        .padding()
+        .frame(minWidth: 400, minHeight: 240)
+    }
+}</code></pre></li>
+  <li><p>Clicking a book opens its detail in its own window. The slider position is preserved per-window across launches because <code>@SceneStorage</code> is scoped to the scene.</p></li>
+  <li><hr></li>
+  <li><h2>What Book 14 Does</h2></li>
+  <li><p>We now have windows we can open, arrange, and restore. Book 14 covers moving content between windows, apps, and devices: clipboard, drag and drop, and share sheets.</p></li>
 </ol>
 </div>
 
 <footer class="page">
-  <div class="pos">Part IV &middot; Book 13 &middot; Proposed Scope</div>
+  <div class="pos">Part IV &middot; Book 13</div>
   <div class="nav"><a href="../Front-of-Book/table-of-contents.html">&larr; Contents</a><a href="../claudex26-index.html">Index</a></div>
 </footer>
 

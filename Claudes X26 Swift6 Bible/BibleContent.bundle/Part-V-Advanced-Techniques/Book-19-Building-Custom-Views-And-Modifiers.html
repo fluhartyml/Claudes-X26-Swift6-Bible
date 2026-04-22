@@ -78,26 +78,285 @@ ol.lines > li > p, ol.lines > li > h2, ol.lines > li > h3, ol.lines > li > ul, o
 
 <div class="content">
 <ol class="lines">
-  <li><h1>Book 19: Building Custom Views And Modifiers</h1></li>
-  <li><div class="scope-note">This Book is <strong>proposed-scope</strong>. The outline below is what will be written. Leave <code>MICHAEL:</code> notes anywhere and I will fold them in before writing the prose.</div></li>
-  <li><h2>Why This Book Exists</h2></li>
-  <li><p>Chapters 02 through 12 have built views from SwiftUI primitives. Book 19 flips the perspective: how the reader builds their own reusable views, modifiers, and styles that other parts of the app can compose with.</p></li>
-  <li><h2>Planned Sections</h2></li>
-  <li><h3>Custom Views</h3></li>
-  <li><ul><li>Composition over inheritance</li><li>Generic views over content</li><li>ViewBuilder parameters and @ViewBuilder closures</li></ul></li>
-  <li><h3>Custom Modifiers</h3></li>
-  <li><ul><li>The ViewModifier protocol</li><li>modifier() vs direct extension on View</li><li>Environment-aware modifiers</li></ul></li>
-  <li><h3>Style Protocols</h3></li>
-  <li><ul><li>ButtonStyle, LabelStyle, ToggleStyle</li><li>When to roll your own style</li></ul></li>
-  <li><h2>Planned Code Examples</h2></li>
-  <li><ul><li>A CardView&lt;Content&gt; generic container</li><li>A .glow() modifier using shadow layers</li><li>A custom ButtonStyle with press animation</li></ul></li>
-  <li><h2>Planned Figures</h2></li>
-  <li><ul><li>Before / after of applying a custom modifier</li></ul></li>
+  <li><h1>Chapter 19: Building Custom Views &amp; Modifiers</h1></li>
+  <li><p><strong>Claude's Swift Reference 26</strong> -- Part V: Advanced Techniques</p></li>
+  <li><hr></li>
+  <li><h2>What You'll Learn</h2></li>
+  <li><p>By the end of this chapter you can:</p></li>
+  <li><ul><li>Extract reusable SwiftUI views from copy-pasted snippets.</li><li>Write custom <code>ViewModifier</code> types and apply them with <code>.modifier</code> or a cleaner <code>.myStyle()</code> extension.</li><li>Use <code>@Environment</code> values to pass data deep into a view tree without threading it through every level.</li><li>Read child-view sizes and positions with <code>GeometryReader</code>.</li><li>Share data from child to parent with <code>PreferenceKey</code>.</li><li>Animate transitions between layouts with <code>.matchedGeometryEffect</code>.</li></ul></li>
+  <li><hr></li>
+  <li><h2>Extracting a Custom View</h2></li>
+  <li><p>The first step past "all code in one big <code>ContentView</code>" is pulling repeated shapes into their own <code>View</code> types.</p></li>
+  <li><pre><code class="lang-swift">struct AvatarRow: View {
+    let name: String
+    let imageName: String
+
+    var body: some View {
+        HStack {
+            Image(systemName: imageName)
+                .resizable()
+                .scaledToFit()
+                .frame(width: 40, height: 40)
+                .foregroundStyle(.blue)
+            Text(name).font(.headline)
+            Spacer()
+        }
+        .padding()
+    }
+}</code></pre></li>
+  <li><p>Used anywhere:</p></li>
+  <li><pre><code class="lang-swift">VStack {
+    AvatarRow(name: "Ada",    imageName: "person.circle")
+    AvatarRow(name: "Max",    imageName: "person.circle.fill")
+    AvatarRow(name: "Claude", imageName: "sparkles")
+}</code></pre></li>
+  <li><p><strong>The rule of three</strong>: the third time you write the same layout, turn it into a view.</p></li>
+  <li><hr></li>
+  <li><h2>ViewModifier -- Reusable Styling</h2></li>
+  <li><p>When the thing you keep repeating is a <strong>stack of modifiers</strong>, not a layout, reach for <code>ViewModifier</code> instead of a new view.</p></li>
+  <li><pre><code class="lang-swift">struct CardStyle: ViewModifier {
+    func body(content: Content) -&gt; some View {
+        content
+            .padding()
+            .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 12))
+            .shadow(color: .black.opacity(0.12), radius: 6, y: 2)
+    }
+}</code></pre></li>
+  <li><p>Apply it with <code>.modifier(CardStyle())</code>, or -- for a cleaner call site -- add a <code>View</code> extension:</p></li>
+  <li><pre><code class="lang-swift">extension View {
+    func card() -&gt; some View { modifier(CardStyle()) }
+}
+
+// Usage
+Text("Hello")
+    .card()</code></pre></li>
+  <li><p>Custom modifiers are how you ship a house style. A dozen views across the app, one definition, any future tweak happens in one place.</p></li>
+  <li><h3>Modifiers That Take Arguments</h3></li>
+  <li><pre><code class="lang-swift">struct BadgedStyle: ViewModifier {
+    let color: Color
+    let count: Int
+
+    func body(content: Content) -&gt; some View {
+        content.overlay(alignment: .topTrailing) {
+            if count &gt; 0 {
+                Text("\(count)")
+                    .font(.caption2.bold())
+                    .padding(4)
+                    .background(color, in: Circle())
+                    .foregroundStyle(.white)
+                    .offset(x: 8, y: -8)
+            }
+        }
+    }
+}
+
+extension View {
+    func badged(_ count: Int, color: Color = .red) -&gt; some View {
+        modifier(BadgedStyle(color: color, count: count))
+    }
+}
+
+// Usage
+Image(systemName: "envelope")
+    .font(.title)
+    .badged(3)</code></pre></li>
+  <li><hr></li>
+  <li><h2>Environment Values -- Passing State Without Plumbing</h2></li>
+  <li><p>When deeply nested views need the same value (theme, date formatter, API client), don't thread it through every initializer. Put it in the environment.</p></li>
+  <li><h3>Reading a Built-In Environment Value</h3></li>
+  <li><pre><code class="lang-swift">struct Banner: View {
+    @Environment(\.colorScheme) private var scheme
+
+    var body: some View {
+        Text("Hello")
+            .foregroundStyle(scheme == .dark ? .white : .black)
+    }
+}</code></pre></li>
+  <li><h3>Defining Your Own Environment Value</h3></li>
+  <li><p>Define a key, extend <code>EnvironmentValues</code>, and set it with <code>.environment</code>:</p></li>
+  <li><pre><code class="lang-swift">private struct ThemeKey: EnvironmentKey {
+    static let defaultValue: Color = .blue
+}
+
+extension EnvironmentValues {
+    var theme: Color {
+        get { self[ThemeKey.self] }
+        set { self[ThemeKey.self] = newValue }
+    }
+}
+
+// A view that reads it
+struct ThemedButton: View {
+    @Environment(\.theme) private var theme
+    let title: String
+
+    var body: some View {
+        Text(title).padding().background(theme).foregroundStyle(.white)
+    }
+}
+
+// A view tree that sets it
+VStack {
+    ThemedButton(title: "Save")
+    ThemedButton(title: "Cancel")
+}
+.environment(\.theme, .orange)</code></pre></li>
+  <li><p>Every <code>ThemedButton</code> under that <code>.environment(...)</code> sees orange. Change the value once and every button updates.</p></li>
+  <li><hr></li>
+  <li><h2>GeometryReader -- Reading the Size Around You</h2></li>
+  <li><p><code>GeometryReader</code> gives its child view a <code>GeometryProxy</code> describing the size and safe-area it has been allocated.</p></li>
+  <li><pre><code class="lang-swift">struct SplitHalf: View {
+    var body: some View {
+        GeometryReader { geo in
+            HStack(spacing: 0) {
+                Color.red.frame(width: geo.size.width / 2)
+                Color.blue.frame(width: geo.size.width / 2)
+            }
+        }
+    }
+}</code></pre></li>
+  <li><h3>When Not to Use GeometryReader</h3></li>
+  <li><p><code>GeometryReader</code> expands to fill the space it is offered, which often surprises newcomers. If all you need is "half the width," reach for <code>.frame(maxWidth: .infinity)</code> and let SwiftUI's normal layout system do the work.</p></li>
+  <li><p>Use <code>GeometryReader</code> when you genuinely need to compute something from the runtime size -- a custom layout, a parallax effect, a shape that depends on width / height.</p></li>
+  <li><h3><code>onGeometryChange</code> (iOS 18+)</h3></li>
+  <li><p>In iOS 18, <code>.onGeometryChange</code> observes a view's frame without wrapping it in <code>GeometryReader</code>:</p></li>
+  <li><pre><code class="lang-swift">Text("Hello")
+    .onGeometryChange(for: CGSize.self) { proxy in
+        proxy.size
+    } action: { newSize in
+        print("I am now", newSize)
+    }</code></pre></li>
+  <li><p>Cleaner than <code>GeometryReader</code> when you only need a measurement, not a layout container.</p></li>
+  <li><hr></li>
+  <li><h2>PreferenceKey -- Child to Parent Communication</h2></li>
+  <li><p>The environment passes data <strong>down</strong> the view tree. Preference keys pass data <strong>up</strong>.</p></li>
+  <li><pre><code class="lang-swift">private struct HeightKey: PreferenceKey {
+    static let defaultValue: CGFloat = 0
+    static func reduce(value: inout CGFloat, nextValue: () -&gt; CGFloat) {
+        value = max(value, nextValue())
+    }
+}
+
+struct RowLikeContent: View {
+    var body: some View {
+        Text("I report my height upward")
+            .background(
+                GeometryReader { geo in
+                    Color.clear.preference(key: HeightKey.self, value: geo.size.height)
+                }
+            )
+    }
+}
+
+struct Parent: View {
+    @State private var rowHeight: CGFloat = 0
+
+    var body: some View {
+        VStack {
+            RowLikeContent()
+            Text("The row above is \(Int(rowHeight)) points tall")
+        }
+        .onPreferenceChange(HeightKey.self) { rowHeight = $0 }
+    }
+}</code></pre></li>
+  <li><p><code>reduce</code> is how SwiftUI combines values from multiple children; in this case we take the largest. Use preference keys when a parent needs to size itself based on its children, or when a child needs to say something specific to an ancestor.</p></li>
+  <li><hr></li>
+  <li><h2>matchedGeometryEffect -- Transitions Between Layouts</h2></li>
+  <li><p>When the same "thing" appears in two different layouts, <code>matchedGeometryEffect</code> animates it between them.</p></li>
+  <li><pre><code class="lang-swift">struct PhotoDetail: View {
+    @Namespace private var ns
+    @State private var expanded = false
+
+    var body: some View {
+        VStack {
+            if expanded {
+                Image("kitten")
+                    .resizable()
+                    .scaledToFit()
+                    .matchedGeometryEffect(id: "photo", in: ns)
+                    .onTapGesture { withAnimation(.spring) { expanded.toggle() } }
+            } else {
+                HStack {
+                    Image("kitten")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 80, height: 80)
+                        .matchedGeometryEffect(id: "photo", in: ns)
+                        .onTapGesture { withAnimation(.spring) { expanded.toggle() } }
+                    Text("Kitten").font(.headline)
+                }
+            }
+        }
+    }
+}</code></pre></li>
+  <li><p>Tap the image. SwiftUI notices the two views share the <code>id: "photo"</code> in the same namespace, and animates position + size from the small version to the full one (and back). You don't write any of the intermediate frames.</p></li>
+  <li><p><code>@Namespace</code> gives you a private namespace; reuse its value for every view pair you want matched.</p></li>
+  <li><hr></li>
+  <li><h2>Chapter Mini-Example -- A Badge Stack</h2></li>
+  <li><p>Putting custom views, a custom modifier, and an environment value together:</p></li>
+  <li><pre><code class="lang-swift">import SwiftUI
+
+private struct AccentKey: EnvironmentKey { static let defaultValue: Color = .blue }
+extension EnvironmentValues {
+    var accent: Color {
+        get { self[AccentKey.self] }
+        set { self[AccentKey.self] = newValue }
+    }
+}
+
+struct BadgedIcon: View {
+    let systemName: String
+    let count: Int
+
+    @Environment(\.accent) private var accent
+
+    var body: some View {
+        Image(systemName: systemName)
+            .font(.title)
+            .foregroundStyle(accent)
+            .overlay(alignment: .topTrailing) {
+                if count &gt; 0 {
+                    Text("\(count)")
+                        .font(.caption2.bold())
+                        .padding(4)
+                        .background(.red, in: Circle())
+                        .foregroundStyle(.white)
+                        .offset(x: 8, y: -8)
+                }
+            }
+    }
+}
+
+struct CardStyle: ViewModifier {
+    func body(content: Content) -&gt; some View {
+        content.padding()
+            .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 12))
+            .shadow(color: .black.opacity(0.12), radius: 6, y: 2)
+    }
+}
+
+extension View { func card() -&gt; some View { modifier(CardStyle()) } }
+
+struct NotificationBar: View {
+    var body: some View {
+        HStack(spacing: 24) {
+            BadgedIcon(systemName: "envelope", count: 3)
+            BadgedIcon(systemName: "bell",     count: 0)
+            BadgedIcon(systemName: "person.2", count: 1)
+        }
+        .card()
+        .environment(\.accent, .orange)
+    }
+}</code></pre></li>
+  <li><p>One reusable icon view, one reusable card modifier, one environment value -- and the bar's entire accent color lives in one spot.</p></li>
+  <li><hr></li>
+  <li><h2>What Book 20 Does</h2></li>
+  <li><p>We've added view-shaped tools to the toolkit. Book 20 pulls back and looks at the app as a running system: Instruments, profiling, and the habits that keep a SwiftUI app smooth as it grows.</p></li>
 </ol>
 </div>
 
 <footer class="page">
-  <div class="pos">Part V &middot; Book 19 &middot; Proposed Scope</div>
+  <div class="pos">Part V &middot; Book 19</div>
   <div class="nav"><a href="../Front-of-Book/table-of-contents.html">&larr; Contents</a><a href="../claudex26-index.html">Index</a></div>
 </footer>
 

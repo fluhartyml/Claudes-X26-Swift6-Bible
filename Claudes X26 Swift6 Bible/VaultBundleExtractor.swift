@@ -18,7 +18,7 @@ import Foundation
 enum VaultBundleExtractor {
     static let folderName = "BibleContent"
     /// Bump this when content mapping rules change so the next launch re-extracts.
-    static let currentVersion = 28
+    static let currentVersion = 30
     private static let versionFileName = ".extraction-version"
 
     /// Make sure the extracted vault exists at a known location, then return
@@ -95,6 +95,7 @@ enum VaultBundleExtractor {
             "claudex26-index.html",
             "claudex26-roadmap.html",
             "swift-section-mapping.html",
+            "bibliography.html",
             "BOOK-PARAMETERS.md",
             "INDEX.md",
             "cover.jpg",

@@ -78,26 +78,304 @@ ol.lines > li > p, ol.lines > li > h2, ol.lines > li > h3, ol.lines > li > ul, o
 
 <div class="content">
 <ol class="lines">
-  <li><h1>Book 22: AI Chatbot Integration</h1></li>
-  <li><div class="scope-note">This Book is <strong>proposed-scope</strong>. The outline below is what will be written. Leave <code>MICHAEL:</code> notes anywhere and I will fold them in before writing the prose.</div></li>
-  <li><h2>Why This Book Exists</h2></li>
-  <li><p>The final Book closes the loop: using AI assistance as part of the development loop, and integrating LLM-backed features into shipping apps.</p></li>
-  <li><h2>Planned Sections</h2></li>
-  <li><h3>Using AI to Build the App</h3></li>
-  <li><ul><li>Claude Code and the terminal workflow</li><li>Xcode + LLM integrations</li><li>Prompt patterns that work for Swift code</li></ul></li>
-  <li><h3>Integrating LLMs Into Apps</h3></li>
-  <li><ul><li>Anthropic API basics in Swift</li><li>Streaming responses in SwiftUI</li><li>Privacy: on-device vs cloud, PII handling</li></ul></li>
-  <li><h3>Design Patterns</h3></li>
-  <li><ul><li>Conversations as state</li><li>Tool use and function calling</li><li>Guardrails and prompt hygiene</li></ul></li>
-  <li><h2>Planned Code Examples</h2></li>
-  <li><ul><li>Minimal chat view that streams from the Anthropic API</li><li>Swift function exposed as a tool to the model</li></ul></li>
-  <li><h2>Planned Figures</h2></li>
-  <li><ul><li>Claude Code terminal interacting with an Xcode project</li><li>Streaming chat view in SwiftUI</li></ul></li>
+  <li><h1>Chapter 22: AI Chatbot Integration</h1></li>
+  <li><p><strong>Claude's Swift Reference 26</strong> -- Part VI: The Modern Toolchain</p></li>
+  <li><hr></li>
+  <li><h2>What You'll Learn</h2></li>
+  <li><p>By the end of this chapter you can:</p></li>
+  <li><ul><li>Register an Anthropic Claude API account, get an API key, and make your first call from Swift.</li><li>Send a message to Claude from an iOS or Mac app using only <code>URLSession</code> and <code>Codable</code>.</li><li>Store the API key safely in the Keychain instead of hard-coding it.</li><li>Build a minimal chat view that streams the assistant's reply as it arrives.</li></ul></li>
+  <li><hr></li>
+  <li><h2>What the Anthropic API Is</h2></li>
+  <li><p>Anthropic's Claude API is an HTTP JSON service. You POST a request describing the conversation so far; you receive a JSON response containing Claude's next message. No special SDK is required -- <code>URLSession</code> and <code>Codable</code> are enough.</p></li>
+  <li><h3>Getting an API Key</h3></li>
+  <li><ol class="body-list"><li>Sign up at <code>console.anthropic.com</code>.</li><li>Fund the account or use the free tier's trial credits.</li><li>Create an API key from the Keys section. Copy it once; Anthropic will not show it again.</li></ol></li>
+  <li><p>Treat the key like a password. Never commit it to Git, never paste it in chat, never embed it in client-side code that ships to end users (see the "Production" note at the end of the chapter).</p></li>
+  <li><hr></li>
+  <li><h2>The Request Shape</h2></li>
+  <li><p>A minimal chat request looks like this:</p></li>
+  <li><pre><code class="lang-json">{
+  "model": "claude-sonnet-4-6",
+  "max_tokens": 1024,
+  "messages": [
+    { "role": "user", "content": "Hello, Claude." }
+  ]
+}</code></pre></li>
+  <li><p>Send it as the body of a <code>POST https://api.anthropic.com/v1/messages</code>, with these headers:</p></li>
+  <li><pre><code class="lang-">x-api-key: &lt;your key&gt;
+anthropic-version: 2023-06-01
+content-type: application/json</code></pre></li>
+  <li><p>The response is JSON containing Claude's reply.</p></li>
+  <li><hr></li>
+  <li><h2>A Minimal Swift Client</h2></li>
+  <li><h3>The Codable Types</h3></li>
+  <li><pre><code class="lang-swift">struct ChatRequest: Codable {
+    let model: String
+    let max_tokens: Int
+    let messages: [Message]
+}
+
+struct Message: Codable {
+    let role: String       // "user" or "assistant"
+    let content: String
+}
+
+struct ChatResponse: Codable {
+    let content: [ContentBlock]
+    struct ContentBlock: Codable {
+        let type: String   // "text"
+        let text: String
+    }
+}</code></pre></li>
+  <li><h3>The Call</h3></li>
+  <li><pre><code class="lang-swift">import Foundation
+
+enum ChatError: Error {
+    case badStatus(Int, String)
+    case noText
+}
+
+func send(_ history: [Message], apiKey: String) async throws -&gt; String {
+    var request = URLRequest(url: URL(string: "https://api.anthropic.com/v1/messages")!)
+    request.httpMethod = "POST"
+    request.setValue(apiKey,             forHTTPHeaderField: "x-api-key")
+    request.setValue("2023-06-01",       forHTTPHeaderField: "anthropic-version")
+    request.setValue("application/json", forHTTPHeaderField: "content-type")
+
+    let payload = ChatRequest(
+        model:      "claude-sonnet-4-6",
+        max_tokens: 1024,
+        messages:   history
+    )
+    request.httpBody = try JSONEncoder().encode(payload)
+
+    let (data, response) = try await URLSession.shared.data(for: request)
+    guard let http = response as? HTTPURLResponse, http.statusCode == 200 else {
+        let body = String(data: data, encoding: .utf8) ?? ""
+        let code = (response as? HTTPURLResponse)?.statusCode ?? -1
+        throw ChatError.badStatus(code, body)
+    }
+
+    let decoded = try JSONDecoder().decode(ChatResponse.self, from: data)
+    guard let text = decoded.content.first(where: { $0.type == "text" })?.text else {
+        throw ChatError.noText
+    }
+    return text
+}</code></pre></li>
+  <li><p>Usage:</p></li>
+  <li><pre><code class="lang-swift">Task {
+    let reply = try await send(
+        [Message(role: "user", content: "Summarize the Gettysburg Address in one sentence.")],
+        apiKey: "sk-ant-..."
+    )
+    print(reply)
+}</code></pre></li>
+  <li><p>That's the whole non-streaming path. Every chat feature is a variation on this.</p></li>
+  <li><hr></li>
+  <li><h2>Storing the API Key Safely</h2></li>
+  <li><h3>Do Not Hard-Code It</h3></li>
+  <li><pre><code class="lang-swift">let apiKey = "sk-ant-ExamplePlease"   // 🚫 ships in your binary</code></pre></li>
+  <li><p>Anyone who unzips your app bundle can read the binary's strings and pull the key. Treat hard-coding as identical to posting the key publicly.</p></li>
+  <li><h3>The Keychain -- For User-Provided Keys</h3></li>
+  <li><p>The safest pattern for a user-brings-their-own-key app: have the user paste their key into a settings view; store it in the Keychain; read it at call time.</p></li>
+  <li><p>Minimal Keychain wrapper:</p></li>
+  <li><pre><code class="lang-swift">import Security
+
+enum Keychain {
+    private static let service = "com.yourname.YourApp"
+
+    static func save(_ value: String, for key: String) throws {
+        let data = Data(value.utf8)
+        let query: [String: Any] = [
+            kSecClass as String:       kSecClassGenericPassword,
+            kSecAttrService as String: service,
+            kSecAttrAccount as String: key,
+        ]
+        SecItemDelete(query as CFDictionary)
+
+        var attrs = query
+        attrs[kSecValueData as String] = data
+        let status = SecItemAdd(attrs as CFDictionary, nil)
+        if status != errSecSuccess { throw NSError(domain: "Keychain", code: Int(status)) }
+    }
+
+    static func load(_ key: String) -&gt; String? {
+        let query: [String: Any] = [
+            kSecClass as String:       kSecClassGenericPassword,
+            kSecAttrService as String: service,
+            kSecAttrAccount as String: key,
+            kSecReturnData as String:  true,
+            kSecMatchLimit as String:  kSecMatchLimitOne,
+        ]
+        var ref: CFTypeRef?
+        guard SecItemCopyMatching(query as CFDictionary, &amp;ref) == errSecSuccess,
+              let data = ref as? Data,
+              let str = String(data: data, encoding: .utf8) else {
+            return nil
+        }
+        return str
+    }
+}</code></pre></li>
+  <li><p>Save once when the user enters the key:</p></li>
+  <li><pre><code class="lang-swift">try Keychain.save(userEnteredKey, for: "anthropicAPIKey")</code></pre></li>
+  <li><p>Load at call time:</p></li>
+  <li><pre><code class="lang-swift">guard let key = Keychain.load("anthropicAPIKey") else {
+    // prompt the user to enter it
+    return
+}
+let reply = try await send(messages, apiKey: key)</code></pre></li>
+  <li><hr></li>
+  <li><h2>A Minimal Chat View</h2></li>
+  <li><pre><code class="lang-swift">import SwiftUI
+
+struct ChatView: View {
+    @State private var history: [Message] = []
+    @State private var draft: String = ""
+    @State private var sending = false
+    @State private var errorText: String?
+
+    var body: some View {
+        VStack {
+            ScrollView {
+                VStack(alignment: .leading, spacing: 12) {
+                    ForEach(history.indices, id: \.self) { i in
+                        Bubble(message: history[i])
+                    }
+                }
+                .padding()
+            }
+
+            if let errorText {
+                Text(errorText).foregroundStyle(.red).padding(.horizontal)
+            }
+
+            HStack {
+                TextField("Ask Claude...", text: $draft)
+                    .textFieldStyle(.roundedBorder)
+                Button("Send") { Task { await send() } }
+                    .disabled(draft.isEmpty || sending)
+            }
+            .padding()
+        }
+    }
+
+    private func send() async {
+        let userMsg = Message(role: "user", content: draft)
+        history.append(userMsg)
+        draft = ""
+        sending = true
+        errorText = nil
+
+        do {
+            guard let key = Keychain.load("anthropicAPIKey") else {
+                errorText = "No API key set. Add one in Settings."
+                sending = false
+                return
+            }
+            let reply = try await SwiftReference26.send(history, apiKey: key)
+            history.append(Message(role: "assistant", content: reply))
+        } catch {
+            errorText = error.localizedDescription
+        }
+        sending = false
+    }
+}
+
+struct Bubble: View {
+    let message: Message
+    var body: some View {
+        HStack {
+            if message.role == "assistant" { Spacer(minLength: 40) }
+            Text(message.content)
+                .padding(10)
+                .background(message.role == "user" ? Color.blue : Color.gray.opacity(0.2),
+                            in: RoundedRectangle(cornerRadius: 12))
+                .foregroundStyle(message.role == "user" ? .white : .primary)
+            if message.role == "user" { Spacer(minLength: 40) }
+        }
+    }
+}
+
+enum SwiftReference26 {
+    static func send(_ history: [Message], apiKey: String) async throws -&gt; String {
+        // The `send` function defined earlier in the chapter.
+        try await Claudes_X26_Swift6_Bible.send(history, apiKey: apiKey)
+    }
+}</code></pre></li>
+  <li><p>Run it. Type a message, tap Send, wait a second or two, Claude's reply appears in a gray bubble. Every message so far is appended to <code>history</code> and re-sent on the next call, giving the model the running context.</p></li>
+  <li><hr></li>
+  <li><h2>Streaming Responses</h2></li>
+  <li><p>When the reply is long, waiting for the full JSON to arrive feels slow. Anthropic supports Server-Sent Events streaming. You pass <code>"stream": true</code> in the request, and the response is a sequence of events you read as they arrive.</p></li>
+  <li><pre><code class="lang-swift">var request = URLRequest(url: URL(string: "https://api.anthropic.com/v1/messages")!)
+request.httpMethod = "POST"
+request.setValue(apiKey, forHTTPHeaderField: "x-api-key")
+request.setValue("2023-06-01", forHTTPHeaderField: "anthropic-version")
+request.setValue("application/json", forHTTPHeaderField: "content-type")
+
+let body = """
+{
+  "model": "claude-sonnet-4-6",
+  "max_tokens": 1024,
+  "stream": true,
+  "messages": [{ "role": "user", "content": "Hello!" }]
+}
+"""
+request.httpBody = body.data(using: .utf8)
+
+let (bytes, _) = try await URLSession.shared.bytes(for: request)
+for try await line in bytes.lines {
+    // Each SSE event is "event: xyz\n" then "data: {...json...}\n\n".
+    if line.hasPrefix("data: ") {
+        let json = String(line.dropFirst("data: ".count))
+        // Parse and append any "text_delta" content to the assistant's message on screen.
+    }
+}</code></pre></li>
+  <li><p>The UI binding pattern: hold the assistant's growing text in a <code>@State</code> string, append each delta as it arrives, and SwiftUI repaints the bubble on every update. The user sees Claude "typing" in real time.</p></li>
+  <li><hr></li>
+  <li><h2>Production Notes</h2></li>
+  <li><ul><li><strong>Don't ship your own API key in a client app.</strong> For apps where you (not the user) are paying for inference, proxy through a server you control. The server holds the key; the app calls your server. This gives you rate limiting, per-user auth, and a way to rotate the key without re-releasing the app.</li><li><strong>User-brings-their-own-key apps</strong> (the pattern in this chapter) are fine for hobby and internal-tool apps. Store the key in Keychain as shown.</li><li><strong>Check the model catalog before shipping.</strong> Anthropic retires older models on a schedule; link to <code>docs.anthropic.com</code> in your app's help so users know which model is current.</li><li><strong>Budget for it.</strong> The API bills per input + output token. A long conversation with a large <code>max_tokens</code> setting can run up a meaningful bill without warning. Show the user the current month-to-date cost if your app supports it.</li></ul></li>
+  <li><hr></li>
+  <li><h2>Chapter Mini-Example -- Settings Screen for the API Key</h2></li>
+  <li><p>A place for users to paste their key and stash it in the Keychain:</p></li>
+  <li><pre><code class="lang-swift">import SwiftUI
+
+struct SettingsView: View {
+    @State private var keyField = ""
+    @State private var savedNote: String?
+
+    var body: some View {
+        Form {
+            Section("Anthropic API Key") {
+                SecureField("sk-ant-...", text: $keyField)
+                Button("Save") {
+                    do {
+                        try Keychain.save(keyField, for: "anthropicAPIKey")
+                        keyField = ""
+                        savedNote = "Key saved."
+                    } catch {
+                        savedNote = "Could not save: \(error.localizedDescription)"
+                    }
+                }
+                if let savedNote {
+                    Text(savedNote).foregroundStyle(.secondary)
+                }
+            }
+            Section {
+                Link("Get a key from Anthropic",
+                     destination: URL(string: "https://console.anthropic.com")!)
+            }
+        }
+        .navigationTitle("Settings")
+    }
+}</code></pre></li>
+  <li><p>The user pastes, the app keychains, the <code>ChatView</code> reads it back, and you have a real, working chat app talking to a real model.</p></li>
+  <li><hr></li>
+  <li><h2>End of Part VI</h2></li>
+  <li><p>That's the modern toolchain: version control, a remote, and a live AI backend you can reach in a few lines of Swift. Appendices A through D walk you through four complete companion apps that exercise what you've learned across all six Parts.</p></li>
 </ol>
 </div>
 
 <footer class="page">
-  <div class="pos">Part VI &middot; Book 22 &middot; Proposed Scope</div>
+  <div class="pos">Part VI &middot; Book 22</div>
   <div class="nav"><a href="../Front-of-Book/table-of-contents.html">&larr; Contents</a><a href="../claudex26-index.html">Index</a></div>
 </footer>
 

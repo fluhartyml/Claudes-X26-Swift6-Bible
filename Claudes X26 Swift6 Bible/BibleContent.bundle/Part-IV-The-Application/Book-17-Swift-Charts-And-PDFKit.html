@@ -78,24 +78,243 @@ ol.lines > li > p, ol.lines > li > h2, ol.lines > li > h3, ol.lines > li > ul, o
 
 <div class="content">
 <ol class="lines">
-  <li><h1>Book 17: Swift Charts And PDFKit</h1></li>
-  <li><div class="scope-note">This Book is <strong>proposed-scope</strong>. The outline below is what will be written. Leave <code>MICHAEL:</code> notes anywhere and I will fold them in before writing the prose.</div></li>
-  <li><h2>Why This Book Exists</h2></li>
-  <li><p>Persistence covered, the app now needs to visualize and export. Book 17 introduces Swift Charts for visualization and PDFKit for export, covering the cases that commonly ship in real apps.</p></li>
-  <li><h2>Planned Sections</h2></li>
-  <li><h3>Swift Charts</h3></li>
-  <li><ul><li>BarMark, LineMark, PointMark</li><li>Axis and legend configuration</li><li>Interactive selection</li><li>Accessibility labels for charts</li></ul></li>
-  <li><h3>PDFKit</h3></li>
-  <li><ul><li>PDFView to display a document</li><li>PDFDocument in code (page extraction, metadata)</li><li>Rendering a SwiftUI view to a PDF page</li><li>Saving the generated PDF to Files</li></ul></li>
-  <li><h2>Planned Code Examples</h2></li>
-  <li><ul><li>Bar chart of weekly totals with selection callout</li><li>Export the current page as a one-page PDF</li></ul></li>
-  <li><h2>Planned Figures</h2></li>
-  <li><ul><li>Finished bar chart with axis labels</li><li>SwiftUI view rendered to a PDF viewer</li></ul></li>
+  <li><h1>Chapter 17: Swift Charts &amp; PDFKit</h1></li>
+  <li><p><strong>Claude's Swift Reference 26</strong> -- Part IV: The Application</p></li>
+  <li><hr></li>
+  <li><h2>What You'll Learn</h2></li>
+  <li><p>By the end of this chapter you can:</p></li>
+  <li><ul><li>Draw bar, line, point, and area charts with Swift Charts using your own data.</li><li>Customize the axes, labels, and colors without leaving SwiftUI.</li><li>Render a SwiftUI view into a PDF you can share or print.</li><li>Load, display, and page through an existing PDF document with PDFKit.</li></ul></li>
+  <li><hr></li>
+  <li><h2>Swift Charts</h2></li>
+  <li><p>Swift Charts arrived with iOS 16 / macOS 13 and now lives across every Apple platform. It's SwiftUI for data visualization: you describe what you want to draw, the framework handles layout, ticks, legends, and animation.</p></li>
+  <li><h3>The Basic Shape</h3></li>
+  <li><p>Every chart starts with <code>Chart</code> and one or more mark types inside.</p></li>
+  <li><pre><code class="lang-swift">import Charts
+import SwiftUI
+
+struct Sale: Identifiable {
+    let id = UUID()
+    let day: String
+    let amount: Double
+}
+
+struct WeekSales: View {
+    let sales: [Sale] = [
+        .init(day: "Mon", amount: 120),
+        .init(day: "Tue", amount: 80),
+        .init(day: "Wed", amount: 140),
+        .init(day: "Thu", amount: 90),
+        .init(day: "Fri", amount: 200),
+        .init(day: "Sat", amount: 160),
+        .init(day: "Sun", amount: 110),
+    ]
+
+    var body: some View {
+        Chart(sales) { sale in
+            BarMark(
+                x: .value("Day", sale.day),
+                y: .value("Sales", sale.amount)
+            )
+        }
+        .frame(height: 240)
+        .padding()
+    }
+}</code></pre></li>
+  <li><p>The <code>.value(_:_:)</code> pairs name the axis and the value; the name appears in labels, VoiceOver callouts, and accessibility summaries.</p></li>
+  <li><h3>Mark Types</h3></li>
+  <li><p>Swap <code>BarMark</code> for any of these depending on the story your data tells:</p></li>
+  <li><ul><li><code>BarMark</code> -- counts, totals, comparisons between categories.</li><li><code>LineMark</code> -- trends over a continuous variable, usually time.</li><li><code>PointMark</code> -- scatter plots.</li><li><code>AreaMark</code> -- cumulative totals, filled region under a line.</li><li><code>RuleMark</code> -- a horizontal or vertical guide line (averages, thresholds).</li><li><code>RectangleMark</code> -- heat-map cells or day-range highlights.</li></ul></li>
+  <li><p>You can combine them. A line with points and an average line:</p></li>
+  <li><pre><code class="lang-swift">Chart(sales) { sale in
+    LineMark(x: .value("Day", sale.day),
+             y: .value("Sales", sale.amount))
+    PointMark(x: .value("Day", sale.day),
+              y: .value("Sales", sale.amount))
+}
+.chartYAxis {
+    AxisMarks(position: .leading)
+}</code></pre></li>
+  <li><h3>Series (Color-Coded Groups)</h3></li>
+  <li><p>If your data has a category dimension, <code>.foregroundStyle(by:)</code> splits it into color-coded series:</p></li>
+  <li><pre><code class="lang-swift">struct Revenue: Identifiable {
+    let id = UUID()
+    let month: String
+    let store: String
+    let amount: Double
+}
+
+Chart(data) { r in
+    BarMark(x: .value("Month", r.month),
+            y: .value("Revenue", r.amount))
+        .foregroundStyle(by: .value("Store", r.store))
+}</code></pre></li>
+  <li><p>Swift Charts picks colors, adds a legend, and handles stacking. For side-by-side bars instead of stacked, add <code>.position(by: .value("Store", r.store))</code>.</p></li>
+  <li><h3>Axes and Labels</h3></li>
+  <li><p>Most of the time the defaults are good. When you want control:</p></li>
+  <li><pre><code class="lang-swift">Chart(sales) { sale in
+    BarMark(x: .value("Day", sale.day),
+            y: .value("Sales", sale.amount))
+}
+.chartXAxis {
+    AxisMarks { value in
+        AxisValueLabel()
+            .font(.caption)
+        AxisGridLine()
+    }
+}
+.chartYAxis {
+    AxisMarks(position: .leading, values: .stride(by: 50)) { value in
+        AxisGridLine()
+        AxisValueLabel { Text("$\(value.as(Int.self) ?? 0)") }
+    }
+}</code></pre></li>
+  <li><h3>Interactivity</h3></li>
+  <li><p>Swift Charts supports selection out of the box on iOS 17 / macOS 14 and later:</p></li>
+  <li><pre><code class="lang-swift">@State private var selectedDay: String?
+
+Chart(sales) { sale in
+    BarMark(x: .value("Day", sale.day),
+            y: .value("Sales", sale.amount))
+}
+.chartXSelection(value: $selectedDay)</code></pre></li>
+  <li><p>Tap a bar and <code>selectedDay</code> updates. Combine with an overlay to show a callout.</p></li>
+  <li><hr></li>
+  <li><h2>PDFKit</h2></li>
+  <li><p>PDFKit is Apple's framework for reading, displaying, and composing PDF documents. Two tasks cover 95% of what apps need: <strong>render a SwiftUI view to PDF</strong> and <strong>display an existing PDF</strong>.</p></li>
+  <li><h3>Rendering a View to PDF</h3></li>
+  <li><p><code>ImageRenderer</code> (iOS 16+) renders any SwiftUI view into a bitmap or PDF-backed CGContext. This is how you make a printable receipt, report, or share-as-PDF feature.</p></li>
+  <li><pre><code class="lang-swift">import SwiftUI
+
+@MainActor
+func renderPDF&lt;Content: View&gt;(
+    _ view: Content,
+    to url: URL,
+    size: CGSize = .init(width: 8.5 * 72, height: 11 * 72)
+) throws {
+    let renderer = ImageRenderer(content:
+        view.frame(width: size.width, height: size.height)
+    )
+
+    try renderer.render { _, context in
+        var box = CGRect(origin: .zero, size: size)
+        guard let pdf = CGContext(url as CFURL, mediaBox: &amp;box, nil) else {
+            return
+        }
+        pdf.beginPDFPage(nil)
+        context(pdf)
+        pdf.endPDFPage()
+        pdf.closePDF()
+    }
+}</code></pre></li>
+  <li><p>Usage:</p></li>
+  <li><pre><code class="lang-swift">let url = URL.temporaryDirectory.appending(path: "receipt.pdf")
+try renderPDF(ReceiptView(order: order), to: url)
+// Hand url to ShareLink, UIActivityViewController, or UIDocumentInteractionController.</code></pre></li>
+  <li><p>Book 14's <code>ShareLink</code> accepts a file URL, so you can ship the PDF with one call.</p></li>
+  <li><h3>Displaying a PDF</h3></li>
+  <li><p><code>PDFView</code> from PDFKit wraps into SwiftUI via <code>UIViewRepresentable</code> (or <code>NSViewRepresentable</code> on Mac):</p></li>
+  <li><pre><code class="lang-swift">import SwiftUI
+import PDFKit
+
+struct PDFReader: UIViewRepresentable {
+    let url: URL
+
+    func makeUIView(context: Context) -&gt; PDFView {
+        let v = PDFView()
+        v.document = PDFDocument(url: url)
+        v.autoScales = true
+        v.displayMode = .singlePageContinuous
+        return v
+    }
+
+    func updateUIView(_ v: PDFView, context: Context) {
+        if v.document?.documentURL != url {
+            v.document = PDFDocument(url: url)
+        }
+    }
+}</code></pre></li>
+  <li><p>Drop it into a view:</p></li>
+  <li><pre><code class="lang-swift">struct PDFScreen: View {
+    let url: URL
+
+    var body: some View {
+        PDFReader(url: url)
+            .ignoresSafeArea()
+    }
+}</code></pre></li>
+  <li><p><code>PDFView</code> gives you pinch-to-zoom, page navigation, and built-in selection highlighting for free.</p></li>
+  <li><h3>Paging, Search, and Outline</h3></li>
+  <li><ul><li><strong>Page count</strong>: <code>document.pageCount</code>.</li><li><strong>Specific page</strong>: <code>document.page(at: 0)</code> returns a <code>PDFPage</code>.</li><li><strong>Search</strong>: <code>document.findString("swift", withOptions: .caseInsensitive)</code> returns an array of <code>PDFSelection</code>.</li><li><strong>Outline</strong>: <code>document.outlineRoot</code> returns the PDF's table of contents if it has one.</li></ul></li>
+  <li><hr></li>
+  <li><h2>Chapter Mini-Example -- Bar Chart with Export</h2></li>
+  <li><pre><code class="lang-swift">import SwiftUI
+import Charts
+
+struct Sale: Identifiable {
+    let id = UUID()
+    let day: String
+    let amount: Double
+}
+
+struct SalesDashboard: View {
+    let sales: [Sale] = [
+        .init(day: "Mon", amount: 120),
+        .init(day: "Tue", amount: 80),
+        .init(day: "Wed", amount: 140),
+        .init(day: "Thu", amount: 90),
+        .init(day: "Fri", amount: 200),
+        .init(day: "Sat", amount: 160),
+        .init(day: "Sun", amount: 110),
+    ]
+
+    @State private var pdfURL: URL?
+
+    var body: some View {
+        VStack {
+            chart
+            if let url = pdfURL {
+                ShareLink(item: url) { Label("Share PDF", systemImage: "square.and.arrow.up") }
+            } else {
+                Button("Export to PDF") { exportPDF() }
+            }
+        }
+        .padding()
+    }
+
+    private var chart: some View {
+        Chart(sales) { sale in
+            BarMark(x: .value("Day", sale.day),
+                    y: .value("Sales", sale.amount))
+        }
+        .frame(height: 260)
+    }
+
+    @MainActor
+    private func exportPDF() {
+        let url = URL.temporaryDirectory.appending(path: "weekly-sales.pdf")
+        let renderer = ImageRenderer(content:
+            chart.frame(width: 600, height: 400).padding()
+        )
+        renderer.render { _, context in
+            var box = CGRect(x: 0, y: 0, width: 612, height: 792)
+            guard let pdf = CGContext(url as CFURL, mediaBox: &amp;box, nil) else { return }
+            pdf.beginPDFPage(nil)
+            context(pdf)
+            pdf.endPDFPage()
+            pdf.closePDF()
+        }
+        pdfURL = url
+    }
+}</code></pre></li>
+  <li><p>One view, a chart, and a button that exports the chart to a real PDF the user can share. That's the pattern for reports throughout the rest of your career.</p></li>
+  <li><hr></li>
+  <li><h2>What Book 18 Does</h2></li>
+  <li><p>Book 17 drew what we had. Book 18 covers what to do when things break: Swift's error-handling system -- <code>throws</code>, <code>try</code>, <code>catch</code>, typed throws in Swift 6, and the <code>Result</code> type for callback-era APIs.</p></li>
 </ol>
 </div>
 
 <footer class="page">
-  <div class="pos">Part IV &middot; Book 17 &middot; Proposed Scope</div>
+  <div class="pos">Part IV &middot; Book 17</div>
   <div class="nav"><a href="../Front-of-Book/table-of-contents.html">&larr; Contents</a><a href="../claudex26-index.html">Index</a></div>
 </footer>
 

@@ -78,26 +78,178 @@ ol.lines > li > p, ol.lines > li > h2, ol.lines > li > h3, ol.lines > li > ul, o
 
 <div class="content">
 <ol class="lines">
-  <li><h1>Book 21: Git And GitHub</h1></li>
-  <li><div class="scope-note">This Book is <strong>proposed-scope</strong>. The outline below is what will be written. Leave <code>MICHAEL:</code> notes anywhere and I will fold them in before writing the prose.</div></li>
-  <li><h2>Why This Book Exists</h2></li>
-  <li><p>Book 21 pivots from the app to the developer's toolchain. Git is not optional; GitHub is not optional. This Book teaches the daily workflow the reader needs.</p></li>
-  <li><h2>Planned Sections</h2></li>
-  <li><h3>Git Basics</h3></li>
-  <li><ul><li>clone, add, commit, push, pull</li><li>Branches and merges</li><li>Undoing: reset, revert, checkout</li></ul></li>
-  <li><h3>GitHub Workflow</h3></li>
-  <li><ul><li>Repos, remotes, and SSH keys</li><li>Pull requests and code review</li><li>Issues, labels, milestones</li><li>Wikis and releases</li></ul></li>
-  <li><h3>Xcode Integration</h3></li>
-  <li><ul><li>Source Control navigator</li><li>Committing from Xcode vs terminal</li><li>Conflict resolution in Xcode</li></ul></li>
-  <li><h2>Planned Code Examples</h2></li>
-  <li><ul><li>First push of a new Xcode project to GitHub</li><li>Branching, merging, and resolving a conflict</li></ul></li>
-  <li><h2>Planned Figures</h2></li>
-  <li><ul><li>Xcode Source Control navigator</li><li>A GitHub PR review screen</li></ul></li>
+  <li><h1>Chapter 21: Git &amp; GitHub</h1></li>
+  <li><p><strong>Claude's Swift Reference 26</strong> -- Part VI: The Modern Toolchain</p></li>
+  <li><hr></li>
+  <li><h2>What You'll Learn</h2></li>
+  <li><p>By the end of this chapter you can:</p></li>
+  <li><ul><li>Create a Git repository for an Xcode project and make your first commit.</li><li>Understand the mental model behind <code>add</code>, <code>commit</code>, <code>branch</code>, and <code>merge</code>.</li><li>Work with a remote on GitHub: clone, push, pull, and open a pull request.</li><li>Write a sane <code>.gitignore</code> for an Xcode project.</li><li>Tag a release and publish it on GitHub.</li></ul></li>
+  <li><hr></li>
+  <li><h2>Why Version Control</h2></li>
+  <li><p>Every file in your project has a history. Without version control, you have one copy of each file and whatever Time Machine remembered last night. With Git, every saved state is a named point you can return to, compare against, or share.</p></li>
+  <li><p>Git is the version control system. GitHub is one of several places to host Git repositories on the internet. You can use Git locally without ever talking to GitHub; you start needing GitHub (or something like it) when you want to sync across machines or collaborate.</p></li>
+  <li><hr></li>
+  <li><h2>The Mental Model</h2></li>
+  <li><p>Git tracks three places your files can live:</p></li>
+  <li><ol class="body-list"><li><strong>Working tree</strong> -- the files you see and edit on disk.</li><li><strong>Staging area (index)</strong> -- files you've marked as "I want these changes in the next commit."</li><li><strong>Repository</strong> -- the stored history of past commits.</li></ol></li>
+  <li><p>A typical change flow:</p></li>
+  <li><ul><li>You edit a file. It lives only in the working tree.</li><li><code>git add thefile.swift</code> moves that change from the working tree into the staging area.</li><li><code>git commit</code> moves the staged changes into the repository as a single named snapshot.</li></ul></li>
+  <li><p>You can stage many files at once and commit them together. Each commit is a whole-project snapshot: everything tracked, at a moment in time.</p></li>
+  <li><hr></li>
+  <li><h2>Creating a Repository</h2></li>
+  <li><p>From the project directory in Terminal:</p></li>
+  <li><pre><code class="lang-bash">cd ~/Developer/MyApp
+git init
+git add .
+git commit -m "Initial commit"</code></pre></li>
+  <li><p>What just happened:</p></li>
+  <li><ul><li><code>git init</code> created a hidden <code>.git/</code> folder, which is the repository.</li><li><code>git add .</code> staged every file in the current directory.</li><li><code>git commit</code> took that snapshot with the message "Initial commit."</li></ul></li>
+  <li><p>Xcode also has a "Create Git repository" checkbox when you make a new project. Either path gets you to the same place.</p></li>
+  <li><hr></li>
+  <li><h2>.gitignore for Xcode Projects</h2></li>
+  <li><p>A <code>.gitignore</code> file tells Git which paths to never track. Xcode generates a lot of user-specific junk that doesn't belong in shared history. A good starting <code>.gitignore</code>:</p></li>
+  <li><pre><code class="lang-"># macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Xcode -- user-specific
+xcuserdata/
+*.xcuserstate
+*.xcscmblueprint
+
+# Xcode -- builds
+build/
+DerivedData/
+
+# Swift Package Manager
+.swiftpm/
+Packages/
+Package.resolved
+
+# CocoaPods / Carthage (if you use them)
+Pods/
+Carthage/Build/
+
+# Secrets
+*.env
+*.env.local</code></pre></li>
+  <li><p>Drop that at the repo root <strong>before</strong> the first <code>git add .</code>. Files already tracked aren't automatically untracked by adding them here; that needs <code>git rm --cached</code>.</p></li>
+  <li><hr></li>
+  <li><h2>Making Commits as You Work</h2></li>
+  <li><p>The everyday cycle:</p></li>
+  <li><pre><code class="lang-bash"># See what changed
+git status
+
+# Stage specific files
+git add Sources/ContentView.swift
+
+# Or stage everything tracked
+git add -u
+
+# Commit
+git commit -m "Wire up Home tab"</code></pre></li>
+  <li><h3>Good Commit Messages</h3></li>
+  <li><ul><li>Imperative mood: "Add sidebar toggle," not "Added sidebar toggle" or "Adds sidebar toggle."</li><li>Short subject (under ~60 chars).</li><li>Optional body explaining <strong>why</strong>, not what -- the diff shows what.</li><li>One logical change per commit. Don't mix a bug fix with a feature; make two commits.</li></ul></li>
+  <li><hr></li>
+  <li><h2>Branches</h2></li>
+  <li><p>A branch is a named line of history. The default name is <code>main</code> (older repos use <code>master</code>).</p></li>
+  <li><pre><code class="lang-bash"># Create and switch to a new branch
+git checkout -b feature/import-csv
+
+# Do work, commit, etc.
+
+# Switch back to main
+git checkout main
+
+# Merge the branch in
+git merge feature/import-csv
+
+# Delete the merged branch
+git branch -d feature/import-csv</code></pre></li>
+  <li><p>Why branch? Because a feature in progress shouldn't sit in <code>main</code> until it's done. Branches let you keep <code>main</code> shippable while experiments live off to the side.</p></li>
+  <li><hr></li>
+  <li><h2>GitHub -- The Remote</h2></li>
+  <li><p>GitHub is where your local repo lives on the internet. "Remote" is Git's word for "a copy of this repo somewhere else." The default remote name is <code>origin</code>.</p></li>
+  <li><h3>Create and Link a Remote Repo</h3></li>
+  <li><p>On GitHub, create an empty repository (no README, no .gitignore -- let the local one be the source of truth). Copy the HTTPS or SSH URL.</p></li>
+  <li><pre><code class="lang-bash">git remote add origin https://github.com/yourname/MyApp.git
+git branch -M main
+git push -u origin main</code></pre></li>
+  <li><ul><li><code>git remote add</code> registers the URL under the name <code>origin</code>.</li><li><code>git branch -M main</code> renames the current branch to <code>main</code> (in case your local default is different).</li><li><code>git push -u origin main</code> uploads the <code>main</code> branch and remembers the association (<code>-u</code> = "upstream").</li></ul></li>
+  <li><h3>Everyday Push / Pull</h3></li>
+  <li><pre><code class="lang-bash"># Grab the latest from GitHub (when someone else committed)
+git pull
+
+# Push your commits
+git push</code></pre></li>
+  <li><hr></li>
+  <li><h2>Pull Requests</h2></li>
+  <li><p>A pull request (PR) is GitHub's way of saying "I'd like my branch merged into yours; here's the diff, please review."</p></li>
+  <li><p>Typical flow:</p></li>
+  <li><ol class="body-list"><li>Create a branch locally and push it to GitHub.</li></ol></li>
+  <li><p>``<code>bash git checkout -b feature/export-pdf # ... commits ... git push -u origin feature/export-pdf </code>``</p></li>
+  <li><ol class="body-list"><li>On GitHub, click "Compare &amp; pull request."</li><li>Fill in the title and description. Link related issues.</li><li>Reviewers comment. You push follow-up commits to the same branch; the PR updates automatically.</li><li>Merge when approved.</li></ol></li>
+  <li><p>For a solo-developer repo, PRs are still useful: they force you to look at the full diff before merging, which catches things you wouldn't see in individual commits.</p></li>
+  <li><hr></li>
+  <li><h2>Tags and Releases</h2></li>
+  <li><p>Tags are named pointers to a specific commit. You use them to mark releases.</p></li>
+  <li><pre><code class="lang-bash">git tag v1.0.0
+git push origin v1.0.0</code></pre></li>
+  <li><p>On GitHub, navigate to Releases and cut a release from the tag. You can attach a built <code>.ipa</code> or <code>.app</code> binary, write release notes, and mark it prerelease or production.</p></li>
+  <li><p>Version tags usually follow <strong>semantic versioning</strong>: <code>MAJOR.MINOR.PATCH</code>. Bump MAJOR for breaking changes, MINOR for new features, PATCH for bug fixes.</p></li>
+  <li><hr></li>
+  <li><h2>Undoing Things</h2></li>
+  <li><h3>Undo Uncommitted Changes to a File</h3></li>
+  <li><pre><code class="lang-bash">git checkout -- Sources/ContentView.swift</code></pre></li>
+  <li><p>Resets that file to whatever was last committed. Be careful -- this loses your working changes.</p></li>
+  <li><h3>Undo a Commit You Haven't Pushed</h3></li>
+  <li><pre><code class="lang-bash">git reset --soft HEAD~1</code></pre></li>
+  <li><p>Moves <code>HEAD</code> back one commit but keeps the changes staged. You can fix them and recommit.</p></li>
+  <li><h3>Undo a Pushed Commit</h3></li>
+  <li><pre><code class="lang-bash">git revert &lt;commit-sha&gt;</code></pre></li>
+  <li><p>Creates a new commit that undoes the old one. Safe because history stays linear; nobody has to rebase their work.</p></li>
+  <li><p>Never use <code>git push --force</code> on a shared branch. It rewrites history and breaks everybody else's clone.</p></li>
+  <li><hr></li>
+  <li><h2>The Xcode Source Control Integration</h2></li>
+  <li><p>Xcode has a Source Control menu that does the common Git operations through GUI. You can:</p></li>
+  <li><ul><li>View history per file with <strong>Source Control &gt; History</strong>.</li><li>Compare working changes against the last commit via the Changes tab in the navigator.</li><li>Commit from <strong>Source Control &gt; Commit</strong> (<code>⌥⌘C</code>).</li><li>Push and pull from <strong>Source Control &gt; Push / Pull</strong>.</li></ul></li>
+  <li><p>The GUI is fine for day-to-day work. Drop to Terminal for anything unusual -- interactive rebases, surgical resets, tag management. The CLI is more powerful; the GUI is faster for the common case.</p></li>
+  <li><hr></li>
+  <li><h2>Chapter Mini-Example -- First Push to GitHub</h2></li>
+  <li><p>Walk through exactly what to type the first time you put a new Xcode project on GitHub.</p></li>
+  <li><pre><code class="lang-bash"># 1. Go to the project
+cd ~/Developer/MyApp
+
+# 2. (If Xcode didn't already) initialize Git
+git init
+
+# 3. Drop a .gitignore at the repo root (paste the template from earlier)
+# 4. Check what Git sees
+git status
+
+# 5. Stage everything
+git add .
+
+# 6. First commit
+git commit -m "Initial commit"
+
+# 7. On GitHub: create an empty repo named MyApp, copy its URL.
+# 8. Wire up the remote (HTTPS example)
+git remote add origin https://github.com/yourname/MyApp.git
+git branch -M main
+
+# 9. First push
+git push -u origin main</code></pre></li>
+  <li><p>Refresh the GitHub repo page. Your code is up. Every future commit is one <code>git push</code> away from being backed up.</p></li>
+  <li><hr></li>
+  <li><h2>What Book 22 Does</h2></li>
+  <li><p>You've got your code under version control and safely stored. Book 22 turns the lens outward: how to integrate an AI chatbot into your own app, using the Anthropic Claude API from Swift.</p></li>
 </ol>
 </div>
 
 <footer class="page">
-  <div class="pos">Part VI &middot; Book 21 &middot; Proposed Scope</div>
+  <div class="pos">Part VI &middot; Book 21</div>
   <div class="nav"><a href="../Front-of-Book/table-of-contents.html">&larr; Contents</a><a href="../claudex26-index.html">Index</a></div>
 </footer>
 

@@ -258,16 +258,16 @@ BOOKS = [
     (10, "Part-III-The-User-Interface",  "TextEditor-And-AttributedString","written"),
     (11, "Part-III-The-User-Interface",  "FileManager-And-Documents",     "written"),
     (12, "Part-III-The-User-Interface",  "Sheets-Alerts-And-Confirmations","written"),
-    (13, "Part-IV-The-Application",      "Multi-Window-And-NavigationSplitView","scope"),
-    (14, "Part-IV-The-Application",      "Clipboard-DragDrop-ShareSheet", "scope"),
-    (15, "Part-IV-The-Application",      "SwiftData-And-CoreData",        "scope"),
+    (13, "Part-IV-The-Application",      "Multi-Window-And-NavigationSplitView","written"),
+    (14, "Part-IV-The-Application",      "Clipboard-DragDrop-ShareSheet", "written"),
+    (15, "Part-IV-The-Application",      "SwiftData-And-CoreData",        "written"),
     (16, "Part-IV-The-Application",      "Extensions-And-Packages",       "written"),
-    (17, "Part-IV-The-Application",      "Swift-Charts-And-PDFKit",       "scope"),
-    (18, "Part-V-Advanced-Techniques",   "Error-Handling-And-Result-Type","scope"),
-    (19, "Part-V-Advanced-Techniques",   "Building-Custom-Views-And-Modifiers","scope"),
-    (20, "Part-V-Advanced-Techniques",   "Performance-Instruments-And-Best-Practices","scope"),
-    (21, "Part-VI-The-Modern-Toolchain", "Git-And-GitHub",                "scope"),
-    (22, "Part-VI-The-Modern-Toolchain", "AI-Chatbot-Integration",        "scope"),
+    (17, "Part-IV-The-Application",      "Swift-Charts-And-PDFKit",       "written"),
+    (18, "Part-V-Advanced-Techniques",   "Error-Handling-And-Result-Type","written"),
+    (19, "Part-V-Advanced-Techniques",   "Building-Custom-Views-And-Modifiers","written"),
+    (20, "Part-V-Advanced-Techniques",   "Performance-Instruments-And-Best-Practices","written"),
+    (21, "Part-VI-The-Modern-Toolchain", "Git-And-GitHub",                "written"),
+    (22, "Part-VI-The-Modern-Toolchain", "AI-Chatbot-Integration",        "written"),
 ]
 
 APPENDICES = [
@@ -645,7 +645,8 @@ def render_toc():
     blocks.append('<h2>Back Matter</h2>')
     blocks.append(
         '<ul>'
-        '<li><a href="../claudex26-index.html">Index</a> — alphabetical list of every Page, Book, and Appendix</li>'
+        '<li><a href="../claudex26-index.html">Index</a> — alphabetical index of every Page, Book, Appendix, plus every Swift identifier that appears in the prose</li>'
+        '<li><a href="../bibliography.html">Bibliography</a> — primary sources the book draws from</li>'
         '</ul>'
     )
 
@@ -653,6 +654,53 @@ def render_toc():
     out_path = BUNDLE / "Front-of-Book" / "table-of-contents.html"
     out_path.parent.mkdir(parents=True, exist_ok=True)
     out_path.write_text(render_page(title, path_display, pos, blocks, nav))
+
+
+# ---------- Cross-reference scanner ----------
+
+# Match inline <code>…</code> not wrapped by a <pre> ancestor. We sub out
+# <pre>…</pre> blocks first, then grab every remaining <code> content.
+_PRE_BLOCK   = re.compile(r"<pre\b[^>]*>.*?</pre>", re.DOTALL | re.IGNORECASE)
+_INLINE_CODE = re.compile(r"<code\b[^>]*>([^<]+)</code>", re.IGNORECASE)
+# A token that looks like a Swift identifier (optionally @ / # / $ prefixed).
+_IDENT = re.compile(r"^[@#$]?[A-Za-z_][A-Za-z0-9_]*$")
+
+def _display_for_file(rel_path: str) -> str:
+    """Reader-friendly label for an in-vault path."""
+    name = rel_path.replace("\\", "/")
+    name = name[:-5] if name.endswith(".html") else name
+    last = name.rsplit("/", 1)[-1]
+    return last.replace("-", " ")
+
+def scan_code_tokens():
+    """
+    Walk every .html under the vault, collect inline <code> tokens that look
+    like Swift identifiers, map each token to the pages that mention it.
+    Skip the Index and Bibliography themselves to avoid circular references.
+    """
+    refs: dict[str, set[tuple[str, str]]] = {}
+    skip = {"claudex26-index.html", "bibliography.html"}
+    for path in sorted(BUNDLE.rglob("*.html")):
+        if path.name in skip: continue
+        rel = str(path.relative_to(BUNDLE))
+        try:
+            text = path.read_text(encoding="utf-8")
+        except Exception:
+            continue
+        stripped = _PRE_BLOCK.sub("", text)
+        for m in _INLINE_CODE.finditer(stripped):
+            token = m.group(1).strip()
+            if len(token) > 40: continue
+            if not _IDENT.match(token): continue
+            # Drop common noise: single-letter loop vars, keywords too trivial
+            # to index (let them land on their Lexicon Page instead).
+            if len(token) <= 1: continue
+            refs.setdefault(token, set()).add((rel, _display_for_file(rel)))
+    # Return as sorted lists per token for deterministic rendering.
+    return {
+        t: sorted(pages, key=lambda p: p[1].lower())
+        for t, pages in refs.items()
+    }
 
 
 # ---------- Index (alphabetical) ----------
@@ -725,8 +773,175 @@ def render_index():
             )
         blocks.append('<ul>' + "".join(items) + '</ul>')
 
-    nav = '<a href="Front-of-Book/table-of-contents.html">Contents</a>'
+    # ---------- Cross-reference of Swift identifiers ----------
+    refs = scan_code_tokens()
+    blocks.append('<h2>Swift Identifiers (Cross-Reference)</h2>')
+    blocks.append(
+        '<p>Every Swift identifier (keyword, type, attribute, API name) that '
+        'appears in the prose of this book, and every page it appears on. '
+        'Tokens that also have a Lexicon Page link to that page first.</p>'
+    )
+    # Group by first letter, preserving case for the token itself.
+    by_letter_xref: dict[str, list[tuple[str, list[tuple[str, str]]]]] = {}
+    for token in sorted(refs.keys(), key=lambda t: re.sub(r"^[@#$]", "", t).lower()):
+        stripped = re.sub(r"^[@#$]", "", token)
+        letter = stripped[0].upper() if stripped else "#"
+        if not letter.isalpha(): letter = "#"
+        by_letter_xref.setdefault(letter, []).append((token, refs[token]))
+
+    for letter in sorted(by_letter_xref.keys()):
+        blocks.append(f'<h3>{letter}</h3>')
+        lines = []
+        for token, pages in by_letter_xref[letter]:
+            links = ", ".join(
+                f'<a href="{href}">{esc(label)}</a>'
+                for href, label in pages
+            )
+            lines.append(f'<li><code>{esc(token)}</code> — {links}</li>')
+        blocks.append('<ul>' + "".join(lines) + '</ul>')
+
+    nav = '<a href="Front-of-Book/table-of-contents.html">Contents</a> <a href="bibliography.html">Bibliography</a>'
     (BUNDLE / "claudex26-index.html").write_text(
+        render_page(title, path_display, pos, blocks, nav)
+    )
+
+
+# ---------- Bibliography ----------
+
+def render_bibliography():
+    path_display = "bibliography"
+    title = "Bibliography — Claude's Xcode 26 Swift Bible"
+    pos = "Back Matter &middot; Bibliography"
+
+    blocks = [
+        '<h1>Bibliography</h1>',
+        '<p>Primary sources the book draws from. Individual claims are not '
+        'yet footnoted line-by-line; a full citation audit is a later pass. '
+        'Everything below is where to go for the authoritative word on the '
+        'topics covered in each chapter.</p>',
+        '<p><em>Last reviewed 2026-04-22.</em></p>',
+
+        '<h2>Swift Language</h2>',
+        '<ul>'
+        '<li>Apple Inc. <strong>The Swift Programming Language</strong>. '
+        '<a href="https://docs.swift.org/swift-book/">docs.swift.org/swift-book</a>. '
+        'The canonical language reference; every keyword, type, and rule lives here.</li>'
+        '<li>Apple Inc. <strong>Swift.org</strong>. <a href="https://www.swift.org/">swift.org</a>. '
+        'Release notes, compiler announcements, and the Swift blog.</li>'
+        '<li>Swift Evolution. <a href="https://github.com/apple/swift-evolution">github.com/apple/swift-evolution</a>. '
+        'Every accepted language proposal, with motivation and alternatives considered.</li>'
+        '<li>Swift Forums. <a href="https://forums.swift.org/">forums.swift.org</a>. '
+        'Where Swift evolution is debated in public.</li>'
+        '</ul>',
+
+        '<h2>Apple Platform APIs</h2>',
+        '<ul>'
+        '<li>Apple Inc. <strong>Apple Developer Documentation</strong>. '
+        '<a href="https://developer.apple.com/documentation/">developer.apple.com/documentation</a>. '
+        'The authoritative source for every framework API surfaced in the book.</li>'
+        '<li>Apple Inc. <strong>SwiftUI</strong>. '
+        '<a href="https://developer.apple.com/documentation/swiftui">developer.apple.com/documentation/swiftui</a>.</li>'
+        '<li>Apple Inc. <strong>SwiftData</strong>. '
+        '<a href="https://developer.apple.com/documentation/swiftdata">developer.apple.com/documentation/swiftdata</a>.</li>'
+        '<li>Apple Inc. <strong>Swift Charts</strong>. '
+        '<a href="https://developer.apple.com/documentation/charts">developer.apple.com/documentation/charts</a>.</li>'
+        '<li>Apple Inc. <strong>PDFKit</strong>. '
+        '<a href="https://developer.apple.com/documentation/pdfkit">developer.apple.com/documentation/pdfkit</a>.</li>'
+        '<li>Apple Inc. <strong>PencilKit</strong>. '
+        '<a href="https://developer.apple.com/documentation/pencilkit">developer.apple.com/documentation/pencilkit</a>.</li>'
+        '<li>Apple Inc. <strong>UIKit</strong>. '
+        '<a href="https://developer.apple.com/documentation/uikit">developer.apple.com/documentation/uikit</a>.</li>'
+        '<li>Apple Inc. <strong>AppKit</strong>. '
+        '<a href="https://developer.apple.com/documentation/appkit">developer.apple.com/documentation/appkit</a>.</li>'
+        '<li>Apple Inc. <strong>Foundation</strong>. '
+        '<a href="https://developer.apple.com/documentation/foundation">developer.apple.com/documentation/foundation</a>.</li>'
+        '<li>Apple Inc. <strong>Core Transferable</strong>. '
+        '<a href="https://developer.apple.com/documentation/coretransferable">developer.apple.com/documentation/coretransferable</a>.</li>'
+        '</ul>',
+
+        '<h2>Design and Platform Guidelines</h2>',
+        '<ul>'
+        '<li>Apple Inc. <strong>Human Interface Guidelines</strong>. '
+        '<a href="https://developer.apple.com/design/human-interface-guidelines/">developer.apple.com/design/human-interface-guidelines</a>. '
+        'Hit-target sizes, accessibility, platform-correct UI.</li>'
+        '<li>Apple Inc. <strong>App Store Review Guidelines</strong>. '
+        '<a href="https://developer.apple.com/app-store/review/guidelines/">developer.apple.com/app-store/review/guidelines</a>.</li>'
+        '</ul>',
+
+        '<h2>WWDC Sessions</h2>',
+        '<ul>'
+        '<li>Apple Inc. <strong>WWDC Session Videos</strong>. '
+        '<a href="https://developer.apple.com/videos/">developer.apple.com/videos</a>. '
+        'Primary source for each year\'s API additions. SwiftUI, SwiftData, Swift '
+        'concurrency, and Swift Charts are particularly well served by the '
+        'year-of-introduction sessions.</li>'
+        '</ul>',
+
+        '<h2>Xcode and the Build System</h2>',
+        '<ul>'
+        '<li>Apple Inc. <strong>Xcode Release Notes</strong>. '
+        '<a href="https://developer.apple.com/documentation/xcode-release-notes">developer.apple.com/documentation/xcode-release-notes</a>.</li>'
+        '<li>Apple Inc. <strong>Xcode Help</strong>. '
+        'Bundled in-app via Xcode > Help > Xcode Help. Covers Signing & Capabilities, schemes, and build settings.</li>'
+        '</ul>',
+
+        '<h2>Instruments and Performance</h2>',
+        '<ul>'
+        '<li>Apple Inc. <strong>Instruments User Guide</strong>. '
+        '<a href="https://help.apple.com/instruments/">help.apple.com/instruments</a>. '
+        'Covers the Time Profiler, Allocations, and SwiftUI instruments cited in Book 20.</li>'
+        '</ul>',
+
+        '<h2>Anthropic Claude API</h2>',
+        '<ul>'
+        '<li>Anthropic PBC. <strong>Anthropic API Reference</strong>. '
+        '<a href="https://docs.anthropic.com/">docs.anthropic.com</a>. '
+        'Messages API, streaming, rate limits, and model catalog used in Book 22.</li>'
+        '<li>Anthropic PBC. <strong>Anthropic Console</strong>. '
+        '<a href="https://console.anthropic.com/">console.anthropic.com</a>. '
+        'API key management and usage dashboards.</li>'
+        '</ul>',
+
+        '<h2>Git and GitHub</h2>',
+        '<ul>'
+        '<li>Chacon, Scott, and Straub, Ben. <strong>Pro Git</strong>, 2nd ed. Apress, 2014. '
+        '<a href="https://git-scm.com/book">git-scm.com/book</a>. The standard free reference.</li>'
+        '<li>Git Project. <strong>git-scm.com</strong>. '
+        '<a href="https://git-scm.com/">git-scm.com</a>. Command reference and changelog.</li>'
+        '<li>GitHub Inc. <strong>GitHub Docs</strong>. '
+        '<a href="https://docs.github.com/">docs.github.com</a>. Remote-side workflows: pull requests, releases, actions.</li>'
+        '</ul>',
+
+        '<h2>Other Languages Referenced (Rosetta Stone)</h2>',
+        '<ul>'
+        '<li>ISO/IEC 14882:2020. <strong>Programming languages — C++</strong>. '
+        'International Organization for Standardization, 2020. Used for C/C++ comparisons in the Lexicon.</li>'
+        '<li>ISO/IEC 7185:1990. <strong>Information technology — Programming languages — Pascal</strong>. '
+        'Cited for the Pascal/Delphi cousins in the Lexicon.</li>'
+        '<li>Embarcadero Technologies. <strong>Delphi Language Reference</strong>. '
+        '<a href="https://docwiki.embarcadero.com/RADStudio/en/Delphi_Language_Reference">docwiki.embarcadero.com/RADStudio</a>.</li>'
+        '<li>Microsoft Corporation. <strong>QuickBASIC Language Reference</strong>. '
+        'Historical reference for the BASIC dialect used in the Lexicon comparisons.</li>'
+        '</ul>',
+
+        '<h2>Fonts and Assets</h2>',
+        '<ul>'
+        '<li>Van Rossum, Nikita. <strong>Fira Code</strong>. '
+        '<a href="https://github.com/tonsky/FiraCode">github.com/tonsky/FiraCode</a>. '
+        'Monospaced font used throughout the book and the reader app.</li>'
+        '<li>Ryan L. McIntyre and Fira Code contributors. <strong>Nerd Fonts</strong>. '
+        '<a href="https://www.nerdfonts.com/">nerdfonts.com</a>. Patched font glyphs.</li>'
+        '</ul>',
+
+        '<h2>Notes on Currency and Accuracy</h2>',
+        '<p>This edition is written for <strong>Xcode 26 / Swift 6</strong>. Anything '
+        'API-shaped moves between Apple releases; when a call site in the book disagrees '
+        'with the linked primary source, the primary source is authoritative. The next '
+        'major edition will be cut after WWDC 26 and updated to Xcode 27 / Swift 7.</p>',
+    ]
+
+    nav = '<a href="Front-of-Book/table-of-contents.html">Contents</a> <a href="claudex26-index.html">Index</a>'
+    (BUNDLE / "bibliography.html").write_text(
         render_page(title, path_display, pos, blocks, nav)
     )
 
@@ -748,6 +963,9 @@ def main():
 
     print("Regenerating claudex26-index.html...")
     render_index()
+
+    print("Regenerating bibliography.html...")
+    render_bibliography()
 
     print("\nPhase 1b complete.")
 
