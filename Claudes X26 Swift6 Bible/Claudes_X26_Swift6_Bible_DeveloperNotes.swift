@@ -222,6 +222,82 @@
 // These inform the renderer's feature set but don't block MVP.
 //
 // ============================================================
+// BOOK AUTHORING — CLAUDE X26 PARAMETERS
+// ============================================================
+//
+// These rules govern every page of the book. They were previously
+// published in the Front Matter of the Bible vault as Claude X26
+// Parameters, but they're author-scaffolding (instructions Claude
+// follows while generating content), not reader material — so they
+// live here in Developer Notes now.
+//
+// CITATION STANDARD
+//   • Every factual claim must be double-cited — two independent,
+//     verifiable sources.
+//   • Same standard as sworn testimony under perjury consequences.
+//   • If it can't be double-cited, qualify it as opinion or
+//     unverified.
+//   • Footnotes on each page, numbered, at the bottom.
+//   • Bibliography (back matter) collects all sources organized by
+//     Book.
+//
+// SOURCE REQUIREMENTS
+//   • All sources must be named — no anonymous posts, no "sources
+//     say."
+//   • All sources must be accountable — an author or organization
+//     that stands behind the claim.
+//   • All sources must be verifiable — the reader can confirm
+//     independently.
+//   • No political bias, no editorial slant — technical facts only.
+//   • Apple is the primary arbiter of truth (they invented Swift).
+//   • Second source corroborates: Swift.org, WWDC sessions, Swift
+//     Evolution proposals, or named authors.
+//
+// Good sources:
+//   - Apple Developer Documentation
+//   - Swift.org (proposals, blog posts, forums — authored)
+//   - WWDC sessions (named presenters)
+//   - Swift Evolution proposals (authored, reviewed, voted on)
+//   - Named authors on published books or articles
+//
+// Bad sources:
+//   - Anonymous Stack Overflow answers
+//   - Unsigned blog posts
+//   - Reddit comments
+//   - Unattributed wikis
+//
+// WRITING STYLE
+//   • Michael's voice — plain American, direct, conversational.
+//   • Short sentences. Get to the point.
+//   • Explain by what it does, not what it is.
+//   • Connect new concepts to familiar ground (Delphi, electronics,
+//     military).
+//   • No fluff, no hype, no academic tone.
+//   • If it's complicated, say so — don't dress it up.
+//   • Practical first — "how do I use this" before "how does this
+//     work."
+//   • Like a technician explaining to another technician at the
+//     bench.
+//
+// FONT AND FORMATTING
+//   • FiraCode Nerd Font (embedded, SIL OFL 1.1).
+//   • 18pt minimum body text.
+//   • Code examples in monospaced blocks.
+//   • Every reader-visible page has a header and footer with its
+//     file path (extension hidden) and reading position.
+//   • Every reader-visible page has line numbers down the left
+//     gutter so any sentence is addressable.
+//   • Every paragraph is outline-numbered (1, 1.1, 1.1.1).
+//
+// LICENSE
+//   • GPL v3 — share and share alike with attribution required.
+//
+// PROOFING
+//   • Michael reads and proofs each page as it's written.
+//   • Inline notes prefixed `MICHAEL:` anywhere in any vault file;
+//     Claude grep-finds them, acts, removes the marker.
+//
+// ============================================================
 // UNDER THE HOOD (reader-visible)
 // ============================================================
 //

@@ -177,6 +177,8 @@ def rewrite_home():
     home = WIKI_LOCAL / "Home.md"
     content = f"""# Claude's X26 Swift6 Bible
 
+![Claude's X26 Swift6 Bible](claudes-x26-swift6-bible-hero.png)
+
 **Version 1.0 (pre-release)** — a living reference for Swift 6, SwiftUI, and Xcode 26 development on Apple platforms.
 
 The book has two reading surfaces:

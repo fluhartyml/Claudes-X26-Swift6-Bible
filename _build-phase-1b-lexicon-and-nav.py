@@ -265,7 +265,6 @@ ENTRIES = {
 
 FRONT_MATTER = [
     # (slug, status)
-    ("Claude-X26-Parameters", "written"),
 ]
 
 BOOKS = [
@@ -674,15 +673,16 @@ def render_toc():
     ]
 
     # Front of Book — TOC lives here, so siblings need no ../
-    blocks.append('<h2>Front of Book</h2>')
-    fm_items = []
-    for slug, status in FRONT_MATTER:
-        display = slug.replace('-', ' ')
-        href = f"{slug}.html"
-        fm_items.append(
-            f'<li><a href="{href}">{esc(display)}</a> {status_tag(status)}</li>'
-        )
-    blocks.append('<ul>' + "".join(fm_items) + '</ul>')
+    if FRONT_MATTER:
+        blocks.append('<h2>Front of Book</h2>')
+        fm_items = []
+        for slug, status in FRONT_MATTER:
+            display = slug.replace('-', ' ')
+            href = f"{slug}.html"
+            fm_items.append(
+                f'<li><a href="{href}">{esc(display)}</a> {status_tag(status)}</li>'
+            )
+        blocks.append('<ul>' + "".join(fm_items) + '</ul>')
 
     # Part I - Introduction (one level up from Front-of-Book)
     blocks.append('<h2>Part I — Introduction</h2>')
