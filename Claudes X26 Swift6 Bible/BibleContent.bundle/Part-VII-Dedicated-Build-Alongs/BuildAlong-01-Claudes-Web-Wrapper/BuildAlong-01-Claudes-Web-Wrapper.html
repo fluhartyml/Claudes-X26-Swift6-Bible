@@ -68,6 +68,15 @@ ol.lines > li::before { content: counter(line); position: absolute; left: 0; top
 ol.lines > li > p, ol.lines > li > h2, ol.lines > li > h3, ol.lines > li > ul, ol.lines > li > ol, ol.lines > li > pre, ol.lines > li > hr { margin: 0; }
 .scope-note { border-left: 3px solid var(--bright); padding: 0.7rem 1rem; background: #140c00; margin: 0.6rem 0; color: var(--bright); }
 .nav { display: flex; gap: 0.9rem; flex-wrap: wrap; margin-top: 0.8rem; font-size: 14pt; }
+
+footer.page.three-col { display: flex; flex-direction: row; justify-content: space-between; align-items: center; gap: 0.5rem; }
+footer.page.three-col .prev, footer.page.three-col .next { flex: 1; min-width: 0; }
+footer.page.three-col .prev { text-align: left; }
+footer.page.three-col .next { text-align: right; }
+footer.page.three-col .pos { flex: 0 0 auto; text-align: center; color: var(--bright); font-weight: bold; }
+footer.page.three-col .prev a, footer.page.three-col .next a { color: var(--bright); font-weight: bold; text-decoration: none; border-bottom: 1px dotted var(--dim); }
+footer.page.three-col .prev a:hover, footer.page.three-col .next a:hover { background: #332200; }
+footer.page.three-col .nav-empty { color: var(--gutter); font-style: italic; }
 </style>
 </head>
 <body>
@@ -793,10 +802,7 @@ struct WraplyApp: App {
 </ol>
 </div>
 
-<footer class="page">
-  <div class="pos">Appendix B</div>
-  <div class="nav"><a href="../Front-of-Book/table-of-contents.html">&larr; Contents</a><a href="../claudex26-index.html">Index</a></div>
-</footer>
+<footer class="page three-col"><div class="prev"><a href="../BuildAlong-00-Claudes-X26-Swift6-Bible-Inkwell/BuildAlong-00-Claudes-X26-Swift6-Bible-Inkwell.html">&larr; Reader App — Claude's X26 Swift6 Bible (Inkwell)</a></div><div class="pos">Build-Along 01</div><div class="next"><a href="../BuildAlong-02-QuickNote/BuildAlong-02-QuickNote.html">Build-Along 02 — QuickNote &rarr;</a></div></footer>
 
 </body>
 </html>

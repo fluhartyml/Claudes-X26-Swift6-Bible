@@ -29,6 +29,15 @@ hr { border: 0; border-top: 1px solid var(--border); margin: 1rem 0; }
 .status-live { color: #66FF66; font-weight: bold; }
 .status-notlive { color: #FFD060; font-weight: bold; }
 .status-planning { color: #996600; font-weight: bold; }
+
+footer.page.three-col { display: flex; flex-direction: row; justify-content: space-between; align-items: center; gap: 0.5rem; }
+footer.page.three-col .prev, footer.page.three-col .next { flex: 1; min-width: 0; }
+footer.page.three-col .prev { text-align: left; }
+footer.page.three-col .next { text-align: right; }
+footer.page.three-col .pos { flex: 0 0 auto; text-align: center; color: var(--bright); font-weight: bold; }
+footer.page.three-col .prev a, footer.page.three-col .next a { color: var(--bright); font-weight: bold; text-decoration: none; border-bottom: 1px dotted var(--dim); }
+footer.page.three-col .prev a:hover, footer.page.three-col .next a:hover { background: #332200; }
+footer.page.three-col .nav-empty { color: var(--gutter); font-style: italic; }
 </style>
 </head><body>
 <header class="page"><div class="path">Part-VII-Dedicated-Build-Alongs/BuildAlong-00-Claudes-X26-Swift6-Bible-Inkwell</div></header>
@@ -53,5 +62,5 @@ hr { border: 0; border-top: 1px solid var(--border); margin: 1rem 0; }
 <li>Phase 2 (official release): TBD. Whether Inkwell ships to the App Store or stays a private-testflight reader alongside the commercial book-store edition is still open.</li>
 </ul>
 </div>
-<footer class="page"><div class="pos">Reader App</div><div class="path">Part-VII-Dedicated-Build-Alongs/BuildAlong-00-Claudes-X26-Swift6-Bible-Inkwell</div></footer>
+<footer class="page three-col"><div class="prev"><span class="nav-empty">(first page)</span></div><div class="pos">Reader App</div><div class="next"><a href="../BuildAlong-01-Claudes-Web-Wrapper/BuildAlong-01-Claudes-Web-Wrapper.html">Build-Along 01 — Claude's Web Wrapper &rarr;</a></div></footer>
 </body></html>

@@ -29,6 +29,15 @@ hr { border: 0; border-top: 1px solid var(--border); margin: 1rem 0; }
 .status-live { color: #66FF66; font-weight: bold; }
 .status-notlive { color: #FFD060; font-weight: bold; }
 .status-planning { color: #996600; font-weight: bold; }
+
+footer.page.three-col { display: flex; flex-direction: row; justify-content: space-between; align-items: center; gap: 0.5rem; }
+footer.page.three-col .prev, footer.page.three-col .next { flex: 1; min-width: 0; }
+footer.page.three-col .prev { text-align: left; }
+footer.page.three-col .next { text-align: right; }
+footer.page.three-col .pos { flex: 0 0 auto; text-align: center; color: var(--bright); font-weight: bold; }
+footer.page.three-col .prev a, footer.page.three-col .next a { color: var(--bright); font-weight: bold; text-decoration: none; border-bottom: 1px dotted var(--dim); }
+footer.page.three-col .prev a:hover, footer.page.three-col .next a:hover { background: #332200; }
+footer.page.three-col .nav-empty { color: var(--gutter); font-style: italic; }
 </style>
 </head><body>
 <header class="page"><div class="path">Part-VII-Dedicated-Build-Alongs/SourceTour-23-NightGard-Commander</div></header>
@@ -49,5 +58,5 @@ hr { border: 0; border-top: 1px solid var(--border); margin: 1rem 0; }
 <li>Source: <a href="https://github.com/fluhartyml/NightGard-Commander">github.com/fluhartyml/NightGard-Commander</a></li>
 </ul>
 </div>
-<footer class="page"><div class="pos">Source Tour 23</div><div class="path">Part-VII-Dedicated-Build-Alongs/SourceTour-23-NightGard-Commander</div></footer>
+<footer class="page three-col"><div class="prev"><a href="../SourceTour-22-NightGard-Library-Commander/SourceTour-22-NightGard-Library-Commander.html">&larr; Source Tour 22 — NightGard Library Commander</a></div><div class="pos">Source Tour 23</div><div class="next"><a href="../SourceTour-24-NightGard-DDNS/SourceTour-24-NightGard-DDNS.html">Source Tour 24 — NightGard DDNS &rarr;</a></div></footer>
 </body></html>

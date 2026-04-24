@@ -27,6 +27,15 @@ em { color: var(--fg); font-style: italic; }
 hr { border: 0; border-top: 1px solid var(--border); margin: 1rem 0; }
 .scope-note { border-left: 3px solid var(--bright); padding: 0.7rem 1rem; background: #140c00; margin: 0.6rem 0; color: var(--bright); }
 .status-live { color: #66FF66; font-weight: bold; }
+
+footer.page.three-col { display: flex; flex-direction: row; justify-content: space-between; align-items: center; gap: 0.5rem; }
+footer.page.three-col .prev, footer.page.three-col .next { flex: 1; min-width: 0; }
+footer.page.three-col .prev { text-align: left; }
+footer.page.three-col .next { text-align: right; }
+footer.page.three-col .pos { flex: 0 0 auto; text-align: center; color: var(--bright); font-weight: bold; }
+footer.page.three-col .prev a, footer.page.three-col .next a { color: var(--bright); font-weight: bold; text-decoration: none; border-bottom: 1px dotted var(--dim); }
+footer.page.three-col .prev a:hover, footer.page.three-col .next a:hover { background: #332200; }
+footer.page.three-col .nav-empty { color: var(--gutter); font-style: italic; }
 </style>
 </head><body>
 <header class="page"><div class="path">Appendices/Appendix-B-CryoKit</div></header>
@@ -57,5 +66,5 @@ hr { border: 0; border-top: 1px solid var(--border); margin: 1rem 0; }
 <h2>The bare-bones rule</h2>
 <p>CryoKit stays deliberately narrow &mdash; no fonts, no styling, no view code. That's the rule: a shared package exports data and logic, not aesthetics. Each consuming app styles its own UI with its own design system. If CryoKit shipped fonts, two apps would be locked into the same look whether they wanted it or not. Keeping the package bare-bones keeps the consuming apps free.</p>
 </div>
-<footer class="page"><div class="pos">Appendix B</div><div class="path">Appendices/Appendix-B-CryoKit</div></footer>
+<footer class="page three-col"><div class="prev"><a href="../Appendix-A-GitHub-Setup.html">&larr; Appendix A — GitHub Setup</a></div><div class="pos">Appendix B</div><div class="next"><span class="nav-empty">(last page)</span></div></footer>
 </body></html>

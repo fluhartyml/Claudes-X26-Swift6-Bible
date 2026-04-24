@@ -26,6 +26,15 @@ strong { color: var(--bright); }
 em { color: var(--fg); font-style: italic; }
 .scope-note { border-left: 3px solid var(--bright); padding: 0.7rem 1rem; background: #140c00; margin: 0.6rem 0; color: var(--bright); }
 .status-planning { color: #996600; font-weight: bold; }
+
+footer.page.three-col { display: flex; flex-direction: row; justify-content: space-between; align-items: center; gap: 0.5rem; }
+footer.page.three-col .prev, footer.page.three-col .next { flex: 1; min-width: 0; }
+footer.page.three-col .prev { text-align: left; }
+footer.page.three-col .next { text-align: right; }
+footer.page.three-col .pos { flex: 0 0 auto; text-align: center; color: var(--bright); font-weight: bold; }
+footer.page.three-col .prev a, footer.page.three-col .next a { color: var(--bright); font-weight: bold; text-decoration: none; border-bottom: 1px dotted var(--dim); }
+footer.page.three-col .prev a:hover, footer.page.three-col .next a:hover { background: #332200; }
+footer.page.three-col .nav-empty { color: var(--gutter); font-style: italic; }
 </style>
 </head><body>
 <header class="page"><div class="path">Part-VII-Dedicated-Build-Alongs/BuildAlong-05-Outside</div></header>
@@ -70,5 +79,5 @@ em { color: var(--fg); font-style: italic; }
 <h2>Next step</h2>
 <p>When this app gets scaffolded (after earlier-numbered build-alongs ship), this page gets replaced with the full step-by-step walkthrough following the same shape as Build-Along 01 (Claude's Web Wrapper). The expanded scope (weather + location + map + photo + journal + persistence) is what takes Outside from a two-kit demo into full-fledged App-Store-shape territory per the distribution rule.</p>
 </div>
-<footer class="page"><div class="pos">Build-Along 05</div><div class="path">Part-VII-Dedicated-Build-Alongs/BuildAlong-05-Outside</div></footer>
+<footer class="page three-col"><div class="prev"><a href="../BuildAlong-04-Claudes-Audio-Universe/BuildAlong-04-Claudes-Audio-Universe.html">&larr; Build-Along 04 — Audio Universe</a></div><div class="pos">Build-Along 05</div><div class="next"><a href="../BuildAlong-06-BodyReadings/BuildAlong-06-BodyReadings.html">Build-Along 06 — BodyReadings &rarr;</a></div></footer>
 </body></html>

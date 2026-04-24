@@ -29,6 +29,15 @@ hr { border: 0; border-top: 1px solid var(--border); margin: 1rem 0; }
 .status-live { color: #66FF66; font-weight: bold; }
 .status-notlive { color: #FFD060; font-weight: bold; }
 .status-planning { color: #996600; font-weight: bold; }
+
+footer.page.three-col { display: flex; flex-direction: row; justify-content: space-between; align-items: center; gap: 0.5rem; }
+footer.page.three-col .prev, footer.page.three-col .next { flex: 1; min-width: 0; }
+footer.page.three-col .prev { text-align: left; }
+footer.page.three-col .next { text-align: right; }
+footer.page.three-col .pos { flex: 0 0 auto; text-align: center; color: var(--bright); font-weight: bold; }
+footer.page.three-col .prev a, footer.page.three-col .next a { color: var(--bright); font-weight: bold; text-decoration: none; border-bottom: 1px dotted var(--dim); }
+footer.page.three-col .prev a:hover, footer.page.three-col .next a:hover { background: #332200; }
+footer.page.three-col .nav-empty { color: var(--gutter); font-style: italic; }
 </style>
 </head><body>
 <header class="page"><div class="path">Part-VII-Dedicated-Build-Alongs/BuildAlong-04-Claudes-Audio-Universe</div></header>
@@ -68,5 +77,5 @@ hr { border: 0; border-top: 1px solid var(--border); margin: 1rem 0; }
 </ol>
 <p><em>This page expands as each feature view ships. See <code>DeveloperNotes.swift</code> in the Audio Universe Xcode project for the live map.</em></p>
 </div>
-<footer class="page"><div class="pos">Build-Along 04</div><div class="path">Part-VII-Dedicated-Build-Alongs/BuildAlong-04-Claudes-Audio-Universe</div></footer>
+<footer class="page three-col"><div class="prev"><a href="../BuildAlong-03-Claudes-LockBox/BuildAlong-03-Claudes-LockBox.html">&larr; Build-Along 03 — Claude's LockBox</a></div><div class="pos">Build-Along 04</div><div class="next"><a href="../BuildAlong-05-Outside/BuildAlong-05-Outside.html">Build-Along 05 — Outside &rarr;</a></div></footer>
 </body></html>

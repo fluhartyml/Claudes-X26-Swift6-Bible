@@ -20,6 +20,15 @@ a { color: var(--bright); font-weight: bold; text-decoration: none; border-botto
 strong { color: var(--bright); }
 .scope-note { border-left: 3px solid var(--bright); padding: 0.7rem 1rem; background: #140c00; margin: 0.6rem 0; color: var(--bright); }
 .status-redirect { color: #FFD060; font-weight: bold; }
+
+footer.page.three-col { display: flex; flex-direction: row; justify-content: space-between; align-items: center; gap: 0.5rem; }
+footer.page.three-col .prev, footer.page.three-col .next { flex: 1; min-width: 0; }
+footer.page.three-col .prev { text-align: left; }
+footer.page.three-col .next { text-align: right; }
+footer.page.three-col .pos { flex: 0 0 auto; text-align: center; color: var(--bright); font-weight: bold; }
+footer.page.three-col .prev a, footer.page.three-col .next a { color: var(--bright); font-weight: bold; text-decoration: none; border-bottom: 1px dotted var(--dim); }
+footer.page.three-col .prev a:hover, footer.page.three-col .next a:hover { background: #332200; }
+footer.page.three-col .nav-empty { color: var(--gutter); font-style: italic; }
 </style>
 </head><body>
 <header class="page"><div class="path">Part-VII-Dedicated-Build-Alongs/BuildAlong-15-MusicListQuery</div></header>
@@ -35,5 +44,5 @@ strong { color: var(--bright); }
 <p>A single-concept "query the Music library" teaching app would be a thin demo by itself &mdash; it would either ship to TestFlight or need to be bulked up with features that would drift away from the original teaching point. Both Source Tours above already show the concept in a real shipping-product context. Duplicating the material in Part VII would waste the reader's time; pointing at the production tours is cleaner.</p>
 <h2>Roster note</h2>
 <p>The slot number 15 stays reserved to preserve the roster's numbering. This entry acts as a signpost, not a build-along. Future revisions may repurpose slot 15 if a genuinely new concept emerges that deserves its own teaching app &mdash; but MusicListQuery as originally conceived is retired here.</p></div>
-<footer class="page"><div class="pos">Build-Along 15</div><div class="path">Part-VII-Dedicated-Build-Alongs/BuildAlong-15-MusicListQuery</div></footer>
+<footer class="page three-col"><div class="prev"><a href="../BuildAlong-14-TipJar/BuildAlong-14-TipJar.html">&larr; Build-Along 14 — TipJar</a></div><div class="pos">Build-Along 15</div><div class="next"><a href="../BuildAlong-16-ChatWithClaude/BuildAlong-16-ChatWithClaude.html">Build-Along 16 — ChatWithClaude &rarr;</a></div></footer>
 </body></html>
