@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Appendix J: NightGard Commander (Self-Publishing Case Study)</title>
+<style>
+:root { --bg: #000000; --fg: #FFB000; --bright: #FFD060; --dim: #996600; --codebg: #1a0d00; --border: #664500; --gutter: #4a3300; --headerbg: #0a0600; }
+* { box-sizing: border-box; }
+html, body { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; height: 100%; }
+body { background: var(--bg); color: var(--fg); font-family: "FiraCode Nerd Font Mono", "Fira Code", "Menlo", "Courier New", monospace; font-size: 18pt; line-height: 1.55; margin: 0; padding: 0; text-shadow: 0 0 1px rgba(255, 176, 0, 0.35); display: flex; flex-direction: column; }
+header.page, footer.page { background: var(--headerbg); color: var(--dim); padding: 0.55rem 1.1rem; font-size: 13pt; display: flex; flex-direction: column; gap: 0.2rem; flex: 0 0 auto; z-index: 10; }
+header.page { border-bottom: 1px solid var(--border); }
+footer.page { border-top: 1px solid var(--border); padding-bottom: calc(0.55rem + env(safe-area-inset-bottom)); }
+header.page .path, footer.page .path { color: var(--fg); word-break: break-all; overflow-wrap: break-word; }
+header.page .pos, footer.page .pos { color: var(--bright); }
+.content { flex: 1 1 auto; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 0.8rem 1rem 2rem 1rem; max-width: 1100px; margin: 0 auto; width: 100%; }
+h1 { color: var(--bright); font-weight: normal; font-size: 26pt; margin: 0.6rem 0 1rem 0; }
+h2 { color: var(--bright); font-weight: normal; font-size: 20pt; border-bottom: 1px solid var(--border); padding-bottom: 0.3rem; margin-top: 1.5rem; }
+h3 { color: var(--bright); font-weight: normal; font-size: 18pt; margin-top: 1rem; }
+p { margin: 0.4rem 0; }
+code { color: var(--bright); background: var(--codebg); padding: 0.08em 0.35em; border: 1px solid #3a2400; border-radius: 3px; font-size: 0.92em; }
+pre { background: var(--codebg); border: 1px solid #3a2400; border-radius: 4px; padding: 0.7rem 0.9rem; overflow-x: auto; font-size: 14pt; }
+ul { margin: 0.4rem 0 0.4rem 1.4rem; padding: 0; }
+a { color: var(--bright); font-weight: bold; text-decoration: none; border-bottom: 1px dotted var(--dim); }
+strong { color: var(--bright); }
+em { color: var(--fg); font-style: italic; }
+hr { border: 0; border-top: 1px solid var(--border); margin: 1rem 0; }
+.scope-note { border-left: 3px solid var(--bright); padding: 0.7rem 1rem; background: #140c00; margin: 0.6rem 0; color: var(--bright); }
+.status-live { color: #66FF66; font-weight: bold; }
+.status-notlive { color: #FFD060; font-weight: bold; }
+.status-planning { color: #996600; font-weight: bold; }
+</style>
+</head><body>
+<header class="page"><div class="path">Appendices/Appendix-J-NightGard-Commander</div></header>
+<div class="content">
+<h1>Appendix J: NightGard Commander (Self-Publishing Case Study)</h1>
+<p><span class="status-notlive">Status: self-distributed, notarized. Not on the App Store by design.</span> Mac app. Descendant of Midnight Commander / Norton Commander.</p>
+<div class="scope-note">Self-publishing case study. Shows what Mac development looks like when the App Store sandbox is not the right fit &mdash; a file manager that needs to browse the whole disk by definition cannot live inside the App Store sandbox.</div>
+<h2>What NightGard Commander shows</h2>
+<ul>
+<li>Two-pane file manager UI (source and destination visible simultaneously, keyboard-driven)</li>
+<li>Differentiation from Finder: Finder has tabs, but tabs aren't side-by-side. NightGard Commander's value is spatial awareness &mdash; source and destination visible at the same time for batch workflows.</li>
+<li>Full disk access via unsandboxed notarized distribution</li>
+<li>Production-hardened Shazam stack (Service / Queue / Delegate / Database) as a byproduct of being a file manager that works well with audio files</li>
+</ul>
+<h2>Why not the App Store</h2>
+<p>A sandboxed file manager can only see what the user explicitly grants, which defeats the purpose. NightGard Commander ships notarized with full disk access. Readers get the "Apple-duplication is fine if we add a workflow differentiator" rule in action, plus a concrete example of when self-publishing is the right call.</p>
+<ul>
+<li>Source: <a href="https://github.com/fluhartyml/NightGard-Commander">github.com/fluhartyml/NightGard-Commander</a></li>
+</ul>
+</div>
+<footer class="page"><div class="pos">Appendix J</div><div class="path">Appendices/Appendix-J-NightGard-Commander</div></footer>
+</body></html>
