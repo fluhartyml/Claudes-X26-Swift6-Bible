@@ -24,32 +24,31 @@ ul { margin: 0.4rem 0 0.4rem 1.4rem; padding: 0; }
 a { color: var(--bright); font-weight: bold; text-decoration: none; border-bottom: 1px dotted var(--dim); }
 strong { color: var(--bright); }
 em { color: var(--fg); font-style: italic; }
-hr { border: 0; border-top: 1px solid var(--border); margin: 1rem 0; }
 .scope-note { border-left: 3px solid var(--bright); padding: 0.7rem 1rem; background: #140c00; margin: 0.6rem 0; color: var(--bright); }
-.status-live { color: #66FF66; font-weight: bold; }
-.status-notlive { color: #FFD060; font-weight: bold; }
 .status-planning { color: #996600; font-weight: bold; }
+.status-testflight { color: #FFD060; font-weight: bold; }
 </style>
 </head><body>
 <header class="page"><div class="path">Part-VII-Dedicated-Build-Alongs/BuildAlong-10-DragBetweenWindows</div></header>
 <div class="content">
 <h1>Build-Along 10: DragBetweenWindows</h1>
-<p><span class="status-planning">Status: planning phase as of 2026-04-24.</span> App not yet scaffolded. Walkthrough fills in once v1.0 scaffolds; planning notes below.</p>
-<div class="scope-note">MVP concept: Drag items from one window to another across multiple scenes.</div>
-<h2>What this build-along will teach</h2>
+<p><span class="status-testflight">Distribution: TestFlight beta.</span> Single-concept teaching app &mdash; dragging items from one window to another across scenes. Does not grow into a full-fledged product on its own, so it ships via TestFlight per the distribution rule.</p>
+<div class="scope-note">MVP concept: two windows open side by side (iPad Split View or Mac); drag an item from the left window, drop it into the right. The cross-scene drag IS the teaching point.</div>
+<h2>What DragBetweenWindows will teach</h2>
 <ul>
-<li><strong>Kits:</strong> Scenes + Drag &amp; Drop</li>
-<li><strong>Signature layer:</strong> MVP feature + Under the Hood view + About &amp; Send Feedback (every primary sample app ships with this trio)</li>
-<li><strong>Distribution:</strong> own App Store listing, own bundle ID, own icon, own privacy policy, own screenshots</li>
+<li><strong>Scenes</strong> &mdash; <code>WindowGroup</code> hosting multiple active windows, scene phase transitions, per-scene state.</li>
+<li><strong>Drag &amp; Drop</strong> &mdash; <code>Transferable</code>, <code>.draggable</code>, <code>.dropDestination</code>, cross-scene payload delivery, handling simultaneous drops.</li>
+<li><strong>Signature layer:</strong> MVP feature + Under the Hood view + About &amp; Send Feedback.</li>
+<li><strong>Distribution:</strong> TestFlight &mdash; readers get an install link from the appendix/wiki.</li>
 </ul>
+<h2>Why TestFlight not App Store</h2>
+<p>Like TouchAndMove, DragBetweenWindows is a demo of one concept. It doesn't bulk into a real product without bolt-on features that dilute the teaching point. Apple's 2.2 guideline correctly reads it as demo; TestFlight is the right channel.</p>
 <h2>Current state</h2>
 <ul>
 <li>No Xcode project yet</li>
-<li>No DeveloperNotes map yet</li>
-<li>No screenshots, no icon</li>
 </ul>
 <h2>Next step</h2>
-<p>When this app gets scaffolded (after earlier-numbered build-alongs ship), this page gets replaced with the full step-by-step walkthrough following the same shape as Build-Along 01 (Claude's Web Wrapper).</p>
+<p>When this app gets scaffolded, the walkthrough lands here. TestFlight distribution only.</p>
 </div>
 <footer class="page"><div class="pos">Build-Along 10</div><div class="path">Part-VII-Dedicated-Build-Alongs/BuildAlong-10-DragBetweenWindows</div></footer>
 </body></html>

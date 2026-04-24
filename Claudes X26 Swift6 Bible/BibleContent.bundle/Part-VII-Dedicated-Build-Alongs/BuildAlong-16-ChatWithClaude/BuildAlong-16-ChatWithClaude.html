@@ -1,10 +1,8 @@
 <!DOCTYPE html>
 <html lang="en"><head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Build-Along 16: ChatWithClaude</title>
-<style>
-:root { --bg: #000000; --fg: #FFB000; --bright: #FFD060; --dim: #996600; --codebg: #1a0d00; --border: #664500; --gutter: #4a3300; --headerbg: #0a0600; }
+<style>:root { --bg: #000000; --fg: #FFB000; --bright: #FFD060; --dim: #996600; --codebg: #1a0d00; --border: #664500; --gutter: #4a3300; --headerbg: #0a0600; }
 * { box-sizing: border-box; }
 html, body { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; height: 100%; }
 body { background: var(--bg); color: var(--fg); font-family: "FiraCode Nerd Font Mono", "Fira Code", "Menlo", "Courier New", monospace; font-size: 18pt; line-height: 1.55; margin: 0; padding: 0; text-shadow: 0 0 1px rgba(255, 176, 0, 0.35); display: flex; flex-direction: column; }
@@ -18,38 +16,54 @@ h1 { color: var(--bright); font-weight: normal; font-size: 26pt; margin: 0.6rem 
 h2 { color: var(--bright); font-weight: normal; font-size: 20pt; border-bottom: 1px solid var(--border); padding-bottom: 0.3rem; margin-top: 1.5rem; }
 h3 { color: var(--bright); font-weight: normal; font-size: 18pt; margin-top: 1rem; }
 p { margin: 0.4rem 0; }
+ul { margin: 0.4rem 0 0.4rem 1.4rem; padding: 0; }
 code { color: var(--bright); background: var(--codebg); padding: 0.08em 0.35em; border: 1px solid #3a2400; border-radius: 3px; font-size: 0.92em; }
 pre { background: var(--codebg); border: 1px solid #3a2400; border-radius: 4px; padding: 0.7rem 0.9rem; overflow-x: auto; font-size: 14pt; }
-ul { margin: 0.4rem 0 0.4rem 1.4rem; padding: 0; }
-a { color: var(--bright); font-weight: bold; text-decoration: none; border-bottom: 1px dotted var(--dim); }
 strong { color: var(--bright); }
 em { color: var(--fg); font-style: italic; }
-hr { border: 0; border-top: 1px solid var(--border); margin: 1rem 0; }
 .scope-note { border-left: 3px solid var(--bright); padding: 0.7rem 1rem; background: #140c00; margin: 0.6rem 0; color: var(--bright); }
-.status-live { color: #66FF66; font-weight: bold; }
-.status-notlive { color: #FFD060; font-weight: bold; }
 .status-planning { color: #996600; font-weight: bold; }
 </style>
 </head><body>
 <header class="page"><div class="path">Part-VII-Dedicated-Build-Alongs/BuildAlong-16-ChatWithClaude</div></header>
-<div class="content">
-<h1>Build-Along 16: ChatWithClaude</h1>
-<p><span class="status-planning">Status: planning phase as of 2026-04-24.</span> App not yet scaffolded. Walkthrough fills in once v1.0 scaffolds; planning notes below.</p>
-<div class="scope-note">MVP concept: Streaming AI chat with the Claude API.</div>
-<h2>What this build-along will teach</h2>
+<div class="content"><h1>Build-Along 16: ChatWithClaude</h1>
+<p><span class="status-planning">Status: planning phase as of 2026-04-24.</span> App not yet scaffolded. Walkthrough fills in once v1.0 scaffolds; expanded planning notes below.</p>
+<div class="scope-note">MVP concept: a BYO-Anthropic-API-key chat workbench for Claude. Readers bring their own API key, saved securely in Keychain, and use the app to hold multiple long-running conversations with Claude across models (Opus / Sonnet / Haiku), with streaming responses, markdown rendering, token-cost tracking, and conversation export. Differentiates from Anthropic's official Claude app by being a workbench for the reader's own API usage &mdash; not a subscription client.</div>
+<h2>What ChatWithClaude will teach</h2>
 <ul>
-<li><strong>Kits:</strong> Anthropic API</li>
-<li><strong>Signature layer:</strong> MVP feature + Under the Hood view + About &amp; Send Feedback (every primary sample app ships with this trio)</li>
-<li><strong>Distribution:</strong> own App Store listing, own bundle ID, own icon, own privacy policy, own screenshots</li>
+<li><strong>Anthropic API</strong> &mdash; the <code>/v1/messages</code> streaming endpoint, server-sent events parsing, message turn structure, system prompts.</li>
+<li><strong>URLSession streaming</strong> &mdash; <code>URLSession.bytes(for:)</code> + <code>AsyncSequence</code> for incremental response rendering. Readers see a SwiftUI chat bubble fill in token by token.</li>
+<li><strong>Keychain</strong> &mdash; storing the API key via the Security framework, not UserDefaults. Real credential hygiene.</li>
+<li><strong>SwiftData</strong> &mdash; persisting conversations, messages, and cost tracking between sessions.</li>
+<li><strong>Prompt caching</strong> &mdash; marking cache-eligible content with <code>cache_control</code>; readers see the 90% cost reduction on cached context, a feature most third-party clients skip. This is the differentiating teaching moment of the chapter.</li>
+<li><strong>Markdown rendering</strong> &mdash; SwiftUI <code>AttributedString</code> rendering of Claude's markdown responses (headers, lists, code blocks with syntax highlighting, links).</li>
+<li><strong>PDFKit</strong> (supporting) &mdash; export a conversation to PDF for sharing (reuses the skill from Build-Along 11 ReportMaker).</li>
+<li><strong>Signature layer:</strong> MVP + Under the Hood + About &amp; Send Feedback.</li>
+<li><strong>Distribution:</strong> App Store &mdash; BYO-API-key workbenches for LLMs are an established category (TypingMind, Msty) and Apple doesn't ship one. Clears 2.2 as a real utility.</li>
 </ul>
+<h2>Core flows</h2>
+<ul>
+<li><strong>First launch</strong> &mdash; prompt for Anthropic API key, save to Keychain, test with a minimal <code>claude-haiku-4-5</code> ping before exiting the setup screen.</li>
+<li><strong>New conversation</strong> &mdash; pick a model (default Sonnet 4.6), optional system prompt preset, start chatting. Responses stream in real time.</li>
+<li><strong>Conversation list</strong> &mdash; reverse-chronological; each conversation shows title, model used, message count, total token cost, last-updated timestamp.</li>
+<li><strong>Export</strong> &mdash; share a conversation as markdown or PDF via the share sheet.</li>
+<li><strong>Cost tracking</strong> &mdash; token counts tallied per message + conversation, priced against current rates, surfaced in the cost column. Readers see the price of their own usage.</li>
+</ul>
+<h2>Model selection</h2>
+<ul>
+<li><strong>Opus 4.7</strong> &mdash; flagship, hardest reasoning, slowest, most expensive.</li>
+<li><strong>Sonnet 4.6</strong> &mdash; balanced default for most work.</li>
+<li><strong>Haiku 4.5</strong> &mdash; fastest + cheapest for quick turn-around.</li>
+</ul>
+<p>Readers see the cost + latency tradeoff directly in-app as they switch models mid-conversation.</p>
+<h2>Why ChatWithClaude passes App Review on merit</h2>
+<p>BYO-API-key LLM clients are a mature category. Apple doesn't ship one. User brings their own account + key; the app never collects or transmits anyone else's data. Prompt caching as a built-in feature is genuinely differentiating &mdash; most competing clients don't implement it. Clean SwiftUI rendering of streamed markdown over the Anthropic API is the teaching payoff for the chapter.</p>
 <h2>Current state</h2>
 <ul>
 <li>No Xcode project yet</li>
 <li>No DeveloperNotes map yet</li>
-<li>No screenshots, no icon</li>
 </ul>
 <h2>Next step</h2>
-<p>When this app gets scaffolded (after earlier-numbered build-alongs ship), this page gets replaced with the full step-by-step walkthrough following the same shape as Build-Along 01 (Claude's Web Wrapper).</p>
-</div>
+<p>Scaffolded after earlier build-alongs ship; App Store target.</p></div>
 <footer class="page"><div class="pos">Build-Along 16</div><div class="path">Part-VII-Dedicated-Build-Alongs/BuildAlong-16-ChatWithClaude</div></footer>
 </body></html>

@@ -1,10 +1,8 @@
 <!DOCTYPE html>
 <html lang="en"><head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Build-Along 12: SwiftUICraft</title>
-<style>
-:root { --bg: #000000; --fg: #FFB000; --bright: #FFD060; --dim: #996600; --codebg: #1a0d00; --border: #664500; --gutter: #4a3300; --headerbg: #0a0600; }
+<style>:root { --bg: #000000; --fg: #FFB000; --bright: #FFD060; --dim: #996600; --codebg: #1a0d00; --border: #664500; --gutter: #4a3300; --headerbg: #0a0600; }
 * { box-sizing: border-box; }
 html, body { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; height: 100%; }
 body { background: var(--bg); color: var(--fg); font-family: "FiraCode Nerd Font Mono", "Fira Code", "Menlo", "Courier New", monospace; font-size: 18pt; line-height: 1.55; margin: 0; padding: 0; text-shadow: 0 0 1px rgba(255, 176, 0, 0.35); display: flex; flex-direction: column; }
@@ -16,40 +14,34 @@ header.page .pos, footer.page .pos { color: var(--bright); }
 .content { flex: 1 1 auto; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 0.8rem 1rem 2rem 1rem; max-width: 1100px; margin: 0 auto; width: 100%; }
 h1 { color: var(--bright); font-weight: normal; font-size: 26pt; margin: 0.6rem 0 1rem 0; }
 h2 { color: var(--bright); font-weight: normal; font-size: 20pt; border-bottom: 1px solid var(--border); padding-bottom: 0.3rem; margin-top: 1.5rem; }
-h3 { color: var(--bright); font-weight: normal; font-size: 18pt; margin-top: 1rem; }
 p { margin: 0.4rem 0; }
-code { color: var(--bright); background: var(--codebg); padding: 0.08em 0.35em; border: 1px solid #3a2400; border-radius: 3px; font-size: 0.92em; }
-pre { background: var(--codebg); border: 1px solid #3a2400; border-radius: 4px; padding: 0.7rem 0.9rem; overflow-x: auto; font-size: 14pt; }
 ul { margin: 0.4rem 0 0.4rem 1.4rem; padding: 0; }
-a { color: var(--bright); font-weight: bold; text-decoration: none; border-bottom: 1px dotted var(--dim); }
+code { color: var(--bright); background: var(--codebg); padding: 0.08em 0.35em; border: 1px solid #3a2400; border-radius: 3px; font-size: 0.92em; }
 strong { color: var(--bright); }
 em { color: var(--fg); font-style: italic; }
-hr { border: 0; border-top: 1px solid var(--border); margin: 1rem 0; }
 .scope-note { border-left: 3px solid var(--bright); padding: 0.7rem 1rem; background: #140c00; margin: 0.6rem 0; color: var(--bright); }
-.status-live { color: #66FF66; font-weight: bold; }
-.status-notlive { color: #FFD060; font-weight: bold; }
-.status-planning { color: #996600; font-weight: bold; }
+.status-testflight { color: #FFD060; font-weight: bold; }
 </style>
 </head><body>
 <header class="page"><div class="path">Part-VII-Dedicated-Build-Alongs/BuildAlong-12-SwiftUICraft</div></header>
-<div class="content">
-<h1>Build-Along 12: SwiftUICraft</h1>
-<p><span class="status-planning">Status: planning phase as of 2026-04-24.</span> App not yet scaffolded. Walkthrough fills in once v1.0 scaffolds; planning notes below.</p>
-<div class="scope-note">MVP concept: Reusable view modifiers, Observable state, 10K-row list performance tuning.</div>
-<h2>What this build-along will teach</h2>
+<div class="content"><h1>Build-Along 12: SwiftUICraft</h1>
+<p><span class="status-testflight">Distribution: TestFlight beta &mdash; the black sheep of the roster.</span> Every other build-along has a concrete user problem it solves. SwiftUICraft is the exception &mdash; it exists to teach three SwiftUI pattern concepts (custom ViewModifiers, <code>@Observable</code> macro, and List performance at scale) that don't coalesce into a single "real product" without stretching. It ships via TestFlight because the honest framing is: this is a pattern playground, not a utility.</p>
+<div class="scope-note">MVP concept: a single app that demonstrates three reusable SwiftUI patterns side by side &mdash; custom ViewModifier composition, <code>@Observable</code> macro state sharing across views, and a 10,000-row list with proper identity + lazy loading. Each pattern is demo-scale on purpose; the point is to show the craft technique, not ship a product.</div>
+<h2>What SwiftUICraft will teach</h2>
 <ul>
-<li><strong>Kits:</strong> Custom ViewModifiers + @Observable macro + List performance</li>
-<li><strong>Signature layer:</strong> MVP feature + Under the Hood view + About &amp; Send Feedback (every primary sample app ships with this trio)</li>
-<li><strong>Distribution:</strong> own App Store listing, own bundle ID, own icon, own privacy policy, own screenshots</li>
+<li><strong>Custom ViewModifiers</strong> &mdash; conforming to <code>ViewModifier</code>, composing modifiers, the <code>extension View { func foo()</code> pattern for ergonomic call sites, modifier ordering and how it affects layout.</li>
+<li><strong>@Observable macro</strong> &mdash; the modern replacement for <code>ObservableObject</code>. Class-based observable state, fine-grained tracking, avoiding the <code>@StateObject</code>/<code>@ObservedObject</code>/<code>@EnvironmentObject</code> confusion.</li>
+<li><strong>List performance</strong> &mdash; 10,000-row list with stable <code>.id()</code>, lazy rendering, per-row view complexity budget, <code>.listRowSeparator</code> tuning, <code>.contentMargins</code> for readable density.</li>
+<li><strong>Signature layer:</strong> MVP + Under the Hood + About &amp; Send Feedback.</li>
+<li><strong>Distribution:</strong> TestFlight.</li>
 </ul>
+<h2>Why it's the black sheep</h2>
+<p>The other TestFlight entries (TouchAndMove, DragBetweenWindows, CloudAndErrors, TipJar) teach cohesive single concepts. SwiftUICraft teaches three loosely related patterns in one app because putting each in its own app would inflate the roster. It's the compromise slot &mdash; "here's a corner of the book where we stack the SwiftUI idioms that don't fit anywhere else, and the app that demos them ships via TestFlight because it's honestly a pattern anthology, not a product."</p>
 <h2>Current state</h2>
 <ul>
 <li>No Xcode project yet</li>
-<li>No DeveloperNotes map yet</li>
-<li>No screenshots, no icon</li>
 </ul>
 <h2>Next step</h2>
-<p>When this app gets scaffolded (after earlier-numbered build-alongs ship), this page gets replaced with the full step-by-step walkthrough following the same shape as Build-Along 01 (Claude's Web Wrapper).</p>
-</div>
+<p>Scaffolded after earlier build-alongs ship. TestFlight distribution only. If over time any of the three patterns emerges with a clear standalone product concept, it could graduate to its own App Store app in a later book edition.</p></div>
 <footer class="page"><div class="pos">Build-Along 12</div><div class="path">Part-VII-Dedicated-Build-Alongs/BuildAlong-12-SwiftUICraft</div></footer>
 </body></html>

@@ -1,10 +1,8 @@
 <!DOCTYPE html>
 <html lang="en"><head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Build-Along 15: MusicListQuery (Mac only)</title>
-<style>
-:root { --bg: #000000; --fg: #FFB000; --bright: #FFD060; --dim: #996600; --codebg: #1a0d00; --border: #664500; --gutter: #4a3300; --headerbg: #0a0600; }
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Build-Along 15: MusicListQuery (covered by Source Tours)</title>
+<style>:root { --bg: #000000; --fg: #FFB000; --bright: #FFD060; --dim: #996600; --codebg: #1a0d00; --border: #664500; --gutter: #4a3300; --headerbg: #0a0600; }
 * { box-sizing: border-box; }
 html, body { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; height: 100%; }
 body { background: var(--bg); color: var(--fg); font-family: "FiraCode Nerd Font Mono", "Fira Code", "Menlo", "Courier New", monospace; font-size: 18pt; line-height: 1.55; margin: 0; padding: 0; text-shadow: 0 0 1px rgba(255, 176, 0, 0.35); display: flex; flex-direction: column; }
@@ -16,40 +14,26 @@ header.page .pos, footer.page .pos { color: var(--bright); }
 .content { flex: 1 1 auto; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 0.8rem 1rem 2rem 1rem; max-width: 1100px; margin: 0 auto; width: 100%; }
 h1 { color: var(--bright); font-weight: normal; font-size: 26pt; margin: 0.6rem 0 1rem 0; }
 h2 { color: var(--bright); font-weight: normal; font-size: 20pt; border-bottom: 1px solid var(--border); padding-bottom: 0.3rem; margin-top: 1.5rem; }
-h3 { color: var(--bright); font-weight: normal; font-size: 18pt; margin-top: 1rem; }
 p { margin: 0.4rem 0; }
-code { color: var(--bright); background: var(--codebg); padding: 0.08em 0.35em; border: 1px solid #3a2400; border-radius: 3px; font-size: 0.92em; }
-pre { background: var(--codebg); border: 1px solid #3a2400; border-radius: 4px; padding: 0.7rem 0.9rem; overflow-x: auto; font-size: 14pt; }
 ul { margin: 0.4rem 0 0.4rem 1.4rem; padding: 0; }
 a { color: var(--bright); font-weight: bold; text-decoration: none; border-bottom: 1px dotted var(--dim); }
 strong { color: var(--bright); }
-em { color: var(--fg); font-style: italic; }
-hr { border: 0; border-top: 1px solid var(--border); margin: 1rem 0; }
 .scope-note { border-left: 3px solid var(--bright); padding: 0.7rem 1rem; background: #140c00; margin: 0.6rem 0; color: var(--bright); }
-.status-live { color: #66FF66; font-weight: bold; }
-.status-notlive { color: #FFD060; font-weight: bold; }
-.status-planning { color: #996600; font-weight: bold; }
+.status-redirect { color: #FFD060; font-weight: bold; }
 </style>
 </head><body>
 <header class="page"><div class="path">Part-VII-Dedicated-Build-Alongs/BuildAlong-15-MusicListQuery</div></header>
-<div class="content">
-<h1>Build-Along 15: MusicListQuery (Mac only)</h1>
-<p><span class="status-planning">Status: planning phase as of 2026-04-24.</span> App not yet scaffolded. Walkthrough fills in once v1.0 scaffolds; planning notes below.</p>
-<div class="scope-note">MVP concept: Reads the Apple Music library on macOS via scripting bridge.</div>
-<h2>What this build-along will teach</h2>
+<div class="content"><h1>Build-Along 15: MusicListQuery</h1>
+<p><span class="status-redirect">Status: concept covered by Source Tours &mdash; no separate build-along.</span></p>
+<div class="scope-note">AppleScript / ScriptingBridge querying of the Apple Music library on macOS is already demonstrated at production scale by two Source Tours in this Part. Rather than duplicate the material in a single-concept teaching app, readers are directed to study the production versions.</div>
+<h2>Where to study this concept instead</h2>
 <ul>
-<li><strong>Kits:</strong> AppleScript / ScriptingBridge</li>
-<li><strong>Signature layer:</strong> MVP feature + Under the Hood view + About &amp; Send Feedback (every primary sample app ships with this trio)</li>
-<li><strong>Distribution:</strong> own App Store listing, own bundle ID, own icon, own privacy policy, own screenshots</li>
+<li><a href="../SourceTour-21-Cryo-Playlist-Manager/SourceTour-21-Cryo-Playlist-Manager.html">Source Tour 21 &mdash; Cryo Playlist Manager</a> &mdash; a Mac app that manipulates the Apple Music library + exports M3U playlists, using AppleScript / ScriptingBridge for the in-place library operations.</li>
+<li><a href="../SourceTour-22-NightGard-Library-Commander/SourceTour-22-NightGard-Library-Commander.html">Source Tour 22 &mdash; NightGard Library Commander</a> &mdash; a Mac app that cleans Apple Music library metadata in place using AppleScript, with MusicKit for read-only queries. Also shows the sandbox-with-temporary-exception-apple-events pattern.</li>
 </ul>
-<h2>Current state</h2>
-<ul>
-<li>No Xcode project yet</li>
-<li>No DeveloperNotes map yet</li>
-<li>No screenshots, no icon</li>
-</ul>
-<h2>Next step</h2>
-<p>When this app gets scaffolded (after earlier-numbered build-alongs ship), this page gets replaced with the full step-by-step walkthrough following the same shape as Build-Along 01 (Claude's Web Wrapper).</p>
-</div>
+<h2>Why no standalone build-along</h2>
+<p>A single-concept "query the Music library" teaching app would be a thin demo by itself &mdash; it would either ship to TestFlight or need to be bulked up with features that would drift away from the original teaching point. Both Source Tours above already show the concept in a real shipping-product context. Duplicating the material in Part VII would waste the reader's time; pointing at the production tours is cleaner.</p>
+<h2>Roster note</h2>
+<p>The slot number 15 stays reserved to preserve the roster's numbering. This entry acts as a signpost, not a build-along. Future revisions may repurpose slot 15 if a genuinely new concept emerges that deserves its own teaching app &mdash; but MusicListQuery as originally conceived is retired here.</p></div>
 <footer class="page"><div class="pos">Build-Along 15</div><div class="path">Part-VII-Dedicated-Build-Alongs/BuildAlong-15-MusicListQuery</div></footer>
 </body></html>

@@ -24,23 +24,42 @@ ul { margin: 0.4rem 0 0.4rem 1.4rem; padding: 0; }
 a { color: var(--bright); font-weight: bold; text-decoration: none; border-bottom: 1px dotted var(--dim); }
 strong { color: var(--bright); }
 em { color: var(--fg); font-style: italic; }
-hr { border: 0; border-top: 1px solid var(--border); margin: 1rem 0; }
 .scope-note { border-left: 3px solid var(--bright); padding: 0.7rem 1rem; background: #140c00; margin: 0.6rem 0; color: var(--bright); }
-.status-live { color: #66FF66; font-weight: bold; }
-.status-notlive { color: #FFD060; font-weight: bold; }
 .status-planning { color: #996600; font-weight: bold; }
 </style>
 </head><body>
 <header class="page"><div class="path">Part-VII-Dedicated-Build-Alongs/BuildAlong-05-Outside</div></header>
 <div class="content">
 <h1>Build-Along 05: Outside</h1>
-<p><span class="status-planning">Status: planning phase as of 2026-04-24.</span> App not yet scaffolded. Walkthrough fills in once v1.0 scaffolds; planning notes below.</p>
-<div class="scope-note">MVP concept: Shows local weather and your location on a map.</div>
-<h2>What this build-along will teach</h2>
+<p><span class="status-planning">Status: planning phase as of 2026-04-24.</span> App not yet scaffolded. Walkthrough fills in once v1.0 scaffolds; expanded planning notes below.</p>
+<div class="scope-note">MVP concept: a weather-and-location diary. The app shows current weather and your location on a map, and lets you log a journal entry with a photo stamped against that moment &mdash; weather, place, time, photo, text &mdash; all preserved as one log entry you can browse later.</div>
+<h2>What Outside will teach</h2>
 <ul>
-<li><strong>Kits:</strong> WeatherKit + CoreLocation + MapKit</li>
-<li><strong>Signature layer:</strong> MVP feature + Under the Hood view + About &amp; Send Feedback (every primary sample app ships with this trio)</li>
-<li><strong>Distribution:</strong> own App Store listing, own bundle ID, own icon, own privacy policy, own screenshots</li>
+<li><strong>WeatherKit</strong> &mdash; current conditions for the user's coordinates, plus a forecast lookup for entry context.</li>
+<li><strong>CoreLocation</strong> &mdash; request permission, read device location, handle the authorization dance properly.</li>
+<li><strong>MapKit</strong> &mdash; render a map centered on the current location, drop a pin at each past log entry.</li>
+<li><strong>PhotosUI</strong> &mdash; pick a photo from the library, or snap a new one with the camera, attach it to the log entry.</li>
+<li><strong>SwiftData</strong> &mdash; persist log entries locally so the diary accumulates across sessions.</li>
+<li><strong>Signature layer:</strong> MVP feature + Under the Hood view + About &amp; Send Feedback.</li>
+<li><strong>Distribution:</strong> App Store listing &mdash; full-fledged utility (weather diary is real, not a demo surface).</li>
+</ul>
+<h2>Per-entry data model (sketch)</h2>
+<pre><code>@Model final class OutsideLog {
+    var id: UUID
+    var timestamp: Date
+    var latitude: Double
+    var longitude: Double
+    var weatherSummary: String     // e.g. "72F, partly cloudy"
+    var temperature: Double
+    var condition: String          // Weather.symbolName
+    var photoData: Data?           // optional attached photo
+    var note: String               // user-typed log entry
+}</code></pre>
+<h2>UI shape (sketch)</h2>
+<ul>
+<li><strong>Home tab</strong> &mdash; current weather card at top, map beneath with pins for past entries, "New Entry" button.</li>
+<li><strong>New Entry sheet</strong> &mdash; auto-fills weather + location + timestamp, PhotoPicker for image, TextEditor for the note, Save.</li>
+<li><strong>Log tab</strong> &mdash; reverse-chronological list of entries, tap to open full detail (photo, weather snapshot, location, text).</li>
 </ul>
 <h2>Current state</h2>
 <ul>
@@ -49,7 +68,7 @@ hr { border: 0; border-top: 1px solid var(--border); margin: 1rem 0; }
 <li>No screenshots, no icon</li>
 </ul>
 <h2>Next step</h2>
-<p>When this app gets scaffolded (after earlier-numbered build-alongs ship), this page gets replaced with the full step-by-step walkthrough following the same shape as Build-Along 01 (Claude's Web Wrapper).</p>
+<p>When this app gets scaffolded (after earlier-numbered build-alongs ship), this page gets replaced with the full step-by-step walkthrough following the same shape as Build-Along 01 (Claude's Web Wrapper). The expanded scope (weather + location + map + photo + journal + persistence) is what takes Outside from a two-kit demo into full-fledged App-Store-shape territory per the distribution rule.</p>
 </div>
 <footer class="page"><div class="pos">Build-Along 05</div><div class="path">Part-VII-Dedicated-Build-Alongs/BuildAlong-05-Outside</div></footer>
 </body></html>

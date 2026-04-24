@@ -1,10 +1,8 @@
 <!DOCTYPE html>
 <html lang="en"><head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Build-Along 08: IntelligenceDemo</title>
-<style>
-:root { --bg: #000000; --fg: #FFB000; --bright: #FFD060; --dim: #996600; --codebg: #1a0d00; --border: #664500; --gutter: #4a3300; --headerbg: #0a0600; }
+<style>:root { --bg: #000000; --fg: #FFB000; --bright: #FFD060; --dim: #996600; --codebg: #1a0d00; --border: #664500; --gutter: #4a3300; --headerbg: #0a0600; }
 * { box-sizing: border-box; }
 html, body { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; height: 100%; }
 body { background: var(--bg); color: var(--fg); font-family: "FiraCode Nerd Font Mono", "Fira Code", "Menlo", "Courier New", monospace; font-size: 18pt; line-height: 1.55; margin: 0; padding: 0; text-shadow: 0 0 1px rgba(255, 176, 0, 0.35); display: flex; flex-direction: column; }
@@ -16,40 +14,36 @@ header.page .pos, footer.page .pos { color: var(--bright); }
 .content { flex: 1 1 auto; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 0.8rem 1rem 2rem 1rem; max-width: 1100px; margin: 0 auto; width: 100%; }
 h1 { color: var(--bright); font-weight: normal; font-size: 26pt; margin: 0.6rem 0 1rem 0; }
 h2 { color: var(--bright); font-weight: normal; font-size: 20pt; border-bottom: 1px solid var(--border); padding-bottom: 0.3rem; margin-top: 1.5rem; }
-h3 { color: var(--bright); font-weight: normal; font-size: 18pt; margin-top: 1rem; }
 p { margin: 0.4rem 0; }
-code { color: var(--bright); background: var(--codebg); padding: 0.08em 0.35em; border: 1px solid #3a2400; border-radius: 3px; font-size: 0.92em; }
-pre { background: var(--codebg); border: 1px solid #3a2400; border-radius: 4px; padding: 0.7rem 0.9rem; overflow-x: auto; font-size: 14pt; }
 ul { margin: 0.4rem 0 0.4rem 1.4rem; padding: 0; }
-a { color: var(--bright); font-weight: bold; text-decoration: none; border-bottom: 1px dotted var(--dim); }
+code { color: var(--bright); background: var(--codebg); padding: 0.08em 0.35em; border: 1px solid #3a2400; border-radius: 3px; font-size: 0.92em; }
 strong { color: var(--bright); }
 em { color: var(--fg); font-style: italic; }
-hr { border: 0; border-top: 1px solid var(--border); margin: 1rem 0; }
 .scope-note { border-left: 3px solid var(--bright); padding: 0.7rem 1rem; background: #140c00; margin: 0.6rem 0; color: var(--bright); }
-.status-live { color: #66FF66; font-weight: bold; }
-.status-notlive { color: #FFD060; font-weight: bold; }
-.status-planning { color: #996600; font-weight: bold; }
+.status-testflight { color: #FFD060; font-weight: bold; }
 </style>
 </head><body>
 <header class="page"><div class="path">Part-VII-Dedicated-Build-Alongs/BuildAlong-08-IntelligenceDemo</div></header>
-<div class="content">
-<h1>Build-Along 08: IntelligenceDemo</h1>
-<p><span class="status-planning">Status: planning phase as of 2026-04-24.</span> App not yet scaffolded. Walkthrough fills in once v1.0 scaffolds; planning notes below.</p>
-<div class="scope-note">MVP concept: On-device: classify an image, detect the language of entered text.</div>
-<h2>What this build-along will teach</h2>
+<div class="content"><h1>Build-Along 08: IntelligenceDemo</h1>
+<p><span class="status-testflight">Distribution: TestFlight beta.</span> The concept was a camera-driven "what is this?" scanner &mdash; point the camera, get object classification (CoreML), extracted text (Vision OCR), language of that text (NaturalLanguage). It would have shipped to the App Store, except Apple already ships this natively.</p>
+<div class="scope-note">MVP concept: a privacy-first camera inspector. CoreML image classification + Vision OCR + NaturalLanguage language detection, all on-device.</div>
+<h2>Why TestFlight, not App Store</h2>
+<p>Apple Intelligence / Visual Intelligence (iOS 18+, refreshed in iOS 26) already provides a camera-driven "what is this?" experience on every modern iPhone natively. Google Lens has been on iOS for years too. Our version wouldn't add enough differentiation to clear App Store Guideline 2.2 &mdash; a reviewer would reasonably say "Apple and Google already do this, why is yours here?" Without a strong differentiator (a specific niche, a unique interaction model, a privacy story that stands out), the honest distribution channel is TestFlight.</p>
+<p>The teaching value of CoreML + Vision + NaturalLanguage is still real &mdash; those frameworks remain worth learning. The app is still worth building as a teaching artifact. It just ships via TestFlight instead of competing with Apple Intelligence on the store.</p>
+<h2>What IntelligenceDemo will teach</h2>
 <ul>
-<li><strong>Kits:</strong> CoreML + Vision + NaturalLanguage</li>
-<li><strong>Signature layer:</strong> MVP feature + Under the Hood view + About &amp; Send Feedback (every primary sample app ships with this trio)</li>
-<li><strong>Distribution:</strong> own App Store listing, own bundle ID, own icon, own privacy policy, own screenshots</li>
+<li><strong>CoreML</strong> &mdash; loading a bundled <code>.mlmodel</code> or <code>.mlpackage</code> (e.g., MobileNetV2 image classifier), running inference on a <code>CVPixelBuffer</code> from the camera feed.</li>
+<li><strong>Vision</strong> &mdash; <code>VNRecognizeTextRequest</code> for OCR, <code>VNClassifyImageRequest</code> for Apple's built-in classifier, combining requests in one <code>VNImageRequestHandler</code>.</li>
+<li><strong>NaturalLanguage</strong> &mdash; <code>NLLanguageRecognizer</code> for language detection on extracted text, plus <code>NLTagger</code> for named entities if the extracted text is a sign or label.</li>
+<li><strong>AVFoundation</strong> (supporting) &mdash; camera capture session, live preview layer, per-frame sampling into the Vision + CoreML pipeline.</li>
+<li><strong>Signature layer:</strong> MVP + Under the Hood + About &amp; Send Feedback.</li>
+<li><strong>Distribution:</strong> TestFlight &mdash; readers get an install link from the appendix/wiki.</li>
 </ul>
 <h2>Current state</h2>
 <ul>
 <li>No Xcode project yet</li>
-<li>No DeveloperNotes map yet</li>
-<li>No screenshots, no icon</li>
 </ul>
 <h2>Next step</h2>
-<p>When this app gets scaffolded (after earlier-numbered build-alongs ship), this page gets replaced with the full step-by-step walkthrough following the same shape as Build-Along 01 (Claude's Web Wrapper).</p>
-</div>
+<p>Scaffolded after earlier build-alongs ship; TestFlight distribution only. If a clear differentiator emerges later (e.g., a specialized niche like botanical-identification or historical-coin-classification) the app could be re-scoped toward App Store at that time, but the default direction is TestFlight.</p></div>
 <footer class="page"><div class="pos">Build-Along 08</div><div class="path">Part-VII-Dedicated-Build-Alongs/BuildAlong-08-IntelligenceDemo</div></footer>
 </body></html>

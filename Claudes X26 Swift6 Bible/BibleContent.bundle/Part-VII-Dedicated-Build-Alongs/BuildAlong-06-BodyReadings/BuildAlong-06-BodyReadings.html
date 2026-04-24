@@ -24,24 +24,32 @@ ul { margin: 0.4rem 0 0.4rem 1.4rem; padding: 0; }
 a { color: var(--bright); font-weight: bold; text-decoration: none; border-bottom: 1px dotted var(--dim); }
 strong { color: var(--bright); }
 em { color: var(--fg); font-style: italic; }
-hr { border: 0; border-top: 1px solid var(--border); margin: 1rem 0; }
 .scope-note { border-left: 3px solid var(--bright); padding: 0.7rem 1rem; background: #140c00; margin: 0.6rem 0; color: var(--bright); }
-.status-live { color: #66FF66; font-weight: bold; }
-.status-notlive { color: #FFD060; font-weight: bold; }
 .status-planning { color: #996600; font-weight: bold; }
 </style>
 </head><body>
 <header class="page"><div class="path">Part-VII-Dedicated-Build-Alongs/BuildAlong-06-BodyReadings</div></header>
 <div class="content">
 <h1>Build-Along 06: BodyReadings</h1>
-<p><span class="status-planning">Status: planning phase as of 2026-04-24.</span> App not yet scaffolded. Walkthrough fills in once v1.0 scaffolds; planning notes below.</p>
-<div class="scope-note">MVP concept: Reads today's step count and live device-motion data.</div>
-<h2>What this build-along will teach</h2>
+<p><span class="status-planning">Status: planning phase as of 2026-04-24.</span> App not yet scaffolded. Walkthrough fills in once v1.0 scaffolds; expanded planning notes below.</p>
+<div class="scope-note">MVP concept: a body log. Track your weight and food intake over time, alongside the automatic signals the iPhone already captures (step count, activity type). One place to see how your body is doing day to day.</div>
+<h2>What BodyReadings will teach</h2>
 <ul>
-<li><strong>Kits:</strong> HealthKit + CoreMotion</li>
-<li><strong>Signature layer:</strong> MVP feature + Under the Hood view + About &amp; Send Feedback (every primary sample app ships with this trio)</li>
-<li><strong>Distribution:</strong> own App Store listing, own bundle ID, own icon, own privacy policy, own screenshots</li>
+<li><strong>HealthKit reads</strong> &mdash; step count, heart rate, active energy, and other passive data the iPhone/Watch already collects. Authorization dance + async query patterns.</li>
+<li><strong>HealthKit writes</strong> &mdash; user-entered weight (<code>HKQuantityType.bodyMass</code>) and dietary data (<code>HKQuantityType.dietaryEnergyConsumed</code>, protein, carbs, fat). Teaches HealthKit as a two-way store, not just a read-only source.</li>
+<li><strong>CoreMotion</strong> &mdash; current activity type (walking, running, driving, stationary) as live context for food/weight entries.</li>
+<li><strong>Signature layer:</strong> MVP feature + Under the Hood view + About &amp; Send Feedback.</li>
+<li><strong>Distribution:</strong> App Store listing &mdash; a daily health diary is a real utility, clears 2.2 on usefulness alone.</li>
 </ul>
+<h2>Core flows</h2>
+<ul>
+<li><strong>Daily summary</strong> &mdash; today's weight (last entry), total calories logged, step count, active minutes, live activity type. Single glance.</li>
+<li><strong>Weight entry</strong> &mdash; one number, one tap save, written to HealthKit with timestamp. Chart shows trend over past 30 days.</li>
+<li><strong>Food entry</strong> &mdash; pick a meal (breakfast/lunch/dinner/snack), enter calories, optional macros (protein/carbs/fat). Written to HealthKit dietary samples.</li>
+<li><strong>History</strong> &mdash; scroll back through past days, see food entries and weight readings in reverse chronological order.</li>
+</ul>
+<h2>Why this passes App Review on merit</h2>
+<p>Weight + food tracking is a real daily utility millions of people use. Apple's Health app shows the data but doesn't make food entry particularly fast, and third-party weight+food loggers are a mature category (MyFitnessPal, Lose It!, LoseIt+, etc.). A clean, focused, keyboard-friendly entry experience backed by HealthKit is a legitimate product &mdash; not a demo.</p>
 <h2>Current state</h2>
 <ul>
 <li>No Xcode project yet</li>

@@ -24,32 +24,41 @@ ul { margin: 0.4rem 0 0.4rem 1.4rem; padding: 0; }
 a { color: var(--bright); font-weight: bold; text-decoration: none; border-bottom: 1px dotted var(--dim); }
 strong { color: var(--bright); }
 em { color: var(--fg); font-style: italic; }
-hr { border: 0; border-top: 1px solid var(--border); margin: 1rem 0; }
 .scope-note { border-left: 3px solid var(--bright); padding: 0.7rem 1rem; background: #140c00; margin: 0.6rem 0; color: var(--bright); }
-.status-live { color: #66FF66; font-weight: bold; }
-.status-notlive { color: #FFD060; font-weight: bold; }
 .status-planning { color: #996600; font-weight: bold; }
+.status-testflight { color: #FFD060; font-weight: bold; }
 </style>
 </head><body>
 <header class="page"><div class="path">Part-VII-Dedicated-Build-Alongs/BuildAlong-11-ReportMaker</div></header>
 <div class="content">
 <h1>Build-Along 11: ReportMaker</h1>
-<p><span class="status-planning">Status: planning phase as of 2026-04-24.</span> App not yet scaffolded. Walkthrough fills in once v1.0 scaffolds; planning notes below.</p>
-<div class="scope-note">MVP concept: Build a bar or line chart from sample data, export the report as a PDF.</div>
-<h2>What this build-along will teach</h2>
+<p><span class="status-planning">Status: planning phase as of 2026-04-24.</span> App not yet scaffolded. Walkthrough fills in once v1.0 scaffolds; expanded planning notes below.</p>
+<div class="scope-note">MVP concept: a business travel expense tracker that collects receipts, categorizes spending (hotel, meals, transport, incidentals), and generates a clean PDF report at trip end. Built for anyone who expenses a business trip and hates manually assembling a reimbursement packet.</div>
+<h2>What ReportMaker will teach</h2>
 <ul>
-<li><strong>Kits:</strong> Swift Charts + PDFKit</li>
-<li><strong>Signature layer:</strong> MVP feature + Under the Hood view + About &amp; Send Feedback (every primary sample app ships with this trio)</li>
-<li><strong>Distribution:</strong> own App Store listing, own bundle ID, own icon, own privacy policy, own screenshots</li>
+<li><strong>Swift Charts</strong> &mdash; spending-by-category bar chart, day-over-day line chart, top-expenses summary. All native Swift Charts, exported into the PDF.</li>
+<li><strong>PDFKit</strong> &mdash; generate a multi-page expense report PDF: cover page with trip summary, per-day breakdown, category totals, embedded receipt images, signature block. Native PDF assembly, not screenshot-printing.</li>
+<li><strong>PhotosUI / VisionKit</strong> (supporting) &mdash; capture receipts via camera or photo library, optional OCR via VisionKit for auto-filling line items.</li>
+<li><strong>SwiftData</strong> (supporting) &mdash; persist trips, expenses, receipts between sessions.</li>
+<li><strong>Signature layer:</strong> MVP feature + Under the Hood view + About &amp; Send Feedback.</li>
+<li><strong>Distribution:</strong> App Store listing &mdash; business expense tracking is a proven market (Expensify, SAP Concur, FreshBooks); Apple doesn't ship one; clears 2.2 on usefulness.</li>
 </ul>
+<h2>Core flows</h2>
+<ul>
+<li><strong>Start a trip</strong> &mdash; trip name, dates, purpose. Creates a new expense container.</li>
+<li><strong>Add expense</strong> &mdash; pick category (hotel / meals / transport / other), amount, optional vendor, optional receipt photo. Tap Save, back to trip dashboard.</li>
+<li><strong>Trip dashboard</strong> &mdash; spending-by-category chart, day-over-day chart, running total, list of receipts. Snapshot of where the trip money is going.</li>
+<li><strong>Generate report</strong> &mdash; one button makes the PDF. Cover page + per-category breakdown + embedded receipts + totals. Share sheet to email, Files, AirDrop.</li>
+</ul>
+<h2>Why ReportMaker passes App Review on merit</h2>
+<p>Business expense tracking is an established category with real users and Apple doesn't ship one. A clean, focused PDF-out app backed by Swift Charts and PDFKit is a legitimate product &mdash; not a demo. Alternate concept Michael floated: journal export (turning a diary into a clean PDF). Same underlying kit combination, similar App-Store shape, different problem domain.</p>
 <h2>Current state</h2>
 <ul>
 <li>No Xcode project yet</li>
 <li>No DeveloperNotes map yet</li>
-<li>No screenshots, no icon</li>
 </ul>
 <h2>Next step</h2>
-<p>When this app gets scaffolded (after earlier-numbered build-alongs ship), this page gets replaced with the full step-by-step walkthrough following the same shape as Build-Along 01 (Claude's Web Wrapper).</p>
+<p>When scaffolded, full step-by-step walkthrough lands here. App Store target.</p>
 </div>
 <footer class="page"><div class="pos">Build-Along 11</div><div class="path">Part-VII-Dedicated-Build-Alongs/BuildAlong-11-ReportMaker</div></footer>
 </body></html>

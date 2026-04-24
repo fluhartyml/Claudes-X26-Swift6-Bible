@@ -24,23 +24,37 @@ ul { margin: 0.4rem 0 0.4rem 1.4rem; padding: 0; }
 a { color: var(--bright); font-weight: bold; text-decoration: none; border-bottom: 1px dotted var(--dim); }
 strong { color: var(--bright); }
 em { color: var(--fg); font-style: italic; }
-hr { border: 0; border-top: 1px solid var(--border); margin: 1rem 0; }
 .scope-note { border-left: 3px solid var(--bright); padding: 0.7rem 1rem; background: #140c00; margin: 0.6rem 0; color: var(--bright); }
-.status-live { color: #66FF66; font-weight: bold; }
-.status-notlive { color: #FFD060; font-weight: bold; }
 .status-planning { color: #996600; font-weight: bold; }
 </style>
 </head><body>
 <header class="page"><div class="path">Part-VII-Dedicated-Build-Alongs/BuildAlong-07-MyPerson</div></header>
 <div class="content">
 <h1>Build-Along 07: MyPerson</h1>
-<p><span class="status-planning">Status: planning phase as of 2026-04-24.</span> App not yet scaffolded. Walkthrough fills in once v1.0 scaffolds; planning notes below.</p>
-<div class="scope-note">MVP concept: Lists your contacts and their upcoming calendar events.</div>
-<h2>What this build-along will teach</h2>
+<p><span class="status-planning">Status: planning phase as of 2026-04-24.</span> App not yet scaffolded. Walkthrough fills in once v1.0 scaffolds; expanded planning notes below.</p>
+<div class="scope-note">MVP concept: a personal contact-relationship manager. Capture new people you meet, track how you met them, set follow-up reminders, and see all your relationships in one focused place. Three ways to capture a new person's contact info &mdash; from "hand the other person your phone" all the way to "tap phones together."</div>
+<h2>What MyPerson will teach</h2>
 <ul>
-<li><strong>Kits:</strong> EventKit + Contacts</li>
-<li><strong>Signature layer:</strong> MVP feature + Under the Hood view + About &amp; Send Feedback (every primary sample app ships with this trio)</li>
-<li><strong>Distribution:</strong> own App Store listing, own bundle ID, own icon, own privacy policy, own screenshots</li>
+<li><strong>Contacts</strong> &mdash; reading and writing <code>CNContact</code> via <code>CNContactStore</code>. Authorization, search, create, update, delete.</li>
+<li><strong>ContactsUI</strong> &mdash; <code>CNContactViewController</code> for the native display/edit surface.</li>
+<li><strong>NearbyInteraction</strong> &mdash; peer-to-peer ranging between iPhones using the UWB chip (U1 in iPhone 11+, U2 in iPhone 15 Pro+). This is the framework that powers NameDrop-style "tap to share" behavior.</li>
+<li><strong>MultipeerConnectivity</strong> &mdash; fallback peer discovery for devices without UWB hardware (older iPhones, iPads, Macs). Bluetooth + local Wi-Fi.</li>
+<li><strong>EventKit</strong> (secondary) &mdash; optional follow-up reminders for "check in with this person in two weeks" flow.</li>
+<li><strong>Signature layer:</strong> MVP feature + Under the Hood view + About &amp; Send Feedback.</li>
+<li><strong>Distribution:</strong> App Store listing &mdash; personal-CRM is an established category (Monica, Dex, Clay) and Apple doesn't ship one. Clear product-market fit for the teaching example.</li>
+</ul>
+<h2>Three ways to capture a new contact</h2>
+<ol>
+<li><strong>Tap-together share (best)</strong> &mdash; both iPhones have MyPerson open, bring them close, the UWB ranging triggers a contact-card exchange. Same UX as NameDrop but captured inside the MyPerson database with relationship metadata.</li>
+<li><strong>Peer discovery (middle)</strong> &mdash; if one device doesn't have UWB, fall back to MultipeerConnectivity over Bluetooth. Slower, but works across iPhone / iPad / Mac.</li>
+<li><strong>Hand over the phone (fallback)</strong> &mdash; open a "New Person" form, hand the phone to the other person, they type their info directly. Works with any human, no device pairing required. This is the worst case and still a first-class path.</li>
+</ol>
+<h2>What differentiates MyPerson from Apple Contacts</h2>
+<ul>
+<li><strong>Relationship context</strong> &mdash; how you met, relationship type (family / friend / colleague / acquaintance), importance, notes.</li>
+<li><strong>Last-contacted tracking</strong> &mdash; cold? warm? haven't reached out in months? Sort by relationship health, not alphabet.</li>
+<li><strong>Follow-up reminders</strong> &mdash; "check in with X in two weeks" creates an EventKit reminder; the app surfaces overdue follow-ups on open.</li>
+<li><strong>Capture-speed ergonomics</strong> &mdash; Apple Contacts' new-contact flow is slow. MyPerson's "hand over the phone" form is one screen, fill it out, done.</li>
 </ul>
 <h2>Current state</h2>
 <ul>
