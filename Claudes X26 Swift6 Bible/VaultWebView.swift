@@ -171,18 +171,14 @@ struct VaultWebView: PlatformViewRepresentable {
             }
           });
           mo.observe(body, { childList: true, subtree: true });
-
-          // Capture-phase click handler: if the tap lands anywhere on (or
-          // inside) an <a>, force navigation BEFORE contentEditable can
-          // turn the tap into a cursor placement + keyboard reveal.
-          document.addEventListener('click', function(e){
-            var a = e.target.closest('a');
-            if (a && a.href) {
-              e.preventDefault();
-              e.stopPropagation();
-              window.location.href = a.href;
-            }
-          }, true);
+          // NOTE: native link clicks are left to flow through the
+          // WKNavigationDelegate as .linkActivated so VaultModel.open()
+          // runs and history/forward tracking stays correct. The
+          // contenteditable=false markings on <a> and nav-style <li>
+          // above are enough to keep tap-on-link from popping the
+          // keyboard; an earlier force-nav via window.location.href
+          // bypassed VaultModel's history stack and broke the
+          // back/forward browser buttons, so it has been removed.
 
           var timer = null;
           function send(){
