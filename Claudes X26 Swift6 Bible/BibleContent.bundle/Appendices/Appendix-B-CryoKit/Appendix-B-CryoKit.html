@@ -2,7 +2,7 @@
 <html lang="en"><head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Appendix M: CryoKit</title>
+<title>Appendix B: CryoKit</title>
 <style>
 :root { --bg: #000000; --fg: #FFB000; --bright: #FFD060; --dim: #996600; --codebg: #1a0d00; --border: #664500; --gutter: #4a3300; --headerbg: #0a0600; }
 * { box-sizing: border-box; }
@@ -29,9 +29,9 @@ hr { border: 0; border-top: 1px solid var(--border); margin: 1rem 0; }
 .status-live { color: #66FF66; font-weight: bold; }
 </style>
 </head><body>
-<header class="page"><div class="path">Appendices/Appendix-M-CryoKit</div></header>
+<header class="page"><div class="path">Appendices/Appendix-B-CryoKit</div></header>
 <div class="content">
-<h1>Appendix M: CryoKit (Shared Package Source Tour)</h1>
+<h1>Appendix B: CryoKit (Shared Package Source Tour)</h1>
 <p><span class="status-live">Status: LIVE as a Swift package.</span> CryoKit is a shared internal Swift package that both CryoTunes Player (Appendix E) and Tally Matrix Clock (Appendix F) depend on. This appendix is the book's one example of cross-app shared code &mdash; a curated package serving multiple production apps.</p>
 <div class="scope-note">Source tour only. CryoKit is deliberately bare-bones &mdash; no fonts, no aesthetic controls, no dependencies of its own. Its scope is data and logic, nothing else. That discipline is the lesson: a shared package earns its keep by staying narrow.</div>
 <h2>What CryoKit contains</h2>
@@ -57,5 +57,5 @@ hr { border: 0; border-top: 1px solid var(--border); margin: 1rem 0; }
 <h2>The bare-bones rule</h2>
 <p>CryoKit stays deliberately narrow &mdash; no fonts, no styling, no view code. That's the rule: a shared package exports data and logic, not aesthetics. Each consuming app styles its own UI with its own design system. If CryoKit shipped fonts, two apps would be locked into the same look whether they wanted it or not. Keeping the package bare-bones keeps the consuming apps free.</p>
 </div>
-<footer class="page"><div class="pos">Appendix M</div><div class="path">Appendices/Appendix-M-CryoKit</div></footer>
+<footer class="page"><div class="pos">Appendix B</div><div class="path">Appendices/Appendix-B-CryoKit</div></footer>
 </body></html>
