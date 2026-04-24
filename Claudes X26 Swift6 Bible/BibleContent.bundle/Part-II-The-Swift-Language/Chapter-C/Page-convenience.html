@@ -76,6 +76,20 @@ ol.lines > li > p, ol.lines > li > h1, ol.lines > li > h2, ol.lines > li > h3, o
 .status-scope    { color: var(--scope); }
 .status-skeleton { color: var(--skeleton); }
 .status-tag { font-size: 13pt; margin-left: 0.4em; }
+
+
+footer.page { flex-direction: column; gap: 0.4rem; }
+footer.page .row-nav { display: flex; flex-direction: row; justify-content: space-between; align-items: center; gap: 0.5rem; }
+footer.page .row-nav .prev, footer.page .row-nav .next { flex: 1; min-width: 0; }
+footer.page .row-nav .prev { text-align: left; }
+footer.page .row-nav .next { text-align: right; }
+footer.page .row-nav .pos { flex: 0 0 auto; text-align: center; color: var(--bright); font-weight: bold; }
+footer.page .row-nav a { color: var(--bright); font-weight: bold; text-decoration: none; border-bottom: 1px dotted var(--dim); }
+footer.page .row-nav a:hover { background: #332200; }
+footer.page .row-nav .nav-empty { color: var(--gutter); font-style: italic; }
+footer.page .row-ref { display: flex; flex-direction: row; justify-content: space-between; align-items: center; gap: 0.5rem; font-size: 14pt; color: var(--dim); }
+footer.page .row-ref a { color: var(--bright); font-weight: bold; text-decoration: none; border-bottom: 1px dotted var(--dim); }
+footer.page .row-ref a:hover { background: #332200; }
 </style>
 </head>
 <body>
@@ -117,10 +131,7 @@ let c = Color(gray: 0.5)</code></pre></li>
 </ol>
 </div>
 
-<footer class="page">
-  <div class="pos">Part II &middot; Chapter C &middot; Page convenience <span class="status-tag status-written">[Written]</span></div>
-  <div class="nav"><a href="../../Front-of-Book/table-of-contents.html">Contents</a><a href="../../claudex26-index.html">Index</a></div>
-</footer>
+<footer class="page"><div class="row-nav"><div class="prev"><a href="Page-continue.html">&larr; continue</a></div><div class="pos">Chapter C · convenience</div><div class="next"><a href="../Chapter-D/Page-Decodable.html">Decodable &rarr;</a></div></div><div class="row-ref"><a href="../../Front-of-Book/table-of-contents.html">&larr; Contents</a><a href="../../claudex26-index.html">Index &rarr;</a></div></footer>
 
 </body>
 </html>
