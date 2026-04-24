@@ -154,6 +154,14 @@ struct VaultWebView: PlatformViewRepresentable {
             var links = (root || document).querySelectorAll('a');
             for (var i = 0; i < links.length; i++) {
               links[i].setAttribute('contenteditable', 'false');
+              // Also mark navigation-style list items (<li> containing an <a>
+              // with no block-level children like <p>, <ul>, <ol>) as
+              // non-editable so taps in the bullet/padding area still
+              // activate the link instead of popping the keyboard.
+              var li = links[i].closest('li');
+              if (li && !li.querySelector('p, ul, ol, h1, h2, h3, pre')) {
+                li.setAttribute('contenteditable', 'false');
+              }
             }
           }
           fixLinks(document);
@@ -163,6 +171,18 @@ struct VaultWebView: PlatformViewRepresentable {
             }
           });
           mo.observe(body, { childList: true, subtree: true });
+
+          // Capture-phase click handler: if the tap lands anywhere on (or
+          // inside) an <a>, force navigation BEFORE contentEditable can
+          // turn the tap into a cursor placement + keyboard reveal.
+          document.addEventListener('click', function(e){
+            var a = e.target.closest('a');
+            if (a && a.href) {
+              e.preventDefault();
+              e.stopPropagation();
+              window.location.href = a.href;
+            }
+          }, true);
 
           var timer = null;
           function send(){
