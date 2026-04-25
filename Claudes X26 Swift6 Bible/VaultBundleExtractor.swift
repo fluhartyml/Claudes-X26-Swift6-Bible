@@ -18,7 +18,7 @@ import Foundation
 enum VaultBundleExtractor {
     static let folderName = "BibleContent"
     /// Bump this when content mapping rules change so the next launch re-extracts.
-    static let currentVersion = 52
+    static let currentVersion = 53
     private static let versionFileName = ".extraction-version"
 
     /// Make sure the extracted vault exists at a known location, then return
@@ -165,6 +165,39 @@ enum VaultBundleExtractor {
         // Appendices — Appendix-X-*.html lands flat under Appendices/.
         if filename.hasPrefix("Appendix-"), filename.hasSuffix(".html") {
             return "Appendices/\(filename)"
+        }
+
+        // Part VII container page itself.
+        if filename == "Part-VII-Dedicated-Build-Alongs.html" {
+            return "Part-VII-Dedicated-Build-Alongs/\(filename)"
+        }
+
+        // Part VII Build-Along entries — each lives in its own subfolder
+        // matching the file basename.
+        if filename.hasPrefix("BuildAlong-"), filename.hasSuffix(".html") {
+            let folder = String(filename.dropLast(".html".count))
+            return "Part-VII-Dedicated-Build-Alongs/\(folder)/\(filename)"
+        }
+
+        // Part VII Source Tour entries — same per-file-folder pattern.
+        if filename.hasPrefix("SourceTour-"), filename.hasSuffix(".html") {
+            let folder = String(filename.dropLast(".html".count))
+            return "Part-VII-Dedicated-Build-Alongs/\(folder)/\(filename)"
+        }
+
+        // Reference pages (tool / file deep-dives linked from Books) — flat
+        // under Reference/.
+        let referenceNames: Set<String> = [
+            "Instruments.html",
+            "App-EntryPoint.html",
+            "ContentView-SwiftUI.html",
+            "Assets-xcassets.html",
+            "Info-plist.html",
+            "Entitlements.html",
+            "DeveloperNotes-swift.html",
+        ]
+        if referenceNames.contains(filename) {
+            return "Reference/\(filename)"
         }
 
         // Figures / screenshots — keep them in a figures subfolder.
