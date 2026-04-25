@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DeveloperNotes.swift convention — Reference</title>
+<style>
+:root { --bg: #000000; --fg: #FFB000; --bright: #FFD060; --dim: #996600; --codebg: #1a0d00; --border: #664500; --gutter: #4a3300; --headerbg: #0a0600; }
+* { box-sizing: border-box; }
+html, body { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; height: 100%; }
+body { background: var(--bg); color: var(--fg); font-family: "FiraCode Nerd Font Mono", "Fira Code", "Menlo", "Courier New", monospace; font-size: 18pt; line-height: 1.55; margin: 0; padding: 0; text-shadow: 0 0 1px rgba(255, 176, 0, 0.35); display: flex; flex-direction: column; }
+header.page, footer.page { background: var(--headerbg); color: var(--dim); padding: 0.55rem 1.1rem; font-size: 13pt; display: flex; flex-direction: column; gap: 0.2rem; flex: 0 0 auto; z-index: 10; }
+header.page { border-bottom: 1px solid var(--border); }
+footer.page { border-top: 1px solid var(--border); padding-bottom: calc(0.55rem + env(safe-area-inset-bottom)); }
+header.page .path, footer.page .path { color: var(--fg); word-break: break-all; overflow-wrap: break-word; }
+header.page .pos, footer.page .pos { color: var(--bright); }
+.content { flex: 1 1 auto; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 0.8rem 1rem 2rem 1rem; max-width: 1100px; margin: 0 auto; width: 100%; }
+h1 { color: var(--bright); font-weight: normal; font-size: 26pt; margin: 0.6rem 0 1rem 0; }
+h2 { color: var(--bright); font-weight: normal; font-size: 20pt; border-bottom: 1px solid var(--border); padding-bottom: 0.3rem; margin-top: 1.5rem; counter-reset: h3 para; }
+h2::before { counter-increment: h2; content: counter(h2) ". "; color: var(--fg); }
+h3 { color: var(--bright); font-weight: normal; font-size: 18pt; margin-top: 1rem; counter-reset: para; }
+h3::before { counter-increment: h3; content: counter(h2) "." counter(h3) " "; color: var(--fg); }
+p { margin: 0.4rem 0; counter-increment: para; }
+p::before { content: counter(h2) "." counter(h3) "." counter(para) " "; color: var(--dim); font-size: 13pt; margin-right: 0.4em; }
+code { color: var(--bright); background: var(--codebg); padding: 0.08em 0.35em; border: 1px solid #3a2400; border-radius: 3px; font-size: 0.92em; }
+pre { background: var(--codebg); border: 1px solid #3a2400; border-radius: 4px; padding: 0.7rem 0.9rem; overflow-x: auto; font-size: 14pt; }
+pre code { background: transparent; border: 0; padding: 0; }
+ul { margin: 0.4rem 0 0.4rem 1.4rem; padding: 0; }
+a { color: var(--bright); font-weight: bold; text-decoration: none; border-bottom: 1px dotted var(--dim); }
+a:hover { background: #332200; }
+strong { color: var(--bright); }
+em { color: var(--fg); font-style: italic; }
+ol.lines { list-style: none; counter-reset: line h2; padding: 0; margin: 0; }
+ol.lines > li { counter-increment: line; padding: 0.15rem 0 0.15rem 3.6rem; position: relative; min-height: 1.2em; }
+ol.lines > li::before { content: counter(line); position: absolute; left: 0; top: 0.25rem; width: 2.8rem; text-align: right; color: var(--gutter); font-size: 13pt; padding-right: 0.5rem; border-right: 1px solid #2a1e00; }
+ol.lines > li > p, ol.lines > li > h1, ol.lines > li > h2, ol.lines > li > h3, ol.lines > li > ul, ol.lines > li > ol, ol.lines > li > pre, ol.lines > li > hr { margin: 0; }
+.kind { color: var(--dim); font-size: 14pt; margin-top: -0.3rem; }
+.scope-note { border-left: 3px solid var(--bright); padding: 0.7rem 1rem; background: #140c00; margin: 0.6rem 0; color: var(--bright); }
+
+footer.page { flex-direction: column; gap: 0.4rem; }
+footer.page .row-nav { display: flex; flex-direction: row; justify-content: space-between; align-items: center; gap: 0.5rem; }
+footer.page .row-nav .prev, footer.page .row-nav .next { flex: 1; min-width: 0; }
+footer.page .row-nav .prev { text-align: left; }
+footer.page .row-nav .next { text-align: right; }
+footer.page .row-nav .pos { flex: 0 0 auto; text-align: center; color: var(--bright); font-weight: bold; }
+footer.page .row-nav a { color: var(--bright); font-weight: bold; text-decoration: none; border-bottom: 1px dotted var(--dim); }
+footer.page .row-nav .nav-empty { color: var(--gutter); font-style: italic; }
+</style>
+</head>
+<body>
+
+<header class="page"><div class="path">Reference/DeveloperNotes.swift</div></header>
+
+<div class="content">
+<ol class="lines">
+<li><h1>DeveloperNotes.swift (the project memory file)</h1></li>
+<li><div class="kind">Reference: Michael's project convention</div></li>
+<li><h2>What it is</h2></li>
+<li><p>Every Xcode project Michael builds gets a file at the top of its source tree named after the project: <code>MyProject_DeveloperNotes.swift</code>. The file is a regular Swift file as far as Xcode is concerned &mdash; it lives in the project, the filesystem-synced project picks it up, the navigator shows it &mdash; but the entire file is wrapped in <code>//</code> line comments. The compiler reads the comments, throws them away, and emits zero bytes for the file. Nothing about <code>DeveloperNotes.swift</code> ships in the built app.</p></li>
+<li><pre><code>//
+//  TngrnGrvWr_DeveloperNotes.swift
+//  TngrnGrvWr (Tangerine GrooveWire)
+//
+//  Developer Notes &mdash; Persistent Memory for AI Assistants
+//
+
+// ============================================================================
+// MARK: - PROJECT IDENTITY
+// ============================================================================
+//
+//  Name:           Tangerine GrooveWire
+//  Bundle ID:      com.TangerineGrooveWire.TngrnGrvWr
+//  Platform:       iOS / macOS (Universal)
+//  Version:        1.0
+//  Storage:        SwiftData + CloudKit
+//  Deployment:     iOS 18.6 / macOS 15.6
+//
+//  Code:           [empty &mdash; the whole file is comments]</code></pre></li>
+<li><h2>Why a Swift file and not a Markdown / text file?</h2></li>
+<li><p>Two reasons it lives as a <code>.swift</code> rather than <code>NOTES.md</code> or <code>README.md</code>:</p></li>
+<li><ul>
+<li><strong>Xcode shows it in the navigator alongside the code.</strong> A Markdown file in the project root would also show up, but Swift files cluster with the rest of the source tree visually. Anyone opening the project cold sees <code>MyProject_DeveloperNotes.swift</code> right next to <code>MyProjectApp.swift</code> and clicks it first.</li>
+<li><strong>Xcode's MARK pragma works in comments.</strong> When you write <code>// MARK: - PROJECT IDENTITY</code>, Xcode's symbol jump bar (Ctrl+6 or click the breadcrumb at the top of the editor) shows each MARK as a navigable section. You can jump straight to "App Store Connect notes" or "Architecture decisions" in a long file. A markdown file doesn't get that treatment.</li>
+</ul></li>
+<li><h2>What goes in it</h2></li>
+<li><p>Anything a future reader (you, a collaborator, an AI session) would want to know without grep-walking the codebase. Common sections:</p></li>
+<li><ul>
+<li><strong>PROJECT IDENTITY</strong> &mdash; name, bundle ID, platforms, version, GitHub URL, deployment target, storage stack.</li>
+<li><strong>APP STORE CONNECT</strong> &mdash; current submission status, App Store ID, common rejection notes.</li>
+<li><strong>ARCHITECTURE DECISIONS</strong> &mdash; "we use SwiftData not Core Data because..." / "view models are <code>@Observable</code>, not <code>ObservableObject</code>." Decisions worth documenting so they don't get re-litigated.</li>
+<li><strong>OPEN QUESTIONS</strong> &mdash; things to investigate next, parked work, "this only works because of X but it's fragile."</li>
+<li><strong>VERSION HISTORY</strong> &mdash; each shipped version's changelog at the source level (which is more honest than App Store "what's new" copy).</li>
+</ul></li>
+<li><h2>Sync to the GitHub wiki</h2></li>
+<li><p>Per Michael's convention (<code>feedback_wiki_sync.md</code> in the apartment memory), <code>DeveloperNotes.swift</code> for any project gets mirrored to a <code>Developer-Notes.md</code> page on that project's GitHub wiki. The Swift file is the source of truth; the wiki page is generated by stripping the <code>//</code> prefixes from each line. Readers browsing the repo on GitHub see the same content.</p></li>
+<li><div class="scope-note">The wiki sync isn't automated &mdash; it's done manually after each meaningful update. Don't let them drift; if the Swift file is ahead by a major version of notes, regenerate the wiki page.</div></li>
+<li><h2>The "compiler skips it" trick &mdash; why this works</h2></li>
+<li><p>Swift's compiler treats <code>//</code> as line comment all the way to end-of-line. A file that's nothing but comment lines is syntactically valid &mdash; it parses to "an empty file" and emits no symbols. The build succeeds. The output binary doesn't grow. The file just exists for human readers.</p></li>
+<li><p>You can also use <code>/* ... */</code> block comments to wrap structured content, but line comments win because they keep MARK pragmas active and don't risk an unbalanced <code>*/</code> ending the comment unexpectedly.</p></li>
+<li><h2>Watch out for</h2></li>
+<li><div class="scope-note"><strong>Don't accidentally uncomment.</strong> If you copy a code snippet into the Swift file to remind yourself of an approach, comment every line. An uncommented <code>import Foundation</code> won't break anything, but uncommented function declarations or top-level expressions <em>will</em> conflict with the rest of your project and you'll spend an hour debugging "why is this symbol declared twice?"</div></li>
+<li><div class="scope-note"><strong>Don't put secrets in it.</strong> The file lives in your repo. If your repo is public, your "developer notes" are public too. API keys, tokens, passwords, internal URLs &mdash; out. Use the apartment <code>secrets.local.md</code> pattern (gitignored) for those.</div></li>
+<li><h2>Cross-references</h2></li>
+<li><ul>
+<li><a href="App-EntryPoint.html">App entry point (MyAppApp.swift)</a></li>
+<li><a href="ContentView-SwiftUI.html">ContentView.swift</a></li>
+</ul></li>
+</ol>
+</div>
+
+<footer class="page"><div class="row-nav"><div class="prev"><span class="nav-empty">(reference)</span></div><div class="pos">Reference · DeveloperNotes.swift</div><div class="next"><span class="nav-empty">(reference)</span></div></div></footer>
+
+</body>
+</html>

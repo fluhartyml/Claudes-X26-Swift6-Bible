@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>App entry point (MyAppApp.swift) — Reference</title>
+<style>
+:root { --bg: #000000; --fg: #FFB000; --bright: #FFD060; --dim: #996600; --codebg: #1a0d00; --border: #664500; --gutter: #4a3300; --headerbg: #0a0600; }
+* { box-sizing: border-box; }
+html, body { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; height: 100%; }
+body { background: var(--bg); color: var(--fg); font-family: "FiraCode Nerd Font Mono", "Fira Code", "Menlo", "Courier New", monospace; font-size: 18pt; line-height: 1.55; margin: 0; padding: 0; text-shadow: 0 0 1px rgba(255, 176, 0, 0.35); display: flex; flex-direction: column; }
+header.page, footer.page { background: var(--headerbg); color: var(--dim); padding: 0.55rem 1.1rem; font-size: 13pt; display: flex; flex-direction: column; gap: 0.2rem; flex: 0 0 auto; z-index: 10; }
+header.page { border-bottom: 1px solid var(--border); }
+footer.page { border-top: 1px solid var(--border); padding-bottom: calc(0.55rem + env(safe-area-inset-bottom)); }
+header.page .path, footer.page .path { color: var(--fg); word-break: break-all; overflow-wrap: break-word; }
+header.page .pos, footer.page .pos { color: var(--bright); }
+.content { flex: 1 1 auto; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 0.8rem 1rem 2rem 1rem; max-width: 1100px; margin: 0 auto; width: 100%; }
+h1 { color: var(--bright); font-weight: normal; font-size: 26pt; margin: 0.6rem 0 1rem 0; }
+h2 { color: var(--bright); font-weight: normal; font-size: 20pt; border-bottom: 1px solid var(--border); padding-bottom: 0.3rem; margin-top: 1.5rem; counter-reset: h3 para; }
+h2::before { counter-increment: h2; content: counter(h2) ". "; color: var(--fg); }
+h3 { color: var(--bright); font-weight: normal; font-size: 18pt; margin-top: 1rem; counter-reset: para; }
+h3::before { counter-increment: h3; content: counter(h2) "." counter(h3) " "; color: var(--fg); }
+p { margin: 0.4rem 0; counter-increment: para; }
+p::before { content: counter(h2) "." counter(h3) "." counter(para) " "; color: var(--dim); font-size: 13pt; margin-right: 0.4em; }
+code { color: var(--bright); background: var(--codebg); padding: 0.08em 0.35em; border: 1px solid #3a2400; border-radius: 3px; font-size: 0.92em; }
+pre { background: var(--codebg); border: 1px solid #3a2400; border-radius: 4px; padding: 0.7rem 0.9rem; overflow-x: auto; font-size: 14pt; }
+pre code { background: transparent; border: 0; padding: 0; }
+ul { margin: 0.4rem 0 0.4rem 1.4rem; padding: 0; }
+a { color: var(--bright); font-weight: bold; text-decoration: none; border-bottom: 1px dotted var(--dim); }
+a:hover { background: #332200; }
+strong { color: var(--bright); }
+em { color: var(--fg); font-style: italic; }
+hr { border: 0; border-top: 1px solid var(--border); margin: 1rem 0; }
+ol.lines { list-style: none; counter-reset: line h2; padding: 0; margin: 0; }
+ol.lines > li { counter-increment: line; padding: 0.15rem 0 0.15rem 3.6rem; position: relative; min-height: 1.2em; }
+ol.lines > li::before { content: counter(line); position: absolute; left: 0; top: 0.25rem; width: 2.8rem; text-align: right; color: var(--gutter); font-size: 13pt; padding-right: 0.5rem; border-right: 1px solid #2a1e00; }
+ol.lines > li > p, ol.lines > li > h1, ol.lines > li > h2, ol.lines > li > h3, ol.lines > li > ul, ol.lines > li > ol, ol.lines > li > pre, ol.lines > li > hr { margin: 0; }
+.kind { color: var(--dim); font-size: 14pt; margin-top: -0.3rem; }
+.scope-note { border-left: 3px solid var(--bright); padding: 0.7rem 1rem; background: #140c00; margin: 0.6rem 0; color: var(--bright); }
+
+footer.page { flex-direction: column; gap: 0.4rem; }
+footer.page .row-nav { display: flex; flex-direction: row; justify-content: space-between; align-items: center; gap: 0.5rem; }
+footer.page .row-nav .prev, footer.page .row-nav .next { flex: 1; min-width: 0; }
+footer.page .row-nav .prev { text-align: left; }
+footer.page .row-nav .next { text-align: right; }
+footer.page .row-nav .pos { flex: 0 0 auto; text-align: center; color: var(--bright); font-weight: bold; }
+footer.page .row-nav a { color: var(--bright); font-weight: bold; text-decoration: none; border-bottom: 1px dotted var(--dim); }
+footer.page .row-nav .nav-empty { color: var(--gutter); font-style: italic; }
+</style>
+</head>
+<body>
+<header class="page"><div class="path">Reference/App entry point</div></header>
+<div class="content">
+<ol class="lines">
+<li><h1>App entry point (<code>MyAppApp.swift</code>)</h1></li>
+<li><div class="kind">Reference: SwiftUI App lifecycle</div></li>
+<li><h2>What this file is</h2></li>
+<li><p>Every Swift app needs exactly one entry point &mdash; the place where the operating system hands control to your code at launch. In SwiftUI, that's a struct marked <code>@main</code> conforming to the <code>App</code> protocol. Xcode names it <code>&lt;TargetName&gt;App.swift</code>; that's why the file is <code>MyAppApp.swift</code> when the target is <code>MyApp</code>. The doubled "App" looks odd but it's deliberate &mdash; the struct is <code>MyAppApp</code> so the name doesn't collide with Apple's <code>App</code> protocol.</p></li>
+<li><pre><code>import SwiftUI
+
+@main
+struct MyAppApp: App {
+    var body: some Scene {
+        WindowGroup {
+            ContentView()
+        }
+    }
+}</code></pre></li>
+<li><h2>What <code>@main</code> does</h2></li>
+<li><p>The <code>@main</code> attribute tells the compiler "start here." Behind the scenes it generates a <code>main()</code> function that the OS calls. You can only have one <code>@main</code> in your entire target; multiple breaks the build. If you migrate from an older app that used <code>@UIApplicationMain</code> or a separate <code>main.swift</code>, you'd remove those when you adopt the SwiftUI <code>App</code> protocol.</p></li>
+<li><h2>How it auto-handles iPhone, iPad, Mac, Vision</h2></li>
+<li><p>The <code>body</code> returns a <code>Scene</code> &mdash; the unit of windowing on each Apple platform. <code>WindowGroup</code> is the most common scene type and it's smart about each platform automatically:</p></li>
+<li><ul>
+<li><strong>iPhone</strong> &mdash; one window full-screen. WindowGroup gives you that, no configuration needed.</li>
+<li><strong>iPad</strong> &mdash; supports Split View, Slide Over, multiple windows of the same app. WindowGroup makes the app multi-window-capable for free; users can drag the app icon from the dock to spawn a second window of the same app.</li>
+<li><strong>Mac</strong> &mdash; multiple windows are the default. WindowGroup gives users <code>Cmd+N</code> to open a new window, with each window holding its own ContentView state.</li>
+<li><strong>Vision Pro (visionOS)</strong> &mdash; floating windows in 3D space. WindowGroup is still the right choice; the OS adapts the visual treatment.</li>
+</ul></li>
+<li><p>You don't write platform branches for any of this. Same code, different platform = different windowing behavior.</p></li>
+<li><h2>Other Scene types</h2></li>
+<li><ul>
+<li><code>DocumentGroup</code> &mdash; for document-based apps (Pages, Numbers, your-app-that-edits-files). Each open document gets its own window automatically; the system handles open/save/recents.</li>
+<li><code>Settings</code> &mdash; macOS only. Defines your app's Settings... menu (Cmd+, on Mac). One per app.</li>
+<li><code>MenuBarExtra</code> &mdash; macOS only. A menu-bar item with a popover or pull-down menu (no main window required).</li>
+<li><code>WindowGroup(id:)</code> &mdash; multiple distinct WindowGroups, each routable by ID via <code>openWindow</code>. Handy for "open this in its own window."</li>
+</ul></li>
+<li><p>You can stack multiple Scenes in your <code>body</code> by using a <code>SceneBuilder</code> result &mdash; a Mac app might have a WindowGroup for the main UI plus a Settings scene plus a MenuBarExtra all in the same App.</p></li>
+<li><h2>Scene phases &mdash; reacting to background/foreground</h2></li>
+<li><p>Read <code>@Environment(\.scenePhase)</code> inside any view to know whether the scene is <code>.active</code> (visible and interactive), <code>.inactive</code> (visible but not focused), or <code>.background</code> (off-screen). Watch for transitions with <code>.onChange(of: scenePhase)</code> &mdash; that's where you save state, pause timers, or refresh data when the user returns.</p></li>
+<li><h2>App delegate when you need it</h2></li>
+<li><p>Some Apple APIs still want a UIKit/AppKit app delegate (push notification handlers, deep-link routing in older patterns, etc.). Bridge with <code>@UIApplicationDelegateAdaptor</code> on iOS or <code>@NSApplicationDelegateAdaptor</code> on Mac:</p></li>
+<li><pre><code>@main
+struct MyAppApp: App {
+    @UIApplicationDelegateAdaptor(MyAppDelegate.self) var delegate
+    var body: some Scene {
+        WindowGroup { ContentView() }
+    }
+}</code></pre></li>
+<li><h2>Cross-references</h2></li>
+<li><ul>
+<li><a href="../Part-II-The-Swift-Language/Chapter-A/Page-async.html"><code>async</code></a></li>
+<li><a href="../Part-II-The-Swift-Language/Chapter-C/Page-concurrency.html"><code>concurrency</code></a></li>
+<li><a href="ContentView-SwiftUI.html">ContentView (the first view)</a></li>
+</ul></li>
+<li><h2>External sources</h2></li>
+<li><ul>
+<li><a href="https://developer.apple.com/documentation/swiftui/app">Apple &mdash; <code>App</code> protocol</a></li>
+<li><a href="https://developer.apple.com/documentation/swiftui/scene">Apple &mdash; <code>Scene</code> protocol</a></li>
+<li><a href="https://developer.apple.com/documentation/swiftui/scenephase">Apple &mdash; <code>ScenePhase</code></a></li>
+</ul></li>
+</ol>
+</div>
+<footer class="page"><div class="row-nav"><div class="prev"><span class="nav-empty">(reference)</span></div><div class="pos">Reference · App entry point</div><div class="next"><span class="nav-empty">(reference)</span></div></div></footer>
+</body>
+</html>

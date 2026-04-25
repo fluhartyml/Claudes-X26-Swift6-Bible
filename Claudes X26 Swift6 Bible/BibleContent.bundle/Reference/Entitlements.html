@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Entitlements (.entitlements) — Reference</title>
+<style>
+:root { --bg: #000000; --fg: #FFB000; --bright: #FFD060; --dim: #996600; --codebg: #1a0d00; --border: #664500; --gutter: #4a3300; --headerbg: #0a0600; }
+* { box-sizing: border-box; }
+html, body { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; height: 100%; }
+body { background: var(--bg); color: var(--fg); font-family: "FiraCode Nerd Font Mono", "Fira Code", "Menlo", "Courier New", monospace; font-size: 18pt; line-height: 1.55; margin: 0; padding: 0; text-shadow: 0 0 1px rgba(255, 176, 0, 0.35); display: flex; flex-direction: column; }
+header.page, footer.page { background: var(--headerbg); color: var(--dim); padding: 0.55rem 1.1rem; font-size: 13pt; display: flex; flex-direction: column; gap: 0.2rem; flex: 0 0 auto; z-index: 10; }
+header.page { border-bottom: 1px solid var(--border); }
+footer.page { border-top: 1px solid var(--border); padding-bottom: calc(0.55rem + env(safe-area-inset-bottom)); }
+header.page .path, footer.page .path { color: var(--fg); word-break: break-all; overflow-wrap: break-word; }
+header.page .pos, footer.page .pos { color: var(--bright); }
+.content { flex: 1 1 auto; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 0.8rem 1rem 2rem 1rem; max-width: 1100px; margin: 0 auto; width: 100%; }
+h1 { color: var(--bright); font-weight: normal; font-size: 26pt; margin: 0.6rem 0 1rem 0; }
+h2 { color: var(--bright); font-weight: normal; font-size: 20pt; border-bottom: 1px solid var(--border); padding-bottom: 0.3rem; margin-top: 1.5rem; counter-reset: h3 para; }
+h2::before { counter-increment: h2; content: counter(h2) ". "; color: var(--fg); }
+h3 { color: var(--bright); font-weight: normal; font-size: 18pt; margin-top: 1rem; counter-reset: para; }
+h3::before { counter-increment: h3; content: counter(h2) "." counter(h3) " "; color: var(--fg); }
+p { margin: 0.4rem 0; counter-increment: para; }
+p::before { content: counter(h2) "." counter(h3) "." counter(para) " "; color: var(--dim); font-size: 13pt; margin-right: 0.4em; }
+code { color: var(--bright); background: var(--codebg); padding: 0.08em 0.35em; border: 1px solid #3a2400; border-radius: 3px; font-size: 0.92em; }
+pre { background: var(--codebg); border: 1px solid #3a2400; border-radius: 4px; padding: 0.7rem 0.9rem; overflow-x: auto; font-size: 14pt; }
+pre code { background: transparent; border: 0; padding: 0; }
+ul { margin: 0.4rem 0 0.4rem 1.4rem; padding: 0; }
+a { color: var(--bright); font-weight: bold; text-decoration: none; border-bottom: 1px dotted var(--dim); }
+a:hover { background: #332200; }
+strong { color: var(--bright); }
+em { color: var(--fg); font-style: italic; }
+hr { border: 0; border-top: 1px solid var(--border); margin: 1rem 0; }
+ol.lines { list-style: none; counter-reset: line h2; padding: 0; margin: 0; }
+ol.lines > li { counter-increment: line; padding: 0.15rem 0 0.15rem 3.6rem; position: relative; min-height: 1.2em; }
+ol.lines > li::before { content: counter(line); position: absolute; left: 0; top: 0.25rem; width: 2.8rem; text-align: right; color: var(--gutter); font-size: 13pt; padding-right: 0.5rem; border-right: 1px solid #2a1e00; }
+ol.lines > li > p, ol.lines > li > h1, ol.lines > li > h2, ol.lines > li > h3, ol.lines > li > ul, ol.lines > li > ol, ol.lines > li > pre, ol.lines > li > hr { margin: 0; }
+.kind { color: var(--dim); font-size: 14pt; margin-top: -0.3rem; }
+.scope-note { border-left: 3px solid var(--bright); padding: 0.7rem 1rem; background: #140c00; margin: 0.6rem 0; color: var(--bright); }
+
+footer.page { flex-direction: column; gap: 0.4rem; }
+footer.page .row-nav { display: flex; flex-direction: row; justify-content: space-between; align-items: center; gap: 0.5rem; }
+footer.page .row-nav .prev, footer.page .row-nav .next { flex: 1; min-width: 0; }
+footer.page .row-nav .prev { text-align: left; }
+footer.page .row-nav .next { text-align: right; }
+footer.page .row-nav .pos { flex: 0 0 auto; text-align: center; color: var(--bright); font-weight: bold; }
+footer.page .row-nav a { color: var(--bright); font-weight: bold; text-decoration: none; border-bottom: 1px dotted var(--dim); }
+footer.page .row-nav .nav-empty { color: var(--gutter); font-style: italic; }
+</style>
+</head>
+<body>
+<header class="page"><div class="path">Reference/Entitlements</div></header>
+<div class="content">
+<ol class="lines">
+<li><h1>Entitlements (<code>MyApp.entitlements</code>)</h1></li>
+<li><div class="kind">Reference: capability gating file</div></li>
+<li><h2>What this file is</h2></li>
+<li><p>The <code>.entitlements</code> file is a property list listing the protected APIs your app is allowed to use. Where <a href="Info-plist.html">Info.plist</a> declares <em>what your app says about itself</em>, the entitlements file declares <em>what the OS lets it do</em>. Code-signing checks that every entitlement claimed in this file matches the provisioning profile signed into the binary &mdash; if they don't match, the app fails to launch.</p></li>
+<li><h2>How entitlements come into existence</h2></li>
+<li><p>You don't usually edit this file by hand. In Xcode, you toggle capabilities in the <strong>Signing &amp; Capabilities</strong> tab of the target editor (the <strong>+ Capability</strong> button at the top). Each capability you add writes corresponding entries into the <code>.entitlements</code> file <em>and</em> registers them with Apple's developer portal so your provisioning profile carries them.</p></li>
+<li><h2>Common entitlements</h2></li>
+<li><h3>iCloud &amp; CloudKit</h3></li>
+<li><ul>
+<li><code>com.apple.developer.icloud-services</code> &mdash; CloudKit, CloudDocuments, CloudKeyValueStore.</li>
+<li><code>com.apple.developer.icloud-container-identifiers</code> &mdash; the iCloud container(s) your app accesses.</li>
+<li><code>com.apple.developer.ubiquity-container-identifiers</code> &mdash; for iCloud Drive document support.</li>
+</ul></li>
+<li><h3>Push notifications</h3></li>
+<li><ul>
+<li><code>aps-environment</code> &mdash; <code>development</code> or <code>production</code>.</li>
+<li><code>com.apple.developer.usernotifications.communication</code> &mdash; for Communication Notifications (richer message-style alerts).</li>
+</ul></li>
+<li><h3>Sign in with Apple</h3></li>
+<li><ul>
+<li><code>com.apple.developer.applesignin</code> &mdash; required if you offer "Sign in with Apple."</li>
+</ul></li>
+<li><h3>App Groups &amp; Keychain Sharing</h3></li>
+<li><ul>
+<li><code>com.apple.security.application-groups</code> &mdash; lets your app + extensions (widgets, share extensions) share UserDefaults, files, and Core Data stores.</li>
+<li><code>keychain-access-groups</code> &mdash; lets multiple apps from the same team share Keychain items.</li>
+</ul></li>
+<li><h3>HealthKit, HomeKit, Apple Pay, Maps</h3></li>
+<li><ul>
+<li><code>com.apple.developer.healthkit</code> &mdash; HealthKit access. Pairs with <code>NSHealthShareUsageDescription</code> in Info.plist.</li>
+<li><code>com.apple.developer.homekit</code> &mdash; HomeKit accessory control.</li>
+<li><code>com.apple.developer.in-app-payments</code> &mdash; Apple Pay merchant IDs.</li>
+<li><code>com.apple.developer.maps</code> &mdash; access to MapKit's expanded routing/transit data.</li>
+</ul></li>
+<li><h3>App Sandbox (macOS App Store)</h3></li>
+<li><p>Mac App Store apps <strong>must</strong> be sandboxed. Toggle <code>com.apple.security.app-sandbox</code> on, then add per-feature sandbox entitlements:</p></li>
+<li><ul>
+<li><code>com.apple.security.network.client</code>, <code>com.apple.security.network.server</code></li>
+<li><code>com.apple.security.files.user-selected.read-write</code> &mdash; access to files via NSOpenPanel/NSSavePanel</li>
+<li><code>com.apple.security.files.downloads.read-write</code></li>
+<li><code>com.apple.security.assets.music.read-write</code></li>
+<li><code>com.apple.security.automation.apple-events</code> &mdash; sending Apple Events (for AppleScript automation)</li>
+<li><code>com.apple.security.temporary-exception.apple-events</code> &mdash; targeting <em>specific</em> apps (Music, Mail, Finder)</li>
+</ul></li>
+<li><h3>Hardened Runtime (notarized Mac apps, not sandboxed)</h3></li>
+<li><p>Self-distributed Mac apps don't need the sandbox, but they DO need Hardened Runtime to be notarized. Hardened Runtime is configurable via separate entitlements:</p></li>
+<li><ul>
+<li><code>com.apple.security.cs.allow-jit</code> &mdash; allow Just-In-Time compilation</li>
+<li><code>com.apple.security.cs.disable-library-validation</code> &mdash; load unsigned plugins</li>
+<li><code>com.apple.security.cs.allow-dyld-environment-variables</code> &mdash; allow DYLD_* env vars</li>
+</ul></li>
+<li><h2>The pairing rule (Info.plist + Entitlements)</h2></li>
+<li><p>Many Apple capabilities require <strong>both</strong> an entitlement (machine permission) AND an Info.plist usage-description string (human explanation):</p></li>
+<li><ul>
+<li>HealthKit &rarr; <code>com.apple.developer.healthkit</code> entitlement + <code>NSHealthShareUsageDescription</code> + <code>NSHealthUpdateUsageDescription</code> in Info.plist.</li>
+<li>Apple Pay &rarr; <code>com.apple.developer.in-app-payments</code> entitlement (no Info.plist string needed).</li>
+<li>Sign in with Apple &rarr; <code>com.apple.developer.applesignin</code> entitlement only.</li>
+</ul></li>
+<li><div class="scope-note">If your app crashes immediately on launch with a code-signing error, 80% of the time it's an entitlement that's claimed in <code>.entitlements</code> but missing from your provisioning profile. Re-generate the profile after adding the capability in Xcode &mdash; the auto-managed flow usually handles this, but a manual profile means you have to re-download from the developer portal.</div></li>
+<li><h2>Cross-references</h2></li>
+<li><ul>
+<li><a href="Info-plist.html">Info.plist</a> &mdash; the sister file for human-facing usage descriptions</li>
+<li><a href="App-EntryPoint.html">App entry point</a></li>
+</ul></li>
+<li><h2>External sources</h2></li>
+<li><ul>
+<li><a href="https://developer.apple.com/documentation/bundleresources/entitlements">Apple &mdash; Entitlements reference</a></li>
+<li><a href="https://developer.apple.com/documentation/security/hardened_runtime">Apple &mdash; Hardened Runtime</a></li>
+</ul></li>
+</ol>
+</div>
+<footer class="page"><div class="row-nav"><div class="prev"><span class="nav-empty">(reference)</span></div><div class="pos">Reference · Entitlements</div><div class="next"><span class="nav-empty">(reference)</span></div></div></footer>
+</body>
+</html>

@@ -84,6 +84,7 @@ ENTRIES = {
         ('Codable', 'protocol'),
         ('Collection', 'protocol'),
         ('Comparable', 'protocol'),
+        ('concurrency', 'concept'),
         ('continue', 'keyword'),
         ('convenience', 'modifier'),
         ('CaseIterable', 'protocol'),

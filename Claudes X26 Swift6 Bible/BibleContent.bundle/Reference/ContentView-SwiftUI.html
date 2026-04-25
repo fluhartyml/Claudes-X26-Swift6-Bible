@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ContentView.swift (your first SwiftUI view) — Reference</title>
+<style>
+:root { --bg: #000000; --fg: #FFB000; --bright: #FFD060; --dim: #996600; --codebg: #1a0d00; --border: #664500; --gutter: #4a3300; --headerbg: #0a0600; }
+* { box-sizing: border-box; }
+html, body { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; height: 100%; }
+body { background: var(--bg); color: var(--fg); font-family: "FiraCode Nerd Font Mono", "Fira Code", "Menlo", "Courier New", monospace; font-size: 18pt; line-height: 1.55; margin: 0; padding: 0; text-shadow: 0 0 1px rgba(255, 176, 0, 0.35); display: flex; flex-direction: column; }
+header.page, footer.page { background: var(--headerbg); color: var(--dim); padding: 0.55rem 1.1rem; font-size: 13pt; display: flex; flex-direction: column; gap: 0.2rem; flex: 0 0 auto; z-index: 10; }
+header.page { border-bottom: 1px solid var(--border); }
+footer.page { border-top: 1px solid var(--border); padding-bottom: calc(0.55rem + env(safe-area-inset-bottom)); }
+header.page .path, footer.page .path { color: var(--fg); word-break: break-all; overflow-wrap: break-word; }
+header.page .pos, footer.page .pos { color: var(--bright); }
+.content { flex: 1 1 auto; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 0.8rem 1rem 2rem 1rem; max-width: 1100px; margin: 0 auto; width: 100%; }
+h1 { color: var(--bright); font-weight: normal; font-size: 26pt; margin: 0.6rem 0 1rem 0; }
+h2 { color: var(--bright); font-weight: normal; font-size: 20pt; border-bottom: 1px solid var(--border); padding-bottom: 0.3rem; margin-top: 1.5rem; counter-reset: h3 para; }
+h2::before { counter-increment: h2; content: counter(h2) ". "; color: var(--fg); }
+h3 { color: var(--bright); font-weight: normal; font-size: 18pt; margin-top: 1rem; counter-reset: para; }
+h3::before { counter-increment: h3; content: counter(h2) "." counter(h3) " "; color: var(--fg); }
+p { margin: 0.4rem 0; counter-increment: para; }
+p::before { content: counter(h2) "." counter(h3) "." counter(para) " "; color: var(--dim); font-size: 13pt; margin-right: 0.4em; }
+code { color: var(--bright); background: var(--codebg); padding: 0.08em 0.35em; border: 1px solid #3a2400; border-radius: 3px; font-size: 0.92em; }
+pre { background: var(--codebg); border: 1px solid #3a2400; border-radius: 4px; padding: 0.7rem 0.9rem; overflow-x: auto; font-size: 14pt; }
+pre code { background: transparent; border: 0; padding: 0; }
+ul { margin: 0.4rem 0 0.4rem 1.4rem; padding: 0; }
+a { color: var(--bright); font-weight: bold; text-decoration: none; border-bottom: 1px dotted var(--dim); }
+a:hover { background: #332200; }
+strong { color: var(--bright); }
+em { color: var(--fg); font-style: italic; }
+hr { border: 0; border-top: 1px solid var(--border); margin: 1rem 0; }
+ol.lines { list-style: none; counter-reset: line h2; padding: 0; margin: 0; }
+ol.lines > li { counter-increment: line; padding: 0.15rem 0 0.15rem 3.6rem; position: relative; min-height: 1.2em; }
+ol.lines > li::before { content: counter(line); position: absolute; left: 0; top: 0.25rem; width: 2.8rem; text-align: right; color: var(--gutter); font-size: 13pt; padding-right: 0.5rem; border-right: 1px solid #2a1e00; }
+ol.lines > li > p, ol.lines > li > h1, ol.lines > li > h2, ol.lines > li > h3, ol.lines > li > ul, ol.lines > li > ol, ol.lines > li > pre, ol.lines > li > hr { margin: 0; }
+.kind { color: var(--dim); font-size: 14pt; margin-top: -0.3rem; }
+.scope-note { border-left: 3px solid var(--bright); padding: 0.7rem 1rem; background: #140c00; margin: 0.6rem 0; color: var(--bright); }
+
+footer.page { flex-direction: column; gap: 0.4rem; }
+footer.page .row-nav { display: flex; flex-direction: row; justify-content: space-between; align-items: center; gap: 0.5rem; }
+footer.page .row-nav .prev, footer.page .row-nav .next { flex: 1; min-width: 0; }
+footer.page .row-nav .prev { text-align: left; }
+footer.page .row-nav .next { text-align: right; }
+footer.page .row-nav .pos { flex: 0 0 auto; text-align: center; color: var(--bright); font-weight: bold; }
+footer.page .row-nav a { color: var(--bright); font-weight: bold; text-decoration: none; border-bottom: 1px dotted var(--dim); }
+footer.page .row-nav .nav-empty { color: var(--gutter); font-style: italic; }
+</style>
+</head>
+<body>
+<header class="page"><div class="path">Reference/ContentView</div></header>
+<div class="content">
+<ol class="lines">
+<li><h1>ContentView (<code>ContentView.swift</code>)</h1></li>
+<li><div class="kind">Reference: SwiftUI View convention</div></li>
+<li><h2>What this file is</h2></li>
+<li><p>ContentView is the SwiftUI view Xcode creates as the starting point for every new project. Its name is convention only &mdash; nothing in SwiftUI requires it. Apple uses "ContentView" because it's neutral; you'd rename it (or split it into many smaller views) for a real app.</p></li>
+<li><pre><code>import SwiftUI
+
+struct ContentView: View {
+    var body: some View {
+        VStack {
+            Image(systemName: "globe")
+                .imageScale(.large)
+                .foregroundStyle(.tint)
+            Text("Hello, world!")
+        }
+        .padding()
+    }
+}
+
+#Preview {
+    ContentView()
+}</code></pre></li>
+<li><h2>The View protocol</h2></li>
+<li><p>Every SwiftUI view is a <strong>struct</strong> conforming to <code>View</code>. The protocol has one requirement: a <code>body</code> property of <code>some View</code>. Whatever you return from <code>body</code> is what gets rendered. The struct is a <em>description</em> of the UI, not a reference to a UIKit/AppKit view object &mdash; SwiftUI builds the actual view tree from your description on each redraw.</p></li>
+<li><h2>Why <code>some View</code> and not just <code>View</code></h2></li>
+<li><p><code>some View</code> is an <em>opaque return type</em> &mdash; the compiler knows the concrete type, but callers don't. SwiftUI's view types are deeply nested generic structs (<code>VStack&lt;TupleView&lt;(Image, Text)&gt;&gt;</code> and so on). Spelling them out explicitly is impossible to read; <code>some View</code> hides the noise. The compiler still type-checks everything; you just don't have to type the full type yourself.</p></li>
+<li><h2>The <code>#Preview</code> macro</h2></li>
+<li><p><code>#Preview</code> tells Xcode's canvas what to render in the preview pane. You can have multiple <code>#Preview</code> blocks in the same file with different setups (different data, different size class, different appearance). Previews don't ship in the built app &mdash; they're a development-time convenience.</p></li>
+<li><h2>Composing views</h2></li>
+<li><p>You build complex UI by nesting smaller views. Best practice is to keep each view small &mdash; under 50 lines &mdash; and pull subtrees into their own <code>struct ChildView: View</code> when they grow. Compiler errors get clearer, previews render faster, and the views become reusable.</p></li>
+<li><div class="scope-note">Rule of thumb: if your <code>body</code> needs scrollbars in the editor, it's too big. Extract subviews.</div></li>
+<li><h2>State, bindings, and the rest of the view-data world</h2></li>
+<li><p>ContentView starts as a stateless view. As it grows you'll add:</p></li>
+<li><ul>
+<li><code>@State</code> &mdash; private mutable state owned by the view.</li>
+<li><code>@Binding</code> &mdash; a two-way connection to state owned higher up the tree.</li>
+<li><code>@Environment</code> &mdash; system-provided values (color scheme, dynamic type size, scene phase).</li>
+<li><code>@Bindable</code> &mdash; for binding into <code>@Observable</code> reference types.</li>
+</ul></li>
+<li><h2>View identity</h2></li>
+<li><p>SwiftUI reconstructs your view tree on every state change. To remember "this view here is the same view from before" (so animations work, state persists), it uses <strong>view identity</strong> &mdash; either the structural position in the tree or an explicit <code>.id()</code> modifier. Mismatched identity is the source of most "my animation jumped" bugs.</p></li>
+<li><h2>Cross-references</h2></li>
+<li><ul>
+<li><a href="App-EntryPoint.html">App entry point</a> &mdash; how ContentView gets shown</li>
+<li><a href="../Part-III-The-User-Interface/Book-04-Gestures-And-Input.html">Book 04 &mdash; Gestures And Input</a></li>
+</ul></li>
+<li><h2>External sources</h2></li>
+<li><ul>
+<li><a href="https://developer.apple.com/documentation/swiftui/view">Apple &mdash; <code>View</code> protocol</a></li>
+<li><a href="https://docs.swift.org/swift-book/documentation/the-swift-programming-language/opaquetypes/">The Swift Programming Language &mdash; Opaque Types</a></li>
+</ul></li>
+</ol>
+</div>
+<footer class="page"><div class="row-nav"><div class="prev"><span class="nav-empty">(reference)</span></div><div class="pos">Reference · ContentView</div><div class="next"><span class="nav-empty">(reference)</span></div></div></footer>
+</body>
+</html>

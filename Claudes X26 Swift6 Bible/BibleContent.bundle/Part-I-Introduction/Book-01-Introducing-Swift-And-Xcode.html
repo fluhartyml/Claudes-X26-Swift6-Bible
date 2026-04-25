@@ -101,7 +101,7 @@ footer.page .row-nav .nav-empty { color: var(--gutter); font-style: italic; }
   <li><h2>What Xcode Is</h2></li>
   <li><p>Xcode is Apple's IDE (Integrated Development Environment). It is the only supported way to build and submit apps for Apple platforms. You get it free from the Mac App Store.</p></li>
   <li><p>Xcode bundles together:</p></li>
-  <li><ul><li>A <strong>code editor</strong> with syntax highlighting and autocomplete</li><li>A <strong>build system</strong> that compiles your Swift into an app</li><li><strong>Interface Builder / SwiftUI Previews</strong> for visual layout</li><li><strong>Simulators</strong> for testing on virtual iPhones, iPads, Apple TVs, etc.</li><li><strong>Instruments</strong> for performance profiling</li><li><strong>Signing and provisioning</strong> tools for App Store submission</li></ul></li>
+  <li><ul><li>A <strong>code editor</strong> with syntax highlighting and autocomplete</li><li>A <strong>build system</strong> that compiles your Swift into an app</li><li><strong>Interface Builder / SwiftUI Previews</strong> for visual layout</li><li><strong>Simulators</strong> for testing on virtual iPhones, iPads, Apple TVs, etc.</li><li><strong><a href="../Reference/Instruments.html">Instruments</a></strong> for performance profiling</li><li><strong>Signing and provisioning</strong> tools for App Store submission</li></ul></li>
   <li><h3>Xcode Version Numbering</h3></li>
   <li><p>Xcode versions track roughly with the OS releases. Xcode 26 ships alongside iOS 26, macOS 26, etc. Each major Xcode version requires a minimum macOS version to run. Always use the latest release version for App Store submissions.</p></li>
   <li><hr></li>
@@ -122,11 +122,11 @@ footer.page .row-nav .nav-empty { color: var(--gutter); font-style: italic; }
   <li><p>The file tree on the left. Your source files, assets, Info.plist, and entitlements live here. The structure in the navigator does not have to match the file system, but keeping them in sync saves headaches.</p></li>
   <li><h3>Key Files in a New Project</h3></li>
   <li><pre><code class="lang-">MyApp/
-  MyAppApp.swift      -- the @main entry point
-  ContentView.swift   -- your first view
-  Assets.xcassets     -- app icon, accent color, image assets
-  Info.plist          -- app configuration (may be absent if using build settings)
-  MyApp.entitlements  -- capabilities like iCloud, HealthKit, etc.</code></pre></li>
+  <a href="../Reference/App-EntryPoint.html">MyAppApp.swift</a>      -- the @main entry point
+  <a href="../Reference/ContentView-SwiftUI.html">ContentView.swift</a>   -- your first view
+  <a href="../Reference/Assets-xcassets.html">Assets.xcassets</a>     -- app icon, accent color, image assets
+  <a href="../Reference/Info-plist.html">Info.plist</a>          -- app configuration (may be absent if using build settings)
+  <a href="../Reference/Entitlements.html">MyApp.entitlements</a>  -- capabilities like iCloud, HealthKit, etc.</code></pre></li>
   <li><hr></li>
   <li><h2>Targets</h2></li>
   <li><p>A <strong>target</strong> is a single product that Xcode builds. One project can contain multiple targets.</p></li>
@@ -139,7 +139,7 @@ footer.page .row-nav .nav-empty { color: var(--gutter); font-style: italic; }
   <li><h2>Schemes</h2></li>
   <li><p>A <strong>scheme</strong> tells Xcode <em>what</em> to build, <em>how</em> to build it, and <em>where</em> to run it.</p></li>
   <li><p>Each scheme defines:</p></li>
-  <li><ul><li><strong>Build</strong> -- which targets to compile</li><li><strong>Run</strong> -- which executable to launch, on which simulator/device</li><li><strong>Test</strong> -- which test targets to execute</li><li><strong>Profile</strong> -- launches Instruments for performance analysis</li><li><strong>Archive</strong> -- builds a release version for App Store submission</li></ul></li>
+  <li><ul><li><strong>Build</strong> -- which targets to compile</li><li><strong>Run</strong> -- which executable to launch, on which simulator/device</li><li><strong>Test</strong> -- which test targets to execute</li><li><strong>Profile</strong> -- launches <a href="../Reference/Instruments.html">Instruments</a> for performance analysis</li><li><strong>Archive</strong> -- builds a release version for App Store submission</li></ul></li>
   <li><p>The scheme picker is at the top-left of Xcode, next to the Run/Stop buttons. It shows: <code>[Scheme Name] &gt; [Destination]</code>.</p></li>
   <li><h3>Editing Schemes</h3></li>
   <li><p>Product &gt; Scheme &gt; Edit Scheme (or click the scheme name and choose "Edit Scheme"). You rarely need to touch this for single-target apps.</p></li>

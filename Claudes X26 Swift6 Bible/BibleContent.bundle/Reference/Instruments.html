@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Instruments — Reference</title>
+<style>
+:root {
+  --bg: #000000;
+  --fg: #FFB000;
+  --bright: #FFD060;
+  --dim: #996600;
+  --codebg: #1a0d00;
+  --border: #664500;
+  --gutter: #4a3300;
+  --headerbg: #0a0600;
+}
+* { box-sizing: border-box; }
+html, body { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; height: 100%; }
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: "FiraCode Nerd Font Mono", "FiraCode Nerd Font", "Fira Code", "Menlo", "Courier New", monospace;
+  font-size: 18pt;
+  line-height: 1.55;
+  margin: 0;
+  padding: 0;
+  text-shadow: 0 0 1px rgba(255, 176, 0, 0.35);
+  display: flex;
+  flex-direction: column;
+}
+header.page, footer.page {
+  background: var(--headerbg);
+  color: var(--dim);
+  padding: 0.55rem 1.1rem;
+  font-size: 13pt;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  flex: 0 0 auto;
+  z-index: 10;
+}
+header.page { border-bottom: 1px solid var(--border); }
+footer.page { border-top: 1px solid var(--border); padding-bottom: calc(0.55rem + env(safe-area-inset-bottom)); }
+header.page .path, footer.page .path { color: var(--fg); word-break: break-all; overflow-wrap: break-word; }
+header.page .pos, footer.page .pos { color: var(--bright); }
+.content { flex: 1 1 auto; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 0.8rem 1rem 2rem 1rem; max-width: 1100px; margin: 0 auto; width: 100%; }
+h1 { color: var(--bright); font-weight: normal; font-size: 26pt; margin: 0.6rem 0 1rem 0; }
+h2 { color: var(--bright); font-weight: normal; font-size: 20pt; border-bottom: 1px solid var(--border); padding-bottom: 0.3rem; margin-top: 1.5rem; counter-reset: h3 para; }
+h2::before { counter-increment: h2; content: counter(h2) ". "; color: var(--fg); }
+p { margin: 0.4rem 0; counter-increment: para; }
+p::before { content: counter(h2) "." counter(para) " "; color: var(--dim); font-size: 13pt; margin-right: 0.4em; }
+code { color: var(--bright); background: var(--codebg); padding: 0.08em 0.35em; border: 1px solid #3a2400; border-radius: 3px; font-size: 0.92em; }
+ul { margin: 0.4rem 0 0.4rem 1.4rem; padding: 0; }
+a { color: var(--bright); font-weight: bold; text-decoration: none; border-bottom: 1px dotted var(--dim); }
+a:hover { background: #332200; }
+strong { color: var(--bright); }
+em { color: var(--fg); font-style: italic; }
+ol.lines { list-style: none; counter-reset: line h2; padding: 0; margin: 0; }
+ol.lines > li { counter-increment: line; padding: 0.15rem 0 0.15rem 3.6rem; position: relative; min-height: 1.2em; }
+ol.lines > li::before { content: counter(line); position: absolute; left: 0; top: 0.25rem; width: 2.8rem; text-align: right; color: var(--gutter); font-size: 13pt; padding-right: 0.5rem; border-right: 1px solid #2a1e00; }
+ol.lines > li > p, ol.lines > li > h1, ol.lines > li > h2, ol.lines > li > h3, ol.lines > li > ul, ol.lines > li > ol, ol.lines > li > pre, ol.lines > li > hr { margin: 0; }
+.kind { color: var(--dim); font-size: 14pt; margin-top: -0.3rem; }
+
+footer.page { flex-direction: column; gap: 0.4rem; }
+footer.page .row-nav { display: flex; flex-direction: row; justify-content: space-between; align-items: center; gap: 0.5rem; }
+footer.page .row-nav .prev, footer.page .row-nav .next { flex: 1; min-width: 0; }
+footer.page .row-nav .prev { text-align: left; }
+footer.page .row-nav .next { text-align: right; }
+footer.page .row-nav .pos { flex: 0 0 auto; text-align: center; color: var(--bright); font-weight: bold; }
+footer.page .row-nav a { color: var(--bright); font-weight: bold; text-decoration: none; border-bottom: 1px dotted var(--dim); }
+footer.page .row-nav .nav-empty { color: var(--gutter); font-style: italic; }
+</style>
+</head>
+<body>
+
+<header class="page">
+  <div class="path">Reference/Instruments</div>
+</header>
+
+<div class="content">
+<ol class="lines">
+  <li><h1>Instruments</h1></li>
+  <li><div class="kind">Reference: Apple developer tool</div></li>
+  <li><h2>When to reach for it</h2></li>
+  <li><p>Instruments is a "reach for it when you have a symptom" tool, not a daily-driver one. Most apps don't need it most of the time. You care about it when one of these specific symptoms shows up:</p></li>
+  <li><ul>
+    <li><strong>An app feels sluggish</strong> &mdash; Time Profiler tells you which method is actually slow (programmers guess wrong about this most of the time).</li>
+    <li><strong>Battery drains faster than it should</strong> &mdash; Energy Log shows what's running hot.</li>
+    <li><strong>You suspect a memory leak</strong> &mdash; Allocations + Leaks catches objects that should have been deallocated but weren't.</li>
+    <li><strong>The UI stutters during animation</strong> &mdash; Animation Hitches finds the exact frame that dropped.</li>
+    <li><strong>Startup feels slow</strong> &mdash; App Launch breaks the launch down by phase so you can see where the time goes.</li>
+    <li><strong>Network requests feel slow or oversized</strong> &mdash; Network shows HTTP traffic, payload sizes, request timing.</li>
+  </ul></li>
+  <li><p>If none of these symptoms describe your app, you can ignore Instruments entirely. Knowing it exists and which instrument matches which symptom is the practical knowledge; the tool itself is a reference card you open when something specific has gone wrong.</p></li>
+  <li><h2>What it is, briefly</h2></li>
+  <li><p>Instruments is Apple's performance profiling app. It ships with Xcode &mdash; launch via <strong>Xcode &rarr; Open Developer Tool &rarr; Instruments</strong>, or by pressing the <strong>Profile</strong> action in Xcode's Run dropdown. It's a separate app, not a panel inside Xcode.</p></li>
+  <li><p>The name comes from a dashboard metaphor: each measurement tool is one "instrument." You pick a <em>template</em> (preset bundle of instruments suited to a particular investigation), run your app under it, and Instruments records a <em>trace</em> &mdash; a timeline of everything those instruments captured. You then analyze the trace to find what's slow, leaky, or wasteful.</p></li>
+  <li><p>It's built on <strong>DTrace</strong>, Apple's low-level tracing framework, so it can observe almost anything the system does without you recompiling your code with debug hooks.</p></li>
+  <li><h2>Where in the book</h2></li>
+  <li><p><a href="../Part-V-Advanced-Techniques/Book-20-Performance-Instruments-And-Best-Practices.html">Book 20 &mdash; Performance, Instruments and Best Practices</a> covers Instruments usage in depth, with walkthroughs of each major instrument when you actually need them.</p></li>
+  <li><h2>External sources</h2></li>
+  <li><ul>
+    <li><a href="https://developer.apple.com/documentation/xcode/improving-your-app-s-performance">Apple &mdash; Improving your app's performance</a></li>
+    <li>Apple WWDC 2022 &mdash; "Profile and optimize your code with Instruments"</li>
+    <li>Apple WWDC 2023 &mdash; "Analyze hangs with Instruments"</li>
+  </ul></li>
+</ol>
+</div>
+
+<footer class="page"><div class="row-nav"><div class="prev"><span class="nav-empty">(reference)</span></div><div class="pos">Reference · Instruments</div><div class="next"><span class="nav-empty">(reference)</span></div></div></footer>
+
+</body>
+</html>

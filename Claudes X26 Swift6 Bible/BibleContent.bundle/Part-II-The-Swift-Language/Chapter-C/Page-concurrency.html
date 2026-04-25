@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>closure — Swift Lexicon &mdash; Claude's Xcode 26 Swift Bible</title>
+<title>concurrency — Swift Lexicon</title>
 <style>
 :root {
   --bg: #000000;
@@ -46,7 +46,6 @@ header.page { border-bottom: 1px solid var(--border); }
 footer.page { border-top: 1px solid var(--border); padding-bottom: calc(0.55rem + env(safe-area-inset-bottom)); }
 header.page .path, footer.page .path { color: var(--fg); word-break: break-all; overflow-wrap: break-word; }
 header.page .pos, footer.page .pos { color: var(--bright); }
-/* The middle scrolls; header and footer stay put. */
 .content { flex: 1 1 auto; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 0.8rem 1rem 2rem 1rem; max-width: 1100px; margin: 0 auto; width: 100%; }
 h1 { color: var(--bright); font-weight: normal; font-size: 26pt; margin: 0.6rem 0 1rem 0; }
 h2 { color: var(--bright); font-weight: normal; font-size: 20pt; border-bottom: 1px solid var(--border); padding-bottom: 0.3rem; margin-top: 1.5rem; counter-reset: h3 para; }
@@ -69,14 +68,7 @@ ol.lines > li { counter-increment: line; padding: 0.15rem 0 0.15rem 3.6rem; posi
 ol.lines > li::before { content: counter(line); position: absolute; left: 0; top: 0.25rem; width: 2.8rem; text-align: right; color: var(--gutter); font-size: 13pt; padding-right: 0.5rem; border-right: 1px solid #2a1e00; }
 ol.lines > li > p, ol.lines > li > h1, ol.lines > li > h2, ol.lines > li > h3, ol.lines > li > ul, ol.lines > li > ol, ol.lines > li > pre, ol.lines > li > hr { margin: 0; }
 .scope-note { border-left: 3px solid var(--bright); padding: 0.7rem 1rem; background: #140c00; margin: 0.6rem 0; color: var(--bright); }
-.slot { color: var(--dim); font-style: italic; }
 .kind { color: var(--dim); font-size: 14pt; margin-top: -0.3rem; }
-.nav { display: flex; gap: 0.9rem; flex-wrap: wrap; margin-top: 0.8rem; font-size: 14pt; }
-.status-written  { color: var(--bright); }
-.status-scope    { color: var(--scope); }
-.status-skeleton { color: var(--skeleton); }
-.status-tag { font-size: 13pt; margin-left: 0.4em; }
-
 
 footer.page { flex-direction: column; gap: 0.4rem; }
 footer.page .row-nav { display: flex; flex-direction: row; justify-content: space-between; align-items: center; gap: 0.5rem; }
@@ -92,40 +84,49 @@ footer.page .row-nav .nav-empty { color: var(--gutter); font-style: italic; }
 <body>
 
 <header class="page">
-  <div class="path">Part II The Swift Language/Chapter C/Page closure</div>
+  <div class="path">Part II The Swift Language/Chapter C/Page concurrency</div>
 </header>
 
 <div class="content">
 <ol class="lines">
-  <li><h1>closure</h1></li>
+  <li><h1>concurrency</h1></li>
   <li><div class="kind">Kind: concept</div></li>
   <li><h2>Definition</h2></li>
-  <li><p>A self-contained block of code you can pass around as a value. Closures capture any variables they reference from their surrounding scope. Functions, methods, and closures are all the same category in Swift — first-class values with a function type.</p></li>
+  <li><p>Swift's model for running multiple things at the same time without corrupting shared state. The modern Swift concurrency system (introduced in Swift 5.5, made strict by default in Swift 6) is built on four pillars: <code>async</code>/<code>await</code> for ergonomic asynchronous code, <code>Task</code> for the concurrency unit, <code>actor</code> for safe shared state, and <code>Sendable</code> for the type-system rule that data crossing concurrency boundaries is safe to move.</p></li>
+  <li><p>Swift 6 enforces concurrency safety <em>at compile time</em>. The compiler tracks which code runs on which actor, refuses to let you smuggle non-<code>Sendable</code> values across boundaries, and surfaces races as build errors before they become runtime crashes. That strictness is the headline change of the Swift 6 era.</p></li>
   <li><h2>Swift Example</h2></li>
-  <li><pre><code>let add: (Int, Int) -&gt; Int = { a, b in a + b }
-print(add(2, 3)) // 5
+  <li><pre><code>actor Counter {
+    private var value = 0
+    func bump() { value += 1 }
+    func read() -&gt; Int { value }
+}
 
-let names = [&quot;Zoe&quot;, &quot;Ada&quot;, &quot;Max&quot;]
-let sorted = names.sorted { $0 &lt; $1 }
-print(sorted) // [&quot;Ada&quot;, &quot;Max&quot;, &quot;Zoe&quot;]</code></pre></li>
+func runManyBumps() async {
+    let counter = Counter()
+    await withTaskGroup(of: Void.self) { group in
+        for _ in 0..&lt;1000 {
+            group.addTask { await counter.bump() }
+        }
+    }
+    print(await counter.read())   // 1000 — no lost updates
+}</code></pre></li>
+  <li><p>The <code>actor</code> serializes access to <code>value</code> automatically. <code>await</code> marks each suspension point. <code>withTaskGroup</code> creates structured concurrency — every child task is guaranteed to finish before the group returns. None of this requires explicit locks.</p></li>
   <li><h2>Rosetta Stone</h2></li>
   <li><h3>Pascal / Delphi</h3></li>
-  <li><p>`procedure of object` (bound method) and anonymous methods (`procedure begin ... end`) are Delphi's closures.</p></li>
+  <li><p>Delphi has <code>TThread</code>, <code>TCriticalSection</code>, and parallel programming via the PPL (Parallel Programming Library) — explicit thread spawning with manual synchronization. No language-level safety guarantee; you write the locks and you live with the bugs you introduce.</p></li>
   <li><h3>BASIC</h3></li>
-  <li><p>`Function(x) x * 2` lambda expressions in VB.NET.</p></li>
+  <li><p>VB.NET has <code>Async</code>/<code>Await</code> + the <code>Task</code> type, conceptually close to Swift's model but without actor isolation or <code>Sendable</code> compile-time checks. Older BASICs (Quick BASIC, GW-BASIC) were single-threaded by design — the program ran one statement at a time, period.</p></li>
   <li><h3>C / C++</h3></li>
-  <li><p>No closures in C. C++ lambdas (`[capture] (args) { body }`) and function objects serve the role.</p></li>
+  <li><p>C uses POSIX threads (<code>pthread_create</code>, <code>pthread_mutex_lock</code>) — bare-metal, error-prone. C++11 added <code>std::thread</code>, <code>std::mutex</code>, <code>std::async</code>, <code>std::future</code>, and C++20 added coroutines. None of these have Swift's compile-time data-race safety; you can still write a race in C++ and it'll compile cleanly.</p></li>
   <li><h2>Related</h2></li>
   <li><p>Other Lexicon entries in the same topic cluster:</p></li>
-  <li><ul><li><a href="../../Part-II-The-Swift-Language/Chapter-A/Page-autoclosure.html"><code>@autoclosure</code></a></li><li><a href="../../Part-II-The-Swift-Language/Chapter-D/Page-discardableResult.html"><code>@discardableResult</code></a></li><li><a href="../../Part-II-The-Swift-Language/Chapter-E/Page-escaping.html"><code>@escaping</code></a></li><li><a href="../../Part-II-The-Swift-Language/Chapter-F/Page-func.html"><code>func</code></a></li><li><a href="../../Part-II-The-Swift-Language/Chapter-I/Page-inlinable.html"><code>@inlinable</code></a></li><li><a href="../../Part-II-The-Swift-Language/Chapter-I/Page-inout.html"><code>inout</code></a></li><li><a href="../../Part-II-The-Swift-Language/Chapter-R/Page-rethrows.html"><code>rethrows</code></a></li></ul></li>
-  <li><p>Book chapters that cover this topic:</p></li>
-  <li><ul><li><a href="../../Part-III-The-User-Interface/Book-04-Gestures-And-Input.html">Book 04 — Gestures And Input</a></li></ul></li>
+  <li><ul><li><a href="../../Part-II-The-Swift-Language/Chapter-A/Page-actor.html"><code>actor</code></a></li><li><a href="../../Part-II-The-Swift-Language/Chapter-A/Page-async.html"><code>async</code></a></li><li><a href="../../Part-II-The-Swift-Language/Chapter-A/Page-await.html"><code>await</code></a></li><li><a href="../../Part-II-The-Swift-Language/Chapter-S/Page-Sendable.html"><code>Sendable</code></a></li><li><a href="../../Part-II-The-Swift-Language/Chapter-T/Page-Task.html"><code>Task</code></a></li><li><a href="../../Part-II-The-Swift-Language/Chapter-M/Page-MainActor.html"><code>MainActor</code></a></li><li><a href="../../Part-II-The-Swift-Language/Chapter-N/Page-nonisolated.html"><code>nonisolated</code></a></li><li><a href="../../Part-II-The-Swift-Language/Chapter-T/Page-throws.html"><code>throws</code></a></li></ul></li>
   <li><h2>Sources</h2></li>
-  <li><ul><li><a href="https://docs.swift.org/swift-book/documentation/the-swift-programming-language/closures">The Swift Programming Language</a></li></ul></li>
+  <li><ul><li><a href="https://docs.swift.org/swift-book/documentation/the-swift-programming-language/concurrency/">The Swift Programming Language &mdash; Concurrency</a></li><li><a href="https://www.swift.org/migration/documentation/swift-6-concurrency-migration-guide/">Swift 6 Concurrency Migration Guide</a></li><li>Apple WWDC 2021 &mdash; "Meet async/await in Swift"</li><li>Apple WWDC 2024 &mdash; "Migrate your app to Swift 6"</li></ul></li>
 </ol>
 </div>
 
-<footer class="page"><div class="row-nav"><div class="prev"><a href="Page-class.html">&larr; class</a></div><div class="pos">Chapter C · closure</div><div class="next"><a href="Page-concurrency.html">concurrency &rarr;</a></div></div></footer>
+<footer class="page"><div class="row-nav"><div class="prev"><a href="Page-closure.html">&larr; closure</a></div><div class="pos">Chapter C · concurrency</div><div class="next"><a href="Page-continue.html">continue &rarr;</a></div></div></footer>
 
 </body>
 </html>

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Info.plist (app metadata) — Reference</title>
+<style>
+:root { --bg: #000000; --fg: #FFB000; --bright: #FFD060; --dim: #996600; --codebg: #1a0d00; --border: #664500; --gutter: #4a3300; --headerbg: #0a0600; }
+* { box-sizing: border-box; }
+html, body { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; height: 100%; }
+body { background: var(--bg); color: var(--fg); font-family: "FiraCode Nerd Font Mono", "Fira Code", "Menlo", "Courier New", monospace; font-size: 18pt; line-height: 1.55; margin: 0; padding: 0; text-shadow: 0 0 1px rgba(255, 176, 0, 0.35); display: flex; flex-direction: column; }
+header.page, footer.page { background: var(--headerbg); color: var(--dim); padding: 0.55rem 1.1rem; font-size: 13pt; display: flex; flex-direction: column; gap: 0.2rem; flex: 0 0 auto; z-index: 10; }
+header.page { border-bottom: 1px solid var(--border); }
+footer.page { border-top: 1px solid var(--border); padding-bottom: calc(0.55rem + env(safe-area-inset-bottom)); }
+header.page .path, footer.page .path { color: var(--fg); word-break: break-all; overflow-wrap: break-word; }
+header.page .pos, footer.page .pos { color: var(--bright); }
+.content { flex: 1 1 auto; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 0.8rem 1rem 2rem 1rem; max-width: 1100px; margin: 0 auto; width: 100%; }
+h1 { color: var(--bright); font-weight: normal; font-size: 26pt; margin: 0.6rem 0 1rem 0; }
+h2 { color: var(--bright); font-weight: normal; font-size: 20pt; border-bottom: 1px solid var(--border); padding-bottom: 0.3rem; margin-top: 1.5rem; counter-reset: h3 para; }
+h2::before { counter-increment: h2; content: counter(h2) ". "; color: var(--fg); }
+h3 { color: var(--bright); font-weight: normal; font-size: 18pt; margin-top: 1rem; counter-reset: para; }
+h3::before { counter-increment: h3; content: counter(h2) "." counter(h3) " "; color: var(--fg); }
+p { margin: 0.4rem 0; counter-increment: para; }
+p::before { content: counter(h2) "." counter(h3) "." counter(para) " "; color: var(--dim); font-size: 13pt; margin-right: 0.4em; }
+code { color: var(--bright); background: var(--codebg); padding: 0.08em 0.35em; border: 1px solid #3a2400; border-radius: 3px; font-size: 0.92em; }
+pre { background: var(--codebg); border: 1px solid #3a2400; border-radius: 4px; padding: 0.7rem 0.9rem; overflow-x: auto; font-size: 14pt; }
+pre code { background: transparent; border: 0; padding: 0; }
+ul { margin: 0.4rem 0 0.4rem 1.4rem; padding: 0; }
+a { color: var(--bright); font-weight: bold; text-decoration: none; border-bottom: 1px dotted var(--dim); }
+a:hover { background: #332200; }
+strong { color: var(--bright); }
+em { color: var(--fg); font-style: italic; }
+hr { border: 0; border-top: 1px solid var(--border); margin: 1rem 0; }
+ol.lines { list-style: none; counter-reset: line h2; padding: 0; margin: 0; }
+ol.lines > li { counter-increment: line; padding: 0.15rem 0 0.15rem 3.6rem; position: relative; min-height: 1.2em; }
+ol.lines > li::before { content: counter(line); position: absolute; left: 0; top: 0.25rem; width: 2.8rem; text-align: right; color: var(--gutter); font-size: 13pt; padding-right: 0.5rem; border-right: 1px solid #2a1e00; }
+ol.lines > li > p, ol.lines > li > h1, ol.lines > li > h2, ol.lines > li > h3, ol.lines > li > ul, ol.lines > li > ol, ol.lines > li > pre, ol.lines > li > hr { margin: 0; }
+.kind { color: var(--dim); font-size: 14pt; margin-top: -0.3rem; }
+.scope-note { border-left: 3px solid var(--bright); padding: 0.7rem 1rem; background: #140c00; margin: 0.6rem 0; color: var(--bright); }
+
+footer.page { flex-direction: column; gap: 0.4rem; }
+footer.page .row-nav { display: flex; flex-direction: row; justify-content: space-between; align-items: center; gap: 0.5rem; }
+footer.page .row-nav .prev, footer.page .row-nav .next { flex: 1; min-width: 0; }
+footer.page .row-nav .prev { text-align: left; }
+footer.page .row-nav .next { text-align: right; }
+footer.page .row-nav .pos { flex: 0 0 auto; text-align: center; color: var(--bright); font-weight: bold; }
+footer.page .row-nav a { color: var(--bright); font-weight: bold; text-decoration: none; border-bottom: 1px dotted var(--dim); }
+footer.page .row-nav .nav-empty { color: var(--gutter); font-style: italic; }
+</style>
+</head>
+<body>
+<header class="page"><div class="path">Reference/Info.plist</div></header>
+<div class="content">
+<ol class="lines">
+<li><h1>Info.plist</h1></li>
+<li><div class="kind">Reference: bundle metadata file</div></li>
+<li><h2>What this file is</h2></li>
+<li><p>Info.plist is a <strong>property list</strong> &mdash; an Apple-flavored XML or binary plist &mdash; that ships inside every app bundle and tells the operating system everything it needs to know about your app before launching it. Bundle ID, version, supported orientations, required device capabilities, what privacy permissions you need: it all lives here.</p></li>
+<li><h2>Modern Xcode &mdash; you may not see this file</h2></li>
+<li><p>In Xcode 13+, the default for new projects is <strong>generated Info.plist</strong> &mdash; you don't see the file in the navigator; instead you edit individual keys via the target's Build Settings (<code>INFOPLIST_KEY_*</code> entries) or the Info tab of the target editor. Xcode generates the actual <code>Info.plist</code> at build time. That's why the book line says "may be absent if using build settings."</p></li>
+<li><p>You can still opt back into a manual <code>Info.plist</code> file if you prefer working in the plist directly &mdash; especially when you have lots of custom keys or you're sharing config across targets.</p></li>
+<li><h2>Two vantage points for editing it</h2></li>
+<li><p>You almost always edit Info.plist from one of two places, and the same key can change behavior depending on which path you took. Knowing which is which keeps you out of trouble.</p></li>
+<li><h3>Vantage point 1: Signing &amp; Capabilities tab (the blue + button)</h3></li>
+<li><p>Click your target in the project navigator, then the <strong>Signing &amp; Capabilities</strong> tab at the top. The <strong>+ Capability</strong> button (the blue plus) opens a list of every Apple capability: iCloud, Push Notifications, HealthKit, Sign in with Apple, Background Modes, App Groups, Keychain Sharing, and so on.</p></li>
+<li><p>When you toggle a capability ON from this panel, Xcode does <em>three</em> things at once for you:</p></li>
+<li><ul><li>Writes the matching entitlement into the <code>.entitlements</code> file.</li><li>Inserts the corresponding Info.plist usage-description keys with <strong>placeholder text</strong> like <code>$(PRODUCT_NAME) needs access to your health data</code>.</li><li>Registers the capability with your developer-portal App ID so the provisioning profile carries it.</li></ul></li>
+<li><p>This is the "managed" path. It's the right starting point for any new capability &mdash; Xcode keeps the three pieces (entitlement, plist key, profile) in sync.</p></li>
+<li><h3>Vantage point 2: editing the Info.plist file directly</h3></li>
+<li><p>Open <code>Info.plist</code> in the navigator (or the target's <strong>Info</strong> tab if you're using the auto-generated path) and you get a key-value table where you can add or change anything. This is where you:</p></li>
+<li><ul><li>Replace placeholder usage-description strings with the real reader-facing text. <strong>App Review reads these strings.</strong> A submission with the literal text <code>$(PRODUCT_NAME) needs access to your health data</code> still in place will get rejected.</li><li>Add custom URL schemes (<code>CFBundleURLTypes</code>) &mdash; not exposed via Capabilities.</li><li>Add document types (<code>CFBundleDocumentTypes</code>) &mdash; ditto.</li><li>Edit App Transport Security exceptions (<code>NSAppTransportSecurity</code>) &mdash; ditto.</li><li>Add custom keys that third-party libraries read (Mapbox, GoogleSignIn, Firebase configuration, etc.).</li></ul></li>
+<li><h2>Common pitfalls (the cautions worth knowing)</h2></li>
+<li><div class="scope-note"><strong>Placeholder strings ship to App Review unless you edit them.</strong> The Capabilities tab gives you "$(PRODUCT_NAME) wants permission" placeholders. Real users see those text strings in iOS permission prompts; reviewers reject submissions where the placeholder still has a literal <code>$(...)</code> in it. Always switch to direct-edit and write a plain-language sentence explaining <em>why</em> your app needs the permission.</div></li>
+<li><div class="scope-note"><strong>Entitlement and plist key can drift.</strong> If you toggle a capability ON via Capabilities, then later open the entitlements file and remove a key by hand (or vice versa), the two stop matching. Code-signing gets strict about this &mdash; an entitlement claimed without a provisioning-profile match crashes the app at launch. Re-toggle the capability via the Capabilities tab to re-sync.</div></li>
+<li><div class="scope-note"><strong>Auto-generated Info.plist makes the file invisible.</strong> Modern Xcode (13+) defaults to "generated Info.plist" &mdash; you don't see the file in the navigator. Edit via the target's <strong>Info</strong> tab or the Build Settings <code>INFOPLIST_KEY_*</code> entries. Don't go looking for a missing file thinking something's broken.</div></li>
+<li><div class="scope-note"><strong>Don't mix manual + generated paths in one target.</strong> If both a literal <code>Info.plist</code> file AND <code>INFOPLIST_KEY_*</code> build settings exist, the build picks one and silently ignores the other. Pick one approach per target and stay there.</div></li>
+<li><div class="scope-note"><strong>Some capabilities aren't in the +Capability list.</strong> A few specialized entitlements (older Mac sandboxing exceptions, certain enterprise capabilities) require manually adding entries to <code>.entitlements</code>. If a capability you need isn't in the list, search Apple's documentation for the entitlement key string and add it directly.</div></li>
+<li><div class="scope-note"><strong>Build number lives in two possible places.</strong> <code>CFBundleVersion</code> in Info.plist OR the <code>CURRENT_PROJECT_VERSION</code> build setting. If both are set, build settings win &mdash; the Info.plist value gets ignored at build time. Pick the build settings path for new projects; it plays nicer with CI tools that bump the build number on each upload.</div></li>
+<li><h2>The keys you'll edit most often</h2></li>
+<li><h3>Identity &amp; versioning</h3></li>
+<li><ul>
+<li><code>CFBundleIdentifier</code> &mdash; your reverse-DNS bundle ID, e.g., <code>com.fluharty.MyApp</code>. Must match the one registered with your Apple Developer account.</li>
+<li><code>CFBundleShortVersionString</code> &mdash; the marketing version users see (1.0, 1.1, 2.0).</li>
+<li><code>CFBundleVersion</code> &mdash; the build number; must be unique per uploaded build to App Store Connect (1, 2, 3 or 1.0.1, 1.0.2).</li>
+<li><code>CFBundleDisplayName</code> &mdash; what shows under the icon on Home Screen if it differs from the executable name.</li>
+</ul></li>
+<li><h3>Privacy usage descriptions &mdash; the most common reason to edit Info.plist</h3></li>
+<li><p>Every protected API the user must approve has a usage description string. iOS shows your string in the permission prompt. Apple <strong>rejects builds that access these APIs without the matching key</strong>. Common ones:</p></li>
+<li><ul>
+<li><code>NSCameraUsageDescription</code> &mdash; "Used to scan documents."</li>
+<li><code>NSMicrophoneUsageDescription</code> &mdash; "Used to record voice notes."</li>
+<li><code>NSPhotoLibraryUsageDescription</code> &mdash; "Used to import photos into your journal."</li>
+<li><code>NSLocationWhenInUseUsageDescription</code> &mdash; "Used to stamp your weather entries with your location."</li>
+<li><code>NSContactsUsageDescription</code> &mdash; "Used to find friends already on the app."</li>
+<li><code>NSCalendarsUsageDescription</code>, <code>NSRemindersUsageDescription</code>, <code>NSHealthShareUsageDescription</code>, <code>NSHealthUpdateUsageDescription</code>, <code>NSSpeechRecognitionUsageDescription</code>, <code>NSBluetoothAlwaysUsageDescription</code>...</li>
+</ul></li>
+<li><h3>Capabilities &amp; behaviors</h3></li>
+<li><ul>
+<li><code>UIRequiredDeviceCapabilities</code> &mdash; an array declaring "this app won't install on a device without GPS / haptic engine / Metal / etc." Restricts which devices the App Store offers your app to.</li>
+<li><code>UISupportedInterfaceOrientations</code> &mdash; portrait, landscape-left, landscape-right, upside-down. Per-device variants exist for iPad.</li>
+<li><code>UIApplicationSceneManifest</code> &mdash; declares your app supports multiple scenes / multi-window on iPad.</li>
+<li><code>UIBackgroundModes</code> &mdash; an array of background-work types your app uses (audio, location, fetch, processing, remote-notification).</li>
+<li><code>LSApplicationCategoryType</code> &mdash; macOS app category (<code>public.app-category.productivity</code>, etc.) for the Mac App Store.</li>
+</ul></li>
+<li><h3>URL schemes &amp; deep links</h3></li>
+<li><ul>
+<li><code>CFBundleURLTypes</code> &mdash; declare a custom URL scheme (<code>myapp://</code>) so other apps can deep-link into yours.</li>
+<li><code>LSApplicationQueriesSchemes</code> &mdash; whitelist the schemes you want to query (<code>UIApplication.canOpenURL</code> only works on schemes you've listed here on iOS 9+).</li>
+</ul></li>
+<li><h2>Watch out for</h2></li>
+<li><ul>
+<li><strong>Privacy strings are user-visible.</strong> Write them in plain language for the end user, not as TODOs to yourself.</li>
+<li><strong>Build number must increment.</strong> If you re-upload with the same <code>CFBundleVersion</code>, App Store Connect rejects.</li>
+<li><strong>Auto-generated vs manual is one or the other.</strong> Mixing causes Xcode to override your manual edits at build time. Pick a path and stick with it.</li>
+</ul></li>
+<li><h2>Cross-references</h2></li>
+<li><ul>
+<li><a href="Entitlements.html">Entitlements (.entitlements)</a> &mdash; sister file for capabilities</li>
+<li><a href="Assets-xcassets.html">Assets.xcassets</a></li>
+</ul></li>
+<li><h2>External sources</h2></li>
+<li><ul>
+<li><a href="https://developer.apple.com/documentation/bundleresources/information_property_list">Apple &mdash; Information Property List reference</a></li>
+<li><a href="https://developer.apple.com/documentation/bundleresources/information_property_list/protected_resources">Apple &mdash; Protected resources (privacy keys)</a></li>
+</ul></li>
+</ol>
+</div>
+<footer class="page"><div class="row-nav"><div class="prev"><span class="nav-empty">(reference)</span></div><div class="pos">Reference · Info.plist</div><div class="next"><span class="nav-empty">(reference)</span></div></div></footer>
+</body>
+</html>
