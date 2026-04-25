@@ -29,9 +29,18 @@ struct VaultWebView: PlatformViewRepresentable {
     let onInternalNavigate: (URL) -> Void
 
     /// Shared bridge that holds a reference to the live WebView so the
-    /// SwiftUI toolbar can trigger actions (Highlight) on it.
+    /// SwiftUI toolbar can trigger actions (Highlight, Edit toggle) on it.
     final class Bridge: ObservableObject {
         weak var webView: WKWebView?
+        /// Edit mode is OFF by default — readers tap links cleanly, no
+        /// keyboard pop. Flip ON to scribble notes / edit content.
+        @Published var isEditing: Bool = false {
+            didSet { applyEditMode() }
+        }
+        func applyEditMode() {
+            let js = "window.setEditMode && window.setEditMode(\(isEditing));"
+            webView?.evaluateJavaScript(js)
+        }
         func highlightSelection() {
             let js = """
             (function(){
@@ -119,13 +128,16 @@ struct VaultWebView: PlatformViewRepresentable {
         return webView
     }
 
-    /// Inject a minimal style for <mark class="user-hl"> so reader highlights
-    /// render in amber on black without clashing with existing vault CSS.
+    /// Inject styling for highlights + suppress iOS's native long-press
+    /// callout menu when in read mode (we want our own long-press
+    /// gesture in editableScript to handle highlighting instead).
     private static let highlightStyleScript: WKUserScript = {
         let source = """
         (function(){
           var s = document.createElement('style');
-          s.textContent = 'mark.user-hl{background:#FFB000;color:#000;padding:0 0.1em;border-radius:2px;}';
+          s.textContent =
+            'mark.user-hl{background:#FFFF00;color:#000;padding:0 0.1em;border-radius:2px;}' +
+            'body:not([contenteditable=\"true\"]){-webkit-touch-callout:none;}';
           document.head.appendChild(s);
         })();
         """
@@ -141,23 +153,26 @@ struct VaultWebView: PlatformViewRepresentable {
         (function(){
           var body = document.body;
           if (!body) return;
-          body.contentEditable = 'true';
+
+          // Edit mode starts OFF — readers tap links cleanly with no
+          // keyboard pop. Swift toggles it ON via window.setEditMode(true)
+          // when the toolbar pencil is engaged.
+          body.contentEditable = 'false';
           body.spellcheck = true;
+
+          window.setEditMode = function(enabled){
+            document.body.contentEditable = enabled ? 'true' : 'false';
+          };
 
           // In contentEditable, tapping a link normally puts the cursor
           // inside instead of navigating. Mark every <a> contentEditable=
           // 'false' so taps behave as ordinary link activations and
-          // VaultWebView's WKNavigationDelegate picks them up. Re-run on
-          // each DOM mutation so newly-inserted links are treated the
-          // same way.
+          // VaultWebView's WKNavigationDelegate picks them up. Harmless
+          // when body itself isn't editable; protective when it is.
           function fixLinks(root){
             var links = (root || document).querySelectorAll('a');
             for (var i = 0; i < links.length; i++) {
               links[i].setAttribute('contenteditable', 'false');
-              // Also mark navigation-style list items (<li> containing an <a>
-              // with no block-level children like <p>, <ul>, <ol>) as
-              // non-editable so taps in the bullet/padding area still
-              // activate the link instead of popping the keyboard.
               var li = links[i].closest('li');
               if (li && !li.querySelector('p, ul, ol, h1, h2, h3, pre')) {
                 li.setAttribute('contenteditable', 'false');
@@ -171,14 +186,6 @@ struct VaultWebView: PlatformViewRepresentable {
             }
           });
           mo.observe(body, { childList: true, subtree: true });
-          // NOTE: native link clicks are left to flow through the
-          // WKNavigationDelegate as .linkActivated so VaultModel.open()
-          // runs and history/forward tracking stays correct. The
-          // contenteditable=false markings on <a> and nav-style <li>
-          // above are enough to keep tap-on-link from popping the
-          // keyboard; an earlier force-nav via window.location.href
-          // bypassed VaultModel's history stack and broke the
-          // back/forward browser buttons, so it has been removed.
 
           var timer = null;
           function send(){
@@ -192,6 +199,216 @@ struct VaultWebView: PlatformViewRepresentable {
             timer = setTimeout(send, 1200);
           });
           body.addEventListener('blur', send, true);
+
+          // ============================================================
+          // Highlight mode: long-press a word to highlight it, drag to
+          // extend forward/backward word by word. Long-press an already-
+          // highlighted word to remove the highlight. Active only when
+          // edit mode is OFF (otherwise normal text-edit interactions
+          // win). On long-press start, native iOS callout is suppressed
+          // by the body:not([contenteditable=true]) rule in the
+          // highlight style script.
+          // ============================================================
+
+          function isEditing(){ return document.body.contentEditable === 'true'; }
+
+          function caretPosFromPoint(x, y){
+            // Standard:
+            if (document.caretPositionFromPoint) {
+              var p = document.caretPositionFromPoint(x, y);
+              if (p) return { node: p.offsetNode, offset: p.offset };
+            }
+            // WebKit fallback:
+            if (document.caretRangeFromPoint) {
+              var r = document.caretRangeFromPoint(x, y);
+              if (r) return { node: r.startContainer, offset: r.startOffset };
+            }
+            return null;
+          }
+
+          // Snap a (textNode, offset) pair outward to the nearest word
+          // boundary on each side, returning a Range covering the word.
+          function wordRangeAt(x, y){
+            var p = caretPosFromPoint(x, y);
+            if (!p || p.node.nodeType !== 3) return null;
+            var text = p.node.nodeValue || '';
+            if (!text) return null;
+            // Walk left for word start.
+            var i = Math.min(p.offset, text.length);
+            while (i > 0 && /\\S/.test(text.charAt(i - 1))) i--;
+            // Walk right for word end.
+            var j = Math.min(p.offset, text.length);
+            while (j < text.length && /\\S/.test(text.charAt(j))) j++;
+            if (i === j) return null;
+            var range = document.createRange();
+            range.setStart(p.node, i);
+            range.setEnd(p.node, j);
+            return range;
+          }
+
+          // Combine two word-ranges into a single range spanning the
+          // earlier start to the later end. Direction-agnostic so the
+          // user can drag forward or backward from the anchor.
+          function unionRange(a, b){
+            var r = document.createRange();
+            var aFirst = a.compareBoundaryPoints(Range.START_TO_START, b) <= 0;
+            r.setStart(aFirst ? a.startContainer : b.startContainer, aFirst ? a.startOffset : b.startOffset);
+            r.setEnd(aFirst ? b.endContainer : a.endContainer, aFirst ? b.endOffset : a.endOffset);
+            return r;
+          }
+
+          function isInsideHighlight(node){
+            while (node && node !== document.body) {
+              if (node.nodeType === 1 && node.tagName === 'MARK' && node.classList && node.classList.contains('user-hl')) {
+                return node;
+              }
+              node = node.parentNode;
+            }
+            return null;
+          }
+
+          function unhighlight(mark){
+            var parent = mark.parentNode;
+            while (mark.firstChild) parent.insertBefore(mark.firstChild, mark);
+            parent.removeChild(mark);
+            // Re-merge adjacent text nodes for a cleaner DOM.
+            parent.normalize && parent.normalize();
+            document.body.dispatchEvent(new Event('input', { bubbles: true }));
+          }
+
+          // Wrap a Range in a fresh <mark.user-hl>. If the range overlaps
+          // existing highlights we'd need merge logic; v1 keeps it simple
+          // and trusts the user not to overlap (existing highlights aren't
+          // re-highlighted on re-tap because anchor detection finds them
+          // first and runs the unhighlight branch).
+          function applyHighlightRange(range){
+            try {
+              var mark = document.createElement('mark');
+              mark.className = 'user-hl';
+              range.surroundContents(mark);
+            } catch(e) {
+              // Range crosses element boundaries — fall back to extract.
+              var frag = range.extractContents();
+              var mark2 = document.createElement('mark');
+              mark2.className = 'user-hl';
+              mark2.appendChild(frag);
+              range.insertNode(mark2);
+            }
+            document.body.dispatchEvent(new Event('input', { bubbles: true }));
+          }
+
+          // Long-press tracking state.
+          var pressTimer = null;
+          var pressStartX = 0, pressStartY = 0;
+          var anchorWordRange = null;     // first highlighted word
+          var lastHighlightMark = null;   // mark currently being grown
+          var pressedHighlight = null;    // existing mark we long-pressed
+          var movedTooEarly = false;
+
+          var LONG_PRESS_MS = 450;
+          var MOVE_TOLERANCE_BEFORE = 8;   // px — finger jitter before long-press fires
+
+          function clearPress(){
+            if (pressTimer) { clearTimeout(pressTimer); pressTimer = null; }
+            anchorWordRange = null;
+            lastHighlightMark = null;
+            pressedHighlight = null;
+            movedTooEarly = false;
+          }
+
+          document.addEventListener('touchstart', function(e){
+            if (isEditing()) return;
+            if (e.touches.length !== 1) return;
+            var t = e.touches[0];
+            pressStartX = t.clientX;
+            pressStartY = t.clientY;
+            movedTooEarly = false;
+
+            pressTimer = setTimeout(function(){
+              pressTimer = null;
+              if (movedTooEarly) return;
+
+              // What did we long-press on? Existing highlight = unhighlight.
+              var topEl = document.elementFromPoint(pressStartX, pressStartY);
+              var hl = isInsideHighlight(topEl);
+              if (hl) {
+                pressedHighlight = hl;
+                unhighlight(hl);
+                return;
+              }
+
+              // Otherwise: highlight the word at the press point and
+              // remember it as the anchor for drag-to-extend.
+              var wr = wordRangeAt(pressStartX, pressStartY);
+              if (!wr) return;
+              anchorWordRange = wr.cloneRange();
+              applyHighlightRange(wr);
+              // The wrap created a fresh <mark>; remember it so we can
+              // re-shape on touchmove.
+              var sel = document.body.querySelector('mark.user-hl:last-of-type');
+              lastHighlightMark = sel;
+            }, LONG_PRESS_MS);
+          }, { passive: true });
+
+          document.addEventListener('touchmove', function(e){
+            if (isEditing()) return;
+            if (e.touches.length !== 1) return;
+            var t = e.touches[0];
+
+            // If we haven't entered highlight mode yet (timer still
+            // pending), small movement is fine; large movement cancels
+            // the long-press.
+            if (pressTimer) {
+              var dx = t.clientX - pressStartX;
+              var dy = t.clientY - pressStartY;
+              if (dx*dx + dy*dy > MOVE_TOLERANCE_BEFORE * MOVE_TOLERANCE_BEFORE) {
+                movedTooEarly = true;
+                clearTimeout(pressTimer);
+                pressTimer = null;
+              }
+              return;
+            }
+
+            // We're in active highlight-drag. Extend the anchor range to
+            // include the word currently under the finger.
+            if (!anchorWordRange) return;
+            var wr = wordRangeAt(t.clientX, t.clientY);
+            if (!wr) return;
+            // Combine anchor word with current word.
+            var combined = unionRange(anchorWordRange, wr);
+
+            // Replace the current highlight with the combined range:
+            // unhighlight the old mark, then re-apply on the union.
+            if (lastHighlightMark && lastHighlightMark.parentNode) {
+              // Walk children out of the old mark.
+              var p = lastHighlightMark.parentNode;
+              while (lastHighlightMark.firstChild) p.insertBefore(lastHighlightMark.firstChild, lastHighlightMark);
+              p.removeChild(lastHighlightMark);
+              p.normalize && p.normalize();
+              lastHighlightMark = null;
+              // Anchor's text node may have been split/merged; re-resolve
+              // the anchor word range from the original press point.
+              anchorWordRange = wordRangeAt(pressStartX, pressStartY);
+              if (!anchorWordRange) return;
+              combined = unionRange(anchorWordRange, wr);
+            }
+            try {
+              applyHighlightRange(combined);
+              lastHighlightMark = document.body.querySelector('mark.user-hl:last-of-type');
+            } catch(e) {
+              // Range got too messy (crossed too many element boundaries);
+              // bail out gracefully.
+            }
+          }, { passive: true });
+
+          document.addEventListener('touchend', function(){
+            // Finalize: nothing more to do; the highlight mark is in the
+            // DOM and the input event already fired so the page will
+            // save itself within 1.2s.
+            clearPress();
+          }, { passive: true });
+
+          document.addEventListener('touchcancel', clearPress, { passive: true });
         })();
         """
         return WKUserScript(source: source, injectionTime: .atDocumentEnd, forMainFrameOnly: true)

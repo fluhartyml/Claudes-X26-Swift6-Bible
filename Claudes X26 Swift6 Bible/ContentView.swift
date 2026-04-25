@@ -245,12 +245,18 @@ struct ContentView: View {
                 Spacer()
 
                 Button {
-                    webViewBridge.highlightSelection()
+                    webViewBridge.isEditing.toggle()
                 } label: {
-                    Label("Highlight", systemImage: "highlighter")
+                    Label(
+                        webViewBridge.isEditing ? "Editing on" : "Edit",
+                        systemImage: webViewBridge.isEditing ? "pencil.circle.fill" : "pencil"
+                    )
                 }
                 .labelStyle(.iconOnly)
-                .help("Highlight selection")
+                .help(webViewBridge.isEditing
+                    ? "Editing is ON — taps place a cursor for typing. Tap again to turn off."
+                    : "Edit mode (off): tap to enable typing/scribble notes."
+                )
 
                 if let doc = vault.currentDocument {
                     ShareLink(item: doc) {
