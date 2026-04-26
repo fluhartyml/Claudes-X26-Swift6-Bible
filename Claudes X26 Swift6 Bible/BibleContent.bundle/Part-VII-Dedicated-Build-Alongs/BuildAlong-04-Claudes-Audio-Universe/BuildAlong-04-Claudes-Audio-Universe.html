@@ -14,10 +14,17 @@ footer.page { border-top: 1px solid var(--border); padding-bottom: calc(0.55rem 
 header.page .path, footer.page .path { color: var(--fg); word-break: break-all; overflow-wrap: break-word; }
 header.page .pos, footer.page .pos { color: var(--bright); }
 .content { flex: 1 1 auto; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 0.8rem 1rem 2rem 1rem; max-width: 1100px; margin: 0 auto; width: 100%; }
+ol.lines { list-style: none; counter-reset: line h2 h3 para; padding: 0; margin: 0; }
+ol.lines > li { counter-increment: line; padding: 0.15rem 0 0.15rem 3.6rem; position: relative; min-height: 1.2em; }
+ol.lines > li::before { content: counter(line); position: absolute; left: 0; top: 0.25rem; width: 2.8rem; text-align: right; color: var(--gutter); font-size: 13pt; padding-right: 0.5rem; border-right: 1px solid #2a1e00; }
+ol.lines > li > p, ol.lines > li > h2, ol.lines > li > h3, ol.lines > li > ul, ol.lines > li > ol, ol.lines > li > pre, ol.lines > li > hr, ol.lines > li > figure, ol.lines > li > .scope-note { margin: 0; }
 h1 { color: var(--bright); font-weight: normal; font-size: 26pt; margin: 0.6rem 0 1rem 0; }
-h2 { color: var(--bright); font-weight: normal; font-size: 20pt; border-bottom: 1px solid var(--border); padding-bottom: 0.3rem; margin-top: 1.5rem; }
-h3 { color: var(--bright); font-weight: normal; font-size: 18pt; margin-top: 1rem; }
+h2 { color: var(--bright); font-weight: normal; font-size: 20pt; border-bottom: 1px solid var(--border); padding-bottom: 0.3rem; margin-top: 1.5rem; counter-set: h3 0 para 0; counter-increment: h2; }
+h2::before { content: counter(h2) ". "; color: var(--fg); }
+h3 { color: var(--bright); font-weight: normal; font-size: 18pt; margin-top: 1rem; counter-set: para 0; counter-increment: h3; }
+h3::before { content: counter(h2) "." counter(h3) " "; color: var(--fg); }
 p { margin: 0.4rem 0; counter-increment: para; }
+p::before { content: counter(h2) "." counter(h3) "." counter(para) " "; color: var(--dim); font-size: 13pt; margin-right: 0.4em; }
 code { color: var(--bright); background: var(--codebg); padding: 0.08em 0.35em; border: 1px solid #3a2400; border-radius: 3px; font-size: 0.92em; }
 pre { background: var(--codebg); border: 1px solid #3a2400; border-radius: 4px; padding: 0.7rem 0.9rem; overflow-x: auto; font-size: 14pt; }
 ul { margin: 0.4rem 0 0.4rem 1.4rem; padding: 0; }
@@ -27,9 +34,18 @@ em { color: var(--fg); font-style: italic; }
 hr { border: 0; border-top: 1px solid var(--border); margin: 1rem 0; }
 .scope-note { border-left: 3px solid var(--bright); padding: 0.7rem 1rem; background: #140c00; margin: 0.6rem 0; color: var(--bright); }
 .status-live { color: #66FF66; font-weight: bold; }
+.status-review { color: #FFD060; font-weight: bold; }
 .status-notlive { color: #FFD060; font-weight: bold; }
-.status-planning { color: #996600; font-weight: bold; }
 
+figure { margin: 0.6rem 0; text-align: center; }
+figure img.screenshot { max-width: 320px; max-height: 600px; width: auto; height: auto; display: inline-block; border: 1px solid var(--border); border-radius: 8px; background: #1a0d00; cursor: zoom-in; -webkit-tap-highlight-color: transparent; }
+figcaption { color: var(--dim); font-size: 14pt; margin-top: 0.3rem; font-style: italic; }
+
+/* Tap-to-zoom lightbox */
+.lightbox-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.96); display: flex; align-items: center; justify-content: center; z-index: 9999; overflow: auto; -webkit-overflow-scrolling: touch; cursor: zoom-out; padding: 1rem; }
+.lightbox-overlay img { max-width: 100%; max-height: 100%; width: auto; height: auto; object-fit: contain; border-radius: 6px; }
+.lightbox-close { position: fixed; top: env(safe-area-inset-top, 1rem); right: 1rem; color: var(--bright); font-size: 20pt; background: rgba(0,0,0,0.7); border: 1px solid var(--border); border-radius: 50%; width: 2.4rem; height: 2.4rem; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 10000; }
+body.lightbox-open { overflow: hidden; }
 
 footer.page { flex-direction: column; gap: 0.4rem; }
 footer.page .row-nav { display: flex; flex-direction: row; justify-content: space-between; align-items: center; gap: 0.5rem; }
@@ -44,40 +60,137 @@ footer.page .row-nav .nav-empty { color: var(--gutter); font-style: italic; }
 </head><body>
 <header class="page"><div class="path">Part-VII-Dedicated-Build-Alongs/BuildAlong-04-Claudes-Audio-Universe</div></header>
 <div class="content">
-<h1>Build-Along 04: Claude's Audio Universe</h1>
-<p><span class="status-notlive">Status: in development as of 2026-04-24.</span> Xcode project scaffolded, icon populated, <code>DeveloperNotes.swift</code> locked with the full architecture map. No feature view code yet. The walkthrough below reflects the plan; step-by-step code instructions land as each feature view gets written.</p>
-<div class="scope-note">One app, four Apple audio frameworks &mdash; MusicKit, AVFoundation, ShazamKit, Speech. Each doing one thing minimally, end to end. Four feature tabs plus Under the Hood and About.</div>
-<h2>The four feature tabs</h2>
-<ul>
-<li><strong>Stream</strong> (MusicKit) &mdash; Pick an Apple Music track, tap play, see artwork. Listen only, no share.</li>
-<li><strong>Record</strong> (AVFoundation) &mdash; Record a clip to disk, play it back. Share the <code>.m4a</code> file via share sheet.</li>
-<li><strong>Identify</strong> (ShazamKit) &mdash; Listen, identify the song playing. Tap the match to open in Apple Music. On iOS 17 / macOS 14+, the match auto-saves to "My Shazam Tracks."</li>
-<li><strong>Transcribe</strong> (Speech) &mdash; Live microphone to text. Share the transcript as plain text.</li>
-</ul>
-<h2>Scope discipline</h2>
-<p>No persistence. Nothing is saved between sessions. Every tab is a one-session tool &mdash; the share sheet is the escape hatch so user work is not trapped. That separates Audio Universe from production apps like CryoTunes Player or Transcription Keeper, which add storage, playlists, and history on top of the same kits.</p>
-<h2>Minimum deployments</h2>
-<ul>
-<li>iOS 15.6 / iPadOS 15.6 / macOS 12.0 / visionOS 26.4 base</li>
-<li><code>SHLibrary.default.addItems()</code> gated with <code>if #available(iOS 17, macOS 14, *)</code></li>
-</ul>
-<h2>Entitlements</h2>
-<ul>
-<li><code>NSMicrophoneUsageDescription</code> (Record, Identify, Transcribe)</li>
-<li><code>NSSpeechRecognitionUsageDescription</code> (Transcribe)</li>
-<li>MusicKit via user's Apple Music subscription (no explicit entitlement)</li>
-</ul>
-<h2>Build order when coding begins</h2>
-<ol>
-<li>ContentView with TabView root (4 feature tabs + UTH + About)</li>
-<li>StreamView with ApplicationMusicPlayer</li>
-<li>RecordView with AVAudioRecorder + AVAudioPlayer</li>
-<li>IdentifyView with SHManagedSession</li>
-<li>TranscribeView with SFSpeechRecognizer</li>
-<li>AboutView + UnderTheHoodView + FeedbackView</li>
-<li>Archive, submit to App Store Connect</li>
+<ol class="lines">
+<li><h1>Build-Along 04: Claude's Audio Universe</h1></li>
+<li><p><span class="status-review">Status: submitted to App Review on 2026-04-25 at 6:50 PM CDT (submission ID 964e4428-1ab0-44f2-aa1d-ccd2fbc27062).</span> Repository at <a href="https://github.com/fluhartyml/Claudes-Audio-Universe">github.com/fluhartyml/Claudes-Audio-Universe</a>. Wiki at <a href="https://github.com/fluhartyml/Claudes-Audio-Universe/wiki">github.com/fluhartyml/Claudes-Audio-Universe/wiki</a>.</p></li>
+<li><div class="scope-note">One app, four Apple audio frameworks &mdash; MusicKit, AVFoundation, ShazamKit, Speech. Each framework drives one tab, end to end. A fifth tab opens the app's own source code in-app for curious developers.</div></li>
+<li><hr></li>
+
+<li><h2>What this app is</h2></li>
+<li><p>Claude's Audio Universe is a focused four-tab utility. The four feature tabs each demonstrate one Apple audio framework. Closing the app or backgrounding it stops the work in every tab. Outputs leave through the system share sheet so the user owns where things land.</p></li>
+<li><p>This is a teaching tool, not a media player. Apple Music exists for actual listening; CryoTunes Player exists for retro-radio listening. Audio Universe exists to show how the audio frameworks work and to let curious developers read the source.</p></li>
+
+<li><h2>Architecture overview</h2></li>
+<li><p>Five tabs total: Stream, Record, Identify, Transcribe, Under the Hood. Each feature tab owns its own audio session and state. There is no central app-state model, no SwiftData container, no networking layer beyond what each framework requires. The shell is deliberately quiet so the framework code in each tab speaks for itself.</p></li>
+<li><p>Every tab is wrapped in a small <code>AppShell</code> container that adds a top-trailing (i) info button. The (i) opens the About sheet, which carries the Send Feedback / Support Wiki / Privacy / Portfolio links. That plumbing is shared once instead of repeated five times.</p></li>
+
+<li><h2>Stream &mdash; MusicKit</h2></li>
+<li><p>Stream uses <code>ApplicationMusicPlayer</code> rather than <code>SystemMusicPlayer</code>. The system player would hijack the user's actual Music.app queue, which is hostile in a single-session tool. <code>MusicSubscription.subscriptionUpdates</code> tells the view whether the user has an active Apple Music subscription before any catalog playback.</p></li>
+<li><p>On first open the tab requests Apple Music access via <code>MusicAuthorization.request()</code>. The system permission dialog uses the <code>NSAppleMusicUsageDescription</code> string from <code>Info.plist</code>.</p></li>
+<li><figure><img class="screenshot" src="../../figures/au-01-stream-intro.png" alt="Stream tab Apple Music access prompt"><figcaption>Stream &mdash; pre-permission intro. The Continue button triggers the system dialog.</figcaption></figure></li>
+<li><figure><img class="screenshot" src="../../figures/au-02-stream-permission.png" alt="iOS Apple Music permission system dialog"><figcaption>iOS system dialog with the app's <code>NSAppleMusicUsageDescription</code> string verbatim.</figcaption></figure></li>
+<li><p>After authorization the search field appears. <code>MusicCatalogSearchRequest(term: text, types: [Song.self])</code> fetches up to twenty-five song results from the catalog. The view never reads the user's library.</p></li>
+<li><figure><img class="screenshot" src="../../figures/au-03-stream-results.png" alt="Stream tab search results"><figcaption>Catalog search results for "September" &mdash; artwork, title, artist, play button.</figcaption></figure></li>
+<li><p>Tap a result to play it. Subscribers hear the full track via <code>ApplicationMusicPlayer</code>; non-subscribers hear the thirty-second preview via <code>AVPlayer</code> streaming the song's <code>previewAssets</code> URL. Tapping the same row toggles play and pause; tapping a different row replaces what is playing. Play and pause only &mdash; no scrub bar, no skip controls. Apple's own Music app is one tap away when the user wants full playback controls.</p></li>
+
+<li><h2>Record &mdash; AVFoundation</h2></li>
+<li><p>Record uses <code>AVAudioRecorder</code> rather than <code>AVAudioEngine</code> because the goal is capture-to-file, not real-time DSP. The session category is <code>.playAndRecord</code> with <code>.defaultToSpeaker</code> so the same view can play back what it just captured without a category switch and without routing playback to the earpiece. Output is <code>.m4a</code> AAC &mdash; small, portable, accepted everywhere the share sheet sends it.</p></li>
+<li><p>Microphone permission is requested via <code>AVAudioApplication.requestRecordPermission()</code>. The system dialog uses the <code>NSMicrophoneUsageDescription</code> string from <code>Info.plist</code>.</p></li>
+<li><figure><img class="screenshot" src="../../figures/au-04-record-permission.png" alt="iOS microphone permission dialog"><figcaption>System microphone dialog with the app's mic-usage description.</figcaption></figure></li>
+<li><figure><img class="screenshot" src="../../figures/au-05-record-idle.png" alt="Record tab idle state"><figcaption>Record idle &mdash; live mm:ss timer at the top, large red Record button.</figcaption></figure></li>
+<li><p>Recording goes to a fresh UUID-named file in <code>FileManager.default.temporaryDirectory</code>. Stop transitions to a finished phase with Play, Share, and Record New buttons. Share uses SwiftUI's <code>ShareLink(item: recordingURL)</code> &mdash; the system share sheet handles delivery to AirDrop, Files, Messages, Voice Memos, or wherever the user picks. Record New deletes the temp file and resets to idle. Nothing persists past the session.</p></li>
+
+<li><h2>Identify &mdash; ShazamKit</h2></li>
+<li><p>Identify uses <code>SHManagedSession</code> rather than the lower-level <code>SHSession</code>. The managed session owns the audio buffer plumbing, which keeps the view simple: create a session, await its <code>result()</code>, switch on the outcome. Three outcomes: a match (use it), no match (tell the user to move closer), or an error (surface it).</p></li>
+<li><figure><img class="screenshot" src="../../figures/au-06-identify-listen.png" alt="Identify tab idle with Shazam logo and Listen button"><figcaption>Identify idle &mdash; Shazam logo and Listen button. The icon animates while listening.</figcaption></figure></li>
+<li><p>On a match, the row is prepended to the list with artwork, title, artist, and an Apple Music indicator. Tapping the row opens the song in Apple Music or the iTunes Store via <code>SHMediaItem.appleMusicURL</code>. On iOS 17 and later, the match is also automatically added to the user's "My Shazam Tracks" library via <code>SHLibrary.default.addItems()</code>. Older OS versions still get the tap-through, just not the auto-save.</p></li>
+
+<li><h2>Transcribe &mdash; Speech</h2></li>
+<li><p>Transcribe uses <code>SFSpeechAudioBufferRecognitionRequest</code> &mdash; the streaming-microphone variant. The view installs an audio tap on <code>AVAudioEngine.inputNode</code> and pushes each buffer into the request as it arrives. Partial results enabled, so the transcript fills in live as the user speaks.</p></li>
+<li><p>Transcribe needs two permissions: Speech recognition (<code>SFSpeechRecognizer.requestAuthorization</code>) and Microphone (<code>AVAudioApplication.requestRecordPermission</code>). Both are requested when the user taps Continue on the pre-permission screen; iOS shows them in sequence.</p></li>
+<li><figure><img class="screenshot" src="../../figures/au-07-transcribe-permission.png" alt="iOS Speech Recognition permission dialog"><figcaption>System dialog for Speech Recognition. Microphone is requested separately.</figcaption></figure></li>
+<li><figure><img class="screenshot" src="../../figures/au-08-transcribe-idle.png" alt="Transcribe tab idle"><figcaption>Transcribe idle &mdash; transcript area with placeholder text and Start button.</figcaption></figure></li>
+<li><p>On-device recognition is preferred when the recognizer reports <code>supportsOnDeviceRecognition</code> for the active locale; the request sets <code>requiresOnDeviceRecognition = true</code> in that case so audio never leaves the device. When the user taps Stop, the audio engine and tap are torn down; the transcript stays on screen with Share and Clear buttons. Share uses <code>ShareLink(item: transcript)</code> &mdash; plain string out via the system share sheet.</p></li>
+
+<li><h2>Under the Hood &mdash; the in-app source tour</h2></li>
+<li><p>The fifth tab is an in-app source tour for curious developers. It lists every Swift source file in the app along with a short callout explaining the design choice for that file &mdash; the WHY behind the WHAT. Tapping a row presents a sheet with the filename, the callout, the source code itself, and an Open on GitHub button for the live source.</p></li>
+<li><figure><img class="screenshot" src="../../figures/au-09-about.png" alt="About sheet"><figcaption>About sheet &mdash; reachable from the (i) button in every tab. Send Feedback, Support / Wiki, Privacy Policy, Portfolio.</figcaption></figure></li>
+<li><figure><img class="screenshot" src="../../figures/au-10-uth-source.png" alt="Under the Hood detail sheet"><figcaption>Under the Hood detail &mdash; design rationale callout at the top, source code below.</figcaption></figure></li>
+<li><p>The callouts target developers who already code in Xcode &mdash; concept-dense, framework-aware, idiom-aware, no Swift fundamentals. Non-coders are served by the book itself: read this book, become a coder, then the source becomes legible.</p></li>
+
+<li><h2>Locked design rules</h2></li>
+<li><ul>
+<li><strong>Teaching tool, not a media player.</strong> When the app loses focus, audio stops. No Background Modes entitlement. No Picture in Picture. The natural iOS behavior of pausing audio on background is the desired behavior.</li>
+<li><strong>iOS only.</strong> Project targets <code>iphoneos iphonesimulator</code>; no macOS, no visionOS. The audio frameworks teach the same lesson on every platform, so cross-platform branching is overhead with no payoff for a teaching utility.</li>
+<li><strong>Nothing persists.</strong> No SwiftData container, no CloudKit, no UserDefaults beyond what each framework needs internally. The share sheet is the escape hatch when the user wants to keep something.</li>
+<li><strong>One framework per tab.</strong> Each tab demonstrates exactly one Apple audio framework, in isolation. The teaching point of each tab is unambiguous.</li>
+</ul></li>
+
+<li><h2>Info.plist usage descriptions</h2></li>
+<li><ul>
+<li><code>NSAppleMusicUsageDescription</code> &mdash; required by Stream</li>
+<li><code>NSMicrophoneUsageDescription</code> &mdash; required by Record, Identify, Transcribe</li>
+<li><code>NSSpeechRecognitionUsageDescription</code> &mdash; required by Transcribe</li>
+</ul></li>
+
+<li><h2>App Services portal</h2></li>
+<li><p>The App ID <code>com.Claudes-X26-Swift-Bible.Claudes-Audio-Universe</code> is registered on developer.apple.com with MusicKit and ShazamKit enabled under App Services. AVFoundation and Speech do not require portal enablement; they are part of the base SDK.</p></li>
+
+<li><h2>Build sequence</h2></li>
+<li><ol>
+<li>New SwiftUI Multiplatform project &mdash; flipped to iOS-only by editing <code>SDKROOT</code>, <code>SUPPORTED_PLATFORMS</code>, <code>TARGETED_DEVICE_FAMILY</code> in the project file</li>
+<li>Stripped the SwiftData scaffolding from the App entry and deleted the auto-generated <code>Item.swift</code>; ContentView became a simple <code>TabView</code> root</li>
+<li>Built <code>AppShell</code> as a wrapping container (NavigationStack + (i) info button + About sheet) so each tab gets the (i) for free</li>
+<li>Built <code>AboutView</code> and <code>FeedbackView</code> &mdash; icon, version, credit, Send Feedback (mailto), Wiki, Privacy, Portfolio, GPL v3 footer</li>
+<li>Wired feature views one at a time: Stream &rarr; Record &rarr; Identify &rarr; Transcribe</li>
+<li>Built <code>UnderTheHoodView</code> as a list-of-files presenting a sheet per file with callout, source, and Open on GitHub</li>
+<li>Created the GitHub wiki Home page (hero icon, feature overview, design philosophy) and Developer Notes page</li>
+<li>Created the Privacy Policy page on fluharty.me at <code>/audiouniverse-privacy</code></li>
+<li>Captured ten App Store screenshots on iPhone, resized to 1284 by 2778, ordered for narrative flow</li>
+<li>Submitted v1.0 build 1 to App Review</li>
+</ol></li>
+
+<li><h2>Resources</h2></li>
+<li><ul>
+<li>Source: <a href="https://github.com/fluhartyml/Claudes-Audio-Universe">github.com/fluhartyml/Claudes-Audio-Universe</a></li>
+<li>Wiki: <a href="https://github.com/fluhartyml/Claudes-Audio-Universe/wiki">github.com/fluhartyml/Claudes-Audio-Universe/wiki</a></li>
+<li>Developer Notes: <a href="https://github.com/fluhartyml/Claudes-Audio-Universe/wiki/Developer-Notes">github.com/fluhartyml/Claudes-Audio-Universe/wiki/Developer-Notes</a></li>
+<li>Privacy: <a href="https://fluharty.me/audiouniverse-privacy">fluharty.me/audiouniverse-privacy</a></li>
+<li>App Store listing: pending review at submission ID 964e4428-1ab0-44f2-aa1d-ccd2fbc27062</li>
+</ul></li>
+
+<li><p><em>Page expanded after Audio Universe v1.0 was submitted to App Review. The walkthrough will deepen as readers ask questions. Source of truth for what shipped is <code>DeveloperNotes.swift</code> in the Audio Universe Xcode project.</em></p></li>
 </ol>
-<p><em>This page expands as each feature view ships. See <code>DeveloperNotes.swift</code> in the Audio Universe Xcode project for the live map.</em></p>
 </div>
-<footer class="page"><div class="row-nav"><div class="prev"><a href="../BuildAlong-03-Claudes-LockBox/BuildAlong-03-Claudes-LockBox.html">&larr; Appendix D: LockBox</a></div><div class="pos">Build-Along 04</div><div class="next"><a href="../BuildAlong-05-Outside/BuildAlong-05-Outside.html">Build-Along 05: Outside &rarr;</a></div></div></footer>
+<footer class="page"><div class="row-nav"><div class="prev"><a href="../BuildAlong-03-Claudes-LockBox/BuildAlong-03-Claudes-LockBox.html">&larr; Build-Along 03: LockBox</a></div><div class="pos">Build-Along 04</div><div class="next"><a href="../BuildAlong-05-Outside/BuildAlong-05-Outside.html">Build-Along 05: Outside &rarr;</a></div></div></footer>
+<script>
+(function() {
+    function openLightbox(src, alt) {
+        var overlay = document.createElement('div');
+        overlay.className = 'lightbox-overlay';
+        var img = document.createElement('img');
+        img.src = src;
+        img.alt = alt || '';
+        overlay.appendChild(img);
+        var closeBtn = document.createElement('div');
+        closeBtn.className = 'lightbox-close';
+        closeBtn.textContent = '×';
+        closeBtn.setAttribute('aria-label', 'Close');
+        overlay.appendChild(closeBtn);
+        function dismiss() {
+            if (overlay.parentNode) overlay.parentNode.removeChild(overlay);
+            document.body.classList.remove('lightbox-open');
+        }
+        overlay.addEventListener('click', dismiss);
+        document.body.appendChild(overlay);
+        document.body.classList.add('lightbox-open');
+    }
+    function wire() {
+        var imgs = document.querySelectorAll('img.screenshot');
+        for (var i = 0; i < imgs.length; i++) {
+            (function(img) {
+                img.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    openLightbox(img.getAttribute('src'), img.getAttribute('alt'));
+                });
+            })(imgs[i]);
+        }
+    }
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', wire);
+    } else {
+        wire();
+    }
+})();
+</script>
 </body></html>
