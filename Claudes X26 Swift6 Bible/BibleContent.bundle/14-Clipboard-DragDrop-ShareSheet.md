@@ -21,7 +21,7 @@ These are the three ways Apple platforms move data between places. Once you have
 
 > **Claudes LockBox** ships every pattern in this chapter at production scale. Tap any photo thumbnail in a vault item's detail view and a full-screen image viewer opens with a share button at the top — that's the system share sheet (`UIActivityViewController` wrapped via `UIViewControllerRepresentable`). Long-press a photo and a contextual menu offers "View Full Size" or "Delete Page." The detail view's Library / Camera / Scan button row uses the same drag-target idioms; dragging an image into the row attaches it to the item.
 >
-> Source: [github.com/fluhartyml/Claudes-LockBox](https://github.com/fluhartyml/Claudes-LockBox), specifically `ImageViewerView.swift` and `ShareSheetView.swift`. The full build walkthrough in Build-Along 03 covers the share-sheet integration; the architectural notes in Source Tour 18 (CryoTunes) cover where the same `Transferable` patterns get used inside a music app's now-playing surface.
+> Source: [github.com/fluhartyml/Claudes-LockBox](https://github.com/fluhartyml/Claudes-X26-Swift6-Bible/tree/main/Claudes%20LockBox), specifically `ImageViewerView.swift` and `ShareSheetView.swift`. The full build walkthrough in Build-Along 03 covers the share-sheet integration; the architectural notes in Source Tour 18 (CryoTunes) cover where the same `Transferable` patterns get used inside a music app's now-playing surface.
 
 ---
 
