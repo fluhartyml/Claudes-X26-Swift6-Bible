@@ -16,6 +16,33 @@ By the end of this chapter you can:
 
 ---
 
+## Live Reference: Every App in This Book
+
+> This chapter is the foundation for the book's distribution rule. **GitHub clone-and-build is the default distribution path** for every app shipping alongside this book — readers clone the repo, open the project in Xcode (Source Control → Clone), build for their own device, run. App Store distribution is the bonus tier for apps that grow into full-fledged shipped products. The clone-and-build workflow this chapter teaches is the workflow every Build-Along chapter assumes the reader can do.
+>
+> The complete app roster on GitHub:
+>
+> - [Inkwell (this book's reader app)](https://github.com/fluhartyml/Claudes-X26-Swift6-Bible) — the meta example, see Build-Along 00
+> - [Claudes Web Wrapper rebuild](https://github.com/fluhartyml/Claudes-Web-Wrapper) — see Build-Along 01
+> - [Wraply (Web Wrapper legacy)](https://github.com/fluhartyml/Wraply) — see Build-Along 01 §15 two-listing case
+> - [QuickNote](https://github.com/fluhartyml/QuickNote) — see Build-Along 02
+> - [Claudes LockBox](https://github.com/fluhartyml/Claudes-LockBox) — see Build-Along 03
+> - [Claudes Audio Universe](https://github.com/fluhartyml/Claudes-Audio-Universe) — see Build-Along 04
+> - [Claudes Outdoor Utility](https://github.com/fluhartyml/Claudes-Outdoor-Utility) — see Build-Along 05
+> - [CryoTunes Player](https://github.com/fluhartyml/CryoTunesPlayer) — see Source Tour 18
+> - [Tally Matrix Clock](https://github.com/fluhartyml/Tally-Matrix-Clock) — see Source Tour 19
+> - [Snap & ScanKeeper](https://github.com/fluhartyml/Snap-ScanKeeper) — see Source Tour 20
+> - [Cryo Playlist Manager](https://github.com/fluhartyml/Cryo-Playlist-Manager) — see Source Tour 21
+> - [NightGard Library Commander](https://github.com/fluhartyml/NightGard-Library-Commander) — see Source Tour 22
+> - [NightGard Commander](https://github.com/fluhartyml/NightGard-Commander) (notarized self-publish) — see Source Tour 23
+> - [NightGard DDNS](https://github.com/fluhartyml/NightGardDDNS) (LaunchAgent self-publish) — see Source Tour 24
+> - [Transcription Keeper](https://github.com/fluhartyml/Transcription-Keeper) — see Source Tour 25
+> - [Take A Chance On Me](https://github.com/fluhartyml/TakeAChanceOnMeV1.0.2) — see Source Tour 26
+>
+> All shipped under the GPL v3 license — share and share alike with attribution required. Clone any of them, study the source, fork your own variant, ship under your own name with the GPL terms preserved.
+
+---
+
 ## Why Version Control
 
 Every file in your project has a history. Without version control, you have one copy of each file and whatever Time Machine remembered last night. With Git, every saved state is a named point you can return to, compare against, or share.

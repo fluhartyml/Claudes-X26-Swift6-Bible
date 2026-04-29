@@ -1,5 +1,11 @@
 # Chapter 9: Text and TextField
 
+## Live Reference: QuickNote + Claudes LockBox
+
+> **QuickNote** uses `TextField` for the note title and `TextEditor` for the body, with the date picker, the photo grid, and the home-screen widget all hanging off that minimal text-input surface. **Claudes LockBox** uses `TextField` for the vault item title and PIN entry, with `keyboardType: .numberPad` on the PIN field and the standard alphanumeric keyboard on the title. Reading both side-by-side shows the same chapter's API in two different production contexts. Source: [github.com/fluhartyml/QuickNote](https://github.com/fluhartyml/QuickNote) and [github.com/fluhartyml/Claudes-LockBox](https://github.com/fluhartyml/Claudes-LockBox). See Build-Along 02 (QuickNote) and Build-Along 03 (LockBox) for the build walkthroughs.
+
+---
+
 ## Text View Basics
 
 `Text` is the workhorse for displaying read-only strings in SwiftUI.

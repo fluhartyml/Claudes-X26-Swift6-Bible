@@ -96,6 +96,29 @@ footer.page .row-nav .nav-empty { color: var(--gutter); font-style: italic; }
   <li><p>By the end of this chapter you can:</p></li>
   <li><ul><li>Create a Git repository for an Xcode project and make your first commit.</li><li>Understand the mental model behind <code>add</code>, <code>commit</code>, <code>branch</code>, and <code>merge</code>.</li><li>Work with a remote on GitHub: clone, push, pull, and open a pull request.</li><li>Write a sane <code>.gitignore</code> for an Xcode project.</li><li>Tag a release and publish it on GitHub.</li></ul></li>
   <li><hr></li>
+  <li><h2>Live Reference: Every App in This Book</h2></li>
+  <li><div class="scope-note">This chapter is the foundation for the book's distribution rule. <strong>GitHub clone-and-build is the default distribution path</strong> for every app shipping alongside this book &mdash; readers clone the repo, open the project in Xcode (Source Control &rarr; Clone), build for their own device, run. App Store distribution is the bonus tier for apps that grow into full-fledged shipped products. The clone-and-build workflow this chapter teaches is the workflow every Build-Along chapter assumes the reader can do.</div></li>
+  <li><p>The complete app roster on GitHub:</p></li>
+  <li><ul>
+<li><a href="https://github.com/fluhartyml/Claudes-X26-Swift6-Bible">Inkwell (this book's reader app)</a> &mdash; the meta example, see Build-Along 00</li>
+<li><a href="https://github.com/fluhartyml/Claudes-Web-Wrapper">Claudes Web Wrapper rebuild</a> &mdash; see Build-Along 01</li>
+<li><a href="https://github.com/fluhartyml/Wraply">Wraply (Web Wrapper legacy)</a> &mdash; see Build-Along 01 &sect;15 two-listing case</li>
+<li><a href="https://github.com/fluhartyml/QuickNote">QuickNote</a> &mdash; see Build-Along 02</li>
+<li><a href="https://github.com/fluhartyml/Claudes-LockBox">Claudes LockBox</a> &mdash; see Build-Along 03</li>
+<li><a href="https://github.com/fluhartyml/Claudes-Audio-Universe">Claudes Audio Universe</a> &mdash; see Build-Along 04</li>
+<li><a href="https://github.com/fluhartyml/Claudes-Outdoor-Utility">Claudes Outdoor Utility</a> &mdash; see Build-Along 05</li>
+<li><a href="https://github.com/fluhartyml/CryoTunesPlayer">CryoTunes Player</a> &mdash; see Source Tour 18</li>
+<li><a href="https://github.com/fluhartyml/Tally-Matrix-Clock">Tally Matrix Clock</a> &mdash; see Source Tour 19</li>
+<li><a href="https://github.com/fluhartyml/Snap-ScanKeeper">Snap &amp; ScanKeeper</a> &mdash; see Source Tour 20</li>
+<li><a href="https://github.com/fluhartyml/Cryo-Playlist-Manager">Cryo Playlist Manager</a> &mdash; see Source Tour 21</li>
+<li><a href="https://github.com/fluhartyml/NightGard-Library-Commander">NightGard Library Commander</a> &mdash; see Source Tour 22</li>
+<li><a href="https://github.com/fluhartyml/NightGard-Commander">NightGard Commander</a> (notarized self-publish) &mdash; see Source Tour 23</li>
+<li><a href="https://github.com/fluhartyml/NightGardDDNS">NightGard DDNS</a> (LaunchAgent self-publish) &mdash; see Source Tour 24</li>
+<li><a href="https://github.com/fluhartyml/Transcription-Keeper">Transcription Keeper</a> &mdash; see Source Tour 25</li>
+<li><a href="https://github.com/fluhartyml/TakeAChanceOnMeV1.0.2">Take A Chance On Me</a> &mdash; see Source Tour 26</li>
+</ul></li>
+  <li><p>All shipped under the GPL v3 license &mdash; share and share alike with attribution required. Clone any of them, study the source, fork your own variant, ship under your own name with the GPL terms preserved.</p></li>
+  <li><hr></li>
   <li><h2>Why Version Control</h2></li>
   <li><p>Every file in your project has a history. Without version control, you have one copy of each file and whatever Time Machine remembered last night. With Git, every saved state is a named point you can return to, compare against, or share.</p></li>
   <li><p>Git is the version control system. GitHub is one of several places to host Git repositories on the internet. You can use Git locally without ever talking to GitHub; you start needing GitHub (or something like it) when you want to sync across machines or collaborate.</p></li>
