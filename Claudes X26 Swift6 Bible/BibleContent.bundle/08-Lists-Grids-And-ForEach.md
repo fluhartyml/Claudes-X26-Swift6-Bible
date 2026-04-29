@@ -1,5 +1,11 @@
 # Chapter 08: Lists, Grids, and ForEach
 
+## Live Reference: Inkwell + Claudes LockBox + QuickNote
+
+> **Inkwell** (the reader app you may be holding right now) uses `List` for its sidebar navigation — every Part, Book, Chapter, and Page is a list row driven by `@Query` against the bundle's content tree. **Claudes LockBox** uses `List` for the items-in-folder column (the middle of the three-column layout) plus a `LazyVGrid` for the photo thumbnail strip in vault item detail. **QuickNote** uses `List` for the notes index, sorted by date, with `@Query` on the SwiftData model. All three apps put `List` and `ForEach` to production work. Sources: [Inkwell](https://github.com/fluhartyml/Claudes-X26-Swift6-Bible), [LockBox](https://github.com/fluhartyml/Claudes-LockBox), [QuickNote](https://github.com/fluhartyml/QuickNote). See Build-Along 00 (Inkwell), Build-Along 03 (LockBox), Build-Along 02 (QuickNote).
+
+---
+
 ## List
 
 The workhorse of data display in SwiftUI. Provides scrolling, cell recycling, selection, swipe actions, and platform-native styling for free.

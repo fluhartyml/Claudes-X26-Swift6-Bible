@@ -1,5 +1,13 @@
 # Chapter 06: Controls — Buttons, Toggles, and Pickers
 
+## Live Reference: Take A Chance On Me + CryoTunes Player
+
+> **Take A Chance On Me** is the smallest-scale shipping example of the patterns this chapter teaches — a multi-die roller built almost entirely from `Button`, `Picker`, and `Stepper`. Each die is a button; each die-size selector is a picker; the multi-die count is a stepper. Reading its source is reading this chapter applied to one concrete app. Source: [github.com/fluhartyml/TakeAChanceOnMeV1.0.2](https://github.com/fluhartyml/TakeAChanceOnMeV1.0.2). See Source Tour 26.
+>
+> **CryoTunes Player** uses every control in this chapter at production scale — buttons across the transport row (play, pause, skip, stop, shuffle, repeat, share, thumbs-up, thumbs-down), toggles in Settings, pickers for radio station and sleep timer. The full grammar of Apple-platform controls in one app. Source: [github.com/fluhartyml/CryoTunesPlayer](https://github.com/fluhartyml/CryoTunesPlayer). See Source Tour 18.
+
+---
+
 ## Button
 
 ### Basic Button

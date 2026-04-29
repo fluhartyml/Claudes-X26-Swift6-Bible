@@ -1,5 +1,13 @@
 # Chapter 11: FileManager and Documents
 
+## Live Reference: Snap & ScanKeeper + Inkwell
+
+> **Snap & ScanKeeper** uses `FileManager` to organize scanned documents — folders, file moves, file deletes, file enumeration. Photos save to the user's Photos library; document scans save into the app's own folder hierarchy via FileManager calls. Source: [github.com/fluhartyml/Snap-ScanKeeper](https://github.com/fluhartyml/Snap-ScanKeeper). See Source Tour 20.
+>
+> **Inkwell** uses FileManager to extract `BibleContent.bundle` from the app target into Application Support on first launch — a complete on-device extract-from-bundle pattern in `VaultBundleExtractor.swift`. The bundle has a flat layout in the binary; the extractor sorts each file into its proper subfolder (Books to `Part-N/`, Build-Alongs to `Part-VII-Dedicated-Build-Alongs/{folder}/`, etc.) using a `targetPath(forFlat:)` routing function that's worth reading as a complete example. See Build-Along 00 (the meta chapter).
+
+---
+
 ## FileManager Basics
 
 `FileManager.default` is your entry point for all file system operations. It is a singleton -- use `FileManager.default` everywhere.

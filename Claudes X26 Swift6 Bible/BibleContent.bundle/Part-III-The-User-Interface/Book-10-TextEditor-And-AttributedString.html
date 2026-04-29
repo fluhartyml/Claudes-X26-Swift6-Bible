@@ -90,6 +90,8 @@ footer.page .row-nav .nav-empty { color: var(--gutter); font-style: italic; }
 <div class="content">
 <ol class="lines">
   <li><h1>Chapter 10: TextEditor and AttributedString</h1></li>
+  <li><h2>Live Reference: QuickNote (TextEditor) + Inkwell (AttributedString)</h2></li>
+  <li><div class="scope-note"><strong>QuickNote</strong> uses <code>TextEditor</code> for the note body &mdash; the chapter's central pattern in production form. The note body is a multi-line free-form text area that grows with the keyboard, persists as a SwiftData string, and reads back identically across the app and its home-screen widget. Source: <a href="https://github.com/fluhartyml/QuickNote">github.com/fluhartyml/QuickNote</a>. <strong>Inkwell</strong> uses <code>AttributedString</code> to render Lexicon Quick-Define popups &mdash; when the reader taps any tinted Swift identifier in a source-mirror code block (in the Under the Hood tab), the popup that appears uses an attributed-string-driven layout to bold the headword, italicize the definition, and link related identifiers. The book renders itself with attributed strings at production scale. See Build-Along 00 (the meta chapter) for the full Inkwell architecture.</div></li>
   <li><h2>TextEditor</h2></li>
   <li><p><code>TextEditor</code> is SwiftUI's multi-line text input. Use it when <code>TextField</code> with <code>axis: .vertical</code> is not enough.</p></li>
   <li><pre><code class="lang-swift">@State private var notes = ""

@@ -1,5 +1,13 @@
 # Chapter 10: TextEditor and AttributedString
 
+## Live Reference: QuickNote (TextEditor) + Inkwell (AttributedString)
+
+> **QuickNote** uses `TextEditor` for the note body — the chapter's central pattern in production form. The note body is a multi-line free-form text area that grows with the keyboard, persists as a SwiftData string, and reads back identically across the app and its home-screen widget. Source: [github.com/fluhartyml/QuickNote](https://github.com/fluhartyml/QuickNote).
+>
+> **Inkwell** uses `AttributedString` to render Lexicon Quick-Define popups — when the reader taps any tinted Swift identifier in a source-mirror code block (in the Under the Hood tab), the popup that appears uses an attributed-string-driven layout to bold the headword, italicize the definition, and link related identifiers. The book renders itself with attributed strings at production scale. See Build-Along 00 (the meta chapter) for the full Inkwell architecture.
+
+---
+
 ## TextEditor
 
 `TextEditor` is SwiftUI's multi-line text input. Use it when `TextField` with `axis: .vertical` is not enough.
