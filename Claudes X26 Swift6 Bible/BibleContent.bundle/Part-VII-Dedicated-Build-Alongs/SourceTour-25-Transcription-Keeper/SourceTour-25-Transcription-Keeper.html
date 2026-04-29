@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Source Tour 25: Transcription Keeper</title>
+<style>
+:root { --bg: #000000; --fg: #FFB000; --bright: #FFD060; --dim: #996600; --codebg: #1a0d00; --border: #664500; --gutter: #4a3300; --headerbg: #0a0600; }
+* { box-sizing: border-box; }
+html, body { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; height: 100%; }
+body { background: var(--bg); color: var(--fg); font-family: "FiraCode Nerd Font Mono", "Fira Code", "Menlo", "Courier New", monospace; font-size: 18pt; line-height: 1.55; margin: 0; padding: 0; text-shadow: 0 0 1px rgba(255, 176, 0, 0.35); display: flex; flex-direction: column; }
+header.page, footer.page { background: var(--headerbg); color: var(--dim); padding: 0.55rem 1.1rem; font-size: 13pt; display: flex; flex-direction: column; gap: 0.2rem; flex: 0 0 auto; z-index: 10; }
+header.page { border-bottom: 1px solid var(--border); }
+footer.page { border-top: 1px solid var(--border); padding-bottom: calc(0.55rem + env(safe-area-inset-bottom)); }
+header.page .path, footer.page .path { color: var(--fg); word-break: break-all; overflow-wrap: break-word; }
+header.page .pos, footer.page .pos { color: var(--bright); }
+.content { flex: 1 1 auto; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 0.8rem 1rem 2rem 1rem; max-width: 1100px; margin: 0 auto; width: 100%; }
+h1 { color: var(--bright); font-weight: normal; font-size: 26pt; margin: 0.6rem 0 1rem 0; }
+h2 { color: var(--bright); font-weight: normal; font-size: 20pt; border-bottom: 1px solid var(--border); padding-bottom: 0.3rem; margin-top: 1.5rem; }
+h3 { color: var(--bright); font-weight: normal; font-size: 18pt; margin-top: 1rem; }
+p { margin: 0.4rem 0; counter-increment: para; }
+code { color: var(--bright); background: var(--codebg); padding: 0.08em 0.35em; border: 1px solid #3a2400; border-radius: 3px; font-size: 0.92em; }
+pre { background: var(--codebg); border: 1px solid #3a2400; border-radius: 4px; padding: 0.7rem 0.9rem; overflow-x: auto; font-size: 14pt; }
+ul { margin: 0.4rem 0 0.4rem 1.4rem; padding: 0; }
+a { color: var(--bright); font-weight: bold; text-decoration: none; border-bottom: 1px dotted var(--dim); }
+strong { color: var(--bright); }
+em { color: var(--fg); font-style: italic; }
+hr { border: 0; border-top: 1px solid var(--border); margin: 1rem 0; }
+.scope-note { border-left: 3px solid var(--bright); padding: 0.7rem 1rem; background: #140c00; margin: 0.6rem 0; color: var(--bright); }
+.status-live { color: #66FF66; font-weight: bold; }
+.status-notlive { color: #FFD060; font-weight: bold; }
+.status-planning { color: #996600; font-weight: bold; }
+
+
+footer.page { flex-direction: column; gap: 0.4rem; }
+footer.page .row-nav { display: flex; flex-direction: row; justify-content: space-between; align-items: center; gap: 0.5rem; }
+footer.page .row-nav .prev, footer.page .row-nav .next { flex: 1; min-width: 0; }
+footer.page .row-nav .prev { text-align: left; }
+footer.page .row-nav .next { text-align: right; }
+footer.page .row-nav .pos { flex: 0 0 auto; text-align: center; color: var(--bright); font-weight: bold; }
+footer.page .row-nav a { color: var(--bright); font-weight: bold; text-decoration: none; border-bottom: 1px dotted var(--dim); }
+footer.page .row-nav a:hover { background: #332200; }
+footer.page .row-nav .nav-empty { color: var(--gutter); font-style: italic; }
+</style>
+</head><body>
+<header class="page"><div class="path">Part-VII-Dedicated-Build-Alongs/SourceTour-25-Transcription-Keeper</div></header>
+<div class="content">
+<h1>Source Tour 25: Transcription Keeper</h1>
+<p><span class="status-live">Status: LIVE on the App Store (v1.1).</span> Production audio-recorder + speech-to-text utility for iPhone and iPad. Apple's Speech framework on top of an audio-file recording pipeline.</p>
+<div class="scope-note">Two paths: install the live app to use the finished product, or clone the repo and read the source. The architecture is small &mdash; ~1100 lines across nine Swift files &mdash; with one substantive teaching surface (the async wrapper around Apple's callback-based <code>SFSpeechRecognizer</code> API). See Book 21 Git-And-GitHub for the clone workflow.</div>
+
+<h2>What Transcription Keeper shows at production scale</h2>
+<ul>
+<li><strong>Apple's Speech framework</strong> via <code>SFSpeechRecognizer</code> &mdash; on-device speech-to-text using Apple's first-party speech model. No third-party API calls, no audio data sent to a server.</li>
+<li><strong>The two-phase recorder-then-transcriber pattern</strong> &mdash; record audio first, save it as a file, then transcribe the file. Different shape than live-streaming transcription, simpler to reason about, easier to retry on failure.</li>
+<li><strong>The async wrapper around a callback-based Apple API</strong> &mdash; one of the most reusable patterns in modern Swift. Apple's older frameworks use closure callbacks; modern call sites want <code>async/await</code>. The wrapper bridges them.</li>
+<li>A complete utility app at ~1100 lines &mdash; small enough to read end-to-end on an afternoon.</li>
+</ul>
+
+<h2>The async wrapper around SFSpeechRecognizer</h2>
+<p>Apple's <code>SFSpeechRecognizer</code> ships with a callback-based recognition API. You hand it a request and a closure; it calls your closure repeatedly with intermediate results, then once more with the final result. That's fine in 2017 SDK style, but in modern Swift you almost always want <code>try await</code> at the call site.</p>
+
+<p>Open <code>TranscriptionService.swift</code> in the repo. The interesting part is at the bottom of the file:</p>
+
+<pre><code>extension SFSpeechRecognizer {
+    /// Async wrapper for recognition task
+    func recognitionTask(with request: SFSpeechRecognitionRequest) async throws -&gt; SFSpeechRecognitionResult {
+        try await withCheckedThrowingContinuation { continuation in
+            recognitionTask(with: request) { result, error in
+                if let error = error {
+                    continuation.resume(throwing: error)
+                } else if let result = result, result.isFinal {
+                    continuation.resume(returning: result)
+                }
+            }
+        }
+    }
+}
+</code></pre>
+
+<p>Three things to notice:</p>
+
+<ul>
+<li><strong><code>withCheckedThrowingContinuation</code></strong> is Swift's standard tool for bridging callback-based APIs into async/await. Inside the closure, <code>continuation.resume(returning:)</code> hands a value back to the awaiting call site; <code>continuation.resume(throwing:)</code> throws an error. You must call resume <em>exactly once</em> per continuation &mdash; calling it twice or zero times is a runtime error.</li>
+<li><strong>The <code>result.isFinal</code> guard</strong> is what makes this wrapper correct. <code>SFSpeechRecognizer</code> calls the closure multiple times during recognition with intermediate partial results. The wrapper only resumes the continuation when the final result arrives, ignoring the partial ones. Without that guard, the wrapper would resume on the first partial and throw on every subsequent callback (because resume-twice is the runtime error mentioned above).</li>
+<li><strong>The error path resumes too.</strong> If the recognition task fails, <code>continuation.resume(throwing: error)</code> propagates that error up to the awaiting call site, where it surfaces as a normal Swift <code>throws</code>. The call site doesn't need to know the API was originally callback-based.</li>
+</ul>
+
+<p>Now the call site at line 66 reads cleanly:</p>
+
+<pre><code>let result = try await recognizer.recognitionTask(with: request)
+transcription = result.bestTranscription.formattedString
+</code></pre>
+
+<p>That's the pattern: messy callback API at the bottom of the file, clean <code>try await</code> at the top. The wrapper lives in an extension so it doesn't pollute the type's public surface in places that don't import this file.</p>
+
+<h2>The two-phase recorder-then-transcriber design</h2>
+<p>Transcription Keeper does <em>not</em> do live streaming transcription. It records audio first, saves it to a file, then transcribes the file as a separate step. That choice shows up at <code>SmartAudioRecorder.swift</code> for the recording side and <code>TranscriptionService.swift</code> for the transcription side. The two services don't know about each other &mdash; <code>ContentView</code> orchestrates them.</p>
+
+<p>Why split the phases?</p>
+
+<ul>
+<li><strong>Failure is recoverable.</strong> If transcription fails (network issue, recognition timeout, unsupported locale), the audio file is still on disk. The user can retry transcription without re-recording. Live streaming loses the audio when transcription fails.</li>
+<li><strong>The user can review what they recorded before transcribing.</strong> Trim the silence at the start, scrub to the part they want transcribed, share just the audio without transcription if that's what they need.</li>
+<li><strong>The recorder doesn't have to know about the recognizer.</strong> Each service has one job. <code>SmartAudioRecorder</code> writes <code>m4a</code> files; <code>TranscriptionService</code> reads them. The contract between them is just a file URL.</li>
+</ul>
+
+<p>This is a small app demonstrating a general principle: <strong>when an operation is naturally two phases, separating them makes each phase simpler than a fused live pipeline would have been</strong>. The cost is the disk write between phases; the savings are recoverability and clean separation of concerns.</p>
+
+<h2>Install and browse</h2>
+<ul>
+<li>App Store: search "Transcription Keeper" on the iOS App Store</li>
+<li>Source: <a href="https://github.com/fluhartyml/Transcription-Keeper">github.com/fluhartyml/Transcription-Keeper</a></li>
+</ul>
+
+<h2>Cross-references</h2>
+<ul>
+<li><strong>Book 21 Git-And-GitHub</strong> &mdash; clone the repo and follow along</li>
+<li><strong>Build-Along 04 Audio Universe</strong> &mdash; the Transcribe tab there teaches the same Speech framework basics in a build-along context; this Source Tour is the focused production version</li>
+<li><strong>Source Tour 18 CryoTunes Player</strong> &mdash; another app that wraps an Apple framework (MusicKit) with a custom service layer; same architectural shape</li>
+</ul>
+</div>
+<footer class="page"><div class="row-nav"><div class="prev"><a href="../SourceTour-24-NightGard-DDNS/SourceTour-24-NightGard-DDNS.html">&larr; Source Tour 24: NightGard DDNS</a></div><div class="pos">Source Tour 25</div><div class="next"><a href="../SourceTour-26-Take-A-Chance-On-Me/SourceTour-26-Take-A-Chance-On-Me.html">Source Tour 26: Take A Chance On Me &rarr;</a></div></div></footer>
+</body></html>

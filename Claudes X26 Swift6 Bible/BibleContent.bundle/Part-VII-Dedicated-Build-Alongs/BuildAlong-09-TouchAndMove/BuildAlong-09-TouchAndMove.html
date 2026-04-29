@@ -26,7 +26,7 @@ strong { color: var(--bright); }
 em { color: var(--fg); font-style: italic; }
 .scope-note { border-left: 3px solid var(--bright); padding: 0.7rem 1rem; background: #140c00; margin: 0.6rem 0; color: var(--bright); }
 .status-planning { color: #996600; font-weight: bold; }
-.status-testflight { color: #FFD060; font-weight: bold; }
+.status-github { color: #FFD060; font-weight: bold; }
 
 
 footer.page { flex-direction: column; gap: 0.4rem; }
@@ -43,23 +43,23 @@ footer.page .row-nav .nav-empty { color: var(--gutter); font-style: italic; }
 <header class="page"><div class="path">Part-VII-Dedicated-Build-Alongs/BuildAlong-09-TouchAndMove</div></header>
 <div class="content">
 <h1>Build-Along 09: TouchAndMove</h1>
-<p><span class="status-testflight">Distribution: TestFlight beta.</span> Single-concept teaching app &mdash; every gesture (tap, drag, pinch, rotate) drives a SwiftUI animation. Does not grow into a full-fledged product on its own, so it ships via TestFlight per the distribution rule rather than fighting a 2.2 rejection.</p>
-<div class="scope-note">MVP concept: a gesture-to-animation playground. The app is the demo &mdash; that's the whole point. Readers install via TestFlight link, play with it, study the source.</div>
+<p><span class="status-github">Distribution: GitHub clone-and-build.</span> Single-concept teaching app &mdash; every gesture (tap, drag, pinch, rotate) drives a SwiftUI animation. Does not grow into a full-fledged product on its own, so it ships as a GitHub repo readers clone and build themselves rather than fighting a 2.2 rejection on the App Store.</p>
+<div class="scope-note">MVP concept: a gesture-to-animation playground. The app is the playground &mdash; that's the whole point. Readers clone the repo, open in Xcode, build, and study the source as they play with it.</div>
 <h2>What TouchAndMove will teach</h2>
 <ul>
 <li><strong>Gestures</strong> &mdash; <code>TapGesture</code>, <code>DragGesture</code>, <code>MagnificationGesture</code>, <code>RotationGesture</code>, <code>LongPressGesture</code>, and composing them with <code>SimultaneousGesture</code> / <code>SequenceGesture</code>.</li>
 <li><strong>Animations</strong> &mdash; <code>withAnimation</code>, spring physics, damping, custom <code>Animation</code> curves, <code>matchedGeometryEffect</code> for hero transitions.</li>
 <li><strong>Signature layer:</strong> MVP feature + Under the Hood view + About &amp; Send Feedback.</li>
-<li><strong>Distribution:</strong> TestFlight &mdash; readers get an install link from the appendix/wiki.</li>
+<li><strong>Distribution:</strong> GitHub clone-and-build &mdash; readers get the repo URL from the appendix/wiki.</li>
 </ul>
-<h2>Why TestFlight not App Store</h2>
-<p>TouchAndMove is genuinely a demo &mdash; a playground that shows gestures driving animations with no other purpose. The honest framing matches how Apple classifies such apps under Guideline 2.2. TestFlight is Apple's designated channel for this kind of teaching artifact. Going that direction from the start avoids a predictable rejection.</p>
+<h2>Why GitHub clone-and-build not App Store</h2>
+<p>TouchAndMove is genuinely a playground &mdash; gestures driving animations with no other purpose. Apple's Guideline 2.2 reads such apps as demos and rejects them from the store; rather than fight that, we ship the source on GitHub and let the reader build it themselves. The reader becomes the developer for this app, which fits the teaching purpose better than App Store distribution would anyway.</p>
 <h2>Current state</h2>
 <ul>
 <li>No Xcode project yet</li>
 </ul>
 <h2>Next step</h2>
-<p>When this app gets scaffolded, the walkthrough lands here. Distribution via TestFlight public link; readers tap the link and install.</p>
+<p>When this app gets scaffolded, the walkthrough lands here. Distribution via GitHub clone-and-build; readers visit the repo and clone it into Xcode (see Book 21 Git-And-GitHub for the clone workflow).</p>
 </div>
 <footer class="page"><div class="row-nav"><div class="prev"><a href="../BuildAlong-08-IntelligenceDemo/BuildAlong-08-IntelligenceDemo.html">&larr; Build-Along 08: IntelligenceDemo</a></div><div class="pos">Build-Along 09</div><div class="next"><a href="../BuildAlong-10-DragBetweenWindows/BuildAlong-10-DragBetweenWindows.html">Build-Along 10: DragBetweenWindows &rarr;</a></div></div></footer>
 </body></html>

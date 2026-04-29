@@ -45,19 +45,53 @@ footer.page .row-nav .nav-empty { color: var(--gutter); font-style: italic; }
 <header class="page"><div class="path">Part-VII-Dedicated-Build-Alongs/SourceTour-23-NightGard-Commander</div></header>
 <div class="content">
 <h1>Source Tour 23: NightGard Commander (Self-Publishing Case Study)</h1>
-<p><span class="status-notlive">Status: self-distributed, notarized. Not on the App Store by design.</span> Mac app. Descendant of Midnight Commander / Norton Commander.</p>
-<div class="scope-note">Self-publishing case study. Shows what Mac development looks like when the App Store sandbox is not the right fit &mdash; a file manager that needs to browse the whole disk by definition cannot live inside the App Store sandbox.</div>
-<h2>What NightGard Commander shows</h2>
+<p><span class="status-notlive">Status: self-distributed, notarized.</span> Mac app, descendant of Midnight Commander and Norton Commander. The book's primary case study for the third distribution path: <strong>notarized self-publishing</strong>, neither App Store nor TestFlight.</p>
+<div class="scope-note">A file manager that needs to browse the whole disk by definition cannot live inside the App Store sandbox. NightGard Commander ships notarized with full disk access &mdash; the right call for an app whose value is exactly "see and act on everything." Source: <a href="https://github.com/fluhartyml/NightGard-Commander">github.com/fluhartyml/NightGard-Commander</a>. See Book 21 Git-And-GitHub for the clone workflow.</div>
+
+<h2>What NightGard Commander shows at production scale</h2>
 <ul>
-<li>Two-pane file manager UI (source and destination visible simultaneously, keyboard-driven)</li>
-<li>Differentiation from Finder: Finder has tabs, but tabs aren't side-by-side. NightGard Commander's value is spatial awareness &mdash; source and destination visible at the same time for batch workflows.</li>
-<li>Full disk access via unsandboxed notarized distribution</li>
-<li>Production-hardened Shazam stack (Service / Queue / Delegate / Database) as a byproduct of being a file manager that works well with audio files</li>
+<li><strong>Two-pane file manager UI</strong> &mdash; source and destination panes visible simultaneously, keyboard-driven, descended directly from Midnight Commander's three-decade-tested layout</li>
+<li><strong>The production-hardened Shazam stack</strong> &mdash; Service, Queue, Session Delegate, Scanned Database, Settings, Results Dialog, Settings Panel. Eight files of production-tuned audio-fingerprint workflow that Library Commander now ports rather than rebuilds (see Source Tour 22).</li>
+<li><strong>Notarized self-publishing</strong> &mdash; how a Mac app gets distributed outside the App Store and still passes Gatekeeper, gets the user's trust on first launch, and updates without going through Apple's review queue.</li>
+<li><strong>Differentiation against Finder</strong> &mdash; Finder has tabs in 2026, but tabs aren't side-by-side. Commander's value is spatial awareness: source and destination visible at the same time for batch workflows like "compare two album folders, copy the missing tracks across."</li>
 </ul>
-<h2>Why not the App Store</h2>
-<p>A sandboxed file manager can only see what the user explicitly grants, which defeats the purpose. NightGard Commander ships notarized with full disk access. Readers get the "Apple-duplication is fine if we add a workflow differentiator" rule in action, plus a concrete example of when self-publishing is the right call.</p>
+
+<h2>Why this app cannot live in the App Store sandbox</h2>
+<p>The Mac App Store sandbox restricts apps to specific user-granted directories. A file manager whose whole purpose is browsing arbitrary locations on disk cannot work under that restriction. The user would be confronted with permission prompts on every directory navigation, the app would lose its ability to compare paths it doesn't have current grants for, and the workflow value (spatial awareness across the whole filesystem) would evaporate.</p>
+
+<p>Apple is explicit about this in their developer guidance: file managers, system utilities, developer tools, and similar "see and act on everything" apps are appropriate candidates for unsandboxed notarized distribution. NightGard Commander is a textbook member of that category. The rejection conversation never even starts because the submission would be wrong from the first frame.</p>
+
+<h2>The notarized-self-publish flow</h2>
+<p>Self-publishing a Mac app for distribution outside the App Store is roughly four steps once the binary is built:</p>
+
+<ol class="body-list">
+<li><strong>Code-sign with a Developer ID Application certificate</strong> (<code>codesign --sign "Developer ID Application: Your Name" --options=runtime ...</code>). The Developer ID certificate is the same Apple Developer Program membership the App Store uses, just configured for outside-the-store distribution.</li>
+<li><strong>Wrap the app in a DMG or zip</strong> for distribution.</li>
+<li><strong>Submit to Apple's notarization service</strong> (<code>xcrun notarytool submit</code>). Apple's automated scan checks for malware signatures and confirms the signing chain. Notarization is not App Review; it's a security check that takes minutes, not days.</li>
+<li><strong>Staple the notarization ticket</strong> to the binary (<code>xcrun stapler staple</code>) so Gatekeeper can verify offline. Without stapling, Gatekeeper has to phone home on first launch; with the ticket stapled, the app launches instantly even on a network-isolated Mac.</li>
+</ol>
+
+<p>The user installs the notarized DMG, drags the app to <code>/Applications</code>, and on first launch sees the Gatekeeper prompt confirming Apple verified the developer's identity. After that, the app launches like any App Store app. Updates ship by replacing the binary in <code>/Applications</code>; there is no auto-update infrastructure unless the developer builds one (Sparkle is the standard third-party framework for that).</p>
+
+<h2>The production-hardened Shazam stack</h2>
+<p>Commander's Shazam stack is the most ported piece of architecture in the NightGard family. Eight files in the app target:</p>
+
 <ul>
-<li>Source: <a href="https://github.com/fluhartyml/NightGard-Commander">github.com/fluhartyml/NightGard-Commander</a></li>
+<li><code>ShazamService</code> &mdash; the public API surface other code calls into</li>
+<li><code>ShazamQueue</code> &mdash; rate-limit-respecting work queue (Apple's Shazam servers throttle aggressive batch use; the queue is what keeps the app from getting blocked)</li>
+<li><code>ShazamSessionDelegate</code> &mdash; the SHSession callback handler that resolves match results into the queue</li>
+<li><code>ShazamScannedDatabase</code> &mdash; persistent record of what's already been Shazamed, so re-running a batch doesn't re-fingerprint files that already have results</li>
+<li><code>ShazamSettings</code> + <code>ShazamSettingsPanel</code> &mdash; user-configurable rate-limit and batch-size knobs</li>
+<li><code>ShazamResultsDialog</code> + <code>BatchShazamDialog</code> &mdash; the user-facing UIs for kicking off batches and viewing results</li>
+</ul>
+
+<p>The lesson the apartment memory captures (in <code>feedback_shazam_rate_limit.md</code> and <code>reference_nightgard_commander_shazam.md</code>) is direct: <strong>do not re-implement this stack in another app from scratch</strong>. Apple's Shazam servers rate-limit batch use aggressively, and getting the queue's pacing wrong invites server-side timeouts that look indistinguishable from real failures. Library Commander ports this stack verbatim rather than reinventing it; that discipline is the right call for any future app in the family that needs Shazam at batch scale.</p>
+
+<h2>Cross-references</h2>
+<ul>
+<li><strong>Source Tour 22 NightGard Library Commander</strong> &mdash; the App-Store-tier sibling that ports this app's Shazam stack</li>
+<li><strong>Source Tour 24 NightGard DDNS</strong> &mdash; the other self-publishing case study, paired with this one to cover both reasons apps leave the App Store (choice + necessity)</li>
+<li><strong>Book 21 Git-And-GitHub</strong> &mdash; clone the repo and read the source</li>
 </ul>
 </div>
 <footer class="page"><div class="row-nav"><div class="prev"><a href="../SourceTour-22-NightGard-Library-Commander/SourceTour-22-NightGard-Library-Commander.html">&larr; Source Tour 22: NightGard Library Commander</a></div><div class="pos">Source Tour 23</div><div class="next"><a href="../SourceTour-24-NightGard-DDNS/SourceTour-24-NightGard-DDNS.html">Source Tour 24: NightGard DDNS (Self-Publishing... &rarr;</a></div></div></footer>

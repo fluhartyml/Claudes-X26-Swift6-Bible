@@ -141,19 +141,43 @@ footer.page .row-nav .nav-empty { color: var(--gutter); font-style: italic; }
 <li>Submitted v1.0 build 1 to App Review</li>
 </ol></li>
 
+<li><h2>The "by Claude" version &mdash; an App-Store-rejected lineage available via GitHub clone-and-build</h2></li>
+<li><p>Audio Universe shipped to App Review under three different name strategies in the same week, and the version named "Audio Universe by Claude" was rejected on naming grounds. The book teaches the success path; the rejected version is preserved as a GitHub clone-and-build artifact for readers who want to study what the original looked like.</p></li>
+<li><p>The rejection &mdash; Apple App Review, Guideline 4.1(a) Design (Copycats), 2026 April 28: <em>"the app's name includes references to Claude."</em> Apple read the explicit "by Claude" attribution as a third-party IP claim against Anthropic's brand. Earlier in the week the same app had passed App Review under the possessive form "Claudes Audio Universe" without a Copycats flag, suggesting the trigger is the explicit attributive form, not a content judgment. Both forms are now off-limits in App-Store-reviewer-visible names per the family-wide naming rule (see also <code>feedback_app_name_by_claude_standard.md</code> in the apartment memory).</p></li>
+<li><p>The current submission carries the bare display name <strong>Audio Universe</strong>; the GitHub repository keeps "Claudes Audio Universe" in its name because the repo is a developer-facing artifact, not an App Store listing field. The two surfaces operate under different rules: App Store reviewer-visible fields stay neutral; repo names, source identifiers, About sheet attribution, Under the Hood content, and the book itself keep the "Claudes" branding.</p></li>
+<li><h3>What the rejected by-Claude version contained</h3></li>
+<li><p>Functionally identical to the current shipping version &mdash; same Stream / Record / Identify / Transcribe tabs, same MusicKit, AVFoundation, ShazamKit, and Speech framework integrations, same Under the Hood and About surfaces. The differences were entirely in display strings:</p></li>
+<li><ul>
+<li><code>CFBundleDisplayName</code> set to "Audio Universe by Claude"</li>
+<li><code>AboutView</code> title text "Audio Universe by Claude"</li>
+<li>Permission usage descriptions (microphone, speech, Apple Music) referenced the app by the "by Claude" attribution form</li>
+<li>The Under the Hood callouts, file headers, and FeedbackView mail subjects carried the same attribution</li>
+</ul></li>
+<li><p>The fix to ship the renamed version was a string-only edit in those fields. No source-architecture change, no functionality change. Apple's rejection was about the name surface as a reviewer reads it, not about the app's behavior.</p></li>
+<li><h3>Cloning the by-Claude version</h3></li>
+<li><p>The "by Claude" lineage lives in the public commit history of the source repository at <a href="https://github.com/fluhartyml/Claudes-Audio-Universe">github.com/fluhartyml/Claudes-Audio-Universe</a>. To clone the rejected-version source for study or your own modification:</p></li>
+<li><ol>
+<li>Open Xcode and choose <strong>Source Control &rarr; Clone</strong> (or use the Welcome window's clone option) and paste the repo URL above. See Book 21 Git-And-GitHub for the full clone workflow.</li>
+<li>Once cloned, the latest commit on <code>main</code> reflects the renamed bare-name version. To check out the by-Claude version, use the commit-history view to find the last commit before the rename (search the log for "Audio Universe by Claude" mentions) and check it out into a working tree of its own.</li>
+<li>Build and run on your own device. The app behaves identically to the App Store version; only the display strings differ. The Apple Music, microphone, and speech permissions still need a real device or a configured simulator runtime to exercise their respective tabs.</li>
+</ol></li>
+<li><p>Two reader directions worth noting. First, the by-Claude version is not appropriate to resubmit to the App Store under that name &mdash; Apple has already rejected it once and the family-wide rule moved on. Treat it as a study artifact, not a starting point for a new submission. Second, the source is licensed under GPL v3 with attribution; if you fork it and ship under your own name, you must keep the GPL terms and the attribution to the original author intact.</p></li>
+<li><h3>Why this teaching beat lives here</h3></li>
+<li><p>App Store name policy is reviewer-variable in ways that bite working developers. A name that passed once can fail later. A name that referenced a third-party brand can be flagged retroactively when policy guidance shifts. The honest book-shaped lesson: keep your core app code separable from your display-name surface, so a rename is a string-only edit on one surface rather than a refactor across the codebase. Audio Universe shipped its rename in fewer than 30 minutes of source edits because the "by Claude" attribution lived in plist keys and a handful of Swift string literals, not threaded through the app's identity at the structural level.</p></li>
+
 <li><h2>Resources</h2></li>
 <li><ul>
 <li>Source: <a href="https://github.com/fluhartyml/Claudes-Audio-Universe">github.com/fluhartyml/Claudes-Audio-Universe</a></li>
 <li>Wiki: <a href="https://github.com/fluhartyml/Claudes-Audio-Universe/wiki">github.com/fluhartyml/Claudes-Audio-Universe/wiki</a></li>
 <li>Developer Notes: <a href="https://github.com/fluhartyml/Claudes-Audio-Universe/wiki/Developer-Notes">github.com/fluhartyml/Claudes-Audio-Universe/wiki/Developer-Notes</a></li>
 <li>Privacy: <a href="https://fluharty.me/audiouniverse-privacy">fluharty.me/audiouniverse-privacy</a></li>
-<li>App Store listing: pending review at submission ID 964e4428-1ab0-44f2-aa1d-ccd2fbc27062</li>
+<li>App Store listing: see current status on <a href="https://apps.apple.com">apps.apple.com</a> under "Audio Universe"</li>
 </ul></li>
 
 <li><p><em>Page expanded after Audio Universe v1.0 was submitted to App Review. The walkthrough will deepen as readers ask questions. Source of truth for what shipped is <code>DeveloperNotes.swift</code> in the Audio Universe Xcode project.</em></p></li>
 </ol>
 </div>
-<footer class="page"><div class="row-nav"><div class="prev"><a href="../BuildAlong-03-Claudes-LockBox/BuildAlong-03-Claudes-LockBox.html">&larr; Build-Along 03: LockBox</a></div><div class="pos">Build-Along 04</div><div class="next"><a href="../BuildAlong-05-Outside/BuildAlong-05-Outside.html">Build-Along 05: Outside &rarr;</a></div></div></footer>
+<footer class="page"><div class="row-nav"><div class="prev"><a href="../BuildAlong-03-Claudes-LockBox/BuildAlong-03-Claudes-LockBox.html">&larr; Build-Along 03: LockBox</a></div><div class="pos">Build-Along 04</div><div class="next"><a href="../BuildAlong-05-Outside/BuildAlong-05-Outside.html">Build-Along 05: Claudes Outdoor Utility &rarr;</a></div></div></footer>
 <script>
 (function() {
     function openLightbox(src, alt) {

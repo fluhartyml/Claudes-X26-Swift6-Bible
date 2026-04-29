@@ -20,7 +20,7 @@ code { color: var(--bright); background: var(--codebg); padding: 0.08em 0.35em; 
 strong { color: var(--bright); }
 em { color: var(--fg); font-style: italic; }
 .scope-note { border-left: 3px solid var(--bright); padding: 0.7rem 1rem; background: #140c00; margin: 0.6rem 0; color: var(--bright); }
-.status-testflight { color: #FFD060; font-weight: bold; }
+.status-github { color: #FFD060; font-weight: bold; }
 
 
 footer.page { flex-direction: column; gap: 0.4rem; }
@@ -36,7 +36,7 @@ footer.page .row-nav .nav-empty { color: var(--gutter); font-style: italic; }
 </head><body>
 <header class="page"><div class="path">Part-VII-Dedicated-Build-Alongs/BuildAlong-12-SwiftUICraft</div></header>
 <div class="content"><h1>Build-Along 12: SwiftUICraft</h1>
-<p><span class="status-testflight">Distribution: TestFlight beta &mdash; the black sheep of the roster.</span> Every other build-along has a concrete user problem it solves. SwiftUICraft is the exception &mdash; it exists to teach three SwiftUI pattern concepts (custom ViewModifiers, <code>@Observable</code> macro, and List performance at scale) that don't coalesce into a single "real product" without stretching. It ships via TestFlight because the honest framing is: this is a pattern playground, not a utility.</p>
+<p><span class="status-github">Distribution: GitHub clone-and-build &mdash; the black sheep of the roster.</span> Every other build-along has a concrete user problem it solves. SwiftUICraft is the exception &mdash; it exists to teach three SwiftUI pattern concepts (custom ViewModifiers, <code>@Observable</code> macro, and List performance at scale) that don't coalesce into a single "real product" without stretching. It ships as a GitHub repo readers clone and build themselves because the honest framing is: this is a pattern playground, not a utility.</p>
 <div class="scope-note">MVP concept: a single app that demonstrates three reusable SwiftUI patterns side by side &mdash; custom ViewModifier composition, <code>@Observable</code> macro state sharing across views, and a 10,000-row list with proper identity + lazy loading. Each pattern is demo-scale on purpose; the point is to show the craft technique, not ship a product.</div>
 <h2>What SwiftUICraft will teach</h2>
 <ul>
@@ -44,15 +44,15 @@ footer.page .row-nav .nav-empty { color: var(--gutter); font-style: italic; }
 <li><strong>@Observable macro</strong> &mdash; the modern replacement for <code>ObservableObject</code>. Class-based observable state, fine-grained tracking, avoiding the <code>@StateObject</code>/<code>@ObservedObject</code>/<code>@EnvironmentObject</code> confusion.</li>
 <li><strong>List performance</strong> &mdash; 10,000-row list with stable <code>.id()</code>, lazy rendering, per-row view complexity budget, <code>.listRowSeparator</code> tuning, <code>.contentMargins</code> for readable density.</li>
 <li><strong>Signature layer:</strong> MVP + Under the Hood + About &amp; Send Feedback.</li>
-<li><strong>Distribution:</strong> TestFlight.</li>
+<li><strong>Distribution:</strong> GitHub clone-and-build.</li>
 </ul>
 <h2>Why it's the black sheep</h2>
-<p>The other TestFlight entries (TouchAndMove, DragBetweenWindows, CloudAndErrors, TipJar) teach cohesive single concepts. SwiftUICraft teaches three loosely related patterns in one app because putting each in its own app would inflate the roster. It's the compromise slot &mdash; "here's a corner of the book where we stack the SwiftUI idioms that don't fit anywhere else, and the app that demos them ships via TestFlight because it's honestly a pattern anthology, not a product."</p>
+<p>The other GitHub clone-and-build entries (TouchAndMove, DragBetweenWindows, CloudAndErrors, TipJar) teach cohesive single concepts. SwiftUICraft teaches three loosely related patterns in one app because putting each in its own app would inflate the roster. It's the compromise slot &mdash; "here's a corner of the book where we stack the SwiftUI idioms that don't fit anywhere else, and the app that demos them ships as a GitHub repo because it's honestly a pattern anthology, not a product."</p>
 <h2>Current state</h2>
 <ul>
 <li>No Xcode project yet</li>
 </ul>
 <h2>Next step</h2>
-<p>Scaffolded after earlier build-alongs ship. TestFlight distribution only. If over time any of the three patterns emerges with a clear standalone product concept, it could graduate to its own App Store app in a later book edition.</p></div>
+<p>Scaffolded after earlier build-alongs ship. GitHub clone-and-build distribution only (see Book 21 Git-And-GitHub for the clone workflow). If over time any of the three patterns emerges with a clear standalone product concept, it could graduate to its own App Store app in a later book edition.</p></div>
 <footer class="page"><div class="row-nav"><div class="prev"><a href="../BuildAlong-11-ReportMaker/BuildAlong-11-ReportMaker.html">&larr; Build-Along 11: ReportMaker</a></div><div class="pos">Build-Along 12</div><div class="next"><a href="../BuildAlong-13-CloudAndErrors/BuildAlong-13-CloudAndErrors.html">Build-Along 13: CloudAndErrors &rarr;</a></div></div></footer>
 </body></html>

@@ -45,16 +45,99 @@ footer.page .row-nav .nav-empty { color: var(--gutter); font-style: italic; }
 <header class="page"><div class="path">Part-VII-Dedicated-Build-Alongs/SourceTour-20-Snap-ScanKeeper</div></header>
 <div class="content">
 <h1>Source Tour 20: Snap &amp; ScanKeeper</h1>
-<p><span class="status-live">Status: LIVE on the App Store.</span> Production VisionKit document scanner with organizational features.</p>
-<div class="scope-note">Source tour for Snap &amp; ScanKeeper. Shows VisionKit scanning at production scale beyond what LockBox's embedded scanner teaches.</div>
+<p><span class="status-live">Status: LIVE on the App Store (v1.1).</span> Production VisionKit document scanner with photo-library storage and folder organization.</p>
+<div class="scope-note">Two paths: install the live app to use the finished product, or clone the repo and read the source. The architecture is small &mdash; ~820 lines across seven Swift files &mdash; so this is a good first source tour for a reader who wants to see a complete shipped app's full surface in one sitting. See Book 21 Git-And-GitHub for the clone workflow.</div>
+
 <h2>What Snap &amp; ScanKeeper shows at production scale</h2>
 <ul>
-<li>VisionKit document scanning with post-scan file organization</li>
-<li>Folder/tag hierarchy for scan archives</li>
-<li>Export pipelines (PDF, image, share)</li>
+<li><strong>The UIKit-to-SwiftUI bridge for system controllers</strong> &mdash; VisionKit's document scanner is delivered as a UIKit view controller, not a SwiftUI view. The wrapper pattern that brings it into a SwiftUI app is the same one you'd use for any system controller (camera picker, mail composer, document picker)</li>
+<li><strong>VisionKit document scanning</strong> via <code>VNDocumentCameraViewController</code> &mdash; full-screen, edge-detecting, perspective-correcting, multi-page-aware. Apple does the heavy lifting; the app just consumes the result</li>
+<li><strong>Photo library storage</strong> via <code>PHPhotoLibrary</code> with folder organization on top, instead of inventing a new storage layer</li>
+<li>A complete, tightly-scoped utility app at ~820 lines &mdash; small enough to read end-to-end</li>
 </ul>
+
+<h2>The UIViewControllerRepresentable bridge</h2>
+<p>Apple ships some of its most powerful interactions as UIKit view controllers, not SwiftUI views. Document scanning is one of them. To use <code>VNDocumentCameraViewController</code> from a SwiftUI app, you wrap it in a <code>UIViewControllerRepresentable</code>. Open <code>DocumentScannerView.swift</code> &mdash; the whole bridge is 50 lines:</p>
+
+<pre><code>import SwiftUI
+import VisionKit
+
+struct DocumentScannerView: UIViewControllerRepresentable {
+    @Environment(\.dismiss) private var dismiss
+    let onScanComplete: (VNDocumentCameraScan) -&gt; Void
+
+    func makeUIViewController(context: Context) -&gt; VNDocumentCameraViewController {
+        let scanner = VNDocumentCameraViewController()
+        scanner.delegate = context.coordinator
+        return scanner
+    }
+
+    func updateUIViewController(_ uiViewController: VNDocumentCameraViewController, context: Context) {
+        // No updates needed
+    }
+
+    func makeCoordinator() -&gt; Coordinator {
+        Coordinator(parent: self)
+    }
+
+    class Coordinator: NSObject, VNDocumentCameraViewControllerDelegate {
+        let parent: DocumentScannerView
+
+        init(parent: DocumentScannerView) {
+            self.parent = parent
+        }
+
+        func documentCameraViewController(_ controller: VNDocumentCameraViewController, didFinishWith scan: VNDocumentCameraScan) {
+            parent.onScanComplete(scan)
+            parent.dismiss()
+        }
+
+        func documentCameraViewControllerDidCancel(_ controller: VNDocumentCameraViewController) {
+            parent.dismiss()
+        }
+
+        func documentCameraViewController(_ controller: VNDocumentCameraViewController, didFailWithError error: Error) {
+            print("Document scanner failed: \(error.localizedDescription)")
+            parent.dismiss()
+        }
+    }
+}
+</code></pre>
+
+<p>Three pieces, in order:</p>
+
 <ul>
+<li><code>makeUIViewController</code> returns the system controller, configured with a delegate. SwiftUI calls this once when the wrapper appears on screen.</li>
+<li><code>Coordinator</code> is a Swift class that conforms to whatever Cocoa-style delegate protocol the controller uses. Here it's <code>VNDocumentCameraViewControllerDelegate</code>; for a mail composer it'd be <code>MFMailComposeViewControllerDelegate</code>; for an image picker it'd be <code>UIImagePickerControllerDelegate</code>. The Coordinator translates UIKit-style delegate callbacks into SwiftUI-style closure invocations on the parent.</li>
+<li><code>updateUIViewController</code> handles state updates if the SwiftUI side changes. For a one-shot scanner like this one, it does nothing; for a controller whose configuration depends on SwiftUI state, this is where you'd push updates through.</li>
+</ul>
+
+<p>The pattern generalizes. Anywhere Apple gives you a UIKit controller, this same three-piece bridge gets it into SwiftUI. <code>UIImagePickerController</code> for camera capture, <code>MFMailComposeViewController</code> for mail, <code>UIDocumentPickerViewController</code> for file picking, <code>UIActivityViewController</code> for share sheets &mdash; all the same shape.</p>
+
+<h2>Why VisionKit beats rolling your own scanner</h2>
+<p>VisionKit's <code>VNDocumentCameraViewController</code> handles, for free:</p>
+
+<ul>
+<li>Full-screen camera preview with edge detection on the live feed</li>
+<li>Perspective correction (you point the camera at a tilted document, the saved image is rectified)</li>
+<li>Auto-capture when the document is well-framed</li>
+<li>Multi-page batching (capture multiple pages, get them back as <code>VNDocumentCameraScan.pageCount</code> pages)</li>
+<li>Color/grayscale/B&amp;W filter selection in the post-capture review</li>
+<li>Crop adjustment on each page</li>
+</ul>
+
+<p>That's months of work if you build it from raw <code>AVFoundation</code>. VisionKit gives it to you in 50 lines of bridge code. The lesson: <strong>look for the system-provided controller before you build a custom one</strong>. Apple's first-party controllers tend to be polished, edge-case-aware, and accessibility-correct in ways that hand-rolled equivalents almost never are.</p>
+
+<h2>Install and browse</h2>
+<ul>
+<li>App Store: search "Snap &amp; ScanKeeper" on the iOS App Store</li>
 <li>Source: <a href="https://github.com/fluhartyml/Snap-ScanKeeper">github.com/fluhartyml/Snap-ScanKeeper</a></li>
+</ul>
+
+<h2>Cross-references</h2>
+<ul>
+<li><strong>Book 21 Git-And-GitHub</strong> &mdash; clone the repo and follow along</li>
+<li><strong>Build-Along 03 Claudes LockBox</strong> &mdash; LockBox embeds a smaller scanner workflow inside a vault context; this Source Tour shows the standalone production version of the same VisionKit pattern</li>
 </ul>
 </div>
 <footer class="page"><div class="row-nav"><div class="prev"><a href="../SourceTour-19-Tally-Matrix-Clock/SourceTour-19-Tally-Matrix-Clock.html">&larr; Source Tour 19: Tally Matrix Clock</a></div><div class="pos">Source Tour 20</div><div class="next"><a href="../SourceTour-21-Cryo-Playlist-Manager/SourceTour-21-Cryo-Playlist-Manager.html">Source Tour 21: Cryo Playlist Manager &rarr;</a></div></div></footer>

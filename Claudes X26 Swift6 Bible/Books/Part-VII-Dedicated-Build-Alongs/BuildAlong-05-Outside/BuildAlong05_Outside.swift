@@ -13,7 +13,7 @@ import SwiftUI
 struct BuildAlong05_Outside: View {
     var body: some View {
         BookPlaceholderView(
-            title: "Build-Along 05: Outside",
+            title: "Build-Along 05: Claudes Outdoor Utility",
             vaultRelativePath: "Part-VII-Dedicated-Build-Alongs/BuildAlong-05-Outside/BuildAlong-05-Outside.html",
             status: "Build-along roadmap."
         )

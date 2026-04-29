@@ -220,7 +220,31 @@ let config = ModelConfiguration(
   <li><h3>What v1.1 Teaches</h3></li>
   <li><ul><li><strong>App Groups are not optional for extensions</strong> — if your extension needs app data, configure this from day one</li><li><strong>The developer portal and Xcode must agree</strong> — register the group online, then add it in Signing &amp; Capabilities</li><li><strong>Don't ship features you haven't tested end-to-end</strong> — the widget looked correct in the preview but was broken on the home screen</li><li><strong><code>@Attribute(.externalStorage)</code></strong> keeps binary data efficient in SwiftData</li><li><strong>PhotosPicker is the modern replacement for UIImagePickerController</strong> — except for camera, which still needs the UIKit bridge</li></ul></li>
   <li><hr></li>
-  <li><p><em>QuickNote by Claude is available on the App Store. Download it, open the Under the Hood tab, and follow along with this appendix.</em></p></li>
+  <li><h2>The "by Claude" v2.0 submission &mdash; cancelled, preserved as GitHub clone-and-build</h2></li>
+  <li><p>Late on 2026 April 28, Audio Universe was rejected under App Store Guideline 4.1(a) Design (Copycats) for the explicit "by Claude" attribution in its display name. QuickNote v2.0(2) had already been submitted earlier the same day under the same naming form (<em>"QuickNote by Claude"</em>) and was sitting in the Waiting for Review queue. The pattern was clear: a different reviewer pulling QuickNote next would almost certainly apply the same 4.1(a) reading.</p></li>
+  <li><p>Rather than wait for the predictable rejection, the v2.0(2) submission was cancelled by the developer in App Store Connect before a reviewer claimed it. This was the cleanest path forward &mdash; cancel before review, rename, resubmit fresh. Per the reusable rule (saved at <code>feedback_app_store_withdraw_resubmit.md</code> in the apartment memory), withdrawing a problem submission and resubmitting a new build that addresses the issue beats Reply-to-App-Review for almost every kind of name-or-metadata trip.</p></li>
+  <li><p>The renamed version that ships shortly thereafter carries the bare or developer-attributed display name (the family-wide rule landed on no "Claude" in App-Store-reviewer-visible name fields, with optional <code>by Fluharty</code> attribution where the bare name collides with existing apps). The "by Claude" lineage exists only in the source repository's commit history.</p></li>
+  <li><h3>What the by-Claude v2.0 source contained</h3></li>
+  <li><p>The source on disk at the moment of cancellation was the v2.0 modernization complete: terracotta accent color, light-and-dark icon set, host + widget extension version aligned at 2.0 build 2, deployment-target raised to iOS / macOS 26.2, the Under the Hood retool to the AU pattern, the new About sheet, and the Lexicon Quick-Define wiring (LexiconContent + LexiconSheet + IdentifierTaggedSourceView ported from LockBox). All shipping-quality work; the only thing that didn't ship under "by Claude" was the App Store record.</p></li>
+  <li><ul>
+<li><code>INFOPLIST_KEY_CFBundleDisplayName</code> set to <em>"QuickNote by Claude"</em> in both Debug and Release configurations</li>
+<li><code>AboutView</code> title text reading <em>"QuickNote by Claude"</em></li>
+<li><code>ContactDeveloperView</code> mail subject and device-info label both referencing <em>"QuickNote by Claude"</em></li>
+<li>Under the Hood callouts and source-mirror file headers carrying the same attribution</li>
+</ul></li>
+<li><p>The rename to drop "by Claude" from those reviewer-visible fields was a string-only edit pass &mdash; same shape as the Audio Universe rename, same lesson: keep your display-name surface separable from your app's identity in source. A naming policy shift should not require an architectural refactor.</p></li>
+<li><h3>Cloning the by-Claude version</h3></li>
+<li><p>The "by Claude" source lineage is preserved in the public commit history at <a href="https://github.com/fluhartyml/QuickNote">github.com/fluhartyml/QuickNote</a>. To clone the cancelled-version source for study or your own modification:</p></li>
+<li><ol class="body-list">
+<li>Open Xcode and choose <strong>Source Control &rarr; Clone</strong>; paste the repo URL above. See Book 21 Git-And-GitHub for the clone walkthrough.</li>
+<li>The latest commit on <code>main</code> reflects the renamed bare-name version. Use the commit-history view to find the last commit before the rename pass (search the log for "QuickNote by Claude" to locate the boundary) and check it out into a worktree.</li>
+<li>Build and run on your own device. The notes-and-photos functionality, the widget extension, the App Group container, and the home-screen widget all behave identically to the App Store version; only the display strings differ.</li>
+</ol></li>
+<li><p>This version is not appropriate to resubmit to the App Store under the "by Claude" name &mdash; the family-wide naming rule moved on, and the same 4.1(a) wall awaits any new submission that puts "Claude" in the reviewer-visible name. Treat the cancelled lineage as a study artifact, not a starting point for a new submission. The license remains GPL v3 with attribution.</p></li>
+  <li><h3>Why this beat lives in the chapter</h3></li>
+  <li><p>QuickNote's two App Store interactions in 24 hours &mdash; submit-and-cancel as "QuickNote by Claude," then resubmit under the renamed form &mdash; are an honest snapshot of how a working developer's day goes when policy guidance shifts. The book's no-mistake-teaching rule means we don't dwell on the rejection-as-failure narrative; we dwell on the recovery as a teachable habit. Cancel-before-review when the wall is predictable. Keep your display name separable from your source. Have your rename pass scoped to a handful of plist keys and string literals, not threaded through the codebase. The chapter shows the v2.0 build as it shipped; this section preserves access to the version Apple wouldn't accept.</p></li>
+  <li><hr></li>
+  <li><p><em>QuickNote is available on the App Store under its current naming. Download it, open the Under the Hood tab, and follow along with this appendix. The "by Claude" lineage available via GitHub clone is the alternate path described in the section above.</em></p></li>
 </ol>
 </div>
 

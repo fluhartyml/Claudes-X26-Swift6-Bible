@@ -19,7 +19,7 @@ ul { margin: 0.4rem 0 0.4rem 1.4rem; padding: 0; }
 code { color: var(--bright); background: var(--codebg); padding: 0.08em 0.35em; border: 1px solid #3a2400; border-radius: 3px; font-size: 0.92em; }
 strong { color: var(--bright); }
 .scope-note { border-left: 3px solid var(--bright); padding: 0.7rem 1rem; background: #140c00; margin: 0.6rem 0; color: var(--bright); }
-.status-testflight { color: #FFD060; font-weight: bold; }
+.status-github { color: #FFD060; font-weight: bold; }
 
 
 footer.page { flex-direction: column; gap: 0.4rem; }
@@ -35,18 +35,18 @@ footer.page .row-nav .nav-empty { color: var(--gutter); font-style: italic; }
 </head><body>
 <header class="page"><div class="path">Part-VII-Dedicated-Build-Alongs/BuildAlong-14-TipJar</div></header>
 <div class="content"><h1>Build-Along 14: TipJar</h1>
-<p><span class="status-testflight">Distribution: TestFlight beta.</span> Single-concept teaching app &mdash; StoreKit 2 non-consumable in-app purchase (the tip jar pattern). Does not grow into a standalone product &mdash; a tip jar without an app context to tip FOR is inherently a demo. TestFlight is the honest channel.</p>
+<p><span class="status-github">Distribution: GitHub clone-and-build.</span> Single-concept teaching app &mdash; StoreKit 2 non-consumable in-app purchase (the tip jar pattern). Does not grow into a standalone product &mdash; a tip jar without an app context to tip FOR is inherently a demo. Shipping the source on GitHub for readers to clone is the honest path.</p>
 <div class="scope-note">MVP concept: one screen with three tip tiers (small / medium / large), a StoreKit 2 purchase per tier, a thank-you confirmation, and a receipt. The whole point is showing StoreKit 2 end-to-end without any other distraction.</div>
 <h2>What TipJar will teach</h2>
 <ul>
 <li><strong>StoreKit 2</strong> &mdash; <code>Product</code> loading, purchase flow, transaction verification, receipt inspection, restore purchases. The modern async API set (not the StoreKit 1 delegate-based pattern).</li>
 <li><strong>Sandbox testing</strong> &mdash; App Store Connect sandbox accounts, StoreKit configuration files for local testing, purchase-state mocking.</li>
 <li><strong>Signature layer:</strong> MVP + Under the Hood + About &amp; Send Feedback.</li>
-<li><strong>Distribution:</strong> TestFlight.</li>
+<li><strong>Distribution:</strong> GitHub clone-and-build.</li>
 </ul>
-<h2>Why TestFlight not App Store (and why not folded into ReportMaker)</h2>
-<p>Two paths were considered: (a) fold TipJar into ReportMaker as an optional "support this app" tier, (b) keep it standalone. Folding dilutes ReportMaker's clean expense-tracker teaching surface and forces StoreKit into a teaching slot that wasn't supposed to be there. Standalone TestFlight is cleaner &mdash; readers study StoreKit 2 in its purest form, ReportMaker stays focused on Swift Charts + PDFKit.</p>
+<h2>Why GitHub clone-and-build not App Store (and why not folded into ReportMaker)</h2>
+<p>Two paths were considered: (a) fold TipJar into ReportMaker as an optional "support this app" tier, (b) keep it standalone. Folding dilutes ReportMaker's clean expense-tracker teaching surface and forces StoreKit into a teaching slot that wasn't supposed to be there. Standalone clone-and-build is cleaner &mdash; readers study StoreKit 2 in its purest form, ReportMaker stays focused on Swift Charts + PDFKit.</p>
 <h2>Current state</h2><ul><li>No Xcode project yet</li></ul>
-<h2>Next step</h2><p>Scaffolded after earlier build-alongs ship; TestFlight distribution only.</p></div>
+<h2>Next step</h2><p>Scaffolded after earlier build-alongs ship; GitHub clone-and-build distribution only (see Book 21 Git-And-GitHub for the clone workflow).</p></div>
 <footer class="page"><div class="row-nav"><div class="prev"><a href="../BuildAlong-13-CloudAndErrors/BuildAlong-13-CloudAndErrors.html">&larr; Build-Along 13: CloudAndErrors</a></div><div class="pos">Build-Along 14</div><div class="next"><a href="../BuildAlong-15-MusicListQuery/BuildAlong-15-MusicListQuery.html">Build-Along 15: MusicListQuery &rarr;</a></div></div></footer>
 </body></html>

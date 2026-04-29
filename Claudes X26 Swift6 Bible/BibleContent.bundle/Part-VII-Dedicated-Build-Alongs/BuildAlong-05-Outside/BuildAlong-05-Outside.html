@@ -2,7 +2,7 @@
 <html lang="en"><head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Build-Along 05: Outside</title>
+<title>Build-Along 05: Claudes Outdoor Utility</title>
 <style>
 :root { --bg: #000000; --fg: #FFB000; --bright: #FFD060; --dim: #996600; --codebg: #1a0d00; --border: #664500; --gutter: #4a3300; --headerbg: #0a0600; }
 * { box-sizing: border-box; }
@@ -14,19 +14,29 @@ footer.page { border-top: 1px solid var(--border); padding-bottom: calc(0.55rem 
 header.page .path, footer.page .path { color: var(--fg); word-break: break-all; overflow-wrap: break-word; }
 header.page .pos, footer.page .pos { color: var(--bright); }
 .content { flex: 1 1 auto; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 0.8rem 1rem 2rem 1rem; max-width: 1100px; margin: 0 auto; width: 100%; }
+ol.lines { list-style: none; counter-reset: line h2 h3 para; padding: 0; margin: 0; }
+ol.lines > li { counter-increment: line; padding: 0.15rem 0 0.15rem 3.6rem; position: relative; min-height: 1.2em; }
+ol.lines > li::before { content: counter(line); position: absolute; left: 0; top: 0.25rem; width: 2.8rem; text-align: right; color: var(--gutter); font-size: 13pt; padding-right: 0.5rem; border-right: 1px solid #2a1e00; }
+ol.lines > li > p, ol.lines > li > h2, ol.lines > li > h3, ol.lines > li > ul, ol.lines > li > ol, ol.lines > li > pre, ol.lines > li > hr, ol.lines > li > figure, ol.lines > li > .scope-note, ol.lines > li > .caution { margin: 0; }
 h1 { color: var(--bright); font-weight: normal; font-size: 26pt; margin: 0.6rem 0 1rem 0; }
-h2 { color: var(--bright); font-weight: normal; font-size: 20pt; border-bottom: 1px solid var(--border); padding-bottom: 0.3rem; margin-top: 1.5rem; }
-h3 { color: var(--bright); font-weight: normal; font-size: 18pt; margin-top: 1rem; }
+h2 { color: var(--bright); font-weight: normal; font-size: 20pt; border-bottom: 1px solid var(--border); padding-bottom: 0.3rem; margin-top: 1.5rem; counter-set: h3 0 para 0; counter-increment: h2; }
+h2::before { content: counter(h2) ". "; color: var(--fg); }
+h3 { color: var(--bright); font-weight: normal; font-size: 18pt; margin-top: 1rem; counter-set: para 0; counter-increment: h3; }
+h3::before { content: counter(h2) "." counter(h3) " "; color: var(--fg); }
 p { margin: 0.4rem 0; counter-increment: para; }
+p::before { content: counter(h2) "." counter(h3) "." counter(para) " "; color: var(--dim); font-size: 13pt; margin-right: 0.4em; }
 code { color: var(--bright); background: var(--codebg); padding: 0.08em 0.35em; border: 1px solid #3a2400; border-radius: 3px; font-size: 0.92em; }
 pre { background: var(--codebg); border: 1px solid #3a2400; border-radius: 4px; padding: 0.7rem 0.9rem; overflow-x: auto; font-size: 14pt; }
-ul { margin: 0.4rem 0 0.4rem 1.4rem; padding: 0; }
+ul, ol { margin: 0.4rem 0 0.4rem 1.4rem; padding: 0; }
 a { color: var(--bright); font-weight: bold; text-decoration: none; border-bottom: 1px dotted var(--dim); }
 strong { color: var(--bright); }
 em { color: var(--fg); font-style: italic; }
+hr { border: 0; border-top: 1px solid var(--border); margin: 1rem 0; }
 .scope-note { border-left: 3px solid var(--bright); padding: 0.7rem 1rem; background: #140c00; margin: 0.6rem 0; color: var(--bright); }
+.caution { border-left: 3px solid #FF8060; padding: 0.7rem 1rem; background: #1a0a04; margin: 0.6rem 0; color: var(--bright); }
 .status-planning { color: #996600; font-weight: bold; }
-
+.status-review { color: #FFD060; font-weight: bold; }
+.status-live { color: #66FF66; font-weight: bold; }
 
 footer.page { flex-direction: column; gap: 0.4rem; }
 footer.page .row-nav { display: flex; flex-direction: row; justify-content: space-between; align-items: center; gap: 0.5rem; }
@@ -39,47 +49,210 @@ footer.page .row-nav a:hover { background: #332200; }
 footer.page .row-nav .nav-empty { color: var(--gutter); font-style: italic; }
 </style>
 </head><body>
-<header class="page"><div class="path">Part-VII-Dedicated-Build-Alongs/BuildAlong-05-Outside</div></header>
+<header class="page"><div class="path">Part-VII-Dedicated-Build-Alongs/BuildAlong-05-Claudes-Outdoor-Utility</div></header>
 <div class="content">
-<h1>Build-Along 05: Outside</h1>
-<p><span class="status-planning">Status: planning phase as of 2026-04-24.</span> App not yet scaffolded. Walkthrough fills in once v1.0 scaffolds; expanded planning notes below.</p>
-<div class="scope-note">MVP concept: a weather-and-location diary. The app shows current weather and your location on a map, and lets you log a journal entry with a photo stamped against that moment &mdash; weather, place, time, photo, text &mdash; all preserved as one log entry you can browse later.</div>
-<h2>What Outside will teach</h2>
-<ul>
-<li><strong>WeatherKit</strong> &mdash; current conditions for the user's coordinates, plus a forecast lookup for entry context.</li>
-<li><strong>CoreLocation</strong> &mdash; request permission, read device location, handle the authorization dance properly.</li>
-<li><strong>MapKit</strong> &mdash; render a map centered on the current location, drop a pin at each past log entry.</li>
-<li><strong>PhotosUI</strong> &mdash; pick a photo from the library, or snap a new one with the camera, attach it to the log entry.</li>
-<li><strong>SwiftData</strong> &mdash; persist log entries locally so the diary accumulates across sessions.</li>
-<li><strong>Signature layer:</strong> MVP feature + Under the Hood view + About &amp; Send Feedback.</li>
-<li><strong>Distribution:</strong> App Store listing &mdash; full-fledged utility (weather diary is real, not a demo surface).</li>
-</ul>
-<h2>Per-entry data model (sketch)</h2>
-<pre><code>@Model final class OutsideLog {
+<ol class="lines">
+<li><h1>Build-Along 05: Claudes Outdoor Utility</h1></li>
+<li><p><span class="status-planning">Status: planning &amp; spec phase as of 2026-04-26.</span> v1.0 will scaffold and ship as five Apple frameworks composed into a single useful diary app. v2.0 demonstrates an upgrade arc by adding a third-party radar tile provider on top.</p></li>
+<li><div class="scope-note">A weather-stamped photo journal. One tap captures a photo, the current weather, your location, a title, and a free-text note &mdash; one entry, frozen in time. Browse past entries chronologically or pinned on a map. Useful out of the gate; teaching the framework composition is what the book gets out of it.</div></li>
+<li><hr></li>
+
+<li><h2>What this app is</h2></li>
+<li><p>Apple Photos remembers GPS coordinates for every photo (when you allow it) but it does not remember the weather. Claudes Outdoor Utility fills that gap. Each journal entry stores a title, a timestamp, a location, the weather conditions at that location and moment, an optional photo, and a free-text note. The map shows every place the user has logged. The log shows every moment chronologically. The app is a lightweight diary built around Apple's audio-of-place &mdash; weather plus location plus a picture &mdash; and it is genuinely useful before any teaching layer is added.</p></li>
+<li><p>Primary identity is a useful App Store app. Teaching layer rides on top: design rationale callouts in every Swift file plus an Under the Hood tab that shows the app's own source code in-app. Same secondary-teaching pattern locked in Build-Along 04 (Claudes Audio Universe).</p></li>
+
+<li><h2>What v1.0 teaches</h2></li>
+<li><p>Five Apple frameworks composed into one product, no third-party dependencies:</p></li>
+<li><ul>
+<li><strong>CoreLocation</strong> &mdash; request when-in-use authorization, read the device's current coordinates, handle the authorization states cleanly</li>
+<li><strong>WeatherKit</strong> &mdash; fetch the current conditions for the user's coordinates at log time and freeze them into the entry</li>
+<li><strong>SwiftData</strong> &mdash; persist journal entries locally with a single <code>@Model</code> class, query them back with <code>@Query</code>, observe changes automatically through SwiftUI</li>
+<li><strong>PhotosUI &amp; UIImagePickerController</strong> &mdash; let the user either pick an existing photo from the library (system privacy-preserving picker) or take a fresh one with the camera</li>
+<li><strong>MapKit</strong> &mdash; render a Home-tab map of every past entry as pins, render a per-entry detail map of one specific location</li>
+</ul></li>
+
+<li><h2>Project setup &mdash; the GitHub checkbox matters</h2></li>
+<li><p>Scaffold from Xcode &rarr; File &rarr; New &rarr; Project &rarr; iOS &rarr; App. Settings:</p></li>
+<li><ul>
+<li>Product Name: <strong>Claudes Outdoor Utility</strong></li>
+<li>Organization Identifier: <code>com.Claudes-X26-Swift-Bible</code></li>
+<li>Interface: SwiftUI &middot; Language: Swift &middot; Storage: <strong>SwiftData</strong></li>
+<li>Save into <code>~/Developer.complex/ClaudesX26Swift6BibleApps/</code></li>
+</ul></li>
+<li><div class="caution"><strong>Caution &mdash; tick the Create Git Repository on my Mac checkbox at project creation time.</strong> Xcode places it on the same panel as the save location. If the box is unchecked, the project is created without an initialized git repo, and you have to retrofit it with <code>git init</code> + remote setup later &mdash; doable but a chore that desyncs Xcode's Source Control panel until you reload the project. Tick the checkbox once at creation and Xcode wires the repo, the first commit, the <code>.gitignore</code>, and the Source Control panel cleanly. Same lesson applies to every Xcode project on your roster: tick the box at create time.</div></li>
+
+<li><h2>Naming and bundle identity</h2></li>
+<li><p>Name discipline matters because the App Store rejects apps that read like demos or beta utilities (per Guideline 2.3.0 and the broader meaningful-app-experience requirement). Claudes Outdoor Utility names what the app does plainly and grants it a real product identity. Bundle ID: <code>com.Claudes-X26-Swift-Bible.Claudes-Outdoor-Utility</code>. GitHub repo: <a href="https://github.com/fluhartyml/Claudes-Outdoor-Utility">github.com/fluhartyml/Claudes-Outdoor-Utility</a>.</p></li>
+
+<li><h2>Architecture overview</h2></li>
+<li><p>Three tabs: Home, New Entry, Log. Each one is wrapped in <code>AppShell</code> so the (i) info button + About sheet plumbing is shared across tabs (same pattern locked in Build-Along 04). The shell owns nothing beyond the (i)-button toolbar; each tab owns its own state, its own data flow, its own framework.</p></li>
+<li><p>One <code>@Model</code> drives the entire data layer. No central store object, no observable singleton, no service layer. SwiftData's <code>modelContext</code> environment value plus <code>@Query</code> property wrapper handle persistence and observation natively.</p></li>
+
+<li><h2>Data model</h2></li>
+<li><pre><code>@Model final class OutsideLog {
     var id: UUID
     var timestamp: Date
+    var title: String           // short user-supplied title
     var latitude: Double
     var longitude: Double
-    var weatherSummary: String     // e.g. "72F, partly cloudy"
+    var weatherSummary: String  // e.g. "72F, partly cloudy"
     var temperature: Double
-    var condition: String          // Weather.symbolName
-    var photoData: Data?           // optional attached photo
-    var note: String               // user-typed log entry
-}</code></pre>
-<h2>UI shape (sketch)</h2>
-<ul>
-<li><strong>Home tab</strong> &mdash; current weather card at top, map beneath with pins for past entries, "New Entry" button.</li>
-<li><strong>New Entry sheet</strong> &mdash; auto-fills weather + location + timestamp, PhotoPicker for image, TextEditor for the note, Save.</li>
-<li><strong>Log tab</strong> &mdash; reverse-chronological list of entries, tap to open full detail (photo, weather snapshot, location, text).</li>
-</ul>
-<h2>Current state</h2>
-<ul>
-<li>No Xcode project yet</li>
-<li>No DeveloperNotes map yet</li>
-<li>No screenshots, no icon</li>
-</ul>
-<h2>Next step</h2>
-<p>When this app gets scaffolded (after earlier-numbered build-alongs ship), this page gets replaced with the full step-by-step walkthrough following the same shape as Build-Along 01 (Claude's Web Wrapper). The expanded scope (weather + location + map + photo + journal + persistence) is what takes Outside from a two-kit demo into full-fledged App-Store-shape territory per the distribution rule.</p>
+    var condition: String       // SF Symbol name from Weather.symbolName
+    var photoData: Data?        // raw bytes, untouched
+    var note: String            // free text body
+}</code></pre></li>
+<li><p>The title is required at New Entry time so that every row in the Log tab is human-scannable months later. Empty-title entries become a bag of "Untitled" placeholders within weeks; requiring 2-5 words at log time costs almost nothing and pays off forever.</p></li>
+
+<li><h2>Photo &amp; location privacy &mdash; the rule</h2></li>
+<li><div class="caution"><strong>Locked rule: never read or modify a photo's EXIF.</strong> The journal entry stores location in the <code>@Model</code> as <code>latitude</code> and <code>longitude</code>. The photo's bytes are stored exactly as the user gave them &mdash; no GPS injection into the in-app copy, no GPS stripping, no rewriting at all. The user's iOS Settings &rarr; Privacy &rarr; Location Services &rarr; Camera setting is the only authority on whether photos carry GPS EXIF in their pixels-plus-metadata blob. Many users keep camera location off so that texted photos do not leak their location; an app that "helpfully" injects EXIF GPS into its own internal copy defeats that decision the moment the user shares the entry. Treat photos as opaque media: accept, store, display, share &mdash; never modify.</div></li>
+<li><p>This is also a generalizable lesson worth carrying to any future app that mixes photos and location. The clean separation is: photo bytes are media, coordinates are journal metadata, and the two stay in their own lanes.</p></li>
+
+<li><h2>Display rule &mdash; timestamp-led titles</h2></li>
+<li><p>Every place an entry surfaces (Log row, detail navigation title, map-pin callout), the dominant text reads:</p></li>
+<li><pre><code>YYYY MMM DD {title}</code></pre></li>
+<li><p>For example, <code>2026 APR 26 Beach walk at sunset</code>. Date-led-then-title is internally consistent with the apartment's screenshot folder naming convention and turns the Log into a chronologically scannable archive without sort-toggle complexity. Date is captured automatically; title is what the user types.</p></li>
+
+<li><h2>Map placement rule &mdash; one-entry views, map last</h2></li>
+<li><p>On per-entry views (New Entry sheet, Entry detail), the photo and the words lead. The map sits at the bottom of the layout as the geographic anchor, sized so it does not eat the visual real estate. On the Home tab, where the map IS the view's purpose (every entry pinned at once), the map fills the screen because that is its job. The principle: when a map represents one entry's data, it goes last; when it represents the whole archive at a glance, it leads.</p></li>
+
+<li><h2>UI shape (sketch)</h2></li>
+<li><h3>Home tab</h3></li>
+<li><ul>
+<li>Map fills most of the tab, pinned with every past entry's location</li>
+<li>"This Day" recall card at the top (optional v1.0 polish): if any entries match today's calendar day in past years, surface them</li>
+<li>Tap a pin &rarr; push the matching Entry detail view</li>
+</ul></li>
+<li><h3>New Entry tab (or sheet)</h3></li>
+<li><ul>
+<li>Title TextField at the top (placeholder "Title this entry", ~50 char practical limit)</li>
+<li>"Add Photo" button &rarr; presents a confirmation dialog with two choices: Take Photo (camera) or Choose from Library (PhotosPicker)</li>
+<li>Weather card auto-filled from WeatherKit (read-only, frozen at log time)</li>
+<li>Note TextEditor for free-text body</li>
+<li>Caption text showing the captured timestamp + coordinates</li>
+<li>Live small Map (~150 pt) at the bottom showing where the entry will pin</li>
+</ul></li>
+<li><h3>Log tab</h3></li>
+<li><ul>
+<li>Reverse-chronological list of entries</li>
+<li>Each row: small cached map thumbnail (generated once via <code>MKMapSnapshotter</code>), date+title primary line, weather summary secondary line, photo thumbnail at the trailing edge</li>
+<li>Tap row &rarr; push Entry detail view</li>
+</ul></li>
+<li><h3>Entry detail view</h3></li>
+<li><ul>
+<li>Hero photo at the top</li>
+<li>Weather card (the frozen snapshot from log time)</li>
+<li>The note</li>
+<li>Caption text with timestamp + coordinates</li>
+<li>Map (~250 pt) at the bottom with the entry's pin centered</li>
+<li>Toolbar: Edit, Delete, Share</li>
+</ul></li>
+
+<li><h2>Locked design rules</h2></li>
+<li><ul>
+<li><strong>iOS only.</strong> Project targets <code>iphoneos iphonesimulator</code>. macOS and visionOS skipped per the case-by-case platform rule (no pedagogical gain from cross-platform branching here)</li>
+<li><strong>SwiftData persists.</strong> Unlike Audio Universe (which was transient by design), Outdoor Utility's whole point is persistence. The diary survives restarts, reinstalls preserve through iOS Device Backup, and CloudKit-backed sync is a v2.x candidate</li>
+<li><strong>One framework per layer.</strong> Each Apple framework owns one slice of the app: CoreLocation owns coordinates, WeatherKit owns weather, SwiftData owns persistence, MapKit owns visual geography, PhotosUI/UIImagePickerController own image input. No leakage between layers</li>
+<li><strong>Photos untouched.</strong> Locked rule from above. The app never reads or writes EXIF</li>
+<li><strong>Title required.</strong> Forces the Log to stay browsable in the long term</li>
+<li><strong>Map last on per-entry views, first on archive views.</strong> Locked above</li>
+</ul></li>
+
+<li><h2>Info.plist usage descriptions</h2></li>
+<li><ul>
+<li><code>NSLocationWhenInUseUsageDescription</code> &mdash; CoreLocation reads your location when you log a new entry</li>
+<li><code>NSCameraUsageDescription</code> &mdash; only when you choose Take Photo</li>
+<li><code>NSPhotoLibraryUsageDescription</code> &mdash; not needed; PhotosPicker is privacy-preserving and does not require library permission</li>
+</ul></li>
+
+<li><h2>App Services portal trip (one-time, before WeatherKit will work)</h2></li>
+<li><p>WeatherKit fails at runtime with a JWT-authentication error until the App ID has WeatherKit enabled on developer.apple.com. CoreLocation, MapKit, PhotosUI, and SwiftData do not need portal enablement &mdash; they are part of the base SDK. Only WeatherKit triggers this trip in v1.0.</p></li>
+<li><p>Step by step:</p></li>
+<li><ol>
+<li>Sign in at <a href="https://developer.apple.com">developer.apple.com</a> &rarr; <strong>Account</strong> &rarr; <strong>Certificates, Identifiers &amp; Profiles</strong> &rarr; <strong>Identifiers</strong></li>
+<li>Find the App ID for this project. If you let Xcode auto-register on first build, it appears with an <code>XC</code> prefix and the bundle ID matches what is in the project file. If it is not there, click <strong>+</strong> to register manually: select <strong>App IDs</strong> &rarr; <strong>App</strong>, paste the explicit bundle ID, fill the description</li>
+<li>Click into the App ID row to edit it</li>
+<li>Click the <strong>App Services</strong> tab at the top of the page (NOT the Capabilities tab &mdash; this is the trap; MusicKit, ShazamKit, WeatherKit live under App Services, not Capabilities)</li>
+<li>Tick <strong>WeatherKit</strong></li>
+<li>Click <strong>Save</strong> at the top right</li>
+<li>Apple shows a "Modify App Capabilities" confirmation dialog warning that provisioning profiles tied to this App ID will be invalidated and must be regenerated. Confirm. With Xcode managed signing, regeneration is automatic on the next build &mdash; nothing for the developer to do</li>
+<li>Wait two to five minutes for Apple's signing infrastructure to propagate the entitlement</li>
+<li>Back in Xcode: <strong>Product &rarr; Clean Build Folder</strong>, then <strong>Run</strong>. The next WeatherKit fetch should succeed</li>
+</ol></li>
+<li><div class="caution"><strong>Caution &mdash; enable WeatherKit on the canonical App ID, not a stale auto-registered one.</strong> If the project was renamed at any point (a typo fix, a name change after first build), Xcode's first-build auto-registration may have created an App ID under the OLD bundle ID. Apple's portal does not delete that stale entry when the project is renamed; both entries exist side by side. WeatherKit must be enabled on the App ID whose bundle ID matches the project's <em>current</em> bundle ID &mdash; the one the next build will sign with. Enabling it on the stale entry does nothing for the running app. Optional cleanup: delete the stale entry from Identifiers afterwards to keep the list legible.</div></li>
+
+<li><h2>WeatherKit attribution</h2></li>
+<li><p>Apple requires visible attribution for WeatherKit data: the phrase "Weather data provided by &#xF8FF; Weather" (using the Apple logo glyph at code point U+F8FF, which renders as the apple icon in any system font on Apple platforms) rendered alongside the data, linked to <a href="https://weatherkit.apple.com/legal-attribution.html"><code>weatherkit.apple.com/legal-attribution.html</code></a>. Apple's review team has rejected updates over missing or invisible WeatherKit attribution, even when prior versions were approved &mdash; treat this as load-bearing, not cosmetic.</p></li>
+<li><p>Two places carry the attribution in this app:</p></li>
+<li><ol>
+<li><strong>The About sheet</strong> &mdash; reachable from the (i) info button on every tab. A small row below the outbound-link buttons, above the GPL footer, with the entire phrase as a single tap target</li>
+<li><strong>The weather card itself</strong> &mdash; on the New Entry sheet and on the Entry detail view, the weather card carries the same attribution adjacent to the displayed conditions. The About-sheet attribution alone is not enough; reviewers want to see attribution on the same screen as the data</li>
+</ol></li>
+<li><p>Implementation pattern: wrap the whole phrase in a single <code>Link</code> so the entire row is one tap target. The apple glyph (U+F8FF) keeps the row tight without spelling out "Apple" as a separate word.</p></li>
+<li><pre><code>Link(destination: URL(string:
+    "https://weatherkit.apple.com/legal-attribution.html")!) {
+    Text("Weather data provided by \u{F8FF} Weather")
+        .font(.caption)
+}</code></pre></li>
+<li><p>The legal-attribution page is a static HTML page Apple maintains that lists every data source WeatherKit pulls from (Apple Weather, The Weather Channel, BreezoMeter, and several meteorological agencies). The page is the canonical destination required by Apple's WeatherKit terms.</p></li>
+<li><div class="caution"><strong>Caution &mdash; attribution belongs adjacent to <em>displayed</em> weather data, not always on screen.</strong> The About-sheet row covers the app-credits surface. The weather card needs attribution on its <strong>success</strong> branch, where Apple Weather data is actually rendered. Do NOT show the attribution in <strong>error</strong> states (no data to credit), <strong>loading</strong> states (no data yet), or <strong>idle/waiting</strong> states (still no data). Showing the attribution Link in an error state is actively harmful: extra interactive elements in the same row can hijack tap routing &mdash; a nearby Retry button can lose its tap to the Link. Code the card so the attribution row is conditionally rendered only in the success branch.</div></li>
+<li><pre><code>@ViewBuilder
+private var weatherCard: some View {
+    if fetchingWeather {
+        ProgressView("Fetching weather…")
+        // No attribution — no data yet
+    } else if let weather = weather {
+        WeatherSummary(weather: weather)
+        WeatherAttributionRow()    // Attribution adjacent to data
+    } else if let weatherError = weatherError {
+        Text(weatherError).foregroundStyle(.red)
+        Button("Retry") { ... }
+        // No attribution — no data displayed
+    } else {
+        Text("Waiting for location…")
+        // No attribution — no data yet
+    }
+}</code></pre></li>
+<li><p>A more future-proof alternative is to read <code>WeatherService.shared.attribution</code> at runtime and link to whatever <code>legalPageURL</code> it returns &mdash; that survives Apple changing the static URL, at the cost of a network read before the row can render.</p></li>
+
+<li><h2>Build sequence (for the actual scaffold)</h2></li>
+<li><ol>
+<li>Xcode &rarr; New Project with the settings + the Create Git Repository checkbox ticked</li>
+<li>Strip the multiplatform sprawl: edit <code>SDKROOT</code>, <code>SUPPORTED_PLATFORMS</code>, <code>TARGETED_DEVICE_FAMILY</code> in the project file to iOS-only</li>
+<li><code>DeveloperNotes.swift</code> &mdash; the architecture map (mission, frameworks, file map, locked rules, version plan, Info.plist keys) authored before any feature work</li>
+<li><code>AppShell.swift</code> &mdash; NavigationStack + (i)-info-button toolbar wrapper, About sheet presentation</li>
+<li><code>AboutView.swift</code> + <code>FeedbackView.swift</code> &mdash; same shape as Audio Universe (icon, version, credit, Send Feedback, Wiki, Privacy, Portfolio, GPL v3)</li>
+<li><code>OutsideLog.swift</code> &mdash; the SwiftData <code>@Model</code></li>
+<li><code>ContentView.swift</code> &mdash; three-tab TabView shell with placeholder bodies</li>
+<li>Wire features one at a time: location auth &rarr; weather fetch &rarr; SwiftData entry creation &rarr; photo input (camera + library) &rarr; map rendering on Home tab &rarr; entry detail view</li>
+<li><code>UnderTheHoodView.swift</code> &mdash; same source-tour pattern as Audio Universe (callout per file + embedded source + Open on GitHub)</li>
+<li>GitHub wiki Home + Developer Notes (synced from <code>DeveloperNotes.swift</code>)</li>
+<li>Privacy Policy page on fluharty.me at <code>/outdoorutility-privacy</code></li>
+<li>App Store screenshots, listing, submit for review</li>
+</ol></li>
+
+<li><h2>v2.0 roadmap &mdash; the upgrade demonstration</h2></li>
+<li><p>v2.0 layers RainViewer's free-tier radar tiles on top of the v1.0 MapKit basemap, turning the Home tab into a "this is what's happening weather-wise where I have logged" view in real time. The upgrade is architecturally meaningful: it adds the app's first third-party API integration, its first <code>MKTileOverlay</code> subclass, its first UIKit-into-SwiftUI bridge (because the SwiftUI <code>Map</code> view does not yet expose tile overlays), and a second visible attribution layer.</p></li>
+<li><p>What v2.0 adds and teaches:</p></li>
+<li><ul>
+<li><strong>Third-party JSON API integration</strong> &mdash; <code>URLSession</code>, <code>Codable</code> decoding of the RainViewer manifest at <code>https://api.rainviewer.com/public/weather-maps.json</code></li>
+<li><strong>MKTileOverlay subclass</strong> &mdash; constructing tile URLs from the manifest, refreshing every ~10 minutes</li>
+<li><strong>UIViewRepresentable bridging</strong> &mdash; wrapping <code>MKMapView</code> in a SwiftUI-facing struct so MapKit's overlay APIs are reachable</li>
+<li><strong>Attribution discipline</strong> &mdash; "Powered by RainViewer" footer band on the Home tab per their free-tier ToS, plus the existing WeatherKit attribution. Two visible credits on the same screen, each with its own rules</li>
+<li><strong>The App Store update review cycle</strong> as its own teaching point &mdash; how a previously approved app moves through review when a substantial new feature lands, what reviewers look for in update submissions, attribution growth</li>
+</ul></li>
+<li><p>This page expands with the full v2.0 walkthrough once v2.0 actually ships, the same way Build-Along 04 (Claudes Audio Universe) gets deepened post-approval. The point of staging the radar work for v2.0 is that the v1.0 -&rarr; v2.0 arc itself becomes a teaching artifact: most beginner programming books show only the build-once-and-stop pattern. The book shows planning, shipping, soaking, and extending, modeled on the same sample app.</p></li>
+
+<li><h2>Resources</h2></li>
+<li><ul>
+<li>Source: <a href="https://github.com/fluhartyml/Claudes-Outdoor-Utility">github.com/fluhartyml/Claudes-Outdoor-Utility</a></li>
+<li>Wiki: <a href="https://github.com/fluhartyml/Claudes-Outdoor-Utility/wiki">github.com/fluhartyml/Claudes-Outdoor-Utility/wiki</a></li>
+<li>Privacy: <a href="https://fluharty.me/outdoorutility-privacy">fluharty.me/outdoorutility-privacy</a></li>
+<li>App Store listing: pending v1.0 scaffold and submission</li>
+<li>RainViewer free-tier API (v2.0 dependency): <a href="https://www.rainviewer.com/api.html">rainviewer.com/api.html</a></li>
+</ul></li>
+
+<li><p><em>Page authored at the spec-lock moment, before v1.0 scaffold. Will expand into a full step-by-step walkthrough as the build progresses, then deepen again with v2.0 after that ships. Source of truth for what the app actually does is <code>DeveloperNotes.swift</code> in the Xcode project once it exists.</em></p></li>
+</ol>
 </div>
 <footer class="page"><div class="row-nav"><div class="prev"><a href="../BuildAlong-04-Claudes-Audio-Universe/BuildAlong-04-Claudes-Audio-Universe.html">&larr; Build-Along 04: Claude's Audio Universe</a></div><div class="pos">Build-Along 05</div><div class="next"><a href="../BuildAlong-06-BodyReadings/BuildAlong-06-BodyReadings.html">Build-Along 06: BodyReadings &rarr;</a></div></div></footer>
 </body></html>

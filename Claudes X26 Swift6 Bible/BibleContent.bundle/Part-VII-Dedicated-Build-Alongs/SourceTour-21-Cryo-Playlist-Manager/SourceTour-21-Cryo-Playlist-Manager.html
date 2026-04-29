@@ -45,19 +45,58 @@ footer.page .row-nav .nav-empty { color: var(--gutter); font-style: italic; }
 <header class="page"><div class="path">Part-VII-Dedicated-Build-Alongs/SourceTour-21-Cryo-Playlist-Manager</div></header>
 <div class="content">
 <h1>Source Tour 21: Cryo Playlist Manager</h1>
-<p><span class="status-notlive">Status: NOT YET LIVE &mdash; must reach the Mac App Store before book official release.</span> Mac app, parked mid-stream; will be resumed from parked state (not rebuilt from scratch).</p>
-<div class="scope-note">Source tour for Cryo Playlist Manager. Shows Mac-specific Apple Music library patterns no primary sample app covers.</div>
-<h2>What Cryo Playlist Manager will show at production scale</h2>
+<p><span class="status-notlive">Status: NOT YET LIVE &mdash; must reach the Mac App Store before book official release.</span> Mac app, parked mid-stream; will be resumed from parked state, not rebuilt from scratch.</p>
+<div class="scope-note">Two paths to follow once it ships: clone the repo and read the source, or wait for the Mac App Store ship and install the live app. Architecture is Apple-Music-and-Spotify cross-platform &mdash; the only app in the book's roster that bridges both music services. Source: <a href="https://github.com/fluhartyml/Cryo-Playlist-Manager">github.com/fluhartyml/Cryo-Playlist-Manager</a>. See Book 21 Git-And-GitHub for the clone workflow.</div>
+
+<h2>What Cryo Playlist Manager shows at production scale</h2>
 <ul>
-<li>Mac-specific Apple Music library manipulation</li>
-<li>M3U playlist import / export</li>
-<li>iCloud Drive for playlist backups</li>
-<li>AppleScript / ScriptingBridge for in-place library edits</li>
+<li><strong>Apple Music + Spotify cross-service playlist management</strong> &mdash; the only app in the family that talks to both services. Reads the user's playlists from each, lets the user copy / merge / sync between them.</li>
+<li><strong>M3U playlist import and export</strong> &mdash; the lingua franca of playlist exchange. M3U files are the closest thing to a portable playlist format; supporting them lets users move playlists across services and tools without lock-in.</li>
+<li><strong>iCloud Drive integration for playlist backups</strong> &mdash; using iCloud Drive's user-visible folder as a backup destination, separate from CloudKit's invisible-to-users data store. The user can see their backups in Finder.</li>
+<li><strong>OAuth2 flow for the Spotify side</strong> &mdash; demonstrates the modern macOS OAuth2 pattern (system browser sign-in with a custom URL scheme callback) that any app integrating a third-party service will need.</li>
+<li><strong>Sandboxed Mac App Store distribution while talking to two music services</strong> &mdash; the trick is that Spotify's web API is over plain HTTPS so it works inside the sandbox without entitlement gymnastics; Apple Music access via AppleScript needs the same temporary-exception entitlement Library Commander uses (Source Tour 22).</li>
 </ul>
+
+<h2>The Apple-Music-plus-Spotify shape</h2>
+<p>Most music apps pick one service. Cryo Playlist Manager intentionally bridges both, because users in the wild often have a foot in each ecosystem &mdash; Apple Music on their phone for car-play and Siri integration, Spotify on the desktop for the social and discovery features the family doesn't fight on. Moving playlists between the two is currently a manual chore that takes the user back to copy-pasting song titles into search bars.</p>
+
+<p>The architecture in <code>Services/</code> reflects that bridge:</p>
+
 <ul>
-<li>Source: <a href="https://github.com/fluhartyml/Cryo-Playlist-Manager">github.com/fluhartyml/Cryo-Playlist-Manager</a></li>
+<li><code>PlaylistManager.swift</code> &mdash; the orchestration layer that doesn't know about either service; it reasons about playlists in a service-agnostic data model</li>
+<li><code>SpotifyAuthManager.swift</code> + <code>SpotifyService.swift</code> &mdash; the Spotify-side adapter (OAuth2 + REST API)</li>
+<li><code>PlaylistLockerService.swift</code> &mdash; the lock-this-playlist-from-edits state, ported from Library Commander where the same pattern lives (cross-app code reuse worth flagging as a habit)</li>
+<li><code>DislikeManager.swift</code> &mdash; per-station dislike tracking, ported from CryoTunes Player</li>
 </ul>
-<p><em>This appendix is a placeholder until the app ships. Book official release (book-store edition) is gated on Cryo Playlist Manager being live in the Mac App Store.</em></p>
+
+<p>The <code>DislikeManager</code> and <code>PlaylistLockerService</code> ports are the lesson: <strong>when you build a family of apps that share patterns, port the proven implementations rather than rebuilding</strong>. Each port saves a debugging cycle and keeps behavior consistent across apps the user might use together.</p>
+
+<h2>The OAuth2-with-system-browser flow</h2>
+<p>Spotify (and most modern third-party APIs) requires OAuth2 sign-in. The recommended modern pattern uses the system browser, not an embedded web view inside the app:</p>
+
+<ol class="body-list">
+<li>App opens the user's default browser with the Spotify authorization URL, including a custom URL scheme (e.g., <code>cryoplaylistmanager://oauth-callback</code>) as the redirect URI.</li>
+<li>User signs in to Spotify in the browser; Spotify redirects to the custom URL scheme with an auth code in the query string.</li>
+<li>macOS routes the custom URL back to Cryo Playlist Manager via the <code>onOpenURL</code> SwiftUI modifier.</li>
+<li>App exchanges the auth code for an access token via Spotify's token endpoint.</li>
+<li>Access token (and refresh token) are stored in Keychain.</li>
+</ol>
+
+<p>The advantage over an embedded web view: the user signs in to Spotify in their normal browser session, where they're probably already signed in. They don't have to type a Spotify password into a third-party app. Apple has been steadily steering apps toward this pattern over the last few years; embedded web views for OAuth are flagged as a friction point in App Review for sandboxed Mac apps now.</p>
+
+<h2>The M3U interchange format</h2>
+<p>M3U files are plain text, one media file path per line, with optional metadata in <code>#EXTINF</code> comments. They're the universal "here's a playlist" file format &mdash; supported by VLC, iTunes (legacy), most Linux media players, every smart speaker app, and anything else that handles playlists. Cryo Playlist Manager imports and exports M3U as the bridge format between Apple Music and Spotify because both services have their own opaque playlist formats that don't interoperate.</p>
+
+<p>The lesson worth flagging: <strong>when integrating with multiple services that don't share formats, find or define a lingua franca that both can be translated to and from</strong>. M3U was already standard; the app just adopted it. If you're integrating services that don't have a common format, defining one (even a trivial JSON shape) is preferable to writing N&times;N direct converters.</p>
+
+<h2>Cross-references</h2>
+<ul>
+<li><strong>Source Tour 18 CryoTunes Player</strong> &mdash; the iOS sister app sharing CryoKit; <code>DislikeManager</code> ported from there</li>
+<li><strong>Source Tour 22 NightGard Library Commander</strong> &mdash; same temporary-exception entitlement pattern for Apple Music access; <code>PlaylistLockerService</code> ported from there</li>
+<li><strong>Book 21 Git-And-GitHub</strong> &mdash; clone the repo and read the source</li>
+</ul>
+
+<p><em>This appendix expands further as the app reaches Mac App Store ship. Book official release is gated on Cryo Playlist Manager being live.</em></p>
 </div>
 <footer class="page"><div class="row-nav"><div class="prev"><a href="../SourceTour-20-Snap-ScanKeeper/SourceTour-20-Snap-ScanKeeper.html">&larr; Source Tour 20: Snap &amp; ScanKeeper</a></div><div class="pos">Source Tour 21</div><div class="next"><a href="../SourceTour-22-NightGard-Library-Commander/SourceTour-22-NightGard-Library-Commander.html">Source Tour 22: NightGard Library Commander &rarr;</a></div></div></footer>
 </body></html>

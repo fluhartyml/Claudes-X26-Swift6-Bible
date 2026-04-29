@@ -45,21 +45,130 @@ footer.page .row-nav .nav-empty { color: var(--gutter); font-style: italic; }
 <header class="page"><div class="path">Part-VII-Dedicated-Build-Alongs/SourceTour-19-Tally-Matrix-Clock</div></header>
 <div class="content">
 <h1>Source Tour 19: Tally Matrix Clock</h1>
-<p><span class="status-live">Status: LIVE on the App Store (v2.4.3).</span> Production clock app with WeatherKit integration.</p>
-<div class="scope-note">Source tour for Tally Matrix Clock. Anchors the book's WeatherKit attribution discipline lesson.</div>
+<p><span class="status-live">Status: LIVE on the tvOS App Store (v2.4.1).</span> Production clock app for Apple TV with matrix-grid time display, WeatherKit integration, and tvOS focus-engine handling.</p>
+<div class="scope-note">Source tour for Tally Matrix Clock. Anchors two book lessons: the circular-time-model insight (modulo arithmetic for clocks) and the WeatherKit-attribution-isn't-sticky discipline. Clone the repo and follow along: <a href="https://github.com/fluhartyml/Tally-Matrix-Clock">github.com/fluhartyml/Tally-Matrix-Clock</a>.</div>
+
 <h2>What Tally Matrix Clock shows at production scale</h2>
 <ul>
-<li>Timer logic and custom clock canvas rendering</li>
-<li>WeatherKit integration at production scale (see the attribution-variability lesson below)</li>
-<li>Matrix-style number rendering</li>
+<li>Modulo arithmetic for 12-hour clock display &mdash; the circular time model that turns out to be unexpectedly subtle (see below)</li>
+<li>Custom matrix-grid digit rendering: 1&times;3 and 3&times;3 SwiftUI grids where the <em>count</em> of lit squares represents each digit</li>
+<li>Pattern shuffling on a timer for visual variety while keeping the math correct</li>
+<li>WeatherKit integration with the per-update attribution discipline (see lesson below)</li>
+<li>tvOS focus-engine handling for d-pad navigation across shuffle/repeat controls</li>
 </ul>
+
+<h2>The circular time model</h2>
+<p>A clock face is a circle. Hours wrap around from 12 back to 1. Minutes wrap around from 59 back to 00. The math that backs this is <strong>modular arithmetic</strong> &mdash; the operator <code>%</code> in Swift &mdash; and Tally Matrix Clock's whole display is built on top of two clean modulo operations stacked on each other.</p>
+
+<p>Open <code>ContentView.swift</code> and find the computed properties around line 527:</p>
+
+<pre><code>var displayHour: Int {
+    let hour = Calendar.current.component(.hour, from: currentTime)
+    if settings.use24Hour {
+        return hour
+    } else {
+        let hour12 = hour % 12
+        return hour12 == 0 ? 12 : hour12
+    }
+}
+
+var isPM: Bool {
+    Calendar.current.component(.hour, from: currentTime) &gt;= 12
+}
+
+var hoursTens: Int { displayHour / 10 }
+var hoursOnes: Int { displayHour % 10 }
+var minutesTens: Int { Calendar.current.component(.minute, from: currentTime) / 10 }
+var minutesOnes: Int { Calendar.current.component(.minute, from: currentTime) % 10 }
+</code></pre>
+
+<p>Two passes of modulo do the whole job:</p>
+
+<ul>
+<li><strong>First pass &mdash; 24-hour to 12-hour wrap.</strong> <code>Calendar</code> hands you an hour 0&ndash;23. <code>hour % 12</code> wraps that to 0&ndash;11. Hour 13 becomes 1, hour 14 becomes 2, hour 23 becomes 11. The clock-face circularity falls out of the math automatically.</li>
+<li><strong>Second pass &mdash; digit extraction.</strong> Once you have the display value, <code>/ 10</code> gives you the tens digit and <code>% 10</code> gives you the ones digit. Same modulo trick, applied to base-10 instead of base-12.</li>
+</ul>
+
+<h3>The boundary case that trips you up</h3>
+<p>Look at the special case: <code>hour12 == 0 ? 12 : hour12</code>.</p>
+
+<p>If you trust modulo blindly, midnight (hour 0) gives <code>0 % 12 == 0</code>, and noon (hour 12) gives <code>12 % 12 == 0</code>. Both come out as 0. But on a 12-hour clock face, both display as <strong>12</strong>, not 0 &mdash; there's no "0 o'clock" on the dial. The ternary catches the boundary and substitutes 12 for 0.</p>
+
+<p>This is the kind of off-by-one that bites cyclic-data code everywhere &mdash; weekdays (is Sunday 0 or 7?), compass bearings (is North 0&deg; or 360&deg;?), card suit indices in a circular deck. The lesson: modulo gives you most of the cycle for free, but always check what your domain calls the boundary value.</p>
+
+<h3>Why the matrix grids work</h3>
+<p>Once <code>displayHour</code> is split into <code>hoursTens</code> and <code>hoursOnes</code>, each digit feeds a matrix view from <code>TallyMatrixViews.swift</code>:</p>
+
+<ul>
+<li><code>TallyMatrix1x3</code> &mdash; a 1&times;3 column for the tens-of-hours digit (practical range 0&ndash;2)</li>
+<li><code>TallyMatrix3x3</code> &times; 3 &mdash; for ones-of-hours, tens-of-minutes (practical range 0&ndash;5), and ones-of-minutes</li>
+</ul>
+
+<h3>Why the clock is base-10, not base-12 or base-60</h3>
+<p>It's worth being precise about this. The display reads as <code>H H : M M</code> &mdash; four positions, each one its own digit. The clock is <strong>base-10 at the digit level</strong>, not base-12 for the hour or base-60 for the minute. Every position draws from 0&ndash;9 independently.</p>
+
+<p>The smaller practical ranges you see &mdash; tens-of-hours capped at 2 in 24-hour mode (or 1 in 12-hour mode), tens-of-minutes capped at 5 &mdash; come from the clock's value bounds, not from the digit base. The grid <em>could</em> show 0&ndash;9 in any slot. It just never needs to in the tens positions, because no clock has 70 minutes or 30 hours. The 3&times;3 grid is the canonical base-10 single-digit display surface; the 1&times;3 grid is a smaller fitted variant for the tens-of-hours position where 0&ndash;2 is the only range that can occur.</p>
+
+<p>That's why the matrix lookup is so clean. <code>hoursTens = displayHour / 10</code> and <code>hoursOnes = displayHour % 10</code> &mdash; classic base-10 digit extraction. No special arithmetic for "minutes are base-60." The <code>% 12</code> step earlier handled the clock-face cyclical math; once you're past that, you're back in plain base-10 territory and the rest of the math reads like a textbook.</p>
+
+<p>The "matrix" name comes from the SwiftUI view, but the deeper insight is that the <em>count</em> of lit squares is the digit value, not their positions. That decoupling is what lets the pattern shuffle visually without breaking the math.</p>
+
+<h3>The pattern shuffle</h3>
+<p>Every <code>patternInterval</code> seconds (or whenever a digit changes), <code>updatePatterns()</code> in <code>ContentView.swift:715</code> rebuilds all four matrices from the current time. The actual pattern picker lives at line 732:</p>
+
+<pre><code>func randomPattern(for value: Int, totalSquares: Int) -&gt; Set&lt;Int&gt; {
+    guard value &gt; 0 else { return [] }
+    var pattern = Set&lt;Int&gt;()
+    while pattern.count &lt; value {
+        pattern.insert(Int.random(in: 0..&lt;totalSquares))
+    }
+    return pattern
+}
+</code></pre>
+
+<p>A <code>Set&lt;Int&gt;</code> of square indices is a clean way to express "these positions, in any order, are lit." Inserting random indices until the set reaches the target count handles deduplication automatically &mdash; if you happen to roll the same index twice, the set rejects the duplicate and the loop just keeps going. The displayed digit value stays correct because the set's <code>count</code> is the contract.</p>
+
+<p>This is a small example of <strong>using the right collection type for the semantics you want</strong>. A <code>[Int]</code> array would have let you accidentally light the same square twice while still incrementing the visible count. <code>Set&lt;Int&gt;</code> makes that bug impossible by construction.</p>
+
+<h2>The tvOS focus engine</h2>
+<p>Tally Matrix Clock is a <strong>tvOS</strong> app. That changes how interaction works: there's no touch, no mouse cursor, no keyboard. Users navigate with the Apple TV remote's d-pad, and every focusable element gets a system-drawn highlight when the focus engine selects it. The default highlight is a soft white ring &mdash; clean, but bland against the clock's deep-black background.</p>
+
+<p>Open <code>Models.swift</code> and find <code>SettingsFocusButtonStyle</code> at the bottom of the file:</p>
+
+<pre><code>struct SettingsFocusButtonStyle: ButtonStyle {
+    @Environment(\.isFocused) var isFocused
+
+    func makeBody(configuration: Configuration) -&gt; some View {
+        configuration.label
+            .foregroundColor(isFocused ? .black : .white)
+            .padding(.horizontal, 12)
+            .padding(.vertical, 6)
+            .background(
+                RoundedRectangle(cornerRadius: 8)
+                    .fill(isFocused ? Color.white : Color.clear)
+            )
+            .scaleEffect(isFocused ? 1.02 : 1.0)
+            .animation(.easeInOut(duration: 0.15), value: isFocused)
+    }
+}
+</code></pre>
+
+<p>This is a custom <code>ButtonStyle</code> that takes over the focus highlight from the system. The key piece is <code>@Environment(\.isFocused)</code> &mdash; a built-in environment value tvOS sets to <code>true</code> when a button is the current focus target. The style flips the button's background to solid white, inverts the text to black, and adds a small <code>scaleEffect</code> bump for a tactile feel.</p>
+
+<p>The lesson worth carrying to your own tvOS apps: <strong>read <code>isFocused</code> from the environment, write your own visual response, don't rely on the system default if your app's color palette doesn't match it</strong>. tvOS gives you the focus signal; the visual treatment is yours to own.</p>
+
 <h2>The WeatherKit attribution lesson</h2>
 <p>Tally Matrix Clock was previously approved with its WeatherKit integration, then flagged on a later update for attribution that had previously passed. The lesson that belongs here, not anywhere else: <strong>App Store approval is not sticky.</strong> Every update has to prove WeatherKit attribution in its own screenshots and copy. A reviewer who didn't notice before can notice now.</p>
-<ul>
-<li>Source: <a href="https://github.com/fluhartyml/Tally-Matrix-Clock">github.com/fluhartyml/Tally-Matrix-Clock</a></li>
-</ul>
+
 <h2>Shared package dependency</h2>
 <p>Tally Matrix Clock depends on <strong>CryoKit</strong> &mdash; a curated internal Swift package that also backs CryoTunes Player. See <a href="../../Appendices/Appendix-B-CryoKit/Appendix-B-CryoKit.html">Appendix B: CryoKit</a> for the shared-package source tour.</p>
+
+<h2>Cross-references</h2>
+<ul>
+<li><strong>Book 21 Git-And-GitHub</strong> &mdash; the clone-from-GitHub workflow that gets readers from the link above into a buildable Xcode project</li>
+<li><strong>Source Tour 18 CryoTunes Player</strong> &mdash; sister app that shares CryoKit; different distribution shape (iPhone retro music player) but same package-dependency story</li>
+<li><strong>Appendix B CryoKit</strong> &mdash; the shared-package internals</li>
+</ul>
 </div>
 <footer class="page"><div class="row-nav"><div class="prev"><a href="../SourceTour-18-CryoTunes-Player/SourceTour-18-CryoTunes-Player.html">&larr; Source Tour 18: CryoTunes Player</a></div><div class="pos">Source Tour 19</div><div class="next"><a href="../SourceTour-20-Snap-ScanKeeper/SourceTour-20-Snap-ScanKeeper.html">Source Tour 20: Snap &amp; ScanKeeper &rarr;</a></div></div></footer>
 </body></html>

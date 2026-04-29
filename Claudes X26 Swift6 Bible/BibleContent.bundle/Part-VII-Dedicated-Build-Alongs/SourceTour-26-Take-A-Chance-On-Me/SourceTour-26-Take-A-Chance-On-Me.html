@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Source Tour 26: Take A Chance On Me</title>
+<style>
+:root { --bg: #000000; --fg: #FFB000; --bright: #FFD060; --dim: #996600; --codebg: #1a0d00; --border: #664500; --gutter: #4a3300; --headerbg: #0a0600; }
+* { box-sizing: border-box; }
+html, body { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; height: 100%; }
+body { background: var(--bg); color: var(--fg); font-family: "FiraCode Nerd Font Mono", "Fira Code", "Menlo", "Courier New", monospace; font-size: 18pt; line-height: 1.55; margin: 0; padding: 0; text-shadow: 0 0 1px rgba(255, 176, 0, 0.35); display: flex; flex-direction: column; }
+header.page, footer.page { background: var(--headerbg); color: var(--dim); padding: 0.55rem 1.1rem; font-size: 13pt; display: flex; flex-direction: column; gap: 0.2rem; flex: 0 0 auto; z-index: 10; }
+header.page { border-bottom: 1px solid var(--border); }
+footer.page { border-top: 1px solid var(--border); padding-bottom: calc(0.55rem + env(safe-area-inset-bottom)); }
+header.page .path, footer.page .path { color: var(--fg); word-break: break-all; overflow-wrap: break-word; }
+header.page .pos, footer.page .pos { color: var(--bright); }
+.content { flex: 1 1 auto; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 0.8rem 1rem 2rem 1rem; max-width: 1100px; margin: 0 auto; width: 100%; }
+h1 { color: var(--bright); font-weight: normal; font-size: 26pt; margin: 0.6rem 0 1rem 0; }
+h2 { color: var(--bright); font-weight: normal; font-size: 20pt; border-bottom: 1px solid var(--border); padding-bottom: 0.3rem; margin-top: 1.5rem; }
+h3 { color: var(--bright); font-weight: normal; font-size: 18pt; margin-top: 1rem; }
+p { margin: 0.4rem 0; counter-increment: para; }
+code { color: var(--bright); background: var(--codebg); padding: 0.08em 0.35em; border: 1px solid #3a2400; border-radius: 3px; font-size: 0.92em; }
+pre { background: var(--codebg); border: 1px solid #3a2400; border-radius: 4px; padding: 0.7rem 0.9rem; overflow-x: auto; font-size: 14pt; }
+ul { margin: 0.4rem 0 0.4rem 1.4rem; padding: 0; }
+a { color: var(--bright); font-weight: bold; text-decoration: none; border-bottom: 1px dotted var(--dim); }
+strong { color: var(--bright); }
+em { color: var(--fg); font-style: italic; }
+hr { border: 0; border-top: 1px solid var(--border); margin: 1rem 0; }
+.scope-note { border-left: 3px solid var(--bright); padding: 0.7rem 1rem; background: #140c00; margin: 0.6rem 0; color: var(--bright); }
+.status-live { color: #66FF66; font-weight: bold; }
+.status-notlive { color: #FFD060; font-weight: bold; }
+.status-planning { color: #996600; font-weight: bold; }
+
+
+footer.page { flex-direction: column; gap: 0.4rem; }
+footer.page .row-nav { display: flex; flex-direction: row; justify-content: space-between; align-items: center; gap: 0.5rem; }
+footer.page .row-nav .prev, footer.page .row-nav .next { flex: 1; min-width: 0; }
+footer.page .row-nav .prev { text-align: left; }
+footer.page .row-nav .next { text-align: right; }
+footer.page .row-nav .pos { flex: 0 0 auto; text-align: center; color: var(--bright); font-weight: bold; }
+footer.page .row-nav a { color: var(--bright); font-weight: bold; text-decoration: none; border-bottom: 1px dotted var(--dim); }
+footer.page .row-nav a:hover { background: #332200; }
+footer.page .row-nav .nav-empty { color: var(--gutter); font-style: italic; }
+</style>
+</head><body>
+<header class="page"><div class="path">Part-VII-Dedicated-Build-Alongs/SourceTour-26-Take-A-Chance-On-Me</div></header>
+<div class="content">
+<h1>Source Tour 26: Take A Chance On Me</h1>
+<p><span class="status-live">Status: LIVE on the App Store (v2.1).</span> Production multi-die roller for iPhone and iPad. The smallest-scale teaching app in this Source Tour set, intentionally so &mdash; it shows what a complete, polished, App-Store-shipping utility looks like at the simplest end of the size spectrum.</p>
+<div class="scope-note">Two paths: install the live app to use the finished product, or clone the repo and read the source. The architecture is tiny &mdash; ~800 lines across seven Swift files &mdash; small enough to read in a single sitting and use as a template for your own first utility app. See Book 21 Git-And-GitHub for the clone workflow.</div>
+
+<h2>What Take A Chance On Me shows at production scale</h2>
+<ul>
+<li><strong>What "minimum viable App Store app" actually looks like</strong> at the smallest defensible size &mdash; one feature done well plus the supporting surfaces (About, Send Feedback) that take a thin app from "demo" to "shippable utility."</li>
+<li><strong>Swift's <code>Int.random(in:)</code> for system randomness</strong> &mdash; the modern, type-safe replacement for <code>arc4random_uniform</code> and <code>Int.random()</code>'s C-bridged ancestors. Cryptographically-OK for game/utility use; not appropriate for security-sensitive randomness.</li>
+<li><strong>Configurable multi-die rolling</strong> &mdash; the user picks how many dice and what kind (d4, d6, d8, d10, d12, d20). Demonstrates how to take a single primitive operation (one random number) and parameterize it into a configurable feature.</li>
+<li>A complete utility app at ~800 lines &mdash; the smallest member of this Source Tour set, intentionally selected to show the bottom of the size scale.</li>
+</ul>
+
+<h2>The dice-rolling primitive</h2>
+<p>The whole core of the app is one line, found at <code>DiceBagView.swift:171</code>:</p>
+
+<pre><code>let result = Int.random(in: 1...getMax(i))
+</code></pre>
+
+<p>Two pieces:</p>
+
+<ul>
+<li><strong><code>Int.random(in:)</code></strong> is Swift's standard system-RNG entry point. Pass a closed range; it returns a uniformly distributed integer in that range. The randomness comes from the system entropy pool (<code>SystemRandomNumberGenerator</code> under the hood). Good enough for dice, card shuffles, picking a random color, A/B-test bucketing &mdash; not appropriate for cryptographic purposes (use <code>SecRandomCopyBytes</code> for those).</li>
+<li><strong><code>getMax(i)</code></strong> is the configurability hook &mdash; a small lookup that returns 4 / 6 / 8 / 10 / 12 / 20 depending on which die kind the user picked for slot <code>i</code>. The variable is the upper bound, not the randomness itself.</li>
+</ul>
+
+<p>That single line is the entire random-roll mechanic. Everything else in the app &mdash; the multi-slot UI, the animations, the result display, the haptic feedback, the dice-kind picker &mdash; is presentation around that one primitive.</p>
+
+<p>Worth dwelling on because the lesson is general: <strong>most utility apps have a single small primitive at their core, and the rest of the codebase is presentation</strong>. Recognizing the primitive helps you keep it simple instead of reaching for libraries that do more than the app needs.</p>
+
+<h2>Why this is a "smallest defensible App Store app" reference</h2>
+<p>App Store Guideline 2.2 (Performance: Beta Testing) is what catches "you brought us a demo, not an app." The line between "thin utility" and "demo" is enforced subjectively by reviewers. Take A Chance On Me sits well above the line because it does these things, in addition to the dice roll itself:</p>
+
+<ul>
+<li>Configurable inputs (multiple dice, choice of die size) &mdash; not a single-press gimmick</li>
+<li>Polished output presentation &mdash; the result isn't just text, it's part of a designed UI</li>
+<li>An About sheet that explains who built it and how to reach them</li>
+<li>A Send Feedback channel that opens the user's mail composer</li>
+<li>App icons across platform sizes, App Store screenshots, a privacy policy, a real description</li>
+</ul>
+
+<p>The lesson: <strong>a one-feature utility can ship to the App Store if the supporting surfaces around the feature are real</strong>. The Signature trio from the book's distribution rule (MVP feature + Under the Hood view + About &amp; Send Feedback) was designed exactly for this point of the size spectrum &mdash; small enough to keep simple, complete enough to ship.</p>
+
+<h2>Install and browse</h2>
+<ul>
+<li>App Store: search "Take A Chance On Me" on the iOS App Store</li>
+<li>Source: <a href="https://github.com/fluhartyml/TakeAChanceOnMeV1.0.2">github.com/fluhartyml/TakeAChanceOnMeV1.0.2</a></li>
+</ul>
+
+<h2>Cross-references</h2>
+<ul>
+<li><strong>Book 21 Git-And-GitHub</strong> &mdash; clone the repo and follow along</li>
+<li><strong>Source Tour 25 Transcription Keeper</strong> &mdash; another small App-Store-shipping utility, slightly larger; same Signature-trio pattern at a different scale</li>
+<li><strong>Build-Along 03 Claudes LockBox</strong> (when complete) &mdash; the build-along version of "small utility shipped to the App Store" with full step-by-step walkthrough</li>
+</ul>
+</div>
+<footer class="page"><div class="row-nav"><div class="prev"><a href="../SourceTour-25-Transcription-Keeper/SourceTour-25-Transcription-Keeper.html">&larr; Source Tour 25: Transcription Keeper</a></div><div class="pos">Source Tour 26</div><div class="next"><a href="../../Appendices/Appendix-A-GitHub-Setup.html">Appendix: Setting Up GitHub and Connecting It to Xcode &rarr;</a></div></div></footer>
+</body></html>

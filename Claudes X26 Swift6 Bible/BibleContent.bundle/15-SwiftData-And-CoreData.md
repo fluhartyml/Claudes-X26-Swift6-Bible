@@ -16,6 +16,14 @@ By the end of this chapter you can:
 
 ---
 
+## Live Reference: Claude's Web Wrapper
+
+> Everything in this chapter ships in **Claude's Web Wrapper** on the App Store (id6762163478). Install it, open the Under the Hood tab, and read `Bookmark.swift` + `BookmarksView.swift` right inside the app. Or browse the source on GitHub at [fluhartyml/Wraply](https://github.com/fluhartyml/Wraply). The bookmark feature in that app is the same `@Model` + `@Query` + `modelContainer` + `modelContext` pattern this chapter teaches -- every concept below has a real shipped line of code you can point at, install, and use.
+
+The toy `Book` / `Author` models you'll see in the examples below are deliberate -- they keep the API shapes obvious. Once a concept clicks, jump to Wraply's source for the production-shaped equivalent: a model with three plain properties (`title`, `urlString`, `dateAdded`), a `@Query`-driven list with swipe-to-delete, a `modelContainer(for:)` attached at the App entry, and a `modelContext.insert(_:)` on the toolbar's bookmark button. No relationships, no CloudKit, no fancy predicates -- just the four pieces working together at App Store-quality polish.
+
+---
+
 ## The Short History
 
 Every Apple app that stores structured data on-device uses one of three things:

@@ -46,20 +46,65 @@ footer.page .row-nav .nav-empty { color: var(--gutter); font-style: italic; }
 <div class="content">
 <h1>Source Tour 22: NightGard Library Commander</h1>
 <p><span class="status-notlive">Status: NOT YET LIVE &mdash; must reach the Mac App Store before book official release.</span> Mac app. App-Store-compliant (sandboxed). Companion to CryoTunes Player.</p>
-<div class="scope-note">Source tour for NightGard Library Commander. Paired with CryoTunes Player &mdash; two-app ecosystem showing how a Mac-side library tool works alongside an iOS-side player through the shared iCloud Music Library.</div>
+<div class="scope-note">Two paths to follow: clone the repo and read the source, or wait for the Mac App Store ship and install the live app. The architecture is split into two well-named services (<code>LibraryService</code>, <code>PlaylistLockerService</code>) and four pane views &mdash; small enough to read end-to-end. See Book 21 Git-And-GitHub for the clone workflow.</div>
+
 <h2>What Library Commander shows at production scale</h2>
 <ul>
-<li>Apple Music library metadata cleanup (fills missing artist/album/genre, handles problem-state tracks)</li>
-<li>MusicKit + AppleScript via the sandbox-with-temporary-exception pattern</li>
-<li>Security-scoped bookmarks for user-picked working folders</li>
-<li>SwiftData for review queue state, CloudKit sync optional</li>
+<li><strong>Apple Music library metadata cleanup at scale</strong> &mdash; fills missing artist, album, genre, and artwork on tracks the user already has in their library. Operates on hundreds or thousands of tracks per session.</li>
+<li><strong>The sandbox-with-temporary-exception-apple-events entitlement pattern</strong> &mdash; how a Mac App Store app can ask Apple Music for library data via AppleScript while staying inside the sandbox boundary Apple requires for store distribution.</li>
+<li><strong>Security-scoped bookmarks</strong> &mdash; persisting access to user-picked working folders across app launches, the only sandboxed way to keep a folder reference alive without re-prompting the user every time.</li>
+<li><strong>The ported-not-rewritten Shazam stack</strong> &mdash; Library Commander pulls in the production-hardened Shazam stack that originated in NightGard Commander (see Source Tour 23). Re-implementing Shazam workflows from scratch is a bait Apple's rate limits set; porting the tuned stack from a sibling app is the correct discipline.</li>
+<li><strong>The CryoTunes Player ecosystem pairing</strong> &mdash; Library Commander cleans the library on Mac; CryoTunes plays from that cleaner library on iPhone. Both share the same iCloud Music Library. Readers see how production Mac + iOS apps compose into a two-device ecosystem.</li>
 </ul>
-<h2>Ecosystem pairing with CryoTunes Player</h2>
-<p>Library Commander cleans the library on Mac. CryoTunes plays from that cleaner library on iPhone. Both share the same iCloud Music Library. Readers see how production Mac + iOS apps compose into an ecosystem, not just standalone experiences.</p>
+
+<h2>The sandbox-with-temporary-exception pattern</h2>
+<p>Apple Music's library data is most accessible via AppleScript (the modern <code>MusicKit.MusicLibrary</code> Swift API is read-only for many properties Library Commander needs to write). On a Mac App Store sandboxed binary, AppleScript-to-Music is normally blocked &mdash; the sandbox doesn't let one app drive another by default. The escape hatch is a <strong>temporary-exception entitlement</strong> that names the specific apple-events targets the app needs to send to.</p>
+
+<p>In <code>NightGard_Library_Commander.entitlements</code> you'll find the <code>com.apple.security.temporary-exception.apple-events</code> key with an array containing <code>com.apple.Music</code>. That single line is what makes the AppleScript pipeline work inside the sandbox. Apple reviews these temporary exceptions case-by-case during App Store review &mdash; you have to justify the use case in the App Review notes (Library Commander's note is short: "writes metadata back to Apple Music tracks the user already owns; no third-party data collection"). Apple has a track record of approving the exception when the use case is honest and narrow.</p>
+
+<p>The lesson: <strong>sandboxed Mac App Store apps can still drive other apps via AppleScript</strong>, but you have to declare the targets up front and survive the App Review conversation about why you need them. Get the use case into one sentence before submitting; reviewers don't read paragraphs.</p>
+
+<h2>Security-scoped bookmarks</h2>
+<p>The user picks a working folder once (a music library folder, a backup destination, a cleaned-output target). A regular <code>NSOpenPanel</code> grants access only for that session &mdash; on next launch, the folder URL is no longer usable. Sandboxed apps don't get to reach into arbitrary disk paths.</p>
+
+<p>The fix is a <strong>security-scoped bookmark</strong>. After the user picks the folder, Library Commander calls <code>url.bookmarkData(options: .withSecurityScope, ...)</code> and persists the resulting <code>Data</code> in <code>UserDefaults</code> or SwiftData. On next launch, the persisted data is resolved with <code>URL(resolvingBookmarkData:options:[.withSecurityScope]...)</code> and the URL is bracketed by <code>startAccessingSecurityScopedResource()</code> / <code>stopAccessingSecurityScopedResource()</code> calls during reads.</p>
+
+<p>The pattern is bureaucratic but important to learn correctly &mdash; getting it wrong on a sandboxed app means the app silently fails to read folders the user clearly granted access to, and the failure mode is "nothing in the folder shows up" rather than an obvious error message.</p>
+
+<h2>The two-service split</h2>
+<p>Library Commander has two services in the <code>Services/</code> folder:</p>
+
+<ul>
+<li><strong><code>LibraryService.swift</code></strong> &mdash; talks to Apple Music via AppleScript to read tracks, identify problem-state items (missing metadata, broken file references), and write fixes back to the library entries in place.</li>
+<li><strong><code>PlaylistLockerService.swift</code></strong> &mdash; manages a separate "locker" of playlists that should not be modified by automated cleanup. The user marks specific playlists as locked; the cleanup pipeline skips items in those playlists.</li>
+</ul>
+
+<p>The split is one of the chapter's clearest production-scale lessons: <strong>name your services around what they own</strong>. <code>LibraryService</code> owns the connection to Apple Music; <code>PlaylistLockerService</code> owns the locked-list state. Mixing those concerns into a single service would have made testing harder and made the boundaries fuzzier as the app grows.</p>
+
+<h2>The four-pane view layout</h2>
+<p>The main window has four panes, each its own <code>@MainActor</code> SwiftUI view in <code>Views/</code>:</p>
+
+<ul>
+<li><strong><code>LibraryPaneView</code></strong> &mdash; the track list, filterable by problem state (missing artist, missing artwork, broken reference, etc.)</li>
+<li><strong><code>LockerPaneView</code></strong> &mdash; the locked-playlists configuration</li>
+<li><strong><code>PlaylistsPaneView</code></strong> &mdash; the user's full playlist roster</li>
+<li><strong><code>StatsPaneView</code></strong> &mdash; the running summary of what's been cleaned, what's remaining, what skipped because of locker rules</li>
+</ul>
+
+<p>The user navigates between panes via a sidebar, classic Mac-app shape. Each pane stays in its own file; cross-pane communication happens through the shared services and SwiftData model context, not through inter-view bindings.</p>
+
+<h2>Cross-references</h2>
+<ul>
+<li><strong>Source Tour 18 CryoTunes Player</strong> &mdash; the iOS sister app that plays from the library Library Commander cleans</li>
+<li><strong>Source Tour 23 NightGard Commander</strong> &mdash; origin of the production-hardened Shazam stack ported here</li>
+<li><strong>Book 21 Git-And-GitHub</strong> &mdash; clone the repo and read the source</li>
+</ul>
+
 <ul>
 <li>Source: <a href="https://github.com/fluhartyml/NightGard-Library-Commander">github.com/fluhartyml/NightGard-Library-Commander</a></li>
 </ul>
-<p><em>This appendix is a placeholder until the app ships. Book official release is gated on Library Commander being live in the Mac App Store.</em></p>
+
+<p><em>This appendix expands further as the app reaches Mac App Store ship. Book official release is gated on Library Commander being live.</em></p>
 </div>
 <footer class="page"><div class="row-nav"><div class="prev"><a href="../SourceTour-21-Cryo-Playlist-Manager/SourceTour-21-Cryo-Playlist-Manager.html">&larr; Source Tour 21: Cryo Playlist Manager</a></div><div class="pos">Source Tour 22</div><div class="next"><a href="../SourceTour-23-NightGard-Commander/SourceTour-23-NightGard-Commander.html">Source Tour 23: NightGard Commander (Self-Publi... &rarr;</a></div></div></footer>
 </body></html>

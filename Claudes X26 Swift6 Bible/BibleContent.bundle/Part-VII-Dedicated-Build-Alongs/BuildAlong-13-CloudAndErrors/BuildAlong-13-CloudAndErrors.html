@@ -19,7 +19,7 @@ ul { margin: 0.4rem 0 0.4rem 1.4rem; padding: 0; }
 code { color: var(--bright); background: var(--codebg); padding: 0.08em 0.35em; border: 1px solid #3a2400; border-radius: 3px; font-size: 0.92em; }
 strong { color: var(--bright); }
 .scope-note { border-left: 3px solid var(--bright); padding: 0.7rem 1rem; background: #140c00; margin: 0.6rem 0; color: var(--bright); }
-.status-testflight { color: #FFD060; font-weight: bold; }
+.status-github { color: #FFD060; font-weight: bold; }
 
 
 footer.page { flex-direction: column; gap: 0.4rem; }
@@ -35,18 +35,18 @@ footer.page .row-nav .nav-empty { color: var(--gutter); font-style: italic; }
 </head><body>
 <header class="page"><div class="path">Part-VII-Dedicated-Build-Alongs/BuildAlong-13-CloudAndErrors</div></header>
 <div class="content"><h1>Build-Along 13: CloudAndErrors</h1>
-<p><span class="status-testflight">Distribution: TestFlight beta.</span> Single-concept teaching app &mdash; CloudKit sync with proper error-handling plumbing (throws / Result / async). Does not grow into a full-fledged product on its own, so it ships via TestFlight.</p>
+<p><span class="status-github">Distribution: GitHub clone-and-build.</span> Single-concept teaching app &mdash; CloudKit sync with proper error-handling plumbing (throws / Result / async). Does not grow into a full-fledged product on its own, so it ships as a GitHub repo readers clone and build themselves.</p>
 <div class="scope-note">MVP concept: a tiny list (grocery list, to-do list, any ordered strings) that syncs across a user's devices via CloudKit Public/Private DB, with every failure mode handled visibly so readers see exactly how to surface sync errors. The app IS the demo.</div>
 <h2>What CloudAndErrors will teach</h2>
 <ul>
 <li><strong>CloudKit</strong> &mdash; <code>CKDatabase</code>, record types, subscriptions, push-driven invalidation, optimistic concurrency, iCloud account status.</li>
 <li><strong>Error handling discipline</strong> &mdash; <code>throws</code>, <code>Result&lt;Success, Failure&gt;</code>, structured <code>async throws</code>, proper error surfacing in SwiftUI via alerts and inline banners. Partial-failure scenarios (one record saves, another doesn't).</li>
 <li><strong>Signature layer:</strong> MVP + Under the Hood + About &amp; Send Feedback.</li>
-<li><strong>Distribution:</strong> TestFlight.</li>
+<li><strong>Distribution:</strong> GitHub clone-and-build.</li>
 </ul>
-<h2>Why TestFlight not App Store</h2>
-<p>A "sync a list, show errors" app is pedagogically valuable but doesn't read as a real utility. Readers who want a synced list already have Reminders, Notes, and dozens of third-party apps. The App Store 2.2 bar for "you brought me a demo" would be triggered. TestFlight is the honest home.</p>
+<h2>Why GitHub clone-and-build not App Store</h2>
+<p>A "sync a list, show errors" app is pedagogically valuable but doesn't read as a real utility. Readers who want a synced list already have Reminders, Notes, and dozens of third-party apps. The App Store 2.2 bar for "you brought me a demo" would be triggered. Shipping as a GitHub repo readers clone is the honest path.</p>
 <h2>Current state</h2><ul><li>No Xcode project yet</li></ul>
-<h2>Next step</h2><p>Scaffolded after earlier build-alongs ship; TestFlight distribution only.</p></div>
+<h2>Next step</h2><p>Scaffolded after earlier build-alongs ship; GitHub clone-and-build distribution only (see Book 21 Git-And-GitHub for the clone workflow).</p></div>
 <footer class="page"><div class="row-nav"><div class="prev"><a href="../BuildAlong-12-SwiftUICraft/BuildAlong-12-SwiftUICraft.html">&larr; Build-Along 12: SwiftUICraft</a></div><div class="pos">Build-Along 13</div><div class="next"><a href="../BuildAlong-14-TipJar/BuildAlong-14-TipJar.html">Build-Along 14: TipJar &rarr;</a></div></div></footer>
 </body></html>

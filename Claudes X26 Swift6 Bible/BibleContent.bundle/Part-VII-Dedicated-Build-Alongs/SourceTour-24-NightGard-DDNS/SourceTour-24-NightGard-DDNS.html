@@ -45,20 +45,64 @@ footer.page .row-nav .nav-empty { color: var(--gutter); font-style: italic; }
 <header class="page"><div class="path">Part-VII-Dedicated-Build-Alongs/SourceTour-24-NightGard-DDNS</div></header>
 <div class="content">
 <h1>Source Tour 24: NightGard DDNS (Self-Publishing Case Study)</h1>
-<p><span class="status-notlive">Status: self-distributed, notarized. Not on the App Store by shape (daemons can't be App Store distributed).</span> Mac utility.</p>
-<div class="scope-note">Self-publishing case study. Pairs with NightGard Commander to show two different reasons apps leave the App Store &mdash; choice (Commander) vs. necessity (DDNS).</div>
-<h2>What NightGard DDNS shows</h2>
+<p><span class="status-notlive">Status: self-distributed, notarized.</span> Mac utility. Pairs with NightGard Commander as the book's two-sided case study on self-publishing &mdash; Commander chose self-publishing over the App Store sandbox; DDNS had no choice because daemons can't be App Store distributed at all.</p>
+<div class="scope-note">A tiny background service that keeps a Dynamic DNS record updated with the user's changing home IP. No windowed UI when running &mdash; just a launchd-managed binary and a small SettingsView the user opens to configure credentials. Source: <a href="https://github.com/fluhartyml/NightGardDDNS">github.com/fluhartyml/NightGardDDNS</a>. See Book 21 Git-And-GitHub for the clone workflow.</div>
+
+<h2>What NightGard DDNS shows at production scale</h2>
 <ul>
-<li>LaunchAgent / launchd integration &mdash; the app runs as a background service, not a windowed app</li>
-<li>Persistent network client (keeps a Dynamic DNS record up to date with the user's changing home IP)</li>
-<li>Keychain storage for service credentials</li>
-<li>Tiny scope &mdash; daemon apps can be very small</li>
+<li><strong>The launchd / LaunchAgent integration pattern</strong> &mdash; the app installs a <code>.plist</code> in <code>~/Library/LaunchAgents/</code> that tells <code>launchd</code> when to start the service, what to run, and how often. The user never sees a Dock icon for the running daemon.</li>
+<li><strong>A persistent network client</strong> &mdash; the service polls the user's current public IP at a configurable interval and writes the result into the Dynamic DNS provider's API when it changes.</li>
+<li><strong>Keychain storage for service credentials</strong> &mdash; the API token for the DNS provider lives in the macOS Keychain, accessed via <code>SecItemAdd</code> / <code>SecItemCopyMatching</code>. Users never see the token after they enter it once; the service reads it from Keychain on every cycle.</li>
+<li><strong>The smallest viable Mac app shape</strong> &mdash; six Swift files, ~500 lines total, demonstrates that a useful production app does not have to be large.</li>
 </ul>
+
 <h2>Why App Store distribution was never an option</h2>
-<p>The App Store doesn't accept daemons or LaunchAgents. An always-on background network client that runs outside of a user-facing app window doesn't fit any App Store app category. Readers learn that some app shapes are simply not App Store material, and self-publishing isn't a fallback &mdash; it's the only path.</p>
+<p>The Mac App Store has no app category for daemons. Apple's submission flow expects an app with a Dock icon, a main window, a menu bar, and an entry point the user invokes. A LaunchAgent has none of those things by design &mdash; it's a binary that <code>launchd</code> starts at boot or login, runs in the background, and the user never directly interacts with the running process.</p>
+
+<p>Trying to fit DDNS into the App Store would mean changing it into something it isn't: adding a windowed UI that runs persistently in the dock, accepting the App Sandbox limits on network egress, working around the sandboxed Keychain access rules. The result would be slower, weaker, more visible, and worse for the user.</p>
+
+<p>The book's lesson here is the inverse of the usual "ship to the App Store as your default": <strong>some apps' shapes are fundamentally incompatible with App Store distribution, and forcing the fit produces a degraded version</strong>. Recognize the shape early. Self-publishing isn't a fallback for these apps; it's the only honest path.</p>
+
+<h2>The two services in the binary</h2>
+<p>The whole architecture is in two files:</p>
+
 <ul>
-<li>Source: <a href="https://github.com/fluhartyml/NightGardDDNS">github.com/fluhartyml/NightGardDDNS</a></li>
+<li><code>NightGardDDNSApp.swift</code> &mdash; the SwiftUI app entry point. When the user launches the app from Finder, it shows the configuration window. When <code>launchd</code> starts it as a daemon, it runs the polling loop without a window.</li>
+<li><code>DDNSService.swift</code> &mdash; the core service: read Keychain credentials, fetch current public IP from a known echo endpoint, compare to last-known, post to the DNS provider's API if different, log the result, sleep until next interval.</li>
+</ul>
+
+<p>Plus <code>SettingsView.swift</code> for the user-facing configuration UI (provider, hostname, API token, polling interval) and <code>NightGardDDNS_DeveloperNotes.swift</code> for the in-app documentation surface. Six files total, including assets and entitlements.</p>
+
+<h2>The launchd plist</h2>
+<p>Outside the app target, in the repo's installation script, is the launchd <code>.plist</code> that registers the service:</p>
+
+<pre><code>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "..."&gt;
+&lt;plist version="1.0"&gt;
+&lt;dict&gt;
+    &lt;key&gt;Label&lt;/key&gt;
+    &lt;string&gt;com.fluhartyml.NightGardDDNS&lt;/string&gt;
+    &lt;key&gt;ProgramArguments&lt;/key&gt;
+    &lt;array&gt;
+        &lt;string&gt;/Applications/NightGardDDNS.app/Contents/MacOS/NightGardDDNS&lt;/string&gt;
+        &lt;string&gt;--daemon&lt;/string&gt;
+    &lt;/array&gt;
+    &lt;key&gt;StartInterval&lt;/key&gt;
+    &lt;integer&gt;300&lt;/integer&gt;
+    &lt;key&gt;RunAtLoad&lt;/key&gt;
+    &lt;true/&gt;
+&lt;/dict&gt;
+&lt;/plist&gt;
+</code></pre>
+
+<p>This <code>.plist</code> goes in <code>~/Library/LaunchAgents/</code>. <code>launchd</code> picks it up at next login (or via <code>launchctl load</code>) and starts the binary with the <code>--daemon</code> flag every 5 minutes. The app reads <code>--daemon</code> at launch and skips creating the configuration window.</p>
+
+<h2>Cross-references</h2>
+<ul>
+<li><strong>Source Tour 23 NightGard Commander</strong> &mdash; the chose-self-publishing sibling; this app is the had-no-choice sibling</li>
+<li><strong>Source Tour 22 NightGard Library Commander</strong> &mdash; the App-Store-tier cousin showing how the same family's other apps fit a different distribution path</li>
+<li><strong>Book 21 Git-And-GitHub</strong> &mdash; clone the repo and read the source</li>
 </ul>
 </div>
-<footer class="page"><div class="row-nav"><div class="prev"><a href="../SourceTour-23-NightGard-Commander/SourceTour-23-NightGard-Commander.html">&larr; Source Tour 23: NightGard Commander (Self-Publi...</a></div><div class="pos">Source Tour 24</div><div class="next"><a href="../../Appendices/Appendix-A-GitHub-Setup.html">Appendix: Setting Up GitHub and Connecting It t... &rarr;</a></div></div></footer>
+<footer class="page"><div class="row-nav"><div class="prev"><a href="../SourceTour-23-NightGard-Commander/SourceTour-23-NightGard-Commander.html">&larr; Source Tour 23: NightGard Commander (Self-Publi...</a></div><div class="pos">Source Tour 24</div><div class="next"><a href="../SourceTour-25-Transcription-Keeper/SourceTour-25-Transcription-Keeper.html">Source Tour 25: Transcription Keeper &rarr;</a></div></div></footer>
 </body></html>

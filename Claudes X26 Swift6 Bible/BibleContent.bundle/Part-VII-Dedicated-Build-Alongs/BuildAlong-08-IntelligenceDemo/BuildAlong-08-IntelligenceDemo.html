@@ -20,7 +20,7 @@ code { color: var(--bright); background: var(--codebg); padding: 0.08em 0.35em; 
 strong { color: var(--bright); }
 em { color: var(--fg); font-style: italic; }
 .scope-note { border-left: 3px solid var(--bright); padding: 0.7rem 1rem; background: #140c00; margin: 0.6rem 0; color: var(--bright); }
-.status-testflight { color: #FFD060; font-weight: bold; }
+.status-github { color: #FFD060; font-weight: bold; }
 
 
 footer.page { flex-direction: column; gap: 0.4rem; }
@@ -36,11 +36,11 @@ footer.page .row-nav .nav-empty { color: var(--gutter); font-style: italic; }
 </head><body>
 <header class="page"><div class="path">Part-VII-Dedicated-Build-Alongs/BuildAlong-08-IntelligenceDemo</div></header>
 <div class="content"><h1>Build-Along 08: IntelligenceDemo</h1>
-<p><span class="status-testflight">Distribution: TestFlight beta.</span> The concept was a camera-driven "what is this?" scanner &mdash; point the camera, get object classification (CoreML), extracted text (Vision OCR), language of that text (NaturalLanguage). It would have shipped to the App Store, except Apple already ships this natively.</p>
+<p><span class="status-github">Distribution: GitHub clone-and-build.</span> The concept is a camera-driven "what is this?" scanner &mdash; point the camera, get object classification (CoreML), extracted text (Vision OCR), language of that text (NaturalLanguage). Readers clone the repo, open the project in Xcode, build and run on their own device.</p>
 <div class="scope-note">MVP concept: a privacy-first camera inspector. CoreML image classification + Vision OCR + NaturalLanguage language detection, all on-device.</div>
-<h2>Why TestFlight, not App Store</h2>
-<p>Apple Intelligence / Visual Intelligence (iOS 18+, refreshed in iOS 26) already provides a camera-driven "what is this?" experience on every modern iPhone natively. Google Lens has been on iOS for years too. Our version wouldn't add enough differentiation to clear App Store Guideline 2.2 &mdash; a reviewer would reasonably say "Apple and Google already do this, why is yours here?" Without a strong differentiator (a specific niche, a unique interaction model, a privacy story that stands out), the honest distribution channel is TestFlight.</p>
-<p>The teaching value of CoreML + Vision + NaturalLanguage is still real &mdash; those frameworks remain worth learning. The app is still worth building as a teaching artifact. It just ships via TestFlight instead of competing with Apple Intelligence on the store.</p>
+<h2>Why GitHub clone-and-build, not App Store</h2>
+<p>Apple Intelligence / Visual Intelligence (iOS 18+, refreshed in iOS 26) already provides a camera-driven "what is this?" experience on every modern iPhone natively. Google Lens has been on iOS for years too. Our version wouldn't add enough differentiation to clear App Store Guideline 2.2 &mdash; a reviewer would reasonably say "Apple and Google already do this, why is yours here?" Without a strong differentiator (a specific niche, a unique interaction model, a privacy story that stands out), App Store distribution isn't the honest path.</p>
+<p>The teaching value of CoreML + Vision + NaturalLanguage is still real &mdash; those frameworks remain worth learning. The app is still worth building as a teaching artifact. It just ships as a GitHub repo readers clone and build themselves, instead of competing with Apple Intelligence on the store.</p>
 <h2>What IntelligenceDemo will teach</h2>
 <ul>
 <li><strong>CoreML</strong> &mdash; loading a bundled <code>.mlmodel</code> or <code>.mlpackage</code> (e.g., MobileNetV2 image classifier), running inference on a <code>CVPixelBuffer</code> from the camera feed.</li>
@@ -48,13 +48,13 @@ footer.page .row-nav .nav-empty { color: var(--gutter); font-style: italic; }
 <li><strong>NaturalLanguage</strong> &mdash; <code>NLLanguageRecognizer</code> for language detection on extracted text, plus <code>NLTagger</code> for named entities if the extracted text is a sign or label.</li>
 <li><strong>AVFoundation</strong> (supporting) &mdash; camera capture session, live preview layer, per-frame sampling into the Vision + CoreML pipeline.</li>
 <li><strong>Signature layer:</strong> MVP + Under the Hood + About &amp; Send Feedback.</li>
-<li><strong>Distribution:</strong> TestFlight &mdash; readers get an install link from the appendix/wiki.</li>
+<li><strong>Distribution:</strong> GitHub clone-and-build &mdash; readers get the repo URL from the appendix/wiki.</li>
 </ul>
 <h2>Current state</h2>
 <ul>
 <li>No Xcode project yet</li>
 </ul>
 <h2>Next step</h2>
-<p>Scaffolded after earlier build-alongs ship; TestFlight distribution only. If a clear differentiator emerges later (e.g., a specialized niche like botanical-identification or historical-coin-classification) the app could be re-scoped toward App Store at that time, but the default direction is TestFlight.</p></div>
+<p>Scaffolded after earlier build-alongs ship; GitHub clone-and-build distribution. If a clear differentiator emerges later (e.g., a specialized niche like botanical-identification or historical-coin-classification) the app could be re-scoped toward App Store at that time, but the default direction is GitHub clone-and-build.</p></div>
 <footer class="page"><div class="row-nav"><div class="prev"><a href="../BuildAlong-07-MyPerson/BuildAlong-07-MyPerson.html">&larr; Build-Along 07: MyPerson</a></div><div class="pos">Build-Along 08</div><div class="next"><a href="../BuildAlong-09-TouchAndMove/BuildAlong-09-TouchAndMove.html">Build-Along 09: TouchAndMove &rarr;</a></div></div></footer>
 </body></html>

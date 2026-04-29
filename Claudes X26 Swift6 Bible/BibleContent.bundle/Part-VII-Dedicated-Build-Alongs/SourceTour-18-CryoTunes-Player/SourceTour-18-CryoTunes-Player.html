@@ -45,22 +45,101 @@ footer.page .row-nav .nav-empty { color: var(--gutter); font-style: italic; }
 <header class="page"><div class="path">Part-VII-Dedicated-Build-Alongs/SourceTour-18-CryoTunes-Player</div></header>
 <div class="content">
 <h1>Source Tour 18: CryoTunes Player</h1>
-<p><span class="status-live">Status: LIVE on the App Store (v2.4.6 approved 2026-04-23).</span> Production MusicKit app with retro-aesthetic radio stations. Install it from the App Store to browse alongside this source tour.</p>
-<div class="scope-note">Source tour for CryoTunes Player. This is not a build-along &mdash; the app is a production app, not a sample. Open the repo in Xcode and browse the source as you read this chapter.</div>
+<p><span class="status-live">Status: LIVE on the App Store (v2.4.6 approved 2026-04-23).</span> Production MusicKit-based retro-aesthetic radio player for iPhone, iPad, and Mac. Built on top of the shared <strong>CryoKit</strong> package and the Apple Music REST API.</p>
+<div class="scope-note">Two ways to follow along: install the live app from the App Store and study its surface, or clone the repo and open it in Xcode to read the source directly. Both paths are first-class &mdash; the App Store version teaches finished-product polish; the GitHub clone teaches the engineering. See Book 21 Git-And-GitHub for the clone workflow.</div>
+
 <h2>What CryoTunes shows at production scale</h2>
 <ul>
-<li>MusicKit streaming (scales what Build-Along 04 Audio Universe's Stream tab teaches)</li>
-<li>ShazamKit integration for "what's playing" features</li>
-<li>iCloud KVS for cross-device dislike sync (real-world gotcha: the entitlement needs the Key-Value Store capability checkbox, not just the plist key)</li>
-<li>CryoKit internal package for radio station data</li>
+<li>The <strong>data-layer-vs-UI-layer</strong> separation in practice: CryoKit owns playback, CryoTunes owns UI. The discipline behind that split is one of the chapter's main teaching beats below.</li>
+<li>MusicKit streaming via <code>ApplicationMusicPlayer.shared</code> &mdash; station playback, personal-station dynamic fetching, queue manipulation</li>
+<li>ShazamKit integration via <code>SHSession</code> &mdash; audio fingerprinting, match-row UI, tap-to-open in Apple Music</li>
+<li>The Apple Music REST API via <code>MusicDataRequest</code> &mdash; for things MusicKit's typed Swift surface doesn't expose (love/dislike ratings, personal stations)</li>
+<li>iCloud Key-Value Store for cross-device sync of preferences-tier data (disliked-song lists)</li>
+<li>The <code>CryoKit</code> shared package, which also backs Tally Matrix Clock &mdash; see Source Tour 19 for the sister-app angle</li>
 </ul>
+
 <h2>Install and browse</h2>
 <ul>
 <li>App Store: <a href="https://apps.apple.com/app/cryotunes-player/id6761222456">CryoTunes Player</a></li>
 <li>Source: <a href="https://github.com/fluhartyml/CryoTunesPlayer">github.com/fluhartyml/CryoTunesPlayer</a></li>
 </ul>
+
+<h2>The data-layer-vs-UI-layer split</h2>
+<p>CryoTunes Player is a textbook example of why architectural rules matter in real apps. The rule:</p>
+
+<div class="scope-note"><strong>CryoKit serves data only. The host app owns the UI.</strong></div>
+
+<p>CryoKit (the package) is responsible for talking to MusicKit, managing the playback session, holding observable state about what's playing. It does not make UI decisions. It does not write user-facing strings. It does not pop up alerts. CryoTunes Player (the app) reads CryoKit's data, presents it in the UI, and decides what the user sees.</p>
+
+<p>In a small app the split feels academic. In a production app it pays off the moment you ship a bug. CryoTunes hit that moment on 2026-04-29 when a false-positive popup ("Unable to play station. Check your connection.") fired while music was actually playing. The popup string lived in CryoKit's <code>MusicPlaybackManager</code> &mdash; a UI-shaped piece of prose sitting on a data layer that has no business diagnosing Wi-Fi. CryoKit had no authority to make that claim; it had simply caught any throw and substituted a fabricated explanation.</p>
+
+<p>The fix: CryoTunes stopped reading CryoKit's <code>errorMessage</code> property entirely. Severing that single binding eliminated the false-positive popup without touching CryoKit at all. The lesson generalizes:</p>
+
+<ul>
+<li><strong>A layer should only report on what it owns and observed.</strong> CryoKit owns MusicKit calls; it can throw "MusicKit call failed." It cannot diagnose the network without reading the network. Don't write user-facing prose in a data layer.</li>
+<li><strong>If a framework's API offers a UI-shaped property you didn't ask for, you don't have to read it.</strong> Public is an offer, not a requirement. Refusing to subscribe is a valid response when the offer is wrong.</li>
+<li><strong>Architectural rules earn their keep when bugs hit.</strong> If you'd kept the UI string in the data layer, the only fix would have been editing the data layer. By treating CryoKit as off-limits read-only, the fix lived entirely in the consumer.</li>
+</ul>
+
+<p>Browse <code>CryoTunes Player/ContentView.swift</code> on GitHub before and after commit <code>06a1852</code> ("Stop reading CryoKit errorMessage in CryoTunes Player") to see the sever in action.</p>
+
+<h2>The Apple Music REST API as a backdoor</h2>
+<p>MusicKit's typed Swift API is generous, but it has gaps. The most common one: it does not expose a first-class call to mark a song as a favorite. There is no <code>Song.markAsFavorite()</code>, no <code>MusicLibrary.shared.addToFavorites(song)</code>. Apple Music's "Favorite Songs" auto-playlist is auto-managed by the iOS app's star button, not by a typed Swift API.</p>
+
+<p>What MusicKit does provide is <code>MusicDataRequest</code> &mdash; a wrapper that lets you make raw HTTP calls to the Apple Music REST API using the user's already-authorized session. CryoTunes uses this to wire its thumbs-up/thumbs-down buttons to Apple Music's love/dislike rating system. Open <code>FavoriteManager.swift</code> in the repo:</p>
+
+<pre><code>private func rate(songID: String, value: Int) async throws {
+    guard let url = URL(string: "https://api.music.apple.com/v1/me/ratings/songs/\(songID)") else {
+        return
+    }
+    var urlRequest = URLRequest(url: url)
+    urlRequest.httpMethod = "PUT"
+    urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
+    let body: [String: Any] = [
+        "type": "ratings",
+        "attributes": ["value": value]
+    ]
+    urlRequest.httpBody = try JSONSerialization.data(withJSONObject: body)
+    let request = MusicDataRequest(urlRequest: urlRequest)
+    _ = try await request.response()
+}
+</code></pre>
+
+<p>Two callable wrappers around it:</p>
+
+<ul>
+<li><code>favorite(songID:)</code> sends <code>value: 1</code> &mdash; the "love" rating, which Apple Music auto-adds to the system Favorite Songs playlist</li>
+<li><code>unfavorite(songID:)</code> sends <code>value: -1</code> &mdash; the "dislike" rating, which removes from Favorites and feeds the global "Suggest Less Like This" recommendation signal</li>
+</ul>
+
+<p>The take-away: <strong>when MusicKit's typed surface is missing what you need, the REST API via <code>MusicDataRequest</code> is the supported escape hatch</strong>. Auth is handled for you; you write the URL and the request body.</p>
+
+<h2>iCloud Key-Value Store for preferences-tier sync</h2>
+<p>CryoTunes' <code>DislikeManager</code> tracks which songs the user has thumbs-down'd on each station, and syncs that across the user's devices via <code>NSUbiquitousKeyValueStore</code> &mdash; iCloud Key-Value Store. KVS is the lightweight cousin of CloudKit: a tiny dictionary (1MB total, 64KB per key, ~1024 keys) backed by iCloud, designed for preferences and small bits of state, not user content.</p>
+
+<p>The real-world gotcha that bit this app: <strong>turning the entitlement on requires more than the plist key</strong>. The Key-Value Store capability has to be checked in Xcode's Signing &amp; Capabilities pane &mdash; that's what triggers the entitlement to be added to the App Store-signed binary. A plist key without the capability checkbox compiles fine but doesn't sync once the binary's signed by Apple. The capability went on for v2.4.6 and KVS sync started working immediately.</p>
+
+<h2>The thumbs-up / thumbs-down design</h2>
+<p>CryoTunes' rating buttons fire <em>two</em> things on each tap, in parallel:</p>
+
+<ul>
+<li><strong>Thumbs-up</strong> &mdash; adds the song to a per-station playlist (e.g., "Jazz - CryoTunes") via <code>MusicLibrary.shared.add(_:to:)</code>, AND sends <code>value: 1</code> to the rating API to favorite the song globally in Apple Music</li>
+<li><strong>Thumbs-down</strong> &mdash; adds the song's ID to <code>DislikeManager</code>'s per-station dislike set (auto-skip on this station next time, KVS-synced across devices), AND sends <code>value: -1</code> to the rating API to dislike the song globally</li>
+<li><strong>Skip-back undo</strong> &mdash; if the user hits previous-track within the song window after a thumbs-down, the per-station dislike is removed and the song is re-favorited via the rating API</li>
+</ul>
+
+<p>The two systems are complementary, not redundant. The per-station system gives <em>guaranteed</em> auto-skip behavior on that station with offline robustness; the Apple Music rating gives global recommendation tuning across all of Apple Music. Each thumbs-down both flags the song locally and informs the global engine. Browse <code>Views/CryoTransportControls.swift</code> on GitHub for the wiring.</p>
+
 <h2>Shared package dependency</h2>
-<p>CryoTunes Player depends on <strong>CryoKit</strong> &mdash; a curated internal Swift package that also backs Tally Matrix Clock. See <a href="../../Appendices/Appendix-B-CryoKit/Appendix-B-CryoKit.html">Appendix B: CryoKit</a> for the shared-package source tour.</p>
+<p>CryoTunes Player depends on <strong>CryoKit</strong> &mdash; a curated internal Swift package that also backs Tally Matrix Clock. See <a href="../../Appendices/Appendix-B-CryoKit/Appendix-B-CryoKit.html">Appendix B: CryoKit</a> for the shared-package source tour and <a href="../SourceTour-19-Tally-Matrix-Clock/SourceTour-19-Tally-Matrix-Clock.html">Source Tour 19 Tally Matrix Clock</a> for the sister-app angle.</p>
+
+<h2>Cross-references</h2>
+<ul>
+<li><strong>Book 21 Git-And-GitHub</strong> &mdash; clone the repo into Xcode and follow along</li>
+<li><strong>Build-Along 04 Audio Universe</strong> &mdash; the App-Store-tier MusicKit teaching app; CryoTunes' Stream-tab equivalent at production scale</li>
+<li><strong>Source Tour 19 Tally Matrix Clock</strong> &mdash; sister app, also depends on CryoKit, different distribution shape (tvOS clock)</li>
+<li><strong>Appendix B CryoKit</strong> &mdash; the shared-package internals</li>
+</ul>
 </div>
 <footer class="page"><div class="row-nav"><div class="prev"><a href="../BuildAlong-17-tvOS-Ambient-Display/BuildAlong-17-tvOS-Ambient-Display.html">&larr; Build-Along 17: tvOS Ambient Display</a></div><div class="pos">Source Tour 18</div><div class="next"><a href="../SourceTour-19-Tally-Matrix-Clock/SourceTour-19-Tally-Matrix-Clock.html">Source Tour 19: Tally Matrix Clock &rarr;</a></div></div></footer>
 </body></html>
