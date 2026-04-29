@@ -1,5 +1,11 @@
 # Chapter 05: Menus and Navigation
 
+## Live Reference: Inkwell sidebar + LockBox three-column + CryoTunes tabs
+
+> Three different production navigation shapes ship across the book's app roster. **Inkwell** uses a sidebar-and-detail `NavigationSplitView` for the book's Parts → Books → Chapters → Pages tree (the navigation you're using right now to get to this page). **Claudes LockBox** uses a three-column `NavigationSplitView` (Folders → Items → Detail) plus a TabView at the root level (Vault tab + Under the Hood tab). **CryoTunes Player** uses a flat tab-and-control-cluster pattern fitted to a music player's needs. Reading the three side-by-side shows how the same `NavigationStack` / `NavigationSplitView` / `TabView` primitives compose into very different feeling apps. Sources: [Inkwell](https://github.com/fluhartyml/Claudes-X26-Swift6-Bible), [LockBox](https://github.com/fluhartyml/Claudes-LockBox), [CryoTunes Player](https://github.com/fluhartyml/CryoTunesPlayer). See Build-Along 00, Build-Along 03, Source Tour 18.
+
+---
+
 ## NavigationStack
 
 The modern replacement for `NavigationView`. Use this for single-column, push-pop navigation on iPhone and iPad.

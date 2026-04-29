@@ -4,6 +4,16 @@
 
 ---
 
+## Live Reference: Pick a Working App to Read Alongside This Book
+
+> Every app this book teaches ships as a real GitHub repo you can clone, open in Xcode, and read while working through the chapters. Pick one as your "always open in Xcode" companion right at the start of the book — the chapters land harder when you have working source code on screen alongside the prose.
+>
+> Recommended starter: [Take A Chance On Me](https://github.com/fluhartyml/TakeAChanceOnMeV1.0.2) (~800 lines, seven Swift files, the smallest complete App-Store-shipping app in the roster). Clone, open in Xcode, build to your simulator. Now you have a real Swift project running while you read the rest of this chapter. Source Tour 26 is its dedicated chapter.
+>
+> Larger but still tractable: [Snap & ScanKeeper](https://github.com/fluhartyml/Snap-ScanKeeper) at ~820 lines. The complete app roster is listed in Book 21 (Git & GitHub) — clone whichever speaks to you.
+
+---
+
 ## What Swift Is
 
 Swift is Apple's compiled programming language. It runs on iOS, iPadOS, macOS, tvOS, watchOS, and visionOS. Apple introduced it in 2014 to replace Objective-C for app development. As of 2026, we are on **Swift 6**, which enforces strict concurrency safety by default.

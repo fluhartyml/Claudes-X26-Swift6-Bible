@@ -92,6 +92,9 @@ footer.page .row-nav .nav-empty { color: var(--gutter); font-style: italic; }
   <li><h1>Chapter 3: Introducing Scenes &amp; Windows</h1></li>
   <li><p><strong>Claude's Swift Reference 26</strong> -- Part I: Introduction</p></li>
   <li><hr></li>
+  <li><h2>Live Reference: Inkwell + Claudes LockBox + CryoTunes Player</h2></li>
+  <li><div class="scope-note">All three apps demonstrate the <code>App</code> protocol and scene wiring this chapter teaches, in three different shapes: <strong>Inkwell</strong> has a single <code>WindowGroup</code> hosting <code>LockScreenView</code> (its app entry), then <code>ContentView</code> after auth &mdash; see <code>Claudes_X26_Swift6_BibleApp.swift</code>. <strong>Claudes LockBox</strong> does the same with a <code>WindowGroup</code> hosting a Face-ID gated <code>LockScreenView</code> that wraps the actual content &mdash; see <code>Claudes_LockBoxApp.swift</code> at <a href="https://github.com/fluhartyml/Claudes-LockBox">github.com/fluhartyml/Claudes-LockBox</a>. <strong>CryoTunes Player</strong> uses <code>WindowGroup</code> plus a <code>Settings</code> scene on Mac for the user's preferences pane &mdash; see <code>CryoTunes_PlayerApp.swift</code> at <a href="https://github.com/fluhartyml/CryoTunesPlayer">github.com/fluhartyml/CryoTunesPlayer</a>. Three apps, three takes on the same App-protocol pattern. See Build-Along 00 (Inkwell), Build-Along 03 (LockBox), Source Tour 18 (CryoTunes).</div></li>
+  <li><hr></li>
   <li><h2>The App Protocol</h2></li>
   <li><p>Every SwiftUI application starts with a struct that conforms to the <code>App</code> protocol and is marked <code>@main</code>. This is the entry point -- the thing that launches when the user taps your icon.</p></li>
   <li><pre><code class="lang-swift">import SwiftUI

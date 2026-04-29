@@ -4,6 +4,18 @@
 
 ---
 
+## Live Reference: Lexicon Sheet + CryoTransport Controls + Tally Matrix Squares
+
+> Three concrete custom-view examples you can read in the production source while working through this chapter:
+>
+> **`LexiconSheet` + `IdentifierTaggedSourceView`** (in Inkwell, [github.com/fluhartyml/Claudes-X26-Swift6-Bible](https://github.com/fluhartyml/Claudes-X26-Swift6-Bible)) — the popup that appears when you tap a tinted Swift identifier in any source-mirror code block in the Under the Hood tab. A custom view that takes an identifier, looks it up in the Lexicon corpus, and renders a definition popup with code example, related links, and book references. Built from raw SwiftUI primitives.
+>
+> **`CryoTransportControls`** (in CryoTunes Player, [github.com/fluhartyml/CryoTunesPlayer](https://github.com/fluhartyml/CryoTunesPlayer)) — a three-row composed view: transport row (play/pause/skip/stop), shuffle/repeat row, like/dislike/share row. A textbook example of decomposing a complex multi-button cluster into one named custom view.
+>
+> **`TallyMatrix1x3` + `TallyMatrix3x3` + `SquareView`** (in Tally Matrix Clock, [github.com/fluhartyml/Tally-Matrix-Clock](https://github.com/fluhartyml/Tally-Matrix-Clock)) — three custom views that compose: `SquareView` is a single lit/unlit square primitive; the two matrix views compose grids of squares for the tens and ones digits. Same primitive, two different layouts, both reusable. See Source Tour 19 for the architectural walkthrough.
+
+---
+
 ## What You'll Learn
 
 By the end of this chapter you can:

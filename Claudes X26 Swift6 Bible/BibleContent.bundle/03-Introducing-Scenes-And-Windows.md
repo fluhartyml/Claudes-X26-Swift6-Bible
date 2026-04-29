@@ -4,6 +4,12 @@
 
 ---
 
+## Live Reference: Inkwell + Claudes LockBox + CryoTunes Player
+
+> All three apps demonstrate the `App` protocol and scene wiring this chapter teaches, in three different shapes: **Inkwell** has a single `WindowGroup` hosting `LockScreenView` (its app entry), then `ContentView` after auth — see `Claudes_X26_Swift6_BibleApp.swift`. **Claudes LockBox** does the same with a `WindowGroup` hosting a Face-ID gated `LockScreenView` that wraps the actual content — see `Claudes_LockBoxApp.swift` at [github.com/fluhartyml/Claudes-LockBox](https://github.com/fluhartyml/Claudes-LockBox). **CryoTunes Player** uses `WindowGroup` plus a `Settings` scene on Mac for the user's preferences pane — see `CryoTunes_PlayerApp.swift` at [github.com/fluhartyml/CryoTunesPlayer](https://github.com/fluhartyml/CryoTunesPlayer). Three apps, three takes on the same App-protocol pattern. See Build-Along 00 (Inkwell), Build-Along 03 (LockBox), Source Tour 18 (CryoTunes).
+
+---
+
 ## The App Protocol
 
 Every SwiftUI application starts with a struct that conforms to the `App` protocol and is marked `@main`. This is the entry point -- the thing that launches when the user taps your icon.

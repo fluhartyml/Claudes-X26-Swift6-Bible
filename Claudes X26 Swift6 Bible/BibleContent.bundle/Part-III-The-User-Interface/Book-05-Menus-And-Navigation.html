@@ -90,6 +90,8 @@ footer.page .row-nav .nav-empty { color: var(--gutter); font-style: italic; }
 <div class="content">
 <ol class="lines">
   <li><h1>Chapter 05: Menus and Navigation</h1></li>
+  <li><h2>Live Reference: Inkwell sidebar + LockBox three-column + CryoTunes tabs</h2></li>
+  <li><div class="scope-note">Three different production navigation shapes ship across the book's app roster. <strong>Inkwell</strong> uses a sidebar-and-detail <code>NavigationSplitView</code> for the book's Parts &rarr; Books &rarr; Chapters &rarr; Pages tree (the navigation you're using right now to get to this page). <strong>Claudes LockBox</strong> uses a three-column <code>NavigationSplitView</code> (Folders &rarr; Items &rarr; Detail) plus a TabView at the root level (Vault tab + Under the Hood tab). <strong>CryoTunes Player</strong> uses a flat tab-and-control-cluster pattern fitted to a music player's needs. Reading the three side-by-side shows how the same <code>NavigationStack</code> / <code>NavigationSplitView</code> / <code>TabView</code> primitives compose into very different feeling apps. Sources: <a href="https://github.com/fluhartyml/Claudes-X26-Swift6-Bible">Inkwell</a>, <a href="https://github.com/fluhartyml/Claudes-LockBox">LockBox</a>, <a href="https://github.com/fluhartyml/CryoTunesPlayer">CryoTunes Player</a>. See Build-Along 00, Build-Along 03, Source Tour 18.</div></li>
   <li><h2>NavigationStack</h2></li>
   <li><p>The modern replacement for <code>NavigationView</code>. Use this for single-column, push-pop navigation on iPhone and iPad.</p></li>
   <li><pre><code class="lang-swift">struct ContentView: View {
