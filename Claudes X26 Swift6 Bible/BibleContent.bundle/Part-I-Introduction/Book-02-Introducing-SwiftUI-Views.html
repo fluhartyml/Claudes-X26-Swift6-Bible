@@ -92,6 +92,9 @@ footer.page .row-nav .nav-empty { color: var(--gutter); font-style: italic; }
   <li><h1>Chapter 2: Introducing SwiftUI Views</h1></li>
   <li><p><strong>Claude's Swift Reference 26</strong> -- Part I: Introduction</p></li>
   <li><hr></li>
+  <li><h2>Live Reference: Inkwell (the app you're reading this in)</h2></li>
+  <li><div class="scope-note">Every shipping app alongside this book is built with SwiftUI, but <strong>Inkwell</strong> is the most useful one to point at while reading the introductory chapter. Inkwell is the iPad reader app that renders these very pages &mdash; every paragraph, every code block, every Live Reference callout you're reading right now is drawn by a SwiftUI <code>View</code> somewhere in the Inkwell source. Tap the Under the Hood tab in this app's toolbar; the file list you see is every SwiftUI view that makes the app. <code>ContentView.swift</code> is the root view. <code>VaultWebView.swift</code> is the WKWebView wrapper that paints the HTML you're looking at. Source: <a href="https://github.com/fluhartyml/Claudes-X26-Swift6-Bible">github.com/fluhartyml/Claudes-X26-Swift6-Bible</a>. See Build-Along 00 (titled "Meta") for the full architecture and the recursive-self-reference framing.</div></li>
+  <li><hr></li>
   <li><h2>What SwiftUI Is</h2></li>
   <li><p>SwiftUI is Apple's declarative UI framework. You describe <em>what</em> you want the interface to look like, and SwiftUI figures out <em>how</em> to render it and <em>when</em> to update it.</p></li>
   <li><p>It shipped in 2019 and has matured significantly. As of Swift 6 / Xcode 26, SwiftUI is the primary way to build Apple apps. UIKit still exists and works, but new projects should start with SwiftUI.</p></li>

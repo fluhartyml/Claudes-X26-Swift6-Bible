@@ -4,6 +4,12 @@
 
 ---
 
+## Live Reference: Claudes LockBox image viewer
+
+> **Claudes LockBox** ships every gesture this chapter teaches in its photo viewer. Tap a vault item's photo thumbnail and the image opens full-screen. Pinch to zoom. Double-tap to toggle between fit-to-screen and 3x zoom. Drag to pan when zoomed in. Pinch below 1x and the image snaps back to fit-to-screen. Long-press a thumbnail in the detail view and a contextual menu offers "View Full Size" or "Delete Page." Five gesture patterns in one screen, all in `ImageViewerView.swift`. Source: [github.com/fluhartyml/Claudes-LockBox](https://github.com/fluhartyml/Claudes-LockBox). See Build-Along 03 §11 for the build walkthrough; the snap-back-on-overpinch behavior is one of the small UX-payoff details this chapter's principles produce in production code.
+
+---
+
 ## What This Chapter Is About
 
 Books 01 through 03 built up the language, SwiftUI's view model, and the scene/window structure of an Apple app. The app runs; views draw. Now we turn to the other half of an app's life: how the user talks back. Taps, swipes, drags, pinches, keyboard presses, Apple Pencil strokes.

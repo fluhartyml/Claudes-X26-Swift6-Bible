@@ -4,6 +4,12 @@
 
 ---
 
+## Live Reference: Inkwell (the app you're reading this in)
+
+> Every shipping app alongside this book is built with SwiftUI, but **Inkwell** is the most useful one to point at while reading the introductory chapter. Inkwell is the iPad reader app that renders these very pages — every paragraph, every code block, every Live Reference callout you're reading right now is drawn by a SwiftUI `View` somewhere in the Inkwell source. Tap the Under the Hood tab in this app's toolbar; the file list you see is every SwiftUI view that makes the app. `ContentView.swift` is the root view. `VaultWebView.swift` is the WKWebView wrapper that paints the HTML you're looking at. Source: [github.com/fluhartyml/Claudes-X26-Swift6-Bible](https://github.com/fluhartyml/Claudes-X26-Swift6-Bible). See Build-Along 00 (titled "Meta") for the full architecture and the recursive-self-reference framing.
+
+---
+
 ## What SwiftUI Is
 
 SwiftUI is Apple's declarative UI framework. You describe *what* you want the interface to look like, and SwiftUI figures out *how* to render it and *when* to update it.

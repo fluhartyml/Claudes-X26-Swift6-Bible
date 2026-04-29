@@ -4,6 +4,14 @@
 
 ---
 
+## Live Reference: CryoTunes Player (a production lesson on what NOT to do)
+
+> **CryoTunes Player** carries an architectural lesson in error handling that this chapter is ultimately about. The app's data layer — actually a Swift package called **CryoKit** — has a class `MusicPlaybackManager` with a `public var errorMessage: String` property. The package's catch blocks set that property to user-facing prose like *"Unable to play station. Check your connection."* But CryoKit doesn't read the network. It calls MusicKit. A bare `catch` in CryoKit catches *anything* that throws and unconditionally writes that connection-blame string, regardless of whether the throw was actually a network error.
+>
+> The lesson, captured in feedback memory: **a layer should only report on what it actually owns and observed.** A data layer doesn't get to author UI prose about domains it has no access to. CryoTunes (the app target) eventually severed its read of CryoKit's `errorMessage` entirely — see CryoTunes' `ContentView.swift` history at [github.com/fluhartyml/CryoTunesPlayer](https://github.com/fluhartyml/CryoTunesPlayer) (commit `06a1852` is the sever). Source Tour 18 covers the architectural lesson at length. The chapter you're reading now is the language-level foundation; that source tour is where the principle hits production.
+
+---
+
 ## What You'll Learn
 
 By the end of this chapter you can:
