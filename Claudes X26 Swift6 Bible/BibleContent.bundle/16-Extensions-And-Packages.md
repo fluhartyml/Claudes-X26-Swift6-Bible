@@ -2,6 +2,14 @@
 
 Your app doesn't have to do everything by itself. Extensions let your app reach outside its own process — into the home screen, the share sheet, Siri, and the lock screen. Packages let you break your code into reusable modules that multiple apps can share. Both are about extending what your app can do without stuffing everything into one target.
 
+## Live Reference: CryoKit (the shared package) + QuickNote (the widget extension)
+
+> Two production examples ship alongside this book:
+>
+> **CryoKit** is a curated internal Swift package shared between two apps — **CryoTunes Player** (iPhone music app) and **Tally Matrix Clock** (tvOS clock). Same package, two completely different platforms, two completely different distribution targets, one shared codebase for the data layer that backs both. Browse it as the canonical example of how a Swift Package binds an app family together. See Source Tour 18 (CryoTunes) and Source Tour 19 (Tally Matrix), with the full package internals at Appendix B (CryoKit).
+>
+> **QuickNote** ships with a home-screen widget extension. The host app and the widget extension live in separate processes, share data through an App Group container, and version their build numbers in lockstep (the host app's `CURRENT_PROJECT_VERSION` must equal the widget's, or App Store submission rejects the binary). Source: [github.com/fluhartyml/QuickNote](https://github.com/fluhartyml/QuickNote). The widget reads the user's three most recent notes from the same SwiftData store the host app writes to.
+
 ## Part 1: App Extensions
 
 ### What Is an App Extension?

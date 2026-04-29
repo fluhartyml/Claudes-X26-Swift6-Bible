@@ -1,5 +1,13 @@
 # Chapter 07: Toolbars and Tab Views
 
+## Live Reference: Five Shipping Apps
+
+> Every concept in this chapter ships in real apps you can install or clone. **CryoTunes Player**, **Claudes LockBox**, **QuickNote**, **Audio Universe**, and **Snap & ScanKeeper** all use the `.toolbar` modifier and `TabView` patterns this chapter teaches. Tap through any of them, browse their source via Under the Hood, and you'll see the same shapes the chapter walks through.
+>
+> The most concentrated example is **CryoTunes Player** — its `CryoTransportControls.swift` shows toolbar-equivalent controls (transport buttons, mode toggles, share buttons) drawn from a clean SwiftUI `HStack` rather than the `.toolbar` modifier; reading it side-by-side with this chapter shows when the modifier is the right tool and when a custom layout serves better. Source: [github.com/fluhartyml/CryoTunesPlayer](https://github.com/fluhartyml/CryoTunesPlayer). See Source Tour 18 for the architecture.
+
+---
+
 ## The .toolbar Modifier
 
 The `.toolbar` modifier is the single entry point for adding buttons, menus, and controls to navigation bars, bottom bars, and keyboard accessories.

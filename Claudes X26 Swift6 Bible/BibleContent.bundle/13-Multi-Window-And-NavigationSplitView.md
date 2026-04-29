@@ -17,6 +17,14 @@ If you have already built LockBox (Appendix D) or QuickNote (Appendix C), this c
 
 ---
 
+## Live Reference: Inkwell + Claudes LockBox
+
+> Two of the apps shipping alongside this book are built on the `NavigationSplitView` pattern this chapter teaches. **Inkwell** (the reader app you may be holding right now if you're on iPad) uses a sidebar-and-detail layout to navigate the book's Parts, Books, Chapters, and Pages. **Claudes LockBox** uses a three-column variant — Folders sidebar → Items in selected Folder → Item Detail — that reads cleanly on iPhone (stacked drill-in) and iPad/Mac (all three columns visible).
+>
+> Browse Inkwell's `ContentView.swift` via its Under the Hood tab, or clone Claudes LockBox at [github.com/fluhartyml/Claudes-LockBox](https://github.com/fluhartyml/Claudes-LockBox) and read `ContentView.swift`, `SidebarView.swift`, `ItemListView.swift`, `ItemDetailView.swift`. Both apps put the same chapter into production form. See Build-Along 00 (Inkwell — the meta chapter) and Build-Along 03 (LockBox) for the full walkthroughs.
+
+---
+
 ## Scenes, Windows, and the App
 
 Every Apple app has one `App` type as its entry point. Inside it you declare one or more **scenes** -- the top-level containers that SwiftUI manages for you. A scene ends up as a window on Mac and iPad, and as the app's root screen on iPhone.
