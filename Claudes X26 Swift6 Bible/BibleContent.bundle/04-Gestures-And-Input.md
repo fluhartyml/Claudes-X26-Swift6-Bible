@@ -6,7 +6,7 @@
 
 ## Live Reference: Claudes LockBox image viewer
 
-> **Claudes LockBox** ships every gesture this chapter teaches in its photo viewer. Tap a vault item's photo thumbnail and the image opens full-screen. Pinch to zoom. Double-tap to toggle between fit-to-screen and 3x zoom. Drag to pan when zoomed in. Pinch below 1x and the image snaps back to fit-to-screen. Long-press a thumbnail in the detail view and a contextual menu offers "View Full Size" or "Delete Page." Five gesture patterns in one screen, all in `ImageViewerView.swift`. Source: [github.com/fluhartyml/Claudes-LockBox](https://github.com/fluhartyml/Claudes-X26-Swift6-Bible/tree/main/Claudes%20LockBox). See Build-Along 03 §11 for the build walkthrough; the snap-back-on-overpinch behavior is one of the small UX-payoff details this chapter's principles produce in production code.
+> **Claudes LockBox** ships every gesture this chapter teaches in its photo viewer. Tap a vault item's photo thumbnail and the image opens full-screen. Pinch to zoom. Double-tap to toggle between fit-to-screen and 3x zoom. Drag to pan when zoomed in. Pinch below 1x and the image snaps back to fit-to-screen. Long-press a thumbnail in the detail view and a contextual menu offers "View Full Size" or "Delete Page." Five gesture patterns in one screen, all in `ImageViewerView.swift`. Source: [github.com/fluhartyml/Claudes-LockBox](https://github.com/fluhartyml/Claudes-LockBox). See Build-Along 03 §11 for the build walkthrough; the snap-back-on-overpinch behavior is one of the small UX-payoff details this chapter's principles produce in production code.
 
 ---
 

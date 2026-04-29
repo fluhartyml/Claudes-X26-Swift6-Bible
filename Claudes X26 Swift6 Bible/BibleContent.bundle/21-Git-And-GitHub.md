@@ -26,7 +26,7 @@ By the end of this chapter you can:
 > - [Claudes Web Wrapper rebuild](https://github.com/fluhartyml/Claudes-Web-Wrapper) — see Build-Along 01
 > - [Wraply (Web Wrapper legacy)](https://github.com/fluhartyml/Wraply) — see Build-Along 01 §15 two-listing case
 > - [QuickNote](https://github.com/fluhartyml/QuickNote) — see Build-Along 02
-> - [Claudes LockBox](https://github.com/fluhartyml/Claudes-X26-Swift6-Bible/tree/main/Claudes%20LockBox) — see Build-Along 03
+> - [Claudes LockBox](https://github.com/fluhartyml/Claudes-LockBox) — see Build-Along 03
 > - [Claudes Audio Universe](https://github.com/fluhartyml/Claudes-Audio-Universe) — see Build-Along 04
 > - [Claudes Outdoor Utility](https://github.com/fluhartyml/Claudes-Outdoor-Utility) — see Build-Along 05
 > - [CryoTunes Player](https://github.com/fluhartyml/CryoTunesPlayer) — see Source Tour 18

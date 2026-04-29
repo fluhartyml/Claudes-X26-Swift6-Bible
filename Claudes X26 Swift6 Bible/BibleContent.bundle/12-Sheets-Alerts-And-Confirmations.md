@@ -2,7 +2,7 @@
 
 ## Live Reference: Claudes LockBox
 
-> **Claudes LockBox** ships every pattern in this chapter at production scale. The New Item form lives in a `fullScreenCover` (not a `.sheet` — see Build-Along 03 §10 for why the `.sheet` height fights the iOS keyboard on phone-sized screens). The image viewer opens via `.sheet`. Long-press menus on photos use the SwiftUI contextual-menu pattern. Delete operations use confirmation dialogs. The About sheet opens from the sidebar's info button via `.sheet` again. Source: [github.com/fluhartyml/Claudes-LockBox](https://github.com/fluhartyml/Claudes-X26-Swift6-Bible/tree/main/Claudes%20LockBox). See Build-Along 03 for the full walkthrough; the `fullScreenCover` vs `.sheet` decision is one of three polish fixes from a single commit on the build day, captured in Section 10 of that chapter.
+> **Claudes LockBox** ships every pattern in this chapter at production scale. The New Item form lives in a `fullScreenCover` (not a `.sheet` — see Build-Along 03 §10 for why the `.sheet` height fights the iOS keyboard on phone-sized screens). The image viewer opens via `.sheet`. Long-press menus on photos use the SwiftUI contextual-menu pattern. Delete operations use confirmation dialogs. The About sheet opens from the sidebar's info button via `.sheet` again. Source: [github.com/fluhartyml/Claudes-LockBox](https://github.com/fluhartyml/Claudes-LockBox). See Build-Along 03 for the full walkthrough; the `fullScreenCover` vs `.sheet` decision is one of three polish fixes from a single commit on the build day, captured in Section 10 of that chapter.
 
 ---
 
