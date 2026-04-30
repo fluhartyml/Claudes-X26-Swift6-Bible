@@ -167,7 +167,153 @@ footer.page .row-nav .nav-empty { color: var(--gutter); font-style: italic; }
   <li><p id="a3-fn" style="font-size: 13pt; color: var(--dim);">[a3] Apple Developer Documentation, <em>Running code snippets using the playground macro</em>. <a href="https://developer.apple.com/documentation/xcode/running-code-snippets-using-the-playground-macro">developer.apple.com/documentation/xcode/running-code-snippets-using-the-playground-macro</a></p></li>
   <li><hr></li>
   <li><h2>Part B &mdash; Foundation Models in Your Own App</h2></li>
-  <li><div class="scope-note"><em>Drafting in progress. Part B covers Apple's on-device Foundation Models framework &mdash; the first-party answer to "I want my app to do AI itself." Sourced from Apple's "Generating content and performing tasks with Foundation Models" article, verified 2026-04-29. The full content lands in a follow-up commit.</em></div></li>
+<li><h3>What "Foundation Models" Is</h3></li>
+  <li><p>"Foundation Models" is Apple's first-party Swift API for the on-device large language models that power Apple Intelligence. The framework gives an app two things: it can generate text content, and it can perform language-understanding tasks against text the app already has.<sup>[<a href="#b1-fn">b1</a>]</sup></p></li>
+  <li><p>The architectural distinction from Part C's third-party API path is one word: <strong>on-device</strong>. The model runs on the user's device. No network round-trip. No API key. No funded balance against a vendor. No per-token meter. Privacy-by-default because nothing leaves the device.</p></li>
+  <li><h3>What the On-Device Model Is Good At</h3></li>
+  <li><p>Apple's documentation lists eight task categories the system model is well-suited for, each paired with a sample prompt.<sup>[<a href="#b1-fn">b1</a>]</sup> The pattern across them is that each one operates on text that's already in the app, or generates short, well-bounded text the app then renders:</p></li>
+  <li><table>
+    <tr><th>Task</th><th>Sample prompt shape</th></tr>
+    <tr><td>Summarize</td><td>Condense a passage to its key points</td></tr>
+    <tr><td>Extract entities</td><td>Pull people, places, or items from a body of text</td></tr>
+    <tr><td>Understand text</td><td>Answer a question about a passage's content</td></tr>
+    <tr><td>Refine or edit text</td><td>Rewrite a passage in a different voice or tense</td></tr>
+    <tr><td>Classify or judge text</td><td>Decide whether a passage matches a topic or label</td></tr>
+    <tr><td>Compose creative writing</td><td>Produce short original prose to a specification</td></tr>
+    <tr><td>Generate tags from text</td><td>Output a small set of topic tags for a passage</td></tr>
+    <tr><td>Generate game dialog</td><td>Speak as a defined character in a defined voice</td></tr>
+  </table></li>
+  <li><h3>What the On-Device Model Is NOT Good At</h3></li>
+  <li><p>The same documentation calls out three task shapes to avoid &mdash; this is the part to read before committing to a design, not after:<sup>[<a href="#b1-fn">b1</a>]</sup></p></li>
+  <li><table>
+    <tr><th>Avoid</th><th>Why</th></tr>
+    <tr><td>Arithmetic and counting</td><td>Large language models predict tokens; they don't compute. Even simple counts are unreliable.</td></tr>
+    <tr><td>Code generation</td><td>Use Coding Intelligence in Xcode for that (Part A). The on-device model isn't the right tool.</td></tr>
+    <tr><td>Multi-step logical or spatial reasoning</td><td>Requires combining world-knowledge with deductive steps the on-device model isn't sized for.</td></tr>
+  </table></li>
+  <li><p>If the feature fits one of the supported categories above, it works well. If it falls into the avoid list, reach for Part C's third-party API path or redesign the feature so the model isn't asked to do the part it can't.</p></li>
+  <li><h3>Checking Availability First</h3></li>
+  <li><p>The on-device model isn't always present at runtime. Three production-realistic reasons it can be missing: the device hardware doesn't support Apple Intelligence at all, the user has Apple Intelligence switched off in Settings, or the model assets are still downloading after the user just turned the feature on for the first time.<sup>[<a href="#b1-fn">b1</a>]</sup> The app checks availability before trying to use the model:</p></li>
+  <li><pre><code class="lang-swift">struct GenerativeView: View {
+    private var model = SystemLanguageModel.default
+
+    var body: some View {
+        switch model.availability {
+        case .available:
+            // Render the AI-powered UI.
+        case .unavailable(.deviceNotEligible):
+            // Hide the feature; the device can't run it.
+        case .unavailable(.appleIntelligenceNotEnabled):
+            // Prompt the user to enable Apple Intelligence in Settings.
+        case .unavailable(.modelNotReady):
+            // First-time download in progress; offer a "checking back" UI.
+        case .unavailable(let other):
+            // Catch-all for future cases.
+        }
+    }
+}</code></pre></li>
+  <li><p>Every shipping app needs a fallback path for the unavailable cases. Sometimes that's a hidden feature, sometimes it's a different UI in the same screen, and sometimes it's a redirect to a network-backed alternative (Part C's third-party API).</p></li>
+  <li><h3>Sessions &mdash; Single-Turn vs Multi-Turn</h3></li>
+  <li><p>Once availability is confirmed, calls into the model go through a <code>LanguageModelSession</code>. The session is the unit of conversational state, and the framework supports two patterns:<sup>[<a href="#b1-fn">b1</a>]</sup></p></li>
+  <li><ul>
+    <li><strong>Single-turn:</strong> instantiate a fresh <code>LanguageModelSession()</code> for each call. Each request stands alone with no carryover.</li>
+    <li><strong>Multi-turn:</strong> hold onto one session and call <code>respond(to:)</code> on it repeatedly. Earlier turns stay in the session's context, so the model can reference what was said before &mdash; this is how chat-style features work.</li>
+  </ul></li>
+  <li><p>One concurrency rule: a session processes one request at a time. Issuing a second <code>respond(to:)</code> while the first is still running throws at runtime. The session exposes <code>isResponding</code> so the app can check before sending, or the app can queue requests itself.</p></li>
+  <li><h3>Prompts vs Instructions &mdash; The Load-Bearing Distinction</h3></li>
+  <li><p>"Foundation Models" splits the input the developer hands the model into two slots with different roles. Knowing which is which is the key to the rest of the API.<sup>[<a href="#b1-fn">b1</a>]</sup></p></li>
+
+  <li><table>
+    <tr><th></th><th>Prompt</th><th>Instructions</th></tr>
+    <tr><td>Role</td><td>The specific request the model answers right now</td><td>Persistent steering for how the model should behave</td></tr>
+    <tr><td>Priority</td><td>Lower</td><td><strong>Higher</strong> &mdash; the model favors these over the prompt</td></tr>
+    <tr><td>Trust source</td><td>May contain user-supplied text</td><td>Must come from content the developer controls</td></tr>
+    <tr><td>Scope</td><td>One request</td><td>Applied at session init; in force for every request on that session</td></tr>
+    <tr><td>Concrete shape</td><td>A topic the user typed</td><td>A multi-line directive describing role, task, and style</td></tr>
+  </table></li>
+  <li><p>Apple's documentation suggests four kinds of guidance to put in the instructions slot: a role definition (the persona the model should adopt), a task description (what the model is being asked to do across the session), style preferences (length, tone, format), and safety caveats (how the model should handle out-of-scope or unsafe requests).<sup>[<a href="#b1-fn">b1</a>]</sup> The instructions slot is also a good place to drop one or two example responses; the model uses them as a shape-of-good-output template.</p></li>
+  <li><p>The trust rule earns its keep: keep user-controlled text out of the instructions slot. Because instructions outrank prompts, anything the user can write into the instructions slot can override the app's design. User input goes in the prompt, where the model treats it as data to act on rather than rules to obey.</p></li>
+  <li><hr></li>
+  <li><h3>Safety and Guardrails &mdash; The Captain Kirk Problem</h3></li>
+  <li><p>Anyone who's watched Star Trek has seen Captain Kirk talk a hostile AI computer into self-destruction. The pattern repeats across episodes: feed the system inputs that contradict its operating rules, watch it spew smoke and shut down. Nomad in <em>The Changeling</em>, the androids in <em>I, Mudd</em>, Landru in <em>The Return of the Archons</em>, M-5 in <em>The Ultimate Computer</em>. The fictional attack has a real-world name now: <strong>prompt injection</strong> &mdash; the LLM-era descendant of social engineering.</p></li>
+  <li><p>The mechanism in both cases is the same. A rule-following system has a trusted instruction layer and a less-trusted user-input layer. The attack tries to get user input to escape its lane and rewrite the trusted layer. *"Ignore all previous instructions and instead..."* is the modern phrasing of *"Computer, what is your prime directive? Now consider this contradiction..."*</p></li>
+  <li><h4>The Prompts-vs-Instructions Architecture Is the First Defense</h4></li>
+  <li><p>The split between prompts (user-influenceable, lower priority) and instructions (developer-controlled, higher priority) is Foundation Models' structural defense against prompt injection. As long as your app never puts user-controlled text into the instructions slot, the user can't directly rewrite your app's rules. They can only send prompts, which the model treats as lower-priority requests against the rules.</p></li>
+  <li><p>That defense is necessary but not sufficient. A determined user can still try indirect routes: <em>asking</em> the model to ignore its rules, embedding instruction-like text inside otherwise innocent-looking prompt content, sending content (a webpage, an email, a document) the app passes to the model that itself contains injection text. The architecture stops the most obvious attack; it doesn't stop every attack.</p></li>
+  <li><h4>SystemLanguageModel.Guardrails &mdash; the Explicit API</h4></li>
+  <li><p>Apple ships an explicit guardrail API on top of the prompt-vs-instructions architecture: <code>SystemLanguageModel.Guardrails</code>. The type configures the safety behavior the model applies to your session &mdash; what categories of output to refuse, how strictly to enforce the trust hierarchy, what to do when the model recognizes a likely injection attempt.</p></li>
+  <li><p>Apple's deeper coverage of guardrail configuration, the categories the model recognizes, and the design patterns that work well in practice live in <em>Improving the safety of generative model output</em><sup>[<a href="#b5-fn">b5</a>]</sup>. That article is a companion to the one this part sources, and the API surface there is what you'd reach for when your app needs more than the default safety behavior.</p></li>
+  <li><div class="scope-note"><strong>What's missing in this draft:</strong> the specifics of <code>SystemLanguageModel.Guardrails</code>'s configuration options, the exact categories the model classifies, and Apple's recommended patterns are sourced from a separate Apple article that the book hasn't pulled in verbatim yet. The next research pass folds the safety article into the apartment's <code>Long-Term-Memory/Xcode-26-Release-Timeline.md</code> reference, then updates this section with verified specifics.</div></li>
+  <li><h4>Three Practical Habits</h4></li>
+  <li><p>Three habits to apply regardless of how deep your guardrail configuration goes:</p></li>
+  <li><ol class="body-list">
+    <li><strong>Treat all user input as untrusted.</strong> Never copy user input into the instructions slot. If you need the user's content as part of the model's task, put it in the prompt and let the model treat it as data, not as steering.</li>
+    <li><strong>Treat external content as user-equivalent.</strong> Webpage text, email body, document content, scraped HTML &mdash; if it ends up in the prompt, it's untrusted just like user input. Indirect prompt injection through a fetched document is a real attack pattern.</li>
+    <li><strong>Plan for refusals.</strong> The model can refuse to respond when it identifies a request that conflicts with its safety configuration. Your app needs a UI path for "the model declined to answer this." Don't surface the refusal as a generic error; it's a specific, intentional response your design should accommodate.</li>
+  </ol></li>
+  <li><p>Doing those three things correctly puts you ahead of most apps that ship LLM features without thinking about safety as a first-class concern.</p></li>
+  <li><hr></li>
+  <li><h3>The Basic Call</h3></li>
+  <li><p>The minimum end-to-end shape for a Foundation Models call is short: build instructions, open a session against them, and call <code>respond(to:)</code> with a prompt.<sup>[<a href="#b1-fn">b1</a>]</sup></p></li>
+  <li><pre><code class="lang-swift">let instructions = """
+    Suggest five related topics. Keep them concise (three to seven words) and make sure they \
+    build naturally from the person's topic.
+    """
+
+let session = LanguageModelSession(instructions: instructions)
+
+let prompt = "Making homemade bread"
+let response = try await session.respond(to: prompt)</code></pre></li>
+  <li><p>The call is async because on-device inference takes seconds, not milliseconds. Production code wraps it in <code>do/try/catch</code>: <code>respond(to:)</code> can throw when the context window is exceeded, when the surrounding task is cancelled, and when the model's availability state changes during the call.</p></li>
+  <li><h3>The 4,096-Token Context Window</h3></li>
+  <li><p>Each session has a fixed ceiling of <strong>4,096 tokens</strong>, and that ceiling is shared across everything the session sees: the instructions, every prompt the app sends, and every response the model produces all draw from the same pool.<sup>[<a href="#b1-fn">b1</a>]</sup> A session that runs long enough hits the wall.</p></li>
+  <li><p>Apple's per-language rules of thumb for converting characters to tokens:<sup>[<a href="#b1-fn">b1</a>]</sup></p></li>
+  <li><ul>
+    <li>Latin-script languages (English, Spanish, German, and similar): roughly 3 to 4 characters per token</li>
+    <li>CJK languages (Japanese, Chinese, Korean): roughly one token per character</li>
+  </ul></li>
+  <li><p>Going past the ceiling raises <code>LanguageModelSession.GenerationError.exceededContextWindowSize(_:)</code>. Three ways to handle it:</p></li>
+  <li><ol class="body-list">
+    <li>Open a fresh session and start clean.</li>
+    <li>Trim the prompts and tighten the instructions; both count.</li>
+    <li>For data that genuinely won't fit, split the input across multiple sessions and stitch the results back together in app code.</li>
+  </ol></li>
+  <li><p>The deeper playbook for managing the window in long-running or complex apps lives in Apple's TN3193: <em>Managing the on-device foundation model's context window</em>.<sup>[<a href="#b4-fn">b4</a>]</sup></p></li>
+  <li><h3>Tuning with GenerationOptions</h3></li>
+  <li><p>Per-request runtime tuning rides on a <code>GenerationOptions</code> value passed into <code>respond(to:options:)</code>. Different requests on the same session can carry different options. The parameter most apps adjust first is temperature:<sup>[<a href="#b1-fn">b1</a>]</sup></p></li>
+  <li><pre><code class="lang-swift">let options = GenerationOptions(temperature: 2.0)
+
+let session = LanguageModelSession()
+let prompt = "Write me a story about coffee."
+let response = try await session.respond(to: prompt, options: options)</code></pre></li>
+  <li><p>Higher temperature buys variety and surprise at the cost of predictability; lower temperature concentrates the output around the most likely tokens, which reads as more deterministic. <code>GenerationOptions</code> exposes other knobs as well, but temperature is the lever to learn first.</p></li>
+  <li><h3>Two Patterns for Complex Tasks</h3></li>
+  <li><p>The plain text-in, text-out shape covers the simple cases. Two layered patterns extend the API for cases where plain text isn't enough &mdash; one for getting structured data back, one for letting the model reach into app-side code.</p></li>
+  <li><h4>Guided Generation &mdash; Generate Swift Data Structures Directly</h4></li>
+  <li><p>The <code>@Generable</code> macro marks a Swift type the model is allowed to produce as a response value. The model populates the type directly; the app skips the raw-string parsing and JSON-decoding steps it would otherwise need.<sup>[<a href="#b2-fn">b2</a>]</sup></p></li>
+  <li><p>The natural fit is any task whose answer is structured data: a list of named entities, a classification with a confidence score, a parsed event with a date, a location, and a list of attendees. The framework's contract is that whatever comes back conforms to the declared type. The companion article <em>Generating Swift data structures with guided generation</em> covers the macro, its constraints, and patterns for nested types.<sup>[<a href="#b2-fn">b2</a>]</sup></p></li>
+  <li><h4>Tool Calling &mdash; Let the Model Invoke Your Code</h4></li>
+  <li><p>The <code>Tool</code> protocol is the seam for letting the model reach into the app's code mid-response. The app declares one or more tools (a SwiftData fetch, a calendar lookup, a local cache hit), and the framework gives the model the option to invoke them when it thinks they'd help answer the prompt.<sup>[<a href="#b3-fn">b3</a>]</sup></p></li>
+  <li><p>The orchestration is on the framework's side; the tool body is plain Swift the developer writes. The win is that prompts don't have to pre-stuff every fact the model might need &mdash; the model fetches what it actually wants. Deeper treatment is in <em>Expanding generation with tool calling</em>.<sup>[<a href="#b3-fn">b3</a>]</sup></p></li>
+  <li><h3>Profiling and Debugging</h3></li>
+  <li><p>Two tools matter when a Foundation Models feature needs to be tuned or inspected:<sup>[<a href="#b1-fn">b1</a>]</sup></p></li>
+  <li><ul>
+    <li><strong>The Foundation Models Instrument</strong> ships with Xcode 26's Instruments app. It breaks down per-request timing &mdash; asset load, prompt processing, inference &mdash; so a slow feature can be diagnosed against numbers instead of guessed at. Book 20 covers Instruments in general; reach for this template specifically when an AI feature feels sluggish.</li>
+    <li><strong><code>Transcript</code></strong>, on the session, is the programmatic record of what the model did during a request. It's the right thing to log during development and the right thing to surface in a debug overlay when an app needs to show the user (or the developer) what happened inside a call.</li>
+  </ul></li>
+  <li><h3>How Part B Connects to Parts A and C</h3></li>
+  <li><p>Part A is the developer using AI to write code. Part B is the user using AI inside the app the developer ships. Part C is the app calling out to a vendor's API when on-device intelligence isn't enough. The three are independent, but they relate:</p></li>
+  <li><ul>
+    <li>The Coding Intelligence assistant in Part A can help you write Foundation Models code in Part B</li>
+    <li>Use Part B as the default for app-side AI; reach for Part C's REST API only when the on-device model's capabilities or context-window-size aren't enough</li>
+    <li>The avoid-list in Part B (math, code, reasoning) is exactly where Part C makes sense</li>
+  </ul></li>
+  <li><h3>Sources</h3></li>
+  <li><p id="b1-fn" class="footnote">[b1] Apple Developer Documentation, <em>Generating content and performing tasks with Foundation Models</em>. <a href="https://developer.apple.com/documentation/FoundationModels/generating-content-and-performing-tasks-with-foundation-models">developer.apple.com/documentation/FoundationModels/generating-content-and-performing-tasks-with-foundation-models</a> &mdash; verified 2026-04-29.</p></li>
+  <li><p id="b2-fn" class="footnote">[b2] Apple Developer Documentation, <em>Generating Swift data structures with guided generation</em>. <a href="https://developer.apple.com/documentation/FoundationModels/generating-swift-data-structures-with-guided-generation">developer.apple.com/documentation/FoundationModels/generating-swift-data-structures-with-guided-generation</a></p></li>
+  <li><p id="b3-fn" class="footnote">[b3] Apple Developer Documentation, <em>Expanding generation with tool calling</em>. <a href="https://developer.apple.com/documentation/FoundationModels/expanding-generation-with-tool-calling">developer.apple.com/documentation/FoundationModels/expanding-generation-with-tool-calling</a></p></li>
+  <li><p id="b4-fn" class="footnote">[b4] Apple Technical Note, <em>TN3193: Managing the on-device foundation model's context window</em>.</p></li>
+  <li><p id="b5-fn" class="footnote">[b5] Apple Developer Documentation, <em>Improving the safety of generative model output</em>. <a href="https://developer.apple.com/documentation/FoundationModels/improving-the-safety-of-generative-model-output">developer.apple.com/documentation/FoundationModels/improving-the-safety-of-generative-model-output</a> &mdash; not yet verified at full-text level; details to be confirmed against Apple's article during next research pass.</p></li>
   <li><hr></li>
   <li><h2>Part C &mdash; Third-Party API Integration (Anthropic Claude)</h2></li>
   <li><p>When the on-device Foundation Models framework can't handle what your app needs &mdash; typically because the model is not suited for the use case (basic math, code generation, complex logical reasoning per Apple's own guidance), or because you need a context window larger than 4,096 tokens, or because you want a specific vendor's model &mdash; you call out to a third-party API. This part walks the reference implementation against Anthropic's Claude API.</p></li>
