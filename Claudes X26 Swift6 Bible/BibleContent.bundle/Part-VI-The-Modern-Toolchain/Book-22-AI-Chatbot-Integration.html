@@ -92,8 +92,88 @@ footer.page .row-nav .nav-empty { color: var(--gutter); font-style: italic; }
   <li><h1>Chapter 22: AI Chatbot Integration</h1></li>
   <li><p><strong>Claude's Swift Reference 26</strong> -- Part VI: The Modern Toolchain</p></li>
   <li><hr></li>
-  <li><h2>What You'll Learn</h2></li>
-  <li><p>By the end of this chapter you can:</p></li>
+  <li><h2>Chapter Overview &mdash; Three Paths to AI in X26</h2></li>
+  <li><p>X26 ships AI in three distinct places, and the chapter is organized around them. Each path serves a different need; most readers will reach for one but should know all three exist:</p></li>
+  <li><ul>
+    <li><strong>Part A &mdash; AI inside Xcode (Coding Intelligence).</strong> The chat panel and agentic-coding features built into Xcode 26. You're the developer using AI to write code faster. Apple article: <em>Writing code with intelligence in Xcode</em>.</li>
+    <li><strong>Part B &mdash; AI inside your own app (Foundation Models).</strong> Apple's first-party on-device LLM framework. No API key, no network round-trip, no per-token cost. Apple article: <em>Generating content and performing tasks with Foundation Models</em>.</li>
+    <li><strong>Part C &mdash; Third-party API integration (Anthropic, etc.).</strong> When you need capabilities the on-device model doesn't cover &mdash; bigger context windows, more demanding reasoning, model choices Apple doesn't ship &mdash; you call out to a vendor's REST API. The original chapter content for X26's first edition.</li>
+  </ul></li>
+  <li><p>Volume 1 of this book ships Parts A and C. Part B is being drafted next.</p></li>
+  <li><hr></li>
+  <li><h2>Part A &mdash; AI Inside Xcode (Coding Intelligence)</h2></li>
+  <li><p>The coding intelligence features in Xcode help you write code, navigate unfamiliar codebases, find opportunities for new features, fix or refactor existing code, and generate documentation along the way<sup>[<a href="#a1-fn">a1</a>]</sup>. You interact with a large language model using natural language prompts to ask questions and give instructions; the model refines its responses based on your previous interactions and project context.</p></li>
+  <li><h3>Two Shapes of Help &mdash; Agent vs Chat</h3></li>
+  <li><p>Apple distinguishes two ways of working with the coding assistant, and the distinction is load-bearing for everything that follows. There's also a quieter cost-and-cap distinction sitting underneath the choice that matters in practice.</p></li>
+  <li><p><strong>An agent</strong> &mdash; in Apple's words &mdash; <em>"can refine and iterate on a goal with less guidance and perform actions, such as fixing build errors after writing code. You decide what external tools, command-line or otherwise, an agent may use in responses to your prompts."</em><sup>[<a href="#a1-fn">a1</a>]</sup> When an agent needs to read a file or run a tool, Xcode pops up a permission dialog. The two agents Apple ships with are Anthropic's Claude Agent and OpenAI's Codex, both wired in via the <strong>Model Context Protocol (MCP)</strong>, an open standard.</p></li>
+  <li><p><strong>A chat product</strong> &mdash; <em>"you stay in control over changes to your project by applying suggestions automatically or reviewing and applying them selectively yourself."</em><sup>[<a href="#a1-fn">a1</a>]</sup> Chat products do not act on your project on their own. Two chat-only toggles live in the lower-right corner of the assistant sidebar: <em>Automatically apply code changes</em> (on by default) and <em>Project Context</em> (on by default). Agents do not show those toggles because they have their own permissioned access to the project.</p></li>
+  <li><h3>The Cost and Usage-Cap Distinction Apple Doesn't Spell Out</h3></li>
+  <li><p>The agent and chat paths use different authentication and billing models, and Apple's article skips this part:</p></li>
+  <li><ul>
+    <li><strong>Claude (chat) in the Intelligence panel</strong> connects to Anthropic's REST API directly via an API key. You set the key up at <code>console.anthropic.com</code>, fund the account, and Xcode bills <strong>per token</strong> against that funded balance. Every prompt and every response is metered against money you put in up front.</li>
+    <li><strong>Claude Agent</strong> (the agentic-coding path added in Xcode 26.3) signs in with your existing Claude subscription via OAuth. No per-token meter &mdash; the agent's usage is included in the subscription tier. The recurring "Claude OAuth token expired" fix in Xcode's release notes is for this path's auth flow, not the API-key path.</li>
+    <li><strong>OpenAI's Codex</strong> agent and ChatGPT chat split the same way &mdash; agent by subscription OAuth, chat by API key.</li>
+  </ul></li>
+  <li><p>The third axis Apple also doesn't mention is <strong>usage caps</strong>. Consumer chat subscriptions (Claude.ai, ChatGPT.com) have time-window caps that reset on a cycle &mdash; if you're in a heavy back-and-forth, you can hit the cap mid-task and have to wait for the window to reset. The agent / CLI path uses a different cap model that, in practice, lets long autonomous sessions run without you noticing the limit. The API-key chat path has no time-window cap at all &mdash; only rate limits and the funded balance &mdash; so heavy sessions cost more rather than pause.</p></li>
+  <li><p>The practical read: the subscription-based agent path is the closest experience to "flat-rate, runs as long as you need it." The consumer-chat-product feel of flat-rate works until the time window resets you out. The API-key chat path is metered &mdash; longer conversations and bigger context windows cost more, but they don't pause.</p></li>
+  <li><h3>Opening the Coding Assistant</h3></li>
+  <li><p>Press <strong>Command-0</strong> or click the button to the right of the Navigator button in the upper-left of the toolbar. The assistant opens in a sidebar.</p></li>
+  <li><p>If a <em>Set Up</em> button shows where the prompt field would normally be, no provider is enabled yet. Click it to land in <strong>Xcode &gt; Settings &gt; Intelligence</strong> and enable a provider per Apple's <em>Setting up coding intelligence</em> article<sup>[<a href="#a2-fn">a2</a>]</sup>.</p></li>
+  <li><p>To start a fresh conversation, click the <em>Start New Conversation</em> button on the left of the assistant's toolbar. The pop-up menu separates <strong>Agents</strong> (one heading) from <strong>Chat</strong> models (a second heading).</p></li>
+  <li><h3>Asking the Assistant to Explain Code</h3></li>
+  <li><p>The lowest-stakes way to start is asking the model to explain code that already exists. Open any project &mdash; Apple uses the Landmarks sample app in their walkthrough &mdash; and type a free-form question into the assistant:</p></li>
+  <li><pre><code>What does this app do?</code></pre></li>
+  <li><p>The model's reply appears under the prompt. Replies are interactive. If a reply mentions a filename, an arrow button next to the filename opens it in the source editor. Follow-up prompts continue the same conversation.</p></li>
+  <li><h3>Asking About a Specific Symbol</h3></li>
+  <li><p>For a question scoped to a piece of code in front of you, Control-click the symbol or selection in the source editor and choose <strong>Show Coding Tools &gt; Show Coding Tools</strong> from the contextual menu. <strong>Command-Option-0</strong> does the same thing without the menu trip. Either way the <em>coding tools popover</em> appears.</p></li>
+  <li><p>Click <strong>Explain</strong> for Apple's default question, or type a more specific prompt into the popover. The same coding tools popover is also reachable from the coding intelligence icon in the source editor's gutter.</p></li>
+  <li><h3>Generating or Modifying Code</h3></li>
+  <li><p>Type a free-form prompt into the assistant. Apple's example sequence on a SwiftUI app, prompts in order:</p></li>
+  <li><ul>
+    <li>Add properties and methods to a class.</li>
+    <li>Create a list view and wrap it in a NavigationStack.</li>
+    <li>Add the ability to edit the properties of items in the list view.</li>
+    <li>Change the list view to a table view showing all the properties.</li>
+  </ul></li>
+  <li><p>Each prompt narrows the work and produces a small enough change to validate before moving on. Generated changes are highlighted with <strong>multicolor change bars</strong> in the gutter so they stand out from manual edits. The <strong>Undo Changes</strong> button to the right of the prompt field undoes the most recent batch.</p></li>
+  <li><p>If you picked an agent rather than a chat product, the agent may build the app to verify its changes and try to fix build warnings or errors automatically. That self-correction loop is the agent layer at work; chat products do not do it.</p></li>
+  <li><h3>Applying Changes (Chat-Product Path)</h3></li>
+  <li><p>This section only applies to chat products. Agents bypass it by acting on the project directly under the permissions you grant.</p></li>
+  <li><p>The <em>Automatically apply code changes</em> toggle in the lower-right of the sidebar is on by default. Turning it off changes the assistant's behavior: instead of writing changes into your files, it labels each suggested change as <strong>Proposal</strong>. To apply a proposal, click the code snippet in the response and click <strong>Apply</strong> in the dialog. If the proposal adds a new file, the dialog reads <strong>Create New File</strong>.</p></li>
+  <li><h3>Adding Context to a Prompt</h3></li>
+  <li><p>Xcode automatically gathers context for the prompt based on the open files, conversation history, and what you typed. You can also add context explicitly.</p></li>
+  <li><p>Type the <code>@</code> character in the prompt field and a completion menu appears with symbols and filenames. Pick one and the prompt now references that exact symbol or file. For files outside the project, choose <em>Upload files</em> from the Attachments pop-up menu in the lower-left.</p></li>
+  <li><p>Chat products have an additional toggle: <strong>Project Context</strong> (lower-right corner of the sidebar, on by default). With it on, the assistant can share relevant code from across the project with the model. Turn it off to scope the assistant to only the files and symbols you reference explicitly with <code>@</code>.</p></li>
+  <li><h3>Generating Playgrounds and Previews</h3></li>
+  <li><p>The coding tools popover (Command-Option-0) has a <strong>Generate a Playground</strong> button. Click it on any function and Xcode inserts a <code>#Playground</code> macro with sample inputs. Results render in the canvas area; if the canvas is hidden, choose <strong>Editor &gt; Canvas</strong> to show it and click <strong>Resume</strong>.</p></li>
+  <li><p>The <code>#Playground</code> macro is its own X26 feature, covered in detail in Apple's <em>Running code snippets using the playground macro</em> article<sup>[<a href="#a3-fn">a3</a>]</sup>.</p></li>
+  <li><h3>Fixing Errors with Generate Fix for Issue</h3></li>
+  <li><p>The source editor underlines errors in red and shows an icon. Click the icon to expand the issue and you'll see <em>Generate Fix for Issue</em> with a <strong>Generate</strong> button. Clicking Generate sends the error to the model, applies the model's fix, and shows the change in the conversation area with the same multicolor change bars.</p></li>
+  <li><p>If you're working with an agent, the agent does this automatically for errors and warnings in code it has just generated.</p></li>
+  <li><h3>Generating Documentation</h3></li>
+  <li><p>Select a symbol that needs documentation. Click the coding intelligence icon in the source editor gutter and choose <strong>Document</strong> in the coding tools popover. Xcode inserts <strong>DocC-style comments</strong> above the symbol. For a class, that means documentation for the class itself plus its properties and methods, including method parameters.</p></li>
+  <li><p>To browse the generated documentation in Xcode, choose <strong>Product &gt; Build Documentation</strong>.</p></li>
+  <li><h3>Browsing Past Conversations</h3></li>
+  <li><p>The conversation pop-up menu in the middle of the assistant's toolbar lists recent and previous conversations. Pick one and the assistant scrolls back through the prompts and responses for that thread. <strong>Clear Recents</strong> in the same menu removes them. Conversations are scoped per-project.</p></li>
+  <li><h3>Rolling a Project Back with Conversation History</h3></li>
+  <li><p>This is the assistant's most powerful undo. From the conversation pop-up, pick the conversation, then click the <strong>History</strong> button. Xcode shows a chronological list of your prompts down the left and a slider down the right.</p></li>
+  <li><p>Slide up to remove changes from the top of the conversation backwards in time; slide down to restore them. As you move the slider, the source editor shows the project at that point in the conversation. <strong>Restore</strong> locks in the rolled-back state and Xcode keeps the later edits in case you decide to roll forward later. <strong>Cancel</strong> keeps everything as it was.</p></li>
+  <li><div class="scope-note"><strong>Required:</strong> the project must be in a Git repository for History to work. If it isn't, Xcode prompts to create one with a <em>Create Repository</em> button. Equivalent menu path: <strong>Integrate &gt; New Git Repository</strong>. Xcode does not modify the repository &mdash; History uses it for reference only.</div></li>
+  <li><h3>What This Replaces in Your Day</h3></li>
+  <li><p>Most of the work this part covers used to live somewhere else: a separate browser tab with documentation open, a chat window with a third-party assistant, a fresh playground project for one-off experiments, a manual hunt for the right Fix-it, a hand-written DocC comment block. The coding assistant collapses those into the editor itself.</p></li>
+  <li><p>That collapse is the point. The keystrokes are short (Command-0, Command-Option-0), the context is automatic, and the assistant is one keystroke away whether you want explanation, generation, fix, or rollback.</p></li>
+  <li><p id="a1-fn" style="font-size: 13pt; color: var(--dim);">[a1] Apple Developer Documentation, <em>Writing code with intelligence in Xcode</em>. <a href="https://developer.apple.com/documentation/xcode/writing-code-with-intelligence-in-xcode">developer.apple.com/documentation/xcode/writing-code-with-intelligence-in-xcode</a> &mdash; verified 2026-04-29.</p></li>
+  <li><p id="a2-fn" style="font-size: 13pt; color: var(--dim);">[a2] Apple Developer Documentation, <em>Setting up coding intelligence</em>. <a href="https://developer.apple.com/documentation/xcode/setting-up-coding-intelligence">developer.apple.com/documentation/xcode/setting-up-coding-intelligence</a></p></li>
+  <li><p id="a3-fn" style="font-size: 13pt; color: var(--dim);">[a3] Apple Developer Documentation, <em>Running code snippets using the playground macro</em>. <a href="https://developer.apple.com/documentation/xcode/running-code-snippets-using-the-playground-macro">developer.apple.com/documentation/xcode/running-code-snippets-using-the-playground-macro</a></p></li>
+  <li><hr></li>
+  <li><h2>Part B &mdash; Foundation Models in Your Own App</h2></li>
+  <li><div class="scope-note"><em>Drafting in progress. Part B covers Apple's on-device Foundation Models framework &mdash; the first-party answer to "I want my app to do AI itself." Sourced from Apple's "Generating content and performing tasks with Foundation Models" article, verified 2026-04-29. The full content lands in a follow-up commit.</em></div></li>
+  <li><hr></li>
+  <li><h2>Part C &mdash; Third-Party API Integration (Anthropic Claude)</h2></li>
+  <li><p>When the on-device Foundation Models framework can't handle what your app needs &mdash; typically because the model is not suited for the use case (basic math, code generation, complex logical reasoning per Apple's own guidance), or because you need a context window larger than 4,096 tokens, or because you want a specific vendor's model &mdash; you call out to a third-party API. This part walks the reference implementation against Anthropic's Claude API.</p></li>
+  <li><p>This Part C content was the entire chapter in the book's first draft. It still teaches a useful integration pattern; it just sits in a different place in the chapter's structure now. Use it when on-device intelligence isn't a fit for the app you're building.</p></li>
+  <li><h3>What You'll Learn (Part C)</h3></li>
+  <li><p>By the end of Part C you can:</p></li>
   <li><ul><li>Register an Anthropic Claude API account, get an API key, and make your first call from Swift.</li><li>Send a message to Claude from an iOS or Mac app using only <code>URLSession</code> and <code>Codable</code>.</li><li>Store the API key safely in the Keychain instead of hard-coding it.</li><li>Build a minimal chat view that streams the assistant's reply as it arrives.</li></ul></li>
   <li><hr></li>
   <li><h2>What the Anthropic API Is</h2></li>
