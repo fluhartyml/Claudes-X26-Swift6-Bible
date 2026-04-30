@@ -16,6 +16,61 @@
 
 ---
 
+## Liquid Glass for Custom Views — `glassEffect` and `GlassEffectContainer`
+
+When the custom views you build want to match the system's Liquid Glass surfaces, X26 ships two SwiftUI APIs you should know about:
+
+- `glassEffect(_:in:)` applies the Liquid Glass material to a custom view
+- `GlassEffectContainer` groups multiple Liquid Glass effects so they morph fluidly between each other and render efficiently
+
+Apple's guidance on `glassEffect(_:in:)` is explicit and matters more than the syntax: **use it sparingly**. Apple's words from the Liquid Glass article: *"Liquid Glass seeks to bring attention to the underlying content, and overusing this material in multiple custom controls can provide a subpar user experience by distracting from that content."*[^cv1] Apply it to the most important functional elements only — a primary action button, a focus-state highlight, the floating action affordance on a custom canvas. Don't apply it to every card, every cell, every chrome surface.
+
+### Basic glassEffect
+
+```swift
+struct PrimaryActionButton: View {
+    let title: String
+    let action: () -> Void
+
+    var body: some View {
+        Button(action: action) {
+            Text(title)
+                .font(.headline)
+                .padding(.horizontal, 20)
+                .padding(.vertical, 12)
+        }
+        .glassEffect(.regular, in: .capsule)
+    }
+}
+```
+
+The first parameter chooses the material variant; the second specifies the shape the material renders into (a capsule, rounded rectangle, etc.). The button picks up Liquid Glass's adaptive optical behavior — refraction, focus-state morphing, scroll edge integration — without reimplementing any of that yourself.
+
+### GlassEffectContainer for Performance and Morphing
+
+When you have multiple custom Liquid Glass elements that need to morph between each other (think: a row of custom toggles, or a custom toolbar where elements expand and collapse), wrap them in a `GlassEffectContainer`:
+
+```swift
+GlassEffectContainer {
+    Button("Edit") { startEditing() }
+        .glassEffect(.regular, in: .capsule)
+    Button("Done") { finishEditing() }
+        .glassEffect(.regular, in: .capsule)
+    Button("Cancel") { cancel() }
+        .glassEffect(.regular, in: .capsule)
+}
+```
+
+The container does two jobs: it optimizes rendering (combining the effects in one pass instead of N separate passes), and it enables fluid morphing transitions between the contained elements. Without the container, each `glassEffect` modifier renders independently and morphing animations between them are choppier.
+
+### tvOS Pairs Liquid Glass with Focus
+
+A platform-specific note worth knowing if you ship to Apple TV: tvOS applies Liquid Glass to standard buttons and controls when focus moves to them. For custom controls in your app, adopt the standard focus APIs (`focusable(_:)`, `isFocused`) and the Liquid Glass focus appearance follows automatically. Apple TV 4K (2nd generation) and newer support Liquid Glass effects; older HD models maintain their pre-X26 appearance.
+
+[^cv1]: Apple Developer Documentation, *Adopting Liquid Glass*. <https://developer.apple.com/documentation/TechnologyOverviews/adopting-liquid-glass> — verified 2026-04-29.
+
+---
+
 ## What You'll Learn
 
 By the end of this chapter you can:

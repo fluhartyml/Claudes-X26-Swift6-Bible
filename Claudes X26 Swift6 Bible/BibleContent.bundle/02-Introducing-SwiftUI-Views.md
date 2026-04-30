@@ -10,6 +10,42 @@
 
 ---
 
+## Liquid Glass — the X26 Material
+
+Open any iOS / iPadOS / macOS / tvOS app built against the X26 SDK and you'll see it: a new dynamic material running through the controls and navigation. Apple calls it **Liquid Glass**, and Apple's one-line definition is the cleanest framing for the whole feature:
+
+> "Liquid Glass forms a distinct functional layer for controls and navigation elements. It affects how the interface looks, feels, and moves, adapting in response to a variety of factors to help bring focus to the underlying content."[^lg1]
+
+Liquid Glass is a *material*, not a style. It adapts in real time to element overlap (controls layered above content) and focus state (whether a control is being interacted with). The optical properties of glass — refraction, reflection, blur — combine with fluid morphing animations.
+
+### Adoption is Automatic for Standard Components
+
+The practical headline: if your app uses standard SwiftUI / UIKit / AppKit components, your interface picks up Liquid Glass when you rebuild against the latest SDK. Bars, sheets, popovers, sliders, toggles, buttons — all adopt the material with zero code changes. The system also adapts these components dynamically to factors like element overlap and focus state.
+
+If you've added custom backgrounds to standard navigation containers — `NavigationStack`, `NavigationSplitView`, `titleBar`, `toolbar(content:)` — strip them. Custom backgrounds overlay or interfere with Liquid Glass and the system's scroll edge effect. The material works best when the system controls the background.
+
+### The Escape Hatch — UIDesignRequiresCompatibility
+
+If you need to ship against the latest SDK without adopting Liquid Glass yet, add the **`UIDesignRequiresCompatibility`** key to your project's Info.plist. Your app keeps its pre-Liquid-Glass appearance even when built and run on the latest platforms. The flag is for transition periods, not permanent opt-out.
+
+### glassEffect for Custom Views
+
+When you have custom controls that should match the system's Liquid Glass surfaces, the SwiftUI modifier is `glassEffect(_:in:)`. Apple's guidance is explicit: **use it sparingly**. Liquid Glass exists to draw attention to underlying content, not to blanket the interface. Apply it to the most important functional elements only.
+
+For multiple custom Liquid Glass elements that need to morph between each other, wrap them in a `GlassEffectContainer`. The container helps optimize rendering performance and enables fluid morphing between the contained elements.
+
+### Test with Reduce Transparency and Reduce Motion
+
+Translucency and fluid morphing are core to Liquid Glass, but both adapt to user accessibility settings. People can choose a preferred Liquid Glass look in their device settings, or turn on **Reduce Transparency** or **Reduce Motion** to modify or remove certain effects. Standard components handle this automatically. Test custom elements, custom colors, and custom animations under both settings before shipping.
+
+### Where the Rest of Liquid Glass Lives
+
+The full Liquid Glass surface area touches multiple chapters in this book. New control APIs (`.glass`, `.glassProminent`, `ConcentricRectangle`) live in Book 6. Toolbar grouping with `ToolbarSpacer` is in Book 5. `Tab(role: .search)`, `tabBarMinimizeBehavior`, and `sidebarAdaptable` are in Book 7. List and form metrics + title-style section headers are in Book 8. Sheet and action sheet changes are in Book 12. `backgroundExtensionEffect` for split views is in Book 13. `glassEffect` deep-dive for custom views is in Book 19.
+
+[^lg1]: Apple Developer Documentation, *Adopting Liquid Glass*. <https://developer.apple.com/documentation/TechnologyOverviews/adopting-liquid-glass> — verified 2026-04-29.
+
+---
+
 ## What SwiftUI Is
 
 SwiftUI is Apple's declarative UI framework. You describe *what* you want the interface to look like, and SwiftUI figures out *how* to render it and *when* to update it.

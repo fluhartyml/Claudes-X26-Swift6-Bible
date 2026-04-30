@@ -25,6 +25,43 @@ If you have already built LockBox (Appendix D) or QuickNote (Appendix C), this c
 
 ---
 
+## X26 Updates to Split Views and Windows
+
+Windows in X26 adopt rounder corners that match the curvature of the controls and navigation living inside them. iPadOS gains two notable changes: **window controls** (close / minimize / resize) now appear on iPad windows, and **continuous window resizing** replaces the older preset-size behavior — windows resize fluidly down to a minimum size instead of snapping between specific dimensions[^v1].
+
+For your code, three practical upgrades.
+
+### Support Arbitrary Window Sizes
+
+If your app sets specific window sizes or resists arbitrary resizing, lift those constraints. Apple's guidance is to let users size windows to whatever width and height works for them, and adjust your content accordingly with safe areas and layout guides. The system's own automatic adjustments to window controls and the title bar depend on you specifying safe areas around your content.
+
+### Use Split Views for Fluid Column Resizing
+
+`NavigationSplitView` automatically reflows content for every size with fluid transitions — but only when you use the standard system API and don't override its layout metrics. The reward is animation-quality column resizing for free; the cost is letting the system decide how columns lay out at intermediate widths.
+
+### `backgroundExtensionEffect()` for Edge-to-Edge Hero Content
+
+A new modifier in X26: `backgroundExtensionEffect()` makes content appear to extend underneath a sidebar or inspector without actually scrolling under it. The effect mirrors adjacent content and applies blur to keep the sidebar legible. Apple's example: a product page hero image extending under the sidebar, giving the impression of a full-screen image while the sidebar still floats above it cleanly.
+
+```swift
+NavigationSplitView {
+    SidebarView()
+} detail: {
+    HeroImage(landmark: landmark)
+        .backgroundExtensionEffect()
+}
+```
+
+Use it on full-width content adjacent to a sidebar or inspector — hero images, video thumbnails, large illustrations — anywhere the visual would be served by extending past the sidebar edge.
+
+### Inspector Panels with `.inspector(isPresented:content:)`
+
+Inspectors are first-class in X26's split-view family. Apple's recommendation when building a sidebar-with-inspector layout is to use the standard `.inspector(isPresented:content:)` API rather than rolling your own column. Standard inspectors get the X26 layout improvements — safe area compatibility, fluid resizing, the right floating-on-Liquid-Glass treatment — automatically.
+
+[^v1]: Apple Developer Documentation, *Adopting Liquid Glass*. <https://developer.apple.com/documentation/TechnologyOverviews/adopting-liquid-glass> — verified 2026-04-29.
+
+---
+
 ## Scenes, Windows, and the App
 
 Every Apple app has one `App` type as its entry point. Inside it you declare one or more **scenes** -- the top-level containers that SwiftUI manages for you. A scene ends up as a window on Mac and iPad, and as the app's root screen on iPhone.

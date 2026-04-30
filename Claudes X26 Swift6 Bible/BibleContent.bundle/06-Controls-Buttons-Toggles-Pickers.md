@@ -8,6 +8,43 @@
 
 ---
 
+## Liquid Glass Updates to Controls (X26)
+
+Controls have a refreshed look across platforms in X26 and come to life when you interact with them. Apple's word on it: *"For controls like sliders and toggles, the knob transforms into Liquid Glass during interaction, and buttons fluidly morph into menus and popovers."*[^c1] The shape of the hardware informs the curvature of controls, which is why many controls adopt rounder forms in X26.
+
+If you use standard controls and don't hard-code their layout metrics, your app picks up the shape and size changes automatically when you rebuild against the latest SDK. Apple flags four review tasks specifically:
+
+- **Use color judiciously in controls and navigation.** Lean on system colors or define custom colors with light, dark, and increased-contrast variants.
+- **Check for crowding or overlapping.** Prefer standard spacing metrics; don't override them. Don't layer Liquid Glass elements on top of each other.
+- **Optimize for content scrolling beneath controls.** System bars adopt the scroll edge effect by default. Custom bars register for it via `safeAreaBar(edge:alignment:spacing:content:)` so content is obscured enough to keep controls legible.
+- **Align rounded shapes to their containers** with `ConcentricRectangle` or `rect(corners:isUniform:)`. Hardware corners → window corners → control corners stay concentric, which is what gives X26 its visual continuity.
+
+### New Button Styles — `.glass` and `.glassProminent`
+
+Two new button styles adopt Liquid Glass with minimal code:
+
+```swift
+Button("Continue") {
+    advance()
+}
+.buttonStyle(.glass)
+
+Button("Buy Now") {
+    purchase()
+}
+.buttonStyle(.glassProminent)
+```
+
+`.glass` gives the button the system's Liquid Glass material. `.glassProminent` is the same idea with extra emphasis — for the most important action on a screen. Use the prominent variant sparingly; it loses its meaning if every button uses it.
+
+### Extra-Large Control Size
+
+Controls in X26 also support an extra-large size. The extra-large size leaves more room for labels and accents, which matters on dense forms or when you want the control to read as the focus of a screen.
+
+[^c1]: Apple Developer Documentation, *Adopting Liquid Glass*. <https://developer.apple.com/documentation/TechnologyOverviews/adopting-liquid-glass> — verified 2026-04-29.
+
+---
+
 ## Button
 
 ### Basic Button

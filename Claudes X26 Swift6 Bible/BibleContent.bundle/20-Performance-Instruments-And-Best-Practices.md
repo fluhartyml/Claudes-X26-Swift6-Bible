@@ -4,6 +4,63 @@
 
 ---
 
+## Live Reference: CryoTunes Player + Tally Matrix Clock
+
+> Two production apps in this book's roster put the patterns in this chapter to work continuously. **CryoTunes Player** ([github.com/fluhartyml/CryoTunesPlayer](https://github.com/fluhartyml/CryoTunesPlayer)) handles streaming MusicKit playback while keeping a SwiftUI animated transport row at 60fps — a real test of the actor-contention and `@StateObject` patterns this chapter covers. See Source Tour 18.
+>
+> **Tally Matrix Clock** ([github.com/fluhartyml/Tally-Matrix-Clock](https://github.com/fluhartyml/Tally-Matrix-Clock)) re-renders an animated grid of squares every second on tvOS, where focus-engine performance and SwiftUI body churn matter more than on iPhone. See Source Tour 19.
+
+---
+
+## X26 Performance Tools and Swift 6.2 Performance APIs
+
+X26 lands a meaningful refresh of Instruments[^p1] and a small set of Swift 6.2 / 6.3 language additions[^p2] that change how you write and profile performance-sensitive code. The chapter that follows still applies — it walks Time Profiler, Allocations, the SwiftUI instrument, and Swift concurrency patterns. The X26 additions sit on top.
+
+### New Instruments Templates
+
+| Template | What it shows you |
+|---|---|
+| **Power Profiler** | System-level power usage and the power impact of your app on different subsystems — CPU, GPU, networking. Drag from the Instruments library and record a trace on iOS or iPadOS device, or open an `.atrc` file captured on-device via Developer settings. |
+| **CPU Counters with Bottleneck Analysis** | A guided path to using counters. The CPU Bottlenecks template breaks sustainable CPU bandwidth into four categories: Useful (forward progress), Instruction Delivery (CPU couldn't provide enough instructions), Instruction Processing (instructions slow due to cost or data not ready), Discarded (incorrect speculative execution). Each category has further recommended modes to narrow in. |
+| **Processor Trace** | Captures every function call. Heavy weight, deep insight — pull this out when sample-based profiling can't tell you why something is slow. |
+| **Foundation Models Instrument** | Profile your app's use of the FoundationModels framework — request timing, asset loading, prompt processing, inference. Pairs with Book 22's Foundation Models work. |
+| **SwiftUI (next-gen)** | Replaces the older SwiftUI template. Captures every SwiftUI update, surfaces a Cause &amp; Effect Graph that explains *why* view bodies are running, and adds a "Show View Hierarchy" action. |
+
+The new SwiftUI instrument is the one to reach for first when SwiftUI feels slow — Cause &amp; Effect tells you whether a view body is running because of state changes you wrote, environment churn, or accidental identity churn from a missing `id`.
+
+### Swift 6.2 / 6.3 Performance Language Additions
+
+The Swift 6.2 release that shipped with X26 (and Swift 6.3 in Xcode 26.4 onward) adds three language features that matter for performance-sensitive code:
+
+- **`Span<T>` and `MutableSpan<T>`** — buffer-safe slice types. Pass a sub-range of a buffer without copying, and let the compiler enforce bounds safety at the type level. Replace `UnsafeBufferPointer` for any code where you can. The mutable variant can be passed as an `inout` parameter (Swift 6.2 made this stable; before, it required an experimental flag).
+- **`InlineArray<N, T>`** — stack-allocated fixed-size array. Useful for small fixed-shape data that you'd otherwise heap-allocate. Example use: a 3D coordinate type with three doubles, a 4-byte color tuple, etc.
+
+```swift
+struct Point {
+    var coordinates: InlineArray<3, Double>
+}
+```
+
+- **`@concurrent` annotation** — explicitly request a function run on the concurrent thread pool rather than inheriting the caller's actor context.
+
+```swift
+@concurrent
+func processData() async {
+    // Runs on concurrent thread pool, not caller's context
+}
+```
+
+`@concurrent` is the explicit complement to `@MainActor` — when you want the work *off* the main actor, you say so by name rather than relying on default isolation rules.
+
+### `Data.bytes` and Span Access to Raw Bytes
+
+`Data.bytes` exposes the raw bytes of a `Data` value as a `Span<UInt8>`. This replaces the older `withUnsafeBytes` / `unsafeRawPointer` patterns for read-only access. Bounds-safe by construction, no closure-passing required.
+
+[^p1]: Apple, *Xcode 26 Release Notes* and *Xcode 26.4 Release Notes*. <https://developer.apple.com/documentation/xcode-release-notes/xcode-26-release-notes>, <https://developer.apple.com/documentation/xcode-release-notes/xcode-26_4-release-notes> — verified 2026-04-29.
+[^p2]: Apartment Long-Term-Memory, `Swift-6-Quick-Reference-WWDC-2025.md` and `Xcode-26-Release-Timeline.md`, both verified against Apple release notes 2026-04-29.
+
+---
+
 ## What You'll Learn
 
 By the end of this chapter you can:

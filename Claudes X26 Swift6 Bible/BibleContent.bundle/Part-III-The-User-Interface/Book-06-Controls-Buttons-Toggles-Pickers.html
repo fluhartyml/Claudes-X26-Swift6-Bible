@@ -92,6 +92,32 @@ footer.page .row-nav .nav-empty { color: var(--gutter); font-style: italic; }
   <li><h1>Chapter 06: Controls — Buttons, Toggles, and Pickers</h1></li>
   <li><h2>Live Reference: Take A Chance On Me + CryoTunes Player</h2></li>
   <li><div class="scope-note"><strong>Take A Chance On Me</strong> is the smallest-scale shipping example of the patterns this chapter teaches &mdash; a multi-die roller built almost entirely from <code>Button</code>, <code>Picker</code>, and <code>Stepper</code>. Each die is a button; each die-size selector is a picker; the multi-die count is a stepper. Reading its source is reading this chapter applied to one concrete app. Source: <a href="https://github.com/fluhartyml/TakeAChanceOnMeV1.0.2">github.com/fluhartyml/TakeAChanceOnMeV1.0.2</a>. See Source Tour 26. <strong>CryoTunes Player</strong> uses every control in this chapter at production scale &mdash; buttons across the transport row (play, pause, skip, stop, shuffle, repeat, share, thumbs-up, thumbs-down), toggles in Settings, pickers for radio station and sleep timer. Source: <a href="https://github.com/fluhartyml/CryoTunesPlayer">github.com/fluhartyml/CryoTunesPlayer</a>. See Source Tour 18.</div></li>
+  <li><hr></li>
+  <li><h2>Liquid Glass Updates to Controls (X26)</h2></li>
+  <li><p>Controls have a refreshed look across platforms in X26 and come to life when you interact with them. Apple's word on it: <em>"For controls like sliders and toggles, the knob transforms into Liquid Glass during interaction, and buttons fluidly morph into menus and popovers."</em><sup>[<a href="#c1-fn">c1</a>]</sup> The shape of the hardware informs the curvature of controls, which is why many controls adopt rounder forms in X26.</p></li>
+  <li><p>If you use standard controls and don't hard-code their layout metrics, your app picks up the shape and size changes automatically when you rebuild against the latest SDK. Apple flags four review tasks specifically:</p></li>
+  <li><ul>
+    <li><strong>Use color judiciously in controls and navigation.</strong> Lean on system colors or define custom colors with light, dark, and increased-contrast variants.</li>
+    <li><strong>Check for crowding or overlapping.</strong> Prefer standard spacing metrics; don't override them. Don't layer Liquid Glass elements on top of each other.</li>
+    <li><strong>Optimize for content scrolling beneath controls.</strong> System bars adopt the scroll edge effect by default. Custom bars register for it via <code>safeAreaBar(edge:alignment:spacing:content:)</code> so content is obscured enough to keep controls legible.</li>
+    <li><strong>Align rounded shapes to their containers</strong> with <code>ConcentricRectangle</code> or <code>rect(corners:isUniform:)</code>. Hardware corners &rarr; window corners &rarr; control corners stay concentric, which is what gives X26 its visual continuity.</li>
+  </ul></li>
+  <li><h3>New Button Styles &mdash; <code>.glass</code> and <code>.glassProminent</code></h3></li>
+  <li><p>Two new button styles adopt Liquid Glass with minimal code:</p></li>
+  <li><pre><code class="lang-swift">Button("Continue") {
+    advance()
+}
+.buttonStyle(.glass)
+
+Button("Buy Now") {
+    purchase()
+}
+.buttonStyle(.glassProminent)</code></pre></li>
+  <li><p><code>.glass</code> gives the button the system's Liquid Glass material. <code>.glassProminent</code> is the same idea with extra emphasis &mdash; for the most important action on a screen. Use the prominent variant sparingly; it loses its meaning if every button uses it.</p></li>
+  <li><h3>Extra-Large Control Size</h3></li>
+  <li><p>Controls in X26 also support an extra-large size. The extra-large size leaves more room for labels and accents, which matters on dense forms or when you want the control to read as the focus of a screen.</p></li>
+  <li><p id="c1-fn" style="font-size: 13pt; color: var(--dim);">[c1] Apple Developer Documentation, <em>Adopting Liquid Glass</em>. <a href="https://developer.apple.com/documentation/TechnologyOverviews/adopting-liquid-glass">developer.apple.com/documentation/TechnologyOverviews/adopting-liquid-glass</a> &mdash; verified 2026-04-29.</p></li>
+  <li><hr></li>
   <li><h2>Button</h2></li>
   <li><h3>Basic Button</h3></li>
   <li><pre><code class="lang-swift">Button("Save") {

@@ -92,6 +92,33 @@ footer.page .row-nav .nav-empty { color: var(--gutter); font-style: italic; }
   <li><h1>Chapter 05: Menus and Navigation</h1></li>
   <li><h2>Live Reference: Inkwell sidebar + LockBox three-column + CryoTunes tabs</h2></li>
   <li><div class="scope-note">Three different production navigation shapes ship across the book's app roster. <strong>Inkwell</strong> uses a sidebar-and-detail <code>NavigationSplitView</code> for the book's Parts &rarr; Books &rarr; Chapters &rarr; Pages tree (the navigation you're using right now to get to this page). <strong>Claudes LockBox</strong> uses a three-column <code>NavigationSplitView</code> (Folders &rarr; Items &rarr; Detail) plus a TabView at the root level (Vault tab + Under the Hood tab). <strong>CryoTunes Player</strong> uses a flat tab-and-control-cluster pattern fitted to a music player's needs. Reading the three side-by-side shows how the same <code>NavigationStack</code> / <code>NavigationSplitView</code> / <code>TabView</code> primitives compose into very different feeling apps. Sources: <a href="https://github.com/fluhartyml/Claudes-X26-Swift6-Bible">Inkwell</a>, <a href="https://github.com/fluhartyml/Claudes-LockBox">LockBox</a>, <a href="https://github.com/fluhartyml/CryoTunesPlayer">CryoTunes Player</a>. See Build-Along 00, Build-Along 03, Source Tour 18.</div></li>
+  <li><hr></li>
+  <li><h2>X26 Menu and Toolbar Updates</h2></li>
+  <li><p>Menus have a refreshed look across platforms in X26. They adopt the Liquid Glass material, and menu items for common actions surface system icons to help users scan and identify them quickly<sup>[<a href="#mn1-fn">mn1</a>]</sup>. New to iPadOS in X26: apps now have a <strong>menu bar</strong> for faster access to common commands, similar in spirit to a Mac menu bar.</p></li>
+  <li><h3>Adopt Standard Selectors for Menu Item Icons</h3></li>
+  <li><p>For menu items that perform standard actions like Cut, Copy, and Paste, the system uses the menu item's selector to determine which icon to apply. To pick up icons in those menu items with no extra code, use the standard selectors. Custom action selectors don't get system icons; you have to provide them yourself.</p></li>
+  <li><p>A practical follow-on rule: match the actions you surface at the top of a contextual menu to the swipe actions you provide for the same item. Consistency between contextual menu and swipe surfaces is what keeps both predictable.</p></li>
+  <li><h3>Toolbar Grouping with <code>ToolbarSpacer</code></h3></li>
+  <li><p>Toolbars adopt Liquid Glass and gain a real grouping mechanism. You decide which actions belong together by separating groups with a fixed spacer:</p></li>
+  <li><pre><code class="lang-swift">.toolbar {
+    ToolbarItemGroup(placement: .primaryAction) {
+        Button("Undo") { undo() }
+        Button("Redo") { redo() }
+    }
+    ToolbarSpacer(.fixed)
+    ToolbarItemGroup(placement: .primaryAction) {
+        Button("Markup") { markup() }
+        Menu("More") { /* ... */ }
+    }
+}</code></pre></li>
+  <li><p>Items within the same group share a Liquid Glass background. Items separated by <code>ToolbarSpacer(.fixed)</code> get their own background. The pattern Apple flags as wrong is putting four unrelated buttons together with one shared background; the right pattern is grouping by function (undo/redo together, markup/more together) and letting the spacer divide them visually.</p></li>
+  <li><p>UIKit and AppKit have parallel APIs (<code>fixed</code> spacer in UIKit, <code>ToolbarSpacer</code> in AppKit).</p></li>
+  <li><h3>Use Icons for Common Actions; Always Provide Accessibility Labels</h3></li>
+  <li><p>Apple's guidance: prefer icons over text for common toolbar actions to declutter the interface. For consistency, don't mix text and icons across items that share a background &mdash; pick one style per group. And regardless of what you show in the UI, <strong>always provide an accessibility label</strong> for every icon. Users who turn on VoiceOver or Voice Control opt into the text label that way; the icon-only visual stays clean for everyone else.</p></li>
+  <li><h3>Hide Toolbar Items Properly</h3></li>
+  <li><p>If you've ever seen an empty toolbar slot in a shipping app, that's usually the developer hiding the <em>content</em> of a toolbar item rather than the item itself. The fix is to hide the entire toolbar item with <code>.hidden(_:)</code> on the item, not on its content. The empty slot disappears completely.</p></li>
+  <li><p id="mn1-fn" style="font-size: 13pt; color: var(--dim);">[mn1] Apple Developer Documentation, <em>Adopting Liquid Glass</em>. <a href="https://developer.apple.com/documentation/TechnologyOverviews/adopting-liquid-glass">developer.apple.com/documentation/TechnologyOverviews/adopting-liquid-glass</a> &mdash; verified 2026-04-29.</p></li>
+  <li><hr></li>
   <li><h2>NavigationStack</h2></li>
   <li><p>The modern replacement for <code>NavigationView</code>. Use this for single-column, push-pop navigation on iPhone and iPad.</p></li>
   <li><pre><code class="lang-swift">struct ContentView: View {

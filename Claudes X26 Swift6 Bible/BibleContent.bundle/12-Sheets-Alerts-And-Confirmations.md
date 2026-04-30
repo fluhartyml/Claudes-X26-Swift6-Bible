@@ -6,6 +6,41 @@
 
 ---
 
+## X26 Updates to Sheets and Action Sheets
+
+Modal views in X26 adopt Liquid Glass and a refreshed shape. Sheets gain an increased corner radius. **Half sheets are inset from the edge of the display** so content peeks through from underneath; when a half sheet expands to full height, it transitions to a more opaque appearance to keep focus on the task[^s1].
+
+Two practical review tasks:
+
+- **Inside the sheet:** check content and controls near the rounder corners. Anything that was tight against a sharp pre-X26 corner can clip or look cramped against the X26 corner radius.
+- **Outside the sheet:** for half sheets, check what shows through the inset gap between the sheet and the display edge. The peek-through is intentional, but a busy or high-contrast background can fight the sheet for attention.
+
+If you've added a custom visual effect view as a sheet or popover background, remove it. Apple's guidance is explicit: *"Audit the backgrounds of sheets and popovers... remove those custom background views to provide a consistent experience with other sheets across the system."*
+
+### Action Sheets Originate from Their Source
+
+Action sheets in X26 don't slide up from the bottom edge of the display anymore. They originate from the element that triggered them — and they stay non-modal, so the user can interact with the rest of the interface while the sheet is open. The relevant SwiftUI API:
+
+```swift
+.confirmationDialog(
+    "Delete this item?",
+    isPresented: $showDeletePrompt,
+    titleVisibility: .visible,
+    presenting: itemToDelete
+) { item in
+    Button("Delete", role: .destructive) {
+        delete(item)
+    }
+    Button("Cancel", role: .cancel) {}
+}
+```
+
+Set the source view or item via the sheet's anchor configuration so the system knows where to originate the inline appearance from. Without an anchor, the dialog falls back to the older bottom-edge behavior.
+
+[^s1]: Apple Developer Documentation, *Adopting Liquid Glass*. <https://developer.apple.com/documentation/TechnologyOverviews/adopting-liquid-glass> — verified 2026-04-29.
+
+---
+
 ## Sheets
 
 ### Basic Sheet

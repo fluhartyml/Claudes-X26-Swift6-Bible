@@ -6,6 +6,41 @@
 
 ---
 
+## X26 Updates to Lists, Tables, and Forms
+
+Lists, tables, and forms in X26 give content more room to breathe. Apple raised the row height and padding, and increased the corner radius on sections to match the curvature of controls across the system[^l1]. The changes are largely automatic — if you use `List`, `Table`, or `Form` from SwiftUI without overriding their layout metrics, the new sizing applies when you rebuild against the latest SDK.
+
+### Section Headers Use Title-Style Capitalization
+
+This one needs your attention even on standard components: section headers in lists, tables, and forms now use **title-style capitalization** instead of all-caps. Apple's pre-X26 convention rendered section headers in all uppercase regardless of the string you provided. X26 honors the capitalization in your source string. Update headers like `"PROFILE"` to `"Profile"` or `"My Profile"` to match the new system convention. Headers that pass through with all-caps now look out of place against the rest of the system UI.
+
+### Adopt Forms with the Grouped Style
+
+For forms, `Form` with the grouped style picks up the X26 layout updates with no extra code:
+
+```swift
+Form {
+    Section("Profile") {
+        TextField("Name", text: $name)
+        TextField("Email", text: $email)
+    }
+    Section("Preferences") {
+        Toggle("Email Notifications", isOn: $emailOn)
+        Picker("Theme", selection: $theme) {
+            Text("Light").tag(Theme.light)
+            Text("Dark").tag(Theme.dark)
+        }
+    }
+}
+.formStyle(.grouped)
+```
+
+The grouped style is the form layout that was already common on iOS; X26 just refreshes its metrics. The Mac equivalent picks up the same layout improvements so the form reads consistently across platforms.
+
+[^l1]: Apple Developer Documentation, *Adopting Liquid Glass*. <https://developer.apple.com/documentation/TechnologyOverviews/adopting-liquid-glass> — verified 2026-04-29.
+
+---
+
 ## List
 
 The workhorse of data display in SwiftUI. Provides scrolling, cell recycling, selection, swipe actions, and platform-native styling for free.

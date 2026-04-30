@@ -6,6 +6,50 @@
 
 ---
 
+## X26 Menu and Toolbar Updates
+
+Menus have a refreshed look across platforms in X26. They adopt the Liquid Glass material, and menu items for common actions surface system icons to help users scan and identify them quickly[^mn1]. New to iPadOS in X26: apps now have a **menu bar** for faster access to common commands, similar in spirit to a Mac menu bar.
+
+### Adopt Standard Selectors for Menu Item Icons
+
+For menu items that perform standard actions like Cut, Copy, and Paste, the system uses the menu item's selector to determine which icon to apply. To pick up icons in those menu items with no extra code, use the standard selectors. Custom action selectors don't get system icons; you have to provide them yourself.
+
+A practical follow-on rule: match the actions you surface at the top of a contextual menu to the swipe actions you provide for the same item. Consistency between contextual menu and swipe surfaces is what keeps both predictable.
+
+### Toolbar Grouping with `ToolbarSpacer`
+
+Toolbars adopt Liquid Glass and gain a real grouping mechanism. You decide which actions belong together by separating groups with a fixed spacer:
+
+```swift
+.toolbar {
+    ToolbarItemGroup(placement: .primaryAction) {
+        Button("Undo") { undo() }
+        Button("Redo") { redo() }
+    }
+    ToolbarSpacer(.fixed)
+    ToolbarItemGroup(placement: .primaryAction) {
+        Button("Markup") { markup() }
+        Menu("More") { /* ... */ }
+    }
+}
+```
+
+Items within the same group share a Liquid Glass background. Items separated by `ToolbarSpacer(.fixed)` get their own background. The pattern Apple flags as wrong is putting four unrelated buttons together with one shared background; the right pattern is grouping by function (undo/redo together, markup/more together) and letting the spacer divide them visually.
+
+UIKit and AppKit have parallel APIs (`fixed` spacer in UIKit, `ToolbarSpacer` in AppKit).
+
+### Use Icons for Common Actions; Always Provide Accessibility Labels
+
+Apple's guidance: prefer icons over text for common toolbar actions to declutter the interface. For consistency, don't mix text and icons across items that share a background — pick one style per group. And regardless of what you show in the UI, **always provide an accessibility label** for every icon. Users who turn on VoiceOver or Voice Control opt into the text label that way; the icon-only visual stays clean for everyone else.
+
+### Hide Toolbar Items Properly
+
+If you've ever seen an empty toolbar slot in a shipping app, that's usually the developer hiding the *content* of a toolbar item rather than the item itself. The fix is to hide the entire toolbar item with `.hidden(_:)` on the item, not on its content. The empty slot disappears completely.
+
+[^mn1]: Apple Developer Documentation, *Adopting Liquid Glass*. <https://developer.apple.com/documentation/TechnologyOverviews/adopting-liquid-glass> — verified 2026-04-29.
+
+---
+
 ## NavigationStack
 
 The modern replacement for `NavigationView`. Use this for single-column, push-pop navigation on iPhone and iPad.

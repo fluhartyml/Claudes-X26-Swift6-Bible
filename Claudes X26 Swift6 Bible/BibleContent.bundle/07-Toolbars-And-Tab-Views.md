@@ -8,6 +8,51 @@
 
 ---
 
+## X26 Tab and Sidebar Updates
+
+Liquid Glass applies to the topmost layer of the interface — exactly where toolbars and tabs live. Apple's word: *"Key navigation elements like tab bars and sidebars float in this Liquid Glass layer to help people focus on the underlying content."*[^t1] Three new APIs land in X26 to take advantage of that.
+
+### Search Tabs with `Tab(role: .search)`
+
+If your tab bar has a search tab, mark it with the search role and the system handles the rest:
+
+```swift
+TabView {
+    Tab("Browse", systemImage: "rectangle.stack") {
+        BrowseView()
+    }
+    Tab("Library", systemImage: "books.vertical") {
+        LibraryView()
+    }
+    Tab(role: .search) {
+        SearchView()
+    }
+}
+```
+
+The system separates the search tab from the others and places it at the trailing end of the tab bar. Users see search where they expect to see search across all apps, and you get that consistency for free.
+
+### Auto-Minimizing Tab Bars with `tabBarMinimizeBehavior`
+
+Tab bars in X26 can recede when the user scrolls, so the underlying content has the screen to itself. Opt in with one modifier:
+
+```swift
+TabView {
+    // ...
+}
+.tabBarMinimizeBehavior(.onScrollDown)
+```
+
+`.onScrollDown` minimizes the tab bar as the user scrolls down (reading new content) and expands it back when they scroll up. `.onScrollUp` is the inverse. Pick whichever direction matches the content's natural reading flow.
+
+### Tab Bar That Adapts to a Sidebar
+
+For apps with a tab-based root that benefit from a sidebar on iPad or Mac, X26 lets the same tab bar adapt into a sidebar based on context — without you maintaining two parallel UIs. The relevant SwiftUI surface is the `.sidebarAdaptable` tab style, which the system applies when the layout has the room for it.
+
+[^t1]: Apple Developer Documentation, *Adopting Liquid Glass*. <https://developer.apple.com/documentation/TechnologyOverviews/adopting-liquid-glass> — verified 2026-04-29.
+
+---
+
 ## The .toolbar Modifier
 
 The `.toolbar` modifier is the single entry point for adding buttons, menus, and controls to navigation bars, bottom bars, and keyboard accessories.
