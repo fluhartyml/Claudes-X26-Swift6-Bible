@@ -94,15 +94,15 @@ footer.page .row-nav .nav-empty { color: var(--gutter); font-style: italic; }
   <li><div class="scope-note"><strong>Claudes LockBox</strong> ships every pattern in this chapter at production scale. The New Item form lives in a <code>fullScreenCover</code> (not a <code>.sheet</code> &mdash; see Build-Along 03 &sect;10 for why the <code>.sheet</code> height fights the iOS keyboard on phone-sized screens). The image viewer opens via <code>.sheet</code>. Long-press menus on photos use the SwiftUI contextual-menu pattern. Delete operations use confirmation dialogs. The About sheet opens from the sidebar's info button via <code>.sheet</code> again. Source: <a href="https://github.com/fluhartyml/Claudes-LockBox">github.com/fluhartyml/Claudes-LockBox</a>. See Build-Along 03 for the full walkthrough; the <code>fullScreenCover</code> vs <code>.sheet</code> decision is one of three polish fixes from a single commit on the build day, captured in Section 10 of that chapter.</div></li>
   <li><hr></li>
   <li><h2>X26 Updates to Sheets and Action Sheets</h2></li>
-  <li><p>Modal views in X26 adopt Liquid Glass and a refreshed shape. Sheets gain an increased corner radius. <strong>Half sheets are inset from the edge of the display</strong> so content peeks through from underneath; when a half sheet expands to full height, it transitions to a more opaque appearance to keep focus on the task<sup>[<a href="#s1-fn">s1</a>]</sup>.</p></li>
+  <li><p>Modal views pick up Liquid Glass in X26, plus a couple of shape changes worth knowing. Full sheets carry a larger corner radius. Half sheets sit slightly off the screen edge instead of butting up against it, leaving a thin gap where the view behind shows through<sup>[<a href="#s1-fn">s1</a>]</sup>. A half sheet that the user drags up to full height also fades from translucent to closer-to-solid as it goes, so the task gets visual priority once the sheet takes over the screen.</p></li>
   <li><p>Two practical review tasks:</p></li>
   <li><ul>
-    <li><strong>Inside the sheet:</strong> check content and controls near the rounder corners. Anything that was tight against a sharp pre-X26 corner can clip or look cramped against the X26 corner radius.</li>
-    <li><strong>Outside the sheet:</strong> for half sheets, check what shows through the inset gap between the sheet and the display edge. The peek-through is intentional, but a busy or high-contrast background can fight the sheet for attention.</li>
+    <li><strong>Inside the sheet:</strong> walk the corners. A label, button, or text field that fit fine against the old square corner can land underneath the new curve and clip a letter or look squeezed.</li>
+    <li><strong>Outside the sheet:</strong> for half sheets, look at what fills the new gap. Whatever was directly behind the sheet now shows through that strip. A loud background pattern there will pull the eye away from the sheet itself.</li>
   </ul></li>
-  <li><p>If you've added a custom visual effect view as a sheet or popover background, remove it. Apple's guidance is explicit: <em>"Audit the backgrounds of sheets and popovers... remove those custom background views to provide a consistent experience with other sheets across the system."</em></p></li>
+  <li><p>If you've added a custom visual effect view as a sheet or popover background, remove it. Apple's guidance is explicit: <em>"Audit the backgrounds of sheets and popovers... remove those custom background views to provide a consistent experience with other sheets across the system."</em><sup>[<a href="#s1-fn">s1</a>]</sup></p></li>
   <li><h3>Action Sheets Originate from Their Source</h3></li>
-  <li><p>Action sheets in X26 don't slide up from the bottom edge of the display anymore. They originate from the element that triggered them &mdash; and they stay non-modal, so the user can interact with the rest of the interface while the sheet is open. The relevant SwiftUI API:</p></li>
+  <li><p>The bottom-of-screen action sheet is gone. In X26 the sheet attaches to whatever button or row the user tapped, and pops up next to that element. The rest of the screen stays live too &mdash; the user can scroll, tap something else, or dismiss by ignoring the sheet. The SwiftUI call is the same one you'd use for a confirmation dialog:</p></li>
   <li><pre><code class="lang-swift">.confirmationDialog(
     "Delete this item?",
     isPresented: $showDeletePrompt,
@@ -114,7 +114,7 @@ footer.page .row-nav .nav-empty { color: var(--gutter); font-style: italic; }
     }
     Button("Cancel", role: .cancel) {}
 }</code></pre></li>
-  <li><p>Set the source view or item via the sheet's anchor configuration so the system knows where to originate the inline appearance from. Without an anchor, the dialog falls back to the older bottom-edge behavior.</p></li>
+  <li><p>Tell the sheet which element it belongs to by passing a source view or item through the dialog's anchor configuration. Skip that step and you'll get the older bottom-edge slide-up as a fallback &mdash; functional, but no longer the X26 default look.</p></li>
   <li><p id="s1-fn" style="font-size: 13pt; color: var(--dim);">[s1] Apple Developer Documentation, <em>Adopting Liquid Glass</em>. <a href="https://developer.apple.com/documentation/TechnologyOverviews/adopting-liquid-glass">developer.apple.com/documentation/TechnologyOverviews/adopting-liquid-glass</a> &mdash; verified 2026-04-29.</p></li>
   <li><hr></li>
   <li><h2>Sheets</h2></li>

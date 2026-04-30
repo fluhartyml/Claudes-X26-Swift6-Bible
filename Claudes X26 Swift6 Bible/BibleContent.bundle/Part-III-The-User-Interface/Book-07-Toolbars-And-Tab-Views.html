@@ -108,16 +108,16 @@ footer.page .row-nav .nav-empty { color: var(--gutter); font-style: italic; }
         SearchView()
     }
 }</code></pre></li>
-  <li><p>The system separates the search tab from the others and places it at the trailing end of the tab bar. Users see search where they expect to see search across all apps, and you get that consistency for free.</p></li>
+  <li><p>What the role buys you: the search tab gets pulled out of the regular tab lineup and pinned to the trailing end of the bar, by itself. Every app that uses the role agrees on that location, so users learn it once and use it everywhere.<sup>[<a href="#t1-fn">t1</a>]</sup></p></li>
   <li><h3>Auto-Minimizing Tab Bars with <code>tabBarMinimizeBehavior</code></h3></li>
-  <li><p>Tab bars in X26 can recede when the user scrolls, so the underlying content has the screen to itself. Opt in with one modifier:</p></li>
+  <li><p>X26 will minimize the tab bar out of the way while the user is actively scrolling, freeing up vertical space for whatever they're reading. It's an opt-in &mdash; one modifier flips it on:<sup>[<a href="#t1-fn">t1</a>]</sup></p></li>
   <li><pre><code class="lang-swift">TabView {
     // ...
 }
 .tabBarMinimizeBehavior(.onScrollDown)</code></pre></li>
-  <li><p><code>.onScrollDown</code> minimizes the tab bar as the user scrolls down (reading new content) and expands it back when they scroll up. <code>.onScrollUp</code> is the inverse. Pick whichever direction matches the content's natural reading flow.</p></li>
+  <li><p>Two flavors. <code>.onScrollDown</code> tucks the bar away as the user scrolls down through new content and brings it back when they scroll up. <code>.onScrollUp</code> reverses the trigger. The right pick is whichever direction lines up with how the content in this tab is meant to be read.</p></li>
   <li><h3>Tab Bar That Adapts to a Sidebar</h3></li>
-  <li><p>For apps with a tab-based root that benefit from a sidebar on iPad or Mac, X26 lets the same tab bar adapt into a sidebar based on context &mdash; without you maintaining two parallel UIs. The relevant SwiftUI surface is the <code>.sidebarAdaptable</code> tab style, which the system applies when the layout has the room for it.</p></li>
+  <li><p>A tab bar that works on iPhone is often the wrong shape for iPad or Mac &mdash; those screens have room for a sidebar that an iPhone doesn't. <code>.sidebarAdaptable</code> is the SwiftUI tab style that lets one TabView serve both: the system promotes the tabs into a sidebar when the layout has space and falls back to a tab bar when it doesn't. One declaration, two presentations, no parallel code paths.<sup>[<a href="#t1-fn">t1</a>]</sup></p></li>
   <li><p id="t1-fn" style="font-size: 13pt; color: var(--dim);">[t1] Apple Developer Documentation, <em>Adopting Liquid Glass</em>. <a href="https://developer.apple.com/documentation/TechnologyOverviews/adopting-liquid-glass">developer.apple.com/documentation/TechnologyOverviews/adopting-liquid-glass</a> &mdash; verified 2026-04-29.</p></li>
   <li><hr></li>
   <li><h2>The .toolbar Modifier</h2></li>
