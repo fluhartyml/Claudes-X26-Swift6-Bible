@@ -89,11 +89,11 @@ footer.page .row-nav .nav-empty { color: var(--gutter); font-style: italic; }
 
 <div class="content">
 <ol class="lines">
-  <li><h1>Chapter 9: Text and TextField</h1></li>
+  <li><h1>Book 9: Text and TextField</h1></li>
   <li><h2>Live Reference: QuickNote + Claudes LockBox</h2></li>
   <li><div class="scope-note"><strong>QuickNote</strong> uses <code>TextField</code> for the note title and <code>TextEditor</code> for the body, with the date picker, the photo grid, and the home-screen widget all hanging off that minimal text-input surface. <strong>Claudes LockBox</strong> uses <code>TextField</code> for the vault item title and PIN entry, with <code>keyboardType: .numberPad</code> on the PIN field and the standard alphanumeric keyboard on the title. Reading both side-by-side shows the same chapter's API in two different production contexts. Source: <a href="https://github.com/fluhartyml/QuickNote">github.com/fluhartyml/QuickNote</a> and <a href="https://github.com/fluhartyml/Claudes-LockBox">github.com/fluhartyml/Claudes-LockBox</a>. See Build-Along 02 (QuickNote) and Build-Along 03 (LockBox) for the build walkthroughs.</div></li>
   <li><h2>Text View Basics</h2></li>
-  <li><p><code>Text</code> is the workhorse for displaying read-only strings in SwiftUI.</p></li>
+  <li><p><code>Text</code> displays read-only strings in SwiftUI.</p></li>
   <li><pre><code class="lang-swift">Text("Hello, world")
 Text(verbatim: "Hello, world") // skips localization lookup</code></pre></li>
   <li><p>Use <code>verbatim:</code> when you have a string that should never be localized (user-generated content, codes, etc.).</p></li>
@@ -332,11 +332,11 @@ TextField("Email", text: $email)
     }</code></pre></li>
   <li><hr></li>
   <li><h2>Quick Reference</h2></li>
-  <li><p>| Modifier | Purpose | |---|---| | <code>.font()</code> | Set text font | | <code>.foregroundStyle()</code> | Set text color/style | | <code>.bold()</code> / <code>.italic()</code> | Weight and emphasis | | <code>.kerning()</code> / <code>.tracking()</code> | Letter spacing | | <code>.lineLimit()</code> | Constrain line count | | <code>.textCase()</code> | Force upper/lower case | | <code>.textSelection()</code> | Enable copy | | <code>.focused()</code> | Bind to @FocusState | | <code>.onSubmit {}</code> | Handle Return key | | <code>.submitLabel()</code> | Return key appearance | | <code>.keyboardType()</code> | Keyboard layout | | <code>.textInputAutocapitalization()</code> | Cap behavior | | <code>.textContentType()</code> | Autofill hint | | <code>.autocorrectionDisabled()</code> | Kill autocorrect |</p></li>
+  <li><p>| Modifier | Purpose | |---|---| | <code>.font()</code> | Set text font | | <code>.foregroundStyle()</code> | Set text color/style | | <code>.bold()</code> / <code>.italic()</code> | Weight and emphasis | | <code>.kerning()</code> / <code>.tracking()</code> | Letter spacing | | <code>.lineLimit()</code> | Constrain line count | | <code>.textCase()</code> | Force upper/lower case | | <code>.textSelection()</code> | Enable copy | | <code>.focused()</code> | Bind to @FocusState | | <code>.onSubmit {}</code> | Handle Return key | | <code>.submitLabel()</code> | Return key appearance | | <code>.keyboardType()</code> | Keyboard layout | | <code>.textInputAutocapitalization()</code> | Cap behavior | | <code>.textContentType()</code> | Autofill hint | | <code>.autocorrectionDisabled()</code> | Disable autocorrect |</p></li>
 </ol>
 </div>
 
-<footer class="page"><div class="row-nav"><div class="prev"><a href="Book-08-Lists-Grids-And-ForEach.html">&larr; Chapter 08: Lists, Grids, and ForEach</a></div><div class="pos">Book 09 Text And TextField</div><div class="next"><a href="Book-10-TextEditor-And-AttributedString.html">Chapter 10: TextEditor and AttributedString &rarr;</a></div></div></footer>
+<footer class="page"><div class="row-nav"><div class="prev"><a href="Book-08-Lists-Grids-And-ForEach.html">&larr; Book 8: Lists, Grids, and ForEach</a></div><div class="pos">Book 09 Text And TextField</div><div class="next"><a href="Book-10-TextEditor-And-AttributedString.html">Book 10: TextEditor and AttributedString &rarr;</a></div></div></footer>
 
 </body>
 </html>

@@ -89,14 +89,14 @@ footer.page .row-nav .nav-empty { color: var(--gutter); font-style: italic; }
 
 <div class="content">
 <ol class="lines">
-  <li><h1>Chapter 2: Introducing SwiftUI Views</h1></li>
-  <li><p><strong>Claude's Swift Reference 26</strong> -- Part I: Introduction</p></li>
+  <li><h1>Book 2: Introducing SwiftUI Views</h1></li>
+  <li><p><strong>Claude's Xcode 26 Swift Bible</strong> -- Part I: Introduction</p></li>
   <li><hr></li>
   <li><h2>Live Reference: Inkwell (the app you're reading this in)</h2></li>
   <li><div class="scope-note">Every shipping app alongside this book is built with SwiftUI, but <strong>Inkwell</strong> is the most useful one to point at while reading the introductory chapter. Inkwell is the iPad reader app that renders these very pages &mdash; every paragraph, every code block, every Live Reference callout you're reading right now is drawn by a SwiftUI <code>View</code> somewhere in the Inkwell source. Tap the Under the Hood tab in this app's toolbar; the file list you see is every SwiftUI view that makes the app. <code>ContentView.swift</code> is the root view. <code>VaultWebView.swift</code> is the WKWebView wrapper that paints the HTML you're looking at. Source: <a href="https://github.com/fluhartyml/Claudes-X26-Swift6-Bible">github.com/fluhartyml/Claudes-X26-Swift6-Bible</a>. See Build-Along 00 (titled "Meta") for the full architecture and the recursive-self-reference framing.</div></li>
   <li><hr></li>
   <li><h2>Liquid Glass &mdash; the X26 Material</h2></li>
-  <li><p>Open any iOS / iPadOS / macOS / tvOS app built against the X26 SDK and you'll see it: a new dynamic material running through the controls and navigation. Apple calls it <strong>Liquid Glass</strong>, and Apple's one-line definition is the cleanest framing for the whole feature:</p></li>
+  <li><p>Open any iOS / iPadOS / macOS / tvOS app built against the X26 SDK and you'll see it: a new dynamic material running through the controls and navigation. Apple calls it <strong>Liquid Glass</strong>, and Apple's one-line definition covers the feature:</p></li>
   <li><div class="scope-note">"Liquid Glass forms a distinct functional layer for controls and navigation elements. It affects how the interface looks, feels, and moves, adapting in response to a variety of factors to help bring focus to the underlying content."<sup>[<a href="#lg1-fn">lg1</a>]</sup></div></li>
   <li><p>Liquid Glass is a <em>material</em>, not a style. It reacts in real time to two inputs: whether other elements are overlapping it, and whether it currently has focus. Visually it borrows refraction, reflection, and blur from real glass, then layers fluid morphing animations on top.<sup>[<a href="#lg1-fn">lg1</a>]</sup></p></li>
   <li><h3>Adoption is Automatic for Standard Components</h3></li>
@@ -105,7 +105,7 @@ footer.page .row-nav .nav-empty { color: var(--gutter); font-style: italic; }
   <li><h3>The Escape Hatch &mdash; UIDesignRequiresCompatibility</h3></li>
   <li><p>Sometimes you need to ship a build against the new SDK before you've finished the Liquid Glass redesign work. The <strong><code>UIDesignRequiresCompatibility</code></strong> key in <code>Info.plist</code> is the lever for that &mdash; with it set, the app runs on the new platforms but renders the old way. Treat it as a bridge, not a hiding place.<sup>[<a href="#lg1-fn">lg1</a>]</sup></p></li>
   <li><h3>glassEffect for Custom Views</h3></li>
-  <li><p>If you've built a custom control that needs to read as part of the same surface family, reach for the SwiftUI modifier <code>glassEffect(_:in:)</code>. Restraint is the rule here &mdash; the material is supposed to draw the eye to whatever the control is sitting on top of, so spreading it across the whole interface defeats the point. Pick the one or two elements that genuinely matter.<sup>[<a href="#lg1-fn">lg1</a>]</sup></p></li>
+  <li><p>If you've built a custom control that needs to read as part of the same surface family, reach for the SwiftUI modifier <code>glassEffect(_:in:)</code>. Use it sparingly &mdash; the material is supposed to draw the eye to whatever the control is sitting on top of, so spreading it across the whole interface defeats the point. Pick the one or two elements that genuinely matter.<sup>[<a href="#lg1-fn">lg1</a>]</sup></p></li>
   <li><p>Multiple custom Liquid Glass elements that animate between each other belong inside a <code>GlassEffectContainer</code>. The container is what makes the morphing look right and keeps rendering cost down.<sup>[<a href="#lg1-fn">lg1</a>]</sup></p></li>
   <li><h3>Test with Reduce Transparency and Reduce Motion</h3></li>
   <li><p>The two things that make Liquid Glass feel like Liquid Glass &mdash; translucency and morphing &mdash; both back off when the user asks them to. Settings ship a preferred-look toggle for the material itself, and the existing <strong>Reduce Transparency</strong> and <strong>Reduce Motion</strong> switches dampen or remove pieces of the effect. Stock components respect all of this on their own. Anything you've drawn yourself &mdash; custom views, custom palette, custom animation &mdash; needs a pass through both accessibility settings before you ship.<sup>[<a href="#lg1-fn">lg1</a>]</sup></p></li>
@@ -328,7 +328,7 @@ struct DeepChildView: View {
     .background(.yellow.opacity(0.3))
     .clipShape(RoundedRectangle(cornerRadius: 8))</code></pre></li>
   <li><h3>Order Matters</h3></li>
-  <li><p>Modifiers apply from inside out. This catches people constantly.</p></li>
+  <li><p>Modifiers apply from inside out.</p></li>
   <li><pre><code class="lang-swift">// Padding THEN background: background includes the padding
 Text("Hello")
     .padding()
@@ -469,11 +469,11 @@ Image("decorative-line")
   <li><ol class="body-list"><li><strong>Previews are your rapid feedback loop.</strong> Set up multiple previews (light mode, dark mode, large text) so you catch layout issues without running the app.</li></ol></li>
   <li><ol class="body-list"><li><strong>When something looks wrong, check modifier order.</strong> Swapping <code>.padding()</code> and <code>.background()</code> changes the result. Read modifiers bottom-to-top to understand layering.</li></ol></li>
   <li><hr></li>
-  <li><p><em>Claude's Swift Reference 26 -- Chapter 2</em> <em>Written by Claude for Michael Fluharty. Swift 6, Xcode 26.</em></p></li>
+  <li><p><em>Claude's Xcode 26 Swift Bible -- Book 2</em> <em>By Michael Fluharty. Swift 6, Xcode 26.</em></p></li>
 </ol>
 </div>
 
-<footer class="page"><div class="row-nav"><div class="prev"><a href="Book-01-Introducing-Swift-And-Xcode.html">&larr; Chapter 1: Introducing Swift &amp; Xcode</a></div><div class="pos">Book 02 Introducing SwiftUI Views</div><div class="next"><a href="Book-03-Introducing-Scenes-And-Windows.html">Chapter 3: Introducing Scenes &amp; Windows &rarr;</a></div></div></footer>
+<footer class="page"><div class="row-nav"><div class="prev"><a href="Book-01-Introducing-Swift-And-Xcode.html">&larr; Book 1: Introducing Swift &amp; Xcode</a></div><div class="pos">Book 02 Introducing SwiftUI Views</div><div class="next"><a href="Book-03-Introducing-Scenes-And-Windows.html">Book 3: Introducing Scenes &amp; Windows &rarr;</a></div></div></footer>
 
 </body>
 </html>

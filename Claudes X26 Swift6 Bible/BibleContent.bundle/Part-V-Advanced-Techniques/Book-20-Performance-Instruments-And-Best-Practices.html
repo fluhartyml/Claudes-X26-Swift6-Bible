@@ -89,8 +89,8 @@ footer.page .row-nav .nav-empty { color: var(--gutter); font-style: italic; }
 
 <div class="content">
 <ol class="lines">
-  <li><h1>Chapter 20: Performance, Instruments, &amp; Best Practices</h1></li>
-  <li><p><strong>Claude's Swift Reference 26</strong> -- Part V: Advanced Techniques</p></li>
+  <li><h1>Book 20: Performance, Instruments, &amp; Best Practices</h1></li>
+  <li><p><strong>Claude's Xcode 26 Swift Bible</strong> -- Part V: Advanced Techniques</p></li>
   <li><hr></li>
   <li><h2>Live Reference: CryoTunes Player + Tally Matrix Clock</h2></li>
   <li><div class="scope-note">Two production apps in this book's roster put the patterns in this chapter to work continuously. <strong>CryoTunes Player</strong> (<a href="https://github.com/fluhartyml/CryoTunesPlayer">github.com/fluhartyml/CryoTunesPlayer</a>) handles streaming MusicKit playback while keeping a SwiftUI animated transport row at 60fps &mdash; a real test of the actor-contention and <code>@StateObject</code> patterns this chapter covers. See Source Tour 18. <strong>Tally Matrix Clock</strong> (<a href="https://github.com/fluhartyml/Tally-Matrix-Clock">github.com/fluhartyml/Tally-Matrix-Clock</a>) re-renders an animated grid of squares every second on tvOS, where focus-engine performance and SwiftUI body churn matter more than on iPhone. See Source Tour 19.</div></li>
@@ -128,12 +128,10 @@ func processData() async {
   <li><p id="p1-fn" style="font-size: 13pt; color: var(--dim);">[p1] Apple, <em>Xcode 26 Release Notes</em> and <em>Xcode 26.4 Release Notes</em>. <a href="https://developer.apple.com/documentation/xcode-release-notes/xcode-26-release-notes">developer.apple.com/documentation/xcode-release-notes/xcode-26-release-notes</a>, <a href="https://developer.apple.com/documentation/xcode-release-notes/xcode-26_4-release-notes">xcode-26_4-release-notes</a> &mdash; verified 2026-04-29.</p></li>
   <li><p id="p2-fn" style="font-size: 13pt; color: var(--dim);">[p2] Apartment Long-Term-Memory, <code>Swift-6-Quick-Reference-WWDC-2025.md</code> and <code>Xcode-26-Release-Timeline.md</code>, both verified against Apple release notes 2026-04-29.</p></li>
   <li><hr></li>
-  <li><h2>What You'll Learn</h2></li>
-  <li><p>By the end of this chapter you can:</p></li>
-  <li><ul><li>Launch Instruments from Xcode and read the three templates you'll actually use most: Time Profiler, Allocations, and SwiftUI.</li><li>Spot and stop unnecessary SwiftUI <code>body</code> recomputations.</li><li>Avoid the two most common <code>@StateObject</code> / <code>@ObservedObject</code> mistakes.</li><li>Keep actors from becoming bottlenecks in Swift 6 concurrency.</li><li>Apply a small set of habits that make an app stay smooth as it grows.</li></ul></li>
+  <li><p>This chapter covers launching Instruments from Xcode and reading the three most-used templates (Time Profiler, Allocations, SwiftUI), spotting and reducing unnecessary SwiftUI <code>body</code> recomputations, the correct use of <code>@StateObject</code> vs. <code>@ObservedObject</code>, keeping actors from becoming bottlenecks in Swift 6 concurrency, and a set of habits that keep an app smooth as it grows.</p></li>
   <li><hr></li>
   <li><h2>When to Start Profiling</h2></li>
-  <li><p>Don't profile before there's a problem. The old saying "premature optimization is the root of all evil" applies: guessing what's slow is usually wrong, and guessing-based changes make code harder to read without making it faster.</p></li>
+  <li><p>Don't profile before there's a problem. Guessing what's slow is usually wrong, and guessing-based changes make code harder to read without making it faster.</p></li>
   <li><p>Start profiling when you see one of these:</p></li>
   <li><ul><li>The UI stutters while scrolling, typing, or animating.</li><li>The Xcode Debug Navigator shows CPU or memory climbing past what feels reasonable.</li><li>A specific action (save, open, search) feels laggy.</li></ul></li>
   <li><p>Profile with real user scenarios on a real device, not the simulator. The simulator gives you roughly the host Mac's speed, which hides problems that bite on an actual iPhone.</p></li>
@@ -156,23 +154,11 @@ func processData() async {
   <li><ul><li><strong>Call count</strong> -- how many times each view's <code>body</code> ran.</li><li><strong>Duration</strong> -- total time spent in that body.</li></ul></li>
   <li><p>If a single <code>Text</code> row's <code>body</code> is being called thousands of times during a short interaction, something above it is re-rendering unnecessarily. That's almost always a fix in the parent: an observable-object update that's too coarse-grained, or a state change that shouldn't be triggering a repaint.</p></li>
   <li><hr></li>
-  <li><h2>Common SwiftUI Performance Mistakes</h2></li>
+  <li><h2>SwiftUI Performance Patterns</h2></li>
   <li><h3><code>@StateObject</code> vs. <code>@ObservedObject</code></h3></li>
-  <li><p><strong>Rule:</strong> if the view creates the object, use <code>@StateObject</code>. If the object is handed in from outside, use <code>@ObservedObject</code>.</p></li>
-  <li><p>Wrong (object recreates on every parent re-render):</p></li>
-  <li><pre><code class="lang-swift">struct BadParent: View {
-    var body: some View {
-        Child()
-    }
-}
-
-struct Child: View {
-    @ObservedObject var model = Model()   // ← recreated every render
-    var body: some View { Text(model.title) }
-}</code></pre></li>
-  <li><p>Right:</p></li>
+  <li><p><strong>Rule:</strong> if the view creates the object, use <code>@StateObject</code>. If the object is handed in from outside, use <code>@ObservedObject</code>. <code>@StateObject</code> creates the object once and keeps it alive across re-renders; <code>@ObservedObject</code> assumes ownership lives elsewhere.</p></li>
   <li><pre><code class="lang-swift">struct Child: View {
-    @StateObject private var model = Model()   // ← created once, persists
+    @StateObject private var model = Model()   // created once, persists
     var body: some View { Text(model.title) }
 }</code></pre></li>
   <li><p>The <code>@Observable</code> macro (Swift 5.9+) avoids this trap entirely:</p></li>
@@ -184,7 +170,7 @@ struct Child: View {
     var body: some View { Text(model.title) }
 }</code></pre></li>
   <li><h3>Passing Too Much Into a View</h3></li>
-  <li><p>The more properties a view takes, the more reasons it has to re-render. If <code>ProfileCard(user: user)</code> takes the whole user but only renders the name, SwiftUI re-renders when any user property changes. Pass only what you need:</p></li>
+  <li><p>Pass the minimum properties a view needs. The fewer inputs a view has, the fewer reasons it has to re-render. <code>ProfileCard(name: user.name)</code> only re-renders when the name changes, where <code>ProfileCard(user: user)</code> re-renders on any change to <code>user</code>:</p></li>
   <li><pre><code class="lang-swift">ProfileCard(name: user.name)</code></pre></li>
   <li><p>Or split the model into smaller <code>@Observable</code> classes so only the relevant piece triggers updates.</p></li>
   <li><h3>Lists That Aren't Stable</h3></li>
@@ -209,7 +195,7 @@ struct Child: View {
   <li><ol class="body-list"><li><strong>Use <code>.task</code> with IDs to cancel in-flight work.</strong> When a row scrolls offscreen, cancel the image load rather than letting it finish.</li></ol></li>
   <li><hr></li>
   <li><h2>Everyday Habits</h2></li>
-  <li><p>The cheapest performance wins aren't about profiling; they're habits that keep an app fast by default.</p></li>
+  <li><p>Habits that keep an app fast by default:</p></li>
   <li><ul><li><strong>Keep view hierarchies shallow.</strong> Deep nesting makes SwiftUI's diffing more expensive and makes the code harder to read.</li><li><strong>Pull state up only as far as it needs to go.</strong> State owned by a grandparent triggers more re-renders than state owned by the immediate parent.</li><li><strong>Avoid expensive computations in <code>body</code>.</strong> Compute once in a helper method (or outside the view) and pass the result in.</li><li><strong>Prefer <code>@Observable</code> over <code>ObservableObject</code>.</strong> Finer-grained tracking means fewer spurious re-renders.</li><li><strong>Measure before and after.</strong> If you "optimized" something, run Instruments again to confirm. Most optimizations don't help; some make things worse.</li></ul></li>
   <li><hr></li>
   <li><h2>Chapter Mini-Example -- A Fast List With 10,000 Items</h2></li>
@@ -239,14 +225,14 @@ struct BigList: View {
 }</code></pre></li>
   <li><p>Why this is fast:</p></li>
   <li><ul><li><code>Row</code> has a stable <code>id: Int</code>. <code>List</code> can diff efficiently on inserts / deletes.</li><li>The row view has no <code>@ObservedObject</code> or heavy computation.</li><li>We don't wrap the list in a <code>GeometryReader</code> or force it into a custom layout.</li><li>The strings are computed up front, not rebuilt in <code>body</code>.</li></ul></li>
-  <li><p>Run Instruments (Time Profiler) on this; scrolling should spend near-zero CPU. That's the shape you're aiming for when your own lists feel slow.</p></li>
+  <li><p>Run Instruments (Time Profiler) on this; scrolling should spend near-zero CPU. That's the target trace shape for a smooth list.</p></li>
   <li><hr></li>
   <li><h2>What Book 21 Does</h2></li>
   <li><p>Part V closes with performance. Part VI is the toolchain beyond the code itself. Book 21 covers Git and GitHub -- how to version your work, share it with a remote, and participate in the standard open-source workflow.</p></li>
 </ol>
 </div>
 
-<footer class="page"><div class="row-nav"><div class="prev"><a href="Book-19-Building-Custom-Views-And-Modifiers.html">&larr; Chapter 19: Building Custom Views &amp; Modifiers</a></div><div class="pos">Book 20 Performance Instruments And Best Practices</div><div class="next"><a href="../Part-VI-The-Modern-Toolchain/Book-21-Git-And-GitHub.html">Chapter 21: Git &amp; GitHub &rarr;</a></div></div></footer>
+<footer class="page"><div class="row-nav"><div class="prev"><a href="Book-19-Building-Custom-Views-And-Modifiers.html">&larr; Book 19: Building Custom Views &amp; Modifiers</a></div><div class="pos">Book 20 Performance Instruments And Best Practices</div><div class="next"><a href="../Part-VI-The-Modern-Toolchain/Book-21-Git-And-GitHub.html">Book 21: Git &amp; GitHub &rarr;</a></div></div></footer>
 
 </body>
 </html>

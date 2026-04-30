@@ -89,8 +89,8 @@ footer.page .row-nav .nav-empty { color: var(--gutter); font-style: italic; }
 
 <div class="content">
 <ol class="lines">
-  <li><h1>Chapter 19: Building Custom Views &amp; Modifiers</h1></li>
-  <li><p><strong>Claude's Swift Reference 26</strong> -- Part V: Advanced Techniques</p></li>
+  <li><h1>Book 19: Building Custom Views &amp; Modifiers</h1></li>
+  <li><p><strong>Claude's Xcode 26 Swift Bible</strong> -- Part V: Advanced Techniques</p></li>
   <li><hr></li>
   <li><h2>Live Reference: Lexicon Sheet + CryoTransport Controls + Tally Matrix Squares</h2></li>
   <li><div class="scope-note">Three concrete custom-view examples you can read in the production source while working through this chapter. <strong><code>LexiconSheet</code> + <code>IdentifierTaggedSourceView</code></strong> (in Inkwell, <a href="https://github.com/fluhartyml/Claudes-X26-Swift6-Bible">github.com/fluhartyml/Claudes-X26-Swift6-Bible</a>) &mdash; the popup that appears when you tap a tinted Swift identifier in any source-mirror code block in the Under the Hood tab. <strong><code>CryoTransportControls</code></strong> (in CryoTunes Player, <a href="https://github.com/fluhartyml/CryoTunesPlayer">github.com/fluhartyml/CryoTunesPlayer</a>) &mdash; a three-row composed view: transport row (play/pause/skip/stop), shuffle/repeat row, like/dislike/share row. A textbook example of decomposing a complex multi-button cluster into one named custom view. <strong><code>TallyMatrix1x3</code> + <code>TallyMatrix3x3</code> + <code>SquareView</code></strong> (in Tally Matrix Clock, <a href="https://github.com/fluhartyml/Tally-Matrix-Clock">github.com/fluhartyml/Tally-Matrix-Clock</a>) &mdash; three custom views that compose: <code>SquareView</code> is a single lit/unlit square primitive; the two matrix views compose grids of squares for the tens and ones digits. See Source Tour 19 for the architectural walkthrough.</div></li>
@@ -162,7 +162,7 @@ footer.page .row-nav .nav-empty { color: var(--gutter); font-style: italic; }
     AvatarRow(name: "Max",    imageName: "person.circle.fill")
     AvatarRow(name: "Claude", imageName: "sparkles")
 }</code></pre></li>
-  <li><p><strong>The rule of three</strong>: the third time you write the same layout, turn it into a view.</p></li>
+  <li><p><strong>Rule</strong>: the third time you write the same layout, turn it into a view.</p></li>
   <li><hr></li>
   <li><h2>ViewModifier -- Reusable Styling</h2></li>
   <li><p>When the thing you keep repeating is a <strong>stack of modifiers</strong>, not a layout, reach for <code>ViewModifier</code> instead of a new view.</p></li>
@@ -182,7 +182,7 @@ footer.page .row-nav .nav-empty { color: var(--gutter); font-style: italic; }
 // Usage
 Text("Hello")
     .card()</code></pre></li>
-  <li><p>Custom modifiers are how you ship a house style. A dozen views across the app, one definition, any future tweak happens in one place.</p></li>
+  <li><p>Custom modifiers centralize a styling decision. A dozen views across the app, one definition, any future tweak happens in one place.</p></li>
   <li><h3>Modifiers That Take Arguments</h3></li>
   <li><pre><code class="lang-swift">struct BadgedStyle: ViewModifier {
     let color: Color
@@ -403,11 +403,11 @@ struct NotificationBar: View {
   <li><p>One reusable icon view, one reusable card modifier, one environment value -- and the bar's entire accent color lives in one spot.</p></li>
   <li><hr></li>
   <li><h2>What Book 20 Does</h2></li>
-  <li><p>We've added view-shaped tools to the toolkit. Book 20 pulls back and looks at the app as a running system: Instruments, profiling, and the habits that keep a SwiftUI app smooth as it grows.</p></li>
+  <li><p>Book 20 looks at the app as a running system: Instruments, profiling, and the habits that keep a SwiftUI app smooth as it grows.</p></li>
 </ol>
 </div>
 
-<footer class="page"><div class="row-nav"><div class="prev"><a href="Book-18-Error-Handling-And-Result-Type.html">&larr; Chapter 18: Error Handling &amp; Result Type</a></div><div class="pos">Book 19 Building Custom Views And Modifiers</div><div class="next"><a href="Book-20-Performance-Instruments-And-Best-Practices.html">Chapter 20: Performance, Instruments, &amp; Bes... &rarr;</a></div></div></footer>
+<footer class="page"><div class="row-nav"><div class="prev"><a href="Book-18-Error-Handling-And-Result-Type.html">&larr; Book 18: Error Handling &amp; Result Type</a></div><div class="pos">Book 19 Building Custom Views And Modifiers</div><div class="next"><a href="Book-20-Performance-Instruments-And-Best-Practices.html">Book 20: Performance, Instruments, &amp; Bes... &rarr;</a></div></div></footer>
 
 </body>
 </html>

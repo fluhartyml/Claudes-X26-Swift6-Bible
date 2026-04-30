@@ -89,7 +89,7 @@ footer.page .row-nav .nav-empty { color: var(--gutter); font-style: italic; }
 
 <div class="content">
 <ol class="lines">
-  <li><h1>Chapter 10: TextEditor and AttributedString</h1></li>
+  <li><h1>Book 10: TextEditor and AttributedString</h1></li>
   <li><h2>Live Reference: QuickNote (TextEditor) + Inkwell (AttributedString)</h2></li>
   <li><div class="scope-note"><strong>QuickNote</strong> uses <code>TextEditor</code> for the note body &mdash; the chapter's central pattern in production form. The note body is a multi-line free-form text area that grows with the keyboard, persists as a SwiftData string, and reads back identically across the app and its home-screen widget. Source: <a href="https://github.com/fluhartyml/QuickNote">github.com/fluhartyml/QuickNote</a>. <strong>Inkwell</strong> uses <code>AttributedString</code> to render Lexicon Quick-Define popups &mdash; when the reader taps any tinted Swift identifier in a source-mirror code block (in the Under the Hood tab), the popup that appears uses an attributed-string-driven layout to bold the headword, italicize the definition, and link related identifiers. The book renders itself with attributed strings at production scale. See Build-Along 00 (the meta chapter) for the full Inkwell architecture.</div></li>
   <li><h2>TextEditor</h2></li>
@@ -107,7 +107,7 @@ TextEditor(text: $notes)
     .background(.ultraThinMaterial)
     .clipShape(.rect(cornerRadius: 12))
     .frame(minHeight: 100, maxHeight: 300)</code></pre></li>
-  <li><p><strong>Watch out:</strong> Before <code>.scrollContentBackground(.hidden)</code> existed, people hacked around the background with <code>UITextView.appearance()</code>. Do not do that. Use <code>.scrollContentBackground(.hidden)</code> and then apply your own <code>.background()</code>.</p></li>
+  <li><p><strong>Note:</strong> Use <code>.scrollContentBackground(.hidden)</code> to remove the default background, then apply your own <code>.background()</code>.</p></li>
   <li><h3>Placeholder Text</h3></li>
   <li><p>TextEditor has no built-in placeholder. Overlay one yourself:</p></li>
   <li><pre><code class="lang-swift">ZStack(alignment: .topLeading) {
@@ -356,7 +356,7 @@ Text(modern)</code></pre></li>
 </ol>
 </div>
 
-<footer class="page"><div class="row-nav"><div class="prev"><a href="Book-09-Text-And-TextField.html">&larr; Chapter 9: Text and TextField</a></div><div class="pos">Book 10 TextEditor And AttributedString</div><div class="next"><a href="Book-11-FileManager-And-Documents.html">Chapter 11: FileManager and Documents &rarr;</a></div></div></footer>
+<footer class="page"><div class="row-nav"><div class="prev"><a href="Book-09-Text-And-TextField.html">&larr; Book 9: Text and TextField</a></div><div class="pos">Book 10 TextEditor And AttributedString</div><div class="next"><a href="Book-11-FileManager-And-Documents.html">Book 11: FileManager and Documents &rarr;</a></div></div></footer>
 
 </body>
 </html>

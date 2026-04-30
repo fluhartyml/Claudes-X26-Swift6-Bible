@@ -89,16 +89,14 @@ footer.page .row-nav .nav-empty { color: var(--gutter); font-style: italic; }
 
 <div class="content">
 <ol class="lines">
-  <li><h1>Chapter 18: Error Handling &amp; Result Type</h1></li>
-  <li><p><strong>Claude's Swift Reference 26</strong> -- Part V: Advanced Techniques</p></li>
+  <li><h1>Book 18: Error Handling &amp; Result Type</h1></li>
+  <li><p><strong>Claude's Xcode 26 Swift Bible</strong> -- Part V: Advanced Techniques</p></li>
   <li><hr></li>
-  <li><h2>What You'll Learn</h2></li>
-  <li><p>By the end of this chapter you can:</p></li>
-  <li><ul><li>Define custom error types with <code>enum</code> and the <code>Error</code> protocol.</li><li>Throw errors from functions with <code>throws</code>, and handle them with <code>do</code> / <code>try</code> / <code>catch</code>.</li><li>Understand the difference between <code>try</code>, <code>try?</code>, and <code>try!</code>, and when to reach for each.</li><li>Use Swift 6's typed throws (<code>throws(MyError)</code>) to declare exactly which errors can escape a function.</li><li>Use <code>Result&lt;Success, Failure&gt;</code> for callback-era APIs and cross-thread boundaries.</li></ul></li>
+  <li><p>This chapter covers custom error types with <code>enum</code> and the <code>Error</code> protocol; throwing errors from functions with <code>throws</code> and handling them with <code>do</code> / <code>try</code> / <code>catch</code>; the differences between <code>try</code>, <code>try?</code>, and <code>try!</code>; Swift 6 typed throws (<code>throws(MyError)</code>) for declaring exactly which errors can escape a function; and <code>Result&lt;Success, Failure&gt;</code> for callback-era APIs and cross-thread boundaries.</p></li>
   <li><hr></li>
-  <li><h2>Live Reference: CryoTunes Player (a production lesson on what NOT to do)</h2></li>
-  <li><div class="scope-note"><strong>CryoTunes Player</strong> carries an architectural lesson in error handling that this chapter is ultimately about. The app's data layer &mdash; actually a Swift package called <strong>CryoKit</strong> &mdash; has a class <code>MusicPlaybackManager</code> with a <code>public var errorMessage: String</code> property. The package's catch blocks set that property to user-facing prose like <em>"Unable to play station. Check your connection."</em> But CryoKit doesn't read the network. It calls MusicKit. A bare <code>catch</code> in CryoKit catches <em>anything</em> that throws and unconditionally writes that connection-blame string, regardless of whether the throw was actually a network error.</div></li>
-  <li><div class="scope-note">The lesson, captured in feedback memory: <strong>a layer should only report on what it actually owns and observed.</strong> A data layer doesn't get to author UI prose about domains it has no access to. CryoTunes (the app target) eventually severed its read of CryoKit's <code>errorMessage</code> entirely &mdash; see CryoTunes' <code>ContentView.swift</code> history at <a href="https://github.com/fluhartyml/CryoTunesPlayer">github.com/fluhartyml/CryoTunesPlayer</a> (commit <code>06a1852</code> is the sever). Source Tour 18 covers the architectural lesson at length. The chapter you're reading now is the language-level foundation; that source tour is where the principle hits production.</div></li>
+  <li><h2>Live Reference: CryoKit's Error-Surface Lesson</h2></li>
+  <li><div class="scope-note"><strong>CryoTunes Player</strong>'s data layer is a Swift package called <strong>CryoKit</strong>. The architectural rule the package now follows: <strong>a layer should only report on what it actually owns and observed.</strong> A data layer that calls MusicKit reports MusicKit-shaped errors; it doesn't author UI prose about networking or other domains it has no access to. The app target reads structured error values from the package and decides how to present them, rather than displaying a string the package wrote.</div></li>
+  <li><div class="scope-note">CryoTunes' <code>ContentView.swift</code> reads from MusicKit directly for player state; the package surfaces typed error values for the app to format. See the source at <a href="https://github.com/fluhartyml/CryoTunesPlayer">github.com/fluhartyml/CryoTunesPlayer</a>, and Source Tour 18 for the architectural walkthrough. The chapter you're reading now is the language-level foundation; that source tour shows the principle in production form.</div></li>
   <li><hr></li>
   <li><h2>Why Swift Throws Instead of Returning <code>nil</code></h2></li>
   <li><p>Swift functions that might fail have two honest ways to say so:</p></li>
@@ -241,7 +239,7 @@ func fetch(completion: (Result&lt;Data, Error&gt;) -&gt; Void)
 
 // New
 func fetch() async throws -&gt; Data</code></pre></li>
-  <li><p>Reach for <code>Result</code> when you're bridging to older callback APIs, storing the outcome, or sending it across a boundary that doesn't play well with throw.</p></li>
+  <li><p>Reach for <code>Result</code> when you're bridging to older callback APIs, storing the outcome, or sending it across a boundary where <code>throw</code> is unavailable (closures stored in collections, async callbacks, cross-actor message passing).</p></li>
   <li><hr></li>
   <li><h2>Chapter Mini-Example -- Parsing with Real Diagnostics</h2></li>
   <li><pre><code class="lang-swift">import SwiftUI
@@ -297,14 +295,14 @@ struct NumberInput: View {
         }
     }
 }</code></pre></li>
-  <li><p>One throwing function, one typed error, one <code>do / catch</code>, real messages the user can actually act on. That's the full pattern; the rest is just more of it.</p></li>
+  <li><p>One throwing function, one typed error, one <code>do / catch</code>, and messages the user can act on &mdash; the same pattern scales to larger surfaces.</p></li>
   <li><hr></li>
   <li><h2>What Book 19 Does</h2></li>
   <li><p>Errors are behavior that happens in response to bad input; Book 19 is about behavior you ship on purpose: custom views, custom modifiers, and the SwiftUI techniques that let you build your own widgets instead of always reaching for built-ins.</p></li>
 </ol>
 </div>
 
-<footer class="page"><div class="row-nav"><div class="prev"><a href="../Part-IV-The-Application/Book-17-Swift-Charts-And-PDFKit.html">&larr; Chapter 17: Swift Charts &amp; PDFKit</a></div><div class="pos">Book 18 Error Handling And Result Type</div><div class="next"><a href="Book-19-Building-Custom-Views-And-Modifiers.html">Chapter 19: Building Custom Views &amp; Modifiers &rarr;</a></div></div></footer>
+<footer class="page"><div class="row-nav"><div class="prev"><a href="../Part-IV-The-Application/Book-17-Swift-Charts-And-PDFKit.html">&larr; Book 17: Swift Charts &amp; PDFKit</a></div><div class="pos">Book 18 Error Handling And Result Type</div><div class="next"><a href="Book-19-Building-Custom-Views-And-Modifiers.html">Book 19: Building Custom Views &amp; Modifiers &rarr;</a></div></div></footer>
 
 </body>
 </html>

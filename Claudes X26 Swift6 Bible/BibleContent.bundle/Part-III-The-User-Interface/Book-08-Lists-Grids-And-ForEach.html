@@ -89,14 +89,14 @@ footer.page .row-nav .nav-empty { color: var(--gutter); font-style: italic; }
 
 <div class="content">
 <ol class="lines">
-  <li><h1>Chapter 08: Lists, Grids, and ForEach</h1></li>
+  <li><h1>Book 8: Lists, Grids, and ForEach</h1></li>
   <li><h2>Live Reference: Inkwell + Claudes LockBox + QuickNote</h2></li>
   <li><div class="scope-note"><strong>Inkwell</strong> (the reader app you may be holding right now) uses <code>List</code> for its sidebar navigation &mdash; every Part, Book, Chapter, and Page is a list row driven by <code>@Query</code> against the bundle's content tree. <strong>Claudes LockBox</strong> uses <code>List</code> for the items-in-folder column (the middle of the three-column layout) plus a <code>LazyVGrid</code> for the photo thumbnail strip in vault item detail. <strong>QuickNote</strong> uses <code>List</code> for the notes index, sorted by date, with <code>@Query</code> on the SwiftData model. All three apps put <code>List</code> and <code>ForEach</code> to production work. Sources: <a href="https://github.com/fluhartyml/Claudes-X26-Swift6-Bible">Inkwell</a>, <a href="https://github.com/fluhartyml/Claudes-LockBox">LockBox</a>, <a href="https://github.com/fluhartyml/QuickNote">QuickNote</a>. See Build-Along 00 (Inkwell), Build-Along 03 (LockBox), Build-Along 02 (QuickNote).</div></li>
   <li><hr></li>
   <li><h2>X26 Updates to Lists, Tables, and Forms</h2></li>
   <li><p>X26 ships taller rows and more padding for <code>List</code>, <code>Table</code>, and <code>Form</code>, plus a larger corner radius on sections so list groupings echo the rounded shape of nearby controls<sup>[<a href="#l1-fn">l1</a>]</sup>. You get all of it for free in most apps. As long as you haven't hand-set row heights or section insets, a rebuild against the X26 SDK is the whole adoption story.</p></li>
   <li><h3>Section Headers Use Title-Style Capitalization</h3></li>
-  <li><p>This one needs your attention even on standard components. Section headers in lists, tables, and forms now render in <strong>title-style capitalization</strong> &mdash; "Profile", not "PROFILE". Pre-X26 the system flipped your header to all-caps no matter what you handed it, so a lot of source code shouts the header in capitals out of habit. That habit is now wrong. Read your header strings and switch them to title case so they sit cleanly next to the system's own.</p></li>
+  <li><p>This one needs your attention even on standard components. Section headers in lists, tables, and forms now render in <strong>title-style capitalization</strong> &mdash; "Profile", not "PROFILE". Pre-X26 the system flipped your header to all-caps no matter what you handed it, so a lot of source code carries the header in capitals out of habit. Read your header strings and switch them to title case so they sit cleanly next to the system's own.</p></li>
   <li><h3>Adopt Forms with the Grouped Style</h3></li>
   <li><p>For forms, <code>Form</code> with the grouped style picks up the X26 layout updates with no extra code:</p></li>
   <li><pre><code class="lang-swift">Form {
@@ -117,7 +117,7 @@ footer.page .row-nav .nav-empty { color: var(--gutter); font-style: italic; }
   <li><p id="l1-fn" style="font-size: 13pt; color: var(--dim);">[l1] Apple Developer Documentation, <em>Adopting Liquid Glass</em>. <a href="https://developer.apple.com/documentation/TechnologyOverviews/adopting-liquid-glass">developer.apple.com/documentation/TechnologyOverviews/adopting-liquid-glass</a> &mdash; verified 2026-04-29.</p></li>
   <li><hr></li>
   <li><h2>List</h2></li>
-  <li><p>The workhorse of data display in SwiftUI. Provides scrolling, cell recycling, selection, swipe actions, and platform-native styling for free.</p></li>
+  <li><p>The primary container for data display in SwiftUI. Provides scrolling, cell recycling, selection, swipe actions, and platform-native styling for free.</p></li>
   <li><h3>Basic List</h3></li>
   <li><pre><code class="lang-swift">struct ItemListView: View {
     let items: [Item]
@@ -470,7 +470,7 @@ ScrollView {
   <li><h2>Practical Tips</h2></li>
   <li><ol class="body-list"><li><strong>Use <code>List</code> by default</strong> for data that needs selection, swipe actions, or editing. Switch to <code>ScrollView</code> + <code>LazyVStack</code> when you need custom layouts or grid arrangements.</li></ol></li>
   <li><ol class="body-list"><li><strong>Always provide stable IDs.</strong> Using array indices as IDs causes incorrect animations and state bugs when items are inserted or removed.</li></ol></li>
-  <li><ol class="body-list"><li><strong><code>.adaptive</code> GridItem is your friend</strong> for responsive layouts that work across iPhone, iPad, and Mac without conditional logic.</li></ol></li>
+  <li><ol class="body-list"><li><strong>Use <code>.adaptive</code> GridItem</strong> for responsive layouts that work across iPhone, iPad, and Mac without conditional logic.</li></ol></li>
   <li><ol class="body-list"><li><strong>Combine <code>.searchable</code> and <code>.refreshable</code></strong> on the same List for a standard data browsing experience with minimal code.</li></ol></li>
   <li><ol class="body-list"><li><strong>Test with large data sets.</strong> A list that works fine with 10 items may stutter at 10,000. Profile with Instruments if scrolling feels slow.</li></ol></li>
   <li><ol class="body-list"><li><strong>Prefer <code>LazyVStack</code> over <code>VStack</code></strong> inside a <code>ScrollView</code> any time the content count is dynamic or could grow. The memory difference is significant.</li></ol></li>
@@ -478,7 +478,7 @@ ScrollView {
 </ol>
 </div>
 
-<footer class="page"><div class="row-nav"><div class="prev"><a href="Book-07-Toolbars-And-Tab-Views.html">&larr; Chapter 07: Toolbars and Tab Views</a></div><div class="pos">Book 08 Lists Grids And ForEach</div><div class="next"><a href="Book-09-Text-And-TextField.html">Chapter 9: Text and TextField &rarr;</a></div></div></footer>
+<footer class="page"><div class="row-nav"><div class="prev"><a href="Book-07-Toolbars-And-Tab-Views.html">&larr; Book 7: Toolbars and Tab Views</a></div><div class="pos">Book 08 Lists Grids And ForEach</div><div class="next"><a href="Book-09-Text-And-TextField.html">Book 9: Text and TextField &rarr;</a></div></div></footer>
 
 </body>
 </html>

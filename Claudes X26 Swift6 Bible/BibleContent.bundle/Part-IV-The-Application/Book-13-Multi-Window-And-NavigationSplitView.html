@@ -89,13 +89,10 @@ footer.page .row-nav .nav-empty { color: var(--gutter); font-style: italic; }
 
 <div class="content">
 <ol class="lines">
-  <li><h1>Chapter 13: Multi-Window &amp; NavigationSplitView</h1></li>
-  <li><p><strong>Claude's Swift Reference 26</strong> -- Part IV: The Application</p></li>
+  <li><h1>Book 13: Multi-Window &amp; NavigationSplitView</h1></li>
+  <li><p><strong>Claude's Xcode 26 Swift Bible</strong> -- Part IV: The Application</p></li>
   <li><hr></li>
-  <li><h2>What You'll Learn</h2></li>
-  <li><p>By the end of this chapter you can:</p></li>
-  <li><ul><li>Open more than one window of the same app (Mac and iPad).</li><li>Lay out a three-column reader with <code>NavigationSplitView</code> that resizes cleanly on iPhone, iPad, and Mac.</li><li>Open, close, and bring windows to the front from code.</li><li>Keep the user's window state across launches so they pick up where they left off.</li></ul></li>
-  <li><p>If you have already built LockBox (Appendix D) or QuickNote (Appendix C), this chapter is the one that teaches them how to grow up into a proper Mac / iPad application with sidebars, detail panes, and multiple open windows.</p></li>
+  <li><p>This chapter covers multi-window apps, the <code>NavigationSplitView</code> three-column reader pattern, opening and closing windows from code, and persisting window state across launches. The patterns apply to LockBox (Appendix D) and QuickNote (Appendix C) when those apps move beyond a single screen toward sidebars, detail panes, and multiple open windows.</p></li>
   <li><hr></li>
   <li><h2>Live Reference: Inkwell + Claudes LockBox</h2></li>
   <li><div class="scope-note">Two of the apps shipping alongside this book are built on the <code>NavigationSplitView</code> pattern this chapter teaches. <strong>Inkwell</strong> (the reader app you may be holding right now if you're on iPad) uses a sidebar-and-detail layout to navigate the book's Parts, Books, Chapters, and Pages. <strong>Claudes LockBox</strong> uses a three-column variant &mdash; Folders sidebar &rarr; Items in selected Folder &rarr; Item Detail &mdash; that reads cleanly on iPhone (stacked drill-in) and iPad / Mac (all three columns visible). Browse Inkwell's <code>ContentView.swift</code> via its Under the Hood tab, or clone Claudes LockBox at <a href="https://github.com/fluhartyml/Claudes-LockBox">github.com/fluhartyml/Claudes-LockBox</a> and read <code>ContentView.swift</code>, <code>SidebarView.swift</code>, <code>ItemListView.swift</code>, <code>ItemDetailView.swift</code>. Both apps put the same chapter into production form. See Build-Along 00 (Inkwell &mdash; the meta chapter) and Build-Along 03 (LockBox) for the full walkthroughs.</div></li>
@@ -117,7 +114,7 @@ footer.page .row-nav .nav-empty { color: var(--gutter); font-style: italic; }
 }</code></pre></li>
   <li><p>Reach for <code>backgroundExtensionEffect()</code> when a single visual asset deserves the whole window: a header photo, a video poster frame, an oversized illustration on a marketing detail page. Anywhere the design wins by reading as edge-to-edge even though the sidebar is still on screen.</p></li>
   <li><h3>Inspector Panels with <code>.inspector(isPresented:content:)</code></h3></li>
-  <li><p>If you're adding an inspector panel, use <code>.inspector(isPresented:content:)</code>. Building a third column by hand was reasonable in earlier OS versions; in X26 it leaves money on the table. The stock modifier sits inside <code>NavigationSplitView</code>, picks up safe areas, resizes fluidly with the rest of the window, and floats on the Liquid Glass surface the way the system expects &mdash; none of which a hand-rolled column gets for free.</p></li>
+  <li><p>If you're adding an inspector panel, use <code>.inspector(isPresented:content:)</code>. Building a third column by hand was reasonable in earlier OS versions; in X26 the stock modifier offers significantly more for free. The stock modifier sits inside <code>NavigationSplitView</code>, picks up safe areas, resizes fluidly with the rest of the window, and floats on the Liquid Glass surface the way the system expects &mdash; none of which a hand-rolled column gets for free.</p></li>
   <li><p id="v1-fn" style="font-size: 13pt; color: var(--dim);">[v1] Apple Developer Documentation, <em>Adopting Liquid Glass</em>. <a href="https://developer.apple.com/documentation/TechnologyOverviews/adopting-liquid-glass">developer.apple.com/documentation/TechnologyOverviews/adopting-liquid-glass</a> &mdash; verified 2026-04-29.</p></li>
   <li><hr></li>
   <li><h2>Scenes, Windows, and the App</h2></li>
@@ -354,11 +351,11 @@ struct BookDetailView: View {
   <li><p>Clicking a book opens its detail in its own window. The slider position is preserved per-window across launches because <code>@SceneStorage</code> is scoped to the scene.</p></li>
   <li><hr></li>
   <li><h2>What Book 14 Does</h2></li>
-  <li><p>We now have windows we can open, arrange, and restore. Book 14 covers moving content between windows, apps, and devices: clipboard, drag and drop, and share sheets.</p></li>
+  <li><p>Book 14 covers moving content between windows, apps, and devices: clipboard, drag and drop, and share sheets.</p></li>
 </ol>
 </div>
 
-<footer class="page"><div class="row-nav"><div class="prev"><a href="../Part-III-The-User-Interface/Book-12-Sheets-Alerts-And-Confirmations.html">&larr; Chapter 12: Sheets, Alerts, and Confirmations</a></div><div class="pos">Book 13 Multi Window And NavigationSplitView</div><div class="next"><a href="Book-14-Clipboard-DragDrop-ShareSheet.html">Chapter 14: Clipboard, Drag &amp; Drop, Share S... &rarr;</a></div></div></footer>
+<footer class="page"><div class="row-nav"><div class="prev"><a href="../Part-III-The-User-Interface/Book-12-Sheets-Alerts-And-Confirmations.html">&larr; Book 12: Sheets, Alerts, and Confirmations</a></div><div class="pos">Book 13 Multi Window And NavigationSplitView</div><div class="next"><a href="Book-14-Clipboard-DragDrop-ShareSheet.html">Book 14: Clipboard, Drag &amp; Drop, Share S... &rarr;</a></div></div></footer>
 
 </body>
 </html>

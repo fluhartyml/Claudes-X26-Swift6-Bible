@@ -89,8 +89,8 @@ footer.page .row-nav .nav-empty { color: var(--gutter); font-style: italic; }
 
 <div class="content">
 <ol class="lines">
-  <li><h1>Chapter 1: Introducing Swift &amp; Xcode</h1></li>
-  <li><p><strong>Claude's Swift Reference 26</strong> -- Part I: Introduction</p></li>
+  <li><h1>Book 1: Introducing Swift &amp; Xcode</h1></li>
+  <li><p><strong>Claude's Xcode 26 Swift Bible</strong> -- Part I: Introduction</p></li>
   <li><hr></li>
   <li><h2>Live Reference: Pick a Working App to Read Alongside This Book</h2></li>
   <li><div class="scope-note">Every app this book teaches ships as a real GitHub repo you can clone, open in Xcode, and read while working through the chapters. Pick one as your "always open in Xcode" companion right at the start of the book &mdash; the chapters land harder when you have working source code on screen alongside the prose. Recommended starter: <a href="https://github.com/fluhartyml/TakeAChanceOnMeV1.0.2">Take A Chance On Me</a> (~800 lines, seven Swift files, the smallest complete App-Store-shipping app in the roster). Clone, open in Xcode, build to your simulator. Now you have a real Swift project running while you read the rest of this chapter. Source Tour 26 is its dedicated chapter. Larger but still tractable: <a href="https://github.com/fluhartyml/Snap-ScanKeeper">Snap &amp; ScanKeeper</a> at ~820 lines. The complete app roster is listed in Book 21 (Git &amp; GitHub) &mdash; clone whichever speaks to you.</div></li>
@@ -219,13 +219,10 @@ Value: CryoTunes needs access to your music library to play your songs.</code></
   <li><h2>App Store Connect</h2></li>
   <li><p>App Store Connect (appstoreconnect.apple.com) is where you manage your apps after they are built. This is separate from the developer portal.</p></li>
   <li><h3>What You Do in App Store Connect</h3></li>
-  <li><ul><li><strong>Create app listings</strong> -- name, description, screenshots, keywords, category</li><li><strong>Submit builds for review</strong> -- upload from Xcode, then select the build in App Store Connect</li><li><strong>Manage TestFlight</strong> -- internal and external beta testing</li><li><strong>View crash reports and analytics</strong></li><li><strong>Set pricing and availability</strong></li><li><strong>Respond to App Review rejections</strong></li></ul></li>
+  <li><ul><li><strong>Create app listings</strong> -- name, description, screenshots, keywords, category</li><li><strong>Submit builds for review</strong> -- upload from Xcode, then select the build in App Store Connect</li><li><strong>View crash reports and analytics</strong></li><li><strong>Set pricing and availability</strong></li><li><strong>Respond to App Review rejections</strong></li></ul></li>
   <li><h3>Uploading a Build</h3></li>
   <li><ol class="body-list"><li>In Xcode: Product &gt; Archive (must have a real device or "Any iOS Device" selected, not a simulator)</li><li>The Organizer window opens with your archive</li><li>Click "Distribute App"</li><li>Choose "App Store Connect" distribution</li><li>Follow the prompts -- Xcode uploads the build</li></ol></li>
   <li><p>The build appears in App Store Connect after 5-30 minutes of processing.</p></li>
-  <li><h3>TestFlight</h3></li>
-  <li><p>TestFlight lets testers install pre-release builds:</p></li>
-  <li><ul><li><strong>Internal testers</strong> -- up to 100 members of your App Store Connect team. Builds are available immediately.</li><li><strong>External testers</strong> -- up to 10,000 people via a link. Requires a brief Beta App Review.</li></ul></li>
   <li><h3>The App Review Process</h3></li>
   <li><p>After you submit a build for review:</p></li>
   <li><ol class="body-list"><li>It enters the review queue</li><li>A reviewer (human, assisted by automated checks) tests your app</li><li>You get one of: Approved, Rejected (with reasons), or "Metadata Rejected" (listing issues, not code)</li></ol></li>
@@ -245,11 +242,11 @@ Value: CryoTunes needs access to your music library to play your songs.</code></
   <li><ol class="body-list"><li><strong>When Xcode gives you a fixit suggestion, read it before accepting.</strong> Fixits are often correct but sometimes mask a deeper issue. A fixit that says "add @Sendable" might be covering up an architecture problem.</li></ol></li>
   <li><ol class="body-list"><li><strong>Build for the oldest OS version you intend to support.</strong> Set your deployment target early. Adding <code>if #available</code> checks later is tedious.</li></ol></li>
   <li><hr></li>
-  <li><p><em>Claude's Swift Reference 26 -- Chapter 1</em> <em>Written by Claude for Michael Fluharty. Swift 6, Xcode 26.</em></p></li>
+  <li><p><em>Claude's Xcode 26 Swift Bible -- Book 1</em> <em>By Michael Fluharty. Swift 6, Xcode 26.</em></p></li>
 </ol>
 </div>
 
-<footer class="page"><div class="row-nav"><div class="prev"><a href="../Front-of-Book/table-of-contents.html">&larr; Table of Contents</a></div><div class="pos">Book 01 Introducing Swift And Xcode</div><div class="next"><a href="Book-02-Introducing-SwiftUI-Views.html">Chapter 2: Introducing SwiftUI Views &rarr;</a></div></div></footer>
+<footer class="page"><div class="row-nav"><div class="prev"><a href="../Front-of-Book/table-of-contents.html">&larr; Table of Contents</a></div><div class="pos">Book 01 Introducing Swift And Xcode</div><div class="next"><a href="Book-02-Introducing-SwiftUI-Views.html">Book 2: Introducing SwiftUI Views &rarr;</a></div></div></footer>
 
 </body>
 </html>

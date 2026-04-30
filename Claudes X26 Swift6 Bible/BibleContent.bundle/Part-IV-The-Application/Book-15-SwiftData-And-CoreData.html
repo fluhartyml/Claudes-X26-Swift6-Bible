@@ -89,12 +89,10 @@ footer.page .row-nav .nav-empty { color: var(--gutter); font-style: italic; }
 
 <div class="content">
 <ol class="lines">
-  <li><h1>Chapter 15: SwiftData &amp; CoreData</h1></li>
-  <li><p><strong>Claude's Swift Reference 26</strong> -- Part IV: The Application</p></li>
+  <li><h1>Book 15: SwiftData &amp; CoreData</h1></li>
+  <li><p><strong>Claude's Xcode 26 Swift Bible</strong> -- Part IV: The Application</p></li>
   <li><hr></li>
-  <li><h2>What You'll Learn</h2></li>
-  <li><p>By the end of this chapter you can:</p></li>
-  <li><ul><li>Describe data models in Swift using SwiftData's <code>@Model</code> macro.</li><li>Save, fetch, and delete model objects with a <code>ModelContainer</code> and a <code>ModelContext</code>.</li><li>Drive a SwiftUI view from live SwiftData fetches with <code>@Query</code>.</li><li>Decide when to reach for SwiftData vs. the older CoreData stack.</li><li>Opt in to iCloud sync so the same data shows up on every device signed in to the user's Apple ID.</li></ul></li>
+  <li><p>This chapter covers data models with SwiftData's <code>@Model</code> macro, saving / fetching / deleting model objects with <code>ModelContainer</code> and <code>ModelContext</code>, driving SwiftUI views from live fetches with <code>@Query</code>, choosing between SwiftData and the older CoreData stack, and opting in to iCloud sync so data shows up on every device signed in to the user's Apple ID.</p></li>
   <li><hr></li>
   <li><h2>Live Reference: Claude's Web Wrapper</h2></li>
   <li><div class="scope-note">Everything in this chapter ships in <strong>Claude's Web Wrapper</strong> on the App Store (id6762163478). Install it, open the Under the Hood tab, and read <code>Bookmark.swift</code> + <code>BookmarksView.swift</code> right inside the app. Or browse the source on GitHub at <a href="https://github.com/fluhartyml/Wraply">fluhartyml/Wraply</a>. The bookmark feature in that app is the same <code>@Model</code> + <code>@Query</code> + <code>modelContainer</code> + <code>modelContext</code> pattern this chapter teaches &mdash; every concept below has a real shipped line of code you can point at, install, and use.</div></li>
@@ -323,12 +321,12 @@ struct Row: View {
 }</code></pre></li>
   <li><p>Rows persist automatically. Deleting swipes a row away and the database is updated. The star button toggles favorite state without any explicit save call. Add CloudKit capability in Xcode (Signing &amp; Capabilities → iCloud → CloudKit) and the library syncs across every device.</p></li>
   <li><hr></li>
-  <li><h2>What Book 17 Does</h2></li>
+  <li><h2>What Book 16 Does</h2></li>
   <li><p>Data is now stored and synced. Book 17 turns that data into pictures: Swift Charts for bars, lines, and points, and PDFKit for printable exports.</p></li>
 </ol>
 </div>
 
-<footer class="page"><div class="row-nav"><div class="prev"><a href="Book-14-Clipboard-DragDrop-ShareSheet.html">&larr; Chapter 14: Clipboard, Drag &amp; Drop, Share S...</a></div><div class="pos">Book 15 SwiftData And CoreData</div><div class="next"><a href="Book-16-Extensions-And-Packages.html">Chapter 16: Extensions &amp; Packages &rarr;</a></div></div></footer>
+<footer class="page"><div class="row-nav"><div class="prev"><a href="Book-14-Clipboard-DragDrop-ShareSheet.html">&larr; Book 14: Clipboard, Drag &amp; Drop, Share S...</a></div><div class="pos">Book 15 SwiftData And CoreData</div><div class="next"><a href="Book-16-Extensions-And-Packages.html">Book 16: Extensions &amp; Packages &rarr;</a></div></div></footer>
 
 </body>
 </html>

@@ -89,8 +89,8 @@ footer.page .row-nav .nav-empty { color: var(--gutter); font-style: italic; }
 
 <div class="content">
 <ol class="lines">
-  <li><h1>Chapter 16: Extensions &amp; Packages</h1></li>
-  <li><p>Your app doesn't have to do everything by itself. Extensions let your app reach outside its own process — into the home screen, the share sheet, Siri, and the lock screen. Packages let you break your code into reusable modules that multiple apps can share. Both are about extending what your app can do without stuffing everything into one target.</p></li>
+  <li><h1>Book 16: Extensions &amp; Packages</h1></li>
+  <li><p>Extensions let an app reach outside its own process &mdash; into the home screen, the share sheet, Siri, and the lock screen. Packages let code be broken into reusable modules that multiple apps can share. Both extend what an app can do without putting everything into one target.</p></li>
   <li><h2>Live Reference: CryoKit (the shared package) + QuickNote (the widget extension)</h2></li>
   <li><div class="scope-note">Two production examples ship alongside this book. <strong>CryoKit</strong> is a curated internal Swift package shared between two apps &mdash; <strong>CryoTunes Player</strong> (iPhone music app) and <strong>Tally Matrix Clock</strong> (tvOS clock). Same package, two completely different platforms, two completely different distribution targets, one shared codebase for the data layer that backs both. See Source Tour 18 (CryoTunes) and Source Tour 19 (Tally Matrix), with the full package internals at Appendix B (CryoKit). <strong>QuickNote</strong> ships with a home-screen widget extension. The host app and the widget extension live in separate processes, share data through an App Group container, and version their build numbers in lockstep (the host app's <code>CURRENT_PROJECT_VERSION</code> must equal the widget's, or App Store submission rejects the binary). Source: <a href="https://github.com/fluhartyml/QuickNote">github.com/fluhartyml/QuickNote</a>. The widget reads the user's three most recent notes from the same SwiftData store the host app writes to.</div></li>
   <li><h2>Part 1: App Extensions</h2></li>
@@ -190,7 +190,7 @@ footer.page .row-nav .nav-empty { color: var(--gutter); font-style: italic; }
 }</code></pre></li>
   <li><p><strong>Setting up the App Group requires three steps:</strong></p></li>
   <li><ol class="body-list"><li>Register the App Group on developer.apple.com (Identifiers &gt; App Groups &gt; add <code>group.com.YourTeam.YourApp</code>)</li><li>In Xcode, go to Signing &amp; Capabilities for <strong>both</strong> the app target and the widget extension target, add the App Groups capability, and check the group you created</li><li>Use <code>groupContainer: .identifier("group.com.YourTeam.YourApp")</code> in both <code>ModelConfiguration</code> instances</li></ol></li>
-  <li><p>Without this, the widget creates its own empty database in its own sandbox and shows "No Notes" — even though the app has data. This was the exact bug we shipped in QuickNote v1.0 and fixed in v1.1.[^3]</p></li>
+  <li><p>Without this, the widget creates its own empty database in its own sandbox and shows "No Notes" &mdash; even though the app has data. The App Group identifier and a matching <code>ModelConfiguration</code> on both sides are what make the widget read from the same store the host app writes to.[^3]</p></li>
   <li><p>To force the widget to refresh when notes change, call <code>WidgetCenter.shared.reloadAllTimelines()</code> after any insert, edit, or delete in the main app.</p></li>
   <li><h3>Creating a Widget Extension Target</h3></li>
   <li><p>In Xcode: <strong>File &gt; New &gt; Target</strong>, then select <strong>Widget Extension</strong> under Application Extension. Give it a product name (convention: YourAppNameWidgetExtension). Xcode creates the target, the boilerplate files, and offers to activate the scheme.</p></li>
@@ -258,9 +258,9 @@ footer.page .row-nav .nav-empty { color: var(--gutter); font-style: italic; }
   <li><h3>What Is a Swift Package?</h3></li>
   <li><p>A Swift Package is a directory with a <code>Package.swift</code> manifest and some Swift source files. That's it. No Xcode project file, no storyboards, no asset catalogs. Just code and a manifest.</p></li>
   <li><p>Packages let you share code between apps without copying files. CryoKit is a package — it defines the data models and station definitions that CryoTunes Player uses. SoundStageKit is another — it provides the shared models, settings, and marker engine that the entire SoundStage suite depends on.</p></li>
-  <li><h3>The Bare Bones Rule</h3></li>
-  <li><p>Packages should be data layer only. No fonts, no colors, no aesthetic control. The package provides the engine; the app provides the paint job.</p></li>
-  <li><p>Why? Because two apps using the same package will look different. CryoTunes has a retro blue theme. Tally Matrix has a matrix green theme. If CryoKit set font sizes or colors, one of those apps would look wrong.</p></li>
+  <li><h3>Keep Packages Data-Layer Only</h3></li>
+  <li><p>Packages should be data layer only. No fonts, no colors, no aesthetic control. The package provides data models and logic; each app supplies its own visual styling.</p></li>
+  <li><p>Two apps using the same package will look different. CryoTunes uses a retro blue theme. Tally Matrix uses a matrix green theme. If CryoKit set font sizes or colors, one of those apps would look wrong.</p></li>
   <li><p>The package owns:</p></li>
   <li><ul><li>Data models</li><li>Business logic</li><li>Persistence helpers</li><li>Network calls</li></ul></li>
   <li><p>The app owns:</p></li>
@@ -317,7 +317,7 @@ let package = Package(
         self.category = category
     }
 }</code></pre></li>
-  <li><p>If you forget <code>public</code>, the app will compile but won't be able to see your types. The compiler error is "cannot find type 'Station' in scope" — that usually means you forgot to make it public, not that it doesn't exist.</p></li>
+  <li><p>Without <code>public</code>, the app cannot see the package's types. The compiler error reads "cannot find type 'Station' in scope" &mdash; check that the type, its initializer, and any properties used outside the package are marked <code>public</code>.</p></li>
   <li><h3>Adding a Package to Your App</h3></li>
   <li><p>Two ways:</p></li>
   <li><ol class="body-list"><li><strong>Local package</strong> — drag the package folder into your Xcode project. Good for development when you're changing the package and the app at the same time.</li></ol></li>
@@ -341,7 +341,7 @@ git push origin 1.0.0</code></pre></li>
 </ol>
 </div>
 
-<footer class="page"><div class="row-nav"><div class="prev"><a href="Book-15-SwiftData-And-CoreData.html">&larr; Chapter 15: SwiftData &amp; CoreData</a></div><div class="pos">Book 16 Extensions And Packages</div><div class="next"><a href="Book-17-Swift-Charts-And-PDFKit.html">Chapter 17: Swift Charts &amp; PDFKit &rarr;</a></div></div></footer>
+<footer class="page"><div class="row-nav"><div class="prev"><a href="Book-15-SwiftData-And-CoreData.html">&larr; Book 15: SwiftData &amp; CoreData</a></div><div class="pos">Book 16 Extensions And Packages</div><div class="next"><a href="Book-17-Swift-Charts-And-PDFKit.html">Book 17: Swift Charts &amp; PDFKit &rarr;</a></div></div></footer>
 
 </body>
 </html>

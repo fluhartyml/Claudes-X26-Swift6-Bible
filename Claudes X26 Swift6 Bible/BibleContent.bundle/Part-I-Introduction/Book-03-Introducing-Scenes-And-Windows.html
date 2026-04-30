@@ -89,8 +89,8 @@ footer.page .row-nav .nav-empty { color: var(--gutter); font-style: italic; }
 
 <div class="content">
 <ol class="lines">
-  <li><h1>Chapter 3: Introducing Scenes &amp; Windows</h1></li>
-  <li><p><strong>Claude's Swift Reference 26</strong> -- Part I: Introduction</p></li>
+  <li><h1>Book 3: Introducing Scenes &amp; Windows</h1></li>
+  <li><p><strong>Claude's Xcode 26 Swift Bible</strong> -- Part I: Introduction</p></li>
   <li><hr></li>
   <li><h2>Live Reference: Inkwell + Claudes LockBox + CryoTunes Player</h2></li>
   <li><div class="scope-note">All three apps demonstrate the <code>App</code> protocol and scene wiring this chapter teaches, in three different shapes: <strong>Inkwell</strong> has a single <code>WindowGroup</code> hosting <code>LockScreenView</code> (its app entry), then <code>ContentView</code> after auth &mdash; see <code>Claudes_X26_Swift6_BibleApp.swift</code>. <strong>Claudes LockBox</strong> does the same with a <code>WindowGroup</code> hosting a Face-ID gated <code>LockScreenView</code> that wraps the actual content &mdash; see <code>Claudes_LockBoxApp.swift</code> at <a href="https://github.com/fluhartyml/Claudes-LockBox">github.com/fluhartyml/Claudes-LockBox</a>. <strong>CryoTunes Player</strong> uses <code>WindowGroup</code> plus a <code>Settings</code> scene on Mac for the user's preferences pane &mdash; see <code>CryoTunes_PlayerApp.swift</code> at <a href="https://github.com/fluhartyml/CryoTunesPlayer">github.com/fluhartyml/CryoTunesPlayer</a>. Three apps, three takes on the same App-protocol pattern. See Build-Along 00 (Inkwell), Build-Along 03 (LockBox), Source Tour 18 (CryoTunes).</div></li>
@@ -342,7 +342,7 @@ struct MyApp: App {
   <li><ul><li>Do not rely on <code>scenePhase</code> for saving critical data on tvOS. tvOS apps can be terminated without warning. Save continuously or after each user action.</li><li><code>scenePhase</code> on macOS applies per-scene (per-window), not per-app. Closing one window does not mean the app is backgrounded if another window is open.</li></ul></li>
   <li><hr></li>
   <li><h2>Multi-Platform Considerations</h2></li>
-  <li><p>SwiftUI's promise is "write once, adapt everywhere." The reality is close but requires awareness of platform differences.</p></li>
+  <li><p>SwiftUI runs on every Apple platform from a shared codebase, but each platform has its own conventions to account for.</p></li>
   <li><h3>iOS / iPadOS</h3></li>
   <li><ul><li><strong>One WindowGroup</strong>, one full-screen window (iPadOS supports multitasking with multiple scenes).</li><li><strong>No Settings scene</strong> -- build settings into your app's UI.</li><li>Navigation typically uses <code>NavigationStack</code> or <code>NavigationSplitView</code>.</li><li>System bars: status bar at top, home indicator at bottom. Use <code>.ignoresSafeArea()</code> carefully.</li></ul></li>
   <li><h3>macOS</h3></li>
@@ -435,11 +435,11 @@ struct ProductivityApp: App {
   <li><ol class="body-list"><li><strong>On tvOS, do not fight the focus system.</strong> SwiftUI handles focus automatically for standard controls. Custom focus behavior is covered in Chapter 4.</li></ol></li>
   <li><ol class="body-list"><li><strong>Keep your App struct thin.</strong> Initialize state, define scenes, and stop. Business logic belongs in your model layer, not in the <code>App</code> body.</li></ol></li>
   <li><hr></li>
-  <li><p><em>Claude's Swift Reference 26 -- Chapter 3</em> <em>Written by Claude for Michael Fluharty. Swift 6, Xcode 26.</em></p></li>
+  <li><p><em>Claude's Xcode 26 Swift Bible -- Book 3</em> <em>By Michael Fluharty. Swift 6, Xcode 26.</em></p></li>
 </ol>
 </div>
 
-<footer class="page"><div class="row-nav"><div class="prev"><a href="Book-02-Introducing-SwiftUI-Views.html">&larr; Chapter 2: Introducing SwiftUI Views</a></div><div class="pos">Book 03 Introducing Scenes And Windows</div><div class="next"><a href="../Part-II-The-Swift-Language/Chapter-A/Page-AnyObject.html">AnyObject &rarr;</a></div></div></footer>
+<footer class="page"><div class="row-nav"><div class="prev"><a href="Book-02-Introducing-SwiftUI-Views.html">&larr; Book 2: Introducing SwiftUI Views</a></div><div class="pos">Book 03 Introducing Scenes And Windows</div><div class="next"><a href="../Part-II-The-Swift-Language/Chapter-A/Page-AnyObject.html">AnyObject &rarr;</a></div></div></footer>
 
 </body>
 </html>

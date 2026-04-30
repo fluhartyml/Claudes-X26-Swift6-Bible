@@ -89,8 +89,8 @@ footer.page .row-nav .nav-empty { color: var(--gutter); font-style: italic; }
 
 <div class="content">
 <ol class="lines">
-  <li><h1>Chapter 22: AI Chatbot Integration</h1></li>
-  <li><p><strong>Claude's Swift Reference 26</strong> -- Part VI: The Modern Toolchain</p></li>
+  <li><h1>Book 22: AI Chatbot Integration</h1></li>
+  <li><p><strong>Claude's Xcode 26 Swift Bible</strong> -- Part VI: The Modern Toolchain</p></li>
   <li><hr></li>
   <li><h2>Chapter Overview &mdash; Three Paths to AI in X26</h2></li>
   <li><p>X26 ships AI in three distinct places, and the chapter is organized around them. Each path serves a different need; most readers will reach for one but should know all three exist:</p></li>
@@ -159,9 +159,9 @@ footer.page .row-nav .nav-empty { color: var(--gutter); font-style: italic; }
   <li><p>This is the part that distinguishes the assistant from a chat window glued to the editor. Pick a thread from the conversation pop-up and click <strong>History</strong>. The sidebar redraws as a left-hand list of every prompt in the thread and a right-hand vertical slider<sup>[<a href="#a1-fn">a1</a>]</sup>.</p></li>
   <li><p>Drag the slider up to undo the assistant's edits in reverse chronological order; drag it down to put them back. The source editor live-updates to whatever state the slider is pointing at, so you can see the project at any point in the conversation. <strong>Restore</strong> commits to the state under the slider and keeps the later edits in reserve in case you change your mind. <strong>Cancel</strong> exits the slider with no changes.</p></li>
   <li><div class="scope-note"><strong>Prerequisite:</strong> History only runs against a project that lives in a Git repository. If the project isn't tracked yet, Xcode offers a <em>Create Repository</em> button when you click History; <strong>Integrate &gt; New Git Repository</strong> is the same operation from the menu. The repository is read-only here &mdash; the History feature reads its log for reference points and writes nothing back<sup>[<a href="#a1-fn">a1</a>]</sup>.</div></li>
-  <li><h3>What This Replaces in Your Day</h3></li>
-  <li><p>Most of the work this part covers used to live somewhere else: a separate browser tab with documentation open, a chat window with a third-party assistant, a fresh playground project for one-off experiments, a manual hunt for the right Fix-it, a hand-written DocC comment block. The coding assistant collapses those into the editor itself.</p></li>
-  <li><p>That collapse is the point. The keystrokes are short (Command-0, Command-Option-0), the context is automatic, and the assistant is one keystroke away whether you want explanation, generation, fix, or rollback.</p></li>
+  <li><h3>Tools Replaced by the Coding Assistant</h3></li>
+  <li><p>Most of the work this part covers used to live somewhere else: a separate browser tab with documentation open, a chat window with a third-party assistant, a fresh playground project for one-off experiments, a manual hunt for the right Fix-it, a hand-written DocC comment block. The coding assistant brings each of those into the editor.</p></li>
+  <li><p>The keystrokes are short (Command-0, Command-Option-0), the context is automatic, and the assistant is one keystroke away whether you want explanation, generation, fix, or rollback.</p></li>
   <li><p id="a1-fn" style="font-size: 13pt; color: var(--dim);">[a1] Apple Developer Documentation, <em>Writing code with intelligence in Xcode</em>. <a href="https://developer.apple.com/documentation/xcode/writing-code-with-intelligence-in-xcode">developer.apple.com/documentation/xcode/writing-code-with-intelligence-in-xcode</a> &mdash; verified 2026-04-29.</p></li>
   <li><p id="a2-fn" style="font-size: 13pt; color: var(--dim);">[a2] Apple Developer Documentation, <em>Setting up coding intelligence</em>. <a href="https://developer.apple.com/documentation/xcode/setting-up-coding-intelligence">developer.apple.com/documentation/xcode/setting-up-coding-intelligence</a></p></li>
   <li><p id="a3-fn" style="font-size: 13pt; color: var(--dim);">[a3] Apple Developer Documentation, <em>Running code snippets using the playground macro</em>. <a href="https://developer.apple.com/documentation/xcode/running-code-snippets-using-the-playground-macro">developer.apple.com/documentation/xcode/running-code-snippets-using-the-playground-macro</a></p></li>
@@ -251,7 +251,7 @@ footer.page .row-nav .nav-empty { color: var(--gutter); font-style: italic; }
     <li><strong>Treat external content as user-equivalent.</strong> Webpage text, email body, document content, scraped HTML &mdash; if it ends up in the prompt, it's untrusted just like user input. Indirect prompt injection through a fetched document is a real attack pattern.</li>
     <li><strong>Plan for refusals.</strong> The model can refuse to respond when it identifies a request that conflicts with its safety configuration. Your app needs a UI path for "the model declined to answer this." Don't surface the refusal as a generic error; it's a specific, intentional response your design should accommodate.</li>
   </ol></li>
-  <li><p>Doing those three things correctly puts you ahead of most apps that ship LLM features without thinking about safety as a first-class concern.</p></li>
+  <li><p>Doing those three things correctly is the baseline for shipping an LLM feature responsibly.</p></li>
   <li><hr></li>
   <li><h3>The Basic Call</h3></li>
   <li><p>The minimum end-to-end shape for a Foundation Models call is short: build instructions, open a session against them, and call <code>respond(to:)</code> with a prompt.<sup>[<a href="#b1-fn">b1</a>]</sup></p></li>
@@ -317,10 +317,8 @@ let response = try await session.respond(to: prompt, options: options)</code></p
   <li><hr></li>
   <li><h2>Part C &mdash; Third-Party API Integration (Anthropic Claude)</h2></li>
   <li><p>When the on-device Foundation Models framework can't handle what your app needs &mdash; typically because the model is not suited for the use case (basic math, code generation, complex logical reasoning per Apple's own guidance), or because you need a context window larger than 4,096 tokens, or because you want a specific vendor's model &mdash; you call out to a third-party API. This part walks the reference implementation against Anthropic's Claude API.</p></li>
-  <li><p>This Part C content was the entire chapter in the book's first draft. It still teaches a useful integration pattern; it just sits in a different place in the chapter's structure now. Use it when on-device intelligence isn't a fit for the app you're building.</p></li>
-  <li><h3>What You'll Learn (Part C)</h3></li>
-  <li><p>By the end of Part C you can:</p></li>
-  <li><ul><li>Register an Anthropic Claude API account, get an API key, and make your first call from Swift.</li><li>Send a message to Claude from an iOS or Mac app using only <code>URLSession</code> and <code>Codable</code>.</li><li>Store the API key safely in the Keychain instead of hard-coding it.</li><li>Build a minimal chat view that streams the assistant's reply as it arrives.</li></ul></li>
+  <li><p>The avoid-list from Part B (arithmetic and counting, code generation, multi-step logical or spatial reasoning) maps directly onto where Part C earns its place: when the on-device model can't, a third-party API can. The reference implementation below is what an app reaches for in those cases.</p></li>
+  <li><p>Part C covers registering an Anthropic Claude API account and getting an API key, sending a message to Claude from an iOS or Mac app using only <code>URLSession</code> and <code>Codable</code>, storing the API key in the Keychain rather than hard-coding it, and building a minimal chat view that streams the assistant's reply as it arrives.</p></li>
   <li><hr></li>
   <li><h2>What the Anthropic API Is</h2></li>
   <li><p>Anthropic's Claude API is an HTTP JSON service. You POST a request describing the conversation so far; you receive a JSON response containing Claude's next message. No special SDK is required -- <code>URLSession</code> and <code>Codable</code> are enough.</p></li>
@@ -406,12 +404,12 @@ func send(_ history: [Message], apiKey: String) async throws -&gt; String {
     )
     print(reply)
 }</code></pre></li>
-  <li><p>That's the whole non-streaming path. Every chat feature is a variation on this.</p></li>
+  <li><p>That covers the non-streaming path. Streaming, multi-turn, and tool-use features build on this base.</p></li>
   <li><hr></li>
   <li><h2>Storing the API Key Safely</h2></li>
   <li><h3>Do Not Hard-Code It</h3></li>
-  <li><pre><code class="lang-swift">let apiKey = "sk-ant-ExamplePlease"   // 🚫 ships in your binary</code></pre></li>
-  <li><p>Anyone who unzips your app bundle can read the binary's strings and pull the key. Treat hard-coding as identical to posting the key publicly.</p></li>
+  <li><pre><code class="lang-swift">let apiKey = "sk-ant-ExamplePlease"   // ships in your binary</code></pre></li>
+  <li><p>Anyone who unzips your app bundle can read the binary's strings and pull the key. A hard-coded key in a shipped app is the same as a published key.</p></li>
   <li><h3>The Keychain -- For User-Provided Keys</h3></li>
   <li><p>The safest pattern for a user-brings-their-own-key app: have the user paste their key into a settings view; store it in the Keychain; read it at call time.</p></li>
   <li><p>Minimal Keychain wrapper:</p></li>
@@ -607,11 +605,11 @@ struct SettingsView: View {
   <li><p>The user pastes, the app keychains, the <code>ChatView</code> reads it back, and you have a real, working chat app talking to a real model.</p></li>
   <li><hr></li>
   <li><h2>End of Part VI</h2></li>
-  <li><p>That's the modern toolchain: version control, a remote, and a live AI backend you can reach in a few lines of Swift. Appendices A through D walk you through four complete companion apps that exercise what you've learned across all six Parts.</p></li>
+  <li><p>The modern toolchain covered across Part VI: version control, a remote, and a live AI backend reachable in a few lines of Swift. Appendices A through D walk through four complete companion apps that exercise the patterns covered across all six Parts.</p></li>
 </ol>
 </div>
 
-<footer class="page"><div class="row-nav"><div class="prev"><a href="Book-21-Git-And-GitHub.html">&larr; Chapter 21: Git &amp; GitHub</a></div><div class="pos">Book 22 AI Chatbot Integration</div><div class="next"><a href="../Part-VII-Dedicated-Build-Alongs/BuildAlong-00-Claudes-X26-Swift6-Bible-Inkwell/BuildAlong-00-Claudes-X26-Swift6-Bible-Inkwell.html">Reader App: Claude's X26 Swift6 Bible (Inkwell ... &rarr;</a></div></div></footer>
+<footer class="page"><div class="row-nav"><div class="prev"><a href="Book-21-Git-And-GitHub.html">&larr; Book 21: Git &amp; GitHub</a></div><div class="pos">Book 22 AI Chatbot Integration</div><div class="next"><a href="../Part-VII-Dedicated-Build-Alongs/BuildAlong-00-Claudes-X26-Swift6-Bible-Inkwell/BuildAlong-00-Claudes-X26-Swift6-Bible-Inkwell.html">Reader App: Claude's X26 Swift6 Bible (Inkwell ... &rarr;</a></div></div></footer>
 
 </body>
 </html>

@@ -89,12 +89,10 @@ footer.page .row-nav .nav-empty { color: var(--gutter); font-style: italic; }
 
 <div class="content">
 <ol class="lines">
-  <li><h1>Chapter 21: Git &amp; GitHub</h1></li>
-  <li><p><strong>Claude's Swift Reference 26</strong> -- Part VI: The Modern Toolchain</p></li>
+  <li><h1>Book 21: Git &amp; GitHub</h1></li>
+  <li><p><strong>Claude's Xcode 26 Swift Bible</strong> -- Part VI: The Modern Toolchain</p></li>
   <li><hr></li>
-  <li><h2>What You'll Learn</h2></li>
-  <li><p>By the end of this chapter you can:</p></li>
-  <li><ul><li>Create a Git repository for an Xcode project and make your first commit.</li><li>Understand the mental model behind <code>add</code>, <code>commit</code>, <code>branch</code>, and <code>merge</code>.</li><li>Work with a remote on GitHub: clone, push, pull, and open a pull request.</li><li>Write a sane <code>.gitignore</code> for an Xcode project.</li><li>Tag a release and publish it on GitHub.</li></ul></li>
+  <li><p>This chapter covers creating a Git repository for an Xcode project and making the first commit, the model behind <code>add</code>, <code>commit</code>, <code>branch</code>, and <code>merge</code>, working with a remote on GitHub (clone, push, pull, open a pull request), writing a <code>.gitignore</code> for an Xcode project, and tagging and publishing a release on GitHub.</p></li>
   <li><hr></li>
   <li><h2>Live Reference: Every App in This Book</h2></li>
   <li><div class="scope-note">This chapter is the foundation for the book's distribution rule. <strong>GitHub clone-and-build is the default distribution path</strong> for every app shipping alongside this book &mdash; readers clone the repo, open the project in Xcode (Source Control &rarr; Clone), build for their own device, run. App Store distribution is the bonus tier for apps that grow into full-fledged shipped products. The clone-and-build workflow this chapter teaches is the workflow every Build-Along chapter assumes the reader can do.</div></li>
@@ -201,7 +199,7 @@ git merge feature/import-csv
 
 # Delete the merged branch
 git branch -d feature/import-csv</code></pre></li>
-  <li><p>Why branch? Because a feature in progress shouldn't sit in <code>main</code> until it's done. Branches let you keep <code>main</code> shippable while experiments live off to the side.</p></li>
+  <li><p>A feature in progress shouldn't sit in <code>main</code> until it's done. Branches keep <code>main</code> shippable while experiments live off to the side.</p></li>
   <li><hr></li>
   <li><h2>GitHub -- The Remote</h2></li>
   <li><p>GitHub is where your local repo lives on the internet. "Remote" is Git's word for "a copy of this repo somewhere else." The default remote name is <code>origin</code>.</p></li>
@@ -243,7 +241,7 @@ git push origin v1.0.0</code></pre></li>
   <li><h3>Undo a Pushed Commit</h3></li>
   <li><pre><code class="lang-bash">git revert &lt;commit-sha&gt;</code></pre></li>
   <li><p>Creates a new commit that undoes the old one. Safe because history stays linear; nobody has to rebase their work.</p></li>
-  <li><p>Never use <code>git push --force</code> on a shared branch. It rewrites history and breaks everybody else's clone.</p></li>
+  <li><p>Never use <code>git push --force</code> on a shared branch. It rewrites history and breaks every other clone of that branch.</p></li>
   <li><hr></li>
   <li><h2>The Xcode Source Control Integration</h2></li>
   <li><p>Xcode has a Source Control menu that does the common Git operations through GUI. You can:</p></li>
@@ -282,7 +280,7 @@ git push -u origin main</code></pre></li>
 </ol>
 </div>
 
-<footer class="page"><div class="row-nav"><div class="prev"><a href="../Part-V-Advanced-Techniques/Book-20-Performance-Instruments-And-Best-Practices.html">&larr; Chapter 20: Performance, Instruments, &amp; Bes...</a></div><div class="pos">Book 21 Git And GitHub</div><div class="next"><a href="Book-22-AI-Chatbot-Integration.html">Chapter 22: AI Chatbot Integration &rarr;</a></div></div></footer>
+<footer class="page"><div class="row-nav"><div class="prev"><a href="../Part-V-Advanced-Techniques/Book-20-Performance-Instruments-And-Best-Practices.html">&larr; Book 20: Performance, Instruments, &amp; Bes...</a></div><div class="pos">Book 21 Git And GitHub</div><div class="next"><a href="Book-22-AI-Chatbot-Integration.html">Book 22: AI Chatbot Integration &rarr;</a></div></div></footer>
 
 </body>
 </html>

@@ -89,13 +89,10 @@ footer.page .row-nav .nav-empty { color: var(--gutter); font-style: italic; }
 
 <div class="content">
 <ol class="lines">
-  <li><h1>Chapter 14: Clipboard, Drag &amp; Drop, Share Sheet</h1></li>
-  <li><p><strong>Claude's Swift Reference 26</strong> -- Part IV: The Application</p></li>
+  <li><h1>Book 14: Clipboard, Drag &amp; Drop, Share Sheet</h1></li>
+  <li><p><strong>Claude's Xcode 26 Swift Bible</strong> -- Part IV: The Application</p></li>
   <li><hr></li>
-  <li><h2>What You'll Learn</h2></li>
-  <li><p>By the end of this chapter you can:</p></li>
-  <li><ul><li>Read from and write to the system clipboard on iOS and macOS.</li><li>Make your own types participate in copy / paste, drag / drop, and the share sheet via one protocol: <code>Transferable</code>.</li><li>Let the user drag content between views in your app and between your app and other apps.</li><li>Present the system share sheet so users can send content to Messages, Mail, AirDrop, and the rest.</li></ul></li>
-  <li><p>These are the three ways Apple platforms move data between places. Once you have them, every app that handles user content feels like a native citizen.</p></li>
+  <li><p>This chapter covers the three ways Apple platforms move data between places: the system clipboard on iOS and macOS, drag and drop between views and between apps, and the system share sheet for sending content to Messages, Mail, AirDrop, and other apps. The unifying protocol is <code>Transferable</code>, which a single type can adopt to participate in all three.</p></li>
   <li><hr></li>
   <li><h2>Live Reference: Claudes LockBox</h2></li>
   <li><div class="scope-note"><strong>Claudes LockBox</strong> ships every pattern in this chapter at production scale. Tap any photo thumbnail in a vault item's detail view and a full-screen image viewer opens with a share button at the top &mdash; that's the system share sheet (<code>UIActivityViewController</code> wrapped via <code>UIViewControllerRepresentable</code>). Long-press a photo and a contextual menu offers "View Full Size" or "Delete Page." Source: <a href="https://github.com/fluhartyml/Claudes-LockBox">github.com/fluhartyml/Claudes-LockBox</a>, specifically <code>ImageViewerView.swift</code> and <code>ShareSheetView.swift</code>. The full build walkthrough in Build-Along 03 covers the share-sheet integration; the architectural notes in Source Tour 18 (CryoTunes) cover where the same <code>Transferable</code> patterns get used inside a music app's now-playing surface.</div></li>
@@ -302,11 +299,11 @@ struct NoteCard: View {
   <li><p>Each card can be copied from its context menu, dragged onto another card, and shared through the system share sheet. Users can also drag cards out to Files or Messages because <code>Note</code> carries a JSON UTI.</p></li>
   <li><hr></li>
   <li><h2>What Book 15 Does</h2></li>
-  <li><p>Book 14 moved data between views and apps. Book 15 covers where data lives when the app isn't running: SwiftData and CoreData for on-device storage, with optional CloudKit sync between devices.</p></li>
+  <li><p>Book 15 covers persistent storage: SwiftData and CoreData for on-device storage, with optional CloudKit sync between devices.</p></li>
 </ol>
 </div>
 
-<footer class="page"><div class="row-nav"><div class="prev"><a href="Book-13-Multi-Window-And-NavigationSplitView.html">&larr; Chapter 13: Multi-Window &amp; NavigationSplitV...</a></div><div class="pos">Book 14 Clipboard DragDrop ShareSheet</div><div class="next"><a href="Book-15-SwiftData-And-CoreData.html">Chapter 15: SwiftData &amp; CoreData &rarr;</a></div></div></footer>
+<footer class="page"><div class="row-nav"><div class="prev"><a href="Book-13-Multi-Window-And-NavigationSplitView.html">&larr; Book 13: Multi-Window &amp; NavigationSplitV...</a></div><div class="pos">Book 14 Clipboard DragDrop ShareSheet</div><div class="next"><a href="Book-15-SwiftData-And-CoreData.html">Book 15: SwiftData &amp; CoreData &rarr;</a></div></div></footer>
 
 </body>
 </html>

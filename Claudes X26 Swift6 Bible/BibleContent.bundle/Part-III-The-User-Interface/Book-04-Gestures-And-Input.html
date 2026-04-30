@@ -89,17 +89,17 @@ footer.page .row-nav .nav-empty { color: var(--gutter); font-style: italic; }
 
 <div class="content">
 <ol class="lines">
-  <li><h1>Chapter 4: Gestures &amp; Input</h1></li>
-  <li><p><strong>Claude's Swift Reference 26</strong> -- Part III: The User Interface</p></li>
+  <li><h1>Book 4: Gestures &amp; Input</h1></li>
+  <li><p><strong>Claude's Xcode 26 Swift Bible</strong> -- Part III: The User Interface</p></li>
   <li><hr></li>
   <li><h2>Live Reference: Claudes LockBox image viewer</h2></li>
   <li><div class="scope-note"><strong>Claudes LockBox</strong> ships every gesture this chapter teaches in its photo viewer. Tap a vault item's photo thumbnail and the image opens full-screen. Pinch to zoom. Double-tap to toggle between fit-to-screen and 3x zoom. Drag to pan when zoomed in. Pinch below 1x and the image snaps back to fit-to-screen. Long-press a thumbnail in the detail view and a contextual menu offers "View Full Size" or "Delete Page." Five gesture patterns in one screen, all in <code>ImageViewerView.swift</code>. Source: <a href="https://github.com/fluhartyml/Claudes-LockBox">github.com/fluhartyml/Claudes-LockBox</a>. See Build-Along 03 &sect;11 for the build walkthrough; the snap-back-on-overpinch behavior is one of the small UX-payoff details this chapter's principles produce in production code.</div></li>
   <li><hr></li>
   <li><h2>What This Chapter Is About</h2></li>
-  <li><p>Books 01 through 03 built up the language, SwiftUI's view model, and the scene/window structure of an Apple app. The app runs; views draw. Now we turn to the other half of an app's life: how the user talks back. Taps, swipes, drags, pinches, keyboard presses, Apple Pencil strokes.</p></li>
+  <li><p>Books 01 through 03 built up the language, SwiftUI's view model, and the scene/window structure of an Apple app. The app runs; views draw. This chapter covers user input: taps, swipes, drags, pinches, keyboard presses, Apple Pencil strokes.</p></li>
   <li><p>SwiftUI covers this with two layers of API:</p></li>
   <li><ul><li><strong>High-level shortcuts</strong> built into the common views -- <code>Button</code>, <code>TextField</code>, <code>Toggle</code>, <code>onTapGesture</code>, <code>onSubmit</code>. Most apps live here and go no deeper.</li><li><strong>The Gesture protocol</strong> -- a composable system for building, combining, and tracking touch gestures when the shortcuts don't cover what you need.</li></ul></li>
-  <li><p>This chapter walks both layers. The goal is that by the end you can handle any ordinary input path a user will hand your app, and know which door to open for the uncommon ones.</p></li>
+  <li><p>This chapter walks both layers, covering ordinary input paths and the gesture-protocol APIs available for less common cases.</p></li>
   <li><hr></li>
   <li><h2>The Tap -- The Simplest Input</h2></li>
   <li><p>A tap is a single, quick press-and-release in roughly the same spot. Every tappable element in an Apple app begins with a tap.</p></li>
@@ -427,14 +427,14 @@ struct Sketchpad: UIViewRepresentable {
     .onTapGesture { toggleFavorite() }
     .accessibilityLabel("Favorite")
     .accessibilityAddTraits(.isButton)</code></pre></li>
-  <li><p>VoiceOver now announces the view as a button named "Favorite." Without the traits and label, it reads "heart.fill, image" -- useless.</p></li>
+  <li><p>VoiceOver now announces the view as a button named "Favorite." Without the traits and label, it reads "heart.fill, image."</p></li>
   <li><hr></li>
   <li><h2>What Book 05 Does</h2></li>
-  <li><p>Book 04 covered how the user talks to views. Book 05 takes it up one level: menus, navigation stacks, and <code>NavigationLink</code>. Once an app has more than one screen, the conversation is no longer about one gesture at a time; it's about moving between places.</p></li>
+  <li><p>Book 04 covered user input on a single view. Book 05 covers menus, navigation stacks, and <code>NavigationLink</code> &mdash; the APIs that move users between screens.</p></li>
 </ol>
 </div>
 
-<footer class="page"><div class="row-nav"><div class="prev"><a href="../Part-II-The-Swift-Language/Chapter-Z/Page-ZStack.html">&larr; ZStack</a></div><div class="pos">Book 04 Gestures And Input</div><div class="next"><a href="Book-05-Menus-And-Navigation.html">Chapter 05: Menus and Navigation &rarr;</a></div></div></footer>
+<footer class="page"><div class="row-nav"><div class="prev"><a href="../Part-II-The-Swift-Language/Chapter-Z/Page-ZStack.html">&larr; ZStack</a></div><div class="pos">Book 04 Gestures And Input</div><div class="next"><a href="Book-05-Menus-And-Navigation.html">Book 5: Menus and Navigation &rarr;</a></div></div></footer>
 
 </body>
 </html>
