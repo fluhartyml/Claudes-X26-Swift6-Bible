@@ -1,31 +1,71 @@
 <!DOCTYPE html>
-<html lang="en"><head>
+<html lang="en">
+<head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Build-Along 07: MyPerson</title>
+<title>Build-Along 07: My Person CRM &mdash; Claude's Xcode 26 Swift Bible</title>
 <style>
-:root { --bg: #000000; --fg: #FFB000; --bright: #FFD060; --dim: #996600; --codebg: #1a0d00; --border: #664500; --gutter: #4a3300; --headerbg: #0a0600; }
+:root {
+  --bg: #000000;
+  --fg: #FFB000;
+  --bright: #FFD060;
+  --dim: #996600;
+  --codebg: #1a0d00;
+  --border: #664500;
+  --gutter: #4a3300;
+  --headerbg: #0a0600;
+}
 * { box-sizing: border-box; }
 html, body { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; height: 100%; }
-body { background: var(--bg); color: var(--fg); font-family: "FiraCode Nerd Font Mono", "Fira Code", "Menlo", "Courier New", monospace; font-size: 18pt; line-height: 1.55; margin: 0; padding: 0; text-shadow: 0 0 1px rgba(255, 176, 0, 0.35); display: flex; flex-direction: column; }
-header.page, footer.page { background: var(--headerbg); color: var(--dim); padding: 0.55rem 1.1rem; font-size: 13pt; display: flex; flex-direction: column; gap: 0.2rem; flex: 0 0 auto; z-index: 10; }
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: "FiraCode Nerd Font Mono", "FiraCode Nerd Font", "Fira Code", "Menlo", "Courier New", monospace;
+  font-size: 18pt;
+  line-height: 1.55;
+  margin: 0;
+  padding: 0;
+  text-shadow: 0 0 1px rgba(255, 176, 0, 0.35);
+  display: flex;
+  flex-direction: column;
+}
+header.page, footer.page {
+  background: var(--headerbg);
+  color: var(--dim);
+  padding: 0.55rem 1.1rem;
+  font-size: 13pt;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  flex: 0 0 auto;
+  z-index: 10;
+}
 header.page { border-bottom: 1px solid var(--border); }
 footer.page { border-top: 1px solid var(--border); padding-bottom: calc(0.55rem + env(safe-area-inset-bottom)); }
 header.page .path, footer.page .path { color: var(--fg); word-break: break-all; overflow-wrap: break-word; }
 header.page .pos, footer.page .pos { color: var(--bright); }
 .content { flex: 1 1 auto; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 0.8rem 1rem 2rem 1rem; max-width: 1100px; margin: 0 auto; width: 100%; }
 h1 { color: var(--bright); font-weight: normal; font-size: 26pt; margin: 0.6rem 0 1rem 0; }
-h2 { color: var(--bright); font-weight: normal; font-size: 20pt; border-bottom: 1px solid var(--border); padding-bottom: 0.3rem; margin-top: 1.5rem; }
-h3 { color: var(--bright); font-weight: normal; font-size: 18pt; margin-top: 1rem; }
+h2 { color: var(--bright); font-weight: normal; font-size: 20pt; border-bottom: 1px solid var(--border); padding-bottom: 0.3rem; margin-top: 1.5rem; counter-set: h3 0 para 0; counter-increment: h2; }
+h2::before { content: counter(h2) ". "; color: var(--fg); }
+h3 { color: var(--bright); font-weight: normal; font-size: 18pt; margin-top: 1rem; counter-set: para 0; counter-increment: h3; }
+h3::before { content: counter(h2) "." counter(h3) " "; color: var(--fg); }
 p { margin: 0.4rem 0; counter-increment: para; }
+p::before { content: counter(h2) "." counter(h3) "." counter(para) " "; color: var(--dim); font-size: 13pt; margin-right: 0.4em; }
 code { color: var(--bright); background: var(--codebg); padding: 0.08em 0.35em; border: 1px solid #3a2400; border-radius: 3px; font-size: 0.92em; }
 pre { background: var(--codebg); border: 1px solid #3a2400; border-radius: 4px; padding: 0.7rem 0.9rem; overflow-x: auto; font-size: 14pt; }
-ul { margin: 0.4rem 0 0.4rem 1.4rem; padding: 0; }
+pre code { background: transparent; border: 0; padding: 0; }
+ul, ol.body-list { margin: 0.4rem 0 0.4rem 1.4rem; padding: 0; }
 a { color: var(--bright); font-weight: bold; text-decoration: none; border-bottom: 1px dotted var(--dim); }
+a:hover { background: #332200; }
 strong { color: var(--bright); }
 em { color: var(--fg); font-style: italic; }
+hr { border: 0; border-top: 1px solid var(--border); margin: 1rem 0; }
+ol.lines { list-style: none; counter-reset: line h2 h3 para; padding: 0; margin: 0; }
+ol.lines > li { counter-increment: line; padding: 0.15rem 0 0.15rem 3.6rem; position: relative; min-height: 1.2em; }
+ol.lines > li::before { content: counter(line); position: absolute; left: 0; top: 0.25rem; width: 2.8rem; text-align: right; color: var(--gutter); font-size: 13pt; padding-right: 0.5rem; border-right: 1px solid #2a1e00; }
+ol.lines > li > p, ol.lines > li > h2, ol.lines > li > h3, ol.lines > li > ul, ol.lines > li > ol, ol.lines > li > pre, ol.lines > li > hr { margin: 0; }
 .scope-note { border-left: 3px solid var(--bright); padding: 0.7rem 1rem; background: #140c00; margin: 0.6rem 0; color: var(--bright); }
-.status-planning { color: #996600; font-weight: bold; }
 
 
 footer.page { flex-direction: column; gap: 0.4rem; }
@@ -38,43 +78,296 @@ footer.page .row-nav a { color: var(--bright); font-weight: bold; text-decoratio
 footer.page .row-nav a:hover { background: #332200; }
 footer.page .row-nav .nav-empty { color: var(--gutter); font-style: italic; }
 </style>
-</head><body>
-<header class="page"><div class="path">Part-VII-Dedicated-Build-Alongs/BuildAlong-07-MyPerson</div></header>
+</head>
+<body>
+
+<header class="page">
+  <div class="path">Part-VII-Dedicated-Build-Alongs/BuildAlong-07-MyPerson</div>
+</header>
+
 <div class="content">
-<h1>Build-Along 07: MyPerson</h1>
-<p><span class="status-planning">Status: planning phase as of 2026-04-24.</span> App not yet scaffolded. Walkthrough fills in once v1.0 scaffolds; expanded planning notes below.</p>
-<div class="scope-note">MVP concept: a personal contact-relationship manager. Capture new people you meet, track how you met them, set follow-up reminders, and see all your relationships in one focused place. Three ways to capture a new person's contact info &mdash; from "hand the other person your phone" all the way to "tap phones together."</div>
-<h2>What MyPerson will teach</h2>
-<ul>
-<li><strong>Contacts</strong> &mdash; reading and writing <code>CNContact</code> via <code>CNContactStore</code>. Authorization, search, create, update, delete.</li>
-<li><strong>ContactsUI</strong> &mdash; <code>CNContactViewController</code> for the native display/edit surface.</li>
-<li><strong>NearbyInteraction</strong> &mdash; peer-to-peer ranging between iPhones using the UWB chip (U1 in iPhone 11+, U2 in iPhone 15 Pro+). This is the framework that powers NameDrop-style "tap to share" behavior.</li>
-<li><strong>MultipeerConnectivity</strong> &mdash; fallback peer discovery for devices without UWB hardware (older iPhones, iPads, Macs). Bluetooth + local Wi-Fi.</li>
-<li><strong>EventKit</strong> (secondary) &mdash; optional follow-up reminders for "check in with this person in two weeks" flow.</li>
-<li><strong>Signature layer:</strong> MVP feature + Under the Hood view + About &amp; Send Feedback.</li>
-<li><strong>Distribution:</strong> App Store listing &mdash; personal-CRM is an established category (Monica, Dex, Clay) and Apple doesn't ship one. Clear product-market fit for the teaching example.</li>
-</ul>
-<h2>Three ways to capture a new contact</h2>
-<ol>
-<li><strong>Tap-together share (best)</strong> &mdash; both iPhones have MyPerson open, bring them close, the UWB ranging triggers a contact-card exchange. Same UX as NameDrop but captured inside the MyPerson database with relationship metadata.</li>
-<li><strong>Peer discovery (middle)</strong> &mdash; if one device doesn't have UWB, fall back to MultipeerConnectivity over Bluetooth. Slower, but works across iPhone / iPad / Mac.</li>
-<li><strong>Hand over the phone (fallback)</strong> &mdash; open a "New Person" form, hand the phone to the other person, they type their info directly. Works with any human, no device pairing required. This is the worst case and still a first-class path.</li>
+<ol class="lines">
+  <li><h1>Build-Along 07: My Person CRM &mdash; Contacts, EventKit, and SwiftData Together</h1></li>
+  <li><p>My Person CRM is a personal customer-relationship manager for the people you actually want to keep in touch with. Pick a contact from your address book, log how you stay in touch (calls, messages, emails, visits, free-form notes), and let the calendar surface upcoming events that mention them. Spring-green accent. Multiplatform &mdash; iPhone, iPad, Mac, Apple Vision &mdash; with SwiftData under the hood and a CloudKit-shaped schema ready to sync.</p></li>
+  <li><p>The repository: <a href="https://github.com/fluhartyml/My-Person-CRM">github.com/fluhartyml/My-Person-CRM</a>. The wiki: <a href="https://github.com/fluhartyml/My-Person-CRM/wiki">github.com/fluhartyml/My-Person-CRM/wiki</a>. Three privacy-gated frameworks (Contacts, ContactsUI, EventKit) coexist in one app, plus SwiftData with relationships and an enum stored as a raw string for CloudKit safety. Aiming for App Store distribution &mdash; the CRM space (Monica, Dex, Clay, Cloze, Contacts Journal) is real and Apple doesn't ship one.</p></li>
+  <li><hr></li>
+  <li><h2>The Brainstorm</h2></li>
+  <li><p>Apple Contacts is a flat directory. It is not a relationship manager. It tells you a person's phone number; it does not tell you when you last spoke to them, what you said, or whether you owe them a follow-up. My Person CRM is a thin relationship layer on top of Contacts: contact details (phone, email, birthday, photo) come live from <code>CNContactStore</code>, while the <strong>interaction log</strong> is the value-add that lives only in this app.</p></li>
+  <li><p><strong>v0.1 spec:</strong></p></li>
+  <li><ul>
+    <li>List of tracked people with photo, name, and "days since last contact"</li>
+    <li>Per-person detail screen with quick-action buttons (Call, Message, Email)</li>
+    <li>Live contact details pulled from Contacts (phone, email, birthday)</li>
+    <li>Upcoming calendar events that mention the person (next 12 months)</li>
+    <li>Interaction log &mdash; type, date, free-form note, sorted newest-first</li>
+    <li>iOS contact picker via <code>CNContactPickerViewController</code></li>
+    <li>Mac manual-entry sheet (<code>ContactsUI</code> doesn't ship on macOS)</li>
+    <li>Empty state with friendly guidance and a single Add button</li>
+    <li>About sheet with Privacy, Source on GitHub, Send Feedback links</li>
+  </ul></li>
+  <li><p>What is intentionally NOT in v0.1:</p></li>
+  <li><ul>
+    <li>No CallKit &mdash; <code>tel://</code> URL is enough</li>
+    <li>No reminders &mdash; "haven't called in N days" is a future feature</li>
+    <li>No Apple Watch companion &mdash; doubles the build, separate chapter material</li>
+    <li>No CloudKit sync turned on yet &mdash; the schema is ready, the container isn't wired</li>
+    <li>No NearbyInteraction or peer-to-peer contact exchange &mdash; future feature; v0.1 stays focused</li>
+  </ul></li>
+  <li><hr></li>
+  <li><h2>The Architecture</h2></li>
+  <li><p>Two SwiftData models hold the persistent state. Two <code>@Observable @MainActor</code> stores wrap Apple's framework APIs and own the auth state machines. Views read both directly.</p></li>
+  <li><pre><code class="lang-swift">@Model
+final class TrackedPerson {
+    var contactIdentifier: String = ""
+    var displayName: String = ""
+    var photoData: Data? = nil
+    var addedAt: Date = Date()
+    var personalNotes: String = ""
+
+    @Relationship(deleteRule: .cascade, inverse: \Interaction.person)
+    var interactions: [Interaction]? = nil
+
+    var lastInteractionDate: Date? {
+        interactions?.sorted(by: { $0.date &gt; $1.date }).first?.date
+    }
+}</code></pre></li>
+  <li><pre><code class="lang-swift">@Model
+final class Interaction {
+    var typeRaw: String = InteractionType.note.rawValue
+    var date: Date = Date()
+    var note: String = ""
+    var person: TrackedPerson? = nil
+
+    var type: InteractionType {
+        get { InteractionType(rawValue: typeRaw) ?? .note }
+        set { typeRaw = newValue.rawValue }
+    }
+}</code></pre></li>
+  <li><p>Three details in this model are deliberate. Every stored property has a default value. The to-many relationship is optional. The enum is stored as a raw string with a computed property bridge. All three are CloudKit-required patterns &mdash; SwiftData with CloudKit refuses to migrate a schema that violates them. Setting them up correctly on day one means turning on iCloud sync later is a one-line change in <code>ModelConfiguration</code>, not a model migration.</p></li>
+  <li><p>The app entry wires the schema and injects the model container:</p></li>
+  <li><pre><code class="lang-swift">@main
+struct My_Person_CRMApp: App {
+    var sharedModelContainer: ModelContainer = {
+        let schema = Schema([TrackedPerson.self, Interaction.self])
+        let modelConfiguration = ModelConfiguration(
+            schema: schema,
+            isStoredInMemoryOnly: false
+        )
+        do {
+            return try ModelContainer(for: schema, configurations: [modelConfiguration])
+        } catch {
+            fatalError("Could not create ModelContainer: \(error)")
+        }
+    }()
+
+    var body: some Scene {
+        WindowGroup { ContentView() }
+            .modelContainer(sharedModelContainer)
+    }
+}</code></pre></li>
+  <li><p>Notice what is <strong>not</strong> there: <code>cloudKitDatabase: .private(...)</code>. The project's iCloud entitlement is declared but the iCloud container hasn't been wired in Signing &amp; Capabilities yet. Setting <code>.private</code> against a non-existent container would crash at launch. The default behavior runs as local SwiftData and quietly ignores the entitlement until a container exists. Wiring CloudKit later is the one-line change.</p></li>
+  <li><hr></li>
+  <li><h2>The Contacts Store</h2></li>
+  <li><p>The Contacts framework is a privacy-gated read of the system address book. Authorization is async; lookup is synchronous and returns an optional.</p></li>
+  <li><pre><code class="lang-swift">@MainActor
+@Observable
+final class ContactsStore {
+    enum AuthState { case unknown, authorized, denied, notDetermined }
+
+    var authState: AuthState = .unknown
+    var lastError: String?
+
+    private let store = CNContactStore()
+
+    func refreshAuth() {
+        switch CNContactStore.authorizationStatus(for: .contacts) {
+        case .authorized: authState = .authorized
+        case .denied, .restricted: authState = .denied
+        case .notDetermined: authState = .notDetermined
+        @unknown default: authState = .unknown
+        }
+    }
+
+    func requestAccess() async {
+        do {
+            let granted = try await store.requestAccess(for: .contacts)
+            authState = granted ? .authorized : .denied
+        } catch {
+            lastError = error.localizedDescription
+            authState = .denied
+        }
+    }
+
+    func contact(forIdentifier identifier: String) -&gt; CNContact? {
+        let keys: [CNKeyDescriptor] = [
+            CNContactGivenNameKey as CNKeyDescriptor,
+            CNContactFamilyNameKey as CNKeyDescriptor,
+            CNContactPhoneNumbersKey as CNKeyDescriptor,
+            CNContactEmailAddressesKey as CNKeyDescriptor,
+            CNContactBirthdayKey as CNKeyDescriptor,
+            CNContactImageDataKey as CNKeyDescriptor,
+            CNContactImageDataAvailableKey as CNKeyDescriptor,
+            CNContactFormatter.descriptorForRequiredKeys(for: .fullName)
+        ]
+        return try? store.unifiedContact(withIdentifier: identifier, keysToFetch: keys)
+    }
+}</code></pre></li>
+  <li><p>The <code>keysToFetch</code> array deserves attention. The Contacts framework refuses to return a property unless you've asked for it explicitly. Trying to read <code>contact.phoneNumbers</code> on a <code>CNContact</code> that wasn't fetched with <code>CNContactPhoneNumbersKey</code> raises an exception. Listing every property the app actually displays here, once, prevents a class of runtime crashes that don't appear during testing on a developer's well-formed contact card.</p></li>
+  <li><p><code>CNContactFormatter.descriptorForRequiredKeys(for: .fullName)</code> is a meta-descriptor: it asks "which keys does the formatter need to produce a full name?" and returns whatever Apple has decided that takes (currently given name, family name, middle name, prefix, suffix, nickname). Always pull it through this API rather than hand-listing the name keys, because Apple has changed which keys are needed across iOS versions.</p></li>
+  <li><hr></li>
+  <li><h2>The Calendar Store</h2></li>
+  <li><p>EventKit is the calendar / reminders framework. iOS 17 introduced <code>requestFullAccessToEvents()</code> as the modern replacement for the deprecated <code>requestAccess(to:)</code>. The deployment target here is iOS 26.4, so the modern API is the only one we use.</p></li>
+  <li><pre><code class="lang-swift">@MainActor
+@Observable
+final class CalendarStore {
+    var authState: AuthState = .unknown
+    private let store = EKEventStore()
+
+    func requestAccess() async {
+        do {
+            let granted = try await store.requestFullAccessToEvents()
+            authState = granted ? .authorized : .denied
+        } catch {
+            authState = .denied
+        }
+    }
+
+    func upcomingEvents(matching searchTerm: String, limit: Int = 5) -&gt; [EKEvent] {
+        guard !searchTerm.isEmpty else { return [] }
+        let now = Date()
+        let oneYearFromNow = Calendar.current.date(byAdding: .year, value: 1, to: now) ?? now
+        let predicate = store.predicateForEvents(withStart: now, end: oneYearFromNow, calendars: nil)
+        let lc = searchTerm.lowercased()
+        return store.events(matching: predicate)
+            .filter { event in
+                if event.title?.lowercased().contains(lc) == true { return true }
+                if event.notes?.lowercased().contains(lc) == true { return true }
+                if event.attendees?.contains(where: { $0.name?.lowercased().contains(lc) == true }) == true { return true }
+                return false
+            }
+            .prefix(limit)
+            .map { $0 }
+    }
+}</code></pre></li>
+  <li><p>The matching logic checks three places where a person's name might live in an event: the title, the notes body, and the attendee list. A meeting titled "Lunch with Alice" matches; a meeting with "Alice" in attendees matches; a meeting whose notes say "Alice will join late" matches. Three OR'd conditions cover every realistic way an event records a person's involvement.</p></li>
+  <li><p><code>predicateForEvents(withStart:end:calendars:)</code> with <code>calendars: nil</code> queries all calendars the user has granted access to &mdash; iCloud, Google, Exchange, work, personal, holidays. The user's mental model is "my calendar"; the framework's model is "all calendars I can see"; passing nil aligns the two.</p></li>
+  <li><hr></li>
+  <li><h2>Bridging UIKit's Contact Picker into SwiftUI</h2></li>
+  <li><p>SwiftUI doesn't ship a contact picker view. The <code>ContactsUI</code> framework provides <code>CNContactPickerViewController</code> &mdash; a UIKit view controller. Bridging it into SwiftUI is a textbook <code>UIViewControllerRepresentable</code> application.</p></li>
+  <li><pre><code class="lang-swift">#if os(iOS)
+import ContactsUI
+
+struct PersonPickerView: UIViewControllerRepresentable {
+    let onPick: (CNContact) -&gt; Void
+
+    func makeUIViewController(context: Context) -&gt; CNContactPickerViewController {
+        let picker = CNContactPickerViewController()
+        picker.delegate = context.coordinator
+        return picker
+    }
+
+    func updateUIViewController(_ uiViewController: CNContactPickerViewController, context: Context) {}
+
+    func makeCoordinator() -&gt; Coordinator { Coordinator(onPick: onPick) }
+
+    final class Coordinator: NSObject, CNContactPickerDelegate {
+        let onPick: (CNContact) -&gt; Void
+        init(onPick: @escaping (CNContact) -&gt; Void) { self.onPick = onPick }
+        func contactPicker(_ picker: CNContactPickerViewController, didSelect contact: CNContact) {
+            onPick(contact)
+        }
+    }
+}
+#endif</code></pre></li>
+  <li><p>Three pieces make this bridge work. <code>makeUIViewController</code> creates the actual UIKit object once and SwiftUI keeps it. <code>updateUIViewController</code> is empty here because the picker doesn't need re-configuring on view updates. The <code>Coordinator</code> sits between the UIKit delegate protocol and the Swift closure the parent SwiftUI view actually wants.</p></li>
+  <li><p>Why a closure and not a binding? A binding would force the parent to hold a <code>@State CNContact?</code>, observe it, and react when it becomes non-nil. A closure expresses "when the user picks, do this" directly. Closures fit one-shot events; bindings fit ongoing two-way state.</p></li>
+  <li><p>The <code>#if os(iOS)</code> guard exists because <code>ContactsUI</code> doesn't ship on macOS. The Mac path uses a simpler SwiftUI sheet that just collects a name in a <code>TextField</code> and creates a <code>TrackedPerson</code> with no underlying <code>CNContact</code> &mdash; the contact identifier stays empty, the contact-detail card stays hidden, but the person can still be tracked and have interactions logged.</p></li>
+  <li><hr></li>
+  <li><h2>Permissions and Info.plist</h2></li>
+  <li><p>Three privacy-gated frameworks need three usage-description strings. iOS shows each string verbatim inside the system permission dialog the first time the app reaches a feature that needs it.</p></li>
+  <li><pre><code class="lang-xml">&lt;key&gt;NSContactsUsageDescription&lt;/key&gt;
+&lt;string&gt;My Person CRM uses Contacts to let you pick the people you want to keep track of and to surface their phone, email, and birthday on each person's detail screen.&lt;/string&gt;
+&lt;key&gt;NSCalendarsFullAccessUsageDescription&lt;/key&gt;
+&lt;string&gt;My Person CRM reads your calendar to show upcoming events that mention each person you track, so you can see what's coming up with them.&lt;/string&gt;</code></pre></li>
+  <li><p>These strings are user-visible UI copy. Write them in the user's voice, name the benefit, never make a defensive engineering claim. App Review reads them. A vague string ("Required for app function") is the fastest way to get rejected.</p></li>
+  <li><p><code>NSCalendarsFullAccessUsageDescription</code> is the iOS 17+ name. The older <code>NSCalendarsUsageDescription</code> still exists for backward compatibility, but the modern key is what the framework looks for first when calling <code>requestFullAccessToEvents</code>. Including only the modern key is correct for iOS 17 / iOS 26 deployment targets.</p></li>
+  <li><hr></li>
+  <li><h2>The CoreData Errno-2 Story</h2></li>
+  <li><p>The first real-device launch produced an alarming wall of red error logs. Dozens of lines of <code>CoreData: error: Failed to stat path '/var/mobile/Containers/.../Library/Application Support/default.store'</code>, sandbox-access-denied messages, full filesystem dumps. To a fresh reader it looks like the app is broken.</p></li>
+  <li><p>It is not. The last log line tells the truth:</p></li>
+  <li><pre><code>CoreData: error: Recovery attempt while adding
+&lt;NSPersistentStoreDescription: 0x...&gt; ... was successful!</code></pre></li>
+  <li><p>What's happening: SwiftData tries to create the SQLite store at <code>~/Library/Application Support/default.store</code>. On a fresh install, the <code>Application Support</code> directory itself doesn't exist yet &mdash; iOS only creates <code>Library</code> by default. The first creation attempt fails with <code>errno 2 / No such file or directory</code>. Core Data dumps a verbose diagnostic (a full filesystem walk, every parent directory's permissions, the file system metadata) and then quietly executes the recovery path: create the missing parent directory, retry. The retry succeeds. Apple's own apps log the same noise.</p></li>
+  <li><p>There is no code-side fix. The errors are loud because Core Data was designed to make filesystem problems easy to diagnose, not because something is wrong. A clean console arrives only by wiring CloudKit (which makes SwiftData use a different store path that doesn't hit this race) or by filing a feedback report to Apple about the verbosity.</p></li>
+  <li><p>The teaching point: <strong>read the entire log before declaring a bug</strong>. The shape of an actual fatal error is different from a recovered error. "Recovery attempt was successful" is the all-clear.</p></li>
+  <li><hr></li>
+  <li><h2>Quick Actions: tel, sms, mailto</h2></li>
+  <li><p>The detail view's three quick-action buttons (Call, Message, Email) route to the system apps using URL schemes. No CallKit, no MFMessageComposeViewController, no MFMailComposeViewController. iOS routes the URLs to the right destination automatically.</p></li>
+  <li><pre><code class="lang-swift">private func callTapped() {
+    guard let phone = contact?.phoneNumbers.first?.value.stringValue else { return }
+    openURL("tel://\(phone.filter { $0.isNumber || $0 == "+" })")
+}
+
+private func messageTapped() {
+    guard let phone = contact?.phoneNumbers.first?.value.stringValue else { return }
+    openURL("sms:\(phone.filter { $0.isNumber || $0 == "+" })")
+}
+
+private func emailTapped() {
+    guard let email = contact?.emailAddresses.first?.value as String? else { return }
+    openURL("mailto:\(email)")
+}
+
+private func openURL(_ string: String) {
+    guard let url = URL(string: string) else { return }
+    #if os(iOS)
+    UIApplication.shared.open(url)
+    #elseif os(macOS)
+    NSWorkspace.shared.open(url)
+    #endif
+}</code></pre></li>
+  <li><p>The phone number sanitization (<code>filter { $0.isNumber || $0 == "+" }</code>) strips parentheses, dashes, dots, and spaces. <code>tel://</code> URLs accept those characters in practice, but a clean digit-only string &mdash; with the leading <code>+</code> for international format preserved &mdash; is the safest input.</p></li>
+  <li><p>The buttons disable themselves when the underlying <code>CNContact</code> has no phone (Call / Message) or no email (Email). A button that would no-op is worse than a button that's clearly inactive; iOS's <code>.disabled</code> + <code>.opacity(0.4)</code> renders the unavailability honestly.</p></li>
+  <li><p><strong>Mac vs iOS dispatch.</strong> <code>UIApplication.shared.open</code> on iOS, <code>NSWorkspace.shared.open</code> on macOS. Same idea, two frameworks, conditional compilation in the same function. This is the cleanest place to put the platform split because the rest of the view doesn't care.</p></li>
+  <li><hr></li>
+  <li><h2>The Three UI States</h2></li>
+  <li><p>The list view has to render three distinct states. A reader can hit any of them.</p></li>
+  <li><p><strong>Empty list:</strong> no <code>TrackedPerson</code> records exist. The view shows a centered icon, a "No People Yet" headline, and a friendly invitation to tap the Add button. The <code>List</code> view is replaced by a <code>VStack</code> so the empty state can be properly centered &mdash; an empty <code>List</code> would just show a blank scrolling area.</p></li>
+  <li><p><strong>Populated list:</strong> at least one person exists. The view shows a <code>List</code> of <code>NavigationLink</code> rows, each rendering a <code>PersonRow</code> with photo, name, and a "days since last contact" caption. <code>onDelete</code> handles swipe-to-delete on iOS.</p></li>
+  <li><p><strong>Permission-pending:</strong> the user tapped Add but Contacts auth hasn't resolved yet. The view doesn't render anything special &mdash; iOS's permission dialog is a system overlay that appears on top of whatever the app is showing. After the user responds, the auth state in <code>ContactsStore</code> updates and the picker sheet either presents (if authorized) or doesn't (if denied).</p></li>
+  <li><p>Why a separate empty state instead of just rendering an empty <code>List</code>? Empty <code>List</code> is silent &mdash; the user sees nothing and doesn't know why. Explicit empty-state copy with a friendly icon and a clear next-action turns "this app is broken" into "I haven't done the first thing yet." Same teaching point as BodyReadings' three-state UI: empty + loading + populated each deserve their own visual.</p></li>
+  <li><hr></li>
+  <li><h2>What This Build-Along Teaches</h2></li>
+  <li><ul>
+    <li><strong>SwiftData with relationships</strong> &mdash; <code>@Model</code>, <code>@Relationship(deleteRule:inverse:)</code>, optional to-many, cascade delete</li>
+    <li><strong>CloudKit-shaped schemas</strong> &mdash; defaults on every property, optional relationships, raw-string-with-computed enum bridge</li>
+    <li><strong>Three privacy frameworks side by side</strong> &mdash; Contacts, ContactsUI, EventKit, each with its own auth pattern</li>
+    <li><strong>iOS 17 modern auth APIs</strong> &mdash; async <code>requestAccess(for:)</code> for Contacts, async <code>requestFullAccessToEvents()</code> for EventKit</li>
+    <li><strong><code>CNContactStore.unifiedContact(withIdentifier:keysToFetch:)</code></strong> &mdash; the lookup pattern, the keys-to-fetch contract, the <code>CNContactFormatter</code> meta-descriptor</li>
+    <li><strong>EventKit predicate search</strong> &mdash; <code>predicateForEvents(withStart:end:calendars:)</code>, three-way OR matching across title / notes / attendees</li>
+    <li><strong><code>UIViewControllerRepresentable</code> bridges</strong> &mdash; wrapping <code>CNContactPickerViewController</code>, the <code>Coordinator</code> pattern, when to use closures vs bindings</li>
+    <li><strong>Multiplatform conditional code</strong> &mdash; <code>#if os(iOS)</code> for ContactsUI, <code>#if os(macOS)</code> for AppKit dispatch, single source for shared logic</li>
+    <li><strong>URL-scheme dispatch</strong> &mdash; <code>tel://</code>, <code>sms:</code>, <code>mailto:</code> as the lightweight alternative to CallKit / MFMessageCompose / MFMailCompose</li>
+    <li><strong>Reading verbose Core Data logs</strong> &mdash; recognizing the difference between a recovered error (loud, harmless) and a fatal error (loud, real)</li>
+  </ul></li>
+  <li><hr></li>
+  <li><h2>Cloning and Building</h2></li>
+  <li><p>My Person CRM is a clone-and-build app for Volume 1 with App Store distribution as the next-stage goal. To get a working copy:</p></li>
+  <li><ol class="body-list">
+    <li>Open Xcode and choose <strong>Source Control &rarr; Clone</strong>; paste <code>https://github.com/fluhartyml/My-Person-CRM</code>.</li>
+    <li>Pick a real iPhone destination (the simulator runs the app fine but has no real Contacts data &mdash; you can still test the auth flow and the empty state, but adding a person will pull from the simulator's stub address book).</li>
+    <li>&#8984;R to build and run.</li>
+    <li>On first launch, tap the <strong>person-with-plus</strong> button in the top right. iOS shows the Contacts permission dialog; choose <strong>Select Contacts</strong> to share only specific people, or <strong>Allow Full Access</strong> for the whole address book.</li>
+    <li>Pick a contact. Tap the row to open their detail view. iOS now asks for Calendar permission &mdash; allow it to see upcoming events that mention them.</li>
+    <li>Tap the <strong>+</strong> in the top right of the detail view to log an interaction.</li>
+  </ol></li>
+  <li><p>The wiki at <a href="https://github.com/fluhartyml/My-Person-CRM/wiki">github.com/fluhartyml/My-Person-CRM/wiki</a> carries the full Chilton-depth shop manual: User's Manual half (how to use the app, what every screen does, every permission explained) and Developer's Manual half (architecture, every Swift file documented, every framework contract spelled out, every decision logged, every failure mode mapped to its recovery). The chapter teaches the patterns; the wiki is the reference.</p></li>
+  <li><hr></li>
+  <li><p><em>My Person CRM was built and verified on real iPhone in a single afternoon on 2026-05-04 &mdash; v0.1 MVP from empty Xcode scaffold to working app, repo, wiki, and book chapter in one sitting. Like BodyReadings the day before, this app earned its chapter by showing up working when the V1 lock had room to grow.</em></p></li>
 </ol>
-<h2>What differentiates MyPerson from Apple Contacts</h2>
-<ul>
-<li><strong>Relationship context</strong> &mdash; how you met, relationship type (family / friend / colleague / acquaintance), importance, notes.</li>
-<li><strong>Last-contacted tracking</strong> &mdash; cold? warm? haven't reached out in months? Sort by relationship health, not alphabet.</li>
-<li><strong>Follow-up reminders</strong> &mdash; "check in with X in two weeks" creates an EventKit reminder; the app surfaces overdue follow-ups on open.</li>
-<li><strong>Capture-speed ergonomics</strong> &mdash; Apple Contacts' new-contact flow is slow. MyPerson's "hand over the phone" form is one screen, fill it out, done.</li>
-</ul>
-<h2>Current state</h2>
-<ul>
-<li>No Xcode project yet</li>
-<li>No DeveloperNotes map yet</li>
-<li>No screenshots, no icon</li>
-</ul>
-<h2>Next step</h2>
-<p>When this app gets scaffolded (after earlier-numbered build-alongs ship), this page gets replaced with the full step-by-step walkthrough following the same shape as Build-Along 01 (Claude's Web Wrapper).</p>
 </div>
+
 <footer class="page"><div class="row-nav"><div class="prev"><a href="../BuildAlong-06-BodyReadings/BuildAlong-06-BodyReadings.html">&larr; Build-Along 06: BodyReadings</a></div><div class="pos">Build-Along 07</div><div class="next"><a href="../BuildAlong-08-IntelligenceDemo/BuildAlong-08-IntelligenceDemo.html">Build-Along 08: IntelligenceDemo &rarr;</a></div></div></footer>
-</body></html>
+
+</body>
+</html>
