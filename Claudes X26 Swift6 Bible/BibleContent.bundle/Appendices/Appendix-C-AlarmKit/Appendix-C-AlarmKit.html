@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Appendix C: AlarmKit</title>
+<style>
+:root { --bg: #000000; --fg: #FFB000; --bright: #FFD060; --dim: #996600; --codebg: #1a0d00; --border: #664500; --gutter: #4a3300; --headerbg: #0a0600; }
+* { box-sizing: border-box; }
+html, body { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; height: 100%; }
+body { background: var(--bg); color: var(--fg); font-family: "FiraCode Nerd Font Mono", "Fira Code", "Menlo", "Courier New", monospace; font-size: 18pt; line-height: 1.55; margin: 0; padding: 0; text-shadow: 0 0 1px rgba(255, 176, 0, 0.35); display: flex; flex-direction: column; }
+header.page, footer.page { background: var(--headerbg); color: var(--dim); padding: 0.55rem 1.1rem; font-size: 13pt; display: flex; flex-direction: column; gap: 0.2rem; flex: 0 0 auto; z-index: 10; }
+header.page { border-bottom: 1px solid var(--border); }
+footer.page { border-top: 1px solid var(--border); padding-bottom: calc(0.55rem + env(safe-area-inset-bottom)); }
+header.page .path, footer.page .path { color: var(--fg); word-break: break-all; overflow-wrap: break-word; }
+header.page .pos, footer.page .pos { color: var(--bright); }
+.content { flex: 1 1 auto; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 0.8rem 1rem 2rem 1rem; max-width: 1100px; margin: 0 auto; width: 100%; }
+h1 { color: var(--bright); font-weight: normal; font-size: 26pt; margin: 0.6rem 0 1rem 0; }
+h2 { color: var(--bright); font-weight: normal; font-size: 20pt; border-bottom: 1px solid var(--border); padding-bottom: 0.3rem; margin-top: 1.5rem; }
+h3 { color: var(--bright); font-weight: normal; font-size: 18pt; margin-top: 1rem; }
+p { margin: 0.4rem 0; counter-increment: para; }
+code { color: var(--bright); background: var(--codebg); padding: 0.08em 0.35em; border: 1px solid #3a2400; border-radius: 3px; font-size: 0.92em; }
+pre { background: var(--codebg); border: 1px solid #3a2400; border-radius: 4px; padding: 0.7rem 0.9rem; overflow-x: auto; font-size: 14pt; }
+ul { margin: 0.4rem 0 0.4rem 1.4rem; padding: 0; }
+a { color: var(--bright); font-weight: bold; text-decoration: none; border-bottom: 1px dotted var(--dim); }
+strong { color: var(--bright); }
+em { color: var(--fg); font-style: italic; }
+hr { border: 0; border-top: 1px solid var(--border); margin: 1rem 0; }
+.scope-note { border-left: 3px solid var(--bright); padding: 0.7rem 1rem; background: #140c00; margin: 0.6rem 0; color: var(--bright); }
+.status-live { color: #66FF66; font-weight: bold; }
+
+
+footer.page { flex-direction: column; gap: 0.4rem; }
+footer.page .row-nav { display: flex; flex-direction: row; justify-content: space-between; align-items: center; gap: 0.5rem; }
+footer.page .row-nav .prev, footer.page .row-nav .next { flex: 1; min-width: 0; }
+footer.page .row-nav .prev { text-align: left; }
+footer.page .row-nav .next { text-align: right; }
+footer.page .row-nav .pos { flex: 0 0 auto; text-align: center; color: var(--bright); font-weight: bold; }
+footer.page .row-nav a { color: var(--bright); font-weight: bold; text-decoration: none; border-bottom: 1px dotted var(--dim); }
+footer.page .row-nav a:hover { background: #332200; }
+footer.page .row-nav .nav-empty { color: var(--gutter); font-style: italic; }
+</style>
+</head><body>
+<header class="page"><div class="path">Appendices/Appendix-C-AlarmKit</div></header>
+<div class="content">
+<h1>Appendix C: AlarmKit (User's Manual)</h1>
+<p><span class="status-live">Status: Public framework, iOS 26.0+ / iPadOS 26.0+ / Mac Catalyst 26.0+.</span> AlarmKit is Apple's framework for scheduling system-level alarms and timers from a third-party app. Alarms scheduled with AlarmKit appear on the Lock Screen and in the Dynamic Island, ring with the system alarm sound, and override the device's focus and silent mode. They behave like Clock-app alarms, but they're authored by your app.</p>
+
+<h2>When to reach for it</h2>
+<p>Reach for AlarmKit when the user expects an <em>alarm</em> &mdash; a prominent alert that fires whether or not your app is running, whether or not the screen is on, whether or not the user has Do Not Disturb enabled. Cooking timers, medication reminders, reservation alerts, calibration windows: anything where missing the moment is the failure mode.</p>
+<p>Don't reach for AlarmKit when a quiet notification will do. <code>UNUserNotificationCenter</code> remains the right tool for non-urgent reminders that should respect focus modes. AlarmKit is louder by design.</p>
+<p>Apple's Clock app does not expose its own timers and alarms to other apps. There is no public API to read or modify a person's existing Clock-app entries. AlarmKit is the framework for creating new alarms <em>that look and act like</em> Clock-app alarms, not for reading or editing the ones already there.</p>
+
+<h2>Authorization</h2>
+<p>AlarmKit needs the user's permission before it will schedule anything. Two pieces have to be in place:</p>
+<ul>
+<li>An <code>NSAlarmKitUsageDescription</code> key in the app's <code>Info.plist</code>, with a string explaining why the app schedules alarms. The string appears in the system permission prompt. If the key is missing or its value is empty, AlarmKit refuses to schedule.</li>
+<li>A runtime call to <code>AlarmManager.shared.requestAuthorization()</code>, which is async and throwing, returning an <code>AlarmManager.AuthorizationState</code>.</li>
+</ul>
+<p>The state enum has three cases: <code>.authorized</code>, <code>.denied</code>, and <code>.notDetermined</code>. If the user denies, every later schedule attempt fails until they grant access in Settings.</p>
+<p>If the app skips the explicit authorization request, AlarmKit asks on the user's behalf the first time the app calls <code>schedule(id:configuration:)</code>. That's a convenience, not a substitute &mdash; explicit requests give the app a chance to explain itself before the system prompt appears.</p>
+
+<h2>The shared instance</h2>
+<p>AlarmKit centers on a singleton: <code>AlarmManager.shared</code>. The whole framework hangs off it &mdash; scheduling, cancelling, pausing, resuming, observing. There is no other entry point.</p>
+
+<h2>Three ways to configure an alarm</h2>
+<p>An alarm is built by passing an <code>AlarmManager.AlarmConfiguration&lt;Metadata&gt;</code> to <code>schedule(id:configuration:)</code>. The configuration has three creation paths, each tuned for a different shape of alert:</p>
+<ul>
+<li><strong>Traditional alarm</strong> &mdash; <code>AlarmManager.AlarmConfiguration.alarm(schedule:attributes:stopIntent:secondaryIntent:sound:)</code>. Fires at a date you specify. The morning wake-up case.</li>
+<li><strong>Countdown</strong> &mdash; <code>AlarmManager.AlarmConfiguration.init(countdownDuration:schedule:attributes:stopIntent:secondaryIntent:sound:)</code>. Shows a countdown UI on the Lock Screen leading up to the alert. The pre-alert countdown duration is configurable.</li>
+<li><strong>Timer</strong> &mdash; <code>AlarmManager.AlarmConfiguration.timer(duration:attributes:stopIntent:secondaryIntent:sound:)</code>. Starts immediately, runs for the specified <code>TimeInterval</code>, alerts at the end. The kitchen-timer case.</li>
+</ul>
+
+<h2>Schedule types</h2>
+<p>For traditional alarms, the <code>Alarm.Schedule</code> type controls when the alarm fires. The relative form &mdash; <code>Alarm.Schedule.Relative</code> &mdash; takes a <code>Time(hour:minute:)</code> and a recurrence rule.</p>
+<p>The recurrence rule is one of two cases: <code>.never</code> (a one-shot) or <code>.weekly([Locale.Weekday])</code> (a weekly cadence on the listed weekdays). The weekday array uses Swift's <code>Locale.Weekday</code> enum, which respects the user's locale.</p>
+
+<h2>Presentations</h2>
+<p>An alarm can be in three states from the user's perspective: <strong>alerting</strong> (currently ringing), <strong>counting down</strong> (a pre-alert countdown is running), or <strong>paused</strong> (the user paused a running countdown). Each state has a corresponding presentation type:</p>
+<ul>
+<li><code>AlarmPresentation.Alert</code> &mdash; required. Carries the title, the stop button, and an optional secondary button.</li>
+<li><code>AlarmPresentation.Countdown</code> &mdash; optional. Used when a countdown duration is configured. Carries the title and a pause button.</li>
+<li><code>AlarmPresentation.Paused</code> &mdash; optional. Used when the user pauses a running countdown. Carries the title and a resume button.</li>
+</ul>
+<p>The three presentations are wrapped in an <code>AlarmAttributes&lt;Metadata&gt;</code> together with a <code>tintColor</code> and any custom metadata. The tint color associates the alarm visually with the originating app and helps the user tell different apps' alarms apart on the Lock Screen.</p>
+
+<h2>Buttons and intents</h2>
+<p>The buttons in the alert UI come from <code>AlarmButton</code>. The framework includes built-in <code>.stopButton</code>, <code>.pauseButton</code>, <code>.resumeButton</code>, <code>.repeatButton</code>, and <code>.openAppButton</code> styles, each tied to a system behavior.</p>
+<p>The secondary button can do one of two things, controlled by <code>AlarmPresentation.Alert.SecondaryButtonBehavior</code>:</p>
+<ul>
+<li><code>.countdown</code> &mdash; a Repeat action. The alarm re-triggers after a <code>postAlert</code> interval defined in the countdown duration.</li>
+<li><code>.custom</code> &mdash; an Open action that launches the app, with the actual work handled by an App Intent the app provides via <code>secondaryIntent</code>.</li>
+</ul>
+<p>Both <code>stopIntent</code> and <code>secondaryIntent</code> on the configuration accept any type conforming to <code>LiveActivityIntent</code>. App Intents are how AlarmKit hands control back to the app when the user taps a button.</p>
+
+<h2>State control</h2>
+<p>Once an alarm is scheduled, the manager has five methods for changing its state, all keyed by <code>Alarm.ID</code> and all throwing:</p>
+<ul>
+<li><code>cancel(id:)</code> &mdash; remove the alarm from the system entirely.</li>
+<li><code>countdown(id:)</code> &mdash; trigger a countdown for an alarm currently alerting (used by the secondary button when its behavior is <code>.countdown</code>).</li>
+<li><code>pause(id:)</code> &mdash; pause an alarm in the countdown state.</li>
+<li><code>resume(id:)</code> &mdash; resume a paused alarm.</li>
+<li><code>stop(id:)</code> &mdash; stop a currently-alerting alarm without cancelling it (alarm stays scheduled for any future fires).</li>
+</ul>
+
+<h2>Observing alarms and authorization</h2>
+<p>AlarmKit exposes two async sequences for staying in sync with the system:</p>
+<ul>
+<li><code>alarmUpdates: some AsyncSequence&lt;[Alarm], Never&gt;</code> &mdash; emits the full list of alarms whenever any of them changes (scheduled, fired, paused, dismissed). The standard pattern is to spin a <code>Task</code> at view-model init and update local state from each emission.</li>
+<li><code>authorizationUpdates: some AsyncSequence&lt;AlarmManager.AuthorizationState, Never&gt;</code> &mdash; emits when authorization changes (user grants or revokes in Settings).</li>
+</ul>
+<p>There's also a synchronous <code>alarms: [Alarm]</code> property and an <code>authorizationState: AuthorizationState</code> property for one-shot reads.</p>
+
+<h2>Critical pitfalls</h2>
+<p>Three things can quietly break an AlarmKit integration. Each is documented in Apple's reference, but each is the kind of detail that's easy to miss until alarms aren't firing in production.</p>
+<div class="scope-note"><strong>Pitfall 1 &mdash; Alarms get deleted from the daemon when they fire.</strong> If the app needs to know whether a one-shot alarm has already fired, it has to persist its own copy and diff against <code>manager.alarms</code>. An alarm missing from that array is an alarm that already fired.</div>
+<div class="scope-note"><strong>Pitfall 2 &mdash; A widget extension is required for any alarm that uses a countdown presentation.</strong> Without it, the system may dismiss alarms unexpectedly and fail to alert. The widget extension hosts the countdown Live Activity that AlarmKit drives. Apple's sample project includes one as a separate target named <code>AlarmLiveActivity</code>; an app shipping AlarmKit countdowns needs the same.</div>
+<div class="scope-note"><strong>Pitfall 3 &mdash; The Info.plist key is load-bearing.</strong> Missing or empty <code>NSAlarmKitUsageDescription</code> means scheduling silently fails. The key must be present <em>and</em> have a non-empty string value.</div>
+
+<h2>Related frameworks</h2>
+<ul>
+<li><strong>ActivityKit</strong> &mdash; the framework that powers Live Activities. AlarmKit's countdown and paused presentations are Live Activities under the hood. Apps shipping AlarmKit countdowns need a widget extension that uses ActivityKit's <code>ActivityAttributes</code> protocol &mdash; the same <code>AlarmAttributes</code> the app passes to <code>AlarmManager</code>.</li>
+<li><strong>App Intents</strong> &mdash; the framework behind <code>stopIntent</code> and <code>secondaryIntent</code>. The intents conform to <code>LiveActivityIntent</code> so they can run from the alert UI on the Lock Screen.</li>
+<li><strong>UserNotifications</strong> &mdash; the older, quieter alternative. Use it when an urgent system-overriding alert would be wrong for the moment.</li>
+</ul>
+
+<h2>Sample project</h2>
+<p>Apple ships a sample project demonstrating one-time alarms, weekly recurring alarms, and timers, including the required widget extension for countdown Live Activities. It's the right starting point for an AlarmKit integration.</p>
+<ul>
+<li>Sample: <a href="https://developer.apple.com/documentation/alarmkit/scheduling-an-alarm-with-alarmkit">Scheduling an alarm with AlarmKit</a> (Apple Developer)</li>
+<li>WWDC25 session 230: <a href="https://developer.apple.com/wwdc25/230">Wake up to the AlarmKit API</a></li>
+<li>Framework reference: <a href="https://developer.apple.com/documentation/alarmkit">developer.apple.com/documentation/alarmkit</a></li>
+</ul>
+
+<h2>Sources</h2>
+<ul>
+<li>Apple Developer Documentation, AlarmKit reference (verified 2026-05-05).</li>
+<li>Apple Developer Documentation, "Scheduling an alarm with AlarmKit" article (verified 2026-05-05).</li>
+<li>WWDC25 session 230, "Wake up to the AlarmKit API."</li>
+</ul>
+</div>
+<footer class="page"><div class="row-nav"><div class="prev"><a href="../Appendix-B-CryoKit/Appendix-B-CryoKit.html">&larr; Appendix B: CryoKit</a></div><div class="pos">Appendix C</div><div class="next"><span class="nav-empty">(last page)</span></div></div></footer>
+</body></html>
