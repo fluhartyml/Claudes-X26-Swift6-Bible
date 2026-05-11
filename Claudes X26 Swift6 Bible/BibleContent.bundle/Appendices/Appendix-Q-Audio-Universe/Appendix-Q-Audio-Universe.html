@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Appendix Q: Audio Universe</title>
+</head><body>
+<div class="content">
+<h1>Appendix Q: Audio Universe (Shop Manual)</h1>
+<p><span class="status-live">Status: v1.0 submitted to App Store APR 25 2026 (submission ID 964e4428), awaiting review. GPL v3. Public repo at <a href="https://github.com/fluhartyml/Audio-Universe">github.com/fluhartyml/Audio-Universe</a>. Build-Along chapter: Part VII Build-Along 04.</span> Audio Universe by Claude is a four-tab audio utility that puts four different Apple audio frameworks behind four self-contained surfaces. Each tab is a single-session tool &mdash; nothing is stored, nothing syncs, nothing has history. Output flows to other apps (Notes, Files, Messages, Mail) via the system share sheet.</p>
+
+<h2>What it is</h2>
+<p>One app, four feature tabs, each owning exactly one Apple audio kit:</p>
+<ol>
+<li><strong>Stream</strong> &mdash; pick an Apple Music song, hear it play. Playback only, no output. (MusicKit.)</li>
+<li><strong>Record</strong> &mdash; capture a short clip to temp storage, play it back, share the file. (AVFoundation.)</li>
+<li><strong>Identify</strong> &mdash; tap Listen, ShazamKit matches the song, the match auto-adds to the user's "My Shazam Tracks" library, tapping the match opens it in Apple Music or the iTunes Store. (ShazamKit.)</li>
+<li><strong>Transcribe</strong> &mdash; tap Start, talk, tap Stop, share the resulting text. (Speech framework.)</li>
+</ol>
+<p>Plus an Under the Hood tab that lets the user browse every source file of the app inside the app. Five tabs total.</p>
+
+<h2>Architecture overview</h2>
+<p>SwiftUI plus four Apple audio frameworks. No SwiftData, no CloudKit, no custom networking. Each tab owns its kit and nothing else.</p>
+<ul>
+<li><strong>App entry:</strong> <code>Claudes_Audio_UniverseApp.swift</code> &mdash; <code>@main</code> scene with one <code>WindowGroup</code> hosting <code>ContentView</code>.</li>
+<li><strong>Root:</strong> <code>ContentView.swift</code> &mdash; <code>TabView</code> with the four feature tabs plus Under the Hood, wired through <code>AppShell.swift</code> for shared chrome.</li>
+<li><strong>Feature tabs:</strong>
+  <ul>
+    <li><code>StreamView.swift</code> &mdash; MusicKit: <code>ApplicationMusicPlayer</code>, <code>MusicCatalogSearchRequest</code>, <code>MusicSubscription</code>.</li>
+    <li><code>RecordView.swift</code> &mdash; AVFoundation: <code>AVAudioRecorder</code>, <code>AVAudioPlayer</code>, <code>AVAudioSession(.playAndRecord)</code>.</li>
+    <li><code>IdentifyView.swift</code> &mdash; ShazamKit: <code>SHManagedSession</code> (iOS 15+ / macOS 12+), <code>SHLibrary.default.addItems()</code> (iOS 17+ / macOS 14+) for auto-save to "My Shazam Tracks."</li>
+    <li><code>TranscribeView.swift</code> &mdash; Speech: <code>SFSpeechRecognizer</code>, <code>SFSpeechAudioBufferRecognitionRequest</code>.</li>
+  </ul>
+</li>
+<li><strong>Placeholders:</strong> <code>PlaceholderTab.swift</code> &mdash; a generic "feature unavailable on this platform" view used when a kit doesn't have a Mac equivalent.</li>
+<li><strong>Auxiliary surfaces:</strong> <code>AboutView.swift</code> (icon, version, credit), <code>FeedbackView.swift</code> (mail composer for Bug Report / Feature Request).</li>
+<li><strong>Under the Hood:</strong> <code>UnderTheHoodView.swift</code> + <code>UnderTheHoodContent.swift</code> (in-app source browser with per-file callout sheets).</li>
+<li><strong>Lexicon Quick-Define:</strong> <code>LexiconContent.swift</code>, <code>LexiconSheet.swift</code>, <code>IdentifierTaggedSourceView.swift</code> &mdash; same three-file pattern as Claude's Web Wrapper (Appendix K) and QuickNote (Appendix L).</li>
+<li><strong>Notes:</strong> <code>DeveloperNotes.swift</code> &mdash; canonical reference; mirrors to the wiki's Developer-Notes.md page after every change.</li>
+</ul>
+
+<h2>The four kits, side by side</h2>
+<p>The teaching value of this app is that all four audio frameworks live in one project. Each <code>*View.swift</code> file is a complete, runnable example of its kit:</p>
+<ul>
+<li><strong>MusicKit</strong> &mdash; user subscription gated, async search, queue-based playback.</li>
+<li><strong>AVFoundation</strong> &mdash; the long-running standard. Records to a temporary file URL, plays back via <code>AVAudioPlayer</code>, hands the file to the share sheet.</li>
+<li><strong>ShazamKit</strong> &mdash; microphone-only listening session that returns a recognized <code>SHMediaItem</code> with metadata and an Apple Music deep link.</li>
+<li><strong>Speech</strong> &mdash; live microphone transcription with on-device recognition when available, server-side fallback when not.</li>
+</ul>
+<p>Reading the four files in order gives a working knowledge of where each kit fits in the system.</p>
+
+<h2>Permissions matrix</h2>
+<p>Three of the four tabs need microphone permission; one of those also needs speech-recognition permission. The Info.plist carries the matching strings:</p>
+<ul>
+<li><code>NSMicrophoneUsageDescription</code> &mdash; required by Record, Identify, and Transcribe.</li>
+<li><code>NSSpeechRecognitionUsageDescription</code> &mdash; required by Transcribe specifically (the recognizer separate from raw mic access).</li>
+<li><code>NSAppleMusicUsageDescription</code> &mdash; required by Stream and by Identify's "open in Apple Music" hand-off.</li>
+</ul>
+<p>Each tab requests its permission on first use, not at launch. If the user denies a permission, the tab shows a "this needs X permission" inline state with a button that deep-links to Settings.</p>
+
+<h2>Session-only design</h2>
+<p>Nothing in this app persists across launches. A recorded clip lives in temp storage, gets played back if the user wants, gets shared if the user wants, and disappears when the tab is left or the app is quit. A transcribed conversation exists only as the in-memory string until the user shares it. A Shazam match goes into the user's system "My Shazam Tracks" library (an Apple service, not this app's storage); the in-app view of the match disappears on tab change.</p>
+<p>That choice keeps the app's data surface near zero. There's no privacy policy to write about user data &mdash; there isn't any user data to write about. The share sheet is the explicit, user-driven hand-off to anywhere the user actually wants to keep something.</p>
+
+<h2>Build + deployment</h2>
+<ul>
+<li><strong>App name:</strong> Audio Universe by Claude (App Store).</li>
+<li><strong>Platforms:</strong> iPhone + iPad universal. Mac via Designed for iPad. Some tabs degrade on Mac (ShazamKit's <code>SHLibrary</code> auto-save is iOS-only; the Identify tab shows the Mac-fallback placeholder for that capability).</li>
+<li><strong>Frameworks:</strong> SwiftUI, MusicKit, AVFoundation, ShazamKit, Speech, MessageUI (feedback composer).</li>
+<li><strong>Deployment floor:</strong> iOS 17+ / iPadOS 17+ / macOS 14+ &mdash; raised from the original v1.0 floor so the <code>SHLibrary.default.addItems()</code> API is available.</li>
+<li><strong>Subscription disclosure:</strong> Apple Music subscription required for the Stream tab. Stated upfront in App Store copy.</li>
+</ul>
+
+<h2>Known gotchas</h2>
+<ul>
+<li><strong>ShazamKit's auto-save is iOS 17+ / macOS 14+ only.</strong> Pre-floor devices get the recognition but not the "added to My Shazam Tracks" hand-off. The app's deployment floor was raised specifically to make this feature consistent across all supported devices.</li>
+<li><strong>AVAudioSession category matters.</strong> <code>Record</code> uses <code>.playAndRecord</code>; if any other tab sets a different category and the user switches tabs mid-session, the active recording can drop. The fix is to set the session category in <code>RecordView</code>'s <code>onAppear</code> and never assume a global state.</li>
+<li><strong>Stream needs an active Apple Music subscription.</strong> Without one, <code>MusicSubscription.current</code> reports inactive and the Stream tab shows a subscribe call-to-action. App Store users who don't subscribe should still see a working Stream tab UI &mdash; just locked.</li>
+<li><strong>The Under the Hood source is hand-mirrored.</strong> Same constraint as the Web Wrapper (Appendix K): <code>UnderTheHoodContent.swift</code> is updated by hand when project files change. The in-app source view mirrors the shipped binary, not the bleeding edge.</li>
+</ul>
+
+<h2>Sources</h2>
+<ul>
+<li>Project source: <a href="https://github.com/fluhartyml/Audio-Universe">github.com/fluhartyml/Audio-Universe</a> (verified 2026-05-10).</li>
+<li>Canonical roadmap: <code>Claudes Audio Universe/DeveloperNotes.swift</code> in the project repo (mirrors to wiki Developer-Notes.md).</li>
+<li>Build-Along chapter: Part VII Build-Along 04.</li>
+<li>Related Lexicon Quick-Define implementation: Appendix K (Claude's Web Wrapper) covers the same three-file pattern in detail.</li>
+</ul>
+</div>
+</body></html>
