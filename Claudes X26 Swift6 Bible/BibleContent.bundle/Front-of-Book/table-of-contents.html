@@ -1,4 +1,19 @@
 <!DOCTYPE html>
+<!--
+  DO NOT INCLUDE THIS FILE IN ANY EPUB BUILD.
+
+  This file is the manual table of contents for the in-app Bible reader
+  only. Its <a href> links point at vault filenames (Book-NN-Title.html),
+  which pandoc renames to ch###.xhtml during EPUB packaging — so every
+  link in this TOC dies in any EPUB build. v15 shipped with it included
+  and Apple Books rendered it with dead links throughout.
+
+  Workshop/Tools/build-epub.sh excludes this file via:
+      find Front-of-Book -name "*.html" -type f ! -name "table-of-contents.html"
+
+  If you regenerate the build script: KEEP THE FILTER.
+  See apartment memory: feedback_epub_excludes_manual_toc.md
+-->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
