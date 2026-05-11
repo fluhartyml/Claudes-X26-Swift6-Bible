@@ -4,106 +4,26 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Book 19: Building Custom Views And Modifiers &mdash; Claude's Xcode 26 Swift Bible</title>
-<style>
-:root {
-  --bg: #000000;
-  --fg: #FFB000;
-  --bright: #FFD060;
-  --dim: #996600;
-  --codebg: #1a0d00;
-  --border: #664500;
-  --gutter: #4a3300;
-  --headerbg: #0a0600;
-}
-* { box-sizing: border-box; }
-html, body { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; height: 100%; }
-body {
-  background: var(--bg);
-  color: var(--fg);
-  font-family: "FiraCode Nerd Font Mono", "FiraCode Nerd Font", "Fira Code", "Menlo", "Courier New", monospace;
-  font-size: 18pt;
-  line-height: 1.55;
-  margin: 0;
-  padding: 0;
-  text-shadow: 0 0 1px rgba(255, 176, 0, 0.35);
-  display: flex;
-  flex-direction: column;
-}
-header.page, footer.page {
-  background: var(--headerbg);
-  color: var(--dim);
-  padding: 0.55rem 1.1rem;
-  font-size: 13pt;
-  display: flex;
-  flex-direction: column;
-  gap: 0.2rem;
-  flex: 0 0 auto;
-  z-index: 10;
-}
-header.page { border-bottom: 1px solid var(--border); }
-footer.page { border-top: 1px solid var(--border); padding-bottom: calc(0.55rem + env(safe-area-inset-bottom)); }
-header.page .path, footer.page .path { color: var(--fg); word-break: break-all; overflow-wrap: break-word; }
-header.page .pos, footer.page .pos { color: var(--bright); }
-/* The middle scrolls; header and footer stay put. */
-.content { flex: 1 1 auto; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 0.8rem 1rem 2rem 1rem; max-width: 1100px; margin: 0 auto; width: 100%; }
-h1 { color: var(--bright); font-weight: normal; font-size: 26pt; margin: 0.6rem 0 1rem 0; }
-h2 { color: var(--bright); font-weight: normal; font-size: 20pt; border-bottom: 1px solid var(--border); padding-bottom: 0.3rem; margin-top: 1.5rem; counter-set: h3 0 para 0; counter-increment: h2; }
-h2::before { content: counter(h2) ". "; color: var(--fg); }
-h3 { color: var(--bright); font-weight: normal; font-size: 18pt; margin-top: 1rem; counter-set: para 0; counter-increment: h3; }
-h3::before { content: counter(h2) "." counter(h3) " "; color: var(--fg); }
-p { margin: 0.4rem 0; counter-increment: para; }
-p::before { content: counter(h2) "." counter(h3) "." counter(para) " "; color: var(--dim); font-size: 13pt; margin-right: 0.4em; }
-code { color: var(--bright); background: var(--codebg); padding: 0.08em 0.35em; border: 1px solid #3a2400; border-radius: 3px; font-size: 0.92em; }
-pre { background: var(--codebg); border: 1px solid #3a2400; border-radius: 4px; padding: 0.7rem 0.9rem; overflow-x: auto; font-size: 14pt; }
-pre code { background: transparent; border: 0; padding: 0; }
-ul, ol.body-list { margin: 0.4rem 0 0.4rem 1.4rem; padding: 0; }
-a { color: var(--bright); font-weight: bold; text-decoration: none; border-bottom: 1px dotted var(--dim); }
-a:hover { background: #332200; }
-strong { color: var(--bright); }
-em { color: var(--fg); font-style: italic; }
-hr { border: 0; border-top: 1px solid var(--border); margin: 1rem 0; }
-ol.lines { list-style: none; counter-reset: line h2 h3 para; padding: 0; margin: 0; }
-ol.lines > li { counter-increment: line; padding: 0.15rem 0 0.15rem 3.6rem; position: relative; min-height: 1.2em; }
-ol.lines > li::before { content: counter(line); position: absolute; left: 0; top: 0.25rem; width: 2.8rem; text-align: right; color: var(--gutter); font-size: 13pt; padding-right: 0.5rem; border-right: 1px solid #2a1e00; }
-ol.lines > li > p, ol.lines > li > h2, ol.lines > li > h3, ol.lines > li > ul, ol.lines > li > ol, ol.lines > li > pre, ol.lines > li > hr { margin: 0; }
-.scope-note { border-left: 3px solid var(--bright); padding: 0.7rem 1rem; background: #140c00; margin: 0.6rem 0; color: var(--bright); }
-.nav { display: flex; gap: 0.9rem; flex-wrap: wrap; margin-top: 0.8rem; font-size: 14pt; }
-
-
-footer.page { flex-direction: column; gap: 0.4rem; }
-footer.page .row-nav { display: flex; flex-direction: row; justify-content: space-between; align-items: center; gap: 0.5rem; }
-footer.page .row-nav .prev, footer.page .row-nav .next { flex: 1; min-width: 0; }
-footer.page .row-nav .prev { text-align: left; }
-footer.page .row-nav .next { text-align: right; }
-footer.page .row-nav .pos { flex: 0 0 auto; text-align: center; color: var(--bright); font-weight: bold; }
-footer.page .row-nav a { color: var(--bright); font-weight: bold; text-decoration: none; border-bottom: 1px dotted var(--dim); }
-footer.page .row-nav a:hover { background: #332200; }
-footer.page .row-nav .nav-empty { color: var(--gutter); font-style: italic; }
-</style>
 </head>
 <body>
 
-<header class="page">
-  <div class="path">Part V Advanced Techniques/Book 19 Building Custom Views And Modifiers</div>
-</header>
-
 <div class="content">
-<ol class="lines">
-  <li><h1>Book 19: Building Custom Views &amp; Modifiers</h1></li>
-  <li><p><strong>Claude's Xcode 26 Swift Bible</strong> -- Part V: Advanced Techniques</p></li>
-  <li><hr></li>
-  <li><h2>Live Reference: Lexicon Sheet + CryoTransport Controls + Tally Matrix Squares + BodyReadings card helper</h2></li>
-  <li><div class="scope-note">Four concrete custom-view examples you can read in the production source while working through this chapter. <strong><code>LexiconSheet</code> + <code>IdentifierTaggedSourceView</code></strong> (in Inkwell, <a href="https://github.com/fluhartyml/Claudes-X26-Swift6-Bible">github.com/fluhartyml/Claudes-X26-Swift6-Bible</a>) &mdash; the popup that appears when you tap a tinted Swift identifier in any source-mirror code block in the Under the Hood tab. <strong><code>CryoTransportControls</code></strong> (in CryoTunes Player, <a href="https://github.com/fluhartyml/CryoTunesPlayer/wiki">github.com/fluhartyml/CryoTunesPlayer/wiki</a>) &mdash; a three-row composed view: transport row (play/pause/skip/stop), shuffle/repeat row, like/dislike/share row. A textbook example of decomposing a complex multi-button cluster into one named custom view. <strong><code>TallyMatrix1x3</code> + <code>TallyMatrix3x3</code> + <code>SquareView</code></strong> (in Tally Matrix Clock, <a href="https://github.com/fluhartyml/Tally-Matrix-Clock/wiki">github.com/fluhartyml/Tally-Matrix-Clock/wiki</a>) &mdash; three custom views that compose: <code>SquareView</code> is a single lit/unlit square primitive; the two matrix views compose grids of squares for the tens and ones digits. See Source Tour 19 for the architectural walkthrough. <strong>BodyReadings</strong> shows the generic-helper-function flavor of view extraction: a private <code>readingCard(label:content:)</code> function annotated <code>@ViewBuilder</code> that wraps the three vitals cards (heart rate, steps, live motion) in a unified card layout. Reading its <code>ContentView.swift</code> shows the difference between extracting a <code>View</code> struct and extracting a generic helper function with <code>@ViewBuilder</code> closure content. Source: <a href="https://github.com/fluhartyml/Body-Readings/wiki">github.com/fluhartyml/Body-Readings/wiki</a>.</div></li>
-  <li><hr></li>
-  <li><h2>Liquid Glass for Custom Views &mdash; <code>glassEffect</code> and <code>GlassEffectContainer</code></h2></li>
-  <li><p>When a custom view needs to sit alongside the system's own Liquid Glass surfaces and feel like part of the same family, X26 gives you two SwiftUI tools<sup>[<a href="#cv1-fn">cv1</a>]</sup>:</p></li>
-  <li><ul>
+
+  <h1>Book 19: Building Custom Views &amp; Modifiers</h1>
+  <p><strong>Claude's Xcode 26 Swift Bible</strong> -- Part V: Advanced Techniques</p>
+  <hr>
+  <h2>Live Reference: Lexicon Sheet + CryoTransport Controls + Tally Matrix Squares + BodyReadings card helper</h2>
+  <div class="scope-note">Four concrete custom-view examples ship in the production source. <strong><code>LexiconSheet</code> + <code>IdentifierTaggedSourceView</code></strong> in <strong>Claudes X26 Swift6 Bible</strong> (<a href="https://github.com/fluhartyml/Claudes-X26-Swift6-Bible">github.com/fluhartyml/Claudes-X26-Swift6-Bible</a>) &mdash; the popup that appears on tap of a tinted Swift identifier in a source-mirror code block. <strong><code>CryoTransportControls</code></strong> in <strong>CryoTunes Player</strong> (<a href="https://github.com/fluhartyml/CryoTunesPlayer">github.com/fluhartyml/CryoTunesPlayer</a>) &mdash; a three-row composed view: transport row (play/pause/skip/stop), shuffle/repeat row, like/dislike/share row. A textbook example of decomposing a complex multi-button cluster into one named custom view. <strong><code>TallyMatrix1x3</code> + <code>TallyMatrix3x3</code> + <code>SquareView</code></strong> in <strong>Tally Matrix Clock</strong> (<a href="https://github.com/fluhartyml/Tally-Matrix-Clock">github.com/fluhartyml/Tally-Matrix-Clock</a>) &mdash; three custom views that compose: <code>SquareView</code> is a single lit/unlit square primitive; the two matrix views compose grids of squares for the tens and ones digits. See Source Tour 19 for the architectural walkthrough. <strong>BodyReadings</strong> shows the generic-helper-function flavor of view extraction: a private <code>readingCard(label:content:)</code> function annotated <code>@ViewBuilder</code> wraps the three vitals cards (heart rate, steps, live motion) in a unified card layout. Its <code>ContentView.swift</code> shows the difference between extracting a <code>View</code> struct and extracting a generic helper function with <code>@ViewBuilder</code> closure content. Source: <a href="https://github.com/fluhartyml/Body-Readings">github.com/fluhartyml/Body-Readings</a>.</div>
+  <hr>
+  <h2>Liquid Glass for Custom Views &mdash; <code>glassEffect</code> and <code>GlassEffectContainer</code></h2>
+  <p>When a custom view needs to sit alongside the system's own Liquid Glass surfaces and feel like part of the same family, X26 gives you two SwiftUI tools<sup>[<a href="#cv1-fn">cv1</a>]</sup>:</p>
+  <ul>
     <li><code>glassEffect(_:in:)</code> &mdash; paints the Liquid Glass material onto a single custom view</li>
     <li><code>GlassEffectContainer</code> &mdash; wraps a cluster of Liquid Glass views so they share one render pass and morph cleanly into each other during animation</li>
-  </ul></li>
-  <li><p>The headline rule on <code>glassEffect(_:in:)</code> is restraint &mdash; Apple warns that <em>"overusing this material in multiple custom controls can provide a subpar user experience by distracting from that content."</em><sup>[<a href="#cv1-fn">cv1</a>]</sup> Pick the elements where Liquid Glass earns its weight: a primary call-to-action button, a focus-state highlight on a custom slider, the lone floating affordance on a canvas. Don't drop it into every card, row, or chrome surface; the material's job is to point the eye at content, and that job breaks the moment everything on screen is wearing it.</p></li>
-  <li><h3>Basic glassEffect</h3></li>
-  <li><pre><code class="lang-swift">struct PrimaryActionButton: View {
+  </ul>
+  <p>The headline rule on <code>glassEffect(_:in:)</code> is restraint &mdash; Apple warns that <em>"overusing this material in multiple custom controls can provide a subpar user experience by distracting from that content."</em><sup>[<a href="#cv1-fn">cv1</a>]</sup> Pick the elements where Liquid Glass earns its weight: a primary call-to-action button, a focus-state highlight on a custom slider, the lone floating affordance on a canvas. Don't drop it into every card, row, or chrome surface; the material's job is to point the eye at content, and that job breaks the moment everything on screen is wearing it.</p>
+  <h3>Basic glassEffect</h3>
+  <pre><code class="lang-swift">struct PrimaryActionButton: View {
     let title: String
     let action: () -&gt; Void
 
@@ -116,30 +36,30 @@ footer.page .row-nav .nav-empty { color: var(--gutter); font-style: italic; }
         }
         .glassEffect(.regular, in: .capsule)
     }
-}</code></pre></li>
-  <li><p>First argument: which flavor of the material you want. Second argument: the shape the material is poured into &mdash; a capsule for a pill button, a rounded rectangle for a card, and so on. From there the button gets the full optical treatment &mdash; refraction at the edges, a knob-style morph when focus lands on it, the scroll edge handoff &mdash; without you writing any of those animations yourself.</p></li>
-  <li><h3>GlassEffectContainer for Performance and Morphing</h3></li>
-  <li><p>When you have multiple custom Liquid Glass elements that need to morph between each other (think: a row of custom toggles, or a custom toolbar where elements expand and collapse), wrap them in a <code>GlassEffectContainer</code>:</p></li>
-  <li><pre><code class="lang-swift">GlassEffectContainer {
+}</code></pre>
+  <p>First argument: which flavor of the material you want. Second argument: the shape the material is poured into &mdash; a capsule for a pill button, a rounded rectangle for a card, and so on. From there the button gets the full optical treatment &mdash; refraction at the edges, a knob-style morph when focus lands on it, the scroll edge handoff &mdash; without you writing any of those animations yourself.</p>
+  <h3>GlassEffectContainer for Performance and Morphing</h3>
+  <p>When you have multiple custom Liquid Glass elements that need to morph between each other (think: a row of custom toggles, or a custom toolbar where elements expand and collapse), wrap them in a <code>GlassEffectContainer</code>:</p>
+  <pre><code class="lang-swift">GlassEffectContainer {
     Button("Edit") { startEditing() }
         .glassEffect(.regular, in: .capsule)
     Button("Done") { finishEditing() }
         .glassEffect(.regular, in: .capsule)
     Button("Cancel") { cancel() }
         .glassEffect(.regular, in: .capsule)
-}</code></pre></li>
-  <li><p>The container is doing two things at once. It collapses what would otherwise be N independent render passes into a single pass &mdash; cheaper for the GPU, especially on older hardware. And it owns the morph between siblings, so when one button expands and another collapses, the glass shape stretches between them instead of cross-fading. Skip the container and each modifier is on its own; the animation between buttons looks staccato instead of fluid.</p></li>
-  <li><h3>tvOS Pairs Liquid Glass with Focus</h3></li>
-  <li><p>If your app reaches Apple TV, add this to your checklist. On tvOS, a stock button or control switches to its Liquid Glass look when the remote's focus lands on it &mdash; the focus state is the trigger. To get the same behavior on your custom controls, opt into the focus engine through <code>focusable(_:)</code> and <code>isFocused</code>; the Liquid Glass appearance is keyed to those APIs and shows up on its own. Hardware floor: Apple TV 4K (2nd generation) and later render the effects. Apple TV HD keeps its pre-X26 styling.</p></li>
-  <li><p id="cv1-fn" style="font-size: 13pt; color: var(--dim);">[cv1] Apple Developer Documentation, <em>Adopting Liquid Glass</em>. <a href="https://developer.apple.com/documentation/TechnologyOverviews/adopting-liquid-glass">developer.apple.com/documentation/TechnologyOverviews/adopting-liquid-glass</a> &mdash; verified 2026-04-29.</p></li>
-  <li><hr></li>
-  <li><h2>What You'll Learn</h2></li>
-  <li><p>By the end of this chapter you can:</p></li>
-  <li><ul><li>Extract reusable SwiftUI views from copy-pasted snippets.</li><li>Write custom <code>ViewModifier</code> types and apply them with <code>.modifier</code> or a cleaner <code>.myStyle()</code> extension.</li><li>Use <code>@Environment</code> values to pass data deep into a view tree without threading it through every level.</li><li>Read child-view sizes and positions with <code>GeometryReader</code>.</li><li>Share data from child to parent with <code>PreferenceKey</code>.</li><li>Animate transitions between layouts with <code>.matchedGeometryEffect</code>.</li></ul></li>
-  <li><hr></li>
-  <li><h2>Extracting a Custom View</h2></li>
-  <li><p>The first step past "all code in one big <code>ContentView</code>" is pulling repeated shapes into their own <code>View</code> types.</p></li>
-  <li><pre><code class="lang-swift">struct AvatarRow: View {
+}</code></pre>
+  <p>The container is doing two things at once. It collapses what would otherwise be N independent render passes into a single pass &mdash; cheaper for the GPU, especially on older hardware. And it owns the morph between siblings, so when one button expands and another collapses, the glass shape stretches between them instead of cross-fading. Skip the container and each modifier is on its own; the animation between buttons looks staccato instead of fluid.</p>
+  <h3>tvOS Pairs Liquid Glass with Focus</h3>
+  <p>If your app reaches Apple TV, add this to your checklist. On tvOS, a stock button or control switches to its Liquid Glass look when the remote's focus lands on it &mdash; the focus state is the trigger. To get the same behavior on your custom controls, opt into the focus engine through <code>focusable(_:)</code> and <code>isFocused</code>; the Liquid Glass appearance is keyed to those APIs and shows up on its own. Hardware floor: Apple TV 4K (2nd generation) and later render the effects. Apple TV HD keeps its pre-X26 styling.</p>
+  <p id="cv1-fn" style="font-size: 13pt; color: var(--dim);">[cv1] Apple Developer Documentation, <em>Adopting Liquid Glass</em>. <a href="https://developer.apple.com/documentation/TechnologyOverviews/adopting-liquid-glass">developer.apple.com/documentation/TechnologyOverviews/adopting-liquid-glass</a> &mdash; verified 2026-04-29.</p>
+  <hr>
+  <h2>What You'll Learn</h2>
+  <p>By the end of this chapter you can:</p>
+  <ul><li>Extract reusable SwiftUI views from copy-pasted snippets.</li><li>Write custom <code>ViewModifier</code> types and apply them with <code>.modifier</code> or a cleaner <code>.myStyle()</code> extension.</li><li>Use <code>@Environment</code> values to pass data deep into a view tree without threading it through every level.</li><li>Read child-view sizes and positions with <code>GeometryReader</code>.</li><li>Share data from child to parent with <code>PreferenceKey</code>.</li><li>Animate transitions between layouts with <code>.matchedGeometryEffect</code>.</li></ul>
+  <hr>
+  <h2>Extracting a Custom View</h2>
+  <p>The first step past "all code in one big <code>ContentView</code>" is pulling repeated shapes into their own <code>View</code> types.</p>
+  <pre><code class="lang-swift">struct AvatarRow: View {
     let name: String
     let imageName: String
 
@@ -155,36 +75,36 @@ footer.page .row-nav .nav-empty { color: var(--gutter); font-style: italic; }
         }
         .padding()
     }
-}</code></pre></li>
-  <li><p>Used anywhere:</p></li>
-  <li><pre><code class="lang-swift">VStack {
+}</code></pre>
+  <p>Used anywhere:</p>
+  <pre><code class="lang-swift">VStack {
     AvatarRow(name: "Ada",    imageName: "person.circle")
     AvatarRow(name: "Max",    imageName: "person.circle.fill")
     AvatarRow(name: "Claude", imageName: "sparkles")
-}</code></pre></li>
-  <li><p><strong>Rule</strong>: the third time you write the same layout, turn it into a view.</p></li>
-  <li><hr></li>
-  <li><h2>ViewModifier -- Reusable Styling</h2></li>
-  <li><p>When the thing you keep repeating is a <strong>stack of modifiers</strong>, not a layout, reach for <code>ViewModifier</code> instead of a new view.</p></li>
-  <li><pre><code class="lang-swift">struct CardStyle: ViewModifier {
+}</code></pre>
+  <p><strong>Rule</strong>: the third time you write the same layout, turn it into a view.</p>
+  <hr>
+  <h2>ViewModifier -- Reusable Styling</h2>
+  <p>When the thing you keep repeating is a <strong>stack of modifiers</strong>, not a layout, reach for <code>ViewModifier</code> instead of a new view.</p>
+  <pre><code class="lang-swift">struct CardStyle: ViewModifier {
     func body(content: Content) -&gt; some View {
         content
             .padding()
             .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 12))
             .shadow(color: .black.opacity(0.12), radius: 6, y: 2)
     }
-}</code></pre></li>
-  <li><p>Apply it with <code>.modifier(CardStyle())</code>, or -- for a cleaner call site -- add a <code>View</code> extension:</p></li>
-  <li><pre><code class="lang-swift">extension View {
+}</code></pre>
+  <p>Apply it with <code>.modifier(CardStyle())</code>, or -- for a cleaner call site -- add a <code>View</code> extension:</p>
+  <pre><code class="lang-swift">extension View {
     func card() -&gt; some View { modifier(CardStyle()) }
 }
 
 // Usage
 Text("Hello")
-    .card()</code></pre></li>
-  <li><p>Custom modifiers centralize a styling decision. A dozen views across the app, one definition, any future tweak happens in one place.</p></li>
-  <li><h3>Modifiers That Take Arguments</h3></li>
-  <li><pre><code class="lang-swift">struct BadgedStyle: ViewModifier {
+    .card()</code></pre>
+  <p>Custom modifiers centralize a styling decision. A dozen views across the app, one definition, any future tweak happens in one place.</p>
+  <h3>Modifiers That Take Arguments</h3>
+  <pre><code class="lang-swift">struct BadgedStyle: ViewModifier {
     let color: Color
     let count: Int
 
@@ -211,22 +131,22 @@ extension View {
 // Usage
 Image(systemName: "envelope")
     .font(.title)
-    .badged(3)</code></pre></li>
-  <li><hr></li>
-  <li><h2>Environment Values -- Passing State Without Plumbing</h2></li>
-  <li><p>When deeply nested views need the same value (theme, date formatter, API client), don't thread it through every initializer. Put it in the environment.</p></li>
-  <li><h3>Reading a Built-In Environment Value</h3></li>
-  <li><pre><code class="lang-swift">struct Banner: View {
+    .badged(3)</code></pre>
+  <hr>
+  <h2>Environment Values -- Passing State Without Plumbing</h2>
+  <p>When deeply nested views need the same value (theme, date formatter, API client), don't thread it through every initializer. Put it in the environment.</p>
+  <h3>Reading a Built-In Environment Value</h3>
+  <pre><code class="lang-swift">struct Banner: View {
     @Environment(\.colorScheme) private var scheme
 
     var body: some View {
         Text("Hello")
             .foregroundStyle(scheme == .dark ? .white : .black)
     }
-}</code></pre></li>
-  <li><h3>Defining Your Own Environment Value</h3></li>
-  <li><p>Define a key, extend <code>EnvironmentValues</code>, and set it with <code>.environment</code>:</p></li>
-  <li><pre><code class="lang-swift">private struct ThemeKey: EnvironmentKey {
+}</code></pre>
+  <h3>Defining Your Own Environment Value</h3>
+  <p>Define a key, extend <code>EnvironmentValues</code>, and set it with <code>.environment</code>:</p>
+  <pre><code class="lang-swift">private struct ThemeKey: EnvironmentKey {
     static let defaultValue: Color = .blue
 }
 
@@ -252,12 +172,12 @@ VStack {
     ThemedButton(title: "Save")
     ThemedButton(title: "Cancel")
 }
-.environment(\.theme, .orange)</code></pre></li>
-  <li><p>Every <code>ThemedButton</code> under that <code>.environment(...)</code> sees orange. Change the value once and every button updates.</p></li>
-  <li><hr></li>
-  <li><h2>GeometryReader -- Reading the Size Around You</h2></li>
-  <li><p><code>GeometryReader</code> gives its child view a <code>GeometryProxy</code> describing the size and safe-area it has been allocated.</p></li>
-  <li><pre><code class="lang-swift">struct SplitHalf: View {
+.environment(\.theme, .orange)</code></pre>
+  <p>Every <code>ThemedButton</code> under that <code>.environment(...)</code> sees orange. Change the value once and every button updates.</p>
+  <hr>
+  <h2>GeometryReader -- Reading the Size Around You</h2>
+  <p><code>GeometryReader</code> gives its child view a <code>GeometryProxy</code> describing the size and safe-area it has been allocated.</p>
+  <pre><code class="lang-swift">struct SplitHalf: View {
     var body: some View {
         GeometryReader { geo in
             HStack(spacing: 0) {
@@ -266,23 +186,23 @@ VStack {
             }
         }
     }
-}</code></pre></li>
-  <li><h3>When Not to Use GeometryReader</h3></li>
-  <li><p><code>GeometryReader</code> expands to fill the space it is offered, which often surprises newcomers. If all you need is "half the width," reach for <code>.frame(maxWidth: .infinity)</code> and let SwiftUI's normal layout system do the work.</p></li>
-  <li><p>Use <code>GeometryReader</code> when you genuinely need to compute something from the runtime size -- a custom layout, a parallax effect, a shape that depends on width / height.</p></li>
-  <li><h3><code>onGeometryChange</code> (iOS 18+)</h3></li>
-  <li><p>In iOS 18, <code>.onGeometryChange</code> observes a view's frame without wrapping it in <code>GeometryReader</code>:</p></li>
-  <li><pre><code class="lang-swift">Text("Hello")
+}</code></pre>
+  <h3>When Not to Use GeometryReader</h3>
+  <p><code>GeometryReader</code> expands to fill the space it is offered, which often surprises newcomers. If all you need is "half the width," reach for <code>.frame(maxWidth: .infinity)</code> and let SwiftUI's normal layout system do the work.</p>
+  <p>Use <code>GeometryReader</code> when you genuinely need to compute something from the runtime size -- a custom layout, a parallax effect, a shape that depends on width / height.</p>
+  <h3><code>onGeometryChange</code> (iOS 18+)</h3>
+  <p>In iOS 18, <code>.onGeometryChange</code> observes a view's frame without wrapping it in <code>GeometryReader</code>:</p>
+  <pre><code class="lang-swift">Text("Hello")
     .onGeometryChange(for: CGSize.self) { proxy in
         proxy.size
     } action: { newSize in
         print("I am now", newSize)
-    }</code></pre></li>
-  <li><p>Cleaner than <code>GeometryReader</code> when you only need a measurement, not a layout container.</p></li>
-  <li><hr></li>
-  <li><h2>PreferenceKey -- Child to Parent Communication</h2></li>
-  <li><p>The environment passes data <strong>down</strong> the view tree. Preference keys pass data <strong>up</strong>.</p></li>
-  <li><pre><code class="lang-swift">private struct HeightKey: PreferenceKey {
+    }</code></pre>
+  <p>Cleaner than <code>GeometryReader</code> when you only need a measurement, not a layout container.</p>
+  <hr>
+  <h2>PreferenceKey -- Child to Parent Communication</h2>
+  <p>The environment passes data <strong>down</strong> the view tree. Preference keys pass data <strong>up</strong>.</p>
+  <pre><code class="lang-swift">private struct HeightKey: PreferenceKey {
     static let defaultValue: CGFloat = 0
     static func reduce(value: inout CGFloat, nextValue: () -&gt; CGFloat) {
         value = max(value, nextValue())
@@ -310,12 +230,12 @@ struct Parent: View {
         }
         .onPreferenceChange(HeightKey.self) { rowHeight = $0 }
     }
-}</code></pre></li>
-  <li><p><code>reduce</code> is how SwiftUI combines values from multiple children; in this case we take the largest. Use preference keys when a parent needs to size itself based on its children, or when a child needs to say something specific to an ancestor.</p></li>
-  <li><hr></li>
-  <li><h2>matchedGeometryEffect -- Transitions Between Layouts</h2></li>
-  <li><p>When the same "thing" appears in two different layouts, <code>matchedGeometryEffect</code> animates it between them.</p></li>
-  <li><pre><code class="lang-swift">struct PhotoDetail: View {
+}</code></pre>
+  <p><code>reduce</code> is how SwiftUI combines values from multiple children; in this case we take the largest. Use preference keys when a parent needs to size itself based on its children, or when a child needs to say something specific to an ancestor.</p>
+  <hr>
+  <h2>matchedGeometryEffect -- Transitions Between Layouts</h2>
+  <p>When the same "thing" appears in two different layouts, <code>matchedGeometryEffect</code> animates it between them.</p>
+  <pre><code class="lang-swift">struct PhotoDetail: View {
     @Namespace private var ns
     @State private var expanded = false
 
@@ -340,13 +260,13 @@ struct Parent: View {
             }
         }
     }
-}</code></pre></li>
-  <li><p>Tap the image. SwiftUI notices the two views share the <code>id: "photo"</code> in the same namespace, and animates position + size from the small version to the full one (and back). You don't write any of the intermediate frames.</p></li>
-  <li><p><code>@Namespace</code> gives you a private namespace; reuse its value for every view pair you want matched.</p></li>
-  <li><hr></li>
-  <li><h2>Chapter Mini-Example -- A Badge Stack</h2></li>
-  <li><p>Putting custom views, a custom modifier, and an environment value together:</p></li>
-  <li><pre><code class="lang-swift">import SwiftUI
+}</code></pre>
+  <p>Tap the image. SwiftUI notices the two views share the <code>id: "photo"</code> in the same namespace, and animates position + size from the small version to the full one (and back). You don't write any of the intermediate frames.</p>
+  <p><code>@Namespace</code> gives you a private namespace; reuse its value for every view pair you want matched.</p>
+  <hr>
+  <h2>Chapter Mini-Example -- A Badge Stack</h2>
+  <p>Putting custom views, a custom modifier, and an environment value together:</p>
+  <pre><code class="lang-swift">import SwiftUI
 
 private struct AccentKey: EnvironmentKey { static let defaultValue: Color = .blue }
 extension EnvironmentValues {
@@ -399,15 +319,26 @@ struct NotificationBar: View {
         .card()
         .environment(\.accent, .orange)
     }
-}</code></pre></li>
-  <li><p>One reusable icon view, one reusable card modifier, one environment value -- and the bar's entire accent color lives in one spot.</p></li>
-  <li><hr></li>
-  <li><h2>What Book 20 Does</h2></li>
-  <li><p>Book 20 looks at the app as a running system: Instruments, profiling, and the habits that keep a SwiftUI app smooth as it grows.</p></li>
-</ol>
-</div>
+}</code></pre>
+  <p>One reusable icon view, one reusable card modifier, one environment value -- and the bar's entire accent color lives in one spot.</p>
+  <hr>
+  <h2>What Book 20 Does</h2>
+  <p>Book 20 looks at the app as a running system: Instruments, profiling, and the habits that keep a SwiftUI app smooth as it grows.</p>
+  <hr>
+  <h2>Further Reading &mdash; WWDC Sessions</h2>
+  <p>This book is a passive resource. When you want deeper coverage of building custom views and modifiers, the WWDC sessions below are Apple's source material.</p>
+  <ul>
+    <li>WWDC25 / 256, <em>What's new in SwiftUI</em> &mdash; <a href="https://developer.apple.com/videos/play/wwdc2025/256/">developer.apple.com/videos/play/wwdc2025/256/</a>. New <code>View</code> and <code>ViewModifier</code> additions this release.</li>
+    <li>WWDC25 / 219, <em>Meet Liquid Glass</em> &mdash; <a href="https://developer.apple.com/videos/play/wwdc2025/219/">developer.apple.com/videos/play/wwdc2025/219/</a>. The material rules custom views need to honor to feel native.</li>
+    <li>WWDC25 / 323, <em>Build a SwiftUI app with the new design</em> &mdash; <a href="https://developer.apple.com/videos/play/wwdc2025/323/">developer.apple.com/videos/play/wwdc2025/323/</a>. Adoption patterns including <code>GlassEffectContainer</code> for grouped morphing of custom controls.</li>
+    <li>WWDC25 / 306, <em>Optimize SwiftUI performance with Instruments</em> &mdash; <a href="https://developer.apple.com/videos/play/wwdc2025/306/">developer.apple.com/videos/play/wwdc2025/306/</a>. Where custom view identity / equality issues show up in profiling.</li>
+  </ul>
+  <h3>Prior-year background sessions</h3>
+  <ul>
+    <li>WWDC23 / 10149, <em>Discover Observation in SwiftUI</em> &mdash; <a href="https://developer.apple.com/videos/play/wwdc2023/10149/">developer.apple.com/videos/play/wwdc2023/10149/</a>. <code>@Observable</code> and the property-tracking model your custom views depend on for efficient updates.</li>
+  </ul>
 
-<footer class="page"><div class="row-nav"><div class="prev"><a href="Book-18-Error-Handling-And-Result-Type.html">&larr; Book 18: Error Handling &amp; Result Type</a></div><div class="pos">Book 19 Building Custom Views And Modifiers</div><div class="next"><a href="Book-20-Performance-Instruments-And-Best-Practices.html">Book 20: Performance, Instruments, &amp; Bes... &rarr;</a></div></div></footer>
+</div>
 
 </body>
 </html>

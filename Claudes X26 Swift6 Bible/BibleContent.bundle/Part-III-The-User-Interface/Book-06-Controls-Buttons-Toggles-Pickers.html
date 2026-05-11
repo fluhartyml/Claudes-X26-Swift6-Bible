@@ -4,107 +4,27 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Book 06: Controls Buttons Toggles Pickers &mdash; Claude's Xcode 26 Swift Bible</title>
-<style>
-:root {
-  --bg: #000000;
-  --fg: #FFB000;
-  --bright: #FFD060;
-  --dim: #996600;
-  --codebg: #1a0d00;
-  --border: #664500;
-  --gutter: #4a3300;
-  --headerbg: #0a0600;
-}
-* { box-sizing: border-box; }
-html, body { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; height: 100%; }
-body {
-  background: var(--bg);
-  color: var(--fg);
-  font-family: "FiraCode Nerd Font Mono", "FiraCode Nerd Font", "Fira Code", "Menlo", "Courier New", monospace;
-  font-size: 18pt;
-  line-height: 1.55;
-  margin: 0;
-  padding: 0;
-  text-shadow: 0 0 1px rgba(255, 176, 0, 0.35);
-  display: flex;
-  flex-direction: column;
-}
-header.page, footer.page {
-  background: var(--headerbg);
-  color: var(--dim);
-  padding: 0.55rem 1.1rem;
-  font-size: 13pt;
-  display: flex;
-  flex-direction: column;
-  gap: 0.2rem;
-  flex: 0 0 auto;
-  z-index: 10;
-}
-header.page { border-bottom: 1px solid var(--border); }
-footer.page { border-top: 1px solid var(--border); padding-bottom: calc(0.55rem + env(safe-area-inset-bottom)); }
-header.page .path, footer.page .path { color: var(--fg); word-break: break-all; overflow-wrap: break-word; }
-header.page .pos, footer.page .pos { color: var(--bright); }
-/* The middle scrolls; header and footer stay put. */
-.content { flex: 1 1 auto; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 0.8rem 1rem 2rem 1rem; max-width: 1100px; margin: 0 auto; width: 100%; }
-h1 { color: var(--bright); font-weight: normal; font-size: 26pt; margin: 0.6rem 0 1rem 0; }
-h2 { color: var(--bright); font-weight: normal; font-size: 20pt; border-bottom: 1px solid var(--border); padding-bottom: 0.3rem; margin-top: 1.5rem; counter-set: h3 0 para 0; counter-increment: h2; }
-h2::before { content: counter(h2) ". "; color: var(--fg); }
-h3 { color: var(--bright); font-weight: normal; font-size: 18pt; margin-top: 1rem; counter-set: para 0; counter-increment: h3; }
-h3::before { content: counter(h2) "." counter(h3) " "; color: var(--fg); }
-p { margin: 0.4rem 0; counter-increment: para; }
-p::before { content: counter(h2) "." counter(h3) "." counter(para) " "; color: var(--dim); font-size: 13pt; margin-right: 0.4em; }
-code { color: var(--bright); background: var(--codebg); padding: 0.08em 0.35em; border: 1px solid #3a2400; border-radius: 3px; font-size: 0.92em; }
-pre { background: var(--codebg); border: 1px solid #3a2400; border-radius: 4px; padding: 0.7rem 0.9rem; overflow-x: auto; font-size: 14pt; }
-pre code { background: transparent; border: 0; padding: 0; }
-ul, ol.body-list { margin: 0.4rem 0 0.4rem 1.4rem; padding: 0; }
-a { color: var(--bright); font-weight: bold; text-decoration: none; border-bottom: 1px dotted var(--dim); }
-a:hover { background: #332200; }
-strong { color: var(--bright); }
-em { color: var(--fg); font-style: italic; }
-hr { border: 0; border-top: 1px solid var(--border); margin: 1rem 0; }
-ol.lines { list-style: none; counter-reset: line h2 h3 para; padding: 0; margin: 0; }
-ol.lines > li { counter-increment: line; padding: 0.15rem 0 0.15rem 3.6rem; position: relative; min-height: 1.2em; }
-ol.lines > li::before { content: counter(line); position: absolute; left: 0; top: 0.25rem; width: 2.8rem; text-align: right; color: var(--gutter); font-size: 13pt; padding-right: 0.5rem; border-right: 1px solid #2a1e00; }
-ol.lines > li > p, ol.lines > li > h2, ol.lines > li > h3, ol.lines > li > ul, ol.lines > li > ol, ol.lines > li > pre, ol.lines > li > hr { margin: 0; }
-.scope-note { border-left: 3px solid var(--bright); padding: 0.7rem 1rem; background: #140c00; margin: 0.6rem 0; color: var(--bright); }
-.nav { display: flex; gap: 0.9rem; flex-wrap: wrap; margin-top: 0.8rem; font-size: 14pt; }
-
-
-footer.page { flex-direction: column; gap: 0.4rem; }
-footer.page .row-nav { display: flex; flex-direction: row; justify-content: space-between; align-items: center; gap: 0.5rem; }
-footer.page .row-nav .prev, footer.page .row-nav .next { flex: 1; min-width: 0; }
-footer.page .row-nav .prev { text-align: left; }
-footer.page .row-nav .next { text-align: right; }
-footer.page .row-nav .pos { flex: 0 0 auto; text-align: center; color: var(--bright); font-weight: bold; }
-footer.page .row-nav a { color: var(--bright); font-weight: bold; text-decoration: none; border-bottom: 1px dotted var(--dim); }
-footer.page .row-nav a:hover { background: #332200; }
-footer.page .row-nav .nav-empty { color: var(--gutter); font-style: italic; }
-</style>
 </head>
 <body>
 
-<header class="page">
-  <div class="path">Part III The User Interface/Book 06 Controls Buttons Toggles Pickers</div>
-</header>
-
 <div class="content">
-<ol class="lines">
-  <li><h1>Book 6: Controls — Buttons, Toggles, and Pickers</h1></li>
-  <li><h2>Live Reference: Take A Chance On Me + CryoTunes Player</h2></li>
-  <li><div class="scope-note"><strong>Take A Chance On Me</strong> is the smallest-scale shipping example of the patterns this chapter teaches &mdash; a multi-die roller built almost entirely from <code>Button</code>, <code>Picker</code>, and <code>Stepper</code>. Each die is a button; each die-size selector is a picker; the multi-die count is a stepper. Reading its source is reading this chapter applied to one concrete app. Source: <a href="https://github.com/fluhartyml/TakeAChanceOnMeV1.0.2/wiki">github.com/fluhartyml/TakeAChanceOnMeV1.0.2/wiki</a>. See Source Tour 26. <strong>CryoTunes Player</strong> uses every control in this chapter at production scale &mdash; buttons across the transport row (play, pause, skip, stop, shuffle, repeat, share, thumbs-up, thumbs-down), toggles in Settings, pickers for radio station and sleep timer. Source: <a href="https://github.com/fluhartyml/CryoTunesPlayer/wiki">github.com/fluhartyml/CryoTunesPlayer/wiki</a>. See Source Tour 18. <strong>TipJar</strong> shows tip-amount buttons feeding StoreKit&nbsp;2 purchase buttons &mdash; a small but real shipping example of buttons paired with system payment UI. Source: <a href="https://github.com/fluhartyml/TipJar/wiki">github.com/fluhartyml/TipJar/wiki</a>. <strong>My Person CRM</strong> demonstrates the system contact picker (<code>CNContactPickerViewController</code>) wrapped as a SwiftUI sheet &mdash; the canonical example of "picker as system intermediary, app receives only what the user chose." Source: <a href="https://github.com/fluhartyml/My-Person-CRM/wiki">github.com/fluhartyml/My-Person-CRM/wiki</a>. <strong>IntelligenceDemo</strong> uses <code>PhotosPicker</code> from <code>PhotosUI</code> &mdash; the same user-mediated picker pattern, applied to photos instead of contacts. Source: <a href="https://github.com/fluhartyml/IntelligenceDemo/wiki">github.com/fluhartyml/IntelligenceDemo/wiki</a>.</div></li>
-  <li><hr></li>
-  <li><h2>Liquid Glass Updates to Controls (X26)</h2></li>
-  <li><p>Every control in X26 looks a little different and feels noticeably more reactive. Apple's framing for what changed: <em>"For controls like sliders and toggles, the knob transforms into Liquid Glass during interaction, and buttons fluidly morph into menus and popovers."</em><sup>[<a href="#c1-fn">c1</a>]</sup> Round corners get more aggressive too, deliberately, so a control's curve matches the curve of the device's display bezel.<sup>[<a href="#c1-fn">c1</a>]</sup></p></li>
-  <li><p>Stock SwiftUI controls inherit the new sizes and shapes automatically as long as you haven't hand-tuned their dimensions. Four things to walk through after the rebuild:<sup>[<a href="#c1-fn">c1</a>]</sup></p></li>
-  <li><ul>
+
+  <h1>Book 6: Controls — Buttons, Toggles, and Pickers</h1>
+  <h2>Live Reference: Source for the Controls in This Chapter</h2>
+  <div class="scope-note"><strong>Take A Chance On Me</strong> is the smallest-scale shipping source. Its <code>DiceBagView</code> uses stock <code>Toggle</code> (per-die enable) and <code>Button</code> (Generate, Clear Results, keyboard Done); its <code>FeedbackView</code> uses a segmented <code>Picker</code> for feedback type. Source: <a href="https://github.com/fluhartyml/TakeAChanceOnMeV1.0.2/wiki">github.com/fluhartyml/TakeAChanceOnMeV1.0.2/wiki</a>. See Source Tour 26. <strong>CryoTunes Player</strong> shows production-scale <code>Button</code> patterns: an album-art context menu of <code>Button</code>s with <code>Label</code>, an alert combining <code>.cancel</code> and default-role buttons, a top-bar Shazam + settings pair, a destructive-role confirmation in Manage Dislikes. CryoTunes is also the chapter's "stock <code>Picker</code> can't carry this design, build it from buttons" example &mdash; <code>CryoStationPicker</code> and <code>CryoSleepTimerPicker</code> (in <code>CryoTunes Player/Views/</code>) are tappable button trees, not Apple's <code>Picker</code> primitive. Source: <a href="https://github.com/fluhartyml/CryoTunesPlayer/wiki">github.com/fluhartyml/CryoTunesPlayer/wiki</a>. See Source Tour 18. <strong>TipJar</strong> shows custom-styled tip-amount <code>Button</code>s feeding StoreKit&nbsp;2 purchases plus <code>.borderedProminent</code> on the empty-state Retry button, with <code>.disabled</code> while a purchase is in flight. Source: <a href="https://github.com/fluhartyml/TipJar/wiki">github.com/fluhartyml/TipJar/wiki</a>. <strong>My Person CRM</strong> wraps the system contact picker (<code>CNContactPickerViewController</code>) as a SwiftUI sheet via <code>UIViewControllerRepresentable</code> &mdash; the canonical "picker as system intermediary, app receives only what the user chose" pattern. Source: <a href="https://github.com/fluhartyml/My-Person-CRM/wiki">github.com/fluhartyml/My-Person-CRM/wiki</a>. <strong>IntelligenceDemo</strong> uses <code>PhotosPicker</code> from <code>PhotosUI</code> &mdash; the same user-mediated picker pattern, applied to photos instead of contacts. Source: <a href="https://github.com/fluhartyml/IntelligenceDemo/wiki">github.com/fluhartyml/IntelligenceDemo/wiki</a>.</div>
+  <hr>
+  <h2>Liquid Glass Updates to Controls (X26)</h2>
+  <p>Every control in X26 looks a little different and feels noticeably more reactive. Apple's framing for what changed: <em>"For controls like sliders and toggles, the knob transforms into Liquid Glass during interaction, and buttons fluidly morph into menus and popovers."</em><sup>[<a href="#c1-fn">c1</a>]</sup> Round corners get more aggressive too, deliberately, so a control's curve matches the curve of the device's display bezel.<sup>[<a href="#c1-fn">c1</a>]</sup></p>
+  <p>Stock SwiftUI controls inherit the new sizes and shapes automatically as long as you haven't hand-tuned their dimensions. Four things to walk through after the rebuild:<sup>[<a href="#c1-fn">c1</a>]</sup></p>
+  <ul>
     <li><strong>Pull color back.</strong> Heavy custom tinting fights the new material; reach for system colors first, and if you need a custom color, declare light, dark, and increased-contrast versions of it.</li>
     <li><strong>Watch for crowding.</strong> Stick with the system spacing values rather than overriding them, and never stack one Liquid Glass surface directly on top of another.</li>
     <li><strong>Handle scroll-under content.</strong> Toolbars and other system bars already obscure the content behind them. A bar you built yourself opts in by registering with <code>safeAreaBar(edge:alignment:spacing:content:)</code>; without that, scrolling text bleeds through and controls become hard to read.</li>
     <li><strong>Concentric corners.</strong> Use <code>ConcentricRectangle</code> or <code>rect(corners:isUniform:)</code> so a control's corner radius is derived from its container's. The cascade flows from the device's screen corner inward through window, group, and control.</li>
-  </ul></li>
-  <li><h3>New Button Styles &mdash; <code>.glass</code> and <code>.glassProminent</code></h3></li>
-  <li><p>Two new button styles adopt Liquid Glass with minimal code:</p></li>
-  <li><pre><code class="lang-swift">Button("Continue") {
+  </ul>
+  <h3>New Button Styles &mdash; <code>.glass</code> and <code>.glassProminent</code></h3>
+  <p>Two new button styles adopt Liquid Glass with minimal code:</p>
+  <pre><code class="lang-swift">Button("Continue") {
     advance()
 }
 .buttonStyle(.glass)
@@ -112,48 +32,70 @@ footer.page .row-nav .nav-empty { color: var(--gutter); font-style: italic; }
 Button("Buy Now") {
     purchase()
 }
-.buttonStyle(.glassProminent)</code></pre></li>
-  <li><p><code>.glass</code> drops the standard material onto a button. <code>.glassProminent</code> is the same material at higher visual emphasis, reserved for the primary action on a screen. Use it on a single button per screen so the emphasis stays meaningful.</p></li>
-  <li><h3>Extra-Large Control Size</h3></li>
-  <li><p>X26 also unlocks a new size step above large &mdash; an extra-large variant for controls. Two situations earn it: a packed form where bigger tap targets keep the screen usable, or a single hero control that's meant to anchor the page.<sup>[<a href="#c1-fn">c1</a>]</sup></p></li>
-  <li><p id="c1-fn" style="font-size: 13pt; color: var(--dim);">[c1] Apple Developer Documentation, <em>Adopting Liquid Glass</em>. <a href="https://developer.apple.com/documentation/TechnologyOverviews/adopting-liquid-glass">developer.apple.com/documentation/TechnologyOverviews/adopting-liquid-glass</a> &mdash; verified 2026-04-29.</p></li>
-  <li><hr></li>
-  <li><h2>Button</h2></li>
-  <li><h3>Basic Button</h3></li>
-  <li><pre><code class="lang-swift">Button("Save") {
-    saveDocument()
+.buttonStyle(.glassProminent)</code></pre>
+  <p><code>.glass</code> drops the standard material onto a button. <code>.glassProminent</code> is the same material at higher visual emphasis, reserved for the primary action on a screen. Use it on a single button per screen so the emphasis stays meaningful.</p>
+  <h3>Extra-Large Control Size</h3>
+  <p>X26 also unlocks a new size step above large &mdash; an extra-large variant for controls. Two situations earn it: a packed form where bigger tap targets keep the screen usable, or a single hero control that's meant to anchor the page.<sup>[<a href="#c1-fn">c1</a>]</sup></p>
+  <p id="c1-fn" style="font-size: 13pt; color: var(--dim);">[c1] Apple Developer Documentation, <em>Adopting Liquid Glass</em>. <a href="https://developer.apple.com/documentation/TechnologyOverviews/adopting-liquid-glass">developer.apple.com/documentation/TechnologyOverviews/adopting-liquid-glass</a> &mdash; verified 2026-04-29.</p>
+  <hr>
+  <h2>Button</h2>
+  <h3>Basic Button</h3>
+  <pre><code class="lang-swift">// From TakeAChanceOnMe/DiceBagView.swift — keyboard "Done" button
+Button("Done") {
+    focusedField = nil
 }
 
-Button(action: saveDocument) {
-    Label("Save", systemImage: "square.and.arrow.down")
-}</code></pre></li>
-  <li><h3>Button Roles</h3></li>
-  <li><pre><code class="lang-swift">Button("Delete", role: .destructive) {
-    deleteItem()
+// From CryoTunes Player/ContentView.swift — album-art context menu entry
+Button {
+    openAlbumInApp(for: song)
+} label: {
+    Label("Open Album", systemImage: "music.note.list")
+}</code></pre>
+  <h3>Button Roles</h3>
+  <pre><code class="lang-swift">// From CryoTunes Player/ContentView.swift — broken-station alert
+Button("Send Report") {
+    reportForMail = stationFailureMonitor.pendingReport
+    stationFailureMonitor.dismiss()
+    showingFailureMailComposer = true
+}
+Button("Not Now", role: .cancel) {
+    stationFailureMonitor.dismiss()
 }
 
-Button("Cancel", role: .cancel) {
-    dismiss()
-}</code></pre></li>
-  <li><p><code>.destructive</code> renders in red. <code>.cancel</code> tells the system this dismisses without action (used in dialogs and confirmations).</p></li>
-  <li><h3>Button with Custom Label</h3></li>
-  <li><pre><code class="lang-swift">Button {
-    startDownload()
+// From CryoTunes Player/SettingsView.swift — Reset All Dislikes confirmation
+Button("Cancel", role: .cancel) {}
+Button("Reset All", role: .destructive) {
+    dislikeManager.resetAll()
+}</code></pre>
+  <p><code>.destructive</code> renders in red. <code>.cancel</code> tells the system this dismisses without action (used in dialogs and confirmations).</p>
+  <h3>Button with Custom Label</h3>
+  <pre><code class="lang-swift">// From TipJar/ContentView.swift — tip button with conditional content (price or ProgressView)
+Button {
+    Task { await store.tip(product) }
 } label: {
     HStack {
-        Image(systemName: "arrow.down.circle.fill")
-            .font(.title2)
-        VStack(alignment: .leading) {
-            Text("Download").font(.headline)
-            Text("42 MB").font(.caption).foregroundStyle(.secondary)
+        Text(product.displayName)
+            .font(.system(size: 18, weight: .semibold, design: .rounded))
+        Spacer()
+        if isPurchasing {
+            ProgressView()
+                .progressViewStyle(.circular)
+                .tint(warmBg)
+        } else {
+            Text(product.displayPrice)
+                .font(.system(size: 18, weight: .semibold, design: .rounded))
         }
     }
-    .padding()
-    .background(.blue.opacity(0.1), in: RoundedRectangle(cornerRadius: 12))
-}</code></pre></li>
-  <li><hr></li>
-  <li><h2>Built-in Button Styles</h2></li>
-  <li><pre><code class="lang-swift">Button("Bordered") { }
+    .foregroundStyle(warmBg)
+    .padding(.vertical, 14)
+    .padding(.horizontal, 18)
+    .frame(maxWidth: .infinity)
+    .background(warmAccent, in: RoundedRectangle(cornerRadius: 12))
+}
+.disabled(isPurchasing)</code></pre>
+  <hr>
+  <h2>Built-in Button Styles</h2>
+  <pre><code class="lang-swift">Button("Bordered") { }
     .buttonStyle(.bordered)
 
 Button("Bordered Prominent") { }
@@ -163,16 +105,27 @@ Button("Borderless") { }
     .buttonStyle(.borderless)
 
 Button("Plain") { }
-    .buttonStyle(.plain)</code></pre></li>
-  <li><p>| Style | Look | |-------|------| | <code>.automatic</code> | Platform default | | <code>.bordered</code> | Tinted background, rounded shape | | <code>.borderedProminent</code> | Filled with tint color, white text | | <code>.borderless</code> | Text only, no background | | <code>.plain</code> | No styling at all — just the label |</p></li>
-  <li><h3>Tint Control</h3></li>
-  <li><pre><code class="lang-swift">Button("Accept") { }
-    .buttonStyle(.borderedProminent)
-    .tint(.green)</code></pre></li>
-  <li><hr></li>
-  <li><h2>Custom ButtonStyle</h2></li>
-  <li><p>Implement the <code>ButtonStyle</code> protocol for a reusable button appearance.</p></li>
-  <li><pre><code class="lang-swift">struct ScaleButtonStyle: ButtonStyle {
+    .buttonStyle(.plain)</code></pre>
+  <table>
+  <thead><tr><th>Style</th><th>Look</th><th></th></tr></thead>
+  <tbody>
+  <tr><td><code>.automatic</code></td><td>Platform default</td><td></td></tr>
+  <tr><td><code>.bordered</code></td><td>Tinted background, rounded shape</td><td></td></tr>
+  <tr><td><code>.borderedProminent</code></td><td>Filled with tint color, white text</td><td></td></tr>
+  <tr><td><code>.borderless</code></td><td>Text only, no background</td><td></td></tr>
+  </tbody>
+  </table>
+  <h3>Tint Control</h3>
+  <pre><code class="lang-swift">// From TipJar/ContentView.swift — empty-state Retry button
+Button("Retry") {
+    Task { await store.loadProducts() }
+}
+.buttonStyle(.borderedProminent)
+.tint(warmAccent)</code></pre>
+  <hr>
+  <h2>Custom ButtonStyle</h2>
+  <p>Implement the <code>ButtonStyle</code> protocol for a reusable button appearance.</p>
+  <pre><code class="lang-swift">struct ScaleButtonStyle: ButtonStyle {
     func makeBody(configuration: Configuration) -&gt; some View {
         configuration.label
             .scaleEffect(configuration.isPressed ? 0.95 : 1.0)
@@ -183,112 +136,165 @@ Button("Plain") { }
 
 // Usage
 Button("Tap Me") { }
-    .buttonStyle(ScaleButtonStyle())</code></pre></li>
-  <li><h3>PrimitiveButtonStyle</h3></li>
-  <li><p>For full control over when the action fires (e.g., requiring a long press).</p></li>
-  <li><pre><code class="lang-swift">struct LongPressButtonStyle: PrimitiveButtonStyle {
+    .buttonStyle(ScaleButtonStyle())</code></pre>
+  <h3>PrimitiveButtonStyle</h3>
+  <p>For full control over when the action fires (e.g., requiring a long press).</p>
+  <pre><code class="lang-swift">struct LongPressButtonStyle: PrimitiveButtonStyle {
     func makeBody(configuration: Configuration) -&gt; some View {
         configuration.label
             .onLongPressGesture {
                 configuration.trigger()
             }
     }
-}</code></pre></li>
-  <li><h3>Watch Out</h3></li>
-  <li><ul><li><code>ButtonStyle</code> gives you <code>isPressed</code> state but the system handles the tap. <code>PrimitiveButtonStyle</code> gives you full control but you must call <code>configuration.trigger()</code> yourself.</li><li><code>buttonStyle</code> applies to all buttons in the subtree. Set it on a container to style every button inside it at once.</li></ul></li>
-  <li><hr></li>
-  <li><h2>Toggle</h2></li>
-  <li><h3>Basic Toggle</h3></li>
-  <li><pre><code class="lang-swift">@State private var isEnabled = false
+}</code></pre>
+  <h3>Watch Out</h3>
+  <ul><li><code>ButtonStyle</code> gives you <code>isPressed</code> state but the system handles the tap. <code>PrimitiveButtonStyle</code> gives you full control but you must call <code>configuration.trigger()</code> yourself.</li><li><code>buttonStyle</code> applies to all buttons in the subtree. Set it on a container to style every button inside it at once.</li></ul>
+  <hr>
+  <h2>Toggle</h2>
+  <h3>Basic Toggle</h3>
+  <pre><code class="lang-swift">// From TakeAChanceOnMe/DiceBagView.swift — per-die enable toggle (label hidden)
+@State private var toggles: [Bool] = Array(repeating: true, count: 7)
 
-Toggle("Notifications", isOn: $isEnabled)
+Toggle("", isOn: $toggles[index])
+    .labelsHidden()
+    .frame(width: 50)
 
+// Label form (icon + text)
 Toggle(isOn: $isEnabled) {
     Label("Notifications", systemImage: "bell")
-}</code></pre></li>
-  <li><h3>Toggle Styles</h3></li>
-  <li><pre><code class="lang-swift">Toggle("Option", isOn: $value)
+}</code></pre>
+  <h3>Toggle Styles</h3>
+  <pre><code class="lang-swift">Toggle("Option", isOn: $value)
     .toggleStyle(.switch)      // the default iOS switch
 
 Toggle("Option", isOn: $value)
     .toggleStyle(.button)      // renders as a pressable button
 
 Toggle("Option", isOn: $value)
-    .toggleStyle(.checkbox)    // macOS only</code></pre></li>
-  <li><h3>Tint</h3></li>
-  <li><pre><code class="lang-swift">Toggle("Dark Mode", isOn: $darkMode)
-    .tint(.purple)</code></pre></li>
-  <li><h3>Watch Out</h3></li>
-  <li><ul><li><code>.toggleStyle(.checkbox)</code> is macOS only. On iOS it falls back to a switch.</li><li>Toggles in a <code>List</code> automatically get trailing alignment. Outside a List, they default to leading label with trailing switch.</li></ul></li>
-  <li><hr></li>
-  <li><h2>Picker</h2></li>
-  <li><h3>Menu Picker (Default on iOS)</h3></li>
-  <li><pre><code class="lang-swift">@State private var selectedFlavor = "Chocolate"
-let flavors = ["Chocolate", "Vanilla", "Strawberry"]
-
-Picker("Flavor", selection: $selectedFlavor) {
-    ForEach(flavors, id: \.self) { flavor in
-        Text(flavor)
-    }
-}</code></pre></li>
-  <li><h3>Segmented</h3></li>
-  <li><pre><code class="lang-swift">Picker("View", selection: $viewMode) {
-    Text("Grid").tag(ViewMode.grid)
-    Text("List").tag(ViewMode.list)
-    Text("Gallery").tag(ViewMode.gallery)
-}
-.pickerStyle(.segmented)</code></pre></li>
-  <li><h3>Wheel</h3></li>
-  <li><pre><code class="lang-swift">Picker("Weight", selection: $weight) {
-    ForEach(100...300, id: \.self) { w in
-        Text("\(w) lbs").tag(w)
+    .toggleStyle(.checkbox)    // macOS only</code></pre>
+  <h3>Tint</h3>
+  <pre><code class="lang-swift">Toggle("Dark Mode", isOn: $darkMode)
+    .tint(.purple)</code></pre>
+  <h3>Watch Out</h3>
+  <ul><li><code>.toggleStyle(.checkbox)</code> is macOS only. On iOS it falls back to a switch.</li><li>Toggles in a <code>List</code> automatically get trailing alignment. Outside a List, they default to leading label with trailing switch.</li></ul>
+  <hr>
+  <h2>Picker</h2>
+  <h3>Menu Picker (Default on iOS)</h3>
+  <pre><code class="lang-swift">// From SwiftUICraft/Schedule/EditRoutineSheet.swift — recurrence picker
+Picker("Recurrence", selection: $kind) {
+    Text("Daily").tag(RecurrenceKind.daily)
+    Text("Weekdays").tag(RecurrenceKind.weekdays)
+    Text("Weekends").tag(RecurrenceKind.weekends)
+    Text("Custom days").tag(RecurrenceKind.custom)
+}</code></pre>
+  <h3>Segmented</h3>
+  <pre><code class="lang-swift">// From TakeAChanceOnMe/FeedbackView.swift — feedback type picker
+Picker("Feedback Type", selection: $feedbackType) {
+    ForEach(FeedbackType.allCases, id: \.self) { type in
+        Text(type.rawValue).tag(type)
     }
 }
-.pickerStyle(.wheel)</code></pre></li>
-  <li><h3>Inline (Expands in List)</h3></li>
-  <li><pre><code class="lang-swift">Picker("Category", selection: $selectedCategory) {
-    ForEach(categories) { cat in
-        Text(cat.name).tag(cat)
+.pickerStyle(.segmented)</code></pre>
+  <h3>Wheel</h3>
+  <pre><code class="lang-swift">// From Relate CRM/ContextEditorView.swift — interaction-type wheel picker (iOS only)
+Picker("Type", selection: $interactionType) {
+    ForEach(InteractionType.allCases, id: \.self) { interactionType in
+        Label(interactionType.rawValue, systemImage: interactionType.icon)
+            .tag(interactionType)
     }
 }
-.pickerStyle(.inline)</code></pre></li>
-  <li><h3>Navigation Link Picker</h3></li>
-  <li><p>Inside a <code>NavigationStack</code>, this pushes a full selection list.</p></li>
-  <li><pre><code class="lang-swift">Picker("Country", selection: $selectedCountry) {
+#if os(iOS)
+.pickerStyle(.wheel)
+#endif</code></pre>
+  <h3>Inline (Expands in List)</h3>
+  <pre><code class="lang-swift">// From OPerationsHOS/ExportSheet.swift — export format inline picker in a Form section
+Picker("Format", selection: $selectedFormat) {
+    ForEach(ExportFormat.allCases) { format in
+        Text(format.label).tag(format)
+    }
+}
+.pickerStyle(.inline)
+.labelsHidden()</code></pre>
+  <h3>Navigation Link Picker</h3>
+  <p>Inside a <code>NavigationStack</code>, this pushes a full selection list.</p>
+  <pre><code class="lang-swift">Picker("Country", selection: $selectedCountry) {
     ForEach(countries) { country in
         Text(country.name).tag(country)
     }
 }
-.pickerStyle(.navigationLink)</code></pre></li>
-  <li><h3>Tag Type Matching</h3></li>
-  <li><p>Every picker option must have a <code>.tag()</code> that matches the <strong>exact type</strong> of the <code>selection</code> binding. If your selection is <code>Optional&lt;Item&gt;</code>, your tags must be <code>Optional&lt;Item&gt;</code> too &mdash; not plain <code>Item</code>.</p></li>
-  <li><pre><code class="lang-swift">// selection is Item?, so tags are Item?
+.pickerStyle(.navigationLink)</code></pre>
+  <h3>Tag Type Matching</h3>
+  <p>Every picker option must have a <code>.tag()</code> that matches the <strong>exact type</strong> of the <code>selection</code> binding. If your selection is <code>Optional&lt;Item&gt;</code>, your tags must be <code>Optional&lt;Item&gt;</code> too &mdash; not plain <code>Item</code>.</p>
+  <pre><code class="lang-swift">// selection is Item?, so tags are Item?
 @State private var selected: Item?
 Picker("Pick", selection: $selected) {
     Text("None").tag(nil as Item?)
     ForEach(items) { item in
         Text(item.name).tag(item as Item?)
     }
-}</code></pre></li>
-  <li><p>If the picker does not respond to taps, check that selection-binding type and tag type match exactly.</p></li>
-  <li><hr></li>
-  <li><h2>Stepper</h2></li>
-  <li><pre><code class="lang-swift">@State private var quantity = 1
+}</code></pre>
+  <p>If the picker does not respond to taps, check that selection-binding type and tag type match exactly.</p>
+  <h3>System Pickers Wrapped as SwiftUI</h3>
+  <p>SwiftUI's <code>Picker</code> covers most cases, but some pickers come from the system (the user's contact list, the photo library, etc.). These wrap UIKit or framework-provided pickers as SwiftUI views; the app receives only what the user chose.</p>
+  <h4>Photos: <code>PhotosPicker</code></h4>
+  <pre><code class="lang-swift">// From IntelligenceDemo/ContentView.swift
+PhotosPicker(
+    selection: $pickedItem,
+    matching: .images,
+    photoLibrary: .shared()
+) {
+    Label(
+        pickedImage == nil ? "Pick a photo" : "Pick another photo",
+        systemImage: "photo.on.rectangle.angled"
+    )
+    .frame(maxWidth: .infinity)
+    .padding()
+    .background(Color.accentColor.opacity(0.15))
+    .clipShape(RoundedRectangle(cornerRadius: 12))
+}</code></pre>
+  <p>Built into SwiftUI &mdash; no representable wrapper needed.</p>
+  <h4>Contacts: <code>CNContactPickerViewController</code> wrapped</h4>
+  <pre><code class="lang-swift">// From My Person CRM/PersonPickerView.swift — UIKit picker as SwiftUI
+struct PersonPickerView: UIViewControllerRepresentable {
+    let onPick: (CNContact) -&gt; Void
+
+    func makeUIViewController(context: Context) -&gt; CNContactPickerViewController {
+        let picker = CNContactPickerViewController()
+        picker.delegate = context.coordinator
+        return picker
+    }
+
+    func updateUIViewController(_ uiViewController: CNContactPickerViewController, context: Context) {}
+
+    func makeCoordinator() -&gt; Coordinator { Coordinator(onPick: onPick) }
+
+    final class Coordinator: NSObject, CNContactPickerDelegate {
+        let onPick: (CNContact) -&gt; Void
+        init(onPick: @escaping (CNContact) -&gt; Void) { self.onPick = onPick }
+        func contactPicker(_ picker: CNContactPickerViewController, didSelect contact: CNContact) {
+            onPick(contact)
+        }
+    }
+}</code></pre>
+  <p>The reusable pattern: <code>UIViewControllerRepresentable</code> + a <code>Coordinator</code> that conforms to the picker's delegate protocol. The closure delivers the chosen value back to the caller.</p>
+  <hr>
+  <h2>Stepper</h2>
+  <pre><code class="lang-swift">@State private var quantity = 1
 
 Stepper("Quantity: \(quantity)", value: $quantity, in: 1...99)
 
 Stepper(value: $zoomLevel, in: 0.5...3.0, step: 0.25) {
     Text("Zoom: \(zoomLevel, specifier: "%.2f")x")
-}</code></pre></li>
-  <li><h3>Manual Stepper</h3></li>
-  <li><pre><code class="lang-swift">Stepper("Custom") {
+}</code></pre>
+  <h3>Manual Stepper</h3>
+  <pre><code class="lang-swift">Stepper("Custom") {
     increment()
 } onDecrement: {
     decrement()
-}</code></pre></li>
-  <li><hr></li>
-  <li><h2>Slider</h2></li>
-  <li><pre><code class="lang-swift">@State private var volume: Double = 0.5
+}</code></pre>
+  <hr>
+  <h2>Slider</h2>
+  <pre><code class="lang-swift">@State private var volume: Double = 0.5
 
 Slider(value: $volume)
 
@@ -298,87 +304,97 @@ Slider(value: $volume, in: 0...100, step: 5) {
     Image(systemName: "speaker")
 } maximumValueLabel: {
     Image(systemName: "speaker.wave.3")
-}</code></pre></li>
-  <li><h3>Watch Out</h3></li>
-  <li><ul><li>Slider labels are hidden by default in many contexts. Use an explicit <code>Text</code> above the slider if you need the user to see the label.</li><li><code>step</code> only snaps during dragging. Setting <code>step: 5</code> with range <code>0...100</code> means the user drags in increments of 5.</li></ul></li>
-  <li><hr></li>
-  <li><h2>DatePicker</h2></li>
-  <li><pre><code class="lang-swift">@State private var date = Date()
+}</code></pre>
+  <h3>Watch Out</h3>
+  <ul><li>Slider labels are hidden by default in many contexts. Use an explicit <code>Text</code> above the slider if you need the user to see the label.</li><li><code>step</code> only snaps during dragging. Setting <code>step: 5</code> with range <code>0...100</code> means the user drags in increments of 5.</li></ul>
+  <hr>
+  <h2>DatePicker</h2>
+  <pre><code class="lang-swift">// From ReportMaker/AddTripSheet.swift — trip Start/End with End >= Start
+DatePicker("Start", selection: $startDate, displayedComponents: .date)
+DatePicker("End", selection: $endDate, in: startDate..., displayedComponents: .date)
 
-DatePicker("Birthday", selection: $date, displayedComponents: .date)
-
-DatePicker("Alarm", selection: $date, displayedComponents: .hourAndMinute)
-
-DatePicker("Event", selection: $date,
-           in: Date()...,   // only future dates
-           displayedComponents: [.date, .hourAndMinute])</code></pre></li>
-  <li><h3>Styles</h3></li>
-  <li><pre><code class="lang-swift">.datePickerStyle(.graphical)    // calendar grid
+// From SwiftUICraft/Schedule/EditRoutineSheet.swift — time-of-day picker
+DatePicker("Time", selection: $time, displayedComponents: .hourAndMinute)</code></pre>
+  <h3>Styles</h3>
+  <pre><code class="lang-swift">.datePickerStyle(.graphical)    // calendar grid
 .datePickerStyle(.wheel)        // spinning wheels
 .datePickerStyle(.compact)      // tappable pill that expands
-.datePickerStyle(.automatic)    // platform decides</code></pre></li>
-  <li><h3>Watch Out</h3></li>
-  <li><ul><li><code>.graphical</code> takes up a lot of space. Works well in a Form or sheet, but can break layouts in tight spaces.</li><li>The <code>in:</code> parameter sets the selectable range. <code>Date()...</code> means today onward. <code>...Date()</code> means up to today.</li></ul></li>
-  <li><hr></li>
-  <li><h2>ColorPicker</h2></li>
-  <li><pre><code class="lang-swift">@State private var color: Color = .blue
+.datePickerStyle(.automatic)    // platform decides</code></pre>
+  <h3>Watch Out</h3>
+  <ul><li><code>.graphical</code> takes up a lot of space. Works well in a Form or sheet, but can break layouts in tight spaces.</li><li>The <code>in:</code> parameter sets the selectable range. <code>Date()...</code> means today onward. <code>...Date()</code> means up to today.</li></ul>
+  <hr>
+  <h2>ColorPicker</h2>
+  <pre><code class="lang-swift">@State private var color: Color = .blue
 
 ColorPicker("Theme Color", selection: $color)
 
-ColorPicker("Background", selection: $color, supportsOpacity: false)</code></pre></li>
-  <li><p><code>supportsOpacity: false</code> hides the alpha slider.</p></li>
-  <li><hr></li>
-  <li><h2>Disabled States</h2></li>
-  <li><pre><code class="lang-swift">Button("Submit") { submit() }
+ColorPicker("Background", selection: $color, supportsOpacity: false)</code></pre>
+  <p><code>supportsOpacity: false</code> hides the alpha slider.</p>
+  <hr>
+  <h2>Disabled States</h2>
+  <pre><code class="lang-swift">Button("Submit") { submit() }
     .disabled(formIsInvalid)
 
 Toggle("Feature", isOn: $feature)
-    .disabled(!isPremiumUser)</code></pre></li>
-  <li><p><code>.disabled(true)</code> grays out the control and blocks interaction. It propagates down the view tree — disable a <code>VStack</code> and every control inside is disabled.</p></li>
-  <li><h3>Reading Disabled State in Custom Views</h3></li>
-  <li><pre><code class="lang-swift">struct MyControl: View {
+    .disabled(!isPremiumUser)</code></pre>
+  <p><code>.disabled(true)</code> grays out the control and blocks interaction. It propagates down the view tree — disable a <code>VStack</code> and every control inside is disabled.</p>
+  <h3>Reading Disabled State in Custom Views</h3>
+  <pre><code class="lang-swift">struct MyControl: View {
     @Environment(\.isEnabled) var isEnabled
 
     var body: some View {
         Text("Status: \(isEnabled ? "Active" : "Disabled")")
             .foregroundStyle(isEnabled ? .primary : .secondary)
     }
-}</code></pre></li>
-  <li><hr></li>
-  <li><h2>Labels and Accessibility</h2></li>
-  <li><h3>Label</h3></li>
-  <li><p><code>Label</code> pairs an icon with text. Many controls accept a <code>Label</code> as content.</p></li>
-  <li><pre><code class="lang-swift">Label("Downloads", systemImage: "arrow.down.circle")
+}</code></pre>
+  <hr>
+  <h2>Labels and Accessibility</h2>
+  <h3>Label</h3>
+  <p><code>Label</code> pairs an icon with text. Many controls accept a <code>Label</code> as content.</p>
+  <pre><code class="lang-swift">Label("Downloads", systemImage: "arrow.down.circle")
 Label("Warning", systemImage: "exclamationmark.triangle")
-    .foregroundStyle(.orange)</code></pre></li>
-  <li><h3>Label Styles</h3></li>
-  <li><pre><code class="lang-swift">Label("Item", systemImage: "star")
+    .foregroundStyle(.orange)</code></pre>
+  <h3>Label Styles</h3>
+  <pre><code class="lang-swift">Label("Item", systemImage: "star")
     .labelStyle(.titleAndIcon)  // both text and icon
     .labelStyle(.titleOnly)     // text only
-    .labelStyle(.iconOnly)      // icon only</code></pre></li>
-  <li><h3>Accessibility Labels</h3></li>
-  <li><pre><code class="lang-swift">Button(action: deleteItem) {
+    .labelStyle(.iconOnly)      // icon only</code></pre>
+  <h3>Accessibility Labels</h3>
+  <pre><code class="lang-swift">Button(action: deleteItem) {
     Image(systemName: "trash")
 }
 .accessibilityLabel("Delete item")
 
 Slider(value: $brightness)
     .accessibilityLabel("Screen brightness")
-    .accessibilityValue("\(Int(brightness))%")</code></pre></li>
-  <li><h3>Watch Out</h3></li>
-  <li><ul><li>Icon-only buttons must have an <code>.accessibilityLabel</code>. VoiceOver users hear nothing otherwise.</li><li><code>Label</code> does not always show both icon and text. In toolbars and menus, the system may choose to show only one. Use <code>.labelStyle(.titleAndIcon)</code> to force both.</li></ul></li>
-  <li><hr></li>
-  <li><h2>Practical Tips</h2></li>
-  <li><ol class="body-list"><li><strong>Use <code>.borderedProminent</code> sparingly.</strong> One prominent button per screen for the primary action. Everything else gets <code>.bordered</code> or <code>.borderless</code>.</li></ol></li>
-  <li><ol class="body-list"><li><strong>Picker tag type matching</strong> is the most common SwiftUI bug. When your picker ignores taps, check tag types first.</li></ol></li>
-  <li><ol class="body-list"><li><strong>Stepper fits small ranges</strong> (1-20). For large ranges, use a Slider or a text field with validation.</li></ol></li>
-  <li><ol class="body-list"><li><strong>Group related controls in a <code>Form</code>.</strong> Controls inside a Form automatically get platform-appropriate styling — grouped rows on iOS, aligned labels on macOS.</li></ol></li>
-  <li><ol class="body-list"><li><strong>Test with Dynamic Type.</strong> At the largest accessibility sizes, labels wrap and controls reflow. Make sure nothing gets clipped.</li></ol></li>
-  <li><ol class="body-list"><li><strong>18pt minimum font height.</strong> Per project standards, all text in controls should meet this minimum for iPad readability.</li></ol></li>
-</ol>
-</div>
+    .accessibilityValue("\(Int(brightness))%")</code></pre>
+  <h3>Watch Out</h3>
+  <ul><li>Icon-only buttons must have an <code>.accessibilityLabel</code>. VoiceOver users hear nothing otherwise.</li><li><code>Label</code> does not always show both icon and text. In toolbars and menus, the system may choose to show only one. Use <code>.labelStyle(.titleAndIcon)</code> to force both.</li></ul>
+  <hr>
+  <h2>Practical Tips</h2>
+  <ol class="body-list"><li><strong>Use <code>.borderedProminent</code> sparingly.</strong> One prominent button per screen for the primary action. Everything else gets <code>.bordered</code> or <code>.borderless</code>.</li></ol>
+  <ol class="body-list"><li><strong>Picker tag type matching</strong> is the most common SwiftUI bug. When your picker ignores taps, check tag types first.</li></ol>
+  <ol class="body-list"><li><strong>Stepper fits small ranges</strong> (1-20). For large ranges, use a Slider or a text field with validation.</li></ol>
+  <ol class="body-list"><li><strong>Group related controls in a <code>Form</code>.</strong> Controls inside a Form automatically get platform-appropriate styling — grouped rows on iOS, aligned labels on macOS.</li></ol>
+  <ol class="body-list"><li><strong>Test with Dynamic Type.</strong> At the largest accessibility sizes, labels wrap and controls reflow. Make sure nothing gets clipped.</li></ol>
+  <ol class="body-list"><li><strong>18pt minimum font height.</strong> Per project standards, all text in controls should meet this minimum for iPad readability.</li></ol>
+  <hr>
+  <h2>Further Reading &mdash; WWDC Sessions</h2>
+  <p>This book is a passive resource. When you want deeper coverage of the controls in this chapter or run into trouble adopting them, the WWDC sessions below are the source material Apple presented. Watch the relevant one for fuller context, code-along walkthroughs, and the rationale behind the API choices.</p>
+  <ul>
+    <li>WWDC25 / 219, <em>Meet Liquid Glass</em> &mdash; <a href="https://developer.apple.com/videos/play/wwdc2025/219/">developer.apple.com/videos/play/wwdc2025/219/</a>. The design philosophy and material rules behind <code>.glass</code> / <code>.glassProminent</code> / <code>.glassEffect()</code>, including the lensing, tinting, and "avoid glass on glass" guidance.</li>
+    <li>WWDC25 / 323, <em>Build a SwiftUI app with the new design</em> &mdash; <a href="https://developer.apple.com/videos/play/wwdc2025/323/">developer.apple.com/videos/play/wwdc2025/323/</a>. Adoption patterns for the new control styles, <code>ToolbarSpacer</code>, search placement, and <code>GlassEffectContainer</code> for grouped fluid morphing.</li>
+    <li>WWDC25 / 284, <em>Build a UIKit app with the new design</em> &mdash; <a href="https://developer.apple.com/videos/play/wwdc2025/284/">developer.apple.com/videos/play/wwdc2025/284/</a>. UIKit equivalents: <code>UIButtonConfiguration.glass()</code>, <code>UISlider.trackConfiguration</code>, <code>UIGlassEffect</code>.</li>
+    <li>WWDC25 / 310, <em>Build an AppKit app with the new design</em> &mdash; <a href="https://developer.apple.com/videos/play/wwdc2025/310/">developer.apple.com/videos/play/wwdc2025/310/</a>. AppKit equivalents: <code>NSGlassEffectView</code>, <code>NSGlassEffectContainerView</code>, <code>tintProminence</code>.</li>
+    <li>WWDC25 / 356, <em>Get to know the new design system</em> &mdash; <a href="https://developer.apple.com/videos/play/wwdc2025/356/">developer.apple.com/videos/play/wwdc2025/356/</a>. The Concentricity / Capsule / Fixed Shapes vocabulary used by the controls in this chapter.</li>
+    <li>WWDC25 / 337, <em>What's new in SF Symbols 7</em> &mdash; <a href="https://developer.apple.com/videos/play/wwdc2025/337/">developer.apple.com/videos/play/wwdc2025/337/</a>. The Draw / Variable Draw animation system and gradient rendering used by symbols inside <code>Button</code> and <code>Label</code>.</li>
+    <li>WWDC25 / 256, <em>What's new in SwiftUI</em> &mdash; <a href="https://developer.apple.com/videos/play/wwdc2025/256/">developer.apple.com/videos/play/wwdc2025/256/</a>. Broader SwiftUI changes that shape how the controls in this chapter appear in real apps.</li>
+    <li>WWDC25 / 266, <em>Explore concurrency in SwiftUI</em> &mdash; <a href="https://developer.apple.com/videos/play/wwdc2025/266/">developer.apple.com/videos/play/wwdc2025/266/</a>. Why <code>Button</code> action callbacks are synchronous, and how to wrap async work inside them with <code>Task</code>.</li>
+    <li>WWDC25 / 359, <em>Design foundations from idea to interface</em> &mdash; <a href="https://developer.apple.com/videos/play/wwdc2025/359/">developer.apple.com/videos/play/wwdc2025/359/</a>. The visual hierarchy and progressive-disclosure principles that decide where each control belongs.</li>
+  </ul>
+  <p>Prior-year WWDC sessions covering the same controls (TBD &mdash; this list will grow as those sessions are individually verified): the original SwiftUI launch (WWDC19), the introduction of <code>.searchable</code> and <code>SearchScope</code> (WWDC21), and the WWDC22&ndash;WWDC24 incremental updates to <code>Picker</code>, <code>Toggle</code>, and <code>DatePicker</code>.</p>
 
-<footer class="page"><div class="row-nav"><div class="prev"><a href="Book-05-Menus-And-Navigation.html">&larr; Book 5: Menus and Navigation</a></div><div class="pos">Book 06 Controls Buttons Toggles Pickers</div><div class="next"><a href="Book-07-Toolbars-And-Tab-Views.html">Book 7: Toolbars and Tab Views &rarr;</a></div></div></footer>
+</div>
 
 </body>
 </html>

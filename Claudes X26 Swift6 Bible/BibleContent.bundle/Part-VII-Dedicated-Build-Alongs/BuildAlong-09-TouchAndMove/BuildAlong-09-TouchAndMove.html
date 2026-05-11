@@ -3,63 +3,250 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Build-Along 09: TouchAndMove</title>
-<style>
-:root { --bg: #000000; --fg: #FFB000; --bright: #FFD060; --dim: #996600; --codebg: #1a0d00; --border: #664500; --gutter: #4a3300; --headerbg: #0a0600; }
-* { box-sizing: border-box; }
-html, body { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; height: 100%; }
-body { background: var(--bg); color: var(--fg); font-family: "FiraCode Nerd Font Mono", "Fira Code", "Menlo", "Courier New", monospace; font-size: 18pt; line-height: 1.55; margin: 0; padding: 0; text-shadow: 0 0 1px rgba(255, 176, 0, 0.35); display: flex; flex-direction: column; }
-header.page, footer.page { background: var(--headerbg); color: var(--dim); padding: 0.55rem 1.1rem; font-size: 13pt; display: flex; flex-direction: column; gap: 0.2rem; flex: 0 0 auto; z-index: 10; }
-header.page { border-bottom: 1px solid var(--border); }
-footer.page { border-top: 1px solid var(--border); padding-bottom: calc(0.55rem + env(safe-area-inset-bottom)); }
-header.page .path, footer.page .path { color: var(--fg); word-break: break-all; overflow-wrap: break-word; }
-header.page .pos, footer.page .pos { color: var(--bright); }
-.content { flex: 1 1 auto; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 0.8rem 1rem 2rem 1rem; max-width: 1100px; margin: 0 auto; width: 100%; }
-h1 { color: var(--bright); font-weight: normal; font-size: 26pt; margin: 0.6rem 0 1rem 0; }
-h2 { color: var(--bright); font-weight: normal; font-size: 20pt; border-bottom: 1px solid var(--border); padding-bottom: 0.3rem; margin-top: 1.5rem; }
-h3 { color: var(--bright); font-weight: normal; font-size: 18pt; margin-top: 1rem; }
-p { margin: 0.4rem 0; counter-increment: para; }
-code { color: var(--bright); background: var(--codebg); padding: 0.08em 0.35em; border: 1px solid #3a2400; border-radius: 3px; font-size: 0.92em; }
-pre { background: var(--codebg); border: 1px solid #3a2400; border-radius: 4px; padding: 0.7rem 0.9rem; overflow-x: auto; font-size: 14pt; }
-ul { margin: 0.4rem 0 0.4rem 1.4rem; padding: 0; }
-a { color: var(--bright); font-weight: bold; text-decoration: none; border-bottom: 1px dotted var(--dim); }
-strong { color: var(--bright); }
-em { color: var(--fg); font-style: italic; }
-.scope-note { border-left: 3px solid var(--bright); padding: 0.7rem 1rem; background: #140c00; margin: 0.6rem 0; color: var(--bright); }
-.status-planning { color: #996600; font-weight: bold; }
-.status-github { color: #FFD060; font-weight: bold; }
+</head>
+<body>
 
-
-footer.page { flex-direction: column; gap: 0.4rem; }
-footer.page .row-nav { display: flex; flex-direction: row; justify-content: space-between; align-items: center; gap: 0.5rem; }
-footer.page .row-nav .prev, footer.page .row-nav .next { flex: 1; min-width: 0; }
-footer.page .row-nav .prev { text-align: left; }
-footer.page .row-nav .next { text-align: right; }
-footer.page .row-nav .pos { flex: 0 0 auto; text-align: center; color: var(--bright); font-weight: bold; }
-footer.page .row-nav a { color: var(--bright); font-weight: bold; text-decoration: none; border-bottom: 1px dotted var(--dim); }
-footer.page .row-nav a:hover { background: #332200; }
-footer.page .row-nav .nav-empty { color: var(--gutter); font-style: italic; }
-</style>
-</head><body>
-<header class="page"><div class="path">Part-VII-Dedicated-Build-Alongs/BuildAlong-09-TouchAndMove</div></header>
 <div class="content">
-<h1>Build-Along 09: TouchAndMove</h1>
-<p><span class="status-github">Distribution: GitHub clone-and-build.</span> Single-concept teaching app &mdash; every gesture (tap, drag, pinch, rotate) drives a SwiftUI animation. Does not grow into a full-fledged product on its own, so it ships as a GitHub repo readers clone and build themselves rather than fighting a 2.2 rejection on the App Store.</p>
-<div class="scope-note">MVP concept: a gesture-to-animation playground. The app is the playground &mdash; that's the whole point. Readers clone the repo, open in Xcode, build, and study the source as they play with it.</div>
-<h2>What TouchAndMove will teach</h2>
-<ul>
-<li><strong>Gestures</strong> &mdash; <code>TapGesture</code>, <code>DragGesture</code>, <code>MagnificationGesture</code>, <code>RotationGesture</code>, <code>LongPressGesture</code>, and composing them with <code>SimultaneousGesture</code> / <code>SequenceGesture</code>.</li>
-<li><strong>Animations</strong> &mdash; <code>withAnimation</code>, spring physics, damping, custom <code>Animation</code> curves, <code>matchedGeometryEffect</code> for hero transitions.</li>
-<li><strong>Signature layer:</strong> MVP feature + Under the Hood view + About &amp; Send Feedback.</li>
-<li><strong>Distribution:</strong> GitHub clone-and-build &mdash; readers get the repo URL from the appendix/wiki.</li>
-</ul>
-<h2>Why GitHub clone-and-build not App Store</h2>
-<p>TouchAndMove is genuinely a playground &mdash; gestures driving animations with no other purpose. Apple's Guideline 2.2 reads such apps as demos and rejects them from the store; rather than fight that, we ship the source on GitHub and let the reader build it themselves. The reader becomes the developer for this app, which fits the teaching purpose better than App Store distribution would anyway.</p>
-<h2>Current state</h2>
-<ul>
-<li>No Xcode project yet</li>
-</ul>
-<h2>Next step</h2>
-<p>When this app gets scaffolded, the walkthrough lands here. Distribution via GitHub clone-and-build; readers visit the repo and clone it into Xcode (see Book 21 Git-And-GitHub for the clone workflow).</p>
+
+  <h1>Build-Along 09: TouchAndMove &mdash; Every Gesture, One Shape</h1>
+  <p><span class="status-github">Distribution: GitHub clone-and-build.</span> TouchAndMove is a SwiftUI gesture playground. One rounded-rectangle shape sits on a dark gradient background; the user can drag it around, pinch to scale, twist to rotate, tap to bounce, and long-press to recolor it. A live readout at the bottom of the screen shows the current offset, scale, angle, and tap count in real time. The teaching point is gesture composition &mdash; running drag, magnify, and rotate at the same time without them fighting each other &mdash; and the two-state-lane pattern that gives the shape its spring-back release feel.</p>
+  <p>The repository: <a href="https://github.com/fluhartyml/TouchAndMove">github.com/fluhartyml/TouchAndMove</a>. Built on <code>DragGesture</code>, <code>MagnifyGesture</code>, <code>RotateGesture</code>, <code>SimultaneousGesture</code>, <code>onTapGesture</code>, <code>onLongPressGesture</code>, and the <code>.spring(response:dampingFraction:)</code> animation curve. iPhone, iPad, and Mac universal target.</p>
+  <div class="scope-note">This chapter is the gesture companion to <a href="../BuildAlong-08-IntelligenceDemo/BuildAlong-08-IntelligenceDemo.html">Build-Along 08: IntelligenceDemo</a>. Both apps are single-feature concept demos &mdash; no persistence, no surrounding product. The pair show the two ends of the SwiftUI input spectrum: machine perception (Vision reading photos) on one side, direct manipulation (gestures driving animation) on the other.</div>
+  <hr>
+  <h2>The Brainstorm</h2>
+  <p>SwiftUI ships seven gesture primitives: <code>TapGesture</code>, <code>LongPressGesture</code>, <code>DragGesture</code>, <code>MagnifyGesture</code>, <code>RotateGesture</code>, <code>SpatialTapGesture</code>, and the empty-base <code>Gesture</code> protocol that user code can extend. Most apps reach for one or two of these and stop; the gestures most readers have written by hand are tap and drag, and the rest tend to live in framework documentation as "things SwiftUI offers" rather than "things I have ever shipped." The point of TouchAndMove is to fix that &mdash; one screen, every primary gesture, every gesture wired up to a visible effect, every effect animated.</p>
+  <p>The shape is a single rounded rectangle on purpose. With one shape there is no question about <em>which</em> shape responded; with one set of state variables there is no question about <em>where</em> the truth lives. The whole app is in one file with a small handful of subviews and gesture definitions, and the playground is meant to be cloned and modified &mdash; readers tweak the spring values, swap the shape, add a new gesture, see what changes.</p>
+  <p><strong>v1.0 spec:</strong></p>
+  <ul>
+    <li>One rounded-rectangle shape, 180&times;180 points, blue by default</li>
+    <li>Drag the shape with one finger; release with a spring-back to where the user let go</li>
+    <li>Pinch with two fingers to scale (clamped between 0.4&times; and 4&times;); release with a spring-settle</li>
+    <li>Twist with two fingers to rotate; release with a spring-settle</li>
+    <li>Drag, pinch, and rotate run simultaneously &mdash; the user can pinch while dragging while twisting</li>
+    <li>Tap once for a bounce animation; tap count visible in the corner of the shape</li>
+    <li>Long-press to toggle the shape's color from blue to orange and back</li>
+    <li>Live readout strip at the bottom showing offset, scale, angle, taps</li>
+    <li>Reset button in the toolbar that returns everything to defaults with one spring animation</li>
+    <li>Under the Hood sheet (developer notes inside the app)</li>
+    <li>About sheet (icon, attribution, links)</li>
+    <li>Universal target: iPhone, iPad, Mac &mdash; same code, same UI</li>
+  </ul>
+  <p>What is intentionally not in v1.0:</p>
+  <ul>
+    <li>No persistence &mdash; every launch starts at the default position, scale, and rotation; the playground has no opinion about &quot;where you left off&quot;</li>
+    <li>No second shape &mdash; collision, snapping, and z-order are out of scope</li>
+    <li>No haptics &mdash; the visible feedback is enough for the lesson; haptics are a follow-on chapter's territory</li>
+    <li>No App Store submission &mdash; gesture playgrounds read as &quot;limited functionality&quot; under App Review Guideline 2.2, which is a fair reading</li>
+  </ul>
+  <hr>
+  <h2>The Architecture</h2>
+  <p>Five Swift files plus the asset catalog.</p>
+  <pre><code>TouchAndMoveApp.swift     # @main &middot; one WindowGroup &middot; ContentView()
+ContentView.swift         # Shape + gestures + readout + toolbar
+DeveloperNotes.swift      # Five notes shown in Under the Hood
+UnderTheHoodView.swift    # Sectioned reader for the notes
+AboutView.swift           # Icon &middot; attribution &middot; links</code></pre>
+  <p>Like <a href="../BuildAlong-08-IntelligenceDemo/BuildAlong-08-IntelligenceDemo.html">Build-Along 08</a>, the app entry point is the SwiftUI default:</p>
+  <pre><code class="lang-swift">@main
+struct TouchAndMoveApp: App {
+    var body: some Scene {
+        WindowGroup {
+            ContentView()
+        }
+    }
+}</code></pre>
+  <p>All the teaching content lives in <code>ContentView.swift</code>. The other three files (<code>DeveloperNotes</code>, <code>UnderTheHoodView</code>, <code>AboutView</code>) follow the same shape every build-along app uses, so a reader who has read any prior build-along chapter can skim those.</p>
+  <hr>
+  <h2>The Two-State-Lane Pattern</h2>
+  <p>This is the pattern that makes the shape feel right under the finger. SwiftUI's gesture API gives the developer a choice for how to track gesture state, and the choice the app makes determines whether the release feels alive or dead.</p>
+  <pre><code class="lang-swift">@State private var offset: CGSize = .zero
+@State private var dragOffset: CGSize = .zero
+@State private var scale: CGFloat = 1.0
+@State private var pinchScale: CGFloat = 1.0
+@State private var rotation: Angle = .zero
+@State private var pinchRotation: Angle = .zero</code></pre>
+  <p>Each of the three continuous gestures has <strong>two</strong> state variables: a committed value (<code>offset</code>, <code>scale</code>, <code>rotation</code>) and a live in-flight value (<code>dragOffset</code>, <code>pinchScale</code>, <code>pinchRotation</code>). While the gesture is active, the view reads the sum of both. On gesture end, the live value collapses into the committed one inside <code>withAnimation</code>, which gives the spring-back release the user feels at the end of every drag, pinch, or twist.</p>
+  <pre><code class="lang-swift">shape
+    .offset(x: offset.width + dragOffset.width,
+            y: offset.height + dragOffset.height)
+    .scaleEffect(scale * pinchScale)
+    .rotationEffect(rotation + pinchRotation)
+    .gesture(combinedGesture)</code></pre>
+  <p>While the user's finger is on the screen, <code>dragOffset</code> grows or shrinks; <code>offset</code> stays at its previous value. The visible position is the sum. When the finger lifts, the gesture's <code>onEnded</code> closure fires, and inside <code>withAnimation</code> two things happen at once: <code>offset</code> jumps to <code>offset + value.translation</code>, and <code>dragOffset</code> resets to zero. The visible position does not change at the moment of release &mdash; both updates are applied to the same view in the same tick &mdash; but the animation curve interpolates the spring trajectory because the change is wrapped in <code>withAnimation</code>.</p>
+  <p>The same pattern applies to scale and rotation. Pinch grows <code>pinchScale</code> while the fingers move; on release, <code>scale</code> multiplies in (clamped between 0.4 and 4.0) and <code>pinchScale</code> resets to 1.0. Rotation accumulates <code>pinchRotation</code> while the fingers twist; on release, <code>rotation</code> adds it in and <code>pinchRotation</code> resets to <code>.zero</code>.</p>
+  <p>If the app used a single state variable per gesture instead of two, the release would still work mechanically &mdash; the value would just stop changing &mdash; but the spring animation would have nothing to animate, because the value at release is exactly the value at rest. The two-lane structure separates the live, instantaneous value from the committed, animated value, and gives the spring something to interpolate.</p>
+  <hr>
+  <h2>Composing Gestures with SimultaneousGesture</h2>
+  <p>The drag, magnify, and rotate gestures are merged so all three run at once.</p>
+  <pre><code class="lang-swift">private var combinedGesture: some Gesture {
+    let drag = DragGesture()
+        .onChanged { dragOffset = $0.translation }
+        .onEnded { value in
+            withAnimation(.spring(response: 0.45, dampingFraction: 0.7)) {
+                offset.width += value.translation.width
+                offset.height += value.translation.height
+                dragOffset = .zero
+            }
+        }
+
+    let magnify = MagnifyGesture()
+        .onChanged { pinchScale = $0.magnification }
+        .onEnded { value in
+            withAnimation(.spring(response: 0.5, dampingFraction: 0.75)) {
+                scale = max(0.4, min(scale * value.magnification, 4.0))
+                pinchScale = 1.0
+            }
+        }
+
+    let rotate = RotateGesture()
+        .onChanged { pinchRotation = $0.rotation }
+        .onEnded { value in
+            withAnimation(.spring(response: 0.5, dampingFraction: 0.75)) {
+                rotation += value.rotation
+                pinchRotation = .zero
+            }
+        }
+
+    return SimultaneousGesture(drag, SimultaneousGesture(magnify, rotate))
+}</code></pre>
+  <p>SwiftUI offers three gesture-composition operators: <code>SimultaneousGesture</code>, <code>SequenceGesture</code>, and <code>ExclusiveGesture</code>. The names describe the semantics. <code>SimultaneousGesture</code> runs both gestures at the same time, and either one can update its state independently. <code>SequenceGesture</code> requires the first gesture to recognize before the second can begin. <code>ExclusiveGesture</code> runs both, but as soon as one recognizes, the other is canceled.</p>
+  <p>The right operator for a multi-touch playground is <code>SimultaneousGesture</code>, because the user can be dragging, pinching, and rotating all at once and SwiftUI has to track all three. Wrapping <code>SimultaneousGesture</code> twice (once over magnify+rotate, then over drag+the-pair) composes the three primitives without nesting issues. The result is a single <code>some Gesture</code> that the view attaches via <code>.gesture(_:)</code>.</p>
+  <p>Tap and long-press hang off their own modifiers (<code>.onTapGesture</code> and <code>.onLongPressGesture</code>) instead of going into the same composition. The reason is that they are discrete, not continuous &mdash; they fire once when recognized, not continuously while a finger is down. Mixing discrete gestures into a <code>SimultaneousGesture</code> with continuous ones invites recognition order bugs, and the modifier form is shorter and more direct anyway.</p>
+  <hr>
+  <h2>Spring Physics, Not Linear Curves</h2>
+  <p>Every release in TouchAndMove uses <code>.spring(response:dampingFraction:)</code> rather than <code>.linear</code> or <code>.easeInOut</code>. The choice is deliberate.</p>
+  <p>A linear animation interpolates the value at a constant rate. The motion looks mechanical &mdash; constant velocity, sharp arrival. An ease-in-out animation slows down at both ends. The motion looks polite but lifeless. A spring animation models the motion as a damped harmonic oscillator: the value accelerates toward the target, overshoots a little, oscillates back, and settles. The motion looks alive.</p>
+  <p><code>response</code> is the time the spring takes to settle, in seconds. Lower values are snappier; higher values are slower. <code>dampingFraction</code> is the ratio of damping to the spring's natural frequency; 1.0 is critically damped (no overshoot), values below 1.0 overshoot and oscillate, values above 1.0 are over-damped and feel sluggish.</p>
+  <p>The values in the source code are tuned for a quick, playful response:</p>
+  <ul>
+    <li>Drag release: <code>response: 0.45, dampingFraction: 0.7</code> &mdash; quick, slight overshoot</li>
+    <li>Magnify release: <code>response: 0.5, dampingFraction: 0.75</code> &mdash; a hair slower, a hair more damped</li>
+    <li>Rotate release: <code>response: 0.5, dampingFraction: 0.75</code> &mdash; same as magnify</li>
+    <li>Tap bounce up: <code>response: 0.25, dampingFraction: 0.5</code> &mdash; very fast, very bouncy</li>
+    <li>Tap bounce return: <code>response: 0.45, dampingFraction: 0.6</code> &mdash; slightly bouncier on the way back</li>
+    <li>Long-press color change: <code>.easeInOut(duration: 0.25)</code> &mdash; not a spring, because color does not bounce</li>
+    <li>Reset: <code>response: 0.55, dampingFraction: 0.7</code> &mdash; slow enough to read, snappy enough to feel decisive</li>
+  </ul>
+  <p>Readers tweaking these values is part of the lesson. Drop the damping fraction to 0.4 on the drag release and the shape oscillates visibly before settling; raise it to 1.0 and the spring becomes critically damped, with no overshoot at all. The fastest way to develop a feel for spring physics is to change the numbers and watch.</p>
+  <hr>
+  <h2>The Tap Animation</h2>
+  <p>Tap is the only gesture that animates without a release boundary, because tap has no "during" state &mdash; it fires once and is done. The animation is two consecutive springs:</p>
+  <pre><code class="lang-swift">private func handleTap() {
+    tapCount += 1
+    withAnimation(.spring(response: 0.25, dampingFraction: 0.5)) {
+        scale *= 1.15
+    }
+    withAnimation(.spring(response: 0.45, dampingFraction: 0.6).delay(0.15)) {
+        scale /= 1.15
+    }
+}</code></pre>
+  <p>The first <code>withAnimation</code> bumps the scale up by 15%. The second <code>withAnimation</code> &mdash; with a 0.15-second delay so it does not fight the first &mdash; brings the scale back to where it was. The bounce is a brief overshoot-and-return that feels tactile without disturbing the shape's resting state. Each tap also increments <code>tapCount</code>, which the readout strip reads to show the running count.</p>
+  <p><strong>Why the asymmetric spring values.</strong> The bounce up is fast and loose (response 0.25, damping 0.5) so it feels reactive. The return is slower and slightly more damped (response 0.45, damping 0.6) so it lands gently. If both halves used the same spring, the bounce would feel more mechanical &mdash; the asymmetry is what gives it personality.</p>
+  <hr>
+  <h2>The Long-Press Color Toggle</h2>
+  <pre><code class="lang-swift">.onLongPressGesture(minimumDuration: 0.4) { handleLongPress() }
+
+private func handleLongPress() {
+    withAnimation(.easeInOut(duration: 0.25)) {
+        isLongPressed.toggle()
+    }
+}</code></pre>
+  <p>The shape's fill is bound to <code>isLongPressed</code>:</p>
+  <pre><code class="lang-swift">RoundedRectangle(cornerRadius: 28, style: .continuous)
+    .fill(isLongPressed ? Color.orange : Color.blue)
+    .frame(width: 180, height: 180)</code></pre>
+  <p>Long-press flips the boolean; the color crossfades to orange. Long-press again, the boolean flips back, the color crossfades to blue. The animation is <code>.easeInOut</code>, not a spring, because color is not a position &mdash; there is nothing to bounce. <code>.easeInOut</code> is the right curve for value changes that have no physical analog.</p>
+  <p>The 0.4-second minimum duration is shorter than iOS's default long-press (0.5) but long enough to distinguish from a tap. Tweaking it to 0.6 or 0.8 makes the gesture feel more deliberate; tweaking it to 0.2 makes it overlap with tap and conflict.</p>
+  <hr>
+  <h2>The Live Readout</h2>
+  <p>Below the shape, a translucent strip shows the current state of the gesture variables in real time:</p>
+  <pre><code class="lang-swift">private var readout: some View {
+    VStack(spacing: 4) {
+        Text("Drag · Pinch · Rotate · Tap · Long-press")
+            .font(.caption)
+            .foregroundStyle(.secondary)
+        HStack(spacing: 16) {
+            stat("Offset", "\(Int(offset.width)), \(Int(offset.height))")
+            stat("Scale", String(format: "%.2f", scale))
+            stat("Angle", String(format: "%.0f°", rotation.degrees))
+            stat("Taps", "\(tapCount)")
+        }
+        .font(.caption.monospacedDigit())
+    }
+    .padding(.vertical, 10)
+    .frame(maxWidth: .infinity)
+    .background(.ultraThinMaterial)
+}</code></pre>
+  <p>The readout reads the <strong>committed</strong> values (<code>offset</code>, <code>scale</code>, <code>rotation</code>, <code>tapCount</code>), not the live in-flight ones. While the user is dragging, the offset shown is the previous resting offset; only when the gesture ends and the values commit does the readout update. This is the right call for a teaching playground &mdash; the readout shows where the shape is at rest, which is the value the user is conceptually controlling, not the moment-to-moment in-flight delta. Showing the live sum would technically be more accurate but harder to read because the numbers would never stop moving.</p>
+  <p>The strip uses <code>.ultraThinMaterial</code> as its background, which gives it the frosted-glass look that iOS uses on the Control Center, the lock screen, and most modal sheets. Materials are SwiftUI's way of saying "I want this to look like a system surface" without specifying the exact color &mdash; the actual rendering depends on what is behind it and on the system's appearance setting.</p>
+  <p>The readout attaches to the main <code>ZStack</code> via <code>.safeAreaInset(edge: .bottom)</code>, which adds it inside the safe area without blocking touches on the rest of the screen. Safe-area insets are how SwiftUI adds persistent chrome to a view without taking it out of the layout flow.</p>
+  <hr>
+  <h2>The Reset Action</h2>
+  <pre><code class="lang-swift">private func reset() {
+    withAnimation(.spring(response: 0.55, dampingFraction: 0.7)) {
+        offset = .zero
+        dragOffset = .zero
+        scale = 1.0
+        pinchScale = 1.0
+        rotation = .zero
+        pinchRotation = .zero
+        isLongPressed = false
+        tapCount = 0
+    }
+}</code></pre>
+  <p>One <code>withAnimation</code> wraps every reset, so the shape springs back to its starting position, scale, rotation, color, and tap count all in one motion. The animation is a single spring, slightly slower than the gesture-release springs because the shape may have to travel further; the longer response time keeps the motion legible.</p>
+  <p>Resetting all eight state variables in one block is a small detail with real value &mdash; if any one were left out, the next interaction would carry that piece of leftover state into a fresh start, and the user would feel it. The exhaustive reset makes the playground reliably restartable, which is what readers need when they are tweaking spring values and want to see each new tuning from a clean slate.</p>
+  <hr>
+  <h2>Toolbar and Sheets</h2>
+  <p>The toolbar holds two items in opposite positions:</p>
+  <pre><code class="lang-swift">.toolbar {
+    ToolbarItem(placement: .primaryAction) {
+        Button("Reset") { reset() }
+    }
+    ToolbarItem(placement: .automatic) {
+        Menu {
+            Button("Under the Hood") { showUnderTheHood = true }
+            Button("About") { showAbout = true }
+        } label: {
+            Image(systemName: "info.circle")
+        }
+    }
+}</code></pre>
+  <p><strong>Reset</strong> sits in the trailing primary-action slot. <strong>Info menu</strong> sits in the automatic slot &mdash; on iPhone that lands on the leading side, on iPad and Mac it lands wherever the platform conventions place automatic items. The info menu opens a two-button menu: Under the Hood (the developer notes) and About (icon, attribution, links).</p>
+  <p>Both sheets are presented from <code>.sheet(isPresented:)</code> bindings on the main <code>ZStack</code>:</p>
+  <pre><code class="lang-swift">.sheet(isPresented: $showUnderTheHood) { UnderTheHoodView() }
+.sheet(isPresented: $showAbout) { AboutView() }</code></pre>
+  <p>Both sheets are <code>NavigationStack</code>-wrapped with a Done button in the cancellation-action slot, so dismissing them feels native on every platform.</p>
+  <hr>
+  <h2>Universal Target: iPhone, iPad, Mac</h2>
+  <p>TouchAndMove ships as a universal target. The same code runs on iPhone, iPad, and Mac &mdash; the only place the source diverges is one <code>#if os(iOS)</code> guard around <code>.navigationBarTitleDisplayMode(.inline)</code>, because that modifier is iOS-only and would not compile on macOS:</p>
+  <pre><code class="lang-swift">.navigationTitle("Touch &amp; Move")
+#if os(iOS)
+.navigationBarTitleDisplayMode(.inline)
+#endif</code></pre>
+  <p>On Mac, the gestures translate naturally: drag becomes a click-and-drag, magnify becomes pinch on a trackpad, rotate becomes the trackpad's two-finger rotate gesture. Tap becomes a click. Long-press becomes a click-and-hold. SwiftUI handles the mapping; the code does not change.</p>
+  <p>This is one of the lessons that compounds in unexpected places: gestures are inputs, not platforms. A gesture-based app written in SwiftUI on iOS will work on a Mac trackpad without a code change as long as the gestures themselves remain meaningful. Pinch-to-scale is meaningful on Mac; drag-to-move is meaningful on Mac; rotate-with-two-fingers is meaningful on Mac. Hover, on the other hand, has no iPhone analog &mdash; a Mac-only gesture would not compose into a universal app cleanly.</p>
+  <hr>
+  <h2>Under the Hood and About</h2>
+  <p>Same shape as the other build-along apps. <code>DeveloperNotes.swift</code> defines a <code>Note</code> struct with <code>title</code> and <code>body</code> strings, and exposes a <code>notes</code> array. <code>UnderTheHoodView.swift</code> renders the array as a sectioned <code>List</code>. <code>AboutView.swift</code> shows the icon, the tagline ("A SwiftUI gesture playground"), the book attribution ("Build-Along 09 of Claude's X26 Swift 6 Bible"), and three links: <code>fluharty.me</code>, Send Feedback, Privacy.</p>
+  <p>Five notes ship with v1.0:</p>
+  <ol class="body-list">
+    <li>Why TouchAndMove exists</li>
+    <li>One shape, two state lanes</li>
+    <li>Composing gestures</li>
+    <li>Spring physics, not linear curves</li>
+    <li>Distribution</li>
+  </ol>
+  <p>The Under the Hood view is meant to age with the app: every nontrivial code change earns a note, so the reader who clones the repo at HEAD has the contemporaneous reasoning available without leaving the running app.</p>
+  <hr>
+  <h2>Distribution: GitHub Clone-and-Build</h2>
+  <p>TouchAndMove ships as a clone-and-build project on <a href="https://github.com/fluhartyml/TouchAndMove">github.com/fluhartyml/TouchAndMove</a>, not an App Store release. App Review Guideline 2.2 reads gesture playgrounds as "limited functionality" demos, and that reading is correct &mdash; the app does one thing and is over. The reader becoming the developer is exactly the teaching outcome: clone the repo, open it in Xcode, build it, and modify it. Readers tweaking the spring values, swapping the shape, or adding a new gesture is the chapter's intended next step.</p>
+  <p>This is the same distribution model as <a href="../BuildAlong-08-IntelligenceDemo/BuildAlong-08-IntelligenceDemo.html">Build-Along 08: IntelligenceDemo</a> and <a href="../BuildAlong-10-DragBetweenWindows/BuildAlong-10-DragBetweenWindows.html">Build-Along 10: DragBetweenWindows</a>. All three are concept demos that teach a specific SwiftUI primitive without pretending to be products.</p>
+  <hr>
+  <h2>What to Read Next</h2>
+  <p><a href="../BuildAlong-10-DragBetweenWindows/BuildAlong-10-DragBetweenWindows.html">Build-Along 10: DragBetweenWindows</a> stays in the gesture family but moves the focus from in-window manipulation to cross-window drag-and-drop &mdash; the <code>Transferable</code> protocol, <code>.dropDestination</code>, and the seam between two SwiftUI scenes.</p>
+  <p><a href="../BuildAlong-11-ReportMaker/BuildAlong-11-ReportMaker.html">Build-Along 11: ReportMaker</a> is the chapter where the single-concept lessons start composing into a real product &mdash; SwiftData, Swift Charts, PhotosUI, and PDFKit bundled into one app.</p>
+
 </div>
-<footer class="page"><div class="row-nav"><div class="prev"><a href="../BuildAlong-08-IntelligenceDemo/BuildAlong-08-IntelligenceDemo.html">&larr; Build-Along 08: IntelligenceDemo</a></div><div class="pos">Build-Along 09</div><div class="next"><a href="../BuildAlong-10-DragBetweenWindows/BuildAlong-10-DragBetweenWindows.html">Build-Along 10: DragBetweenWindows &rarr;</a></div></div></footer>
+
 </body></html>

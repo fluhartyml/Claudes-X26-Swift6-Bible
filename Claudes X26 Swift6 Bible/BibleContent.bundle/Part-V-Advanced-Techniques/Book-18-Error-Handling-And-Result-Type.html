@@ -4,116 +4,36 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Book 18: Error Handling And Result Type &mdash; Claude's Xcode 26 Swift Bible</title>
-<style>
-:root {
-  --bg: #000000;
-  --fg: #FFB000;
-  --bright: #FFD060;
-  --dim: #996600;
-  --codebg: #1a0d00;
-  --border: #664500;
-  --gutter: #4a3300;
-  --headerbg: #0a0600;
-}
-* { box-sizing: border-box; }
-html, body { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; height: 100%; }
-body {
-  background: var(--bg);
-  color: var(--fg);
-  font-family: "FiraCode Nerd Font Mono", "FiraCode Nerd Font", "Fira Code", "Menlo", "Courier New", monospace;
-  font-size: 18pt;
-  line-height: 1.55;
-  margin: 0;
-  padding: 0;
-  text-shadow: 0 0 1px rgba(255, 176, 0, 0.35);
-  display: flex;
-  flex-direction: column;
-}
-header.page, footer.page {
-  background: var(--headerbg);
-  color: var(--dim);
-  padding: 0.55rem 1.1rem;
-  font-size: 13pt;
-  display: flex;
-  flex-direction: column;
-  gap: 0.2rem;
-  flex: 0 0 auto;
-  z-index: 10;
-}
-header.page { border-bottom: 1px solid var(--border); }
-footer.page { border-top: 1px solid var(--border); padding-bottom: calc(0.55rem + env(safe-area-inset-bottom)); }
-header.page .path, footer.page .path { color: var(--fg); word-break: break-all; overflow-wrap: break-word; }
-header.page .pos, footer.page .pos { color: var(--bright); }
-/* The middle scrolls; header and footer stay put. */
-.content { flex: 1 1 auto; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 0.8rem 1rem 2rem 1rem; max-width: 1100px; margin: 0 auto; width: 100%; }
-h1 { color: var(--bright); font-weight: normal; font-size: 26pt; margin: 0.6rem 0 1rem 0; }
-h2 { color: var(--bright); font-weight: normal; font-size: 20pt; border-bottom: 1px solid var(--border); padding-bottom: 0.3rem; margin-top: 1.5rem; counter-set: h3 0 para 0; counter-increment: h2; }
-h2::before { content: counter(h2) ". "; color: var(--fg); }
-h3 { color: var(--bright); font-weight: normal; font-size: 18pt; margin-top: 1rem; counter-set: para 0; counter-increment: h3; }
-h3::before { content: counter(h2) "." counter(h3) " "; color: var(--fg); }
-p { margin: 0.4rem 0; counter-increment: para; }
-p::before { content: counter(h2) "." counter(h3) "." counter(para) " "; color: var(--dim); font-size: 13pt; margin-right: 0.4em; }
-code { color: var(--bright); background: var(--codebg); padding: 0.08em 0.35em; border: 1px solid #3a2400; border-radius: 3px; font-size: 0.92em; }
-pre { background: var(--codebg); border: 1px solid #3a2400; border-radius: 4px; padding: 0.7rem 0.9rem; overflow-x: auto; font-size: 14pt; }
-pre code { background: transparent; border: 0; padding: 0; }
-ul, ol.body-list { margin: 0.4rem 0 0.4rem 1.4rem; padding: 0; }
-a { color: var(--bright); font-weight: bold; text-decoration: none; border-bottom: 1px dotted var(--dim); }
-a:hover { background: #332200; }
-strong { color: var(--bright); }
-em { color: var(--fg); font-style: italic; }
-hr { border: 0; border-top: 1px solid var(--border); margin: 1rem 0; }
-ol.lines { list-style: none; counter-reset: line h2 h3 para; padding: 0; margin: 0; }
-ol.lines > li { counter-increment: line; padding: 0.15rem 0 0.15rem 3.6rem; position: relative; min-height: 1.2em; }
-ol.lines > li::before { content: counter(line); position: absolute; left: 0; top: 0.25rem; width: 2.8rem; text-align: right; color: var(--gutter); font-size: 13pt; padding-right: 0.5rem; border-right: 1px solid #2a1e00; }
-ol.lines > li > p, ol.lines > li > h2, ol.lines > li > h3, ol.lines > li > ul, ol.lines > li > ol, ol.lines > li > pre, ol.lines > li > hr { margin: 0; }
-.scope-note { border-left: 3px solid var(--bright); padding: 0.7rem 1rem; background: #140c00; margin: 0.6rem 0; color: var(--bright); }
-.nav { display: flex; gap: 0.9rem; flex-wrap: wrap; margin-top: 0.8rem; font-size: 14pt; }
-
-
-footer.page { flex-direction: column; gap: 0.4rem; }
-footer.page .row-nav { display: flex; flex-direction: row; justify-content: space-between; align-items: center; gap: 0.5rem; }
-footer.page .row-nav .prev, footer.page .row-nav .next { flex: 1; min-width: 0; }
-footer.page .row-nav .prev { text-align: left; }
-footer.page .row-nav .next { text-align: right; }
-footer.page .row-nav .pos { flex: 0 0 auto; text-align: center; color: var(--bright); font-weight: bold; }
-footer.page .row-nav a { color: var(--bright); font-weight: bold; text-decoration: none; border-bottom: 1px dotted var(--dim); }
-footer.page .row-nav a:hover { background: #332200; }
-footer.page .row-nav .nav-empty { color: var(--gutter); font-style: italic; }
-</style>
 </head>
 <body>
 
-<header class="page">
-  <div class="path">Part V Advanced Techniques/Book 18 Error Handling And Result Type</div>
-</header>
-
 <div class="content">
-<ol class="lines">
-  <li><h1>Book 18: Error Handling &amp; Result Type</h1></li>
-  <li><p><strong>Claude's Xcode 26 Swift Bible</strong> -- Part V: Advanced Techniques</p></li>
-  <li><hr></li>
-  <li><p>This chapter covers custom error types with <code>enum</code> and the <code>Error</code> protocol; throwing errors from functions with <code>throws</code> and handling them with <code>do</code> / <code>try</code> / <code>catch</code>; the differences between <code>try</code>, <code>try?</code>, and <code>try!</code>; Swift 6 typed throws (<code>throws(MyError)</code>) for declaring exactly which errors can escape a function; and <code>Result&lt;Success, Failure&gt;</code> for callback-era APIs and cross-thread boundaries.</p></li>
-  <li><hr></li>
-  <li><h2>Live Reference: CryoKit's Error-Surface Lesson + IntelligenceDemo's Inline Recovery</h2></li>
-  <li><div class="scope-note"><strong>CryoTunes Player</strong>'s data layer is a Swift package called <strong>CryoKit</strong>. The architectural rule the package now follows: <strong>a layer should only report on what it actually owns and observed.</strong> A data layer that calls MusicKit reports MusicKit-shaped errors; it doesn't author UI prose about networking or other domains it has no access to. The app target reads structured error values from the package and decides how to present them, rather than displaying a string the package wrote. <strong>IntelligenceDemo</strong> shows the same principle at the smaller end: its <code>recognizeText(in:)</code> wraps the <code>VNImageRequestHandler.perform</code> call in <code>do</code>/<code>catch</code>, and on a thrown error returns a string prefixed with "Recognition failed:" plus the localized description. The error surface is inline with the result &mdash; no alert, no separate error state machine &mdash; because for a one-photo OCR utility the error IS the result. Source: <a href="https://github.com/fluhartyml/IntelligenceDemo/wiki">github.com/fluhartyml/IntelligenceDemo/wiki</a>. Compare with CryoKit, which separates structured error from successful payload because the consumer (a music app) treats them differently.</div></li>
-  <li><div class="scope-note">CryoTunes' <code>ContentView.swift</code> reads from MusicKit directly for player state; the package surfaces typed error values for the app to format. See the source at <a href="https://github.com/fluhartyml/CryoTunesPlayer">github.com/fluhartyml/CryoTunesPlayer</a>, and Source Tour 18 for the architectural walkthrough. The chapter you're reading now is the language-level foundation; that source tour shows the principle in production form.</div></li>
-  <li><hr></li>
-  <li><h2>Why Swift Throws Instead of Returning <code>nil</code></h2></li>
-  <li><p>Swift functions that might fail have two honest ways to say so:</p></li>
-  <li><ol class="body-list"><li>Return an <code>Optional</code> -- "here's a value, or nothing."</li><li>Throw an error -- "here's a value, or a specific reason for the failure."</li></ol></li>
-  <li><p>Optionals are great when there's only one failure mode and the reason doesn't matter. A dictionary lookup returning <code>nil</code> is fine -- the key either exists or it doesn't.</p></li>
-  <li><p>Errors are better when the caller needs to know <strong>why</strong> something failed: a file was missing, the network was down, the JSON was malformed. The error itself carries that story.</p></li>
-  <li><hr></li>
-  <li><h2>Defining an Error Type</h2></li>
-  <li><p>Any type conforming to the empty <code>Error</code> protocol can be thrown. Enums are the idiomatic choice:</p></li>
-  <li><pre><code class="lang-swift">enum ParseError: Error {
+
+  <h1>Book 18: Error Handling &amp; Result Type</h1>
+  <p><strong>Claude's Xcode 26 Swift Bible</strong> -- Part V: Advanced Techniques</p>
+  <hr>
+  <p>This chapter covers custom error types with <code>enum</code> and the <code>Error</code> protocol; throwing errors from functions with <code>throws</code> and handling them with <code>do</code> / <code>try</code> / <code>catch</code>; the differences between <code>try</code>, <code>try?</code>, and <code>try!</code>; Swift 6 typed throws (<code>throws(MyError)</code>) for declaring exactly which errors can escape a function; and <code>Result&lt;Success, Failure&gt;</code> for callback-era APIs and cross-thread boundaries.</p>
+  <hr>
+  <h2>Live Reference: CryoKit's Error-Surface Lesson + IntelligenceDemo's Inline Recovery</h2>
+  <div class="scope-note"><strong>CryoTunes Player</strong>'s data layer is a Swift package called <strong>CryoKit</strong>. The architectural rule the package now follows: <strong>a layer should only report on what it actually owns and observed.</strong> A data layer that calls MusicKit reports MusicKit-shaped errors; it doesn't author UI prose about networking or other domains it has no access to. The app target reads structured error values from the package and decides how to present them, rather than displaying a string the package wrote. <strong>IntelligenceDemo</strong> shows the same principle at the smaller end: its <code>recognizeText(in:)</code> wraps the <code>VNImageRequestHandler.perform</code> call in <code>do</code>/<code>catch</code>, and on a thrown error returns a string prefixed with "Recognition failed:" plus the localized description. The error surface is inline with the result &mdash; no alert, no separate error state machine &mdash; because for a one-photo OCR utility the error IS the result. Source: <a href="https://github.com/fluhartyml/IntelligenceDemo/wiki">github.com/fluhartyml/IntelligenceDemo/wiki</a>. Compare with CryoKit, which separates structured error from successful payload because the consumer (a music app) treats them differently.</div>
+  <div class="scope-note">CryoTunes' <code>ContentView.swift</code> reads from MusicKit directly for player state; the package surfaces typed error values for the app to format. See the source at <a href="https://github.com/fluhartyml/CryoTunesPlayer">github.com/fluhartyml/CryoTunesPlayer</a>, and Source Tour 18 for the architectural walkthrough. The chapter you're reading now is the language-level foundation; that source tour shows the principle in production form.</div>
+  <hr>
+  <h2>Why Swift Throws Instead of Returning <code>nil</code></h2>
+  <p>Swift functions that might fail have two honest ways to say so:</p>
+  <ol class="body-list"><li>Return an <code>Optional</code> -- "here's a value, or nothing."</li><li>Throw an error -- "here's a value, or a specific reason for the failure."</li></ol>
+  <p>Optionals are great when there's only one failure mode and the reason doesn't matter. A dictionary lookup returning <code>nil</code> is fine -- the key either exists or it doesn't.</p>
+  <p>Errors are better when the caller needs to know <strong>why</strong> something failed: a file was missing, the network was down, the JSON was malformed. The error itself carries that story.</p>
+  <hr>
+  <h2>Defining an Error Type</h2>
+  <p>Any type conforming to the empty <code>Error</code> protocol can be thrown. Enums are the idiomatic choice:</p>
+  <pre><code class="lang-swift">enum ParseError: Error {
     case empty
     case notANumber(String)
     case outOfRange(value: Int, max: Int)
-}</code></pre></li>
-  <li><p>Associated values carry the details of the failure -- the offending string, the number that was out of range, whatever the caller needs to explain or recover.</p></li>
-  <li><p>For better error messages, conform to <code>LocalizedError</code>:</p></li>
-  <li><pre><code class="lang-swift">extension ParseError: LocalizedError {
+}</code></pre>
+  <p>Associated values carry the details of the failure -- the offending string, the number that was out of range, whatever the caller needs to explain or recover.</p>
+  <p>For better error messages, conform to <code>LocalizedError</code>:</p>
+  <pre><code class="lang-swift">extension ParseError: LocalizedError {
     var errorDescription: String? {
         switch self {
         case .empty:
@@ -124,12 +44,12 @@ footer.page .row-nav .nav-empty { color: var(--gutter); font-style: italic; }
             return "\(v) is out of range (max \(max))."
         }
     }
-}</code></pre></li>
-  <li><p>Now printing the error or showing it to the user reads as plain prose.</p></li>
-  <li><hr></li>
-  <li><h2>Throwing Errors</h2></li>
-  <li><p>A function that might throw declares it with <code>throws</code>:</p></li>
-  <li><pre><code class="lang-swift">func parse(_ input: String, max: Int) throws -&gt; Int {
+}</code></pre>
+  <p>Now printing the error or showing it to the user reads as plain prose.</p>
+  <hr>
+  <h2>Throwing Errors</h2>
+  <p>A function that might throw declares it with <code>throws</code>:</p>
+  <pre><code class="lang-swift">func parse(_ input: String, max: Int) throws -&gt; Int {
     guard !input.isEmpty else {
         throw ParseError.empty
     }
@@ -140,10 +60,10 @@ footer.page .row-nav .nav-empty { color: var(--gutter); font-style: italic; }
         throw ParseError.outOfRange(value: n, max: max)
     }
     return n
-}</code></pre></li>
-  <li><p><code>throws</code> is part of the function's type. Callers have to acknowledge it with <code>try</code> or the compiler rejects the call.</p></li>
-  <li><p>Computed properties and initializers can throw too:</p></li>
-  <li><pre><code class="lang-swift">init(fromJSON data: Data) throws {
+}</code></pre>
+  <p><code>throws</code> is part of the function's type. Callers have to acknowledge it with <code>try</code> or the compiler rejects the call.</p>
+  <p>Computed properties and initializers can throw too:</p>
+  <pre><code class="lang-swift">init(fromJSON data: Data) throws {
     // ...
 }
 
@@ -151,12 +71,12 @@ var size: Int {
     get throws {
         // ...
     }
-}</code></pre></li>
-  <li><hr></li>
-  <li><h2>Handling Errors</h2></li>
-  <li><h3>do / try / catch</h3></li>
-  <li><p>The default form is <code>do</code> / <code>try</code> / <code>catch</code>:</p></li>
-  <li><pre><code class="lang-swift">do {
+}</code></pre>
+  <hr>
+  <h2>Handling Errors</h2>
+  <h3>do / try / catch</h3>
+  <p>The default form is <code>do</code> / <code>try</code> / <code>catch</code>:</p>
+  <pre><code class="lang-swift">do {
     let value = try parse("42", max: 100)
     print("parsed:", value)
 } catch ParseError.empty {
@@ -165,50 +85,50 @@ var size: Int {
     print("not a number:", s)
 } catch {
     print("other:", error)
-}</code></pre></li>
-  <li><p>Catch clauses are patterns, just like <code>case</code> clauses in <code>switch</code>. A plain <code>catch</code> binds the error as <code>error</code> and acts as the catch-all. Swift checks that the <code>do</code> block's errors are all handled (or that the enclosing function also throws).</p></li>
-  <li><h3>try? -- Turn Errors into <code>nil</code></h3></li>
-  <li><p>When you don't care about the reason for failure:</p></li>
-  <li><pre><code class="lang-swift">let maybe = try? parse("abc", max: 100)   // Optional&lt;Int&gt;, nil on any throw</code></pre></li>
-  <li><p><code>try?</code> converts the call into an optional. Handy when you were going to check for <code>nil</code> anyway.</p></li>
-  <li><h3>try! -- Force It</h3></li>
-  <li><p>When you're absolutely sure the call can't fail (and you want to trap if you're wrong):</p></li>
-  <li><pre><code class="lang-swift">let count = try! parse("42", max: 100)    // traps if parse throws</code></pre></li>
-  <li><p>Use <code>try!</code> sparingly. It's appropriate for things like reading a file bundled with the app that you know exists. It's not appropriate for user input, network calls, or anything with uncertainty.</p></li>
-  <li><h3>Rethrowing</h3></li>
-  <li><p>A function whose throwing behavior depends on a closure argument uses <code>rethrows</code>:</p></li>
-  <li><pre><code class="lang-swift">func retry&lt;T&gt;(_ body: () throws -&gt; T) rethrows -&gt; T {
+}</code></pre>
+  <p>Catch clauses are patterns, just like <code>case</code> clauses in <code>switch</code>. A plain <code>catch</code> binds the error as <code>error</code> and acts as the catch-all. Swift checks that the <code>do</code> block's errors are all handled (or that the enclosing function also throws).</p>
+  <h3>try? -- Turn Errors into <code>nil</code></h3>
+  <p>When you don't care about the reason for failure:</p>
+  <pre><code class="lang-swift">let maybe = try? parse("abc", max: 100)   // Optional&lt;Int&gt;, nil on any throw</code></pre>
+  <p><code>try?</code> converts the call into an optional. Handy when you were going to check for <code>nil</code> anyway.</p>
+  <h3>try! -- Force It</h3>
+  <p>When you're absolutely sure the call can't fail (and you want to trap if you're wrong):</p>
+  <pre><code class="lang-swift">let count = try! parse("42", max: 100)    // traps if parse throws</code></pre>
+  <p>Use <code>try!</code> sparingly. It's appropriate for things like reading a file bundled with the app that you know exists. It's not appropriate for user input, network calls, or anything with uncertainty.</p>
+  <h3>Rethrowing</h3>
+  <p>A function whose throwing behavior depends on a closure argument uses <code>rethrows</code>:</p>
+  <pre><code class="lang-swift">func retry&lt;T&gt;(_ body: () throws -&gt; T) rethrows -&gt; T {
     do   { return try body() }
     catch { return try body() }
 }
 
 let x = retry { 42 }                    // non-throwing closure: caller doesn't need try
-let y = try retry { try parse("7", max: 10) } // throwing closure: caller needs try</code></pre></li>
-  <li><p><code>rethrows</code> keeps callers free of <code>try</code> when their closure isn't throwing.</p></li>
-  <li><hr></li>
-  <li><h2>Typed Throws (Swift 6)</h2></li>
-  <li><p>Swift 6 lets you declare exactly which error type a function throws:</p></li>
-  <li><pre><code class="lang-swift">func parse(_ input: String, max: Int) throws(ParseError) -&gt; Int {
+let y = try retry { try parse("7", max: 10) } // throwing closure: caller needs try</code></pre>
+  <p><code>rethrows</code> keeps callers free of <code>try</code> when their closure isn't throwing.</p>
+  <hr>
+  <h2>Typed Throws (Swift 6)</h2>
+  <p>Swift 6 lets you declare exactly which error type a function throws:</p>
+  <pre><code class="lang-swift">func parse(_ input: String, max: Int) throws(ParseError) -&gt; Int {
     guard !input.isEmpty else { throw .empty }
     guard let n = Int(input) else { throw .notANumber(input) }
     guard n &lt;= max else { throw .outOfRange(value: n, max: max) }
     return n
-}</code></pre></li>
-  <li><p>Two things that change:</p></li>
-  <li><ul><li>Inside the function you can write <code>.empty</code> instead of <code>ParseError.empty</code> (Swift infers the type).</li><li>The caller catches the concrete type without an <code>as?</code> cast:</li></ul></li>
-  <li><p>``<code>swift do { let v = try parse("42", max: 10) } catch let error: ParseError { // error is ParseError here, no cast needed } </code>``</p></li>
-  <li><p>Plain <code>throws</code> is shorthand for <code>throws(any Error)</code> -- "might throw anything." Use typed throws when your function has a fixed, bounded set of failures and you want the compiler to check that callers handle each one.</p></li>
-  <li><hr></li>
-  <li><h2>Result -- The Errors-as-Values Type</h2></li>
-  <li><p><code>Result&lt;Success, Failure&gt;</code> is a standard-library enum with two cases:</p></li>
-  <li><pre><code class="lang-swift">public enum Result&lt;Success, Failure: Error&gt; {
+}</code></pre>
+  <p>Two things that change:</p>
+  <ul><li>Inside the function you can write <code>.empty</code> instead of <code>ParseError.empty</code> (Swift infers the type).</li><li>The caller catches the concrete type without an <code>as?</code> cast:</li></ul>
+  <p>``<code>swift do { let v = try parse("42", max: 10) } catch let error: ParseError { // error is ParseError here, no cast needed } </code>``</p>
+  <p>Plain <code>throws</code> is shorthand for <code>throws(any Error)</code> -- "might throw anything." Use typed throws when your function has a fixed, bounded set of failures and you want the compiler to check that callers handle each one.</p>
+  <hr>
+  <h2>Result -- The Errors-as-Values Type</h2>
+  <p><code>Result&lt;Success, Failure&gt;</code> is a standard-library enum with two cases:</p>
+  <pre><code class="lang-swift">public enum Result&lt;Success, Failure: Error&gt; {
     case success(Success)
     case failure(Failure)
-}</code></pre></li>
-  <li><p>It represents the same information as a throwing function, but as a <strong>value</strong> you can pass around, store, and hand to a callback. Three common places you reach for it:</p></li>
-  <li><h3>1. Callback-Based APIs</h3></li>
-  <li><p>Older callback APIs (pre-<code>async</code>/<code>await</code>) use <code>Result</code> as the payload:</p></li>
-  <li><pre><code class="lang-swift">func fetch(completion: @escaping (Result&lt;Data, NetworkError&gt;) -&gt; Void) {
+}</code></pre>
+  <p>It represents the same information as a throwing function, but as a <strong>value</strong> you can pass around, store, and hand to a callback. Three common places you reach for it:</p>
+  <h3>1. Callback-Based APIs</h3>
+  <p>Older callback APIs (pre-<code>async</code>/<code>await</code>) use <code>Result</code> as the payload:</p>
+  <pre><code class="lang-swift">func fetch(completion: @escaping (Result&lt;Data, NetworkError&gt;) -&gt; Void) {
     // ... some URLSession-style call
 }
 
@@ -217,32 +137,32 @@ fetch { result in
     case .success(let data): print("got", data.count, "bytes")
     case .failure(let e):    print("failed:", e)
     }
-}</code></pre></li>
-  <li><h3>2. Crossing Thread Boundaries</h3></li>
-  <li><p>Throwing across a boundary can be awkward because errors don't flow easily across task or queue hops. Wrapping the value in <code>Result</code> turns it into something you can hand across the gap:</p></li>
-  <li><pre><code class="lang-swift">let result: Result&lt;Int, Error&gt; = .success(42)
+}</code></pre>
+  <h3>2. Crossing Thread Boundaries</h3>
+  <p>Throwing across a boundary can be awkward because errors don't flow easily across task or queue hops. Wrapping the value in <code>Result</code> turns it into something you can hand across the gap:</p>
+  <pre><code class="lang-swift">let result: Result&lt;Int, Error&gt; = .success(42)
 DispatchQueue.main.async {
     handle(result)   // thread-safe: it's just a value
-}</code></pre></li>
-  <li><h3>3. Converting Between Styles</h3></li>
-  <li><p><code>Result</code> has two convenience bridges:</p></li>
-  <li><pre><code class="lang-swift">// Throwing call → Result
+}</code></pre>
+  <h3>3. Converting Between Styles</h3>
+  <p><code>Result</code> has two convenience bridges:</p>
+  <pre><code class="lang-swift">// Throwing call → Result
 let r = Result { try parse("42", max: 100) }
 
 // Result → throwing
-let n = try r.get()</code></pre></li>
-  <li><p><code>Result(_ body:)</code> runs the throwing closure and bundles the outcome; <code>.get()</code> re-throws the error out of the Result.</p></li>
-  <li><h3>When NOT to Use Result</h3></li>
-  <li><p>In modern Swift code, prefer <code>async throws</code> over <code>Result</code> for anything new. <code>async throws</code> reads more naturally:</p></li>
-  <li><pre><code class="lang-swift">// Old
+let n = try r.get()</code></pre>
+  <p><code>Result(_ body:)</code> runs the throwing closure and bundles the outcome; <code>.get()</code> re-throws the error out of the Result.</p>
+  <h3>When NOT to Use Result</h3>
+  <p>In modern Swift code, prefer <code>async throws</code> over <code>Result</code> for anything new. <code>async throws</code> reads more naturally:</p>
+  <pre><code class="lang-swift">// Old
 func fetch(completion: (Result&lt;Data, Error&gt;) -&gt; Void)
 
 // New
-func fetch() async throws -&gt; Data</code></pre></li>
-  <li><p>Reach for <code>Result</code> when you're bridging to older callback APIs, storing the outcome, or sending it across a boundary where <code>throw</code> is unavailable (closures stored in collections, async callbacks, cross-actor message passing).</p></li>
-  <li><hr></li>
-  <li><h2>Chapter Mini-Example -- Parsing with Real Diagnostics</h2></li>
-  <li><pre><code class="lang-swift">import SwiftUI
+func fetch() async throws -&gt; Data</code></pre>
+  <p>Reach for <code>Result</code> when you're bridging to older callback APIs, storing the outcome, or sending it across a boundary where <code>throw</code> is unavailable (closures stored in collections, async callbacks, cross-actor message passing).</p>
+  <hr>
+  <h2>Chapter Mini-Example -- Parsing with Real Diagnostics</h2>
+  <pre><code class="lang-swift">import SwiftUI
 
 enum ParseError: LocalizedError {
     case empty
@@ -294,15 +214,25 @@ struct NumberInput: View {
             }
         }
     }
-}</code></pre></li>
-  <li><p>One throwing function, one typed error, one <code>do / catch</code>, and messages the user can act on &mdash; the same pattern scales to larger surfaces.</p></li>
-  <li><hr></li>
-  <li><h2>What Book 19 Does</h2></li>
-  <li><p>Errors are behavior that happens in response to bad input; Book 19 is about behavior you ship on purpose: custom views, custom modifiers, and the SwiftUI techniques that let you build your own widgets instead of always reaching for built-ins.</p></li>
-</ol>
-</div>
+}</code></pre>
+  <p>One throwing function, one typed error, one <code>do / catch</code>, and messages the user can act on &mdash; the same pattern scales to larger surfaces.</p>
+  <hr>
+  <h2>What Book 19 Does</h2>
+  <p>Errors are behavior that happens in response to bad input; Book 19 is about behavior you ship on purpose: custom views, custom modifiers, and the SwiftUI techniques that let you build your own widgets instead of always reaching for built-ins.</p>
+  <hr>
+  <h2>Further Reading &mdash; WWDC Sessions</h2>
+  <p>This book is a passive resource. When you want deeper coverage of Swift error handling or the concurrency rules that shape where errors flow, the WWDC sessions below are Apple's source material.</p>
+  <ul>
+    <li>WWDC25 / 268, <em>Embracing Swift concurrency</em> &mdash; <a href="https://developer.apple.com/videos/play/wwdc2025/268/">developer.apple.com/videos/play/wwdc2025/268/</a>. How <code>throws</code> interacts with <code>async</code>, isolation, and the new <code>@concurrent</code> attribute.</li>
+    <li>WWDC25 / 245, <em>What's new in Swift</em> &mdash; <a href="https://developer.apple.com/videos/play/wwdc2025/245/">developer.apple.com/videos/play/wwdc2025/245/</a>. Updates to typed throws and the broader Swift evolution that affects error patterns.</li>
+  </ul>
+  <h3>Prior-year background sessions</h3>
+  <ul>
+    <li>WWDC24 / 10169, <em>Migrate your app to Swift 6</em> &mdash; <a href="https://developer.apple.com/videos/play/wwdc2024/10169/">developer.apple.com/videos/play/wwdc2024/10169/</a>. The incremental migration path that turned strict concurrency on, including how errors cross isolation boundaries.</li>
+    <li>WWDC24 / 10136, <em>What's new in Swift</em> &mdash; <a href="https://developer.apple.com/videos/play/wwdc2024/10136/">developer.apple.com/videos/play/wwdc2024/10136/</a>. The introduction of typed throws (<code>throws(SomeError)</code>) and how it changes error type inference.</li>
+  </ul>
 
-<footer class="page"><div class="row-nav"><div class="prev"><a href="../Part-IV-The-Application/Book-17-Swift-Charts-And-PDFKit.html">&larr; Book 17: Swift Charts &amp; PDFKit</a></div><div class="pos">Book 18 Error Handling And Result Type</div><div class="next"><a href="Book-19-Building-Custom-Views-And-Modifiers.html">Book 19: Building Custom Views &amp; Modifiers &rarr;</a></div></div></footer>
+</div>
 
 </body>
 </html>

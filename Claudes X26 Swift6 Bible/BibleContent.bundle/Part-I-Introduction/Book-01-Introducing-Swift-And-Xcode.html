@@ -4,249 +4,217 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Book 01: Introducing Swift And Xcode &mdash; Claude's Xcode 26 Swift Bible</title>
-<style>
-:root {
-  --bg: #000000;
-  --fg: #FFB000;
-  --bright: #FFD060;
-  --dim: #996600;
-  --codebg: #1a0d00;
-  --border: #664500;
-  --gutter: #4a3300;
-  --headerbg: #0a0600;
-}
-* { box-sizing: border-box; }
-html, body { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; height: 100%; }
-body {
-  background: var(--bg);
-  color: var(--fg);
-  font-family: "FiraCode Nerd Font Mono", "FiraCode Nerd Font", "Fira Code", "Menlo", "Courier New", monospace;
-  font-size: 18pt;
-  line-height: 1.55;
-  margin: 0;
-  padding: 0;
-  text-shadow: 0 0 1px rgba(255, 176, 0, 0.35);
-  display: flex;
-  flex-direction: column;
-}
-header.page, footer.page {
-  background: var(--headerbg);
-  color: var(--dim);
-  padding: 0.55rem 1.1rem;
-  font-size: 13pt;
-  display: flex;
-  flex-direction: column;
-  gap: 0.2rem;
-  flex: 0 0 auto;
-  z-index: 10;
-}
-header.page { border-bottom: 1px solid var(--border); }
-footer.page { border-top: 1px solid var(--border); padding-bottom: calc(0.55rem + env(safe-area-inset-bottom)); }
-header.page .path, footer.page .path { color: var(--fg); word-break: break-all; overflow-wrap: break-word; }
-header.page .pos, footer.page .pos { color: var(--bright); }
-/* The middle scrolls; header and footer stay put. */
-.content { flex: 1 1 auto; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 0.8rem 1rem 2rem 1rem; max-width: 1100px; margin: 0 auto; width: 100%; }
-h1 { color: var(--bright); font-weight: normal; font-size: 26pt; margin: 0.6rem 0 1rem 0; }
-h2 { color: var(--bright); font-weight: normal; font-size: 20pt; border-bottom: 1px solid var(--border); padding-bottom: 0.3rem; margin-top: 1.5rem; counter-set: h3 0 para 0; counter-increment: h2; }
-h2::before { content: counter(h2) ". "; color: var(--fg); }
-h3 { color: var(--bright); font-weight: normal; font-size: 18pt; margin-top: 1rem; counter-set: para 0; counter-increment: h3; }
-h3::before { content: counter(h2) "." counter(h3) " "; color: var(--fg); }
-p { margin: 0.4rem 0; counter-increment: para; }
-p::before { content: counter(h2) "." counter(h3) "." counter(para) " "; color: var(--dim); font-size: 13pt; margin-right: 0.4em; }
-code { color: var(--bright); background: var(--codebg); padding: 0.08em 0.35em; border: 1px solid #3a2400; border-radius: 3px; font-size: 0.92em; }
-pre { background: var(--codebg); border: 1px solid #3a2400; border-radius: 4px; padding: 0.7rem 0.9rem; overflow-x: auto; font-size: 14pt; }
-pre code { background: transparent; border: 0; padding: 0; }
-ul, ol.body-list { margin: 0.4rem 0 0.4rem 1.4rem; padding: 0; }
-a { color: var(--bright); font-weight: bold; text-decoration: none; border-bottom: 1px dotted var(--dim); }
-a:hover { background: #332200; }
-strong { color: var(--bright); }
-em { color: var(--fg); font-style: italic; }
-hr { border: 0; border-top: 1px solid var(--border); margin: 1rem 0; }
-ol.lines { list-style: none; counter-reset: line h2 h3 para; padding: 0; margin: 0; }
-ol.lines > li { counter-increment: line; padding: 0.15rem 0 0.15rem 3.6rem; position: relative; min-height: 1.2em; }
-ol.lines > li::before { content: counter(line); position: absolute; left: 0; top: 0.25rem; width: 2.8rem; text-align: right; color: var(--gutter); font-size: 13pt; padding-right: 0.5rem; border-right: 1px solid #2a1e00; }
-ol.lines > li > p, ol.lines > li > h2, ol.lines > li > h3, ol.lines > li > ul, ol.lines > li > ol, ol.lines > li > pre, ol.lines > li > hr { margin: 0; }
-.scope-note { border-left: 3px solid var(--bright); padding: 0.7rem 1rem; background: #140c00; margin: 0.6rem 0; color: var(--bright); }
-.nav { display: flex; gap: 0.9rem; flex-wrap: wrap; margin-top: 0.8rem; font-size: 14pt; }
-
-
-footer.page { flex-direction: column; gap: 0.4rem; }
-footer.page .row-nav { display: flex; flex-direction: row; justify-content: space-between; align-items: center; gap: 0.5rem; }
-footer.page .row-nav .prev, footer.page .row-nav .next { flex: 1; min-width: 0; }
-footer.page .row-nav .prev { text-align: left; }
-footer.page .row-nav .next { text-align: right; }
-footer.page .row-nav .pos { flex: 0 0 auto; text-align: center; color: var(--bright); font-weight: bold; }
-footer.page .row-nav a { color: var(--bright); font-weight: bold; text-decoration: none; border-bottom: 1px dotted var(--dim); }
-footer.page .row-nav a:hover { background: #332200; }
-footer.page .row-nav .nav-empty { color: var(--gutter); font-style: italic; }
-</style>
 </head>
 <body>
 
-<header class="page">
-  <div class="path">Part I Introduction/Book 01 Introducing Swift And Xcode</div>
-</header>
-
 <div class="content">
-<ol class="lines">
-  <li><h1>Book 1: Introducing Swift &amp; Xcode</h1></li>
-  <li><p><strong>Claude's Xcode 26 Swift Bible</strong> -- Part I: Introduction</p></li>
-  <li><hr></li>
-  <li><h2>Live Reference: Pick a Working App to Read Alongside This Book</h2></li>
-  <li><div class="scope-note">Every app this book teaches ships as a real GitHub repo you can clone, open in Xcode, and read while working through the chapters. Pick one as your "always open in Xcode" companion right at the start of the book &mdash; the chapters land harder when you have working source code on screen alongside the prose. Recommended starter: <a href="https://github.com/fluhartyml/TakeAChanceOnMeV1.0.2">Take A Chance On Me</a> (~800 lines, seven Swift files, the smallest complete App-Store-shipping app in the roster). Clone, open in Xcode, build to your simulator. Now you have a real Swift project running while you read the rest of this chapter. Source Tour 26 is its dedicated chapter. Larger but still tractable: <a href="https://github.com/fluhartyml/Snap-ScanKeeper">Snap &amp; ScanKeeper</a> at ~820 lines. The complete app roster is listed in Book 21 (Git &amp; GitHub) &mdash; clone whichever speaks to you.</div></li>
-  <li><hr></li>
-  <li><h2>What Swift Is</h2></li>
-  <li><p>Swift is Apple's compiled programming language. Swift runs on iOS, iPadOS, macOS, tvOS, watchOS, and visionOS. Apple introduced Swift in 2014 to replace Objective-C for app development. As of 2026, we are on <strong>Swift 6</strong>, which enforces strict concurrency safety by default.</p></li>
-  <li><p>Swift is:</p></li>
-  <li><ul><li><strong>Type-safe</strong> -- the compiler catches type mismatches before your code runs</li><li><strong>Compiled</strong> -- your code becomes native machine code, not interpreted at runtime</li><li><strong>Protocol-oriented</strong> -- protocols (think: contracts a type agrees to fulfill) are the primary design tool</li><li><strong>Memory-managed</strong> -- ARC (Automatic Reference Counting) handles memory; no manual malloc/free</li></ul></li>
-  <li><p>Swift files end in <code>.swift</code>. That is the only file type you write code in.</p></li>
-  <li><hr></li>
-  <li><h2>What Xcode Is</h2></li>
-  <li><p>Xcode is Apple's IDE (Integrated Development Environment). It is the only supported way to build and submit apps for Apple platforms. You get it free from the Mac App Store.</p></li>
-  <li><p>Xcode bundles together:</p></li>
-  <li><ul><li>A <strong>code editor</strong> with syntax highlighting and autocomplete</li><li>A <strong>build system</strong> that compiles your Swift into an app</li><li><strong>Interface Builder / SwiftUI Previews</strong> for visual layout</li><li><strong>Simulators</strong> for testing on virtual iPhones, iPads, Apple TVs, etc.</li><li><strong><a href="../Reference/Instruments.html">Instruments</a></strong> for performance profiling</li><li><strong>Signing and provisioning</strong> tools for App Store submission</li></ul></li>
-  <li><h3>Xcode Version Numbering</h3></li>
-  <li><p>Xcode versions track roughly with the OS releases. Xcode 26 ships alongside iOS 26, macOS 26, etc. Each major Xcode version requires a minimum macOS version to run. Always use the latest release version for App Store submissions.</p></li>
-  <li><hr></li>
-  <li><h2>Opening Xcode for the First Time</h2></li>
-  <li><p>When you launch Xcode, you see the Welcome screen. Your three options:</p></li>
-  <li><ol class="body-list"><li><strong>Create New Project</strong> -- starts from a template</li><li><strong>Clone Git Repository</strong> -- pulls an existing project from GitHub, etc.</li><li><strong>Open Existing Project</strong> -- opens a <code>.xcodeproj</code> or <code>.xcworkspace</code> file</li></ol></li>
-  <li><h3>Creating a New Project</h3></li>
-  <li><p>Xcode walks you through a wizard:</p></li>
-  <li><ol class="body-list"><li><strong>Choose a template</strong> -- for SwiftUI apps, pick "App" under the platform tab (iOS, macOS, multiplatform)</li><li><strong>Name your project</strong> -- this becomes the bundle name and default folder name</li><li><strong>Organization Identifier</strong> -- reverse-DNS style, like <code>com.yourname</code>. Combined with the product name, this forms your <strong>Bundle Identifier</strong> (e.g., <code>com.yourname.MyApp</code>)</li><li><strong>Storage</strong> -- choose SwiftData if you need persistence, or None</li><li><strong>Include Tests</strong> -- check this box; you can delete them later but having the target is useful</li></ol></li>
-  <li><p>Hit Create, pick a save location, and Xcode generates your project.</p></li>
-  <li><hr></li>
-  <li><h2>The Xcode Project Structure</h2></li>
-  <li><h3>The .xcodeproj File</h3></li>
-  <li><p>This is actually a folder (a "package" in macOS terms) containing:</p></li>
-  <li><ul><li><code>project.pbxproj</code> -- the master file that tracks every file, target, build setting</li><li><code>xcshareddata/</code> -- shared schemes</li><li><code>xcuserdata/</code> -- your personal settings (window positions, breakpoints)</li></ul></li>
-  <li><p>Never edit <code>project.pbxproj</code> by hand unless you truly know what you are doing.</p></li>
-  <li><h3>The Project Navigator (Left Sidebar)</h3></li>
-  <li><p>The file tree on the left. Your source files, assets, Info.plist, and entitlements live here. The structure in the navigator does not have to match the file system, but keeping them in sync saves headaches.</p></li>
-  <li><h3>Key Files in a New Project</h3></li>
-  <li><pre><code class="lang-">MyApp/
+
+  <h1>Book 1: Introducing Swift &amp; Xcode</h1>
+  <p><strong>Claude's Xcode 26 Swift Bible</strong> -- Part I: Introduction</p>
+  <hr>
+  <h2>What Swift Is</h2>
+  <p>Swift is Apple's compiled programming language. Swift runs on iOS, iPadOS, macOS, tvOS, watchOS, and visionOS. Apple introduced Swift in 2014 to replace Objective-C for app development. As of 2026, we are on <strong>Swift 6</strong>, which enforces strict concurrency safety by default.</p>
+  <p>Swift is:</p>
+  <ul><li><strong>Type-safe</strong> -- the compiler catches type mismatches before your code runs</li><li><strong>Compiled</strong> -- your code becomes native machine code, not interpreted at runtime</li><li><strong>Protocol-oriented</strong> -- protocols (think: contracts a type agrees to fulfill) are the primary design tool</li><li><strong>Memory-managed</strong> -- ARC (Automatic Reference Counting) handles memory; no manual malloc/free</li></ul>
+  <p>Swift files end in <code>.swift</code>. That is the only file type you write code in.</p>
+  <hr>
+  <h2>What Xcode Is</h2>
+  <p>Xcode is Apple's IDE (Integrated Development Environment). It is the only supported way to build and submit apps for Apple platforms. You get it free from the Mac App Store.</p>
+  <p>Xcode bundles together:</p>
+  <ul><li>A <strong>code editor</strong> with syntax highlighting and autocomplete</li><li>A <strong>build system</strong> that compiles your Swift into an app</li><li><strong>Interface Builder / SwiftUI Previews</strong> for visual layout</li><li><strong>Simulators</strong> for testing on virtual iPhones, iPads, Apple TVs, etc.</li><li><strong><a href="../Reference/Instruments.html">Instruments</a></strong> for performance profiling</li><li><strong>Signing and provisioning</strong> tools for App Store submission</li></ul>
+  <h3>Xcode Version Numbering</h3>
+  <p>Xcode versions track roughly with the OS releases. Xcode 26 ships alongside iOS 26, macOS 26, etc. Each major Xcode version requires a minimum macOS version to run. Always use the latest release version for App Store submissions.</p>
+  <hr>
+  <h2>Opening Xcode for the First Time</h2>
+  <p>When you launch Xcode, you see the Welcome screen. Your three options:</p>
+  <ol class="body-list"><li><strong>Create New Project</strong> -- starts from a template</li><li><strong>Clone Git Repository</strong> -- pulls an existing project from GitHub, etc.</li><li><strong>Open Existing Project</strong> -- opens a <code>.xcodeproj</code> or <code>.xcworkspace</code> file</li></ol>
+  <h3>Creating a New Project</h3>
+  <p>Xcode walks you through a wizard:</p>
+  <ol class="body-list"><li><strong>Choose a template</strong> -- for SwiftUI apps, pick "App" under the platform tab (iOS, macOS, multiplatform)</li><li><strong>Name your project</strong> -- this becomes the bundle name and default folder name</li><li><strong>Organization Identifier</strong> -- reverse-DNS style, like <code>com.yourname</code>. Combined with the product name, this forms your <strong>Bundle Identifier</strong> (e.g., <code>com.yourname.MyApp</code>)</li><li><strong>Storage</strong> -- choose SwiftData if you need persistence, or None</li><li><strong>Include Tests</strong> -- check this box; you can delete them later but having the target is useful</li></ol>
+  <p>Hit Create, pick a save location, and Xcode generates your project.</p>
+  <hr>
+  <h2>The Xcode Project Structure</h2>
+  <h3>The .xcodeproj File</h3>
+  <p>This is actually a folder (a "package" in macOS terms) containing:</p>
+  <ul><li><code>project.pbxproj</code> -- the master file that tracks every file, target, build setting</li><li><code>xcshareddata/</code> -- shared schemes</li><li><code>xcuserdata/</code> -- your personal settings (window positions, breakpoints)</li></ul>
+  <p>Never edit <code>project.pbxproj</code> by hand unless you truly know what you are doing.</p>
+  <h3>The Project Navigator (Left Sidebar)</h3>
+  <p>The file tree on the left. Your source files, assets, Info.plist, and entitlements live here. The structure in the navigator does not have to match the file system, but keeping them in sync saves headaches.</p>
+  <h3>Key Files in a New Project</h3>
+  <pre><code class="lang-">MyApp/
   <a href="../Reference/App-EntryPoint.html">MyAppApp.swift</a>      -- the @main entry point
   <a href="../Reference/ContentView-SwiftUI.html">ContentView.swift</a>   -- your first view
   <a href="../Reference/Assets-xcassets.html">Assets.xcassets</a>     -- app icon, accent color, image assets
   <a href="../Reference/Info-plist.html">Info.plist</a>          -- app configuration (may be absent if using build settings)
-  <a href="../Reference/Entitlements.html">MyApp.entitlements</a>  -- capabilities like iCloud, HealthKit, etc.</code></pre></li>
-  <li><hr></li>
-  <li><h2>Targets</h2></li>
-  <li><p>A <strong>target</strong> is a single product that Xcode builds. One project can contain multiple targets.</p></li>
-  <li><p>Common target types:</p></li>
-  <li><ul><li><strong>App target</strong> -- the actual application</li><li><strong>Framework target</strong> -- a reusable module (like a Swift Package, but project-local)</li><li><strong>Test target</strong> -- unit tests and UI tests</li><li><strong>Widget target</strong> -- for WidgetKit extensions</li><li><strong>App Clip target</strong> -- lightweight version of your app</li></ul></li>
-  <li><p>Each target has its own build settings, Info.plist values, and source files. A file can belong to multiple targets (check the Target Membership inspector on the right sidebar).</p></li>
-  <li><h3>Adding a New Target</h3></li>
-  <li><p>File &gt; New &gt; Target. Pick the template. Xcode adds a new folder and configures the build settings. The new target appears in the scheme picker at the top of Xcode.</p></li>
-  <li><hr></li>
-  <li><h2>Schemes</h2></li>
-  <li><p>A <strong>scheme</strong> tells Xcode <em>what</em> to build, <em>how</em> to build it, and <em>where</em> to run it.</p></li>
-  <li><p>Each scheme defines:</p></li>
-  <li><ul><li><strong>Build</strong> -- which targets to compile</li><li><strong>Run</strong> -- which executable to launch, on which simulator/device</li><li><strong>Test</strong> -- which test targets to execute</li><li><strong>Profile</strong> -- launches <a href="../Reference/Instruments.html">Instruments</a> for performance analysis</li><li><strong>Archive</strong> -- builds a release version for App Store submission</li></ul></li>
-  <li><p>The scheme picker is at the top-left of Xcode, next to the Run/Stop buttons. It shows: <code>[Scheme Name] &gt; [Destination]</code>.</p></li>
-  <li><h3>Editing Schemes</h3></li>
-  <li><p>Product &gt; Scheme &gt; Edit Scheme (or click the scheme name and choose "Edit Scheme"). You rarely need to touch this for single-target apps.</p></li>
-  <li><h3>Watch Out For</h3></li>
-  <li><ul><li>If your app builds but nothing happens when you click Run, check that the scheme's "Executable" is set correctly (not "None").</li><li>If tests are not running, make sure the test target is checked under the scheme's Test action.</li></ul></li>
-  <li><hr></li>
-  <li><h2>The Build System</h2></li>
-  <li><p>When you press Cmd+B (Build) or Cmd+R (Run), Xcode:</p></li>
-  <li><ol class="body-list"><li><strong>Resolves dependencies</strong> -- finds Swift Packages, frameworks, linked libraries</li><li><strong>Compiles Swift files</strong> -- each <code>.swift</code> file is compiled; the compiler checks types, concurrency, access control</li><li><strong>Links</strong> -- combines compiled objects into a single executable</li><li><strong>Code-signs</strong> -- applies your signing certificate</li><li><strong>Copies resources</strong> -- bundles assets, storyboards, localization files into the app package</li></ol></li>
-  <li><p>Build output appears in the <strong>Report Navigator</strong> (last tab in the left sidebar) or the build log (View &gt; Navigators &gt; Reports).</p></li>
-  <li><h3>Build Configurations</h3></li>
-  <li><p>Every project ships with two:</p></li>
-  <li><ul><li><strong>Debug</strong> -- unoptimized, includes debug symbols, assertions are active, previews work</li><li><strong>Release</strong> -- optimized, stripped, what ships to the App Store</li></ul></li>
-  <li><p>You can create custom configurations (e.g., "Staging") but most apps only need these two.</p></li>
-  <li><h3>Common Build Errors</h3></li>
-  <li><p>| Error | What It Means | |-------|--------------| | "Cannot find 'X' in scope" | You are using a name that does not exist -- typo, missing import, or file not in target | | "Type 'X' does not conform to protocol 'Y'" | You declared conformance but have not implemented required members | | "Sending 'X' risks causing data races" | Swift 6 concurrency -- you are passing a non-Sendable value across actor boundaries | | "Missing return in closure" | A closure needs an explicit <code>return</code> statement |</p></li>
-  <li><hr></li>
-  <li><h2>Simulators</h2></li>
-  <li><p>Simulators let you test your app without a physical device. They simulate the software environment (not the hardware).</p></li>
-  <li><h3>Using Simulators</h3></li>
-  <li><ol class="body-list"><li>In the scheme picker, choose a simulator destination (e.g., "iPhone 16 Pro")</li><li>Press Cmd+R to build and run</li><li>The Simulator app launches with your app installed</li></ol></li>
-  <li><h3>Simulator Limitations</h3></li>
-  <li><p>Simulators <strong>cannot</strong> simulate:</p></li>
-  <li><ul><li>Camera</li><li>Bluetooth</li><li>Push notifications (partially available via command line)</li><li>Actual performance characteristics (a Mac is far faster than an iPhone)</li><li>Haptic feedback</li><li>NFC</li></ul></li>
-  <li><p>Simulators <strong>can</strong> simulate:</p></li>
-  <li><ul><li>Different screen sizes and orientations</li><li>Dark mode / light mode</li><li>Dynamic Type sizes (critical for accessibility testing)</li><li>Location services (with mock locations)</li><li>Slow network conditions</li></ul></li>
-  <li><h3>Managing Simulators</h3></li>
-  <li><p>Window &gt; Devices and Simulators in Xcode. You can create, delete, and reset simulators here. You can also boot multiple simulators simultaneously for comparison testing.</p></li>
-  <li><h3>Watch Out For</h3></li>
-  <li><ul><li>Simulator performance is not representative of real-device performance. Always test on a real device before shipping.</li><li>If a simulator is stuck or behaving oddly, reset it: Device &gt; Erase All Content and Settings in the Simulator app.</li><li>tvOS simulator uses the arrow keys and Return as the Siri Remote. The trackpad on the remote is simulated with mouse clicks.</li></ul></li>
-  <li><hr></li>
-  <li><h2>Running on Physical Devices</h2></li>
-  <li><h3>Requirements</h3></li>
-  <li><ol class="body-list"><li>An Apple Developer account (free accounts work for personal testing; paid $99/year for App Store distribution)</li><li>The device connected via USB or on the same Wi-Fi network (for wireless debugging)</li><li>The device registered in your developer account (automatic for free accounts, up to 3 devices)</li></ol></li>
-  <li><h3>First-Time Device Setup</h3></li>
-  <li><ol class="body-list"><li>Connect the device via USB</li><li>Xcode prompts you to trust the computer on the device -- tap Trust</li><li>Select the device in the scheme destination picker</li><li>Xcode may prompt you to enable Developer Mode on the device (Settings &gt; Privacy &amp; Security &gt; Developer Mode)</li><li>Build and run</li></ol></li>
-  <li><h3>Wireless Debugging</h3></li>
-  <li><p>After the first USB connection: Window &gt; Devices and Simulators &gt; select device &gt; check "Connect via network." The device appears in the destination list with a network icon.</p></li>
-  <li><hr></li>
-  <li><h2>Info.plist</h2></li>
-  <li><p><code>Info.plist</code> is a property list file that stores configuration metadata about your app. Modern Xcode projects often embed these values directly in build settings instead of a separate file, but you can still create one manually.</p></li>
-  <li><p>Common keys:</p></li>
-  <li><p>| Key | Purpose | |-----|---------| | <code>CFBundleDisplayName</code> | The name shown under the app icon | | <code>CFBundleShortVersionString</code> | Marketing version (e.g., "2.4") | | <code>CFBundleVersion</code> | Build number (e.g., "1") | | <code>UILaunchScreen</code> | Launch screen configuration | | <code>NSCameraUsageDescription</code> | Why your app needs camera access | | <code>NSMicrophoneUsageDescription</code> | Why your app needs microphone access | | <code>UIBackgroundModes</code> | Background execution modes (audio, location, etc.) |</p></li>
-  <li><h3>Privacy Usage Descriptions</h3></li>
-  <li><p>Any time your app accesses a protected resource (camera, microphone, location, photos, health data, music library, calendar), you <strong>must</strong> provide a usage description string. If you skip this, the app crashes at runtime when requesting permission, or Apple rejects the app during review.</p></li>
-  <li><p>Example for MusicKit:</p></li>
-  <li><pre><code class="lang-">Key:   NSAppleMusicUsageDescription
-Value: CryoTunes needs access to your music library to play your songs.</code></pre></li>
-  <li><h3>Watch Out For</h3></li>
-  <li><ul><li>If Info.plist values are duplicated in both the file and build settings, the build setting wins.</li><li>Some keys only work in Info.plist (not build settings). When in doubt, create an explicit Info.plist file.</li></ul></li>
-  <li><hr></li>
-  <li><h2>Entitlements</h2></li>
-  <li><p>Entitlements declare what system capabilities your app can use. They live in a <code>.entitlements</code> file (a plist).</p></li>
-  <li><p>Common entitlements:</p></li>
-  <li><p>| Entitlement | What It Enables | |-------------|----------------| | <code>com.apple.security.app-sandbox</code> | macOS sandboxing (required for Mac App Store) | | <code>com.apple.developer.icloud-container-identifiers</code> | iCloud storage | | <code>com.apple.developer.healthkit</code> | HealthKit access | | <code>com.apple.developer.musickit</code> | MusicKit (Apple Music) | | <code>com.apple.developer.weatherkit</code> | WeatherKit |</p></li>
-  <li><h3>Enabling Capabilities</h3></li>
-  <li><ol class="body-list"><li>Select your project in the navigator</li><li>Select your target</li><li>Go to the "Signing &amp; Capabilities" tab</li><li>Click "+ Capability"</li><li>Search and add what you need</li></ol></li>
-  <li><p>Xcode updates the entitlements file and, for some capabilities, also registers them with Apple's developer portal.</p></li>
-  <li><h3>Watch Out For</h3></li>
-  <li><ul><li>Some capabilities (MusicKit, WeatherKit, ShazamKit) must also be enabled in App Services on <strong>developer.apple.com</strong>, not just in Xcode. The Xcode checkbox alone is not sufficient.[^1]</li><li>If you enable a capability but do not use it, App Review may ask you to remove it or justify it.</li></ul></li>
-  <li><p>[^1]: Go to developer.apple.com &gt; Certificates, Identifiers &amp; Profiles &gt; Identifiers &gt; select your app &gt; App Services tab.</p></li>
-  <li><hr></li>
-  <li><h2>Code Signing</h2></li>
-  <li><p>Code signing proves that your app comes from you and has not been tampered with. Xcode handles most of this automatically.</p></li>
-  <li><h3>Automatic Signing</h3></li>
-  <li><p>Under Signing &amp; Capabilities, check "Automatically manage signing" and select your Team. Xcode will:</p></li>
-  <li><ul><li>Create a signing certificate if needed</li><li>Create/update a provisioning profile</li><li>Register devices as needed</li></ul></li>
-  <li><p>This works for development and App Store distribution. Use it unless you have a specific reason not to.</p></li>
-  <li><h3>Manual Signing</h3></li>
-  <li><p>Some situations (enterprise distribution, CI/CD pipelines) require manual signing. You manage certificates and profiles yourself in the developer portal and select them in Xcode's build settings.</p></li>
-  <li><h3>Watch Out For</h3></li>
-  <li><ul><li>"No signing certificate found" -- go to Xcode &gt; Settings &gt; Accounts, select your team, click "Manage Certificates," and create a new one.</li><li>Provisioning profile errors often fix themselves if you delete the old profile from <code>~/Library/MobileDevice/Provisioning Profiles/</code> and let Xcode regenerate it.</li><li>If you switch teams or accounts, clean your build folder (Shift+Cmd+K) and restart Xcode.</li></ul></li>
-  <li><hr></li>
-  <li><h2>App Store Connect</h2></li>
-  <li><p>App Store Connect (appstoreconnect.apple.com) is where you manage your apps after they are built. This is separate from the developer portal.</p></li>
-  <li><h3>What You Do in App Store Connect</h3></li>
-  <li><ul><li><strong>Create app listings</strong> -- name, description, screenshots, keywords, category</li><li><strong>Submit builds for review</strong> -- upload from Xcode, then select the build in App Store Connect</li><li><strong>View crash reports and analytics</strong></li><li><strong>Set pricing and availability</strong></li><li><strong>Respond to App Review rejections</strong></li></ul></li>
-  <li><h3>Uploading a Build</h3></li>
-  <li><ol class="body-list"><li>In Xcode: Product &gt; Archive (must have a real device or "Any iOS Device" selected, not a simulator)</li><li>The Organizer window opens with your archive</li><li>Click "Distribute App"</li><li>Choose "App Store Connect" distribution</li><li>Follow the prompts -- Xcode uploads the build</li></ol></li>
-  <li><p>The build appears in App Store Connect after 5-30 minutes of processing.</p></li>
-  <li><h3>The App Review Process</h3></li>
-  <li><p>After you submit a build for review:</p></li>
-  <li><ol class="body-list"><li>It enters the review queue</li><li>A reviewer (human, assisted by automated checks) tests your app</li><li>You get one of: Approved, Rejected (with reasons), or "Metadata Rejected" (listing issues, not code)</li></ol></li>
-  <li><p>Common rejection reasons:</p></li>
-  <li><ul><li>Crashes or bugs</li><li>Missing privacy usage descriptions</li><li>Incomplete or placeholder content</li><li>Guideline 4.3: spam/duplicate app</li><li>Guideline 2.1: performance issues</li></ul></li>
-  <li><h3>Watch Out For</h3></li>
-  <li><ul><li><strong>Version and build numbers</strong>: the marketing version (<code>CFBundleShortVersionString</code>) must increase with each new App Store release. The build number (<code>CFBundleVersion</code>) must be unique per version. If you upload build 1 for version 2.4 and it gets rejected, upload build 2 for version 2.4.</li><li><strong>Screenshots</strong>: must match the device they claim to represent. Xcode simulators are the easiest way to capture them.</li><li><strong>Privacy manifests</strong>: as of 2024, Apple requires privacy manifest files for apps that use certain APIs. Xcode warns you if yours is missing.</li></ul></li>
-  <li><hr></li>
-  <li><h2>Xcode Keyboard Shortcuts Worth Knowing</h2></li>
-  <li><p>| Shortcut | Action | |----------|--------| | Cmd+R | Build and Run | | Cmd+B | Build only | | Cmd+. | Stop running app | | Cmd+Shift+K | Clean build folder | | Cmd+Shift+O | Open Quickly (jump to any file or symbol) | | Cmd+/ | Toggle comment on selected lines | | Cmd+[ and Cmd+] | Indent left / right | | Cmd+Ctrl+E | Edit All in Scope (rename a variable) | | Cmd+Shift+L | Library (insert views, modifiers, images) | | Ctrl+I | Re-indent selected code | | Cmd+0 | Toggle navigator sidebar | | Cmd+Option+0 | Toggle inspector sidebar |</p></li>
-  <li><hr></li>
-  <li><h2>Practical Tips</h2></li>
-  <li><ol class="body-list"><li><strong>Clean builds fix weird issues.</strong> If something stops working and you cannot figure out why, try Shift+Cmd+K (Clean Build Folder), then Cmd+B. This clears cached compilation artifacts.</li></ol></li>
-  <li><ol class="body-list"><li><strong>Derived Data is Xcode's cache.</strong> It lives at <code>~/Library/Developer/Xcode/DerivedData/</code>. If Xcode is acting truly bizarre (phantom errors, previews refusing to work), delete this folder and rebuild. It is safe to delete; Xcode recreates it.</li></ol></li>
-  <li><ol class="body-list"><li><strong>Restart Xcode more than you think you should.</strong> Xcode's indexing and preview systems accumulate state. A restart clears it.</li></ol></li>
-  <li><ol class="body-list"><li><strong>Use Open Quickly (Cmd+Shift+O) constantly.</strong> It is faster than clicking through the file tree for any project larger than a handful of files.</li></ol></li>
-  <li><ol class="body-list"><li><strong>When Xcode gives you a fixit suggestion, read it before accepting.</strong> Fixits are often correct but sometimes mask a deeper issue. A fixit that says "add @Sendable" might be covering up an architecture problem.</li></ol></li>
-  <li><ol class="body-list"><li><strong>Build for the oldest OS version you intend to support.</strong> Set your deployment target early. Adding <code>if #available</code> checks later is tedious.</li></ol></li>
-  <li><hr></li>
-  <li><p><em>Claude's Xcode 26 Swift Bible -- Book 1</em> <em>By Michael Fluharty. Swift 6, Xcode 26.</em></p></li>
-</ol>
-</div>
+  <a href="../Reference/Entitlements.html">MyApp.entitlements</a>  -- capabilities like iCloud, HealthKit, etc.</code></pre>
+  <hr>
+  <h2>Targets</h2>
+  <p>A <strong>target</strong> is a single product that Xcode builds. One project can contain multiple targets.</p>
+  <p>Common target types:</p>
+  <ul><li><strong>App target</strong> -- the actual application</li><li><strong>Framework target</strong> -- a reusable module (like a Swift Package, but project-local)</li><li><strong>Test target</strong> -- unit tests and UI tests</li><li><strong>Widget target</strong> -- for WidgetKit extensions</li><li><strong>App Clip target</strong> -- lightweight version of your app</li></ul>
+  <p>Each target has its own build settings, Info.plist values, and source files. A file can belong to multiple targets (check the Target Membership inspector on the right sidebar).</p>
+  <h3>Adding a New Target</h3>
+  <p>File &gt; New &gt; Target. Pick the template. Xcode adds a new folder and configures the build settings. The new target appears in the scheme picker at the top of Xcode.</p>
+  <hr>
+  <h2>Schemes</h2>
+  <p>A <strong>scheme</strong> tells Xcode <em>what</em> to build, <em>how</em> to build it, and <em>where</em> to run it.</p>
+  <p>Each scheme defines:</p>
+  <ul><li><strong>Build</strong> -- which targets to compile</li><li><strong>Run</strong> -- which executable to launch, on which simulator/device</li><li><strong>Test</strong> -- which test targets to execute</li><li><strong>Profile</strong> -- launches <a href="../Reference/Instruments.html">Instruments</a> for performance analysis</li><li><strong>Archive</strong> -- builds a release version for App Store submission</li></ul>
+  <p>The scheme picker is at the top-left of Xcode, next to the Run/Stop buttons. It shows: <code>[Scheme Name] &gt; [Destination]</code>.</p>
+  <h3>Editing Schemes</h3>
+  <p>Product &gt; Scheme &gt; Edit Scheme (or click the scheme name and choose "Edit Scheme"). You rarely need to touch this for single-target apps.</p>
+  <h3>Watch Out For</h3>
+  <ul><li>If your app builds but nothing happens when you click Run, check that the scheme's "Executable" is set correctly (not "None").</li><li>If tests are not running, make sure the test target is checked under the scheme's Test action.</li></ul>
+  <hr>
+  <h2>The Build System</h2>
+  <p>When you press Cmd+B (Build) or Cmd+R (Run), Xcode:</p>
+  <ol class="body-list"><li><strong>Resolves dependencies</strong> -- finds Swift Packages, frameworks, linked libraries</li><li><strong>Compiles Swift files</strong> -- each <code>.swift</code> file is compiled; the compiler checks types, concurrency, access control</li><li><strong>Links</strong> -- combines compiled objects into a single executable</li><li><strong>Code-signs</strong> -- applies your signing certificate</li><li><strong>Copies resources</strong> -- bundles assets, storyboards, localization files into the app package</li></ol>
+  <p>Build output appears in the <strong>Report Navigator</strong> (last tab in the left sidebar) or the build log (View &gt; Navigators &gt; Reports).</p>
+  <h3>Build Configurations</h3>
+  <p>Every project ships with two:</p>
+  <ul><li><strong>Debug</strong> -- unoptimized, includes debug symbols, assertions are active, previews work</li><li><strong>Release</strong> -- optimized, stripped, what ships to the App Store</li></ul>
+  <p>You can create custom configurations (e.g., "Staging") but most apps only need these two.</p>
+  <h3>Common Build Errors</h3>
+  <table>
+  <thead><tr><th>Error</th><th>What It Means</th><th></th></tr></thead>
+  <tbody>
+  <tr><td>"Cannot find 'X' in scope"</td><td>You are using a name that does not exist -- typo, missing import, or file not in target</td><td></td></tr>
+  <tr><td>"Type 'X' does not conform to protocol 'Y'"</td><td>You declared conformance but have not implemented required members</td><td></td></tr>
+  <tr><td>"Sending 'X' risks causing data races"</td><td>Swift 6 concurrency -- you are passing a non-Sendable value across actor boundaries</td><td></td></tr>
+  </tbody>
+  </table>
+  <hr>
+  <h2>Simulators</h2>
+  <p>Simulators let you test your app without a physical device. They simulate the software environment (not the hardware).</p>
+  <h3>Using Simulators</h3>
+  <ol class="body-list"><li>In the scheme picker, choose a simulator destination (e.g., "iPhone 16 Pro")</li><li>Press Cmd+R to build and run</li><li>The Simulator app launches with your app installed</li></ol>
+  <h3>Simulator Limitations</h3>
+  <p>Simulators <strong>cannot</strong> simulate:</p>
+  <ul><li>Camera</li><li>Bluetooth</li><li>Push notifications (partially available via command line)</li><li>Actual performance characteristics (a Mac is far faster than an iPhone)</li><li>Haptic feedback</li><li>NFC</li></ul>
+  <p>Simulators <strong>can</strong> simulate:</p>
+  <ul><li>Different screen sizes and orientations</li><li>Dark mode / light mode</li><li>Dynamic Type sizes (critical for accessibility testing)</li><li>Location services (with mock locations)</li><li>Slow network conditions</li></ul>
+  <h3>Managing Simulators</h3>
+  <p>Window &gt; Devices and Simulators in Xcode. You can create, delete, and reset simulators here. You can also boot multiple simulators simultaneously for comparison testing.</p>
+  <h3>Watch Out For</h3>
+  <ul><li>Simulator performance is not representative of real-device performance. Always test on a real device before shipping.</li><li>If a simulator is stuck or behaving oddly, reset it: Device &gt; Erase All Content and Settings in the Simulator app.</li><li>tvOS simulator uses the arrow keys and Return as the Siri Remote. The trackpad on the remote is simulated with mouse clicks.</li></ul>
+  <hr>
+  <h2>Running on Physical Devices</h2>
+  <h3>Requirements</h3>
+  <ol class="body-list"><li>An Apple Developer account (free accounts work for personal testing; paid $99/year for App Store distribution)</li><li>The device connected via USB or on the same Wi-Fi network (for wireless debugging)</li><li>The device registered in your developer account (automatic for free accounts, up to 3 devices)</li></ol>
+  <h3>First-Time Device Setup</h3>
+  <ol class="body-list"><li>Connect the device via USB</li><li>Xcode prompts you to trust the computer on the device -- tap Trust</li><li>Select the device in the scheme destination picker</li><li>Xcode may prompt you to enable Developer Mode on the device (Settings &gt; Privacy &amp; Security &gt; Developer Mode)</li><li>Build and run</li></ol>
+  <h3>Wireless Debugging</h3>
+  <p>After the first USB connection: Window &gt; Devices and Simulators &gt; select device &gt; check "Connect via network." The device appears in the destination list with a network icon.</p>
+  <hr>
+  <h2>Info.plist</h2>
+  <p><code>Info.plist</code> is a property list file that stores configuration metadata about your app. Modern Xcode projects often embed these values directly in build settings instead of a separate file, but you can still create one manually.</p>
+  <p>Common keys:</p>
+  <table>
+  <thead><tr><th>Key</th><th>Purpose</th><th></th></tr></thead>
+  <tbody>
+  <tr><td><code>CFBundleDisplayName</code></td><td>The name shown under the app icon</td><td></td></tr>
+  <tr><td><code>CFBundleShortVersionString</code></td><td>Marketing version (e.g., "2.4")</td><td></td></tr>
+  <tr><td><code>CFBundleVersion</code></td><td>Build number (e.g., "1")</td><td></td></tr>
+  <tr><td><code>UILaunchScreen</code></td><td>Launch screen configuration</td><td></td></tr>
+  <tr><td><code>NSCameraUsageDescription</code></td><td>Why your app needs camera access</td><td></td></tr>
+  <tr><td><code>NSMicrophoneUsageDescription</code></td><td>Why your app needs microphone access</td><td></td></tr>
+  </tbody>
+  </table>
+  <h3>Privacy Usage Descriptions</h3>
+  <p>Any time your app accesses a protected resource (camera, microphone, location, photos, health data, music library, calendar), you <strong>must</strong> provide a usage description string. If you skip this, the app crashes at runtime when requesting permission, or Apple rejects the app during review.</p>
+  <p>Example for MusicKit:</p>
+  <pre><code class="lang-">Key:   NSAppleMusicUsageDescription
+Value: CryoTunes needs access to your music library to play your songs.</code></pre>
+  <h3>Watch Out For</h3>
+  <ul><li>If Info.plist values are duplicated in both the file and build settings, the build setting wins.</li><li>Some keys only work in Info.plist (not build settings). When in doubt, create an explicit Info.plist file.</li></ul>
+  <hr>
+  <h2>Entitlements</h2>
+  <p>Entitlements declare what system capabilities your app can use. They live in a <code>.entitlements</code> file (a plist).</p>
+  <p>Common entitlements:</p>
+  <table>
+  <thead><tr><th>Entitlement</th><th>What It Enables</th><th></th></tr></thead>
+  <tbody>
+  <tr><td><code>com.apple.security.app-sandbox</code></td><td>macOS sandboxing (required for Mac App Store)</td><td></td></tr>
+  <tr><td><code>com.apple.developer.icloud-container-identifiers</code></td><td>iCloud storage</td><td></td></tr>
+  <tr><td><code>com.apple.developer.healthkit</code></td><td>HealthKit access</td><td></td></tr>
+  <tr><td><code>com.apple.developer.musickit</code></td><td>MusicKit (Apple Music)</td><td></td></tr>
+  </tbody>
+  </table>
+  <h3>Enabling Capabilities</h3>
+  <ol class="body-list"><li>Select your project in the navigator</li><li>Select your target</li><li>Go to the "Signing &amp; Capabilities" tab</li><li>Click "+ Capability"</li><li>Search and add what you need</li></ol>
+  <p>Xcode updates the entitlements file and, for some capabilities, also registers them with Apple's developer portal.</p>
+  <h3>Watch Out For</h3>
+  <ul><li>Some capabilities (MusicKit, WeatherKit, ShazamKit) must also be enabled in App Services on <strong>developer.apple.com</strong>, not just in Xcode. The Xcode checkbox alone is not sufficient.[^1]</li><li>If you enable a capability but do not use it, App Review may ask you to remove it or justify it.</li></ul>
+  <p>[^1]: Go to developer.apple.com &gt; Certificates, Identifiers &amp; Profiles &gt; Identifiers &gt; select your app &gt; App Services tab.</p>
+  <hr>
+  <h2>Code Signing</h2>
+  <p>Code signing proves that your app comes from you and has not been tampered with. Xcode handles most of this automatically.</p>
+  <h3>Automatic Signing</h3>
+  <p>Under Signing &amp; Capabilities, check "Automatically manage signing" and select your Team. Xcode will:</p>
+  <ul><li>Create a signing certificate if needed</li><li>Create/update a provisioning profile</li><li>Register devices as needed</li></ul>
+  <p>This works for development and App Store distribution. Use it unless you have a specific reason not to.</p>
+  <h3>Manual Signing</h3>
+  <p>Some situations (enterprise distribution, CI/CD pipelines) require manual signing. You manage certificates and profiles yourself in the developer portal and select them in Xcode's build settings.</p>
+  <h3>Watch Out For</h3>
+  <ul><li>"No signing certificate found" -- go to Xcode &gt; Settings &gt; Accounts, select your team, click "Manage Certificates," and create a new one.</li><li>Provisioning profile errors often fix themselves if you delete the old profile from <code>~/Library/MobileDevice/Provisioning Profiles/</code> and let Xcode regenerate it.</li><li>If you switch teams or accounts, clean your build folder (Shift+Cmd+K) and restart Xcode.</li></ul>
+  <hr>
+  <h2>App Store Connect</h2>
+  <p>App Store Connect (appstoreconnect.apple.com) is where you manage your apps after they are built. This is separate from the developer portal.</p>
+  <h3>What You Do in App Store Connect</h3>
+  <ul><li><strong>Create app listings</strong> -- name, description, screenshots, keywords, category</li><li><strong>Submit builds for review</strong> -- upload from Xcode, then select the build in App Store Connect</li><li><strong>View crash reports and analytics</strong></li><li><strong>Set pricing and availability</strong></li><li><strong>Respond to App Review rejections</strong></li></ul>
+  <h3>Uploading a Build</h3>
+  <ol class="body-list"><li>In Xcode: Product &gt; Archive (must have a real device or "Any iOS Device" selected, not a simulator)</li><li>The Organizer window opens with your archive</li><li>Click "Distribute App"</li><li>Choose "App Store Connect" distribution</li><li>Follow the prompts -- Xcode uploads the build</li></ol>
+  <p>The build appears in App Store Connect after 5-30 minutes of processing.</p>
+  <h3>The App Review Process</h3>
+  <p>After you submit a build for review:</p>
+  <ol class="body-list"><li>It enters the review queue</li><li>A reviewer (human, assisted by automated checks) tests your app</li><li>You get one of: Approved, Rejected (with reasons), or "Metadata Rejected" (listing issues, not code)</li></ol>
+  <p>Common rejection reasons:</p>
+  <ul><li>Crashes or bugs</li><li>Missing privacy usage descriptions</li><li>Incomplete or placeholder content</li><li>Guideline 4.3: spam/duplicate app</li><li>Guideline 2.1: performance issues</li></ul>
+  <h3>Watch Out For</h3>
+  <ul><li><strong>Version and build numbers</strong>: the marketing version (<code>CFBundleShortVersionString</code>) must increase with each new App Store release. The build number (<code>CFBundleVersion</code>) must be unique per version. If you upload build 1 for version 2.4 and it gets rejected, upload build 2 for version 2.4.</li><li><strong>Screenshots</strong>: must match the device they claim to represent. Xcode simulators are the easiest way to capture them.</li><li><strong>Privacy manifests</strong>: as of 2024, Apple requires privacy manifest files for apps that use certain APIs. Xcode warns you if yours is missing.</li></ul>
+  <hr>
+  <h2>Xcode Keyboard Shortcuts Worth Knowing</h2>
+  <table>
+  <thead><tr><th>Shortcut</th><th>Action</th><th></th></tr></thead>
+  <tbody>
+  <tr><td>Cmd+R</td><td>Build and Run</td><td></td></tr>
+  <tr><td>Cmd+B</td><td>Build only</td><td></td></tr>
+  <tr><td>Cmd+.</td><td>Stop running app</td><td></td></tr>
+  <tr><td>Cmd+Shift+K</td><td>Clean build folder</td><td></td></tr>
+  <tr><td>Cmd+Shift+O</td><td>Open Quickly (jump to any file or symbol)</td><td></td></tr>
+  <tr><td>Cmd+/</td><td>Toggle comment on selected lines</td><td></td></tr>
+  <tr><td>Cmd+[ and Cmd+]</td><td>Indent left / right</td><td></td></tr>
+  <tr><td>Cmd+Ctrl+E</td><td>Edit All in Scope (rename a variable)</td><td></td></tr>
+  <tr><td>Cmd+Shift+L</td><td>Library (insert views, modifiers, images)</td><td></td></tr>
+  <tr><td>Ctrl+I</td><td>Re-indent selected code</td><td></td></tr>
+  <tr><td>Cmd+0</td><td>Toggle navigator sidebar</td><td></td></tr>
+  </tbody>
+  </table>
+  <hr>
+  <h2>Practical Tips</h2>
+  <ol class="body-list"><li><strong>Clean builds fix weird issues.</strong> If something stops working and you cannot figure out why, try Shift+Cmd+K (Clean Build Folder), then Cmd+B. This clears cached compilation artifacts.</li></ol>
+  <ol class="body-list"><li><strong>Derived Data is Xcode's cache.</strong> It lives at <code>~/Library/Developer/Xcode/DerivedData/</code>. If Xcode is acting truly bizarre (phantom errors, previews refusing to work), delete this folder and rebuild. It is safe to delete; Xcode recreates it.</li></ol>
+  <ol class="body-list"><li><strong>Restart Xcode more than you think you should.</strong> Xcode's indexing and preview systems accumulate state. A restart clears it.</li></ol>
+  <ol class="body-list"><li><strong>Use Open Quickly (Cmd+Shift+O) constantly.</strong> It is faster than clicking through the file tree for any project larger than a handful of files.</li></ol>
+  <ol class="body-list"><li><strong>When Xcode gives you a fixit suggestion, read it before accepting.</strong> Fixits are often correct but sometimes mask a deeper issue. A fixit that says "add @Sendable" might be covering up an architecture problem.</li></ol>
+  <ol class="body-list"><li><strong>Build for the oldest OS version you intend to support.</strong> Set your deployment target early. Adding <code>if #available</code> checks later is tedious.</li></ol>
+  <hr>
+  <h2>Further Reading &mdash; WWDC Sessions</h2>
+  <p>This book is a passive resource. When you want deeper coverage of Swift and Xcode or run into trouble, the WWDC sessions below are Apple's source material. Watch the relevant one for fuller context and the design rationale behind the API choices.</p>
+  <ul>
+    <li>WWDC25 / 245, <em>What's new in Swift</em> &mdash; <a href="https://developer.apple.com/videos/play/wwdc2025/245/">developer.apple.com/videos/play/wwdc2025/245/</a>. This year's Swift language updates and the standard library additions you'll see referenced throughout the book.</li>
+    <li>WWDC25 / 247, <em>What's new in Xcode 26</em> &mdash; <a href="https://developer.apple.com/videos/play/wwdc2025/247/">developer.apple.com/videos/play/wwdc2025/247/</a>. The Xcode 26 release: workspace changes, build-system updates, debugger improvements.</li>
+    <li>WWDC25 / 364, <em>Welcome to WWDC25</em> &mdash; <a href="https://developer.apple.com/videos/play/wwdc2025/364/">developer.apple.com/videos/play/wwdc2025/364/</a>. The opening orientation for the rest of the year's sessions &mdash; useful as a roadmap.</li>
+    <li>WWDC25 / 365, <em>New things on the way from Apple</em> &mdash; <a href="https://developer.apple.com/videos/play/wwdc2025/365/">developer.apple.com/videos/play/wwdc2025/365/</a>. Cross-platform overview of what shipped this year.</li>
+  </ul>
+  <h3>Prior-year background sessions</h3>
+  <ul>
+    <li>WWDC24 / 10136, <em>What's new in Swift</em> &mdash; <a href="https://developer.apple.com/videos/play/wwdc2024/10136/">developer.apple.com/videos/play/wwdc2024/10136/</a>. The Swift 6 release talk &mdash; data-race safety, typed throws, embedded Swift, noncopyable types.</li>
+  </ul>
+  <hr>
+  <p><em>Claude's Xcode 26 Swift Bible -- Book 1</em> <em>By Michael Fluharty. Swift 6, Xcode 26.</em></p>
 
-<footer class="page"><div class="row-nav"><div class="prev"><a href="../Front-of-Book/table-of-contents.html">&larr; Table of Contents</a></div><div class="pos">Book 01 Introducing Swift And Xcode</div><div class="next"><a href="Book-02-Introducing-SwiftUI-Views.html">Book 2: Introducing SwiftUI Views &rarr;</a></div></div></footer>
+</div>
 
 </body>
 </html>

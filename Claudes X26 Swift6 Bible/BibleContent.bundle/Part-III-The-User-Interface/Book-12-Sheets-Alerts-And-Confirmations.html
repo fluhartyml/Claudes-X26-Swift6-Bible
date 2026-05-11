@@ -4,106 +4,26 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Book 12: Sheets Alerts And Confirmations &mdash; Claude's Xcode 26 Swift Bible</title>
-<style>
-:root {
-  --bg: #000000;
-  --fg: #FFB000;
-  --bright: #FFD060;
-  --dim: #996600;
-  --codebg: #1a0d00;
-  --border: #664500;
-  --gutter: #4a3300;
-  --headerbg: #0a0600;
-}
-* { box-sizing: border-box; }
-html, body { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; height: 100%; }
-body {
-  background: var(--bg);
-  color: var(--fg);
-  font-family: "FiraCode Nerd Font Mono", "FiraCode Nerd Font", "Fira Code", "Menlo", "Courier New", monospace;
-  font-size: 18pt;
-  line-height: 1.55;
-  margin: 0;
-  padding: 0;
-  text-shadow: 0 0 1px rgba(255, 176, 0, 0.35);
-  display: flex;
-  flex-direction: column;
-}
-header.page, footer.page {
-  background: var(--headerbg);
-  color: var(--dim);
-  padding: 0.55rem 1.1rem;
-  font-size: 13pt;
-  display: flex;
-  flex-direction: column;
-  gap: 0.2rem;
-  flex: 0 0 auto;
-  z-index: 10;
-}
-header.page { border-bottom: 1px solid var(--border); }
-footer.page { border-top: 1px solid var(--border); padding-bottom: calc(0.55rem + env(safe-area-inset-bottom)); }
-header.page .path, footer.page .path { color: var(--fg); word-break: break-all; overflow-wrap: break-word; }
-header.page .pos, footer.page .pos { color: var(--bright); }
-/* The middle scrolls; header and footer stay put. */
-.content { flex: 1 1 auto; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 0.8rem 1rem 2rem 1rem; max-width: 1100px; margin: 0 auto; width: 100%; }
-h1 { color: var(--bright); font-weight: normal; font-size: 26pt; margin: 0.6rem 0 1rem 0; }
-h2 { color: var(--bright); font-weight: normal; font-size: 20pt; border-bottom: 1px solid var(--border); padding-bottom: 0.3rem; margin-top: 1.5rem; counter-set: h3 0 para 0; counter-increment: h2; }
-h2::before { content: counter(h2) ". "; color: var(--fg); }
-h3 { color: var(--bright); font-weight: normal; font-size: 18pt; margin-top: 1rem; counter-set: para 0; counter-increment: h3; }
-h3::before { content: counter(h2) "." counter(h3) " "; color: var(--fg); }
-p { margin: 0.4rem 0; counter-increment: para; }
-p::before { content: counter(h2) "." counter(h3) "." counter(para) " "; color: var(--dim); font-size: 13pt; margin-right: 0.4em; }
-code { color: var(--bright); background: var(--codebg); padding: 0.08em 0.35em; border: 1px solid #3a2400; border-radius: 3px; font-size: 0.92em; }
-pre { background: var(--codebg); border: 1px solid #3a2400; border-radius: 4px; padding: 0.7rem 0.9rem; overflow-x: auto; font-size: 14pt; }
-pre code { background: transparent; border: 0; padding: 0; }
-ul, ol.body-list { margin: 0.4rem 0 0.4rem 1.4rem; padding: 0; }
-a { color: var(--bright); font-weight: bold; text-decoration: none; border-bottom: 1px dotted var(--dim); }
-a:hover { background: #332200; }
-strong { color: var(--bright); }
-em { color: var(--fg); font-style: italic; }
-hr { border: 0; border-top: 1px solid var(--border); margin: 1rem 0; }
-ol.lines { list-style: none; counter-reset: line h2 h3 para; padding: 0; margin: 0; }
-ol.lines > li { counter-increment: line; padding: 0.15rem 0 0.15rem 3.6rem; position: relative; min-height: 1.2em; }
-ol.lines > li::before { content: counter(line); position: absolute; left: 0; top: 0.25rem; width: 2.8rem; text-align: right; color: var(--gutter); font-size: 13pt; padding-right: 0.5rem; border-right: 1px solid #2a1e00; }
-ol.lines > li > p, ol.lines > li > h2, ol.lines > li > h3, ol.lines > li > ul, ol.lines > li > ol, ol.lines > li > pre, ol.lines > li > hr { margin: 0; }
-.scope-note { border-left: 3px solid var(--bright); padding: 0.7rem 1rem; background: #140c00; margin: 0.6rem 0; color: var(--bright); }
-.nav { display: flex; gap: 0.9rem; flex-wrap: wrap; margin-top: 0.8rem; font-size: 14pt; }
-
-
-footer.page { flex-direction: column; gap: 0.4rem; }
-footer.page .row-nav { display: flex; flex-direction: row; justify-content: space-between; align-items: center; gap: 0.5rem; }
-footer.page .row-nav .prev, footer.page .row-nav .next { flex: 1; min-width: 0; }
-footer.page .row-nav .prev { text-align: left; }
-footer.page .row-nav .next { text-align: right; }
-footer.page .row-nav .pos { flex: 0 0 auto; text-align: center; color: var(--bright); font-weight: bold; }
-footer.page .row-nav a { color: var(--bright); font-weight: bold; text-decoration: none; border-bottom: 1px dotted var(--dim); }
-footer.page .row-nav a:hover { background: #332200; }
-footer.page .row-nav .nav-empty { color: var(--gutter); font-style: italic; }
-</style>
 </head>
 <body>
 
-<header class="page">
-  <div class="path">Part III The User Interface/Book 12 Sheets Alerts And Confirmations</div>
-</header>
-
 <div class="content">
-<ol class="lines">
-  <li><h1>Book 12: Sheets, Alerts, and Confirmations</h1></li>
-  <li><h2>Live Reference: Claudes LockBox</h2></li>
-  <li><div class="scope-note"><strong>Claudes LockBox</strong> ships every pattern in this chapter at production scale. The New Item form lives in a <code>fullScreenCover</code> (not a <code>.sheet</code> &mdash; see Build-Along 03 &sect;10 for why the <code>.sheet</code> height fights the iOS keyboard on phone-sized screens). The image viewer opens via <code>.sheet</code>. Long-press menus on photos use the SwiftUI contextual-menu pattern. Delete operations use confirmation dialogs. The About sheet opens from the sidebar's info button via <code>.sheet</code> again. Source: <a href="https://github.com/fluhartyml/Claudes-LockBox">github.com/fluhartyml/Claudes-LockBox</a>. See Build-Along 03 for the full walkthrough; the <code>fullScreenCover</code> vs <code>.sheet</code> decision is one of three polish fixes from a single commit on the build day, captured in Section 10 of that chapter. <strong>My Person CRM</strong> shows the same patterns at slightly larger scale: an Add Interaction sheet driven by <code>.sheet(isPresented:)</code>, an About sheet from the toolbar info button, plus a SwiftUI-wrapped <code>CNContactPickerViewController</code> presented as a sheet for picking a contact &mdash; the canonical example of a UIKit picker bridged into SwiftUI's sheet system. Source: <a href="https://github.com/fluhartyml/My-Person-CRM/wiki">github.com/fluhartyml/My-Person-CRM/wiki</a>. <strong>IntelligenceDemo</strong> uses <code>PhotosPicker</code> from <code>PhotosUI</code> instead of presenting a sheet itself &mdash; the picker IS the sheet, fired from a <code>PhotosPicker</code> control rather than a manual <code>.sheet</code> modifier. Source: <a href="https://github.com/fluhartyml/IntelligenceDemo/wiki">github.com/fluhartyml/IntelligenceDemo/wiki</a>. Worth contrasting: LockBox manually presents a UIKit camera, My Person CRM manually presents a UIKit contact picker, IntelligenceDemo lets <code>PhotosPicker</code> handle presentation entirely &mdash; three places on the spectrum from "you drive the sheet" to "the framework drives the sheet for you."</div></li>
-  <li><hr></li>
-  <li><h2>X26 Updates to Sheets and Action Sheets</h2></li>
-  <li><p>Modal views pick up Liquid Glass in X26, plus a couple of shape changes worth knowing. Full sheets carry a larger corner radius. Half sheets sit slightly off the screen edge instead of butting up against it, leaving a thin gap where the view behind shows through<sup>[<a href="#s1-fn">s1</a>]</sup>. A half sheet that the user drags up to full height also fades from translucent to closer-to-solid as it goes, so the task gets visual priority once the sheet takes over the screen.</p></li>
-  <li><p>Two practical review tasks:</p></li>
-  <li><ul>
+
+  <h1>Book 12: Sheets, Alerts, and Confirmations</h1>
+  <h2>Live Reference: Claudes LockBox</h2>
+  <div class="scope-note"><strong>Claudes LockBox</strong> ships every pattern in this chapter at production scale. The New Item form lives in a <code>fullScreenCover</code> (not a <code>.sheet</code> &mdash; see Build-Along 03 &sect;10 for why the <code>.sheet</code> height fights the iOS keyboard on phone-sized screens). The image viewer opens via <code>.sheet</code>. Long-press menus on photos use the SwiftUI contextual-menu pattern. Delete operations use confirmation dialogs. The About sheet opens from the sidebar's info button via <code>.sheet</code> again. Source: <a href="https://github.com/fluhartyml/Claudes-LockBox">github.com/fluhartyml/Claudes-LockBox</a>. See Build-Along 03 for the full walkthrough; the <code>fullScreenCover</code> vs <code>.sheet</code> decision is one of three polish fixes from a single commit on the build day, captured in Section 10 of that chapter. <strong>My Person CRM</strong> shows the same patterns at slightly larger scale: an Add Interaction sheet driven by <code>.sheet(isPresented:)</code>, an About sheet from the toolbar info button, plus a SwiftUI-wrapped <code>CNContactPickerViewController</code> presented as a sheet for picking a contact &mdash; the canonical example of a UIKit picker bridged into SwiftUI's sheet system. Source: <a href="https://github.com/fluhartyml/My-Person-CRM/wiki">github.com/fluhartyml/My-Person-CRM/wiki</a>. <strong>IntelligenceDemo</strong> uses <code>PhotosPicker</code> from <code>PhotosUI</code> instead of presenting a sheet itself &mdash; the picker IS the sheet, fired from a <code>PhotosPicker</code> control rather than a manual <code>.sheet</code> modifier. Source: <a href="https://github.com/fluhartyml/IntelligenceDemo/wiki">github.com/fluhartyml/IntelligenceDemo/wiki</a>. Worth contrasting: LockBox manually presents a UIKit camera, My Person CRM manually presents a UIKit contact picker, IntelligenceDemo lets <code>PhotosPicker</code> handle presentation entirely &mdash; three places on the spectrum from "the app drives the sheet" to "the framework drives the sheet for the app."</div>
+  <hr>
+  <h2>X26 Updates to Sheets and Action Sheets</h2>
+  <p>Modal views pick up Liquid Glass in X26, plus a couple of shape changes worth knowing. Full sheets carry a larger corner radius. Half sheets sit slightly off the screen edge instead of butting up against it, leaving a thin gap where the view behind shows through<sup>[<a href="#s1-fn">s1</a>]</sup>. A half sheet that the user drags up to full height also fades from translucent to closer-to-solid as it goes, so the task gets visual priority once the sheet takes over the screen.</p>
+  <p>Two practical review tasks:</p>
+  <ul>
     <li><strong>Inside the sheet:</strong> walk the corners. A label, button, or text field that fit fine against the old square corner can land underneath the new curve and clip a letter or look squeezed.</li>
     <li><strong>Outside the sheet:</strong> for half sheets, look at what fills the new gap. Whatever was directly behind the sheet now shows through that strip. A loud background pattern there will pull the eye away from the sheet itself.</li>
-  </ul></li>
-  <li><p>If you've added a custom visual effect view as a sheet or popover background, remove it. Apple's guidance is explicit: <em>"Audit the backgrounds of sheets and popovers... remove those custom background views to provide a consistent experience with other sheets across the system."</em><sup>[<a href="#s1-fn">s1</a>]</sup></p></li>
-  <li><h3>Action Sheets Originate from Their Source</h3></li>
-  <li><p>The bottom-of-screen action sheet is gone. In X26 the sheet attaches to whatever button or row the user tapped, and pops up next to that element. The rest of the screen stays live too &mdash; the user can scroll, tap something else, or dismiss by ignoring the sheet. The SwiftUI call is the same one you'd use for a confirmation dialog:</p></li>
-  <li><pre><code class="lang-swift">.confirmationDialog(
+  </ul>
+  <p>If you've added a custom visual effect view as a sheet or popover background, remove it. Apple's guidance is explicit: <em>"Audit the backgrounds of sheets and popovers... remove those custom background views to provide a consistent experience with other sheets across the system."</em><sup>[<a href="#s1-fn">s1</a>]</sup></p>
+  <h3>Action Sheets Originate from Their Source</h3>
+  <p>The bottom-of-screen action sheet is gone. In X26 the sheet attaches to whatever button or row the user tapped, and pops up next to that element. The rest of the screen stays live too &mdash; the user can scroll, tap something else, or dismiss by ignoring the sheet. The SwiftUI call is the same one you'd use for a confirmation dialog:</p>
+  <pre><code class="lang-swift">.confirmationDialog(
     "Delete this item?",
     isPresented: $showDeletePrompt,
     titleVisibility: .visible,
@@ -113,23 +33,23 @@ footer.page .row-nav .nav-empty { color: var(--gutter); font-style: italic; }
         delete(item)
     }
     Button("Cancel", role: .cancel) {}
-}</code></pre></li>
-  <li><p>Tell the sheet which element it belongs to by passing a source view or item through the dialog's anchor configuration. Skip that step and you'll get the older bottom-edge slide-up as a fallback &mdash; functional, but no longer the X26 default look.</p></li>
-  <li><p id="s1-fn" style="font-size: 13pt; color: var(--dim);">[s1] Apple Developer Documentation, <em>Adopting Liquid Glass</em>. <a href="https://developer.apple.com/documentation/TechnologyOverviews/adopting-liquid-glass">developer.apple.com/documentation/TechnologyOverviews/adopting-liquid-glass</a> &mdash; verified 2026-04-29.</p></li>
-  <li><hr></li>
-  <li><h2>Sheets</h2></li>
-  <li><h3>Basic Sheet</h3></li>
-  <li><p>Present a modal sheet with a boolean binding:</p></li>
-  <li><pre><code class="lang-swift">@State private var showSettings = false
+}</code></pre>
+  <p>Tell the sheet which element it belongs to by passing a source view or item through the dialog's anchor configuration. Skip that step and you'll get the older bottom-edge slide-up as a fallback &mdash; functional, but no longer the X26 default look.</p>
+  <p id="s1-fn" style="font-size: 13pt; color: var(--dim);">[s1] Apple Developer Documentation, <em>Adopting Liquid Glass</em>. <a href="https://developer.apple.com/documentation/TechnologyOverviews/adopting-liquid-glass">developer.apple.com/documentation/TechnologyOverviews/adopting-liquid-glass</a> &mdash; verified 2026-04-29.</p>
+  <hr>
+  <h2>Sheets</h2>
+  <h3>Basic Sheet</h3>
+  <p>Present a modal sheet with a boolean binding:</p>
+  <pre><code class="lang-swift">@State private var showSettings = false
 
 Button("Settings") { showSettings = true }
     .sheet(isPresented: $showSettings) {
         SettingsView()
-    }</code></pre></li>
-  <li><p>The sheet dismisses automatically when <code>showSettings</code> becomes <code>false</code>.</p></li>
-  <li><h3>Sheet with an Item</h3></li>
-  <li><p>Present a sheet driven by an optional identifiable value:</p></li>
-  <li><pre><code class="lang-swift">@State private var selectedProject: Project?
+    }</code></pre>
+  <p>The sheet dismisses automatically when <code>showSettings</code> becomes <code>false</code>.</p>
+  <h3>Sheet with an Item</h3>
+  <p>Present a sheet driven by an optional identifiable value:</p>
+  <pre><code class="lang-swift">@State private var selectedProject: Project?
 
 List(projects) { project in
     Button(project.name) {
@@ -138,12 +58,12 @@ List(projects) { project in
 }
 .sheet(item: $selectedProject) { project in
     ProjectDetailView(project: project)
-}</code></pre></li>
-  <li><p>The sheet appears when the value is non-nil and dismisses when it becomes <code>nil</code>. This is the preferred pattern when the sheet content depends on which item was tapped.</p></li>
-  <li><p><strong>Watch out:</strong> The item type must conform to <code>Identifiable</code>. If it doesn't, add conformance or use the boolean variant.</p></li>
-  <li><h3>Dismissing a Sheet from Inside</h3></li>
-  <li><p>Use the <code>dismiss</code> environment value:</p></li>
-  <li><pre><code class="lang-swift">struct SettingsView: View {
+}</code></pre>
+  <p>The sheet appears when the value is non-nil and dismisses when it becomes <code>nil</code>. This is the preferred pattern when the sheet content depends on which item was tapped.</p>
+  <p><strong>Watch out:</strong> The item type must conform to <code>Identifiable</code>. If it doesn't, add conformance or use the boolean variant.</p>
+  <h3>Dismissing a Sheet from Inside</h3>
+  <p>Use the <code>dismiss</code> environment value:</p>
+  <pre><code class="lang-swift">struct SettingsView: View {
     @Environment(\.dismiss) private var dismiss
 
     var body: some View {
@@ -154,78 +74,78 @@ List(projects) { project in
                 }
         }
     }
-}</code></pre></li>
-  <li><p><strong>Watch out:</strong> Always wrap sheet content in a <code>NavigationStack</code> if you want a toolbar with Done/Cancel buttons. Without it, <code>.toolbar</code> has nowhere to render.</p></li>
-  <li><h3>Preventing Dismissal</h3></li>
-  <li><p>Stop the user from swiping down to dismiss:</p></li>
-  <li><pre><code class="lang-swift">.sheet(isPresented: $showEditor) {
+}</code></pre>
+  <p><strong>Watch out:</strong> Always wrap sheet content in a <code>NavigationStack</code> if you want a toolbar with Done/Cancel buttons. Without it, <code>.toolbar</code> has nowhere to render.</p>
+  <h3>Preventing Dismissal</h3>
+  <p>Stop the user from swiping down to dismiss:</p>
+  <pre><code class="lang-swift">.sheet(isPresented: $showEditor) {
     EditorView()
         .interactiveDismissDisabled(hasUnsavedChanges)
-}</code></pre></li>
-  <li><p>Pass a boolean to conditionally prevent dismissal. When <code>true</code>, the swipe-down gesture is disabled and the user must use your explicit dismiss button.</p></li>
-  <li><h3>onDismiss Callback</h3></li>
-  <li><p>Run code when the sheet closes:</p></li>
-  <li><pre><code class="lang-swift">.sheet(isPresented: $showPicker, onDismiss: {
+}</code></pre>
+  <p>Pass a boolean to conditionally prevent dismissal. When <code>true</code>, the swipe-down gesture is disabled and the user must use your explicit dismiss button.</p>
+  <h3>onDismiss Callback</h3>
+  <p>Run code when the sheet closes:</p>
+  <pre><code class="lang-swift">.sheet(isPresented: $showPicker, onDismiss: {
     refreshData()
 }) {
     PhotoPicker()
-}</code></pre></li>
-  <li><hr></li>
-  <li><h2>Sheet Detents</h2></li>
-  <li><p>Control how tall a sheet is on iPhone/iPad.</p></li>
-  <li><h3>Built-in Detents</h3></li>
-  <li><pre><code class="lang-swift">.sheet(isPresented: $showInfo) {
+}</code></pre>
+  <hr>
+  <h2>Sheet Detents</h2>
+  <p>Control how tall a sheet is on iPhone/iPad.</p>
+  <h3>Built-in Detents</h3>
+  <pre><code class="lang-swift">.sheet(isPresented: $showInfo) {
     InfoView()
         .presentationDetents([.medium, .large])
-}</code></pre></li>
-  <li><ul><li><code>.medium</code> -- half screen</li><li><code>.large</code> -- full height (default)</li></ul></li>
-  <li><p>The user can drag between the detents you provide.</p></li>
-  <li><h3>Fixed and Fractional Detents</h3></li>
-  <li><pre><code class="lang-swift">.presentationDetents([
+}</code></pre>
+  <ul><li><code>.medium</code> -- half screen</li><li><code>.large</code> -- full height (default)</li></ul>
+  <p>The user can drag between the detents you provide.</p>
+  <h3>Fixed and Fractional Detents</h3>
+  <pre><code class="lang-swift">.presentationDetents([
     .height(200),          // fixed 200pt
     .fraction(0.3),        // 30% of screen
     .medium,
     .large
-])</code></pre></li>
-  <li><h3>Custom Detents</h3></li>
-  <li><p>For dynamic sizing:</p></li>
-  <li><pre><code class="lang-swift">struct CompactDetent: CustomPresentationDetent {
+])</code></pre>
+  <h3>Custom Detents</h3>
+  <p>For dynamic sizing:</p>
+  <pre><code class="lang-swift">struct CompactDetent: CustomPresentationDetent {
     static func height(in context: Context) -&gt; CGFloat? {
         min(context.maxDetentValue, 400)
     }
 }
 
 // Usage
-.presentationDetents([.custom(CompactDetent.self), .large])</code></pre></li>
-  <li><h3>Detent Selection Binding</h3></li>
-  <li><p>Track and control which detent is active:</p></li>
-  <li><pre><code class="lang-swift">@State private var selectedDetent: PresentationDetent = .medium
+.presentationDetents([.custom(CompactDetent.self), .large])</code></pre>
+  <h3>Detent Selection Binding</h3>
+  <p>Track and control which detent is active:</p>
+  <pre><code class="lang-swift">@State private var selectedDetent: PresentationDetent = .medium
 
 .sheet(isPresented: $showPanel) {
     PanelView()
         .presentationDetents([.medium, .large], selection: $selectedDetent)
-}</code></pre></li>
-  <li><h3>Drag Indicator</h3></li>
-  <li><pre><code class="lang-swift">.presentationDragIndicator(.visible)   // show the grabber bar
-.presentationDragIndicator(.hidden)    // hide it</code></pre></li>
-  <li><h3>Background Interaction</h3></li>
-  <li><p>Allow the user to interact with content behind the sheet:</p></li>
-  <li><pre><code class="lang-swift">.presentationBackgroundInteraction(.enabled(upThrough: .medium))</code></pre></li>
-  <li><p>This lets taps pass through to the parent view when the sheet is at <code>.medium</code> or smaller.</p></li>
-  <li><h3>Sheet Background and Corner Radius</h3></li>
-  <li><pre><code class="lang-swift">.presentationBackground(.ultraThinMaterial)
-.presentationCornerRadius(20)</code></pre></li>
-  <li><hr></li>
-  <li><h2>fullScreenCover</h2></li>
-  <li><p>A modal that covers the entire screen. No swipe-to-dismiss gesture.</p></li>
-  <li><pre><code class="lang-swift">@State private var showOnboarding = false
+}</code></pre>
+  <h3>Drag Indicator</h3>
+  <pre><code class="lang-swift">.presentationDragIndicator(.visible)   // show the grabber bar
+.presentationDragIndicator(.hidden)    // hide it</code></pre>
+  <h3>Background Interaction</h3>
+  <p>Allow the user to interact with content behind the sheet:</p>
+  <pre><code class="lang-swift">.presentationBackgroundInteraction(.enabled(upThrough: .medium))</code></pre>
+  <p>This lets taps pass through to the parent view when the sheet is at <code>.medium</code> or smaller.</p>
+  <h3>Sheet Background and Corner Radius</h3>
+  <pre><code class="lang-swift">.presentationBackground(.ultraThinMaterial)
+.presentationCornerRadius(20)</code></pre>
+  <hr>
+  <h2>fullScreenCover</h2>
+  <p>A modal that covers the entire screen. No swipe-to-dismiss gesture.</p>
+  <pre><code class="lang-swift">@State private var showOnboarding = false
 
 .fullScreenCover(isPresented: $showOnboarding) {
     OnboardingView()
-}</code></pre></li>
-  <li><p>Works identically to <code>.sheet</code> in terms of API (boolean binding, item binding, <code>onDismiss</code>).</p></li>
-  <li><p><strong>Watch out:</strong> <code>fullScreenCover</code> has no swipe-to-dismiss. You must provide your own dismiss button. If you forget, the user is stuck.</p></li>
-  <li><pre><code class="lang-swift">struct OnboardingView: View {
+}</code></pre>
+  <p>Works identically to <code>.sheet</code> in terms of API (boolean binding, item binding, <code>onDismiss</code>).</p>
+  <p><strong>Watch out:</strong> <code>fullScreenCover</code> has no swipe-to-dismiss. You must provide your own dismiss button. If you forget, the user is stuck.</p>
+  <pre><code class="lang-swift">struct OnboardingView: View {
     @Environment(\.dismiss) private var dismiss
 
     var body: some View {
@@ -234,35 +154,35 @@ List(projects) { project in
             Button("Get Started") { dismiss() }
         }
     }
-}</code></pre></li>
-  <li><p><code>fullScreenCover</code> does not support detents. It is always full screen.</p></li>
-  <li><hr></li>
-  <li><h2>Popover</h2></li>
-  <li><p>A floating bubble anchored to the source view. On iPad and Mac it appears as an actual popover. On iPhone it falls back to a sheet.</p></li>
-  <li><pre><code class="lang-swift">@State private var showTooltip = false
+}</code></pre>
+  <p><code>fullScreenCover</code> does not support detents. It is always full screen.</p>
+  <hr>
+  <h2>Popover</h2>
+  <p>A floating bubble anchored to the source view. On iPad and Mac it appears as an actual popover. On iPhone it falls back to a sheet.</p>
+  <pre><code class="lang-swift">@State private var showTooltip = false
 
 Button("Info") { showTooltip = true }
     .popover(isPresented: $showTooltip) {
         Text("This is additional information about the feature.")
             .font(.body)
             .padding()
-    }</code></pre></li>
-  <li><h3>Popover with Arrow Edge</h3></li>
-  <li><pre><code class="lang-swift">.popover(isPresented: $showPopover, arrowEdge: .top) {
+    }</code></pre>
+  <h3>Popover with Arrow Edge</h3>
+  <pre><code class="lang-swift">.popover(isPresented: $showPopover, arrowEdge: .top) {
     PopoverContent()
-}</code></pre></li>
-  <li><p>Arrow edge options: <code>.top</code>, <code>.bottom</code>, <code>.leading</code>, <code>.trailing</code>. The system may override this if there is not enough space.</p></li>
-  <li><h3>Sizing a Popover</h3></li>
-  <li><p>On iPad/Mac, constrain the popover size:</p></li>
-  <li><pre><code class="lang-swift">.popover(isPresented: $showPopover) {
+}</code></pre>
+  <p>Arrow edge options: <code>.top</code>, <code>.bottom</code>, <code>.leading</code>, <code>.trailing</code>. The system may override this if there is not enough space.</p>
+  <h3>Sizing a Popover</h3>
+  <p>On iPad/Mac, constrain the popover size:</p>
+  <pre><code class="lang-swift">.popover(isPresented: $showPopover) {
     PopoverContent()
         .frame(width: 300, height: 400)
-}</code></pre></li>
-  <li><p><strong>Watch out:</strong> On iPhone, popovers become sheets. Do not rely on popover-specific behavior for iPhone layouts.</p></li>
-  <li><hr></li>
-  <li><h2>Alerts</h2></li>
-  <li><h3>Basic Alert</h3></li>
-  <li><pre><code class="lang-swift">@State private var showAlert = false
+}</code></pre>
+  <p><strong>Watch out:</strong> On iPhone, popovers become sheets. Do not rely on popover-specific behavior for iPhone layouts.</p>
+  <hr>
+  <h2>Alerts</h2>
+  <h3>Basic Alert</h3>
+  <pre><code class="lang-swift">@State private var showAlert = false
 
 Button("Delete") { showAlert = true }
     .alert("Delete Item?", isPresented: $showAlert) {
@@ -270,15 +190,15 @@ Button("Delete") { showAlert = true }
         Button("Cancel", role: .cancel) { }
     } message: {
         Text("This action cannot be undone.")
-    }</code></pre></li>
-  <li><h3>Alert with No Message</h3></li>
-  <li><pre><code class="lang-swift">.alert("Are you sure?", isPresented: $showAlert) {
+    }</code></pre>
+  <h3>Alert with No Message</h3>
+  <pre><code class="lang-swift">.alert("Are you sure?", isPresented: $showAlert) {
     Button("Yes") { proceed() }
     Button("No", role: .cancel) { }
-}</code></pre></li>
-  <li><p>If you omit the <code>message:</code> parameter, the alert shows only the title and buttons.</p></li>
-  <li><h3>Alert with an Item</h3></li>
-  <li><pre><code class="lang-swift">@State private var errorToShow: AppError?
+}</code></pre>
+  <p>If you omit the <code>message:</code> parameter, the alert shows only the title and buttons.</p>
+  <h3>Alert with an Item</h3>
+  <pre><code class="lang-swift">@State private var errorToShow: AppError?
 
 .alert("Error", isPresented: Binding(
     get: { errorToShow != nil },
@@ -287,9 +207,9 @@ Button("Delete") { showAlert = true }
     Button("OK") { errorToShow = nil }
 } message: {
     Text(errorToShow?.localizedDescription ?? "")
-}</code></pre></li>
-  <li><p>Or more cleanly, make your error type <code>Identifiable</code> and use the item variant:</p></li>
-  <li><pre><code class="lang-swift">struct AppError: Identifiable {
+}</code></pre>
+  <p>Or more cleanly, make your error type <code>Identifiable</code> and use the item variant:</p>
+  <pre><code class="lang-swift">struct AppError: Identifiable {
     let id = UUID()
     let message: String
 }
@@ -299,9 +219,9 @@ Button("Delete") { showAlert = true }
 .alert(item: $currentError) { error in
     // This closure does not exist in the standard API.
     // Use the pattern below instead.
-}</code></pre></li>
-  <li><p><strong>Practical pattern</strong> &mdash; alert-with-item:</p></li>
-  <li><pre><code class="lang-swift">@State private var alertMessage = ""
+}</code></pre>
+  <p><strong>Practical pattern</strong> &mdash; alert-with-item:</p>
+  <pre><code class="lang-swift">@State private var alertMessage = ""
 @State private var showErrorAlert = false
 
 func handleError(_ error: Error) {
@@ -313,10 +233,10 @@ func handleError(_ error: Error) {
     Button("OK", role: .cancel) { }
 } message: {
     Text(alertMessage)
-}</code></pre></li>
-  <li><h3>Alert with TextField</h3></li>
-  <li><p>Alerts can contain text fields:</p></li>
-  <li><pre><code class="lang-swift">@State private var showRename = false
+}</code></pre>
+  <h3>Alert with TextField</h3>
+  <p>Alerts can contain text fields:</p>
+  <pre><code class="lang-swift">@State private var showRename = false
 @State private var newName = ""
 
 .alert("Rename", isPresented: $showRename) {
@@ -325,19 +245,19 @@ func handleError(_ error: Error) {
     Button("Cancel", role: .cancel) { }
 } message: {
     Text("Enter a new name for this item.")
-}</code></pre></li>
-  <li><p><strong>Watch out:</strong> Alert text fields are iOS 16+ / macOS 13+.</p></li>
-  <li><h3>Button Roles</h3></li>
-  <li><ul><li><code>.destructive</code> -- red text, signals danger</li><li><code>.cancel</code> -- bold text, always placed in the "safe" position</li></ul></li>
-  <li><pre><code class="lang-swift">.alert("Reset?", isPresented: $showReset) {
+}</code></pre>
+  <p><strong>Watch out:</strong> Alert text fields are iOS 16+ / macOS 13+.</p>
+  <h3>Button Roles</h3>
+  <ul><li><code>.destructive</code> -- red text, signals danger</li><li><code>.cancel</code> -- bold text, always placed in the "safe" position</li></ul>
+  <pre><code class="lang-swift">.alert("Reset?", isPresented: $showReset) {
     Button("Reset Everything", role: .destructive) { reset() }
     Button("Cancel", role: .cancel) { }
-}</code></pre></li>
-  <li><p>If you provide no <code>.cancel</code> button, the system adds one automatically.</p></li>
-  <li><hr></li>
-  <li><h2>Confirmation Dialog</h2></li>
-  <li><p>An action sheet on iPhone, a popover menu on iPad/Mac. Use for choices where the user picks from options.</p></li>
-  <li><pre><code class="lang-swift">@State private var showDialog = false
+}</code></pre>
+  <p>If you provide no <code>.cancel</code> button, the system adds one automatically.</p>
+  <hr>
+  <h2>Confirmation Dialog</h2>
+  <p>An action sheet on iPhone, a popover menu on iPad/Mac. Use for choices where the user picks from options.</p>
+  <pre><code class="lang-swift">@State private var showDialog = false
 
 Button("Share") { showDialog = true }
     .confirmationDialog("Share As", isPresented: $showDialog, titleVisibility: .visible) {
@@ -347,14 +267,14 @@ Button("Share") { showDialog = true }
         Button("Cancel", role: .cancel) { }
     } message: {
         Text("Choose the export format.")
-    }</code></pre></li>
-  <li><h3>Title Visibility</h3></li>
-  <li><pre><code class="lang-swift">.confirmationDialog("Title", isPresented: $show, titleVisibility: .visible) { }
+    }</code></pre>
+  <h3>Title Visibility</h3>
+  <pre><code class="lang-swift">.confirmationDialog("Title", isPresented: $show, titleVisibility: .visible) { }
 .confirmationDialog("Title", isPresented: $show, titleVisibility: .hidden) { }
-.confirmationDialog("Title", isPresented: $show, titleVisibility: .automatic) { }</code></pre></li>
-  <li><p>On iPhone, <code>.automatic</code> hides the title. Set <code>.visible</code> if you want users to see it.</p></li>
-  <li><h3>Confirmation Dialog with Item</h3></li>
-  <li><pre><code class="lang-swift">@State private var itemToDelete: Item?
+.confirmationDialog("Title", isPresented: $show, titleVisibility: .automatic) { }</code></pre>
+  <p>On iPhone, <code>.automatic</code> hides the title. Set <code>.visible</code> if you want users to see it.</p>
+  <h3>Confirmation Dialog with Item</h3>
+  <pre><code class="lang-swift">@State private var itemToDelete: Item?
 
 .confirmationDialog("Delete", isPresented: Binding(
     get: { itemToDelete != nil },
@@ -369,11 +289,11 @@ Button("Share") { showDialog = true }
     Button("Cancel", role: .cancel) { itemToDelete = nil }
 } message: {
     Text("This will permanently remove the item.")
-}</code></pre></li>
-  <li><hr></li>
-  <li><h2>Inspector</h2></li>
-  <li><p>The <code>.inspector</code> modifier presents a side panel on iPad/Mac and a sheet on iPhone. Ideal for detail/property panels.</p></li>
-  <li><pre><code class="lang-swift">@State private var showInspector = false
+}</code></pre>
+  <hr>
+  <h2>Inspector</h2>
+  <p>The <code>.inspector</code> modifier presents a side panel on iPad/Mac and a sheet on iPhone. Ideal for detail/property panels.</p>
+  <pre><code class="lang-swift">@State private var showInspector = false
 
 NavigationStack {
     ContentView()
@@ -386,24 +306,24 @@ NavigationStack {
             InspectorContent()
                 .inspectorColumnWidth(min: 200, ideal: 300, max: 400)
         }
-}</code></pre></li>
-  <li><h3>Inspector Column Width</h3></li>
-  <li><pre><code class="lang-swift">.inspectorColumnWidth(300)                          // fixed width
-.inspectorColumnWidth(min: 200, ideal: 300, max: 400)  // flexible range</code></pre></li>
-  <li><p><strong>Watch out:</strong> <code>.inspector</code> was introduced in iOS 17 / macOS 14. On older systems, you need a different approach (NavigationSplitView sidebar, etc.).</p></li>
-  <li><hr></li>
-  <li><h2>Presentation Order and Stacking</h2></li>
-  <li><h3>Multiple Sheets</h3></li>
-  <li><p>Each view gets one <code>.sheet</code>, one <code>.fullScreenCover</code>, one <code>.alert</code>, etc. To present two sheets independently, attach each modifier to a different view:</p></li>
-  <li><pre><code class="lang-swift">VStack {
+}</code></pre>
+  <h3>Inspector Column Width</h3>
+  <pre><code class="lang-swift">.inspectorColumnWidth(300)                          // fixed width
+.inspectorColumnWidth(min: 200, ideal: 300, max: 400)  // flexible range</code></pre>
+  <p><strong>Watch out:</strong> <code>.inspector</code> was introduced in iOS 17 / macOS 14. On older systems, you need a different approach (NavigationSplitView sidebar, etc.).</p>
+  <hr>
+  <h2>Presentation Order and Stacking</h2>
+  <h3>Multiple Sheets</h3>
+  <p>Each view gets one <code>.sheet</code>, one <code>.fullScreenCover</code>, one <code>.alert</code>, etc. To present two sheets independently, attach each modifier to a different view:</p>
+  <pre><code class="lang-swift">VStack {
     Button("Show A") { showA = true }
         .sheet(isPresented: $showA) { ViewA() }
 
     Button("Show B") { showB = true }
         .sheet(isPresented: $showB) { ViewB() }
-}</code></pre></li>
-  <li><p>Or use an enum to drive a single sheet:</p></li>
-  <li><pre><code class="lang-swift">enum ActiveSheet: Identifiable {
+}</code></pre>
+  <p>Or use an enum to drive a single sheet:</p>
+  <pre><code class="lang-swift">enum ActiveSheet: Identifiable {
     case settings, profile, editor
 
     var id: Self { self }
@@ -417,11 +337,11 @@ NavigationStack {
     case .profile: ProfileView()
     case .editor: EditorView()
     }
-}</code></pre></li>
-  <li><p>This is the standard pattern for views that can present multiple different sheets.</p></li>
-  <li><h3>Sheet Over Sheet</h3></li>
-  <li><p>You can present a sheet from inside a sheet. The new sheet appears on top:</p></li>
-  <li><pre><code class="lang-swift">struct FirstSheet: View {
+}</code></pre>
+  <p>This is the standard pattern for views that can present multiple different sheets.</p>
+  <h3>Sheet Over Sheet</h3>
+  <p>You can present a sheet from inside a sheet. The new sheet appears on top:</p>
+  <pre><code class="lang-swift">struct FirstSheet: View {
     @State private var showSecond = false
 
     var body: some View {
@@ -430,12 +350,12 @@ NavigationStack {
                 SecondSheet()
             }
     }
-}</code></pre></li>
-  <li><p><strong>Watch out:</strong> Deep sheet stacking gets confusing for users. Limit to two levels at most.</p></li>
-  <li><hr></li>
-  <li><h2>Practical Patterns</h2></li>
-  <li><h3>Destructive Action Confirmation</h3></li>
-  <li><pre><code class="lang-swift">struct DeleteButton: View {
+}</code></pre>
+  <p><strong>Watch out:</strong> Deep sheet stacking gets confusing for users. Limit to two levels at most.</p>
+  <hr>
+  <h2>Practical Patterns</h2>
+  <h3>Destructive Action Confirmation</h3>
+  <pre><code class="lang-swift">struct DeleteButton: View {
     let itemName: String
     let onDelete: () -&gt; Void
     @State private var showConfirm = false
@@ -453,10 +373,10 @@ NavigationStack {
             Text("This cannot be undone.")
         }
     }
-}</code></pre></li>
-  <li><h3>Error Alert Modifier</h3></li>
-  <li><p>A reusable pattern for showing errors:</p></li>
-  <li><pre><code class="lang-swift">struct ErrorAlert: ViewModifier {
+}</code></pre>
+  <h3>Error Alert Modifier</h3>
+  <p>A reusable pattern for showing errors:</p>
+  <pre><code class="lang-swift">struct ErrorAlert: ViewModifier {
     @Binding var error: Error?
 
     var isPresented: Binding&lt;Bool&gt; {
@@ -485,9 +405,9 @@ extension View {
 @State private var lastError: Error?
 
 SomeView()
-    .errorAlert($lastError)</code></pre></li>
-  <li><h3>Half-Sheet Settings Panel</h3></li>
-  <li><pre><code class="lang-swift">@State private var showSettings = false
+    .errorAlert($lastError)</code></pre>
+  <h3>Half-Sheet Settings Panel</h3>
+  <pre><code class="lang-swift">@State private var showSettings = false
 
 .sheet(isPresented: $showSettings) {
     NavigationStack {
@@ -502,14 +422,38 @@ SomeView()
     .presentationDetents([.medium, .large])
     .presentationDragIndicator(.visible)
     .presentationBackground(.regularMaterial)
-}</code></pre></li>
-  <li><hr></li>
-  <li><h2>Quick Reference</h2></li>
-  <li><p>| What | How | |---|---| | Sheet (boolean) | <code>.sheet(isPresented: $bool) { }</code> | | Sheet (item) | <code>.sheet(item: $optional) { item in }</code> | | Full screen modal | <code>.fullScreenCover(isPresented: $bool) { }</code> | | Popover | <code>.popover(isPresented: $bool) { }</code> | | Alert | <code>.alert("Title", isPresented: $bool) { buttons } message: { }</code> | | Confirmation dialog | <code>.confirmationDialog("Title", isPresented: $bool) { buttons }</code> | | Inspector panel | <code>.inspector(isPresented: $bool) { }</code> | | Dismiss from inside | <code>@Environment(\.dismiss) private var dismiss</code> | | Block swipe dismiss | <code>.interactiveDismissDisabled(true)</code> | | Half sheet | <code>.presentationDetents([.medium, .large])</code> | | Custom height | <code>.presentationDetents([.height(300)])</code> | | Drag indicator | <code>.presentationDragIndicator(.visible)</code> | | Sheet background | <code>.presentationBackground(.thinMaterial)</code> | | Background interaction | <code>.presentationBackgroundInteraction(.enabled(upThrough: .medium))</code> | | Inspector width | <code>.inspectorColumnWidth(min: 200, ideal: 300, max: 400)</code> |</p></li>
-</ol>
-</div>
+}</code></pre>
+  <hr>
+  <h2>Quick Reference</h2>
+  <table>
+  <thead><tr><th>What</th><th>How</th><th></th></tr></thead>
+  <tbody>
+  <tr><td>Sheet (boolean)</td><td><code>.sheet(isPresented: $bool) { }</code></td><td></td></tr>
+  <tr><td>Sheet (item)</td><td><code>.sheet(item: $optional) { item in }</code></td><td></td></tr>
+  <tr><td>Full screen modal</td><td><code>.fullScreenCover(isPresented: $bool) { }</code></td><td></td></tr>
+  <tr><td>Popover</td><td><code>.popover(isPresented: $bool) { }</code></td><td></td></tr>
+  <tr><td>Alert</td><td><code>.alert("Title", isPresented: $bool) { buttons } message: { }</code></td><td></td></tr>
+  <tr><td>Confirmation dialog</td><td><code>.confirmationDialog("Title", isPresented: $bool) { buttons }</code></td><td></td></tr>
+  <tr><td>Inspector panel</td><td><code>.inspector(isPresented: $bool) { }</code></td><td></td></tr>
+  <tr><td>Dismiss from inside</td><td><code>@Environment(\.dismiss) private var dismiss</code></td><td></td></tr>
+  <tr><td>Block swipe dismiss</td><td><code>.interactiveDismissDisabled(true)</code></td><td></td></tr>
+  <tr><td>Half sheet</td><td><code>.presentationDetents([.medium, .large])</code></td><td></td></tr>
+  <tr><td>Custom height</td><td><code>.presentationDetents([.height(300)])</code></td><td></td></tr>
+  <tr><td>Drag indicator</td><td><code>.presentationDragIndicator(.visible)</code></td><td></td></tr>
+  <tr><td>Sheet background</td><td><code>.presentationBackground(.thinMaterial)</code></td><td></td></tr>
+  <tr><td>Background interaction</td><td><code>.presentationBackgroundInteraction(.enabled(upThrough: .medium))</code></td><td></td></tr>
+  </tbody>
+  </table>
+  <hr>
+  <h2>Further Reading &mdash; WWDC Sessions</h2>
+  <p>This book is a passive resource. When you want deeper coverage of sheets, alerts, and confirmations, the WWDC sessions below are Apple's source material.</p>
+  <ul>
+    <li>WWDC25 / 256, <em>What's new in SwiftUI</em> &mdash; <a href="https://developer.apple.com/videos/play/wwdc2025/256/">developer.apple.com/videos/play/wwdc2025/256/</a>. Sheet and alert presentation updates this release.</li>
+    <li>WWDC25 / 281, <em>Design interactive snippets</em> &mdash; <a href="https://developer.apple.com/videos/play/wwdc2025/281/">developer.apple.com/videos/play/wwdc2025/281/</a>. Snippet surfaces that App Intents present in place of full sheets in many flows.</li>
+    <li>WWDC25 / 230, <em>Wake up to the AlarmKit API</em> &mdash; <a href="https://developer.apple.com/videos/play/wwdc2025/230/">developer.apple.com/videos/play/wwdc2025/230/</a>. System-level alert presentation outside your process &mdash; alarms are a different surface than <code>.alert()</code>.</li>
+  </ul>
 
-<footer class="page"><div class="row-nav"><div class="prev"><a href="Book-11-FileManager-And-Documents.html">&larr; Book 11: FileManager and Documents</a></div><div class="pos">Book 12 Sheets Alerts And Confirmations</div><div class="next"><a href="../Part-IV-The-Application/Book-13-Multi-Window-And-NavigationSplitView.html">Book 13: Multi-Window &amp; NavigationSplitV... &rarr;</a></div></div></footer>
+</div>
 
 </body>
 </html>

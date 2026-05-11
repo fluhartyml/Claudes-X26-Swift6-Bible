@@ -4,100 +4,20 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Book 07: Toolbars And Tab Views &mdash; Claude's Xcode 26 Swift Bible</title>
-<style>
-:root {
-  --bg: #000000;
-  --fg: #FFB000;
-  --bright: #FFD060;
-  --dim: #996600;
-  --codebg: #1a0d00;
-  --border: #664500;
-  --gutter: #4a3300;
-  --headerbg: #0a0600;
-}
-* { box-sizing: border-box; }
-html, body { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; height: 100%; }
-body {
-  background: var(--bg);
-  color: var(--fg);
-  font-family: "FiraCode Nerd Font Mono", "FiraCode Nerd Font", "Fira Code", "Menlo", "Courier New", monospace;
-  font-size: 18pt;
-  line-height: 1.55;
-  margin: 0;
-  padding: 0;
-  text-shadow: 0 0 1px rgba(255, 176, 0, 0.35);
-  display: flex;
-  flex-direction: column;
-}
-header.page, footer.page {
-  background: var(--headerbg);
-  color: var(--dim);
-  padding: 0.55rem 1.1rem;
-  font-size: 13pt;
-  display: flex;
-  flex-direction: column;
-  gap: 0.2rem;
-  flex: 0 0 auto;
-  z-index: 10;
-}
-header.page { border-bottom: 1px solid var(--border); }
-footer.page { border-top: 1px solid var(--border); padding-bottom: calc(0.55rem + env(safe-area-inset-bottom)); }
-header.page .path, footer.page .path { color: var(--fg); word-break: break-all; overflow-wrap: break-word; }
-header.page .pos, footer.page .pos { color: var(--bright); }
-/* The middle scrolls; header and footer stay put. */
-.content { flex: 1 1 auto; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 0.8rem 1rem 2rem 1rem; max-width: 1100px; margin: 0 auto; width: 100%; }
-h1 { color: var(--bright); font-weight: normal; font-size: 26pt; margin: 0.6rem 0 1rem 0; }
-h2 { color: var(--bright); font-weight: normal; font-size: 20pt; border-bottom: 1px solid var(--border); padding-bottom: 0.3rem; margin-top: 1.5rem; counter-set: h3 0 para 0; counter-increment: h2; }
-h2::before { content: counter(h2) ". "; color: var(--fg); }
-h3 { color: var(--bright); font-weight: normal; font-size: 18pt; margin-top: 1rem; counter-set: para 0; counter-increment: h3; }
-h3::before { content: counter(h2) "." counter(h3) " "; color: var(--fg); }
-p { margin: 0.4rem 0; counter-increment: para; }
-p::before { content: counter(h2) "." counter(h3) "." counter(para) " "; color: var(--dim); font-size: 13pt; margin-right: 0.4em; }
-code { color: var(--bright); background: var(--codebg); padding: 0.08em 0.35em; border: 1px solid #3a2400; border-radius: 3px; font-size: 0.92em; }
-pre { background: var(--codebg); border: 1px solid #3a2400; border-radius: 4px; padding: 0.7rem 0.9rem; overflow-x: auto; font-size: 14pt; }
-pre code { background: transparent; border: 0; padding: 0; }
-ul, ol.body-list { margin: 0.4rem 0 0.4rem 1.4rem; padding: 0; }
-a { color: var(--bright); font-weight: bold; text-decoration: none; border-bottom: 1px dotted var(--dim); }
-a:hover { background: #332200; }
-strong { color: var(--bright); }
-em { color: var(--fg); font-style: italic; }
-hr { border: 0; border-top: 1px solid var(--border); margin: 1rem 0; }
-ol.lines { list-style: none; counter-reset: line h2 h3 para; padding: 0; margin: 0; }
-ol.lines > li { counter-increment: line; padding: 0.15rem 0 0.15rem 3.6rem; position: relative; min-height: 1.2em; }
-ol.lines > li::before { content: counter(line); position: absolute; left: 0; top: 0.25rem; width: 2.8rem; text-align: right; color: var(--gutter); font-size: 13pt; padding-right: 0.5rem; border-right: 1px solid #2a1e00; }
-ol.lines > li > p, ol.lines > li > h2, ol.lines > li > h3, ol.lines > li > ul, ol.lines > li > ol, ol.lines > li > pre, ol.lines > li > hr { margin: 0; }
-.scope-note { border-left: 3px solid var(--bright); padding: 0.7rem 1rem; background: #140c00; margin: 0.6rem 0; color: var(--bright); }
-.nav { display: flex; gap: 0.9rem; flex-wrap: wrap; margin-top: 0.8rem; font-size: 14pt; }
-
-
-footer.page { flex-direction: column; gap: 0.4rem; }
-footer.page .row-nav { display: flex; flex-direction: row; justify-content: space-between; align-items: center; gap: 0.5rem; }
-footer.page .row-nav .prev, footer.page .row-nav .next { flex: 1; min-width: 0; }
-footer.page .row-nav .prev { text-align: left; }
-footer.page .row-nav .next { text-align: right; }
-footer.page .row-nav .pos { flex: 0 0 auto; text-align: center; color: var(--bright); font-weight: bold; }
-footer.page .row-nav a { color: var(--bright); font-weight: bold; text-decoration: none; border-bottom: 1px dotted var(--dim); }
-footer.page .row-nav a:hover { background: #332200; }
-footer.page .row-nav .nav-empty { color: var(--gutter); font-style: italic; }
-</style>
 </head>
 <body>
 
-<header class="page">
-  <div class="path">Part III The User Interface/Book 07 Toolbars And Tab Views</div>
-</header>
-
 <div class="content">
-<ol class="lines">
-  <li><h1>Book 7: Toolbars and Tab Views</h1></li>
-  <li><h2>Live Reference: Six Shipping Apps</h2></li>
-  <li><div class="scope-note">Every concept in this chapter ships in real apps you can install or clone. <strong>CryoTunes Player</strong>, <strong>Claudes LockBox</strong>, <strong>QuickNote</strong>, <strong>Audio Universe</strong>, <strong>Snap &amp; ScanKeeper</strong>, and <strong>My Person CRM</strong> all use the <code>.toolbar</code> modifier and <code>TabView</code> patterns this chapter teaches. Tap through any of them, browse their source via Under the Hood, and you'll see the same shapes the chapter walks through. The most concentrated example is <strong>CryoTunes Player</strong> &mdash; its <code>CryoTransportControls.swift</code> shows toolbar-equivalent controls (transport buttons, mode toggles, share buttons) drawn from a clean SwiftUI <code>HStack</code> rather than the <code>.toolbar</code> modifier; reading it side-by-side with this chapter shows when the modifier is the right tool and when a custom layout serves better. Source: <a href="https://github.com/fluhartyml/CryoTunesPlayer/wiki">github.com/fluhartyml/CryoTunesPlayer/wiki</a>. <strong>My Person CRM</strong> uses <code>.toolbar</code> with <code>ToolbarItem</code> in four places &mdash; the people-list view (Add-Person and About buttons), the per-person detail view (Edit + contextual menu), the Add Interaction sheet (Cancel + Save), and the About sheet (Done). Source: <a href="https://github.com/fluhartyml/My-Person-CRM/wiki">github.com/fluhartyml/My-Person-CRM/wiki</a>. See Source Tour 18 (CryoTunes), Build-Along 07 (My Person CRM).</div></li>
-  <li><hr></li>
-  <li><h2>X26 Tab and Sidebar Updates</h2></li>
-  <li><p>Liquid Glass applies to the topmost layer of the interface &mdash; exactly where toolbars and tabs live. Apple's word: <em>"Key navigation elements like tab bars and sidebars float in this Liquid Glass layer to help people focus on the underlying content."</em><sup>[<a href="#t1-fn">t1</a>]</sup> Three new APIs land in X26 to take advantage of that.</p></li>
-  <li><h3>Search Tabs with <code>Tab(role: .search)</code></h3></li>
-  <li><p>If your tab bar has a search tab, mark it with the search role and the system handles the rest:</p></li>
-  <li><pre><code class="lang-swift">TabView {
+
+  <h1>Book 7: Toolbars and Tab Views</h1>
+  <h2>Live Reference: Six Shipping Apps</h2>
+  <div class="scope-note">Six apps in this book's roster ship the <code>.toolbar</code> modifier and <code>TabView</code> patterns this chapter covers: <strong>CryoTunes Player</strong>, <strong>Claudes LockBox</strong>, <strong>QuickNote</strong>, <strong>Audio Universe</strong>, <strong>Snap &amp; ScanKeeper</strong>, and <strong>My Person CRM</strong>. The most concentrated example is <strong>CryoTunes Player</strong> &mdash; its <code>CryoTransportControls.swift</code> shows toolbar-equivalent controls (transport buttons, mode toggles, share buttons) drawn from a clean SwiftUI <code>HStack</code> rather than the <code>.toolbar</code> modifier; the source side-by-side with this chapter contrasts when the modifier is the right tool and when a custom layout serves better. Source: <a href="https://github.com/fluhartyml/CryoTunesPlayer">github.com/fluhartyml/CryoTunesPlayer</a>. <strong>My Person CRM</strong> uses <code>.toolbar</code> with <code>ToolbarItem</code> in four places &mdash; the people-list view (Add-Person and About buttons), the per-person detail view (Edit + contextual menu), the Add Interaction sheet (Cancel + Save), and the About sheet (Done). Source: <a href="https://github.com/fluhartyml/My-Person-CRM">github.com/fluhartyml/My-Person-CRM</a>. See Source Tour 18 (CryoTunes), Build-Along 07 (My Person CRM).</div>
+  <hr>
+  <h2>X26 Tab and Sidebar Updates</h2>
+  <p>Liquid Glass applies to the topmost layer of the interface &mdash; exactly where toolbars and tabs live. Apple's word: <em>"Key navigation elements like tab bars and sidebars float in this Liquid Glass layer to help people focus on the underlying content."</em><sup>[<a href="#t1-fn">t1</a>]</sup> Three new APIs land in X26 to take advantage of that.</p>
+  <h3>Search Tabs with <code>Tab(role: .search)</code></h3>
+  <p>If your tab bar has a search tab, mark it with the search role and the system handles the rest:</p>
+  <pre><code class="lang-swift">TabView {
     Tab("Browse", systemImage: "rectangle.stack") {
         BrowseView()
     }
@@ -107,22 +27,22 @@ footer.page .row-nav .nav-empty { color: var(--gutter); font-style: italic; }
     Tab(role: .search) {
         SearchView()
     }
-}</code></pre></li>
-  <li><p>What the role buys you: the search tab gets pulled out of the regular tab lineup and pinned to the trailing end of the bar, by itself. Every app that uses the role agrees on that location, so users learn it once and use it everywhere.<sup>[<a href="#t1-fn">t1</a>]</sup></p></li>
-  <li><h3>Auto-Minimizing Tab Bars with <code>tabBarMinimizeBehavior</code></h3></li>
-  <li><p>X26 will minimize the tab bar out of the way while the user is actively scrolling, freeing up vertical space for whatever they're reading. It's an opt-in &mdash; one modifier flips it on:<sup>[<a href="#t1-fn">t1</a>]</sup></p></li>
-  <li><pre><code class="lang-swift">TabView {
+}</code></pre>
+  <p>What the role buys you: the search tab gets pulled out of the regular tab lineup and pinned to the trailing end of the bar, by itself. Every app that uses the role agrees on that location, so users learn it once and use it everywhere.<sup>[<a href="#t1-fn">t1</a>]</sup></p>
+  <h3>Auto-Minimizing Tab Bars with <code>tabBarMinimizeBehavior</code></h3>
+  <p>X26 will minimize the tab bar out of the way while the user is actively scrolling, freeing up vertical space for whatever they're reading. It's an opt-in &mdash; one modifier flips it on:<sup>[<a href="#t1-fn">t1</a>]</sup></p>
+  <pre><code class="lang-swift">TabView {
     // ...
 }
-.tabBarMinimizeBehavior(.onScrollDown)</code></pre></li>
-  <li><p>Two flavors. <code>.onScrollDown</code> tucks the bar away as the user scrolls down through new content and brings it back when they scroll up. <code>.onScrollUp</code> reverses the trigger. The right pick is whichever direction lines up with how the content in this tab is meant to be read.</p></li>
-  <li><h3>Tab Bar That Adapts to a Sidebar</h3></li>
-  <li><p>A tab bar that works on iPhone is often the wrong shape for iPad or Mac &mdash; those screens have room for a sidebar that an iPhone doesn't. <code>.sidebarAdaptable</code> is the SwiftUI tab style that lets one TabView serve both: the system promotes the tabs into a sidebar when the layout has space and falls back to a tab bar when it doesn't. One declaration, two presentations, no parallel code paths.<sup>[<a href="#t1-fn">t1</a>]</sup></p></li>
-  <li><p id="t1-fn" style="font-size: 13pt; color: var(--dim);">[t1] Apple Developer Documentation, <em>Adopting Liquid Glass</em>. <a href="https://developer.apple.com/documentation/TechnologyOverviews/adopting-liquid-glass">developer.apple.com/documentation/TechnologyOverviews/adopting-liquid-glass</a> &mdash; verified 2026-04-29.</p></li>
-  <li><hr></li>
-  <li><h2>The .toolbar Modifier</h2></li>
-  <li><p>The <code>.toolbar</code> modifier is the single entry point for adding buttons, menus, and controls to navigation bars, bottom bars, and keyboard accessories.</p></li>
-  <li><pre><code class="lang-swift">struct ItemListView: View {
+.tabBarMinimizeBehavior(.onScrollDown)</code></pre>
+  <p>Two flavors. <code>.onScrollDown</code> tucks the bar away as the user scrolls down through new content and brings it back when they scroll up. <code>.onScrollUp</code> reverses the trigger. The right pick is whichever direction lines up with how the content in this tab is meant to be read.</p>
+  <h3>Tab Bar That Adapts to a Sidebar</h3>
+  <p>A tab bar that works on iPhone is often the wrong shape for iPad or Mac &mdash; those screens have room for a sidebar that an iPhone doesn't. <code>.sidebarAdaptable</code> is the SwiftUI tab style that lets one TabView serve both: the system promotes the tabs into a sidebar when the layout has space and falls back to a tab bar when it doesn't. One declaration, two presentations, no parallel code paths.<sup>[<a href="#t1-fn">t1</a>]</sup></p>
+  <p id="t1-fn" style="font-size: 13pt; color: var(--dim);">[t1] Apple Developer Documentation, <em>Adopting Liquid Glass</em>. <a href="https://developer.apple.com/documentation/TechnologyOverviews/adopting-liquid-glass">developer.apple.com/documentation/TechnologyOverviews/adopting-liquid-glass</a> &mdash; verified 2026-04-29.</p>
+  <hr>
+  <h2>The .toolbar Modifier</h2>
+  <p>The <code>.toolbar</code> modifier is the single entry point for adding buttons, menus, and controls to navigation bars, bottom bars, and keyboard accessories.</p>
+  <pre><code class="lang-swift">struct ItemListView: View {
     var body: some View {
         List(items) { item in
             Text(item.name)
@@ -134,12 +54,12 @@ footer.page .row-nav .nav-empty { color: var(--gutter); font-style: italic; }
             }
         }
     }
-}</code></pre></li>
-  <li><p>Without specifying a placement, the system puts the button where it makes sense for the platform — trailing on iOS, trailing in the toolbar on macOS.</p></li>
-  <li><hr></li>
-  <li><h2>ToolbarItem</h2></li>
-  <li><p>Use <code>ToolbarItem</code> when you need to control exactly where a button lands.</p></li>
-  <li><pre><code class="lang-swift">.toolbar {
+}</code></pre>
+  <p>Without specifying a placement, the system puts the button where it makes sense for the platform — trailing on iOS, trailing in the toolbar on macOS.</p>
+  <hr>
+  <h2>ToolbarItem</h2>
+  <p>Use <code>ToolbarItem</code> when you need to control exactly where a button lands.</p>
+  <pre><code class="lang-swift">.toolbar {
     ToolbarItem(placement: .primaryAction) {
         Button("Save") { save() }
     }
@@ -151,26 +71,44 @@ footer.page .row-nav .nav-empty { color: var(--gutter); font-style: italic; }
     ToolbarItem(placement: .destructiveAction) {
         Button("Delete", role: .destructive) { delete() }
     }
-}</code></pre></li>
-  <li><hr></li>
-  <li><h2>ToolbarItemGroup</h2></li>
-  <li><p>Group multiple items in the same placement.</p></li>
-  <li><pre><code class="lang-swift">.toolbar {
+}</code></pre>
+  <hr>
+  <h2>ToolbarItemGroup</h2>
+  <p>Group multiple items in the same placement.</p>
+  <pre><code class="lang-swift">.toolbar {
     ToolbarItemGroup(placement: .primaryAction) {
         Button("Share", systemImage: "square.and.arrow.up") { share() }
         Button("Edit", systemImage: "pencil") { edit() }
         Button("Add", systemImage: "plus") { add() }
     }
-}</code></pre></li>
-  <li><hr></li>
-  <li><h2>Toolbar Placements</h2></li>
-  <li><h3>Semantic Placements (Preferred)</h3></li>
-  <li><p>These let the system decide the exact position based on platform conventions.</p></li>
-  <li><p>| Placement | iOS | macOS | Use For | |-----------|-----|-------|---------| | <code>.automatic</code> | Trailing nav bar | Toolbar area | Default, system decides | | <code>.primaryAction</code> | Trailing nav bar | Trailing toolbar | Main action (Save, Add) | | <code>.secondaryAction</code> | Overflow menu | Toolbar customization | Less-used actions | | <code>.cancellationAction</code> | Leading nav bar | Leading toolbar | Cancel/Dismiss | | <code>.confirmationAction</code> | Trailing nav bar | Trailing toolbar | Confirm/Done in sheets | | <code>.destructiveAction</code> | Trailing nav bar | Trailing toolbar | Delete/Remove | | <code>.navigation</code> | Leading nav bar | Leading toolbar | Back-like navigation |</p></li>
-  <li><h3>Positional Placements</h3></li>
-  <li><p>| Placement | Where | |-----------|-------| | <code>.topBarLeading</code> | iOS: left side of nav bar | | <code>.topBarTrailing</code> | iOS: right side of nav bar | | <code>.bottomBar</code> | iOS: bottom bar above tab bar | | <code>.keyboard</code> | iOS: above the keyboard | | <code>.tabBar</code> | Inside the tab bar area |</p></li>
-  <li><h3>Bottom Bar</h3></li>
-  <li><pre><code class="lang-swift">.toolbar {
+}</code></pre>
+  <hr>
+  <h2>Toolbar Placements</h2>
+  <h3>Semantic Placements (Preferred)</h3>
+  <p>These let the system decide the exact position based on platform conventions.</p>
+  <table>
+  <thead><tr><th>Placement</th><th>iOS</th><th>macOS</th><th>Use For</th><th></th></tr></thead>
+  <tbody>
+  <tr><td><code>.automatic</code></td><td>Trailing nav bar</td><td>Toolbar area</td><td>Default, system decides</td><td></td></tr>
+  <tr><td><code>.primaryAction</code></td><td>Trailing nav bar</td><td>Trailing toolbar</td><td>Main action (Save, Add)</td><td></td></tr>
+  <tr><td><code>.secondaryAction</code></td><td>Overflow menu</td><td>Toolbar customization</td><td>Less-used actions</td><td></td></tr>
+  <tr><td><code>.cancellationAction</code></td><td>Leading nav bar</td><td>Leading toolbar</td><td>Cancel/Dismiss</td><td></td></tr>
+  <tr><td><code>.confirmationAction</code></td><td>Trailing nav bar</td><td>Trailing toolbar</td><td>Confirm/Done in sheets</td><td></td></tr>
+  <tr><td><code>.destructiveAction</code></td><td>Trailing nav bar</td><td>Trailing toolbar</td><td>Delete/Remove</td><td></td></tr>
+  </tbody>
+  </table>
+  <h3>Positional Placements</h3>
+  <table>
+  <thead><tr><th>Placement</th><th>Where</th><th></th></tr></thead>
+  <tbody>
+  <tr><td><code>.topBarLeading</code></td><td>iOS: left side of nav bar</td><td></td></tr>
+  <tr><td><code>.topBarTrailing</code></td><td>iOS: right side of nav bar</td><td></td></tr>
+  <tr><td><code>.bottomBar</code></td><td>iOS: bottom bar above tab bar</td><td></td></tr>
+  <tr><td><code>.keyboard</code></td><td>iOS: above the keyboard</td><td></td></tr>
+  </tbody>
+  </table>
+  <h3>Bottom Bar</h3>
+  <pre><code class="lang-swift">.toolbar {
     ToolbarItemGroup(placement: .bottomBar) {
         Button("Previous", systemImage: "chevron.left") { previous() }
         Spacer()
@@ -178,10 +116,10 @@ footer.page .row-nav .nav-empty { color: var(--gutter); font-style: italic; }
         Spacer()
         Button("Next", systemImage: "chevron.right") { next() }
     }
-}</code></pre></li>
-  <li><h3>Keyboard Toolbar</h3></li>
-  <li><p>Add a "Done" button above the keyboard. Essential for dismissing number pads and other keyboards that lack a return key.</p></li>
-  <li><pre><code class="lang-swift">TextField("Amount", value: $amount, format: .number)
+}</code></pre>
+  <h3>Keyboard Toolbar</h3>
+  <p>Add a "Done" button above the keyboard. Essential for dismissing number pads and other keyboards that lack a return key.</p>
+  <pre><code class="lang-swift">TextField("Amount", value: $amount, format: .number)
     .keyboardType(.decimalPad)
     .toolbar {
         ToolbarItemGroup(placement: .keyboard) {
@@ -190,30 +128,30 @@ footer.page .row-nav .nav-empty { color: var(--gutter); font-style: italic; }
                 isFocused = false
             }
         }
-    }</code></pre></li>
-  <li><h3>Watch Out</h3></li>
-  <li><ul><li><code>.keyboard</code> placement only shows when the keyboard is visible. If you have multiple text fields, the keyboard toolbar is shared — whichever field is focused gets it.</li><li><code>.bottomBar</code> does not appear if the view is inside a <code>TabView</code>. The tab bar occupies that space. Use <code>.tabBar</code> placement instead if you need items alongside tabs.</li></ul></li>
-  <li><hr></li>
-  <li><h2>Toolbar Visibility</h2></li>
-  <li><p>Hide or show toolbars explicitly.</p></li>
-  <li><pre><code class="lang-swift">.toolbar(.hidden, for: .navigationBar)    // hide the nav bar
+    }</code></pre>
+  <h3>Watch Out</h3>
+  <ul><li><code>.keyboard</code> placement only shows when the keyboard is visible. If you have multiple text fields, the keyboard toolbar is shared — whichever field is focused gets it.</li><li><code>.bottomBar</code> does not appear if the view is inside a <code>TabView</code>. The tab bar occupies that space. Use <code>.tabBar</code> placement instead if you need items alongside tabs.</li></ul>
+  <hr>
+  <h2>Toolbar Visibility</h2>
+  <p>Hide or show toolbars explicitly.</p>
+  <pre><code class="lang-swift">.toolbar(.hidden, for: .navigationBar)    // hide the nav bar
 .toolbar(.visible, for: .bottomBar)       // force bottom bar visible
-.toolbar(.hidden, for: .tabBar)           // hide tab bar (e.g., in detail views)</code></pre></li>
-  <li><p>The <code>for:</code> parameter targets: <code>.navigationBar</code>, <code>.bottomBar</code>, <code>.tabBar</code>, <code>.windowToolbar</code> (macOS).</p></li>
-  <li><h3>Watch Out</h3></li>
-  <li><ul><li>Hiding <code>.tabBar</code> only works from a view inside a <code>TabView</code>. If you hide it from outside the tab hierarchy, nothing happens.</li><li>Use <code>.toolbar(.hidden, for: .tabBar)</code> on detail views where you want a full-screen experience. It animates smoothly.</li></ul></li>
-  <li><hr></li>
-  <li><h2>Toolbar on macOS vs iOS</h2></li>
-  <li><h3>macOS-Specific Toolbar Style</h3></li>
-  <li><pre><code class="lang-swift">WindowGroup {
+.toolbar(.hidden, for: .tabBar)           // hide tab bar (e.g., in detail views)</code></pre>
+  <p>The <code>for:</code> parameter targets: <code>.navigationBar</code>, <code>.bottomBar</code>, <code>.tabBar</code>, <code>.windowToolbar</code> (macOS).</p>
+  <h3>Watch Out</h3>
+  <ul><li>Hiding <code>.tabBar</code> only works from a view inside a <code>TabView</code>. If you hide it from outside the tab hierarchy, nothing happens.</li><li>Use <code>.toolbar(.hidden, for: .tabBar)</code> on detail views where you want a full-screen experience. It animates smoothly.</li></ul>
+  <hr>
+  <h2>Toolbar on macOS vs iOS</h2>
+  <h3>macOS-Specific Toolbar Style</h3>
+  <pre><code class="lang-swift">WindowGroup {
     ContentView()
 }
 .windowToolbarStyle(.unified)           // toolbar merges with title bar
 .windowToolbarStyle(.unifiedCompact)    // thinner merged toolbar
-.windowToolbarStyle(.expanded)          // toolbar below title bar</code></pre></li>
-  <li><h3>macOS Toolbar Customization</h3></li>
-  <li><p>Users can customize the macOS toolbar by default. To control what is customizable:</p></li>
-  <li><pre><code class="lang-swift">.toolbar(id: "main") {
+.windowToolbarStyle(.expanded)          // toolbar below title bar</code></pre>
+  <h3>macOS Toolbar Customization</h3>
+  <p>Users can customize the macOS toolbar by default. To control what is customizable:</p>
+  <pre><code class="lang-swift">.toolbar(id: "main") {
     ToolbarItem(id: "add", placement: .primaryAction) {
         Button("Add", systemImage: "plus") { }
     }
@@ -221,13 +159,13 @@ footer.page .row-nav .nav-empty { color: var(--gutter); font-style: italic; }
         Button("Share", systemImage: "square.and.arrow.up") { }
     }
 }
-.toolbarRole(.editor)  // changes toolbar behavior and appearance</code></pre></li>
-  <li><h3>Watch Out</h3></li>
-  <li><ul><li>On macOS, <code>.primaryAction</code> items are always visible. <code>.secondaryAction</code> items go into the customization palette and may be hidden by default.</li><li><code>ToolbarItem(id:)</code> requires a stable string identifier for toolbar customization persistence. Without IDs, user customizations are lost between launches.</li></ul></li>
-  <li><hr></li>
-  <li><h2>TabView In Depth</h2></li>
-  <li><h3>Basic Tab Setup</h3></li>
-  <li><pre><code class="lang-swift">struct RootView: View {
+.toolbarRole(.editor)  // changes toolbar behavior and appearance</code></pre>
+  <h3>Watch Out</h3>
+  <ul><li>On macOS, <code>.primaryAction</code> items are always visible. <code>.secondaryAction</code> items go into the customization palette and may be hidden by default.</li><li><code>ToolbarItem(id:)</code> requires a stable string identifier for toolbar customization persistence. Without IDs, user customizations are lost between launches.</li></ul>
+  <hr>
+  <h2>TabView In Depth</h2>
+  <h3>Basic Tab Setup</h3>
+  <pre><code class="lang-swift">struct RootView: View {
     @State private var selectedTab: AppTab = .home
 
     var body: some View {
@@ -255,17 +193,17 @@ footer.page .row-nav .nav-empty { color: var(--gutter); font-style: italic; }
 
 enum AppTab: Hashable {
     case home, library, profile
-}</code></pre></li>
-  <li><h3>Badge Modifier</h3></li>
-  <li><pre><code class="lang-swift">Tab("Inbox", systemImage: "tray", value: .inbox) {
+}</code></pre>
+  <h3>Badge Modifier</h3>
+  <pre><code class="lang-swift">Tab("Inbox", systemImage: "tray", value: .inbox) {
     InboxView()
 }
 .badge(unreadCount)     // integer badge
-.badge("New")           // text badge</code></pre></li>
-  <li><p>Badges appear as a small indicator on the tab icon. On iOS, it is a red circle with the count. On macOS, it is a text overlay.</p></li>
-  <li><h3>Tab Sections (iPadOS / visionOS Sidebar)</h3></li>
-  <li><p>On iPadOS with sufficient width, <code>TabView</code> can render as a sidebar. Group tabs with <code>TabSection</code>.</p></li>
-  <li><pre><code class="lang-swift">TabView {
+.badge("New")           // text badge</code></pre>
+  <p>Badges appear as a small indicator on the tab icon. On iOS, it is a red circle with the count. On macOS, it is a text overlay.</p>
+  <h3>Tab Sections (iPadOS / visionOS Sidebar)</h3>
+  <p>On iPadOS with sufficient width, <code>TabView</code> can render as a sidebar. Group tabs with <code>TabSection</code>.</p>
+  <pre><code class="lang-swift">TabView {
     Tab("Home", systemImage: "house", value: .home) {
         HomeView()
     }
@@ -288,22 +226,22 @@ enum AppTab: Hashable {
         }
     }
 }
-.tabViewStyle(.sidebarAdaptable)</code></pre></li>
-  <li><h3>Page-Style TabView</h3></li>
-  <li><p>For swipeable pages (onboarding, image galleries).</p></li>
-  <li><pre><code class="lang-swift">TabView {
+.tabViewStyle(.sidebarAdaptable)</code></pre>
+  <h3>Page-Style TabView</h3>
+  <p>For swipeable pages (onboarding, image galleries).</p>
+  <pre><code class="lang-swift">TabView {
     OnboardingPage1()
     OnboardingPage2()
     OnboardingPage3()
 }
 .tabViewStyle(.page)
-.indexViewStyle(.page(backgroundDisplayMode: .always))</code></pre></li>
-  <li><h3>Watch Out</h3></li>
-  <li><ul><li>Each tab should own its own <code>NavigationStack</code>. Wrapping the entire <code>TabView</code> in a single <code>NavigationStack</code> causes the nav bar to appear above tabs and navigation pushes replace the whole tab interface.</li><li><code>.tabViewStyle(.page)</code> hides the tab bar entirely. It shows dots instead. Do not mix page style with labeled tabs.</li><li>Tab order is the order you declare them. There is no reordering API like UIKit's "More" tab — though the sidebar-adaptable style on iPad does support reordering.</li></ul></li>
-  <li><hr></li>
-  <li><h2>Custom Tab Bar</h2></li>
-  <li><p>When the built-in tab bar does not meet your needs, build your own.</p></li>
-  <li><pre><code class="lang-swift">struct CustomTabBar: View {
+.indexViewStyle(.page(backgroundDisplayMode: .always))</code></pre>
+  <h3>Watch Out</h3>
+  <ul><li>Each tab should own its own <code>NavigationStack</code>. Wrapping the entire <code>TabView</code> in a single <code>NavigationStack</code> causes the nav bar to appear above tabs and navigation pushes replace the whole tab interface.</li><li><code>.tabViewStyle(.page)</code> hides the tab bar entirely. It shows dots instead. Do not mix page style with labeled tabs.</li><li>Tab order is the order you declare them. There is no reordering API like UIKit's "More" tab — though the sidebar-adaptable style on iPad does support reordering.</li></ul>
+  <hr>
+  <h2>Custom Tab Bar</h2>
+  <p>When the built-in tab bar does not meet your needs, build your own.</p>
+  <pre><code class="lang-swift">struct CustomTabBar: View {
     @Binding var selectedTab: AppTab
 
     var body: some View {
@@ -346,21 +284,28 @@ struct RootView: View {
             CustomTabBar(selectedTab: $selectedTab)
         }
     }
-}</code></pre></li>
-  <li><h3>Watch Out</h3></li>
-  <li><ul><li>Custom tab bars do not get the system safe area handling for free. You need to account for the home indicator on modern iPhones.</li><li>You lose automatic state preservation that <code>TabView</code> provides. Each <code>switch</code> case re-creates the view. Use <code>@State</code> or a view model to preserve state across tab switches.</li></ul></li>
-  <li><hr></li>
-  <li><h2>Practical Tips</h2></li>
-  <li><ol class="body-list"><li><strong>Use semantic placements</strong> (<code>.primaryAction</code>, <code>.cancellationAction</code>) over positional ones (<code>.topBarTrailing</code>). Semantic placements adapt correctly across platforms.</li></ol></li>
-  <li><ol class="body-list"><li><strong>Keyboard toolbar is essential</strong> for number pads. Users cannot dismiss a <code>.decimalPad</code> or <code>.numberPad</code> keyboard without a Done button.</li></ol></li>
-  <li><ol class="body-list"><li><strong>Hide the tab bar in detail views</strong> with <code>.toolbar(.hidden, for: .tabBar)</code> for immersive content like photo viewers or media players.</li></ol></li>
-  <li><ol class="body-list"><li><strong>Keep toolbar items minimal.</strong> Two to three items max per placement. Overloaded toolbars confuse users and look cramped on smaller devices.</li></ol></li>
-  <li><ol class="body-list"><li><strong>Test on both iPhone and iPad.</strong> Toolbar items can shift positions dramatically between compact and regular size classes. What looks right on one screen may be wrong on another.</li></ol></li>
-  <li><ol class="body-list"><li><strong>18pt minimum</strong> applies to toolbar labels too. If you use custom toolbar views with text, keep them readable.</li></ol></li>
-</ol>
-</div>
+}</code></pre>
+  <h3>Watch Out</h3>
+  <ul><li>Custom tab bars do not get the system safe area handling for free. You need to account for the home indicator on modern iPhones.</li><li>You lose automatic state preservation that <code>TabView</code> provides. Each <code>switch</code> case re-creates the view. Use <code>@State</code> or a view model to preserve state across tab switches.</li></ul>
+  <hr>
+  <h2>Practical Tips</h2>
+  <ol class="body-list"><li><strong>Use semantic placements</strong> (<code>.primaryAction</code>, <code>.cancellationAction</code>) over positional ones (<code>.topBarTrailing</code>). Semantic placements adapt correctly across platforms.</li></ol>
+  <ol class="body-list"><li><strong>Keyboard toolbar is essential</strong> for number pads. Users cannot dismiss a <code>.decimalPad</code> or <code>.numberPad</code> keyboard without a Done button.</li></ol>
+  <ol class="body-list"><li><strong>Hide the tab bar in detail views</strong> with <code>.toolbar(.hidden, for: .tabBar)</code> for immersive content like photo viewers or media players.</li></ol>
+  <ol class="body-list"><li><strong>Keep toolbar items minimal.</strong> Two to three items max per placement. Overloaded toolbars confuse users and look cramped on smaller devices.</li></ol>
+  <ol class="body-list"><li><strong>Test on both iPhone and iPad.</strong> Toolbar items can shift positions dramatically between compact and regular size classes. What looks right on one screen may be wrong on another.</li></ol>
+  <ol class="body-list"><li><strong>18pt minimum</strong> applies to toolbar labels too. If you use custom toolbar views with text, keep them readable.</li></ol>
+  <hr>
+  <h2>Further Reading &mdash; WWDC Sessions</h2>
+  <p>This book is a passive resource. When you want deeper coverage of toolbars or tab views, the WWDC sessions below are Apple's source material.</p>
+  <ul>
+    <li>WWDC25 / 256, <em>What's new in SwiftUI</em> &mdash; <a href="https://developer.apple.com/videos/play/wwdc2025/256/">developer.apple.com/videos/play/wwdc2025/256/</a>. Toolbar and tab-view updates this release.</li>
+    <li>WWDC25 / 323, <em>Build a SwiftUI app with the new design</em> &mdash; <a href="https://developer.apple.com/videos/play/wwdc2025/323/">developer.apple.com/videos/play/wwdc2025/323/</a>. <code>ToolbarSpacer</code>, search placement, and toolbar grouping in the new design.</li>
+    <li>WWDC25 / 219, <em>Meet Liquid Glass</em> &mdash; <a href="https://developer.apple.com/videos/play/wwdc2025/219/">developer.apple.com/videos/play/wwdc2025/219/</a>. The material that toolbars now sit on, and the "avoid glass on glass" guidance.</li>
+    <li>WWDC25 / 282, <em>Make your UIKit app more flexible</em> &mdash; <a href="https://developer.apple.com/videos/play/wwdc2025/282/">developer.apple.com/videos/play/wwdc2025/282/</a>. UIKit toolbar and tab-bar flexibility patterns.</li>
+  </ul>
 
-<footer class="page"><div class="row-nav"><div class="prev"><a href="Book-06-Controls-Buttons-Toggles-Pickers.html">&larr; Book 6: Controls — Buttons, Toggles, and Pi...</a></div><div class="pos">Book 07 Toolbars And Tab Views</div><div class="next"><a href="Book-08-Lists-Grids-And-ForEach.html">Book 8: Lists, Grids, and ForEach &rarr;</a></div></div></footer>
+</div>
 
 </body>
 </html>

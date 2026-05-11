@@ -4,103 +4,23 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Book 05: Menus And Navigation &mdash; Claude's Xcode 26 Swift Bible</title>
-<style>
-:root {
-  --bg: #000000;
-  --fg: #FFB000;
-  --bright: #FFD060;
-  --dim: #996600;
-  --codebg: #1a0d00;
-  --border: #664500;
-  --gutter: #4a3300;
-  --headerbg: #0a0600;
-}
-* { box-sizing: border-box; }
-html, body { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; height: 100%; }
-body {
-  background: var(--bg);
-  color: var(--fg);
-  font-family: "FiraCode Nerd Font Mono", "FiraCode Nerd Font", "Fira Code", "Menlo", "Courier New", monospace;
-  font-size: 18pt;
-  line-height: 1.55;
-  margin: 0;
-  padding: 0;
-  text-shadow: 0 0 1px rgba(255, 176, 0, 0.35);
-  display: flex;
-  flex-direction: column;
-}
-header.page, footer.page {
-  background: var(--headerbg);
-  color: var(--dim);
-  padding: 0.55rem 1.1rem;
-  font-size: 13pt;
-  display: flex;
-  flex-direction: column;
-  gap: 0.2rem;
-  flex: 0 0 auto;
-  z-index: 10;
-}
-header.page { border-bottom: 1px solid var(--border); }
-footer.page { border-top: 1px solid var(--border); padding-bottom: calc(0.55rem + env(safe-area-inset-bottom)); }
-header.page .path, footer.page .path { color: var(--fg); word-break: break-all; overflow-wrap: break-word; }
-header.page .pos, footer.page .pos { color: var(--bright); }
-/* The middle scrolls; header and footer stay put. */
-.content { flex: 1 1 auto; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 0.8rem 1rem 2rem 1rem; max-width: 1100px; margin: 0 auto; width: 100%; }
-h1 { color: var(--bright); font-weight: normal; font-size: 26pt; margin: 0.6rem 0 1rem 0; }
-h2 { color: var(--bright); font-weight: normal; font-size: 20pt; border-bottom: 1px solid var(--border); padding-bottom: 0.3rem; margin-top: 1.5rem; counter-set: h3 0 para 0; counter-increment: h2; }
-h2::before { content: counter(h2) ". "; color: var(--fg); }
-h3 { color: var(--bright); font-weight: normal; font-size: 18pt; margin-top: 1rem; counter-set: para 0; counter-increment: h3; }
-h3::before { content: counter(h2) "." counter(h3) " "; color: var(--fg); }
-p { margin: 0.4rem 0; counter-increment: para; }
-p::before { content: counter(h2) "." counter(h3) "." counter(para) " "; color: var(--dim); font-size: 13pt; margin-right: 0.4em; }
-code { color: var(--bright); background: var(--codebg); padding: 0.08em 0.35em; border: 1px solid #3a2400; border-radius: 3px; font-size: 0.92em; }
-pre { background: var(--codebg); border: 1px solid #3a2400; border-radius: 4px; padding: 0.7rem 0.9rem; overflow-x: auto; font-size: 14pt; }
-pre code { background: transparent; border: 0; padding: 0; }
-ul, ol.body-list { margin: 0.4rem 0 0.4rem 1.4rem; padding: 0; }
-a { color: var(--bright); font-weight: bold; text-decoration: none; border-bottom: 1px dotted var(--dim); }
-a:hover { background: #332200; }
-strong { color: var(--bright); }
-em { color: var(--fg); font-style: italic; }
-hr { border: 0; border-top: 1px solid var(--border); margin: 1rem 0; }
-ol.lines { list-style: none; counter-reset: line h2 h3 para; padding: 0; margin: 0; }
-ol.lines > li { counter-increment: line; padding: 0.15rem 0 0.15rem 3.6rem; position: relative; min-height: 1.2em; }
-ol.lines > li::before { content: counter(line); position: absolute; left: 0; top: 0.25rem; width: 2.8rem; text-align: right; color: var(--gutter); font-size: 13pt; padding-right: 0.5rem; border-right: 1px solid #2a1e00; }
-ol.lines > li > p, ol.lines > li > h2, ol.lines > li > h3, ol.lines > li > ul, ol.lines > li > ol, ol.lines > li > pre, ol.lines > li > hr { margin: 0; }
-.scope-note { border-left: 3px solid var(--bright); padding: 0.7rem 1rem; background: #140c00; margin: 0.6rem 0; color: var(--bright); }
-.nav { display: flex; gap: 0.9rem; flex-wrap: wrap; margin-top: 0.8rem; font-size: 14pt; }
-
-
-footer.page { flex-direction: column; gap: 0.4rem; }
-footer.page .row-nav { display: flex; flex-direction: row; justify-content: space-between; align-items: center; gap: 0.5rem; }
-footer.page .row-nav .prev, footer.page .row-nav .next { flex: 1; min-width: 0; }
-footer.page .row-nav .prev { text-align: left; }
-footer.page .row-nav .next { text-align: right; }
-footer.page .row-nav .pos { flex: 0 0 auto; text-align: center; color: var(--bright); font-weight: bold; }
-footer.page .row-nav a { color: var(--bright); font-weight: bold; text-decoration: none; border-bottom: 1px dotted var(--dim); }
-footer.page .row-nav a:hover { background: #332200; }
-footer.page .row-nav .nav-empty { color: var(--gutter); font-style: italic; }
-</style>
 </head>
 <body>
 
-<header class="page">
-  <div class="path">Part III The User Interface/Book 05 Menus And Navigation</div>
-</header>
-
 <div class="content">
-<ol class="lines">
-  <li><h1>Book 5: Menus and Navigation</h1></li>
-  <li><h2>Live Reference: Inkwell sidebar + LockBox three-column + CryoTunes tabs</h2></li>
-  <li><div class="scope-note">Three different production navigation shapes ship across the book's app roster. <strong>Inkwell</strong> uses a sidebar-and-detail <code>NavigationSplitView</code> for the book's Parts &rarr; Books &rarr; Chapters &rarr; Pages tree (the navigation you're using right now to get to this page). <strong>Claudes LockBox</strong> uses a three-column <code>NavigationSplitView</code> (Folders &rarr; Items &rarr; Detail) plus a TabView at the root level (Vault tab + Under the Hood tab). <strong>CryoTunes Player</strong> uses a flat tab-and-control-cluster pattern fitted to a music player's needs. Reading the three side-by-side shows how the same <code>NavigationStack</code> / <code>NavigationSplitView</code> / <code>TabView</code> primitives compose into very different feeling apps. Sources: <a href="https://github.com/fluhartyml/Claudes-X26-Swift6-Bible">Inkwell</a>, <a href="https://github.com/fluhartyml/Claudes-LockBox">LockBox</a>, <a href="https://github.com/fluhartyml/CryoTunesPlayer">CryoTunes Player</a>. See Build-Along 00, Build-Along 03, Source Tour 18.</div></li>
-  <li><hr></li>
-  <li><h2>X26 Menu and Toolbar Updates</h2></li>
-  <li><p>Menus in X26 pick up the Liquid Glass material on every platform and start showing system icons next to common actions, so a user can pick Cut, Copy, or Paste at a glance instead of reading the words<sup>[<a href="#mn1-fn">mn1</a>]</sup>. The bigger structural change is on iPadOS: every app gets a <strong>menu bar</strong> now, the same way Mac apps have always had one.<sup>[<a href="#mn1-fn">mn1</a>]</sup></p></li>
-  <li><h3>Adopt Standard Selectors for Menu Item Icons</h3></li>
-  <li><p>The way the icons get attached is selector-driven. When a menu item is wired up to a standard selector (Cut, Copy, Paste, and the rest of the platform's standard action vocabulary), the system reads that selector and pairs the right icon with it. Wire your standard actions to the standard selectors and the icons appear; if the action is custom, the selector is custom, and you supply your own icon.<sup>[<a href="#mn1-fn">mn1</a>]</sup></p></li>
-  <li><p>Related rule worth keeping near this one: whatever you put at the top of a contextual menu should also be the swipe action on the same row.<sup>[<a href="#mn1-fn">mn1</a>]</sup></p></li>
-  <li><h3>Toolbar Grouping with <code>ToolbarSpacer</code></h3></li>
-  <li><p>Toolbars get the new material, and along with it a way to declare which buttons belong in the same cluster. The tool for that is a fixed spacer dropped between groups:<sup>[<a href="#mn1-fn">mn1</a>]</sup></p></li>
-  <li><pre><code class="lang-swift">.toolbar {
+
+  <h1>Book 5: Menus and Navigation</h1>
+  <h2>Live Reference: Claudes X26 Swift6 Bible + Claudes LockBox + CryoTunes Player</h2>
+  <div class="scope-note">Three different production navigation shapes ship across the book's app roster. <strong>Claudes X26 Swift6 Bible</strong> uses a sidebar-and-detail <code>NavigationSplitView</code> for the book's Parts &rarr; Books &rarr; Chapters &rarr; Pages tree. <strong>Claudes LockBox</strong> uses a three-column <code>NavigationSplitView</code> (Folders &rarr; Items &rarr; Detail) plus a TabView at the root level. <strong>CryoTunes Player</strong> uses a flat tab-and-control-cluster pattern fitted to a music player's needs. The three sources side-by-side show how the same <code>NavigationStack</code> / <code>NavigationSplitView</code> / <code>TabView</code> primitives compose into very different feeling apps. Sources: <a href="https://github.com/fluhartyml/Claudes-X26-Swift6-Bible">github.com/fluhartyml/Claudes-X26-Swift6-Bible</a>, <a href="https://github.com/fluhartyml/Claudes-LockBox">github.com/fluhartyml/Claudes-LockBox</a>, <a href="https://github.com/fluhartyml/CryoTunesPlayer">github.com/fluhartyml/CryoTunesPlayer</a>. See Build-Along 00, Build-Along 03, Source Tour 18.</div>
+  <hr>
+  <h2>X26 Menu and Toolbar Updates</h2>
+  <p>Menus in X26 pick up the Liquid Glass material on every platform and start showing system icons next to common actions, so a user can pick Cut, Copy, or Paste at a glance instead of reading the words<sup>[<a href="#mn1-fn">mn1</a>]</sup>. The bigger structural change is on iPadOS: every app gets a <strong>menu bar</strong> now, the same way Mac apps have always had one.<sup>[<a href="#mn1-fn">mn1</a>]</sup></p>
+  <h3>Adopt Standard Selectors for Menu Item Icons</h3>
+  <p>The way the icons get attached is selector-driven. When a menu item is wired up to a standard selector (Cut, Copy, Paste, and the rest of the platform's standard action vocabulary), the system reads that selector and pairs the right icon with it. Wire your standard actions to the standard selectors and the icons appear; if the action is custom, the selector is custom, and you supply your own icon.<sup>[<a href="#mn1-fn">mn1</a>]</sup></p>
+  <p>Related rule worth keeping near this one: whatever you put at the top of a contextual menu should also be the swipe action on the same row.<sup>[<a href="#mn1-fn">mn1</a>]</sup></p>
+  <h3>Toolbar Grouping with <code>ToolbarSpacer</code></h3>
+  <p>Toolbars get the new material, and along with it a way to declare which buttons belong in the same cluster. The tool for that is a fixed spacer dropped between groups:<sup>[<a href="#mn1-fn">mn1</a>]</sup></p>
+  <pre><code class="lang-swift">.toolbar {
     ToolbarItemGroup(placement: .primaryAction) {
         Button("Undo") { undo() }
         Button("Redo") { redo() }
@@ -110,18 +30,18 @@ footer.page .row-nav .nav-empty { color: var(--gutter); font-style: italic; }
         Button("Markup") { markup() }
         Menu("More") { /* ... */ }
     }
-}</code></pre></li>
-  <li><p>Buttons inside one group ride on a shared Liquid Glass plate. A <code>ToolbarSpacer(.fixed)</code> between groups gives each group its own plate. The wrong-look version is four unrelated buttons crammed onto a single plate; the right-look version splits by function &mdash; undo/redo on one plate, markup/more on another &mdash; with the spacer doing the visual separating.<sup>[<a href="#mn1-fn">mn1</a>]</sup></p></li>
-  <li><p>UIKit and AppKit ship parallel APIs (<code>fixed</code> spacer on UIKit, <code>ToolbarSpacer</code> on AppKit).<sup>[<a href="#mn1-fn">mn1</a>]</sup></p></li>
-  <li><h3>Use Icons for Common Actions; Always Provide Accessibility Labels</h3></li>
-  <li><p>For the standard verbs in a toolbar, an icon reads faster than a word and takes less space &mdash; reach for icons first.<sup>[<a href="#mn1-fn">mn1</a>]</sup> One rule about mixing them: a single group should be all icons or all text, not a checkerboard of both. And every icon, no matter how obvious you think it is, needs an <strong>accessibility label</strong> attached. VoiceOver and Voice Control users read the label; sighted users see the icon.<sup>[<a href="#mn1-fn">mn1</a>]</sup></p></li>
-  <li><h3>Hide Toolbar Items Properly</h3></li>
-  <li><p>You've probably seen an app with a blank gap in its toolbar &mdash; a slot that's clearly there but holds nothing. That's the symptom of hiding the inside of a toolbar item instead of the item. Apply <code>.hidden(_:)</code> at the item level instead of inside it, and the slot collapses with the item; no ghost gap left behind.<sup>[<a href="#mn1-fn">mn1</a>]</sup></p></li>
-  <li><p id="mn1-fn" style="font-size: 13pt; color: var(--dim);">[mn1] Apple Developer Documentation, <em>Adopting Liquid Glass</em>. <a href="https://developer.apple.com/documentation/TechnologyOverviews/adopting-liquid-glass">developer.apple.com/documentation/TechnologyOverviews/adopting-liquid-glass</a> &mdash; verified 2026-04-29.</p></li>
-  <li><hr></li>
-  <li><h2>NavigationStack</h2></li>
-  <li><p>The modern replacement for <code>NavigationView</code>. Use this for single-column, push-pop navigation on iPhone and iPad.</p></li>
-  <li><pre><code class="lang-swift">struct ContentView: View {
+}</code></pre>
+  <p>Buttons inside one group ride on a shared Liquid Glass plate. A <code>ToolbarSpacer(.fixed)</code> between groups gives each group its own plate. The wrong-look version is four unrelated buttons crammed onto a single plate; the right-look version splits by function &mdash; undo/redo on one plate, markup/more on another &mdash; with the spacer doing the visual separating.<sup>[<a href="#mn1-fn">mn1</a>]</sup></p>
+  <p>UIKit and AppKit ship parallel APIs (<code>fixed</code> spacer on UIKit, <code>ToolbarSpacer</code> on AppKit).<sup>[<a href="#mn1-fn">mn1</a>]</sup></p>
+  <h3>Use Icons for Common Actions; Always Provide Accessibility Labels</h3>
+  <p>For the standard verbs in a toolbar, an icon reads faster than a word and takes less space &mdash; reach for icons first.<sup>[<a href="#mn1-fn">mn1</a>]</sup> One rule about mixing them: a single group should be all icons or all text, not a checkerboard of both. And every icon, no matter how obvious you think it is, needs an <strong>accessibility label</strong> attached. VoiceOver and Voice Control users read the label; sighted users see the icon.<sup>[<a href="#mn1-fn">mn1</a>]</sup></p>
+  <h3>Hide Toolbar Items Properly</h3>
+  <p>You've probably seen an app with a blank gap in its toolbar &mdash; a slot that's clearly there but holds nothing. That's the symptom of hiding the inside of a toolbar item instead of the item. Apply <code>.hidden(_:)</code> at the item level instead of inside it, and the slot collapses with the item; no ghost gap left behind.<sup>[<a href="#mn1-fn">mn1</a>]</sup></p>
+  <p id="mn1-fn" style="font-size: 13pt; color: var(--dim);">[mn1] Apple Developer Documentation, <em>Adopting Liquid Glass</em>. <a href="https://developer.apple.com/documentation/TechnologyOverviews/adopting-liquid-glass">developer.apple.com/documentation/TechnologyOverviews/adopting-liquid-glass</a> &mdash; verified 2026-04-29.</p>
+  <hr>
+  <h2>NavigationStack</h2>
+  <p>The modern replacement for <code>NavigationView</code>. Use this for single-column, push-pop navigation on iPhone and iPad.</p>
+  <pre><code class="lang-swift">struct ContentView: View {
     var body: some View {
         NavigationStack {
             List {
@@ -134,10 +54,10 @@ footer.page .row-nav .nav-empty { color: var(--gutter); font-style: italic; }
             }
         }
     }
-}</code></pre></li>
-  <li><h3>Programmatic Navigation with Path</h3></li>
-  <li><p>Use <code>NavigationPath</code> when you need to push/pop views from code — after a network call, a button tap, or a deep link.</p></li>
-  <li><pre><code class="lang-swift">struct AppView: View {
+}</code></pre>
+  <h3>Programmatic Navigation with Path</h3>
+  <p>Use <code>NavigationPath</code> when you need to push/pop views from code — after a network call, a button tap, or a deep link.</p>
+  <pre><code class="lang-swift">struct AppView: View {
     @State private var path = NavigationPath()
 
     var body: some View {
@@ -173,10 +93,10 @@ struct StepView: View {
         }
         .navigationTitle(step)
     }
-}</code></pre></li>
-  <li><h3>Typed Navigation Path</h3></li>
-  <li><p>When all your destinations share a single type, skip <code>NavigationPath</code> and use a plain array.</p></li>
-  <li><pre><code class="lang-swift">struct RecipeApp: View {
+}</code></pre>
+  <h3>Typed Navigation Path</h3>
+  <p>When all your destinations share a single type, skip <code>NavigationPath</code> and use a plain array.</p>
+  <pre><code class="lang-swift">struct RecipeApp: View {
     @State private var path: [Recipe] = []
 
     var body: some View {
@@ -187,14 +107,14 @@ struct StepView: View {
                 }
         }
     }
-}</code></pre></li>
-  <li><h3>Watch Out</h3></li>
-  <li><ul><li><code>NavigationPath</code> is type-erased. It can hold any <code>Hashable</code> type, but you need a <code>.navigationDestination(for:)</code> registered for each type you append.</li><li>If you append a value with no matching destination, the push silently fails. No crash, no error. Just nothing happens.</li><li>Do not nest <code>NavigationStack</code> inside another <code>NavigationStack</code>. You get double navigation bars and broken behavior.</li></ul></li>
-  <li><hr></li>
-  <li><h2>NavigationSplitView</h2></li>
-  <li><p>For two- or three-column layouts. iPad and Mac get real columns; iPhone collapses to a stack automatically.</p></li>
-  <li><h3>Two-Column</h3></li>
-  <li><pre><code class="lang-swift">struct TwoColumnView: View {
+}</code></pre>
+  <h3>Watch Out</h3>
+  <ul><li><code>NavigationPath</code> is type-erased. It can hold any <code>Hashable</code> type, but you need a <code>.navigationDestination(for:)</code> registered for each type you append.</li><li>If you append a value with no matching destination, the push silently fails. No crash, no error. Just nothing happens.</li><li>Do not nest <code>NavigationStack</code> inside another <code>NavigationStack</code>. You get double navigation bars and broken behavior.</li></ul>
+  <hr>
+  <h2>NavigationSplitView</h2>
+  <p>For two- or three-column layouts. iPad and Mac get real columns; iPhone collapses to a stack automatically.</p>
+  <h3>Two-Column</h3>
+  <pre><code class="lang-swift">struct TwoColumnView: View {
     @State private var selectedItem: Item?
 
     var body: some View {
@@ -213,9 +133,9 @@ struct StepView: View {
             }
         }
     }
-}</code></pre></li>
-  <li><h3>Three-Column</h3></li>
-  <li><pre><code class="lang-swift">NavigationSplitView {
+}</code></pre>
+  <h3>Three-Column</h3>
+  <pre><code class="lang-swift">NavigationSplitView {
     // Sidebar (column 1)
     CategoryListView(selection: $selectedCategory)
 } content: {
@@ -228,31 +148,31 @@ struct StepView: View {
     if let selectedItem {
         ItemDetailView(item: selectedItem)
     }
-}</code></pre></li>
-  <li><h3>Controlling Column Visibility</h3></li>
-  <li><pre><code class="lang-swift">@State private var columnVisibility: NavigationSplitViewVisibility = .all
+}</code></pre>
+  <h3>Controlling Column Visibility</h3>
+  <pre><code class="lang-swift">@State private var columnVisibility: NavigationSplitViewVisibility = .all
 
 NavigationSplitView(columnVisibility: $columnVisibility) {
     Sidebar()
 } detail: {
     Detail()
-}</code></pre></li>
-  <li><p>Options: <code>.all</code>, <code>.doubleColumn</code>, <code>.detailOnly</code>, <code>.automatic</code>.</p></li>
-  <li><h3>Watch Out</h3></li>
-  <li><ul><li>On iPhone, <code>NavigationSplitView</code> collapses into a single navigation stack. The sidebar becomes the root list. This is automatic but test it — your layout assumptions may not hold.</li><li><code>selection</code> binding on <code>List</code> inside <code>NavigationSplitView</code> drives navigation. If you also use <code>NavigationLink(value:)</code>, you can get conflicts. Pick one approach.</li></ul></li>
-  <li><hr></li>
-  <li><h2>NavigationLink</h2></li>
-  <li><p>Two forms exist: the modern value-based form and the older view-based form.</p></li>
-  <li><h3>Value-Based (Preferred)</h3></li>
-  <li><pre><code class="lang-swift">NavigationLink("Show Detail", value: myItem)</code></pre></li>
-  <li><p>Pair with <code>.navigationDestination(for:)</code> on a parent. The destination is declared once, not per link.</p></li>
-  <li><h3>View-Based (Legacy but Functional)</h3></li>
-  <li><pre><code class="lang-swift">NavigationLink("Show Detail") {
+}</code></pre>
+  <p>Options: <code>.all</code>, <code>.doubleColumn</code>, <code>.detailOnly</code>, <code>.automatic</code>.</p>
+  <h3>Watch Out</h3>
+  <ul><li>On iPhone, <code>NavigationSplitView</code> collapses into a single navigation stack. The sidebar becomes the root list. This is automatic but test it — your layout assumptions may not hold.</li><li><code>selection</code> binding on <code>List</code> inside <code>NavigationSplitView</code> drives navigation. If you also use <code>NavigationLink(value:)</code>, you can get conflicts. Pick one approach.</li></ul>
+  <hr>
+  <h2>NavigationLink</h2>
+  <p>Two forms exist: the modern value-based form and the older view-based form.</p>
+  <h3>Value-Based (Preferred)</h3>
+  <pre><code class="lang-swift">NavigationLink("Show Detail", value: myItem)</code></pre>
+  <p>Pair with <code>.navigationDestination(for:)</code> on a parent. The destination is declared once, not per link.</p>
+  <h3>View-Based (Legacy but Functional)</h3>
+  <pre><code class="lang-swift">NavigationLink("Show Detail") {
     DetailView(item: myItem)
-}</code></pre></li>
-  <li><p>This still works. The downside is that the destination view is created at the same time as the link, even if the user never taps it. For heavy views, that wastes memory.</p></li>
-  <li><h3>Custom Label</h3></li>
-  <li><pre><code class="lang-swift">NavigationLink(value: recipe) {
+}</code></pre>
+  <p>This still works. The downside is that the destination view is created at the same time as the link, even if the user never taps it. For heavy views, that wastes memory.</p>
+  <h3>Custom Label</h3>
+  <pre><code class="lang-swift">NavigationLink(value: recipe) {
     HStack {
         Image(systemName: "fork.knife")
         VStack(alignment: .leading) {
@@ -260,21 +180,21 @@ NavigationSplitView(columnVisibility: $columnVisibility) {
             Text(recipe.cuisine).font(.caption).foregroundStyle(.secondary)
         }
     }
-}</code></pre></li>
-  <li><hr></li>
-  <li><h2>Navigation Title</h2></li>
-  <li><pre><code class="lang-swift">.navigationTitle("Recipes")             // standard
-.navigationTitle($editableTitle)         // editable title (iOS 16+)</code></pre></li>
-  <li><h3>Display Modes (iOS)</h3></li>
-  <li><pre><code class="lang-swift">.navigationBarTitleDisplayMode(.large)     // big title, scrolls to inline
+}</code></pre>
+  <hr>
+  <h2>Navigation Title</h2>
+  <pre><code class="lang-swift">.navigationTitle("Recipes")             // standard
+.navigationTitle($editableTitle)         // editable title (iOS 16+)</code></pre>
+  <h3>Display Modes (iOS)</h3>
+  <pre><code class="lang-swift">.navigationBarTitleDisplayMode(.large)     // big title, scrolls to inline
 .navigationBarTitleDisplayMode(.inline)    // small centered title
-.navigationBarTitleDisplayMode(.automatic) // inherits from parent</code></pre></li>
-  <li><h3>Watch Out</h3></li>
-  <li><ul><li><code>.navigationTitle</code> goes on the content inside the NavigationStack, not on the NavigationStack itself. Put it on the <code>List</code> or <code>VStack</code>, not the outer container.</li></ul></li>
-  <li><hr></li>
-  <li><h2>TabView</h2></li>
-  <li><h3>Basic Tabs</h3></li>
-  <li><pre><code class="lang-swift">struct MainView: View {
+.navigationBarTitleDisplayMode(.automatic) // inherits from parent</code></pre>
+  <h3>Watch Out</h3>
+  <ul><li><code>.navigationTitle</code> goes on the content inside the NavigationStack, not on the NavigationStack itself. Put it on the <code>List</code> or <code>VStack</code>, not the outer container.</li></ul>
+  <hr>
+  <h2>TabView</h2>
+  <h3>Basic Tabs</h3>
+  <pre><code class="lang-swift">struct MainView: View {
     @State private var selectedTab = 0
 
     var body: some View {
@@ -290,18 +210,18 @@ NavigationSplitView(columnVisibility: $columnVisibility) {
             }
         }
     }
-}</code></pre></li>
-  <li><h3>Badge</h3></li>
-  <li><pre><code class="lang-swift">Tab("Inbox", systemImage: "tray", value: 0) {
+}</code></pre>
+  <h3>Badge</h3>
+  <pre><code class="lang-swift">Tab("Inbox", systemImage: "tray", value: 0) {
     InboxView()
 }
-.badge(unreadCount)</code></pre></li>
-  <li><h3>Watch Out</h3></li>
-  <li><ul><li>Each tab should contain its own <code>NavigationStack</code> if it needs navigation. Do not wrap the entire <code>TabView</code> in a <code>NavigationStack</code>.</li><li>Tab state resets when switching tabs unless you preserve it with <code>@State</code> or <code>@SceneStorage</code>.</li></ul></li>
-  <li><hr></li>
-  <li><h2>macOS Menu Bar</h2></li>
-  <li><h3>CommandGroup: Adding to Existing Menus</h3></li>
-  <li><pre><code class="lang-swift">@main
+.badge(unreadCount)</code></pre>
+  <h3>Watch Out</h3>
+  <ul><li>Each tab should contain its own <code>NavigationStack</code> if it needs navigation. Do not wrap the entire <code>TabView</code> in a <code>NavigationStack</code>.</li><li>Tab state resets when switching tabs unless you preserve it with <code>@State</code> or <code>@SceneStorage</code>.</li></ul>
+  <hr>
+  <h2>macOS Menu Bar</h2>
+  <h3>CommandGroup: Adding to Existing Menus</h3>
+  <pre><code class="lang-swift">@main
 struct MyApp: App {
     var body: some Scene {
         WindowGroup {
@@ -323,10 +243,10 @@ struct MyApp: App {
             }
         }
     }
-}</code></pre></li>
-  <li><p>Common placements: <code>.newItem</code>, <code>.saveItem</code>, <code>.sidebar</code>, <code>.toolbar</code>, <code>.help</code>, <code>.pasteboard</code>, <code>.undoRedo</code>.</p></li>
-  <li><h3>CommandMenu: Custom Top-Level Menu</h3></li>
-  <li><pre><code class="lang-swift">.commands {
+}</code></pre>
+  <p>Common placements: <code>.newItem</code>, <code>.saveItem</code>, <code>.sidebar</code>, <code>.toolbar</code>, <code>.help</code>, <code>.pasteboard</code>, <code>.undoRedo</code>.</p>
+  <h3>CommandMenu: Custom Top-Level Menu</h3>
+  <pre><code class="lang-swift">.commands {
     CommandMenu("Recipes") {
         Button("Import from File...") { importRecipes() }
             .keyboardShortcut("i", modifiers: [.command, .shift])
@@ -341,11 +261,11 @@ struct MyApp: App {
             Button("Rating") { sortBy(.rating) }
         }
     }
-}</code></pre></li>
-  <li><h3>Watch Out</h3></li>
-  <li><ul><li>Menu commands cannot directly access view state. Use <code>@FocusedValue</code> or <code>@FocusedBinding</code> to bridge between the menu bar and the focused view.</li><li><code>.commands</code> modifier goes on the <code>Scene</code>, not on a <code>View</code>.</li></ul></li>
-  <li><h3>FocusedValue Bridge</h3></li>
-  <li><pre><code class="lang-swift">// 1. Define the key
+}</code></pre>
+  <h3>Watch Out</h3>
+  <ul><li>Menu commands cannot directly access view state. Use <code>@FocusedValue</code> or <code>@FocusedBinding</code> to bridge between the menu bar and the focused view.</li><li><code>.commands</code> modifier goes on the <code>Scene</code>, not on a <code>View</code>.</li></ul>
+  <h3>FocusedValue Bridge</h3>
+  <pre><code class="lang-swift">// 1. Define the key
 struct FocusedRecipeKey: FocusedValueKey {
     typealias Value = Binding&lt;Recipe&gt;
 }
@@ -382,10 +302,10 @@ struct MyApp: App {
             }
         }
     }
-}</code></pre></li>
-  <li><hr></li>
-  <li><h2>Context Menus</h2></li>
-  <li><pre><code class="lang-swift">Text("Hold me")
+}</code></pre>
+  <hr>
+  <h2>Context Menus</h2>
+  <pre><code class="lang-swift">Text("Hold me")
     .contextMenu {
         Button("Copy", action: copyItem)
         Button("Delete", role: .destructive, action: deleteItem)
@@ -396,30 +316,37 @@ struct MyApp: App {
             Button("Messages", action: shareViaMessages)
             Button("Mail", action: shareViaMail)
         }
-    }</code></pre></li>
-  <li><h3>Context Menu with Preview</h3></li>
-  <li><pre><code class="lang-swift">Text(recipe.name)
+    }</code></pre>
+  <h3>Context Menu with Preview</h3>
+  <pre><code class="lang-swift">Text(recipe.name)
     .contextMenu {
         Button("Edit") { editRecipe() }
         Button("Delete", role: .destructive) { deleteRecipe() }
     } preview: {
         RecipePreviewCard(recipe: recipe)
             .frame(width: 300, height: 200)
-    }</code></pre></li>
-  <li><h3>Watch Out</h3></li>
-  <li><ul><li>Context menus only support <code>Button</code>, <code>Divider</code>, <code>Menu</code>, <code>Toggle</code>, and <code>Picker</code>. No arbitrary views — no sliders, no text fields.</li><li>On macOS, context menus trigger on right-click. On iOS, long press.</li></ul></li>
-  <li><hr></li>
-  <li><h2>Practical Tips</h2></li>
-  <li><ol class="body-list"><li><strong>Start with NavigationStack.</strong> Only move to NavigationSplitView when you actually need columns (iPad/Mac sidebar layouts).</li></ol></li>
-  <li><ol class="body-list"><li><strong>Use value-based NavigationLink</strong> with <code>.navigationDestination(for:)</code>. It separates the "what to show" from the "where it lives" and enables programmatic navigation.</li></ol></li>
-  <li><ol class="body-list"><li><strong>Pop to root</strong> by resetting the path: <code>path = NavigationPath()</code> or <code>path.removeLast(path.count)</code>.</li></ol></li>
-  <li><ol class="body-list"><li><strong>Deep linking</strong>: Build your <code>NavigationPath</code> from URL components on app launch, then set it as the initial path.</li></ol></li>
-  <li><ol class="body-list"><li><strong>Test on all platforms.</strong> NavigationSplitView behaves very differently on iPhone vs iPad vs Mac. The compiler will not catch layout surprises.</li></ol></li>
-  <li><ol class="body-list"><li><strong>Keep NavigationStack out of reusable components.</strong> The view that owns the NavigationStack should be a top-level coordinator, not a leaf view.</li></ol></li>
-</ol>
-</div>
+    }</code></pre>
+  <h3>Watch Out</h3>
+  <ul><li>Context menus only support <code>Button</code>, <code>Divider</code>, <code>Menu</code>, <code>Toggle</code>, and <code>Picker</code>. No arbitrary views — no sliders, no text fields.</li><li>On macOS, context menus trigger on right-click. On iOS, long press.</li></ul>
+  <hr>
+  <h2>Practical Tips</h2>
+  <ol class="body-list"><li><strong>Start with NavigationStack.</strong> Only move to NavigationSplitView when you actually need columns (iPad/Mac sidebar layouts).</li></ol>
+  <ol class="body-list"><li><strong>Use value-based NavigationLink</strong> with <code>.navigationDestination(for:)</code>. It separates the "what to show" from the "where it lives" and enables programmatic navigation.</li></ol>
+  <ol class="body-list"><li><strong>Pop to root</strong> by resetting the path: <code>path = NavigationPath()</code> or <code>path.removeLast(path.count)</code>.</li></ol>
+  <ol class="body-list"><li><strong>Deep linking</strong>: Build your <code>NavigationPath</code> from URL components on app launch, then set it as the initial path.</li></ol>
+  <ol class="body-list"><li><strong>Test on all platforms.</strong> NavigationSplitView behaves very differently on iPhone vs iPad vs Mac. The compiler will not catch layout surprises.</li></ol>
+  <ol class="body-list"><li><strong>Keep NavigationStack out of reusable components.</strong> The view that owns the NavigationStack should be a top-level coordinator, not a leaf view.</li></ol>
+  <hr>
+  <h2>Further Reading &mdash; WWDC Sessions</h2>
+  <p>This book is a passive resource. When you want deeper coverage of menus and navigation, the WWDC sessions below are Apple's source material.</p>
+  <ul>
+    <li>WWDC25 / 256, <em>What's new in SwiftUI</em> &mdash; <a href="https://developer.apple.com/videos/play/wwdc2025/256/">developer.apple.com/videos/play/wwdc2025/256/</a>. Navigation-stack and menu updates this release.</li>
+    <li>WWDC25 / 323, <em>Build a SwiftUI app with the new design</em> &mdash; <a href="https://developer.apple.com/videos/play/wwdc2025/323/">developer.apple.com/videos/play/wwdc2025/323/</a>. New <code>ToolbarSpacer</code>, search placement, and grouped morphing that affect menu surfaces.</li>
+    <li>WWDC25 / 219, <em>Meet Liquid Glass</em> &mdash; <a href="https://developer.apple.com/videos/play/wwdc2025/219/">developer.apple.com/videos/play/wwdc2025/219/</a>. Material rules for menu chrome and context menus.</li>
+    <li>WWDC25 / 282, <em>Make your UIKit app more flexible</em> &mdash; <a href="https://developer.apple.com/videos/play/wwdc2025/282/">developer.apple.com/videos/play/wwdc2025/282/</a>. UIKit-side menu and navigation flexibility you'll want when bridging.</li>
+  </ul>
 
-<footer class="page"><div class="row-nav"><div class="prev"><a href="Book-04-Gestures-And-Input.html">&larr; Book 4: Gestures &amp; Input</a></div><div class="pos">Book 05 Menus And Navigation</div><div class="next"><a href="Book-06-Controls-Buttons-Toggles-Pickers.html">Book 6: Controls — Buttons, Toggles, and Pi... &rarr;</a></div></div></footer>
+</div>
 
 </body>
 </html>

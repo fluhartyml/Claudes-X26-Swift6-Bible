@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Appendix E: ActivityKit</title>
+</head><body>
+<div class="content">
+<h1>Appendix E: ActivityKit (User's Manual)</h1>
+<p><span class="status-live">Status: Public framework, iOS 16.1+ / iPadOS 17.0+, with Apple Watch and CarPlay surfaces added in 2024 and broadcast support in 2025.</span> ActivityKit is Apple's framework for Live Activities &mdash; the small, persistent UI that lives on the lock screen and in the Dynamic Island while something is in progress. A sports score that's still updating, a delivery driver on the way, a workout timer counting up: anything time-bounded the user wants to glance at without unlocking the device.</p>
+
+<h2>When to reach for it</h2>
+<p>Reach for ActivityKit when there's a real-time activity the user wants to track from outside the app &mdash; one with a clear start, an end the user is waiting for, and updates in between. The activity has to have an end. ActivityKit explicitly refuses indefinite content: it's not a notification, it's not a widget, it's an in-progress view.</p>
+<p>Don't reach for ActivityKit for content that doesn't change ("today's weather"), for content with no end ("currently playing music" &mdash; that's <code>MPNowPlayingInfoCenter</code>), or for purely ambient state. If there's nothing for the user to wait for, ActivityKit isn't the right tool.</p>
+
+<h2>Three pieces an activity needs</h2>
+<p>Every Live Activity has three pieces:</p>
+<ul>
+<li>A type that conforms to <code>ActivityAttributes</code>. This holds the static data &mdash; the parts that don't change over the life of the activity. A pizza order's number, the addresses for pickup and dropoff, the customer's name. The nested <code>ContentState</code> holds the dynamic data &mdash; the parts that update.</li>
+<li>A widget extension that includes a <code>Widget</code> conforming to <code>ActivityConfiguration&lt;Attributes&gt;</code>. The widget defines the lock-screen and Dynamic Island UI for the activity.</li>
+<li>A call from the app to <code>Activity.request(attributes:content:pushType:)</code> to start the activity, and follow-up calls to <code>activity.update(_:)</code> and <code>activity.end(_:dismissalPolicy:)</code> to advance and finish it.</li>
+</ul>
+
+<h2>The attributes type</h2>
+<pre><code>import ActivityKit
+
+struct DeliveryAttributes: ActivityAttributes {
+    typealias DeliveryStatus = ContentState
+
+    struct ContentState: Codable, Hashable {
+        var driverName: String
+        var minutesAway: Int
+        var stage: Stage
+
+        enum Stage: String, Codable, Hashable {
+            case preparing, onTheWay, arrived
+        }
+    }
+
+    var orderNumber: String
+    var restaurantName: String
+}</code></pre>
+<p>The outer struct (<code>orderNumber</code>, <code>restaurantName</code>) is fixed for the life of the activity. The inner <code>ContentState</code> (<code>driverName</code>, <code>minutesAway</code>, <code>stage</code>) is what the app pushes updates to. Both must be <code>Codable</code> and <code>Hashable</code>, and both must be small &mdash; the system enforces a payload cap.</p>
+
+<h2>The widget configuration</h2>
+<p>Inside the widget extension, the activity gets a configuration that maps states to views for each surface:</p>
+<pre><code>struct DeliveryLiveActivity: Widget {
+    var body: some WidgetConfiguration {
+        ActivityConfiguration(for: DeliveryAttributes.self) { context in
+            DeliveryLockScreenView(context: context)
+        } dynamicIsland: { context in
+            DynamicIsland {
+                DynamicIslandExpandedRegion(.leading) { ... }
+                DynamicIslandExpandedRegion(.trailing) { ... }
+                DynamicIslandExpandedRegion(.center) { ... }
+                DynamicIslandExpandedRegion(.bottom) { ... }
+            } compactLeading: {
+                Text(context.state.minutesAway, format: .number)
+            } compactTrailing: {
+                Image(systemName: "bicycle")
+            } minimal: {
+                Image(systemName: "bicycle")
+            }
+        }
+    }
+}</code></pre>
+<p>The first closure is the lock-screen banner. The <code>dynamicIsland</code> closure declares four regions for the expanded view (leading, trailing, center, bottom) and three small views for the collapsed states (compact leading, compact trailing, minimal). The system picks which one to show based on what else is competing for the island at the time.</p>
+
+<h2>Starting, updating, ending</h2>
+<pre><code>let attributes = DeliveryAttributes(orderNumber: "A412", restaurantName: "Mario's")
+let initial = DeliveryAttributes.ContentState(
+    driverName: "Sam",
+    minutesAway: 18,
+    stage: .preparing
+)
+
+let activity = try Activity.request(
+    attributes: attributes,
+    content: .init(state: initial, staleDate: nil),
+    pushType: nil
+)
+
+try await activity.update(
+    .init(
+        state: DeliveryAttributes.ContentState(
+            driverName: "Sam",
+            minutesAway: 9,
+            stage: .onTheWay
+        ),
+        staleDate: Date().addingTimeInterval(60 * 5)
+    )
+)
+
+try await activity.end(
+    .init(
+        state: DeliveryAttributes.ContentState(
+            driverName: "Sam",
+            minutesAway: 0,
+            stage: .arrived
+        ),
+        staleDate: nil
+    ),
+    dismissalPolicy: .default
+)</code></pre>
+<p><code>request</code> starts the activity. <code>update</code> pushes a new <code>ContentState</code>. <code>end</code> closes it &mdash; the activity stays visible for a short grace period (the <code>dismissalPolicy</code>) before the system removes it.</p>
+
+<h2>Stale dates</h2>
+<p>A <code>staleDate</code> on a content update tells the system when the data should be considered out of date. After the stale date passes, the system can dim the activity or stop showing it in the Dynamic Island until a fresh update arrives. Stale dates are how an activity tells the system "if you don't hear from me by 7:42 PM, this number isn't trustworthy anymore."</p>
+
+<h2>Push updates</h2>
+<p>Activities can be updated from a server with no app launch required. Set <code>pushType: .token</code> when requesting the activity and the system gives back a push token the app forwards to the server. The server then sends APNs payloads that update the activity in place. The payload format is documented separately in <code>ActivityKit</code>'s "Updating live activities with ActivityKit push notifications" article. Push updates are the only way to keep an activity current while the app is suspended &mdash; the alternative is local timers that won't fire when the app isn't running.</p>
+
+<h2>Authorization</h2>
+<p>Live Activities are off by default in Settings. The app can read <code>ActivityAuthorizationInfo().areActivitiesEnabled</code> to check the user's preference, and <code>request</code> throws if activities are disabled. There's no separate permission prompt &mdash; the user toggles the master switch in Settings &gt; Notifications &gt; (App) &gt; Live Activities.</p>
+
+<h2>The watch and CarPlay surfaces</h2>
+<p>Starting in 2024, a Live Activity also shows up on a paired Apple Watch in the Smart Stack, and in CarPlay during navigation or media playback. The widget extension's activity configuration drives both surfaces; no extra code is required, but the views need to render correctly at the watch's screen size and within CarPlay's safety constraints (no animations, limited interactivity).</p>
+
+<h2>What's new in 2025</h2>
+<ul>
+<li><strong>Broadcast Live Activities.</strong> A single activity can be shared with all of a user's followers (sports app, news app), updated server-side, and dismissed in bulk. The activity is keyed on a topic the user subscribes to, not on an installed app instance.</li>
+<li><strong>Interactive activities with App Intents.</strong> Buttons inside the Dynamic Island and lock-screen banner can invoke an <code>AppIntent</code> directly &mdash; "pause," "resume," "mark delivered" &mdash; without launching the app.</li>
+<li><strong>Tighter alignment with the new design system.</strong> The lock-screen banner inherits the Liquid Glass material; widget views inside the activity should reach for <code>.glassEffect()</code> only on top-level surfaces, not on nested controls (see <em>Appendix B &mdash; CryoKit</em> for the "no glass on glass" rule and the broader material guidance).</li>
+</ul>
+
+<h2>Common mistakes</h2>
+<ul>
+<li><strong>Putting mutable data in the outer attributes type.</strong> The outer attributes are fixed for the life of the activity. Anything that changes belongs in <code>ContentState</code>.</li>
+<li><strong>Forgetting the dismissal policy.</strong> <code>.default</code> keeps the activity visible briefly after end. <code>.immediate</code> removes it at once. <code>.after(Date)</code> keeps it visible until a specific moment. Pick deliberately &mdash; the default is rarely wrong, but the immediate dismissal is sometimes preferable for activities that should clear when the user is done.</li>
+<li><strong>Animating heavy content in the Dynamic Island.</strong> The island is performance-constrained. Static content with one or two animated SF Symbols looks crisp; full-bleed animations stutter or get truncated.</li>
+<li><strong>Skipping the stale date.</strong> An activity with no stale date that stops receiving updates looks "stuck" &mdash; the numbers freeze but the UI keeps showing them. Even a conservative stale date (5 minutes out) lets the system soften the display when data goes cold.</li>
+</ul>
+
+<h2>Sources</h2>
+<ul>
+<li>Apple Developer Documentation, ActivityKit framework reference (verified 2026-05-10).</li>
+<li>Apple Developer Documentation, "Displaying live data with Live Activities" article (verified 2026-05-10).</li>
+<li>Apple Developer Documentation, "Updating live activities with ActivityKit push notifications" article (verified 2026-05-10).</li>
+<li>WWDC25 session 278, "What's new in widgets."</li>
+<li>WWDC25 session 275, "Explore new advances in App Intents" (interactive activity controls).</li>
+<li>WWDC25 session 219, "Meet Liquid Glass" (material rules for activity banners).</li>
+</ul>
+</div>
+</body></html>

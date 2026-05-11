@@ -4,123 +4,43 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Book 13: Multi Window And NavigationSplitView &mdash; Claude's Xcode 26 Swift Bible</title>
-<style>
-:root {
-  --bg: #000000;
-  --fg: #FFB000;
-  --bright: #FFD060;
-  --dim: #996600;
-  --codebg: #1a0d00;
-  --border: #664500;
-  --gutter: #4a3300;
-  --headerbg: #0a0600;
-}
-* { box-sizing: border-box; }
-html, body { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; height: 100%; }
-body {
-  background: var(--bg);
-  color: var(--fg);
-  font-family: "FiraCode Nerd Font Mono", "FiraCode Nerd Font", "Fira Code", "Menlo", "Courier New", monospace;
-  font-size: 18pt;
-  line-height: 1.55;
-  margin: 0;
-  padding: 0;
-  text-shadow: 0 0 1px rgba(255, 176, 0, 0.35);
-  display: flex;
-  flex-direction: column;
-}
-header.page, footer.page {
-  background: var(--headerbg);
-  color: var(--dim);
-  padding: 0.55rem 1.1rem;
-  font-size: 13pt;
-  display: flex;
-  flex-direction: column;
-  gap: 0.2rem;
-  flex: 0 0 auto;
-  z-index: 10;
-}
-header.page { border-bottom: 1px solid var(--border); }
-footer.page { border-top: 1px solid var(--border); padding-bottom: calc(0.55rem + env(safe-area-inset-bottom)); }
-header.page .path, footer.page .path { color: var(--fg); word-break: break-all; overflow-wrap: break-word; }
-header.page .pos, footer.page .pos { color: var(--bright); }
-/* The middle scrolls; header and footer stay put. */
-.content { flex: 1 1 auto; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 0.8rem 1rem 2rem 1rem; max-width: 1100px; margin: 0 auto; width: 100%; }
-h1 { color: var(--bright); font-weight: normal; font-size: 26pt; margin: 0.6rem 0 1rem 0; }
-h2 { color: var(--bright); font-weight: normal; font-size: 20pt; border-bottom: 1px solid var(--border); padding-bottom: 0.3rem; margin-top: 1.5rem; counter-set: h3 0 para 0; counter-increment: h2; }
-h2::before { content: counter(h2) ". "; color: var(--fg); }
-h3 { color: var(--bright); font-weight: normal; font-size: 18pt; margin-top: 1rem; counter-set: para 0; counter-increment: h3; }
-h3::before { content: counter(h2) "." counter(h3) " "; color: var(--fg); }
-p { margin: 0.4rem 0; counter-increment: para; }
-p::before { content: counter(h2) "." counter(h3) "." counter(para) " "; color: var(--dim); font-size: 13pt; margin-right: 0.4em; }
-code { color: var(--bright); background: var(--codebg); padding: 0.08em 0.35em; border: 1px solid #3a2400; border-radius: 3px; font-size: 0.92em; }
-pre { background: var(--codebg); border: 1px solid #3a2400; border-radius: 4px; padding: 0.7rem 0.9rem; overflow-x: auto; font-size: 14pt; }
-pre code { background: transparent; border: 0; padding: 0; }
-ul, ol.body-list { margin: 0.4rem 0 0.4rem 1.4rem; padding: 0; }
-a { color: var(--bright); font-weight: bold; text-decoration: none; border-bottom: 1px dotted var(--dim); }
-a:hover { background: #332200; }
-strong { color: var(--bright); }
-em { color: var(--fg); font-style: italic; }
-hr { border: 0; border-top: 1px solid var(--border); margin: 1rem 0; }
-ol.lines { list-style: none; counter-reset: line h2 h3 para; padding: 0; margin: 0; }
-ol.lines > li { counter-increment: line; padding: 0.15rem 0 0.15rem 3.6rem; position: relative; min-height: 1.2em; }
-ol.lines > li::before { content: counter(line); position: absolute; left: 0; top: 0.25rem; width: 2.8rem; text-align: right; color: var(--gutter); font-size: 13pt; padding-right: 0.5rem; border-right: 1px solid #2a1e00; }
-ol.lines > li > p, ol.lines > li > h2, ol.lines > li > h3, ol.lines > li > ul, ol.lines > li > ol, ol.lines > li > pre, ol.lines > li > hr { margin: 0; }
-.scope-note { border-left: 3px solid var(--bright); padding: 0.7rem 1rem; background: #140c00; margin: 0.6rem 0; color: var(--bright); }
-.nav { display: flex; gap: 0.9rem; flex-wrap: wrap; margin-top: 0.8rem; font-size: 14pt; }
-
-
-footer.page { flex-direction: column; gap: 0.4rem; }
-footer.page .row-nav { display: flex; flex-direction: row; justify-content: space-between; align-items: center; gap: 0.5rem; }
-footer.page .row-nav .prev, footer.page .row-nav .next { flex: 1; min-width: 0; }
-footer.page .row-nav .prev { text-align: left; }
-footer.page .row-nav .next { text-align: right; }
-footer.page .row-nav .pos { flex: 0 0 auto; text-align: center; color: var(--bright); font-weight: bold; }
-footer.page .row-nav a { color: var(--bright); font-weight: bold; text-decoration: none; border-bottom: 1px dotted var(--dim); }
-footer.page .row-nav a:hover { background: #332200; }
-footer.page .row-nav .nav-empty { color: var(--gutter); font-style: italic; }
-</style>
 </head>
 <body>
 
-<header class="page">
-  <div class="path">Part IV The Application/Book 13 Multi Window And NavigationSplitView</div>
-</header>
-
 <div class="content">
-<ol class="lines">
-  <li><h1>Book 13: Multi-Window &amp; NavigationSplitView</h1></li>
-  <li><p><strong>Claude's Xcode 26 Swift Bible</strong> -- Part IV: The Application</p></li>
-  <li><hr></li>
-  <li><p>This chapter covers multi-window apps, the <code>NavigationSplitView</code> three-column reader pattern, opening and closing windows from code, and persisting window state across launches. The patterns apply to LockBox (Appendix D) and QuickNote (Appendix C) when those apps move beyond a single screen toward sidebars, detail panes, and multiple open windows.</p></li>
-  <li><hr></li>
-  <li><h2>Live Reference: Inkwell + Claudes LockBox + My Person CRM</h2></li>
-  <li><div class="scope-note">Three of the apps shipping alongside this book use the navigation patterns this chapter teaches. <strong>Inkwell</strong> (the reader app you may be holding right now if you're on iPad) uses a sidebar-and-detail layout to navigate the book's Parts, Books, Chapters, and Pages. <strong>Claudes LockBox</strong> uses a three-column variant &mdash; Folders sidebar &rarr; Items in selected Folder &rarr; Item Detail &mdash; that reads cleanly on iPhone (stacked drill-in) and iPad / Mac (all three columns visible). <strong>My Person CRM</strong> uses the simpler <code>NavigationStack</code> + <code>NavigationLink</code> pattern &mdash; a flat list of tracked people drilling into a per-person detail screen. Reading its source is reading the iPhone-first end of the same story this chapter tells: when <code>NavigationStack</code> is the right tool and when <code>NavigationSplitView</code> takes over. Browse Inkwell's <code>ContentView.swift</code> via its Under the Hood tab, clone Claudes LockBox at <a href="https://github.com/fluhartyml/Claudes-LockBox">github.com/fluhartyml/Claudes-LockBox</a>, or clone My Person CRM at <a href="https://github.com/fluhartyml/My-Person-CRM/wiki">github.com/fluhartyml/My-Person-CRM/wiki</a>. See Build-Along 00 (Inkwell), Build-Along 03 (LockBox), Build-Along 07 (My Person CRM).</div></li>
-  <li><hr></li>
-  <li><h2>X26 Updates to Split Views and Windows</h2></li>
-  <li><p>X26 rounds the corners of every window so the chrome echoes the rounded buttons, sheets, and controls inside. iPadOS picks up two new behaviors. iPad windows now show the close, minimize, and resize controls on their title bar. And iPad windows resize as a continuous gesture &mdash; drag the corner and the window follows your finger smoothly, all the way down to its minimum size, instead of snapping to one of a handful of preset widths<sup>[<a href="#v1-fn">v1</a>]</sup>.</p></li>
-  <li><p>For your code, three practical upgrades.</p></li>
-  <li><h3>Support Arbitrary Window Sizes</h3></li>
-  <li><p>Drop any code that pins windows to a fixed size or refuses arbitrary resize gestures. The X26 expectation is that the user picks the dimensions, your content reflows, and you provide safe areas so layout guides have something to work against. The system uses those safe areas to position window controls and the title bar without colliding with your views &mdash; if you don't declare them, that automatic adjustment can't run.</p></li>
-  <li><h3>Use Split Views for Fluid Column Resizing</h3></li>
-  <li><p>Stay on the stock <code>NavigationSplitView</code> and the column resize behavior comes wired up. Drag a divider and the columns rebalance smoothly across every intermediate width, not just at named breakpoints. The trade is straightforward: you don't write the animation code, but you also don't get to override how the columns negotiate space at half-widths &mdash; the system makes that call.</p></li>
-  <li><h3><code>backgroundExtensionEffect()</code> for Edge-to-Edge Hero Content</h3></li>
-  <li><p>X26 adds the <code>backgroundExtensionEffect()</code> modifier. It fakes the visual of a wide image running edge-to-edge under your sidebar &mdash; no actual content scrolls under the sidebar, the modifier just samples your hero view, blurs the sample, and paints it into the strip the sidebar occupies. The sidebar text stays sharp; the photo behind it looks unbroken. Apple's reference example is a product page where a landmark photo appears to span the whole window even though only the detail column is filled.</p></li>
-  <li><pre><code class="lang-swift">NavigationSplitView {
+
+  <h1>Book 13: Multi-Window &amp; NavigationSplitView</h1>
+  <p><strong>Claude's Xcode 26 Swift Bible</strong> -- Part IV: The Application</p>
+  <hr>
+  <p>This chapter covers multi-window apps, the <code>NavigationSplitView</code> three-column reader pattern, opening and closing windows from code, and persisting window state across launches. The patterns apply to LockBox (Appendix D) and QuickNote (Appendix C) when those apps move beyond a single screen toward sidebars, detail panes, and multiple open windows.</p>
+  <hr>
+  <h2>Live Reference: Claudes X26 Swift6 Bible + Claudes LockBox + My Person CRM</h2>
+  <div class="scope-note">Three apps in this book's roster use the navigation patterns this chapter covers. <strong>Claudes X26 Swift6 Bible</strong> uses a sidebar-and-detail layout to navigate the book's Parts, Books, Chapters, and Pages. <strong>Claudes LockBox</strong> uses a three-column variant &mdash; Folders sidebar &rarr; Items in selected Folder &rarr; Item Detail &mdash; that reads cleanly on iPhone (stacked drill-in) and iPad / Mac (all three columns visible). <strong>My Person CRM</strong> uses the simpler <code>NavigationStack</code> + <code>NavigationLink</code> pattern &mdash; a flat list of tracked people drilling into a per-person detail screen. Its source shows the iPhone-first end of the same story this chapter tells: when <code>NavigationStack</code> is the right tool and when <code>NavigationSplitView</code> takes over. Sources: <a href="https://github.com/fluhartyml/Claudes-X26-Swift6-Bible">github.com/fluhartyml/Claudes-X26-Swift6-Bible</a>, <a href="https://github.com/fluhartyml/Claudes-LockBox">github.com/fluhartyml/Claudes-LockBox</a>, <a href="https://github.com/fluhartyml/My-Person-CRM">github.com/fluhartyml/My-Person-CRM</a>. See Build-Along 00 (Claudes X26 Swift6 Bible), Build-Along 03 (LockBox), Build-Along 07 (My Person CRM).</div>
+  <hr>
+  <h2>X26 Updates to Split Views and Windows</h2>
+  <p>X26 rounds the corners of every window so the chrome echoes the rounded buttons, sheets, and controls inside. iPadOS picks up two new behaviors. iPad windows now show the close, minimize, and resize controls on their title bar. And iPad windows resize as a continuous gesture &mdash; drag the corner and the window follows your finger smoothly, all the way down to its minimum size, instead of snapping to one of a handful of preset widths<sup>[<a href="#v1-fn">v1</a>]</sup>.</p>
+  <p>For your code, three practical upgrades.</p>
+  <h3>Support Arbitrary Window Sizes</h3>
+  <p>Drop any code that pins windows to a fixed size or refuses arbitrary resize gestures. The X26 expectation is that the user picks the dimensions, your content reflows, and you provide safe areas so layout guides have something to work against. The system uses those safe areas to position window controls and the title bar without colliding with your views &mdash; if you don't declare them, that automatic adjustment can't run.</p>
+  <h3>Use Split Views for Fluid Column Resizing</h3>
+  <p>Stay on the stock <code>NavigationSplitView</code> and the column resize behavior comes wired up. Drag a divider and the columns rebalance smoothly across every intermediate width, not just at named breakpoints. The trade is straightforward: you don't write the animation code, but you also don't get to override how the columns negotiate space at half-widths &mdash; the system makes that call.</p>
+  <h3><code>backgroundExtensionEffect()</code> for Edge-to-Edge Hero Content</h3>
+  <p>X26 adds the <code>backgroundExtensionEffect()</code> modifier. It fakes the visual of a wide image running edge-to-edge under your sidebar &mdash; no actual content scrolls under the sidebar, the modifier just samples your hero view, blurs the sample, and paints it into the strip the sidebar occupies. The sidebar text stays sharp; the photo behind it looks unbroken. Apple's reference example is a product page where a landmark photo appears to span the whole window even though only the detail column is filled.</p>
+  <pre><code class="lang-swift">NavigationSplitView {
     SidebarView()
 } detail: {
     HeroImage(landmark: landmark)
         .backgroundExtensionEffect()
-}</code></pre></li>
-  <li><p>Reach for <code>backgroundExtensionEffect()</code> when a single visual asset deserves the whole window: a header photo, a video poster frame, an oversized illustration on a marketing detail page. Anywhere the design wins by reading as edge-to-edge even though the sidebar is still on screen.</p></li>
-  <li><h3>Inspector Panels with <code>.inspector(isPresented:content:)</code></h3></li>
-  <li><p>If you're adding an inspector panel, use <code>.inspector(isPresented:content:)</code>. Building a third column by hand was reasonable in earlier OS versions; in X26 the stock modifier offers significantly more for free. The stock modifier sits inside <code>NavigationSplitView</code>, picks up safe areas, resizes fluidly with the rest of the window, and floats on the Liquid Glass surface the way the system expects &mdash; none of which a hand-rolled column gets for free.</p></li>
-  <li><p id="v1-fn" style="font-size: 13pt; color: var(--dim);">[v1] Apple Developer Documentation, <em>Adopting Liquid Glass</em>. <a href="https://developer.apple.com/documentation/TechnologyOverviews/adopting-liquid-glass">developer.apple.com/documentation/TechnologyOverviews/adopting-liquid-glass</a> &mdash; verified 2026-04-29.</p></li>
-  <li><hr></li>
-  <li><h2>Scenes, Windows, and the App</h2></li>
-  <li><p>Every Apple app has one <code>App</code> type as its entry point. Inside it you declare one or more <strong>scenes</strong> -- the top-level containers that SwiftUI manages for you. A scene ends up as a window on Mac and iPad, and as the app's root screen on iPhone.</p></li>
-  <li><p>The simplest app has exactly one scene:</p></li>
-  <li><pre><code class="lang-swift">import SwiftUI
+}</code></pre>
+  <p>Reach for <code>backgroundExtensionEffect()</code> when a single visual asset deserves the whole window: a header photo, a video poster frame, an oversized illustration on a marketing detail page. Anywhere the design wins by reading as edge-to-edge even though the sidebar is still on screen.</p>
+  <h3>Inspector Panels with <code>.inspector(isPresented:content:)</code></h3>
+  <p>If you're adding an inspector panel, use <code>.inspector(isPresented:content:)</code>. Building a third column by hand was reasonable in earlier OS versions; in X26 the stock modifier offers significantly more for free. The stock modifier sits inside <code>NavigationSplitView</code>, picks up safe areas, resizes fluidly with the rest of the window, and floats on the Liquid Glass surface the way the system expects &mdash; none of which a hand-rolled column gets for free.</p>
+  <p id="v1-fn" style="font-size: 13pt; color: var(--dim);">[v1] Apple Developer Documentation, <em>Adopting Liquid Glass</em>. <a href="https://developer.apple.com/documentation/TechnologyOverviews/adopting-liquid-glass">developer.apple.com/documentation/TechnologyOverviews/adopting-liquid-glass</a> &mdash; verified 2026-04-29.</p>
+  <hr>
+  <h2>Scenes, Windows, and the App</h2>
+  <p>Every Apple app has one <code>App</code> type as its entry point. Inside it you declare one or more <strong>scenes</strong> -- the top-level containers that SwiftUI manages for you. A scene ends up as a window on Mac and iPad, and as the app's root screen on iPhone.</p>
+  <p>The simplest app has exactly one scene:</p>
+  <pre><code class="lang-swift">import SwiftUI
 
 @main
 struct MyApp: App {
@@ -129,18 +49,18 @@ struct MyApp: App {
             ContentView()
         }
     }
-}</code></pre></li>
-  <li><p><code>WindowGroup</code> is the scene type for "a window the user can open more than one of." On Mac, File &gt; New Window opens a second one. On iPad, it takes part in Split View / Slide Over / Stage Manager. On iPhone there is only one window; <code>WindowGroup</code> still works, it just never gets a sibling.</p></li>
-  <li><h3>The Other Scene Types</h3></li>
-  <li><p>You will meet three other scene types over a typical app's lifetime:</p></li>
-  <li><ul><li><code>Window</code> -- a single-instance window. Think Preferences on Mac; you don't want two of them open at once.</li><li><code>DocumentGroup</code> -- a scene wired to a file document type. Each open document gets its own window automatically. Covered in Book 11.</li><li><code>Settings</code> -- Mac's Preferences scene. Shows under the app menu as <code>⌘,</code>.</li></ul></li>
-  <li><p>For most of this chapter we stay with <code>WindowGroup</code>, which covers the common case.</p></li>
-  <li><hr></li>
-  <li><h2>NavigationSplitView -- Sidebar, Content, Detail</h2></li>
-  <li><p><code>NavigationSplitView</code> is SwiftUI's answer to the three-column layout you see in Mail, Notes, Files, and every well-built Mac / iPad app. It gives you a sidebar on the left, a content column in the middle, and a detail pane on the right.</p></li>
-  <li><h3>The Two-Column Form</h3></li>
-  <li><p>The simplest form has two columns -- sidebar and detail:</p></li>
-  <li><pre><code class="lang-swift">struct Library: View {
+}</code></pre>
+  <p><code>WindowGroup</code> is the scene type for "a window the user can open more than one of." On Mac, File &gt; New Window opens a second one. On iPad, it takes part in Split View / Slide Over / Stage Manager. On iPhone there is only one window; <code>WindowGroup</code> still works, it just never gets a sibling.</p>
+  <h3>The Other Scene Types</h3>
+  <p>You will meet three other scene types over a typical app's lifetime:</p>
+  <ul><li><code>Window</code> -- a single-instance window. Think Preferences on Mac; you don't want two of them open at once.</li><li><code>DocumentGroup</code> -- a scene wired to a file document type. Each open document gets its own window automatically. Covered in Book 11.</li><li><code>Settings</code> -- Mac's Preferences scene. Shows under the app menu as <code>⌘,</code>.</li></ul>
+  <p>For most of this chapter we stay with <code>WindowGroup</code>, which covers the common case.</p>
+  <hr>
+  <h2>NavigationSplitView -- Sidebar, Content, Detail</h2>
+  <p><code>NavigationSplitView</code> is SwiftUI's answer to the three-column layout you see in Mail, Notes, Files, and every well-built Mac / iPad app. It gives you a sidebar on the left, a content column in the middle, and a detail pane on the right.</p>
+  <h3>The Two-Column Form</h3>
+  <p>The simplest form has two columns -- sidebar and detail:</p>
+  <pre><code class="lang-swift">struct Library: View {
     let books = ["Swift in 26 Days", "SwiftUI by Example", "The Pragmatic Programmer"]
     @State private var selected: String?
 
@@ -160,12 +80,12 @@ struct MyApp: App {
             }
         }
     }
-}</code></pre></li>
-  <li><p>On iPad and Mac: sidebar and detail appear side by side. On iPhone: the sidebar is the first screen and the detail is pushed when you tap a row.</p></li>
-  <li><p>The <code>selection:</code> binding is what makes the detail update when the user picks something in the sidebar. No <code>NavigationLink</code> needed.</p></li>
-  <li><h3>The Three-Column Form</h3></li>
-  <li><p>When your app has a real hierarchy -- categories, items, item-detail -- reach for the three-column form:</p></li>
-  <li><pre><code class="lang-swift">struct Mailbox: View {
+}</code></pre>
+  <p>On iPad and Mac: sidebar and detail appear side by side. On iPhone: the sidebar is the first screen and the detail is pushed when you tap a row.</p>
+  <p>The <code>selection:</code> binding is what makes the detail update when the user picks something in the sidebar. No <code>NavigationLink</code> needed.</p>
+  <h3>The Three-Column Form</h3>
+  <p>When your app has a real hierarchy -- categories, items, item-detail -- reach for the three-column form:</p>
+  <pre><code class="lang-swift">struct Mailbox: View {
     let folders = ["Inbox", "Sent", "Drafts"]
     @State private var folder: String?
     @State private var messageID: Int?
@@ -191,13 +111,13 @@ struct MyApp: App {
             }
         }
     }
-}</code></pre></li>
-  <li><p>Three columns on Mac and iPad Pro. Two columns on iPad regular width. Single column pushed through a stack on iPhone. You write the layout once; SwiftUI adapts it to the device.</p></li>
-  <li><h3>columnVisibility -- Controlling What's Open</h3></li>
-  <li><p><code>NavigationSplitView</code> takes a binding for <strong>column visibility</strong>. The cases cover the possible states:</p></li>
-  <li><ul><li><code>.all</code> -- every column visible (only actually shown when there is room).</li><li><code>.automatic</code> -- SwiftUI picks based on size class.</li><li><code>.detailOnly</code> -- sidebar and content hidden, detail takes the whole window.</li><li><code>.doubleColumn</code> -- sidebar hidden, content + detail visible.</li></ul></li>
-  <li><p>The binding lets you drive the UI in code:</p></li>
-  <li><pre><code class="lang-swift">struct Reader: View {
+}</code></pre>
+  <p>Three columns on Mac and iPad Pro. Two columns on iPad regular width. Single column pushed through a stack on iPhone. You write the layout once; SwiftUI adapts it to the device.</p>
+  <h3>columnVisibility -- Controlling What's Open</h3>
+  <p><code>NavigationSplitView</code> takes a binding for <strong>column visibility</strong>. The cases cover the possible states:</p>
+  <ul><li><code>.all</code> -- every column visible (only actually shown when there is room).</li><li><code>.automatic</code> -- SwiftUI picks based on size class.</li><li><code>.detailOnly</code> -- sidebar and content hidden, detail takes the whole window.</li><li><code>.doubleColumn</code> -- sidebar hidden, content + detail visible.</li></ul>
+  <p>The binding lets you drive the UI in code:</p>
+  <pre><code class="lang-swift">struct Reader: View {
     @State private var columns: NavigationSplitViewVisibility = .automatic
 
     var body: some View {
@@ -215,16 +135,16 @@ struct MyApp: App {
 
     private var sidebar: some View { Text("Sidebar") }
     private var detail: some View { Text("Detail") }
-}</code></pre></li>
-  <li><p>Tapping Focus hides the sidebar so the reader can concentrate. The system still lets the user reveal it again via edge swipe (iOS) or the default sidebar icon (iPad / Mac).</p></li>
-  <li><hr></li>
-  <li><h2>Opening Extra Windows</h2></li>
-  <li><p>On Mac and iPad you can open additional windows of your app's scenes. There are two sides to this: letting the user do it, and doing it in code.</p></li>
-  <li><h3>Letting the User Open Windows</h3></li>
-  <li><p><code>WindowGroup</code> already provides this. On Mac, File &gt; New Window appears automatically. On iPad, the user can drag the app's Dock icon to open a second window in Split View. You don't write any code.</p></li>
-  <li><h3>Opening a Window in Code</h3></li>
-  <li><p>Use the <code>openWindow</code> environment action.</p></li>
-  <li><pre><code class="lang-swift">struct Root: View {
+}</code></pre>
+  <p>Tapping Focus hides the sidebar so the reader can concentrate. The system still lets the user reveal it again via edge swipe (iOS) or the default sidebar icon (iPad / Mac).</p>
+  <hr>
+  <h2>Opening Extra Windows</h2>
+  <p>On Mac and iPad you can open additional windows of your app's scenes. There are two sides to this: letting the user do it, and doing it in code.</p>
+  <h3>Letting the User Open Windows</h3>
+  <p><code>WindowGroup</code> already provides this. On Mac, File &gt; New Window appears automatically. On iPad, the user can drag the app's Dock icon to open a second window in Split View. You don't write any code.</p>
+  <h3>Opening a Window in Code</h3>
+  <p>Use the <code>openWindow</code> environment action.</p>
+  <pre><code class="lang-swift">struct Root: View {
     @Environment(\.openWindow) private var openWindow
 
     var body: some View {
@@ -232,9 +152,9 @@ struct MyApp: App {
             openWindow(id: "note")
         }
     }
-}</code></pre></li>
-  <li><p>For this to work, the scene has to have an <code>id:</code> parameter on the <code>App</code>:</p></li>
-  <li><pre><code class="lang-swift">@main
+}</code></pre>
+  <p>For this to work, the scene has to have an <code>id:</code> parameter on the <code>App</code>:</p>
+  <pre><code class="lang-swift">@main
 struct NotesApp: App {
     var body: some Scene {
         WindowGroup("Library", id: "library") {
@@ -245,11 +165,11 @@ struct NotesApp: App {
             NoteView()
         }
     }
-}</code></pre></li>
-  <li><p>Now <code>openWindow(id: "note")</code> creates a new window with a fresh <code>NoteView</code>.</p></li>
-  <li><h3>Opening a Window With a Value</h3></li>
-  <li><p>If the opened window needs a value -- say, "open this specific note" -- give the scene a <code>for:</code> type:</p></li>
-  <li><pre><code class="lang-swift">@main
+}</code></pre>
+  <p>Now <code>openWindow(id: "note")</code> creates a new window with a fresh <code>NoteView</code>.</p>
+  <h3>Opening a Window With a Value</h3>
+  <p>If the opened window needs a value -- say, "open this specific note" -- give the scene a <code>for:</code> type:</p>
+  <pre><code class="lang-swift">@main
 struct NotesApp: App {
     var body: some Scene {
         WindowGroup("Library") { LibraryView() }
@@ -258,37 +178,37 @@ struct NotesApp: App {
             if let id = noteID { NoteView(noteID: id) }
         }
     }
-}</code></pre></li>
-  <li><p>Then open it with a value:</p></li>
-  <li><pre><code class="lang-swift">@Environment(\.openWindow) private var openWindow
+}</code></pre>
+  <p>Then open it with a value:</p>
+  <pre><code class="lang-swift">@Environment(\.openWindow) private var openWindow
 // ...
-openWindow(value: note.id)</code></pre></li>
-  <li><p>SwiftUI picks the <code>WindowGroup</code> whose <code>for:</code> type matches. The window is restored across launches because the value conforms to <code>Codable</code>.</p></li>
-  <li><h3>Dismissing a Window</h3></li>
-  <li><p>From inside the window you want to close:</p></li>
-  <li><pre><code class="lang-swift">@Environment(\.dismissWindow) private var dismissWindow
+openWindow(value: note.id)</code></pre>
+  <p>SwiftUI picks the <code>WindowGroup</code> whose <code>for:</code> type matches. The window is restored across launches because the value conforms to <code>Codable</code>.</p>
+  <h3>Dismissing a Window</h3>
+  <p>From inside the window you want to close:</p>
+  <pre><code class="lang-swift">@Environment(\.dismissWindow) private var dismissWindow
 
-Button("Close") { dismissWindow() }</code></pre></li>
-  <li><p>From outside, pass the same <code>id:</code> or <code>value:</code> you opened with:</p></li>
-  <li><pre><code class="lang-swift">dismissWindow(id: "note")</code></pre></li>
-  <li><hr></li>
-  <li><h2>State Restoration</h2></li>
-  <li><p>Users expect the app to come back the way they left it -- the same window open, same document, same scroll position. SwiftUI restores most of this automatically as long as you use the right property wrappers.</p></li>
-  <li><p><code>@SceneStorage</code> is the one you reach for most. It's like <code>@State</code> except SwiftUI persists it per scene across launches:</p></li>
-  <li><pre><code class="lang-swift">struct NoteView: View {
+Button("Close") { dismissWindow() }</code></pre>
+  <p>From outside, pass the same <code>id:</code> or <code>value:</code> you opened with:</p>
+  <pre><code class="lang-swift">dismissWindow(id: "note")</code></pre>
+  <hr>
+  <h2>State Restoration</h2>
+  <p>Users expect the app to come back the way they left it -- the same window open, same document, same scroll position. SwiftUI restores most of this automatically as long as you use the right property wrappers.</p>
+  <p><code>@SceneStorage</code> is the one you reach for most. It's like <code>@State</code> except SwiftUI persists it per scene across launches:</p>
+  <pre><code class="lang-swift">struct NoteView: View {
     @SceneStorage("draft") private var draft = ""
     @SceneStorage("scrollPosition") private var scroll = 0
 
     var body: some View {
         TextEditor(text: $draft)
     }
-}</code></pre></li>
-  <li><p>Close the window, relaunch, the text is still there.</p></li>
-  <li><p>For app-wide preferences -- "last-used color scheme," "font size" -- use <code>@AppStorage</code> instead; that writes into <code>UserDefaults</code> and is shared across every window.</p></li>
-  <li><hr></li>
-  <li><h2>Chapter Mini-Example -- A Two-Window Reader</h2></li>
-  <li><p>Putting the pieces together, here is a small app with a library window and a detail window that opens when you click a book.</p></li>
-  <li><pre><code class="lang-swift">import SwiftUI
+}</code></pre>
+  <p>Close the window, relaunch, the text is still there.</p>
+  <p>For app-wide preferences -- "last-used color scheme," "font size" -- use <code>@AppStorage</code> instead; that writes into <code>UserDefaults</code> and is shared across every window.</p>
+  <hr>
+  <h2>Chapter Mini-Example -- A Two-Window Reader</h2>
+  <p>Putting the pieces together, here is a small app with a library window and a detail window that opens when you click a book.</p>
+  <pre><code class="lang-swift">import SwiftUI
 
 struct Book: Identifiable, Hashable, Codable {
     let id: Int
@@ -347,15 +267,22 @@ struct BookDetailView: View {
         .padding()
         .frame(minWidth: 400, minHeight: 240)
     }
-}</code></pre></li>
-  <li><p>Clicking a book opens its detail in its own window. The slider position is preserved per-window across launches because <code>@SceneStorage</code> is scoped to the scene.</p></li>
-  <li><hr></li>
-  <li><h2>What Book 14 Does</h2></li>
-  <li><p>Book 14 covers moving content between windows, apps, and devices: clipboard, drag and drop, and share sheets.</p></li>
-</ol>
-</div>
+}</code></pre>
+  <p>Clicking a book opens its detail in its own window. The slider position is preserved per-window across launches because <code>@SceneStorage</code> is scoped to the scene.</p>
+  <hr>
+  <h2>What Book 14 Does</h2>
+  <p>Book 14 covers moving content between windows, apps, and devices: clipboard, drag and drop, and share sheets.</p>
+  <hr>
+  <h2>Further Reading &mdash; WWDC Sessions</h2>
+  <p>This book is a passive resource. When you want deeper coverage of multi-window and <code>NavigationSplitView</code>, the WWDC sessions below are Apple's source material.</p>
+  <ul>
+    <li>WWDC25 / 256, <em>What's new in SwiftUI</em> &mdash; <a href="https://developer.apple.com/videos/play/wwdc2025/256/">developer.apple.com/videos/play/wwdc2025/256/</a>. Navigation-stack and split-view updates this release.</li>
+    <li>WWDC25 / 282, <em>Make your UIKit app more flexible</em> &mdash; <a href="https://developer.apple.com/videos/play/wwdc2025/282/">developer.apple.com/videos/play/wwdc2025/282/</a>. UIKit multiscene patterns and assistive scenes.</li>
+    <li>WWDC25 / 290, <em>Set the scene with SwiftUI in visionOS</em> &mdash; <a href="https://developer.apple.com/videos/play/wwdc2025/290/">developer.apple.com/videos/play/wwdc2025/290/</a>. Scene composition beyond <code>WindowGroup</code> &mdash; useful framing even for non-visionOS apps.</li>
+    <li>WWDC25 / 208, <em>Elevate the design of your iPad app</em> &mdash; <a href="https://developer.apple.com/videos/play/wwdc2025/208/">developer.apple.com/videos/play/wwdc2025/208/</a>. iPad-specific multi-column patterns that <code>NavigationSplitView</code> drives.</li>
+  </ul>
 
-<footer class="page"><div class="row-nav"><div class="prev"><a href="../Part-III-The-User-Interface/Book-12-Sheets-Alerts-And-Confirmations.html">&larr; Book 12: Sheets, Alerts, and Confirmations</a></div><div class="pos">Book 13 Multi Window And NavigationSplitView</div><div class="next"><a href="Book-14-Clipboard-DragDrop-ShareSheet.html">Book 14: Clipboard, Drag &amp; Drop, Share S... &rarr;</a></div></div></footer>
+</div>
 
 </body>
 </html>

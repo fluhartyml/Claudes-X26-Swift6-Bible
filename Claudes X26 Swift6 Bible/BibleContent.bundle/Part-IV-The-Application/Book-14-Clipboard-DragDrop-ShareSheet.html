@@ -4,102 +4,22 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Book 14: Clipboard DragDrop ShareSheet &mdash; Claude's Xcode 26 Swift Bible</title>
-<style>
-:root {
-  --bg: #000000;
-  --fg: #FFB000;
-  --bright: #FFD060;
-  --dim: #996600;
-  --codebg: #1a0d00;
-  --border: #664500;
-  --gutter: #4a3300;
-  --headerbg: #0a0600;
-}
-* { box-sizing: border-box; }
-html, body { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; height: 100%; }
-body {
-  background: var(--bg);
-  color: var(--fg);
-  font-family: "FiraCode Nerd Font Mono", "FiraCode Nerd Font", "Fira Code", "Menlo", "Courier New", monospace;
-  font-size: 18pt;
-  line-height: 1.55;
-  margin: 0;
-  padding: 0;
-  text-shadow: 0 0 1px rgba(255, 176, 0, 0.35);
-  display: flex;
-  flex-direction: column;
-}
-header.page, footer.page {
-  background: var(--headerbg);
-  color: var(--dim);
-  padding: 0.55rem 1.1rem;
-  font-size: 13pt;
-  display: flex;
-  flex-direction: column;
-  gap: 0.2rem;
-  flex: 0 0 auto;
-  z-index: 10;
-}
-header.page { border-bottom: 1px solid var(--border); }
-footer.page { border-top: 1px solid var(--border); padding-bottom: calc(0.55rem + env(safe-area-inset-bottom)); }
-header.page .path, footer.page .path { color: var(--fg); word-break: break-all; overflow-wrap: break-word; }
-header.page .pos, footer.page .pos { color: var(--bright); }
-/* The middle scrolls; header and footer stay put. */
-.content { flex: 1 1 auto; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 0.8rem 1rem 2rem 1rem; max-width: 1100px; margin: 0 auto; width: 100%; }
-h1 { color: var(--bright); font-weight: normal; font-size: 26pt; margin: 0.6rem 0 1rem 0; }
-h2 { color: var(--bright); font-weight: normal; font-size: 20pt; border-bottom: 1px solid var(--border); padding-bottom: 0.3rem; margin-top: 1.5rem; counter-set: h3 0 para 0; counter-increment: h2; }
-h2::before { content: counter(h2) ". "; color: var(--fg); }
-h3 { color: var(--bright); font-weight: normal; font-size: 18pt; margin-top: 1rem; counter-set: para 0; counter-increment: h3; }
-h3::before { content: counter(h2) "." counter(h3) " "; color: var(--fg); }
-p { margin: 0.4rem 0; counter-increment: para; }
-p::before { content: counter(h2) "." counter(h3) "." counter(para) " "; color: var(--dim); font-size: 13pt; margin-right: 0.4em; }
-code { color: var(--bright); background: var(--codebg); padding: 0.08em 0.35em; border: 1px solid #3a2400; border-radius: 3px; font-size: 0.92em; }
-pre { background: var(--codebg); border: 1px solid #3a2400; border-radius: 4px; padding: 0.7rem 0.9rem; overflow-x: auto; font-size: 14pt; }
-pre code { background: transparent; border: 0; padding: 0; }
-ul, ol.body-list { margin: 0.4rem 0 0.4rem 1.4rem; padding: 0; }
-a { color: var(--bright); font-weight: bold; text-decoration: none; border-bottom: 1px dotted var(--dim); }
-a:hover { background: #332200; }
-strong { color: var(--bright); }
-em { color: var(--fg); font-style: italic; }
-hr { border: 0; border-top: 1px solid var(--border); margin: 1rem 0; }
-ol.lines { list-style: none; counter-reset: line h2 h3 para; padding: 0; margin: 0; }
-ol.lines > li { counter-increment: line; padding: 0.15rem 0 0.15rem 3.6rem; position: relative; min-height: 1.2em; }
-ol.lines > li::before { content: counter(line); position: absolute; left: 0; top: 0.25rem; width: 2.8rem; text-align: right; color: var(--gutter); font-size: 13pt; padding-right: 0.5rem; border-right: 1px solid #2a1e00; }
-ol.lines > li > p, ol.lines > li > h2, ol.lines > li > h3, ol.lines > li > ul, ol.lines > li > ol, ol.lines > li > pre, ol.lines > li > hr { margin: 0; }
-.scope-note { border-left: 3px solid var(--bright); padding: 0.7rem 1rem; background: #140c00; margin: 0.6rem 0; color: var(--bright); }
-.nav { display: flex; gap: 0.9rem; flex-wrap: wrap; margin-top: 0.8rem; font-size: 14pt; }
-
-
-footer.page { flex-direction: column; gap: 0.4rem; }
-footer.page .row-nav { display: flex; flex-direction: row; justify-content: space-between; align-items: center; gap: 0.5rem; }
-footer.page .row-nav .prev, footer.page .row-nav .next { flex: 1; min-width: 0; }
-footer.page .row-nav .prev { text-align: left; }
-footer.page .row-nav .next { text-align: right; }
-footer.page .row-nav .pos { flex: 0 0 auto; text-align: center; color: var(--bright); font-weight: bold; }
-footer.page .row-nav a { color: var(--bright); font-weight: bold; text-decoration: none; border-bottom: 1px dotted var(--dim); }
-footer.page .row-nav a:hover { background: #332200; }
-footer.page .row-nav .nav-empty { color: var(--gutter); font-style: italic; }
-</style>
 </head>
 <body>
 
-<header class="page">
-  <div class="path">Part IV The Application/Book 14 Clipboard DragDrop ShareSheet</div>
-</header>
-
 <div class="content">
-<ol class="lines">
-  <li><h1>Book 14: Clipboard, Drag &amp; Drop, Share Sheet</h1></li>
-  <li><p><strong>Claude's Xcode 26 Swift Bible</strong> -- Part IV: The Application</p></li>
-  <li><hr></li>
-  <li><p>This chapter covers the three ways Apple platforms move data between places: the system clipboard on iOS and macOS, drag and drop between views and between apps, and the system share sheet for sending content to Messages, Mail, AirDrop, and other apps. The unifying protocol is <code>Transferable</code>, which a single type can adopt to participate in all three.</p></li>
-  <li><hr></li>
-  <li><h2>Live Reference: Claudes LockBox + IntelligenceDemo</h2></li>
-  <li><div class="scope-note"><strong>Claudes LockBox</strong> ships every pattern in this chapter at production scale. Tap any photo thumbnail in a vault item's detail view and a full-screen image viewer opens with a share button at the top &mdash; that's the system share sheet (<code>UIActivityViewController</code> wrapped via <code>UIViewControllerRepresentable</code>). Long-press a photo and a contextual menu offers "View Full Size" or "Delete Page." Source: <a href="https://github.com/fluhartyml/Claudes-LockBox">github.com/fluhartyml/Claudes-LockBox</a>, specifically <code>ImageViewerView.swift</code> and <code>ShareSheetView.swift</code>. The full build walkthrough in Build-Along 03 covers the share-sheet integration; the architectural notes in Source Tour 18 (CryoTunes) cover where the same <code>Transferable</code> patterns get used inside a music app's now-playing surface. <strong>IntelligenceDemo</strong> shows the simplest end of clipboard support: the OCR-extracted text uses <code>.textSelection(.enabled)</code>, which lets the system handle long-press / select-all / copy with no app code beyond that one modifier. No <code>UIPasteboard</code> calls, no custom menu &mdash; SwiftUI hands the selection and copy affordances to UIKit's standard text-selection UI. Source: <a href="https://github.com/fluhartyml/IntelligenceDemo/wiki">github.com/fluhartyml/IntelligenceDemo/wiki</a>.</div></li>
-  <li><hr></li>
-  <li><h2>Transferable -- One Protocol Covers All Three</h2></li>
-  <li><p><code>Transferable</code> is the unifying protocol. A type that conforms to <code>Transferable</code> can be copied to the clipboard, dragged from one view to another, and handed to the share sheet -- all through the same API. If your data type conforms to <code>Codable</code>, the conformance is often a single line.</p></li>
-  <li><pre><code class="lang-swift">import CoreTransferable
+
+  <h1>Book 14: Clipboard, Drag &amp; Drop, Share Sheet</h1>
+  <p><strong>Claude's Xcode 26 Swift Bible</strong> -- Part IV: The Application</p>
+  <hr>
+  <p>This chapter covers the three ways Apple platforms move data between places: the system clipboard on iOS and macOS, drag and drop between views and between apps, and the system share sheet for sending content to Messages, Mail, AirDrop, and other apps. The unifying protocol is <code>Transferable</code>, which a single type can adopt to participate in all three.</p>
+  <hr>
+  <h2>Live Reference: Claudes LockBox + IntelligenceDemo</h2>
+  <div class="scope-note"><strong>Claudes LockBox</strong> ships every pattern in this chapter at production scale. A tap on a photo thumbnail in a vault item's detail view opens a full-screen image viewer with a share button at the top &mdash; the system share sheet (<code>UIActivityViewController</code> wrapped via <code>UIViewControllerRepresentable</code>). Long-press on a photo presents a contextual menu with "View Full Size" or "Delete Page" options. Source: <a href="https://github.com/fluhartyml/Claudes-LockBox">github.com/fluhartyml/Claudes-LockBox</a>, specifically <code>ImageViewerView.swift</code> and <code>ShareSheetView.swift</code>. The full build walkthrough in Build-Along 03 covers the share-sheet integration; the architectural notes in Source Tour 18 (CryoTunes) cover where the same <code>Transferable</code> patterns get used inside a music app's now-playing surface. <strong>IntelligenceDemo</strong> shows the simplest end of clipboard support: the OCR-extracted text uses <code>.textSelection(.enabled)</code>, which lets the system handle long-press / select-all / copy with no app code beyond that one modifier. No <code>UIPasteboard</code> calls, no custom menu &mdash; SwiftUI hands the selection and copy affordances to UIKit's standard text-selection UI. Source: <a href="https://github.com/fluhartyml/IntelligenceDemo">github.com/fluhartyml/IntelligenceDemo</a>.</div>
+  <hr>
+  <h2>Transferable -- One Protocol Covers All Three</h2>
+  <p><code>Transferable</code> is the unifying protocol. A type that conforms to <code>Transferable</code> can be copied to the clipboard, dragged from one view to another, and handed to the share sheet -- all through the same API. If your data type conforms to <code>Codable</code>, the conformance is often a single line.</p>
+  <pre><code class="lang-swift">import CoreTransferable
 
 struct Note: Codable, Transferable {
     let title: String
@@ -108,14 +28,14 @@ struct Note: Codable, Transferable {
     static var transferRepresentation: some TransferRepresentation {
         CodableRepresentation(contentType: .json)
     }
-}</code></pre></li>
-  <li><p><code>CodableRepresentation</code> is a built-in representation that encodes the type as JSON under the given Uniform Type Identifier (UTI). Now <code>Note</code> can cross every data-movement boundary SwiftUI understands.</p></li>
-  <li><p>For plain-text or image types you usually don't define a custom <code>Transferable</code>. <code>String</code>, <code>URL</code>, <code>Data</code>, <code>Image</code>, and <code>UIImage</code> / <code>NSImage</code> already conform.</p></li>
-  <li><hr></li>
-  <li><h2>The Clipboard (Copy and Paste)</h2></li>
-  <li><h3>Writing to the Clipboard</h3></li>
-  <li><p>iOS uses <code>UIPasteboard.general</code>; macOS uses <code>NSPasteboard.general</code>. SwiftUI hides the platform split for simple cases with <code>Button</code> styles that target copying, but you'll often write directly.</p></li>
-  <li><pre><code class="lang-swift">#if os(iOS)
+}</code></pre>
+  <p><code>CodableRepresentation</code> is a built-in representation that encodes the type as JSON under the given Uniform Type Identifier (UTI). Now <code>Note</code> can cross every data-movement boundary SwiftUI understands.</p>
+  <p>For plain-text or image types you usually don't define a custom <code>Transferable</code>. <code>String</code>, <code>URL</code>, <code>Data</code>, <code>Image</code>, and <code>UIImage</code> / <code>NSImage</code> already conform.</p>
+  <hr>
+  <h2>The Clipboard (Copy and Paste)</h2>
+  <h3>Writing to the Clipboard</h3>
+  <p>iOS uses <code>UIPasteboard.general</code>; macOS uses <code>NSPasteboard.general</code>. SwiftUI hides the platform split for simple cases with <code>Button</code> styles that target copying, but you'll often write directly.</p>
+  <pre><code class="lang-swift">#if os(iOS)
 import UIKit
 
 func copy(_ text: String) {
@@ -128,31 +48,31 @@ func copy(_ text: String) {
     NSPasteboard.general.clearContents()
     NSPasteboard.general.setString(text, forType: .string)
 }
-#endif</code></pre></li>
-  <li><p>Plain text is the simplest case. Writing an image:</p></li>
-  <li><pre><code class="lang-swift">// iOS
-UIPasteboard.general.image = UIImage(systemName: "heart")</code></pre></li>
-  <li><h3>Reading from the Clipboard</h3></li>
-  <li><pre><code class="lang-swift">#if os(iOS)
+#endif</code></pre>
+  <p>Plain text is the simplest case. Writing an image:</p>
+  <pre><code class="lang-swift">// iOS
+UIPasteboard.general.image = UIImage(systemName: "heart")</code></pre>
+  <h3>Reading from the Clipboard</h3>
+  <pre><code class="lang-swift">#if os(iOS)
 let text = UIPasteboard.general.string ?? ""
 #else
 let text = NSPasteboard.general.string(forType: .string) ?? ""
-#endif</code></pre></li>
-  <li><h3>Built-In Copy / Paste UI</h3></li>
-  <li><p>On iOS, every <code>TextField</code> and <code>TextEditor</code> already shows a copy / paste menu when the user taps and holds. You don't wire that up. Where you DO wire it up is on non-text content -- a card view, an image tile -- via the <code>.contextMenu</code>:</p></li>
-  <li><pre><code class="lang-swift">Image("kitten")
+#endif</code></pre>
+  <h3>Built-In Copy / Paste UI</h3>
+  <p>On iOS, every <code>TextField</code> and <code>TextEditor</code> already shows a copy / paste menu when the user taps and holds. You don't wire that up. Where you DO wire it up is on non-text content -- a card view, an image tile -- via the <code>.contextMenu</code>:</p>
+  <pre><code class="lang-swift">Image("kitten")
     .contextMenu {
         Button {
             UIPasteboard.general.image = UIImage(named: "kitten")
         } label: {
             Label("Copy Image", systemImage: "doc.on.doc")
         }
-    }</code></pre></li>
-  <li><hr></li>
-  <li><h2>Drag and Drop</h2></li>
-  <li><h3>Making a View Draggable</h3></li>
-  <li><p>Attach <code>.draggable</code> with a <code>Transferable</code> value:</p></li>
-  <li><pre><code class="lang-swift">struct Card: View {
+    }</code></pre>
+  <hr>
+  <h2>Drag and Drop</h2>
+  <h3>Making a View Draggable</h3>
+  <p>Attach <code>.draggable</code> with a <code>Transferable</code> value:</p>
+  <pre><code class="lang-swift">struct Card: View {
     let note: Note
 
     var body: some View {
@@ -161,19 +81,19 @@ let text = NSPasteboard.general.string(forType: .string) ?? ""
             .background(.yellow)
             .draggable(note)
     }
-}</code></pre></li>
-  <li><p>That's it. On Mac the card now drags with a normal mouse. On iPad the user presses and lifts with a finger or Apple Pencil. The drag preview uses the view itself.</p></li>
-  <li><p>You can provide a custom preview:</p></li>
-  <li><pre><code class="lang-swift">Text(note.title)
+}</code></pre>
+  <p>That's it. On Mac the card now drags with a normal mouse. On iPad the user presses and lifts with a finger or Apple Pencil. The drag preview uses the view itself.</p>
+  <p>You can provide a custom preview:</p>
+  <pre><code class="lang-swift">Text(note.title)
     .draggable(note) {
         RoundedRectangle(cornerRadius: 8)
             .fill(.yellow)
             .frame(width: 80, height: 40)
             .overlay(Text(note.title).font(.caption))
-    }</code></pre></li>
-  <li><h3>Accepting a Drop</h3></li>
-  <li><p>Attach <code>.dropDestination</code> to the view that should receive drops:</p></li>
-  <li><pre><code class="lang-swift">struct Trash: View {
+    }</code></pre>
+  <h3>Accepting a Drop</h3>
+  <p>Attach <code>.dropDestination</code> to the view that should receive drops:</p>
+  <pre><code class="lang-swift">struct Trash: View {
     @State private var count = 0
 
     var body: some View {
@@ -188,39 +108,39 @@ let text = NSPasteboard.general.string(forType: .string) ?? ""
                 if count &gt; 0 { Text("\(count)").padding(4).background(.red) }
             }
     }
-}</code></pre></li>
-  <li><p>The closure gets an array of the dropped values (multiple items can drop at once) plus a <code>CGPoint</code> location in the view's coordinates. Return <code>true</code> to accept the drop, <code>false</code> to refuse.</p></li>
-  <li><h3>Highlighting While Hovering</h3></li>
-  <li><p><code>.dropDestination</code> takes an <code>isTargeted:</code> binding that flips to <code>true</code> while something draggable is hovering over the view:</p></li>
-  <li><pre><code class="lang-swift">@State private var hovering = false
+}</code></pre>
+  <p>The closure gets an array of the dropped values (multiple items can drop at once) plus a <code>CGPoint</code> location in the view's coordinates. Return <code>true</code> to accept the drop, <code>false</code> to refuse.</p>
+  <h3>Highlighting While Hovering</h3>
+  <p><code>.dropDestination</code> takes an <code>isTargeted:</code> binding that flips to <code>true</code> while something draggable is hovering over the view:</p>
+  <pre><code class="lang-swift">@State private var hovering = false
 
 Image(systemName: "tray")
     .padding()
     .background(hovering ? .blue.opacity(0.2) : .clear)
     .dropDestination(for: Note.self) { notes, _ in
         return true
-    } isTargeted: { hovering = $0 }</code></pre></li>
-  <li><h3>Inter-App Drag on iPadOS</h3></li>
-  <li><p>Because <code>Transferable</code> types also declare their UTI, a drag that leaves your app -- onto another app or into Files -- can still be accepted if the destination understands the UTI. Drag a note with <code>.json</code> type into Files and you get a <code>.json</code> file written there. Drag a plain <code>String</code> into Messages and it becomes a chat bubble. The system does the dispatch; you do nothing extra.</p></li>
-  <li><hr></li>
-  <li><h2>The Share Sheet</h2></li>
-  <li><p>The share sheet is the system UI for "send this content somewhere": Messages, Mail, AirDrop, Notes, copy, and any app that registered a share extension.</p></li>
-  <li><h3>SwiftUI's ShareLink</h3></li>
-  <li><p>Most of the time you'll use <code>ShareLink</code>, which is to sharing what <code>Button</code> is to actions:</p></li>
-  <li><pre><code class="lang-swift">ShareLink(item: "Hello from the book") {
+    } isTargeted: { hovering = $0 }</code></pre>
+  <h3>Inter-App Drag on iPadOS</h3>
+  <p>Because <code>Transferable</code> types also declare their UTI, a drag that leaves your app -- onto another app or into Files -- can still be accepted if the destination understands the UTI. Drag a note with <code>.json</code> type into Files and you get a <code>.json</code> file written there. Drag a plain <code>String</code> into Messages and it becomes a chat bubble. The system does the dispatch; you do nothing extra.</p>
+  <hr>
+  <h2>The Share Sheet</h2>
+  <p>The share sheet is the system UI for "send this content somewhere": Messages, Mail, AirDrop, Notes, copy, and any app that registered a share extension.</p>
+  <h3>SwiftUI's ShareLink</h3>
+  <p>Most of the time you'll use <code>ShareLink</code>, which is to sharing what <code>Button</code> is to actions:</p>
+  <pre><code class="lang-swift">ShareLink(item: "Hello from the book") {
     Label("Share", systemImage: "square.and.arrow.up")
-}</code></pre></li>
-  <li><p>The label is optional; without one, <code>ShareLink</code> renders a default share glyph. <code>ShareLink</code> accepts any <code>Transferable</code>:</p></li>
-  <li><pre><code class="lang-swift">ShareLink(item: note,
+}</code></pre>
+  <p>The label is optional; without one, <code>ShareLink</code> renders a default share glyph. <code>ShareLink</code> accepts any <code>Transferable</code>:</p>
+  <pre><code class="lang-swift">ShareLink(item: note,
           preview: SharePreview(note.title,
-                                icon: Image(systemName: "note.text")))</code></pre></li>
-  <li><p><code>SharePreview</code> supplies the tiny preview that shows up at the top of the share sheet (the AirDrop card, the header in Messages, etc.).</p></li>
-  <li><h3>Multiple Items</h3></li>
-  <li><pre><code class="lang-swift">let urls: [URL] = [photoOne, photoTwo, photoThree]
-ShareLink(items: urls) { Label("Share Photos", systemImage: "photo") }</code></pre></li>
-  <li><h3>Triggering the Share Sheet Manually (UIKit / AppKit)</h3></li>
-  <li><p>Sometimes you want the share sheet to open in response to a custom gesture, not a button. Use <code>UIActivityViewController</code> on iOS:</p></li>
-  <li><pre><code class="lang-swift">#if os(iOS)
+                                icon: Image(systemName: "note.text")))</code></pre>
+  <p><code>SharePreview</code> supplies the tiny preview that shows up at the top of the share sheet (the AirDrop card, the header in Messages, etc.).</p>
+  <h3>Multiple Items</h3>
+  <pre><code class="lang-swift">let urls: [URL] = [photoOne, photoTwo, photoThree]
+ShareLink(items: urls) { Label("Share Photos", systemImage: "photo") }</code></pre>
+  <h3>Triggering the Share Sheet Manually (UIKit / AppKit)</h3>
+  <p>Sometimes you want the share sheet to open in response to a custom gesture, not a button. Use <code>UIActivityViewController</code> on iOS:</p>
+  <pre><code class="lang-swift">#if os(iOS)
 func share(_ items: [Any]) {
     guard let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
           let root  = scene.windows.first?.rootViewController else { return }
@@ -228,11 +148,11 @@ func share(_ items: [Any]) {
     let vc = UIActivityViewController(activityItems: items, applicationActivities: nil)
     root.present(vc, animated: true)
 }
-#endif</code></pre></li>
-  <li><p>On Mac, <code>NSSharingServicePicker</code> does the same job.</p></li>
-  <li><hr></li>
-  <li><h2>Chapter Mini-Example -- Cards You Can Copy, Drag, or Share</h2></li>
-  <li><pre><code class="lang-swift">import SwiftUI
+#endif</code></pre>
+  <p>On Mac, <code>NSSharingServicePicker</code> does the same job.</p>
+  <hr>
+  <h2>Chapter Mini-Example -- Cards You Can Copy, Drag, or Share</h2>
+  <pre><code class="lang-swift">import SwiftUI
 import CoreTransferable
 
 struct Note: Codable, Identifiable, Transferable {
@@ -295,15 +215,20 @@ struct NoteCard: View {
             return true
         } isTargeted: { hovering = $0 }
     }
-}</code></pre></li>
-  <li><p>Each card can be copied from its context menu, dragged onto another card, and shared through the system share sheet. Users can also drag cards out to Files or Messages because <code>Note</code> carries a JSON UTI.</p></li>
-  <li><hr></li>
-  <li><h2>What Book 15 Does</h2></li>
-  <li><p>Book 15 covers persistent storage: SwiftData and CoreData for on-device storage, with optional CloudKit sync between devices.</p></li>
-</ol>
-</div>
+}</code></pre>
+  <p>Each card can be copied from its context menu, dragged onto another card, and shared through the system share sheet. Users can also drag cards out to Files or Messages because <code>Note</code> carries a JSON UTI.</p>
+  <hr>
+  <h2>What Book 15 Does</h2>
+  <p>Book 15 covers persistent storage: SwiftData and CoreData for on-device storage, with optional CloudKit sync between devices.</p>
+  <hr>
+  <h2>Further Reading &mdash; WWDC Sessions</h2>
+  <p>This book is a passive resource. When you want deeper coverage of pasteboard, drag-and-drop, or the share sheet, the WWDC sessions below are Apple's source material.</p>
+  <ul>
+    <li>WWDC25 / 256, <em>What's new in SwiftUI</em> &mdash; <a href="https://developer.apple.com/videos/play/wwdc2025/256/">developer.apple.com/videos/play/wwdc2025/256/</a>. Drag-and-drop and transferable updates this release.</li>
+    <li>WWDC25 / 246, <em>Integrate privacy into your development process</em> &mdash; <a href="https://developer.apple.com/videos/play/wwdc2025/246/">developer.apple.com/videos/play/wwdc2025/246/</a>. Clipboard transparency rules and the user-visible indicators tied to <code>UIPasteboard</code>.</li>
+  </ul>
 
-<footer class="page"><div class="row-nav"><div class="prev"><a href="Book-13-Multi-Window-And-NavigationSplitView.html">&larr; Book 13: Multi-Window &amp; NavigationSplitV...</a></div><div class="pos">Book 14 Clipboard DragDrop ShareSheet</div><div class="next"><a href="Book-15-SwiftData-And-CoreData.html">Book 15: SwiftData &amp; CoreData &rarr;</a></div></div></footer>
+</div>
 
 </body>
 </html>

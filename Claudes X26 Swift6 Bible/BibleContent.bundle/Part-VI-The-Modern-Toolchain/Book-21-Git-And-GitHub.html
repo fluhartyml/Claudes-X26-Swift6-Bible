@@ -4,100 +4,20 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Book 21: Git And GitHub &mdash; Claude's Xcode 26 Swift Bible</title>
-<style>
-:root {
-  --bg: #000000;
-  --fg: #FFB000;
-  --bright: #FFD060;
-  --dim: #996600;
-  --codebg: #1a0d00;
-  --border: #664500;
-  --gutter: #4a3300;
-  --headerbg: #0a0600;
-}
-* { box-sizing: border-box; }
-html, body { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; height: 100%; }
-body {
-  background: var(--bg);
-  color: var(--fg);
-  font-family: "FiraCode Nerd Font Mono", "FiraCode Nerd Font", "Fira Code", "Menlo", "Courier New", monospace;
-  font-size: 18pt;
-  line-height: 1.55;
-  margin: 0;
-  padding: 0;
-  text-shadow: 0 0 1px rgba(255, 176, 0, 0.35);
-  display: flex;
-  flex-direction: column;
-}
-header.page, footer.page {
-  background: var(--headerbg);
-  color: var(--dim);
-  padding: 0.55rem 1.1rem;
-  font-size: 13pt;
-  display: flex;
-  flex-direction: column;
-  gap: 0.2rem;
-  flex: 0 0 auto;
-  z-index: 10;
-}
-header.page { border-bottom: 1px solid var(--border); }
-footer.page { border-top: 1px solid var(--border); padding-bottom: calc(0.55rem + env(safe-area-inset-bottom)); }
-header.page .path, footer.page .path { color: var(--fg); word-break: break-all; overflow-wrap: break-word; }
-header.page .pos, footer.page .pos { color: var(--bright); }
-/* The middle scrolls; header and footer stay put. */
-.content { flex: 1 1 auto; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 0.8rem 1rem 2rem 1rem; max-width: 1100px; margin: 0 auto; width: 100%; }
-h1 { color: var(--bright); font-weight: normal; font-size: 26pt; margin: 0.6rem 0 1rem 0; }
-h2 { color: var(--bright); font-weight: normal; font-size: 20pt; border-bottom: 1px solid var(--border); padding-bottom: 0.3rem; margin-top: 1.5rem; counter-set: h3 0 para 0; counter-increment: h2; }
-h2::before { content: counter(h2) ". "; color: var(--fg); }
-h3 { color: var(--bright); font-weight: normal; font-size: 18pt; margin-top: 1rem; counter-set: para 0; counter-increment: h3; }
-h3::before { content: counter(h2) "." counter(h3) " "; color: var(--fg); }
-p { margin: 0.4rem 0; counter-increment: para; }
-p::before { content: counter(h2) "." counter(h3) "." counter(para) " "; color: var(--dim); font-size: 13pt; margin-right: 0.4em; }
-code { color: var(--bright); background: var(--codebg); padding: 0.08em 0.35em; border: 1px solid #3a2400; border-radius: 3px; font-size: 0.92em; }
-pre { background: var(--codebg); border: 1px solid #3a2400; border-radius: 4px; padding: 0.7rem 0.9rem; overflow-x: auto; font-size: 14pt; }
-pre code { background: transparent; border: 0; padding: 0; }
-ul, ol.body-list { margin: 0.4rem 0 0.4rem 1.4rem; padding: 0; }
-a { color: var(--bright); font-weight: bold; text-decoration: none; border-bottom: 1px dotted var(--dim); }
-a:hover { background: #332200; }
-strong { color: var(--bright); }
-em { color: var(--fg); font-style: italic; }
-hr { border: 0; border-top: 1px solid var(--border); margin: 1rem 0; }
-ol.lines { list-style: none; counter-reset: line h2 h3 para; padding: 0; margin: 0; }
-ol.lines > li { counter-increment: line; padding: 0.15rem 0 0.15rem 3.6rem; position: relative; min-height: 1.2em; }
-ol.lines > li::before { content: counter(line); position: absolute; left: 0; top: 0.25rem; width: 2.8rem; text-align: right; color: var(--gutter); font-size: 13pt; padding-right: 0.5rem; border-right: 1px solid #2a1e00; }
-ol.lines > li > p, ol.lines > li > h2, ol.lines > li > h3, ol.lines > li > ul, ol.lines > li > ol, ol.lines > li > pre, ol.lines > li > hr { margin: 0; }
-.scope-note { border-left: 3px solid var(--bright); padding: 0.7rem 1rem; background: #140c00; margin: 0.6rem 0; color: var(--bright); }
-.nav { display: flex; gap: 0.9rem; flex-wrap: wrap; margin-top: 0.8rem; font-size: 14pt; }
-
-
-footer.page { flex-direction: column; gap: 0.4rem; }
-footer.page .row-nav { display: flex; flex-direction: row; justify-content: space-between; align-items: center; gap: 0.5rem; }
-footer.page .row-nav .prev, footer.page .row-nav .next { flex: 1; min-width: 0; }
-footer.page .row-nav .prev { text-align: left; }
-footer.page .row-nav .next { text-align: right; }
-footer.page .row-nav .pos { flex: 0 0 auto; text-align: center; color: var(--bright); font-weight: bold; }
-footer.page .row-nav a { color: var(--bright); font-weight: bold; text-decoration: none; border-bottom: 1px dotted var(--dim); }
-footer.page .row-nav a:hover { background: #332200; }
-footer.page .row-nav .nav-empty { color: var(--gutter); font-style: italic; }
-</style>
 </head>
 <body>
 
-<header class="page">
-  <div class="path">Part VI The Modern Toolchain/Book 21 Git And GitHub</div>
-</header>
-
 <div class="content">
-<ol class="lines">
-  <li><h1>Book 21: Git &amp; GitHub</h1></li>
-  <li><p><strong>Claude's Xcode 26 Swift Bible</strong> -- Part VI: The Modern Toolchain</p></li>
-  <li><hr></li>
-  <li><p>This chapter covers creating a Git repository for an Xcode project and making the first commit, the model behind <code>add</code>, <code>commit</code>, <code>branch</code>, and <code>merge</code>, working with a remote on GitHub (clone, push, pull, open a pull request), writing a <code>.gitignore</code> for an Xcode project, and tagging and publishing a release on GitHub.</p></li>
-  <li><hr></li>
-  <li><h2>Live Reference: Every App in This Book</h2></li>
-  <li><div class="scope-note">This chapter is the foundation for the book's distribution rule. <strong>GitHub clone-and-build is the default distribution path</strong> for every app shipping alongside this book &mdash; readers clone the repo, open the project in Xcode (Source Control &rarr; Clone), build for their own device, run. App Store distribution is the bonus tier for apps that grow into full-fledged shipped products. The clone-and-build workflow this chapter teaches is the workflow every Build-Along chapter assumes the reader can do.</div></li>
-  <li><p>The complete app roster on GitHub:</p></li>
-  <li><ul>
+
+  <h1>Book 21: Git &amp; GitHub</h1>
+  <p><strong>Claude's Xcode 26 Swift Bible</strong> -- Part VI: The Modern Toolchain</p>
+  <hr>
+  <p>This chapter covers creating a Git repository for an Xcode project and making the first commit, the model behind <code>add</code>, <code>commit</code>, <code>branch</code>, and <code>merge</code>, working with a remote on GitHub (clone, push, pull, open a pull request), writing a <code>.gitignore</code> for an Xcode project, and tagging and publishing a release on GitHub.</p>
+  <hr>
+  <h2>Live Reference: Every App in This Book</h2>
+  <div class="scope-note">This chapter is the foundation for the book's distribution rule. <strong>GitHub clone-and-build is the default distribution path</strong> for every app shipping alongside this book. The flow: clone the repo, open the project in Xcode (Source Control &rarr; Clone), build for the target device, run. App Store distribution is the bonus tier for apps that grow into full-fledged shipped products. The clone-and-build workflow this chapter covers is the workflow every Build-Along chapter assumes the reader has at hand.</div>
+  <p>The complete app roster on GitHub:</p>
+  <ul>
 <li><a href="https://github.com/fluhartyml/Claudes-X26-Swift6-Bible">Inkwell (this book's reader app)</a> &mdash; the meta example, see Build-Along 00</li>
 <li><a href="https://github.com/fluhartyml/Claudes-Web-Wrapper">Claudes Web Wrapper rebuild</a> &mdash; see Build-Along 01</li>
 <li><a href="https://github.com/fluhartyml/Wraply">Wraply (Web Wrapper legacy)</a> &mdash; see Build-Along 01 &sect;15 two-listing case</li>
@@ -114,33 +34,76 @@ footer.page .row-nav .nav-empty { color: var(--gutter); font-style: italic; }
 <li><a href="https://github.com/fluhartyml/NightGardDDNS">NightGard DDNS</a> (LaunchAgent self-publish) &mdash; see Source Tour 24</li>
 <li><a href="https://github.com/fluhartyml/Transcription-Keeper">Transcription Keeper</a> &mdash; see Source Tour 25</li>
 <li><a href="https://github.com/fluhartyml/TakeAChanceOnMeV1.0.2">Take A Chance On Me</a> &mdash; see Source Tour 26</li>
-</ul></li>
-  <li><p>All shipped under the GPL v3 license &mdash; share and share alike with attribution required. Clone any of them, study the source, fork your own variant, ship under your own name with the GPL terms preserved.</p></li>
-  <li><hr></li>
-  <li><h2>Why Version Control</h2></li>
-  <li><p>Every file in your project has a history. Without version control, you have one copy of each file and whatever Time Machine remembered last night. With Git, every saved state is a named point you can return to, compare against, or share.</p></li>
-  <li><p>Git is the version control system. GitHub is one of several places to host Git repositories on the internet. You can use Git locally without ever talking to GitHub; you start needing GitHub (or something like it) when you want to sync across machines or collaborate.</p></li>
-  <li><hr></li>
-  <li><h2>The Mental Model</h2></li>
-  <li><p>Git tracks three places your files can live:</p></li>
-  <li><ol class="body-list"><li><strong>Working tree</strong> -- the files you see and edit on disk.</li><li><strong>Staging area (index)</strong> -- files you've marked as "I want these changes in the next commit."</li><li><strong>Repository</strong> -- the stored history of past commits.</li></ol></li>
-  <li><p>A typical change flow:</p></li>
-  <li><ul><li>You edit a file. It lives only in the working tree.</li><li><code>git add thefile.swift</code> moves that change from the working tree into the staging area.</li><li><code>git commit</code> moves the staged changes into the repository as a single named snapshot.</li></ul></li>
-  <li><p>You can stage many files at once and commit them together. Each commit is a whole-project snapshot: everything tracked, at a moment in time.</p></li>
-  <li><hr></li>
-  <li><h2>Creating a Repository</h2></li>
-  <li><p>From the project directory in Terminal:</p></li>
-  <li><pre><code class="lang-bash">cd ~/Developer/MyApp
+</ul>
+  <p>All shipped under the GPL v3 license &mdash; share and share alike with attribution required. Clone any of them, study the source, fork your own variant, ship under your own name with the GPL terms preserved.</p>
+  <hr>
+  <h2>Why Version Control</h2>
+  <p>Every file in your project has a history. Without version control, you have one copy of each file and whatever Time Machine remembered last night. With Git, every saved state is a named point you can return to, compare against, or share.</p>
+  <p>Git is the version control system. GitHub is one of several places to host Git repositories on the internet. You can use Git locally without ever talking to GitHub; you start needing GitHub (or something like it) when you want to sync across machines or collaborate.</p>
+  <hr>
+  <h2>The Mental Model</h2>
+  <p>Git tracks three places your files can live:</p>
+  <ol class="body-list"><li><strong>Working tree</strong> -- the files you see and edit on disk.</li><li><strong>Staging area (index)</strong> -- files you've marked as "I want these changes in the next commit."</li><li><strong>Repository</strong> -- the stored history of past commits.</li></ol>
+  <p>A typical change flow:</p>
+  <ul><li>You edit a file. It lives only in the working tree.</li><li><code>git add thefile.swift</code> moves that change from the working tree into the staging area.</li><li><code>git commit</code> moves the staged changes into the repository as a single named snapshot.</li></ul>
+  <p>You can stage many files at once and commit them together. Each commit is a whole-project snapshot: everything tracked, at a moment in time.</p>
+  <hr>
+  <h2>Cloning a Build-Along Repo (Xcode 26 Step-by-Step)</h2>
+  <p>Every Build-Along chapter in this book assumes the reader can pull the matching repo down from GitHub and open it in Xcode. This section is the step-by-step for doing exactly that, using Xcode 26's built-in Clone Git Repository flow. No Terminal required.</p>
+
+  <h3>Opening Xcode for the First Time</h3>
+  <p>Launch Xcode from the Applications folder, the Dock, Launchpad, or Spotlight (Cmd-Space, type "Xcode," press Return). The first thing Xcode shows is the Welcome screen.</p>
+  <p>If Xcode is already open and the Welcome screen has been dismissed, bring it back with <strong>Window &rarr; Welcome to Xcode</strong> in the menu bar, or the keyboard shortcut <strong>Cmd-Shift-1</strong>.</p>
+
+  <h3>The Welcome Screen</h3>
+  <p>The Welcome screen has three primary actions on the left and a list of recent projects on the right.</p>
+  <p>The three actions:</p>
+  <ul>
+    <li><strong>Create New Project</strong> &mdash; starts from one of Xcode's templates (App, Framework, Multiplatform App, etc.).</li>
+    <li><strong>Clone Git Repository</strong> &mdash; pulls an existing project from a Git host (GitHub, GitLab, Bitbucket, a self-hosted server) using its repository URL.</li>
+    <li><strong>Open Existing Project</strong> &mdash; opens a project that's already on disk.</li>
+  </ul>
+  <p>For a Build-Along chapter, the second option is the entry point.</p>
+
+  <h3>Clone Git Repository &mdash; Step by Step</h3>
+  <ol class="body-list">
+    <li><strong>Click "Clone Git Repository"</strong> on the Welcome screen. A dialog appears asking for the repository URL.</li>
+    <li><strong>Paste the repo URL</strong> into the field. Every Build-Along chapter prints the URL near the top of the chapter, in the form <code>https://github.com/fluhartyml/{ProjectName}.git</code>. The <code>.git</code> suffix is optional &mdash; Xcode accepts the URL with or without it.</li>
+    <li><strong>Click "Clone."</strong> Xcode shows a save panel asking where the project should land on disk.</li>
+    <li><strong>Pick a destination folder.</strong> The default is the home folder. Many readers keep a top-level <code>~/Developer/</code> folder for cloned projects; that's the convention this book uses, but the location doesn't affect the build &mdash; pick whatever stays organized.</li>
+    <li><strong>Click "Clone"</strong> in the save panel. Xcode reaches out to GitHub, downloads the repo, and opens the project in a new window. The first clone of any given repo takes a few seconds; subsequent clones of the same repo are nearly instant because Git reuses cached objects.</li>
+  </ol>
+  <p>Public repos clone without authentication. Private repos prompt for GitHub credentials the first time &mdash; Xcode stores the token in the system keychain for future clones.</p>
+
+  <h3>Where the Project Lands</h3>
+  <p>The cloned repo lands as a folder inside the chosen destination. The folder name matches the repo name from the URL. Inside, the structure is whatever the project author committed: an <code>.xcodeproj</code> bundle, a <code>README.md</code>, a <code>.gitignore</code>, source folders, a <code>.git</code> directory (hidden in Finder; visible to <code>ls -la</code> in Terminal) containing the full history.</p>
+  <p>Xcode opens the <code>.xcodeproj</code> automatically when the clone finishes. The folder on disk is the working tree from this chapter's mental model; the <code>.git</code> subdirectory is the repository.</p>
+
+  <h3>Building and Running the Cloned App</h3>
+  <ol class="body-list">
+    <li><strong>Wait for Xcode to finish indexing.</strong> The activity indicator in the toolbar shows "Indexing&hellip;" briefly. Code completion and Quick Help don't fully work until indexing finishes &mdash; a small project takes a few seconds, a larger one a minute or two.</li>
+    <li><strong>Pick a run destination</strong> from the scheme menu in the toolbar (the field just to the right of the Run / Stop buttons). For most Build-Along apps this is an iPhone or iPad simulator that matches the chapter's target device.</li>
+    <li><strong>Press Cmd-R</strong> (or click the Run button). Xcode builds the project and launches it in the chosen simulator. The first build is slower than later builds because Xcode is compiling from scratch and caching artifacts in <code>~/Library/Developer/Xcode/DerivedData/</code>.</li>
+    <li><strong>Read along.</strong> The Build-Along chapter walks through the source while the running app demonstrates the behavior. Stopping (Cmd-Period) and starting (Cmd-R) is cheap once the first build is cached.</li>
+  </ol>
+
+  <h3>Updating a Cloned Repo Later</h3>
+  <p>When the upstream repo on GitHub gains new commits and the reader wants to pull them down into the local clone, the path inside Xcode is <strong>Integrate &rarr; Pull&hellip;</strong> in the menu bar. Xcode shows the changes and brings them in. The Terminal equivalent is <code>git pull</code> from the project directory.</p>
+  <p>For Build-Along chapters tied to specific versions of the source, the chapter notes a tag (for example <code>v1.0.0</code> or <code>book-snapshot-2026-05-10</code>). Checking out a specific tag is covered in the Tags and Releases section later in this chapter.</p>
+  <hr>
+  <h2>Creating a Repository</h2>
+  <p>From the project directory in Terminal:</p>
+  <pre><code class="lang-bash">cd ~/Developer/MyApp
 git init
 git add .
-git commit -m "Initial commit"</code></pre></li>
-  <li><p>What just happened:</p></li>
-  <li><ul><li><code>git init</code> created a hidden <code>.git/</code> folder, which is the repository.</li><li><code>git add .</code> staged every file in the current directory.</li><li><code>git commit</code> took that snapshot with the message "Initial commit."</li></ul></li>
-  <li><p>Xcode also has a "Create Git repository" checkbox when you make a new project. Either path gets you to the same place.</p></li>
-  <li><hr></li>
-  <li><h2>.gitignore for Xcode Projects</h2></li>
-  <li><p>A <code>.gitignore</code> file tells Git which paths to never track. Xcode generates a lot of user-specific junk that doesn't belong in shared history. A good starting <code>.gitignore</code>:</p></li>
-  <li><pre><code class="lang-"># macOS
+git commit -m "Initial commit"</code></pre>
+  <p>What just happened:</p>
+  <ul><li><code>git init</code> created a hidden <code>.git/</code> folder, which is the repository.</li><li><code>git add .</code> staged every file in the current directory.</li><li><code>git commit</code> took that snapshot with the message "Initial commit."</li></ul>
+  <p>Xcode also has a "Create Git repository" checkbox when you make a new project. Either path gets you to the same place.</p>
+  <hr>
+  <h2>.gitignore for Xcode Projects</h2>
+  <p>A <code>.gitignore</code> file tells Git which paths to never track. Xcode generates a lot of user-specific junk that doesn't belong in shared history. A good starting <code>.gitignore</code>:</p>
+  <pre><code class="lang-"># macOS
 .DS_Store
 .AppleDouble
 .LSOverride
@@ -165,12 +128,12 @@ Carthage/Build/
 
 # Secrets
 *.env
-*.env.local</code></pre></li>
-  <li><p>Drop that at the repo root <strong>before</strong> the first <code>git add .</code>. Files already tracked aren't automatically untracked by adding them here; that needs <code>git rm --cached</code>.</p></li>
-  <li><hr></li>
-  <li><h2>Making Commits as You Work</h2></li>
-  <li><p>The everyday cycle:</p></li>
-  <li><pre><code class="lang-bash"># See what changed
+*.env.local</code></pre>
+  <p>Drop that at the repo root <strong>before</strong> the first <code>git add .</code>. Files already tracked aren't automatically untracked by adding them here; that needs <code>git rm --cached</code>.</p>
+  <hr>
+  <h2>Making Commits as You Work</h2>
+  <p>The everyday cycle:</p>
+  <pre><code class="lang-bash"># See what changed
 git status
 
 # Stage specific files
@@ -180,13 +143,13 @@ git add Sources/ContentView.swift
 git add -u
 
 # Commit
-git commit -m "Wire up Home tab"</code></pre></li>
-  <li><h3>Good Commit Messages</h3></li>
-  <li><ul><li>Imperative mood: "Add sidebar toggle," not "Added sidebar toggle" or "Adds sidebar toggle."</li><li>Short subject (under ~60 chars).</li><li>Optional body explaining <strong>why</strong>, not what -- the diff shows what.</li><li>One logical change per commit. Don't mix a bug fix with a feature; make two commits.</li></ul></li>
-  <li><hr></li>
-  <li><h2>Branches</h2></li>
-  <li><p>A branch is a named line of history. The default name is <code>main</code> (older repos use <code>master</code>).</p></li>
-  <li><pre><code class="lang-bash"># Create and switch to a new branch
+git commit -m "Wire up Home tab"</code></pre>
+  <h3>Good Commit Messages</h3>
+  <ul><li>Imperative mood: "Add sidebar toggle," not "Added sidebar toggle" or "Adds sidebar toggle."</li><li>Short subject (under ~60 chars).</li><li>Optional body explaining <strong>why</strong>, not what -- the diff shows what.</li><li>One logical change per commit. Don't mix a bug fix with a feature; make two commits.</li></ul>
+  <hr>
+  <h2>Branches</h2>
+  <p>A branch is a named line of history. The default name is <code>main</code> (older repos use <code>master</code>).</p>
+  <pre><code class="lang-bash"># Create and switch to a new branch
 git checkout -b feature/import-csv
 
 # Do work, commit, etc.
@@ -198,59 +161,59 @@ git checkout main
 git merge feature/import-csv
 
 # Delete the merged branch
-git branch -d feature/import-csv</code></pre></li>
-  <li><p>A feature in progress shouldn't sit in <code>main</code> until it's done. Branches keep <code>main</code> shippable while experiments live off to the side.</p></li>
-  <li><hr></li>
-  <li><h2>GitHub -- The Remote</h2></li>
-  <li><p>GitHub is where your local repo lives on the internet. "Remote" is Git's word for "a copy of this repo somewhere else." The default remote name is <code>origin</code>.</p></li>
-  <li><h3>Create and Link a Remote Repo</h3></li>
-  <li><p>On GitHub, create an empty repository (no README, no .gitignore -- let the local one be the source of truth). Copy the HTTPS or SSH URL.</p></li>
-  <li><pre><code class="lang-bash">git remote add origin https://github.com/yourname/MyApp.git
+git branch -d feature/import-csv</code></pre>
+  <p>A feature in progress shouldn't sit in <code>main</code> until it's done. Branches keep <code>main</code> shippable while experiments live off to the side.</p>
+  <hr>
+  <h2>GitHub -- The Remote</h2>
+  <p>GitHub is where your local repo lives on the internet. "Remote" is Git's word for "a copy of this repo somewhere else." The default remote name is <code>origin</code>.</p>
+  <h3>Create and Link a Remote Repo</h3>
+  <p>On GitHub, create an empty repository (no README, no .gitignore -- let the local one be the source of truth). Copy the HTTPS or SSH URL.</p>
+  <pre><code class="lang-bash">git remote add origin https://github.com/yourname/MyApp.git
 git branch -M main
-git push -u origin main</code></pre></li>
-  <li><ul><li><code>git remote add</code> registers the URL under the name <code>origin</code>.</li><li><code>git branch -M main</code> renames the current branch to <code>main</code> (in case your local default is different).</li><li><code>git push -u origin main</code> uploads the <code>main</code> branch and remembers the association (<code>-u</code> = "upstream").</li></ul></li>
-  <li><h3>Everyday Push / Pull</h3></li>
-  <li><pre><code class="lang-bash"># Grab the latest from GitHub (when someone else committed)
+git push -u origin main</code></pre>
+  <ul><li><code>git remote add</code> registers the URL under the name <code>origin</code>.</li><li><code>git branch -M main</code> renames the current branch to <code>main</code> (in case your local default is different).</li><li><code>git push -u origin main</code> uploads the <code>main</code> branch and remembers the association (<code>-u</code> = "upstream").</li></ul>
+  <h3>Everyday Push / Pull</h3>
+  <pre><code class="lang-bash"># Grab the latest from GitHub (when someone else committed)
 git pull
 
 # Push your commits
-git push</code></pre></li>
-  <li><hr></li>
-  <li><h2>Pull Requests</h2></li>
-  <li><p>A pull request (PR) is GitHub's way of saying "I'd like my branch merged into yours; here's the diff, please review."</p></li>
-  <li><p>Typical flow:</p></li>
-  <li><ol class="body-list"><li>Create a branch locally and push it to GitHub.</li></ol></li>
-  <li><p>``<code>bash git checkout -b feature/export-pdf # ... commits ... git push -u origin feature/export-pdf </code>``</p></li>
-  <li><ol class="body-list"><li>On GitHub, click "Compare &amp; pull request."</li><li>Fill in the title and description. Link related issues.</li><li>Reviewers comment. You push follow-up commits to the same branch; the PR updates automatically.</li><li>Merge when approved.</li></ol></li>
-  <li><p>For a solo-developer repo, PRs are still useful: they force you to look at the full diff before merging, which catches things you wouldn't see in individual commits.</p></li>
-  <li><hr></li>
-  <li><h2>Tags and Releases</h2></li>
-  <li><p>Tags are named pointers to a specific commit. You use them to mark releases.</p></li>
-  <li><pre><code class="lang-bash">git tag v1.0.0
-git push origin v1.0.0</code></pre></li>
-  <li><p>On GitHub, navigate to Releases and cut a release from the tag. You can attach a built <code>.ipa</code> or <code>.app</code> binary, write release notes, and mark it prerelease or production.</p></li>
-  <li><p>Version tags usually follow <strong>semantic versioning</strong>: <code>MAJOR.MINOR.PATCH</code>. Bump MAJOR for breaking changes, MINOR for new features, PATCH for bug fixes.</p></li>
-  <li><hr></li>
-  <li><h2>Undoing Things</h2></li>
-  <li><h3>Undo Uncommitted Changes to a File</h3></li>
-  <li><pre><code class="lang-bash">git checkout -- Sources/ContentView.swift</code></pre></li>
-  <li><p>Resets that file to whatever was last committed. Be careful -- this loses your working changes.</p></li>
-  <li><h3>Undo a Commit You Haven't Pushed</h3></li>
-  <li><pre><code class="lang-bash">git reset --soft HEAD~1</code></pre></li>
-  <li><p>Moves <code>HEAD</code> back one commit but keeps the changes staged. You can fix them and recommit.</p></li>
-  <li><h3>Undo a Pushed Commit</h3></li>
-  <li><pre><code class="lang-bash">git revert &lt;commit-sha&gt;</code></pre></li>
-  <li><p>Creates a new commit that undoes the old one. Safe because history stays linear; nobody has to rebase their work.</p></li>
-  <li><p>Never use <code>git push --force</code> on a shared branch. It rewrites history and breaks every other clone of that branch.</p></li>
-  <li><hr></li>
-  <li><h2>The Xcode Source Control Integration</h2></li>
-  <li><p>Xcode has a Source Control menu that does the common Git operations through GUI. You can:</p></li>
-  <li><ul><li>View history per file with <strong>Source Control &gt; History</strong>.</li><li>Compare working changes against the last commit via the Changes tab in the navigator.</li><li>Commit from <strong>Source Control &gt; Commit</strong> (<code>⌥⌘C</code>).</li><li>Push and pull from <strong>Source Control &gt; Push / Pull</strong>.</li></ul></li>
-  <li><p>The GUI is fine for day-to-day work. Drop to Terminal for anything unusual -- interactive rebases, surgical resets, tag management. The CLI is more powerful; the GUI is faster for the common case.</p></li>
-  <li><hr></li>
-  <li><h2>Chapter Mini-Example -- First Push to GitHub</h2></li>
-  <li><p>Walk through exactly what to type the first time you put a new Xcode project on GitHub.</p></li>
-  <li><pre><code class="lang-bash"># 1. Go to the project
+git push</code></pre>
+  <hr>
+  <h2>Pull Requests</h2>
+  <p>A pull request (PR) is GitHub's way of saying "I'd like my branch merged into yours; here's the diff, please review."</p>
+  <p>Typical flow:</p>
+  <ol class="body-list"><li>Create a branch locally and push it to GitHub.</li></ol>
+  <p>``<code>bash git checkout -b feature/export-pdf # ... commits ... git push -u origin feature/export-pdf </code>``</p>
+  <ol class="body-list"><li>On GitHub, click "Compare &amp; pull request."</li><li>Fill in the title and description. Link related issues.</li><li>Reviewers comment. You push follow-up commits to the same branch; the PR updates automatically.</li><li>Merge when approved.</li></ol>
+  <p>For a solo-developer repo, PRs are still useful: they force you to look at the full diff before merging, which catches things you wouldn't see in individual commits.</p>
+  <hr>
+  <h2>Tags and Releases</h2>
+  <p>Tags are named pointers to a specific commit. You use them to mark releases.</p>
+  <pre><code class="lang-bash">git tag v1.0.0
+git push origin v1.0.0</code></pre>
+  <p>On GitHub, navigate to Releases and cut a release from the tag. You can attach a built <code>.ipa</code> or <code>.app</code> binary, write release notes, and mark it prerelease or production.</p>
+  <p>Version tags usually follow <strong>semantic versioning</strong>: <code>MAJOR.MINOR.PATCH</code>. Bump MAJOR for breaking changes, MINOR for new features, PATCH for bug fixes.</p>
+  <hr>
+  <h2>Undoing Things</h2>
+  <h3>Undo Uncommitted Changes to a File</h3>
+  <pre><code class="lang-bash">git checkout -- Sources/ContentView.swift</code></pre>
+  <p>Resets that file to whatever was last committed. Be careful -- this loses your working changes.</p>
+  <h3>Undo a Commit You Haven't Pushed</h3>
+  <pre><code class="lang-bash">git reset --soft HEAD~1</code></pre>
+  <p>Moves <code>HEAD</code> back one commit but keeps the changes staged. You can fix them and recommit.</p>
+  <h3>Undo a Pushed Commit</h3>
+  <pre><code class="lang-bash">git revert &lt;commit-sha&gt;</code></pre>
+  <p>Creates a new commit that undoes the old one. Safe because history stays linear; nobody has to rebase their work.</p>
+  <p>Never use <code>git push --force</code> on a shared branch. It rewrites history and breaks every other clone of that branch.</p>
+  <hr>
+  <h2>The Xcode Source Control Integration</h2>
+  <p>Xcode has a Source Control menu that does the common Git operations through GUI. You can:</p>
+  <ul><li>View history per file with <strong>Source Control &gt; History</strong>.</li><li>Compare working changes against the last commit via the Changes tab in the navigator.</li><li>Commit from <strong>Source Control &gt; Commit</strong> (<code>⌥⌘C</code>).</li><li>Push and pull from <strong>Source Control &gt; Push / Pull</strong>.</li></ul>
+  <p>The GUI is fine for day-to-day work. Drop to Terminal for anything unusual -- interactive rebases, surgical resets, tag management. The CLI is more powerful; the GUI is faster for the common case.</p>
+  <hr>
+  <h2>Chapter Mini-Example -- First Push to GitHub</h2>
+  <p>Walk through exactly what to type the first time you put a new Xcode project on GitHub.</p>
+  <pre><code class="lang-bash"># 1. Go to the project
 cd ~/Developer/MyApp
 
 # 2. (If Xcode didn't already) initialize Git
@@ -272,15 +235,20 @@ git remote add origin https://github.com/yourname/MyApp.git
 git branch -M main
 
 # 9. First push
-git push -u origin main</code></pre></li>
-  <li><p>Refresh the GitHub repo page. Your code is up. Every future commit is one <code>git push</code> away from being backed up.</p></li>
-  <li><hr></li>
-  <li><h2>What Book 22 Does</h2></li>
-  <li><p>You've got your code under version control and safely stored. Book 22 turns the lens outward: how to integrate an AI chatbot into your own app, using the Anthropic Claude API from Swift.</p></li>
-</ol>
-</div>
+git push -u origin main</code></pre>
+  <p>Refresh the GitHub repo page. Your code is up. Every future commit is one <code>git push</code> away from being backed up.</p>
+  <hr>
+  <h2>What Book 22 Does</h2>
+  <p>You've got your code under version control and safely stored. Book 22 turns the lens outward: how to integrate an AI chatbot into your own app, using the Anthropic Claude API from Swift.</p>
+  <hr>
+  <h2>Further Reading &mdash; WWDC Sessions</h2>
+  <p>This book is a passive resource. When you want deeper coverage of the Xcode-side source-control flow and the automation that surrounds it, the WWDC sessions below are Apple's source material.</p>
+  <ul>
+    <li>WWDC25 / 247, <em>What's new in Xcode 26</em> &mdash; <a href="https://developer.apple.com/videos/play/wwdc2025/247/">developer.apple.com/videos/play/wwdc2025/247/</a>. Source-control panel updates, build-system + checkout flow improvements.</li>
+    <li>WWDC25 / 324, <em>Automate your development process with the App Store Connect API</em> &mdash; <a href="https://developer.apple.com/videos/play/wwdc2025/324/">developer.apple.com/videos/play/wwdc2025/324/</a>. Webhooks, Build Upload API, and the Feedback API that turn GitHub Actions into a real release pipeline.</li>
+  </ul>
 
-<footer class="page"><div class="row-nav"><div class="prev"><a href="../Part-V-Advanced-Techniques/Book-20-Performance-Instruments-And-Best-Practices.html">&larr; Book 20: Performance, Instruments, &amp; Bes...</a></div><div class="pos">Book 21 Git And GitHub</div><div class="next"><a href="Book-22-AI-Chatbot-Integration.html">Book 22: AI Chatbot Integration &rarr;</a></div></div></footer>
+</div>
 
 </body>
 </html>

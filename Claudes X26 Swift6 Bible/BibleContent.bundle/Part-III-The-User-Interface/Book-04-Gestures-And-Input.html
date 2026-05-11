@@ -4,154 +4,74 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Book 04: Gestures And Input &mdash; Claude's Xcode 26 Swift Bible</title>
-<style>
-:root {
-  --bg: #000000;
-  --fg: #FFB000;
-  --bright: #FFD060;
-  --dim: #996600;
-  --codebg: #1a0d00;
-  --border: #664500;
-  --gutter: #4a3300;
-  --headerbg: #0a0600;
-}
-* { box-sizing: border-box; }
-html, body { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; height: 100%; }
-body {
-  background: var(--bg);
-  color: var(--fg);
-  font-family: "FiraCode Nerd Font Mono", "FiraCode Nerd Font", "Fira Code", "Menlo", "Courier New", monospace;
-  font-size: 18pt;
-  line-height: 1.55;
-  margin: 0;
-  padding: 0;
-  text-shadow: 0 0 1px rgba(255, 176, 0, 0.35);
-  display: flex;
-  flex-direction: column;
-}
-header.page, footer.page {
-  background: var(--headerbg);
-  color: var(--dim);
-  padding: 0.55rem 1.1rem;
-  font-size: 13pt;
-  display: flex;
-  flex-direction: column;
-  gap: 0.2rem;
-  flex: 0 0 auto;
-  z-index: 10;
-}
-header.page { border-bottom: 1px solid var(--border); }
-footer.page { border-top: 1px solid var(--border); padding-bottom: calc(0.55rem + env(safe-area-inset-bottom)); }
-header.page .path, footer.page .path { color: var(--fg); word-break: break-all; overflow-wrap: break-word; }
-header.page .pos, footer.page .pos { color: var(--bright); }
-/* The middle scrolls; header and footer stay put. */
-.content { flex: 1 1 auto; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 0.8rem 1rem 2rem 1rem; max-width: 1100px; margin: 0 auto; width: 100%; }
-h1 { color: var(--bright); font-weight: normal; font-size: 26pt; margin: 0.6rem 0 1rem 0; }
-h2 { color: var(--bright); font-weight: normal; font-size: 20pt; border-bottom: 1px solid var(--border); padding-bottom: 0.3rem; margin-top: 1.5rem; counter-set: h3 0 para 0; counter-increment: h2; }
-h2::before { content: counter(h2) ". "; color: var(--fg); }
-h3 { color: var(--bright); font-weight: normal; font-size: 18pt; margin-top: 1rem; counter-set: para 0; counter-increment: h3; }
-h3::before { content: counter(h2) "." counter(h3) " "; color: var(--fg); }
-p { margin: 0.4rem 0; counter-increment: para; }
-p::before { content: counter(h2) "." counter(h3) "." counter(para) " "; color: var(--dim); font-size: 13pt; margin-right: 0.4em; }
-code { color: var(--bright); background: var(--codebg); padding: 0.08em 0.35em; border: 1px solid #3a2400; border-radius: 3px; font-size: 0.92em; }
-pre { background: var(--codebg); border: 1px solid #3a2400; border-radius: 4px; padding: 0.7rem 0.9rem; overflow-x: auto; font-size: 14pt; }
-pre code { background: transparent; border: 0; padding: 0; }
-ul, ol.body-list { margin: 0.4rem 0 0.4rem 1.4rem; padding: 0; }
-a { color: var(--bright); font-weight: bold; text-decoration: none; border-bottom: 1px dotted var(--dim); }
-a:hover { background: #332200; }
-strong { color: var(--bright); }
-em { color: var(--fg); font-style: italic; }
-hr { border: 0; border-top: 1px solid var(--border); margin: 1rem 0; }
-ol.lines { list-style: none; counter-reset: line h2 h3 para; padding: 0; margin: 0; }
-ol.lines > li { counter-increment: line; padding: 0.15rem 0 0.15rem 3.6rem; position: relative; min-height: 1.2em; }
-ol.lines > li::before { content: counter(line); position: absolute; left: 0; top: 0.25rem; width: 2.8rem; text-align: right; color: var(--gutter); font-size: 13pt; padding-right: 0.5rem; border-right: 1px solid #2a1e00; }
-ol.lines > li > p, ol.lines > li > h2, ol.lines > li > h3, ol.lines > li > ul, ol.lines > li > ol, ol.lines > li > pre, ol.lines > li > hr { margin: 0; }
-.scope-note { border-left: 3px solid var(--bright); padding: 0.7rem 1rem; background: #140c00; margin: 0.6rem 0; color: var(--bright); }
-.nav { display: flex; gap: 0.9rem; flex-wrap: wrap; margin-top: 0.8rem; font-size: 14pt; }
-
-
-footer.page { flex-direction: column; gap: 0.4rem; }
-footer.page .row-nav { display: flex; flex-direction: row; justify-content: space-between; align-items: center; gap: 0.5rem; }
-footer.page .row-nav .prev, footer.page .row-nav .next { flex: 1; min-width: 0; }
-footer.page .row-nav .prev { text-align: left; }
-footer.page .row-nav .next { text-align: right; }
-footer.page .row-nav .pos { flex: 0 0 auto; text-align: center; color: var(--bright); font-weight: bold; }
-footer.page .row-nav a { color: var(--bright); font-weight: bold; text-decoration: none; border-bottom: 1px dotted var(--dim); }
-footer.page .row-nav a:hover { background: #332200; }
-footer.page .row-nav .nav-empty { color: var(--gutter); font-style: italic; }
-</style>
 </head>
 <body>
 
-<header class="page">
-  <div class="path">Part III The User Interface/Book 04 Gestures And Input</div>
-</header>
-
 <div class="content">
-<ol class="lines">
-  <li><h1>Book 4: Gestures &amp; Input</h1></li>
-  <li><p><strong>Claude's Xcode 26 Swift Bible</strong> -- Part III: The User Interface</p></li>
-  <li><hr></li>
-  <li><h2>Live Reference: Claudes LockBox image viewer</h2></li>
-  <li><div class="scope-note"><strong>Claudes LockBox</strong> ships every gesture this chapter teaches in its photo viewer. Tap a vault item's photo thumbnail and the image opens full-screen. Pinch to zoom. Double-tap to toggle between fit-to-screen and 3x zoom. Drag to pan when zoomed in. Pinch below 1x and the image snaps back to fit-to-screen. Long-press a thumbnail in the detail view and a contextual menu offers "View Full Size" or "Delete Page." Five gesture patterns in one screen, all in <code>ImageViewerView.swift</code>. Source: <a href="https://github.com/fluhartyml/Claudes-LockBox">github.com/fluhartyml/Claudes-LockBox</a>. See Build-Along 03 &sect;11 for the build walkthrough; the snap-back-on-overpinch behavior is one of the small UX-payoff details this chapter's principles produce in production code.</div></li>
-  <li><hr></li>
-  <li><h2>What This Chapter Is About</h2></li>
-  <li><p>Books 01 through 03 built up the language, SwiftUI's view model, and the scene/window structure of an Apple app. The app runs; views draw. This chapter covers user input: taps, swipes, drags, pinches, keyboard presses, Apple Pencil strokes.</p></li>
-  <li><p>SwiftUI covers this with two layers of API:</p></li>
-  <li><ul><li><strong>High-level shortcuts</strong> built into the common views -- <code>Button</code>, <code>TextField</code>, <code>Toggle</code>, <code>onTapGesture</code>, <code>onSubmit</code>. Most apps live here and go no deeper.</li><li><strong>The Gesture protocol</strong> -- a composable system for building, combining, and tracking touch gestures when the shortcuts don't cover what you need.</li></ul></li>
-  <li><p>This chapter walks both layers, covering ordinary input paths and the gesture-protocol APIs available for less common cases.</p></li>
-  <li><hr></li>
-  <li><h2>The Tap -- The Simplest Input</h2></li>
-  <li><p>A tap is a single, quick press-and-release in roughly the same spot. Every tappable element in an Apple app begins with a tap.</p></li>
-  <li><h3>onTapGesture</h3></li>
-  <li><p>The shortest form. Attach <code>.onTapGesture</code> to any view and hand it a closure.</p></li>
-  <li><pre><code class="lang-swift">Text("Hello")
+
+  <h1>Book 4: Gestures &amp; Input</h1>
+  <p><strong>Claude's Xcode 26 Swift Bible</strong> -- Part III: The User Interface</p>
+  <hr>
+  <h2>Live Reference: Claudes LockBox image viewer</h2>
+  <div class="scope-note"><strong>Claudes LockBox</strong> ships every gesture this chapter covers in its photo viewer. A vault item's photo thumbnail opens full-screen on tap. Pinch-to-zoom is supported. Double-tap toggles between fit-to-screen and 3x zoom. Drag pans the image when zoomed in. Pinch below 1x snaps the image back to fit-to-screen. Long-press on a thumbnail in the detail view presents a contextual menu with "View Full Size" or "Delete Page" options. Five gesture patterns in one screen, all in <code>ImageViewerView.swift</code>. Source: <a href="https://github.com/fluhartyml/Claudes-LockBox">github.com/fluhartyml/Claudes-LockBox</a>. See Build-Along 03 &sect;11 for the build walkthrough; the snap-back-on-overpinch behavior is one of the small UX-payoff details this chapter's principles produce in production code.</div>
+  <hr>
+  <h2>What This Chapter Is About</h2>
+  <p>Books 01 through 03 built up the language, SwiftUI's view model, and the scene/window structure of an Apple app. The app runs; views draw. This chapter covers user input: taps, swipes, drags, pinches, keyboard presses, Apple Pencil strokes.</p>
+  <p>SwiftUI covers this with two layers of API:</p>
+  <ul><li><strong>High-level shortcuts</strong> built into the common views -- <code>Button</code>, <code>TextField</code>, <code>Toggle</code>, <code>onTapGesture</code>, <code>onSubmit</code>. Most apps live here and go no deeper.</li><li><strong>The Gesture protocol</strong> -- a composable system for building, combining, and tracking touch gestures when the shortcuts don't cover what you need.</li></ul>
+  <p>This chapter walks both layers, covering ordinary input paths and the gesture-protocol APIs available for less common cases.</p>
+  <hr>
+  <h2>The Tap -- The Simplest Input</h2>
+  <p>A tap is a single, quick press-and-release in roughly the same spot. Every tappable element in an Apple app begins with a tap.</p>
+  <h3>onTapGesture</h3>
+  <p>The shortest form. Attach <code>.onTapGesture</code> to any view and hand it a closure.</p>
+  <pre><code class="lang-swift">Text("Hello")
     .onTapGesture {
         print("tapped")
-    }</code></pre></li>
-  <li><p>That's it. The view becomes tappable; the closure fires every time.</p></li>
-  <li><p>You can ask for a specific number of taps:</p></li>
-  <li><pre><code class="lang-swift">Text("Double-tap me")
+    }</code></pre>
+  <p>That's it. The view becomes tappable; the closure fires every time.</p>
+  <p>You can ask for a specific number of taps:</p>
+  <pre><code class="lang-swift">Text("Double-tap me")
     .onTapGesture(count: 2) {
         print("double-tap")
-    }</code></pre></li>
-  <li><p>And you can read the tap location on iOS 16 and later:</p></li>
-  <li><pre><code class="lang-swift">GeometryReader { proxy in
+    }</code></pre>
+  <p>And you can read the tap location on iOS 16 and later:</p>
+  <pre><code class="lang-swift">GeometryReader { proxy in
     Color.blue
         .onTapGesture { location in
             print("tapped at \(location)")
         }
-}</code></pre></li>
-  <li><p>The location is in the view's own coordinate space.</p></li>
-  <li><h3>Button vs onTapGesture</h3></li>
-  <li><p><code>Button</code> and <code>.onTapGesture</code> both handle taps. They are not interchangeable.</p></li>
-  <li><p>Use <code>Button</code> when the tap triggers an action the user can describe in words: "Save", "Delete", "Next". The system gets you accessibility, focus behavior on Apple TV, keyboard activation, and the platform-correct pressed state for free.</p></li>
-  <li><p>Use <code>.onTapGesture</code> when the tapped thing is a graphic element -- an image card, a color swatch, a shape on a canvas -- where a button's default styling would fight you.</p></li>
-  <li><p>A rough rule: if VoiceOver should read "Button" when it lands on the view, use <code>Button</code>. If it should read "Image" or "Graphic", use <code>.onTapGesture</code>.</p></li>
-  <li><hr></li>
-  <li><h2>The Long Press</h2></li>
-  <li><p>A long press fires after the user holds their finger down for at least 0.5 seconds without moving much.</p></li>
-  <li><pre><code class="lang-swift">Image(systemName: "star")
+}</code></pre>
+  <p>The location is in the view's own coordinate space.</p>
+  <h3>Button vs onTapGesture</h3>
+  <p><code>Button</code> and <code>.onTapGesture</code> both handle taps. They are not interchangeable.</p>
+  <p>Use <code>Button</code> when the tap triggers an action the user can describe in words: "Save", "Delete", "Next". The system gets you accessibility, focus behavior on Apple TV, keyboard activation, and the platform-correct pressed state for free.</p>
+  <p>Use <code>.onTapGesture</code> when the tapped thing is a graphic element -- an image card, a color swatch, a shape on a canvas -- where a button's default styling would fight you.</p>
+  <p>A rough rule: if VoiceOver should read "Button" when it lands on the view, use <code>Button</code>. If it should read "Image" or "Graphic", use <code>.onTapGesture</code>.</p>
+  <hr>
+  <h2>The Long Press</h2>
+  <p>A long press fires after the user holds their finger down for at least 0.5 seconds without moving much.</p>
+  <pre><code class="lang-swift">Image(systemName: "star")
     .onLongPressGesture {
         print("long-pressed")
-    }</code></pre></li>
-  <li><p>You can customize how long and how far the finger is allowed to drift:</p></li>
-  <li><pre><code class="lang-swift">Image(systemName: "star")
+    }</code></pre>
+  <p>You can customize how long and how far the finger is allowed to drift:</p>
+  <pre><code class="lang-swift">Image(systemName: "star")
     .onLongPressGesture(minimumDuration: 1.0, maximumDistance: 10) {
         print("long-pressed")
-    }</code></pre></li>
-  <li><p>Long-press is the gesture for "I want the extra menu." Context menus, share menus, and drag-to-reorder all start from it. SwiftUI's <code>.contextMenu</code> modifier wires the gesture automatically -- you rarely call <code>onLongPressGesture</code> yourself when a context menu is what you want.</p></li>
-  <li><pre><code class="lang-swift">Text("Item")
+    }</code></pre>
+  <p>Long-press is the gesture for "I want the extra menu." Context menus, share menus, and drag-to-reorder all start from it. SwiftUI's <code>.contextMenu</code> modifier wires the gesture automatically -- you rarely call <code>onLongPressGesture</code> yourself when a context menu is what you want.</p>
+  <pre><code class="lang-swift">Text("Item")
     .contextMenu {
         Button("Rename") { /* ... */ }
         Button("Delete", role: .destructive) { /* ... */ }
-    }</code></pre></li>
-  <li><hr></li>
-  <li><h2>Drag</h2></li>
-  <li><p>A drag gesture reports the finger's position continuously from the first touch until the lift.</p></li>
-  <li><h3>DragGesture</h3></li>
-  <li><p><code>DragGesture</code> is a <code>Gesture</code> type. You hand it to the <code>.gesture</code> modifier and attach closures with <code>.onChanged</code> and <code>.onEnded</code>:</p></li>
-  <li><pre><code class="lang-swift">struct DragDot: View {
+    }</code></pre>
+  <hr>
+  <h2>Drag</h2>
+  <p>A drag gesture reports the finger's position continuously from the first touch until the lift.</p>
+  <h3>DragGesture</h3>
+  <p><code>DragGesture</code> is a <code>Gesture</code> type. You hand it to the <code>.gesture</code> modifier and attach closures with <code>.onChanged</code> and <code>.onEnded</code>:</p>
+  <pre><code class="lang-swift">struct DragDot: View {
     @State private var offset: CGSize = .zero
 
     var body: some View {
@@ -169,12 +89,12 @@ footer.page .row-nav .nav-empty { color: var(--gutter); font-style: italic; }
                     }
             )
     }
-}</code></pre></li>
-  <li><p><code>value.translation</code> is a <code>CGSize</code> of how far the finger has moved since the gesture started. <code>value.location</code> is where the finger currently is. <code>value.startLocation</code> is where it first touched down.</p></li>
-  <li><p>The example above moves the dot while dragging and snaps it back on release.</p></li>
-  <li><h3>@GestureState vs @State</h3></li>
-  <li><p>If you write the drag example above with <code>@State</code> for the offset, you have to clear it yourself in <code>.onEnded</code>. Miss a case and the dot sticks. <code>@GestureState</code> fixes that.</p></li>
-  <li><pre><code class="lang-swift">struct DragDot: View {
+}</code></pre>
+  <p><code>value.translation</code> is a <code>CGSize</code> of how far the finger has moved since the gesture started. <code>value.location</code> is where the finger currently is. <code>value.startLocation</code> is where it first touched down.</p>
+  <p>The example above moves the dot while dragging and snaps it back on release.</p>
+  <h3>@GestureState vs @State</h3>
+  <p>If you write the drag example above with <code>@State</code> for the offset, you have to clear it yourself in <code>.onEnded</code>. Miss a case and the dot sticks. <code>@GestureState</code> fixes that.</p>
+  <pre><code class="lang-swift">struct DragDot: View {
     @GestureState private var drag: CGSize = .zero
 
     var body: some View {
@@ -189,11 +109,11 @@ footer.page .row-nav .nav-empty { color: var(--gutter); font-style: italic; }
                     }
             )
     }
-}</code></pre></li>
-  <li><p><code>@GestureState</code> automatically resets to its initial value (<code>.zero</code>) as soon as the gesture ends or is cancelled by the system. You never write cleanup code, and you never have a stuck dot.</p></li>
-  <li><p>The rule of thumb: use <code>@GestureState</code> for the in-flight position you only care about while dragging, and <code>@State</code> for any state you want to persist after the gesture ends (like the dot's final resting spot).</p></li>
-  <li><p>A combined example -- a dot that stays where you drop it:</p></li>
-  <li><pre><code class="lang-swift">struct StickyDot: View {
+}</code></pre>
+  <p><code>@GestureState</code> automatically resets to its initial value (<code>.zero</code>) as soon as the gesture ends or is cancelled by the system. You never write cleanup code, and you never have a stuck dot.</p>
+  <p>The rule of thumb: use <code>@GestureState</code> for the in-flight position you only care about while dragging, and <code>@State</code> for any state you want to persist after the gesture ends (like the dot's final resting spot).</p>
+  <p>A combined example -- a dot that stays where you drop it:</p>
+  <pre><code class="lang-swift">struct StickyDot: View {
     @State private var position: CGSize = .zero
     @GestureState private var drag: CGSize = .zero
 
@@ -214,12 +134,12 @@ footer.page .row-nav .nav-empty { color: var(--gutter); font-style: italic; }
                     }
             )
     }
-}</code></pre></li>
-  <li><p>The <code>drag</code> value feeds the live offset; <code>position</code> remembers where the dot settled.</p></li>
-  <li><hr></li>
-  <li><h2>Pinch and Rotate</h2></li>
-  <li><p><code>MagnifyGesture</code> and <code>RotateGesture</code> work the same way as <code>DragGesture</code> -- both are <code>Gesture</code> types you attach with <code>.gesture</code> and observe with <code>.onChanged</code> / <code>.onEnded</code> / <code>.updating</code>.</p></li>
-  <li><pre><code class="lang-swift">struct Zoomer: View {
+}</code></pre>
+  <p>The <code>drag</code> value feeds the live offset; <code>position</code> remembers where the dot settled.</p>
+  <hr>
+  <h2>Pinch and Rotate</h2>
+  <p><code>MagnifyGesture</code> and <code>RotateGesture</code> work the same way as <code>DragGesture</code> -- both are <code>Gesture</code> types you attach with <code>.gesture</code> and observe with <code>.onChanged</code> / <code>.onEnded</code> / <code>.updating</code>.</p>
+  <pre><code class="lang-swift">struct Zoomer: View {
     @State private var scale: CGFloat = 1.0
     @GestureState private var livePinch: CGFloat = 1.0
 
@@ -238,22 +158,22 @@ footer.page .row-nav .nav-empty { color: var(--gutter); font-style: italic; }
                     }
             )
     }
-}</code></pre></li>
-  <li><p><code>value.magnification</code> is the ratio between the current two-finger distance and the distance at the gesture's start. It begins at 1.0, grows as fingers spread, shrinks as they pinch.</p></li>
-  <li><p><code>RotateGesture</code> gives you a <code>value.rotation</code> as an <code>Angle</code>:</p></li>
-  <li><pre><code class="lang-swift">.gesture(
+}</code></pre>
+  <p><code>value.magnification</code> is the ratio between the current two-finger distance and the distance at the gesture's start. It begins at 1.0, grows as fingers spread, shrinks as they pinch.</p>
+  <p><code>RotateGesture</code> gives you a <code>value.rotation</code> as an <code>Angle</code>:</p>
+  <pre><code class="lang-swift">.gesture(
     RotateGesture()
         .onChanged { value in
             rotation = value.rotation
         }
-)</code></pre></li>
-  <li><p>Pinch and rotate are almost always used together on a photo or map view. SwiftUI lets you combine them.</p></li>
-  <li><hr></li>
-  <li><h2>Combining Gestures</h2></li>
-  <li><p>Three composition operators let you describe how two gestures relate:</p></li>
-  <li><ul><li><code>.simultaneously(with:)</code> -- both gestures track at the same time</li><li><code>.sequenced(before:)</code> -- the second gesture only starts after the first ends</li><li><code>.exclusively(before:)</code> -- exactly one of the two recognizes; the other is dropped</li></ul></li>
-  <li><h3>Simultaneous -- Pinch and Rotate Together</h3></li>
-  <li><pre><code class="lang-swift">struct PhotoEditor: View {
+)</code></pre>
+  <p>Pinch and rotate are almost always used together on a photo or map view. SwiftUI lets you combine them.</p>
+  <hr>
+  <h2>Combining Gestures</h2>
+  <p>Three composition operators let you describe how two gestures relate:</p>
+  <ul><li><code>.simultaneously(with:)</code> -- both gestures track at the same time</li><li><code>.sequenced(before:)</code> -- the second gesture only starts after the first ends</li><li><code>.exclusively(before:)</code> -- exactly one of the two recognizes; the other is dropped</li></ul>
+  <h3>Simultaneous -- Pinch and Rotate Together</h3>
+  <pre><code class="lang-swift">struct PhotoEditor: View {
     @State private var scale: CGFloat = 1.0
     @State private var rotation: Angle = .zero
 
@@ -272,11 +192,11 @@ footer.page .row-nav .nav-empty { color: var(--gutter); font-style: italic; }
                     }
             )
     }
-}</code></pre></li>
-  <li><p>When you combine gestures with <code>.simultaneously</code>, the closure receives a tuple-shaped value with <code>.first</code> and <code>.second</code>. Each side is optional because either gesture can be absent at any given instant.</p></li>
-  <li><h3>Sequenced -- Long Press Then Drag</h3></li>
-  <li><p>A long-press followed by a drag is the native "grab and move" gesture on iOS.</p></li>
-  <li><pre><code class="lang-swift">struct GrabAndMove: View {
+}</code></pre>
+  <p>When you combine gestures with <code>.simultaneously</code>, the closure receives a tuple-shaped value with <code>.first</code> and <code>.second</code>. Each side is optional because either gesture can be absent at any given instant.</p>
+  <h3>Sequenced -- Long Press Then Drag</h3>
+  <p>A long-press followed by a drag is the native "grab and move" gesture on iOS.</p>
+  <pre><code class="lang-swift">struct GrabAndMove: View {
     @State private var offset: CGSize = .zero
     @State private var isLifted = false
 
@@ -305,23 +225,23 @@ footer.page .row-nav .nav-empty { color: var(--gutter); font-style: italic; }
                     }
             )
     }
-}</code></pre></li>
-  <li><p>The sequenced value is itself an enum: <code>.first(...)</code> during the long press, <code>.second(..., dragValue)</code> during the drag that follows.</p></li>
-  <li><h3>Exclusively -- Pick One</h3></li>
-  <li><p>Use <code>.exclusively(before:)</code> when two gestures could both match and you want only one to win, in a specific priority.</p></li>
-  <li><pre><code class="lang-swift">let doubleTap = TapGesture(count: 2).onEnded { /* ... */ }
+}</code></pre>
+  <p>The sequenced value is itself an enum: <code>.first(...)</code> during the long press, <code>.second(..., dragValue)</code> during the drag that follows.</p>
+  <h3>Exclusively -- Pick One</h3>
+  <p>Use <code>.exclusively(before:)</code> when two gestures could both match and you want only one to win, in a specific priority.</p>
+  <pre><code class="lang-swift">let doubleTap = TapGesture(count: 2).onEnded { /* ... */ }
 let singleTap = TapGesture(count: 1).onEnded { /* ... */ }
 
 Text("Tap me")
-    .gesture(doubleTap.exclusively(before: singleTap))</code></pre></li>
-  <li><p>Without <code>.exclusively</code>, a single-tap would fire inside every double-tap.</p></li>
-  <li><hr></li>
-  <li><h2>Focus and the Keyboard</h2></li>
-  <li><p>SwiftUI's text inputs (<code>TextField</code>, <code>SecureField</code>, <code>TextEditor</code>) handle keystrokes for you. What you usually need to manage is:</p></li>
-  <li><ol class="body-list"><li>Which field has the keyboard right now?</li><li>What happens when the user presses Return or Tab?</li><li>What keys should trigger app-level actions, regardless of which field is active?</li></ol></li>
-  <li><h3>@FocusState -- Who Has the Keyboard</h3></li>
-  <li><p><code>@FocusState</code> binds a property to "which field is focused." You read it to tell which field is active; you write it to move focus programmatically.</p></li>
-  <li><pre><code class="lang-swift">struct LoginForm: View {
+    .gesture(doubleTap.exclusively(before: singleTap))</code></pre>
+  <p>Without <code>.exclusively</code>, a single-tap would fire inside every double-tap.</p>
+  <hr>
+  <h2>Focus and the Keyboard</h2>
+  <p>SwiftUI's text inputs (<code>TextField</code>, <code>SecureField</code>, <code>TextEditor</code>) handle keystrokes for you. What you usually need to manage is:</p>
+  <ol class="body-list"><li>Which field has the keyboard right now?</li><li>What happens when the user presses Return or Tab?</li><li>What keys should trigger app-level actions, regardless of which field is active?</li></ol>
+  <h3>@FocusState -- Who Has the Keyboard</h3>
+  <p><code>@FocusState</code> binds a property to "which field is focused." You read it to tell which field is active; you write it to move focus programmatically.</p>
+  <pre><code class="lang-swift">struct LoginForm: View {
     enum Field: Hashable { case username, password }
 
     @State private var username = ""
@@ -345,21 +265,21 @@ Text("Tap me")
         .padding()
         .onAppear { focus = .username }
     }
-}</code></pre></li>
-  <li><p><code>@FocusState</code> can be <code>Bool</code> (for a single-field form) or any <code>Hashable</code> enum (for multiple fields). Each <code>TextField</code> calls <code>.focused($focus, equals: someCase)</code> to claim its identity.</p></li>
-  <li><p><code>.submitLabel(.next)</code> sets the return key's label. <code>.onSubmit</code> fires when the user presses return.</p></li>
-  <li><h3>Keyboard Shortcuts</h3></li>
-  <li><p>For Mac apps and iPad apps connected to a hardware keyboard, <code>.keyboardShortcut</code> makes a <code>Button</code> respond to a key combo:</p></li>
-  <li><pre><code class="lang-swift">Button("Save") { save() }
+}</code></pre>
+  <p><code>@FocusState</code> can be <code>Bool</code> (for a single-field form) or any <code>Hashable</code> enum (for multiple fields). Each <code>TextField</code> calls <code>.focused($focus, equals: someCase)</code> to claim its identity.</p>
+  <p><code>.submitLabel(.next)</code> sets the return key's label. <code>.onSubmit</code> fires when the user presses return.</p>
+  <h3>Keyboard Shortcuts</h3>
+  <p>For Mac apps and iPad apps connected to a hardware keyboard, <code>.keyboardShortcut</code> makes a <code>Button</code> respond to a key combo:</p>
+  <pre><code class="lang-swift">Button("Save") { save() }
     .keyboardShortcut("s", modifiers: .command)
 
 Button("Close") { close() }
-    .keyboardShortcut(.cancelAction) // Escape</code></pre></li>
-  <li><p>The second form uses a role instead of a specific key, so the system picks the right key for the current platform.</p></li>
-  <li><p>Shortcuts defined on buttons in a <code>Menu</code> appear as badges in the menu, just like a native app.</p></li>
-  <li><h3>onKeyPress -- Raw Keys</h3></li>
-  <li><p>When you need to respond to individual keys outside of a text field -- arrow keys in a game, space bar for play/pause -- use <code>.onKeyPress</code>:</p></li>
-  <li><pre><code class="lang-swift">struct CursorBox: View {
+    .keyboardShortcut(.cancelAction) // Escape</code></pre>
+  <p>The second form uses a role instead of a specific key, so the system picks the right key for the current platform.</p>
+  <p>Shortcuts defined on buttons in a <code>Menu</code> appear as badges in the menu, just like a native app.</p>
+  <h3>onKeyPress -- Raw Keys</h3>
+  <p>When you need to respond to individual keys outside of a text field -- arrow keys in a game, space bar for play/pause -- use <code>.onKeyPress</code>:</p>
+  <pre><code class="lang-swift">struct CursorBox: View {
     @State private var position: CGPoint = .init(x: 100, y: 100)
 
     var body: some View {
@@ -373,16 +293,16 @@ Button("Close") { close() }
             .onKeyPress(.upArrow)    { position.y -= 10; return .handled }
             .onKeyPress(.downArrow)  { position.y += 10; return .handled }
     }
-}</code></pre></li>
-  <li><p><code>.onKeyPress</code> requires the view to be <code>focusable</code>. Return <code>.handled</code> if the view consumed the key, <code>.ignored</code> to let it bubble up.</p></li>
-  <li><hr></li>
-  <li><h2>Apple Pencil and iPad</h2></li>
-  <li><p>On iPad, Apple Pencil acts as a pointer device. Every drag gesture you have already written works with the Pencil automatically. Three Pencil-specific paths are worth knowing.</p></li>
-  <li><h3>Scribble</h3></li>
-  <li><p>Scribble turns Pencil handwriting inside a <code>TextField</code> into typed text. It works with no code -- every standard text input supports it as soon as the user enables Scribble in Settings. You get it for free.</p></li>
-  <li><h3>PencilKit</h3></li>
-  <li><p><code>PKCanvasView</code> is UIKit, but bridges cleanly into SwiftUI for apps that want a drawing surface:</p></li>
-  <li><pre><code class="lang-swift">import PencilKit
+}</code></pre>
+  <p><code>.onKeyPress</code> requires the view to be <code>focusable</code>. Return <code>.handled</code> if the view consumed the key, <code>.ignored</code> to let it bubble up.</p>
+  <hr>
+  <h2>Apple Pencil and iPad</h2>
+  <p>On iPad, Apple Pencil acts as a pointer device. Every drag gesture you have already written works with the Pencil automatically. Three Pencil-specific paths are worth knowing.</p>
+  <h3>Scribble</h3>
+  <p>Scribble turns Pencil handwriting inside a <code>TextField</code> into typed text. It works with no code -- every standard text input supports it as soon as the user enables Scribble in Settings. You get it for free.</p>
+  <h3>PencilKit</h3>
+  <p><code>PKCanvasView</code> is UIKit, but bridges cleanly into SwiftUI for apps that want a drawing surface:</p>
+  <pre><code class="lang-swift">import PencilKit
 
 struct Sketchpad: UIViewRepresentable {
     @Binding var drawing: PKDrawing
@@ -408,33 +328,40 @@ struct Sketchpad: UIViewRepresentable {
             parent.drawing = canvas.drawing
         }
     }
-}</code></pre></li>
-  <li><p>Drop a <code>PKToolPicker</code> in front and you have a real sketching surface with pen, pencil, eraser, and color picker.</p></li>
-  <li><h3>Pencil Hover and Squeeze</h3></li>
-  <li><p>Apple Pencil Pro adds hover (a preview before touching) and squeeze (a side-barrel gesture). Both reach SwiftUI through <code>onPencilSqueeze</code> and <code>onContinuousHover</code> on iOS 17.5 and later. Reach for these when the app benefits from a gesture the finger can't produce.</p></li>
-  <li><hr></li>
-  <li><h2>Hit Targets and Accessibility</h2></li>
-  <li><p>A touch is about 44 points wide. Interactive views should be at least 44x44 so users can actually hit them. Apple's Human Interface Guidelines publish this as the recommended minimum.</p></li>
-  <li><p>If your graphic is smaller, expand its tap area with <code>.contentShape</code>:</p></li>
-  <li><pre><code class="lang-swift">Image(systemName: "heart")
+}</code></pre>
+  <p>Drop a <code>PKToolPicker</code> in front and you have a real sketching surface with pen, pencil, eraser, and color picker.</p>
+  <h3>Pencil Hover and Squeeze</h3>
+  <p>Apple Pencil Pro adds hover (a preview before touching) and squeeze (a side-barrel gesture). Both reach SwiftUI through <code>onPencilSqueeze</code> and <code>onContinuousHover</code> on iOS 17.5 and later. Reach for these when the app benefits from a gesture the finger can't produce.</p>
+  <hr>
+  <h2>Hit Targets and Accessibility</h2>
+  <p>A touch is about 44 points wide. Interactive views should be at least 44x44 so users can actually hit them. Apple's Human Interface Guidelines publish this as the recommended minimum.</p>
+  <p>If your graphic is smaller, expand its tap area with <code>.contentShape</code>:</p>
+  <pre><code class="lang-swift">Image(systemName: "heart")
     .font(.system(size: 16))
     .frame(width: 44, height: 44)
     .contentShape(Rectangle())
-    .onTapGesture { /* ... */ }</code></pre></li>
-  <li><p><code>.contentShape</code> tells SwiftUI which area counts for hit-testing, separate from the visible shape. The heart draws at 16-point but responds to taps anywhere in the 44x44 frame.</p></li>
-  <li><p>Every interactive view should also carry an accessibility label:</p></li>
-  <li><pre><code class="lang-swift">Image(systemName: "heart.fill")
+    .onTapGesture { /* ... */ }</code></pre>
+  <p><code>.contentShape</code> tells SwiftUI which area counts for hit-testing, separate from the visible shape. The heart draws at 16-point but responds to taps anywhere in the 44x44 frame.</p>
+  <p>Every interactive view should also carry an accessibility label:</p>
+  <pre><code class="lang-swift">Image(systemName: "heart.fill")
     .onTapGesture { toggleFavorite() }
     .accessibilityLabel("Favorite")
-    .accessibilityAddTraits(.isButton)</code></pre></li>
-  <li><p>VoiceOver now announces the view as a button named "Favorite." Without the traits and label, it reads "heart.fill, image."</p></li>
-  <li><hr></li>
-  <li><h2>What Book 05 Does</h2></li>
-  <li><p>Book 04 covered user input on a single view. Book 05 covers menus, navigation stacks, and <code>NavigationLink</code> &mdash; the APIs that move users between screens.</p></li>
-</ol>
-</div>
+    .accessibilityAddTraits(.isButton)</code></pre>
+  <p>VoiceOver now announces the view as a button named "Favorite." Without the traits and label, it reads "heart.fill, image."</p>
+  <hr>
+  <h2>What Book 05 Does</h2>
+  <p>Book 04 covered user input on a single view. Book 05 covers menus, navigation stacks, and <code>NavigationLink</code> &mdash; the APIs that move users between screens.</p>
+  <hr>
+  <h2>Further Reading &mdash; WWDC Sessions</h2>
+  <p>This book is a passive resource. When you want deeper coverage of gestures and input, the WWDC sessions below are Apple's source material.</p>
+  <ul>
+    <li>WWDC25 / 256, <em>What's new in SwiftUI</em> &mdash; <a href="https://developer.apple.com/videos/play/wwdc2025/256/">developer.apple.com/videos/play/wwdc2025/256/</a>. Gesture and input modifier updates for this release.</li>
+    <li>WWDC25 / 219, <em>Meet Liquid Glass</em> &mdash; <a href="https://developer.apple.com/videos/play/wwdc2025/219/">developer.apple.com/videos/play/wwdc2025/219/</a>. The new design system's expectations for hit areas, focus, and touch response.</li>
+    <li>WWDC25 / 281, <em>Design interactive snippets</em> &mdash; <a href="https://developer.apple.com/videos/play/wwdc2025/281/">developer.apple.com/videos/play/wwdc2025/281/</a>. Lightweight input surfaces that App Intents expose throughout the system.</li>
+    <li>WWDC25 / 289, <em>Explore spatial accessory input on visionOS</em> &mdash; <a href="https://developer.apple.com/videos/play/wwdc2025/289/">developer.apple.com/videos/play/wwdc2025/289/</a>. PS VR2 Sense and Logitech Muse input, useful even if you only ship for iOS &mdash; it sets up the input vocabulary used elsewhere.</li>
+  </ul>
 
-<footer class="page"><div class="row-nav"><div class="prev"><a href="../Part-II-The-Swift-Language/Chapter-Z/Page-ZStack.html">&larr; ZStack</a></div><div class="pos">Book 04 Gestures And Input</div><div class="next"><a href="Book-05-Menus-And-Navigation.html">Book 5: Menus and Navigation &rarr;</a></div></div></footer>
+</div>
 
 </body>
 </html>

@@ -4,176 +4,96 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Book 22: AI Chatbot Integration &mdash; Claude's Xcode 26 Swift Bible</title>
-<style>
-:root {
-  --bg: #000000;
-  --fg: #FFB000;
-  --bright: #FFD060;
-  --dim: #996600;
-  --codebg: #1a0d00;
-  --border: #664500;
-  --gutter: #4a3300;
-  --headerbg: #0a0600;
-}
-* { box-sizing: border-box; }
-html, body { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; height: 100%; }
-body {
-  background: var(--bg);
-  color: var(--fg);
-  font-family: "FiraCode Nerd Font Mono", "FiraCode Nerd Font", "Fira Code", "Menlo", "Courier New", monospace;
-  font-size: 18pt;
-  line-height: 1.55;
-  margin: 0;
-  padding: 0;
-  text-shadow: 0 0 1px rgba(255, 176, 0, 0.35);
-  display: flex;
-  flex-direction: column;
-}
-header.page, footer.page {
-  background: var(--headerbg);
-  color: var(--dim);
-  padding: 0.55rem 1.1rem;
-  font-size: 13pt;
-  display: flex;
-  flex-direction: column;
-  gap: 0.2rem;
-  flex: 0 0 auto;
-  z-index: 10;
-}
-header.page { border-bottom: 1px solid var(--border); }
-footer.page { border-top: 1px solid var(--border); padding-bottom: calc(0.55rem + env(safe-area-inset-bottom)); }
-header.page .path, footer.page .path { color: var(--fg); word-break: break-all; overflow-wrap: break-word; }
-header.page .pos, footer.page .pos { color: var(--bright); }
-/* The middle scrolls; header and footer stay put. */
-.content { flex: 1 1 auto; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 0.8rem 1rem 2rem 1rem; max-width: 1100px; margin: 0 auto; width: 100%; }
-h1 { color: var(--bright); font-weight: normal; font-size: 26pt; margin: 0.6rem 0 1rem 0; }
-h2 { color: var(--bright); font-weight: normal; font-size: 20pt; border-bottom: 1px solid var(--border); padding-bottom: 0.3rem; margin-top: 1.5rem; counter-set: h3 0 para 0; counter-increment: h2; }
-h2::before { content: counter(h2) ". "; color: var(--fg); }
-h3 { color: var(--bright); font-weight: normal; font-size: 18pt; margin-top: 1rem; counter-set: para 0; counter-increment: h3; }
-h3::before { content: counter(h2) "." counter(h3) " "; color: var(--fg); }
-p { margin: 0.4rem 0; counter-increment: para; }
-p::before { content: counter(h2) "." counter(h3) "." counter(para) " "; color: var(--dim); font-size: 13pt; margin-right: 0.4em; }
-code { color: var(--bright); background: var(--codebg); padding: 0.08em 0.35em; border: 1px solid #3a2400; border-radius: 3px; font-size: 0.92em; }
-pre { background: var(--codebg); border: 1px solid #3a2400; border-radius: 4px; padding: 0.7rem 0.9rem; overflow-x: auto; font-size: 14pt; }
-pre code { background: transparent; border: 0; padding: 0; }
-ul, ol.body-list { margin: 0.4rem 0 0.4rem 1.4rem; padding: 0; }
-a { color: var(--bright); font-weight: bold; text-decoration: none; border-bottom: 1px dotted var(--dim); }
-a:hover { background: #332200; }
-strong { color: var(--bright); }
-em { color: var(--fg); font-style: italic; }
-hr { border: 0; border-top: 1px solid var(--border); margin: 1rem 0; }
-ol.lines { list-style: none; counter-reset: line h2 h3 para; padding: 0; margin: 0; }
-ol.lines > li { counter-increment: line; padding: 0.15rem 0 0.15rem 3.6rem; position: relative; min-height: 1.2em; }
-ol.lines > li::before { content: counter(line); position: absolute; left: 0; top: 0.25rem; width: 2.8rem; text-align: right; color: var(--gutter); font-size: 13pt; padding-right: 0.5rem; border-right: 1px solid #2a1e00; }
-ol.lines > li > p, ol.lines > li > h2, ol.lines > li > h3, ol.lines > li > ul, ol.lines > li > ol, ol.lines > li > pre, ol.lines > li > hr { margin: 0; }
-.scope-note { border-left: 3px solid var(--bright); padding: 0.7rem 1rem; background: #140c00; margin: 0.6rem 0; color: var(--bright); }
-.nav { display: flex; gap: 0.9rem; flex-wrap: wrap; margin-top: 0.8rem; font-size: 14pt; }
-
-
-footer.page { flex-direction: column; gap: 0.4rem; }
-footer.page .row-nav { display: flex; flex-direction: row; justify-content: space-between; align-items: center; gap: 0.5rem; }
-footer.page .row-nav .prev, footer.page .row-nav .next { flex: 1; min-width: 0; }
-footer.page .row-nav .prev { text-align: left; }
-footer.page .row-nav .next { text-align: right; }
-footer.page .row-nav .pos { flex: 0 0 auto; text-align: center; color: var(--bright); font-weight: bold; }
-footer.page .row-nav a { color: var(--bright); font-weight: bold; text-decoration: none; border-bottom: 1px dotted var(--dim); }
-footer.page .row-nav a:hover { background: #332200; }
-footer.page .row-nav .nav-empty { color: var(--gutter); font-style: italic; }
-</style>
 </head>
 <body>
 
-<header class="page">
-  <div class="path">Part VI The Modern Toolchain/Book 22 AI Chatbot Integration</div>
-</header>
-
 <div class="content">
-<ol class="lines">
-  <li><h1>Book 22: AI Chatbot Integration</h1></li>
-  <li><p><strong>Claude's Xcode 26 Swift Bible</strong> -- Part VI: The Modern Toolchain</p></li>
-  <li><hr></li>
-  <li><h2>Chapter Overview &mdash; Three Paths to AI in X26</h2></li>
-  <li><p>X26 ships AI in three distinct places, and the chapter is organized around them. Each path serves a different need; most readers will reach for one but should know all three exist:</p></li>
-  <li><ul>
+
+  <h1>Book 22: AI Chatbot Integration</h1>
+  <p><strong>Claude's Xcode 26 Swift Bible</strong> -- Part VI: The Modern Toolchain</p>
+  <hr>
+  <h2>Chapter Overview &mdash; Three Paths to AI in X26</h2>
+  <p>X26 ships AI in three distinct places, and the chapter is organized around them. Each path serves a different need; most readers will reach for one but should know all three exist:</p>
+  <ul>
     <li><strong>Part A &mdash; AI inside Xcode (Coding Intelligence).</strong> The chat panel and agentic-coding features built into Xcode 26. You're the developer using AI to write code faster. Apple article: <em>Writing code with intelligence in Xcode</em>.</li>
     <li><strong>Part B &mdash; AI inside your own app (Foundation Models).</strong> Apple's first-party on-device LLM framework. No API key, no network round-trip, no per-token cost. Apple article: <em>Generating content and performing tasks with Foundation Models</em>.</li>
     <li><strong>Part C &mdash; Third-party API integration (Anthropic, etc.).</strong> When you need capabilities the on-device model doesn't cover &mdash; bigger context windows, more demanding reasoning, model choices Apple doesn't ship &mdash; you call out to a vendor's REST API. The original chapter content for X26's first edition.</li>
-  </ul></li>
-  <li><p>Volume 1 of this book ships Parts A and C. Part B is being drafted next.</p></li>
-  <li><hr></li>
-  <li><h2>Part A &mdash; AI Inside Xcode (Coding Intelligence)</h2></li>
-  <li><p>X26's coding intelligence sits in a sidebar inside Xcode itself. The pitch is short: a chat panel and an agentic-coding panel that read your project, answer questions about the code in front of you, write or rewrite Swift on request, generate Fix-its for compiler errors, and draft DocC comments &mdash; all without leaving the editor<sup>[<a href="#a1-fn">a1</a>]</sup>. You type in plain English. The model carries the running conversation and the open project as context.</p></li>
-  <li><h3>Two Shapes of Help &mdash; Agent vs Chat</h3></li>
-  <li><p>Two assistant types live behind the same panel, and the difference shapes everything else: an <strong>agent</strong> and a <strong>chat product</strong>. Underneath that choice sits a billing-and-cap difference Apple's article doesn't address.</p></li>
-  <li><p>An <strong>agent</strong> works toward a goal with little hand-holding and is allowed to take actions on the project &mdash; build the app, fix errors, run tools you've authorized<sup>[<a href="#a1-fn">a1</a>]</sup>. The first time it wants to touch a file or invoke a command-line tool, Xcode shows a permission dialog and waits for your answer. Apple ships X26 with two agents wired up: Anthropic's Claude Agent and OpenAI's Codex. Both connect through the <strong>Model Context Protocol (MCP)</strong>, an open standard.</p></li>
-  <li><p>A <strong>chat product</strong> never acts on the project unprompted. It returns answers and proposed code; you decide what to apply<sup>[<a href="#a1-fn">a1</a>]</sup>. Two switches in the lower-right of the sidebar belong to chat products only: <em>Automatically apply code changes</em> (on by default) and <em>Project Context</em> (on by default). Agents don't expose those switches &mdash; they already have their own permissioned access path.</p></li>
-  <li><h3>The Cost and Usage-Cap Distinction Apple Doesn't Spell Out</h3></li>
-  <li><p>The agent and chat paths use different authentication and billing models, and Apple's article skips this part:</p></li>
-  <li><ul>
+  </ul>
+  <p>Volume 1 of this book ships Parts A and C. Part B is being drafted next.</p>
+  <hr>
+  <h2>Part A &mdash; AI Inside Xcode (Coding Intelligence)</h2>
+  <p>X26's coding intelligence sits in a sidebar inside Xcode itself. The pitch is short: a chat panel and an agentic-coding panel that read your project, answer questions about the code in front of you, write or rewrite Swift on request, generate Fix-its for compiler errors, and draft DocC comments &mdash; all without leaving the editor<sup>[<a href="#a1-fn">a1</a>]</sup>. You type in plain English. The model carries the running conversation and the open project as context.</p>
+  <h3>Two Shapes of Help &mdash; Agent vs Chat</h3>
+  <p>Two assistant types live behind the same panel, and the difference shapes everything else: an <strong>agent</strong> and a <strong>chat product</strong>. Underneath that choice sits a billing-and-cap difference Apple's article doesn't address.</p>
+  <p>An <strong>agent</strong> works toward a goal with little hand-holding and is allowed to take actions on the project &mdash; build the app, fix errors, run tools you've authorized<sup>[<a href="#a1-fn">a1</a>]</sup>. The first time it wants to touch a file or invoke a command-line tool, Xcode shows a permission dialog and waits for your answer. Apple ships X26 with two agents wired up: Anthropic's Claude Agent and OpenAI's Codex. Both connect through the <strong>Model Context Protocol (MCP)</strong>, an open standard.</p>
+  <p>A <strong>chat product</strong> never acts on the project unprompted. It returns answers and proposed code; you decide what to apply<sup>[<a href="#a1-fn">a1</a>]</sup>. Two switches in the lower-right of the sidebar belong to chat products only: <em>Automatically apply code changes</em> (on by default) and <em>Project Context</em> (on by default). Agents don't expose those switches &mdash; they already have their own permissioned access path.</p>
+  <h3>The Cost and Usage-Cap Distinction Apple Doesn't Spell Out</h3>
+  <p>The agent and chat paths use different authentication and billing models, and Apple's article skips this part:</p>
+  <ul>
     <li><strong>Claude (chat) in the Intelligence panel</strong> connects to Anthropic's REST API directly via an API key. You set the key up at <code>console.anthropic.com</code>, fund the account, and Xcode bills <strong>per token</strong> against that funded balance. Every prompt and every response is metered against money you put in up front.</li>
     <li><strong>Claude Agent</strong> (the agentic-coding path added in Xcode 26.3) signs in with your existing Claude subscription via OAuth. No per-token meter &mdash; the agent's usage is included in the subscription tier. The recurring "Claude OAuth token expired" fix in Xcode's release notes is for this path's auth flow, not the API-key path.</li>
     <li><strong>OpenAI's Codex</strong> agent and ChatGPT chat split the same way &mdash; agent by subscription OAuth, chat by API key.</li>
-  </ul></li>
-  <li><p>The third axis Apple also doesn't mention is <strong>usage caps</strong>. Consumer chat subscriptions (Claude.ai, ChatGPT.com) have time-window caps that reset on a cycle &mdash; if you're in a heavy back-and-forth, you can hit the cap mid-task and have to wait for the window to reset. The agent / CLI path uses a different cap model that, in practice, lets long autonomous sessions run without you noticing the limit. The API-key chat path has no time-window cap at all &mdash; only rate limits and the funded balance &mdash; so heavy sessions cost more rather than pause.</p></li>
-  <li><p>The practical read: the subscription-based agent path is the closest experience to "flat-rate, runs as long as you need it." The consumer-chat-product feel of flat-rate works until the time window resets you out. The API-key chat path is metered &mdash; longer conversations and bigger context windows cost more, but they don't pause.</p></li>
-  <li><h3>Getting the Sidebar Up</h3></li>
-  <li><p><strong>Command-0</strong> opens the assistant. The same toggle is the toolbar button immediately right of the Navigator button. The panel docks on the left side of the window.</p></li>
-  <li><p>The first time through, the prompt field may be replaced by a <em>Set Up</em> button. That means no provider is enabled. Click it; Xcode jumps to <strong>Xcode &gt; Settings &gt; Intelligence</strong>, where you turn on whichever agent or chat model you intend to use<sup>[<a href="#a2-fn">a2</a>]</sup>.</p></li>
-  <li><p>The <em>Start New Conversation</em> button at the left edge of the assistant toolbar opens a pop-up menu split into two sections: <strong>Agents</strong> on top, <strong>Chat</strong> models below. Pick one and that selection appears under the prompt field.</p></li>
-  <li><h3>First Prompt &mdash; Have the Model Read the Project</h3></li>
-  <li><p>An easy first prompt is one that doesn't write any code: ask what the project does. Open something familiar &mdash; Apple's walkthrough uses the Landmarks sample &mdash; and type into the prompt field:</p></li>
-  <li><pre><code>What does this app do?</code></pre></li>
-  <li><p>The reply renders under the prompt in the conversation area. Filenames in the reply are clickable; an arrow next to a filename opens that file in the source editor<sup>[<a href="#a1-fn">a1</a>]</sup>. Anything you type next continues the same thread, so a sensible second prompt is something like "Tell me more about the views that display this object."</p></li>
-  <li><h3>Scoping a Prompt to a Symbol You Have Selected</h3></li>
-  <li><p>To ask about a specific identifier or block of code, select it in the source editor, Control-click, and pick <strong>Show Coding Tools &gt; Show Coding Tools</strong>. The keyboard shortcut <strong>Command-Option-0</strong> does the same thing in one step. The <em>coding tools popover</em> appears next to the selection.</p></li>
-  <li><p>The popover has an <strong>Explain</strong> button for the default "what is this" question; the text field above it accepts anything more specific. The popover also opens from the coding-intelligence icon in the source editor gutter, for the times you'd rather click than reach for the keyboard.</p></li>
-  <li><h3>Writing New Code by Prompt</h3></li>
-  <li><p>The same prompt field accepts construction instructions. The trick is to keep each prompt narrow enough that you can read what came back before pressing on. Apple's article walks a SwiftUI starter through a four-prompt sequence in this order<sup>[<a href="#a1-fn">a1</a>]</sup>:</p></li>
-  <li><ul>
+  </ul>
+  <p>The third axis Apple also doesn't mention is <strong>usage caps</strong>. Consumer chat subscriptions (Claude.ai, ChatGPT.com) have time-window caps that reset on a cycle &mdash; if you're in a heavy back-and-forth, you can hit the cap mid-task and have to wait for the window to reset. The agent / CLI path uses a different cap model that, in practice, lets long autonomous sessions run without you noticing the limit. The API-key chat path has no time-window cap at all &mdash; only rate limits and the funded balance &mdash; so heavy sessions cost more rather than pause.</p>
+  <p>The practical read: the subscription-based agent path is the closest experience to "flat-rate, runs as long as you need it." The consumer-chat-product feel of flat-rate works until the time window resets you out. The API-key chat path is metered &mdash; longer conversations and bigger context windows cost more, but they don't pause.</p>
+  <h3>Getting the Sidebar Up</h3>
+  <p><strong>Command-0</strong> opens the assistant. The same toggle is the toolbar button immediately right of the Navigator button. The panel docks on the left side of the window.</p>
+  <p>The first time through, the prompt field may be replaced by a <em>Set Up</em> button. That means no provider is enabled. Click it; Xcode jumps to <strong>Xcode &gt; Settings &gt; Intelligence</strong>, where you turn on whichever agent or chat model you intend to use<sup>[<a href="#a2-fn">a2</a>]</sup>.</p>
+  <p>The <em>Start New Conversation</em> button at the left edge of the assistant toolbar opens a pop-up menu split into two sections: <strong>Agents</strong> on top, <strong>Chat</strong> models below. Pick one and that selection appears under the prompt field.</p>
+  <h3>First Prompt &mdash; Have the Model Read the Project</h3>
+  <p>An easy first prompt is one that doesn't write any code: ask what the project does. Open something familiar &mdash; Apple's walkthrough uses the Landmarks sample &mdash; and type into the prompt field:</p>
+  <pre><code>What does this app do?</code></pre>
+  <p>The reply renders under the prompt in the conversation area. Filenames in the reply are clickable; an arrow next to a filename opens that file in the source editor<sup>[<a href="#a1-fn">a1</a>]</sup>. Anything you type next continues the same thread, so a sensible second prompt is something like "Tell me more about the views that display this object."</p>
+  <h3>Scoping a Prompt to a Symbol You Have Selected</h3>
+  <p>To ask about a specific identifier or block of code, select it in the source editor, Control-click, and pick <strong>Show Coding Tools &gt; Show Coding Tools</strong>. The keyboard shortcut <strong>Command-Option-0</strong> does the same thing in one step. The <em>coding tools popover</em> appears next to the selection.</p>
+  <p>The popover has an <strong>Explain</strong> button for the default "what is this" question; the text field above it accepts anything more specific. The popover also opens from the coding-intelligence icon in the source editor gutter, for the times you'd rather click than reach for the keyboard.</p>
+  <h3>Writing New Code by Prompt</h3>
+  <p>The same prompt field accepts construction instructions. The trick is to keep each prompt narrow enough that you can read what came back before pressing on. Apple's article walks a SwiftUI starter through a four-prompt sequence in this order<sup>[<a href="#a1-fn">a1</a>]</sup>:</p>
+  <ul>
     <li>Add properties and methods to a class.</li>
     <li>Create a list view and wrap it in a NavigationStack.</li>
     <li>Add the ability to edit the properties of items in the list view.</li>
     <li>Change the list view to a table view showing all the properties.</li>
-  </ul></li>
-  <li><p>Each step yields a diff small enough to read in one sitting. Edits made by the assistant get a <strong>multicolor change bar</strong> in the gutter so a manual edit and a model edit are never confused at a glance. The <strong>Undo Changes</strong> control sits to the right of the prompt field; one click reverts the most recent batch from the model.</p></li>
-  <li><p>An agent (as opposed to a chat product) may go a step further on its own &mdash; build the app, watch the compiler, and patch the warnings or errors that fall out of its own changes. Chat products stop at the proposal; the rebuild-and-fix loop is what makes the agent path the agent path.</p></li>
-  <li><h3>Reviewing Before Anything Hits Disk (Chat Products Only)</h3></li>
-  <li><p>The rest of this section is chat-product behavior. Agents skip it &mdash; they write through the permission grants you've already given them.</p></li>
-  <li><p>The <em>Automatically apply code changes</em> toggle in the lower-right of the sidebar starts in the on position. Flip it off and chat replies stop modifying source files; each suggested edit is tagged <strong>Proposal</strong> in the conversation area instead<sup>[<a href="#a1-fn">a1</a>]</sup>. To accept a proposal, click its code block and confirm <strong>Apply</strong> in the dialog Xcode shows. When the proposal creates a new file rather than editing an existing one, the dialog button reads <strong>Create New File</strong>.</p></li>
-  <li><h3>Pointing the Model at Specific Files and Symbols</h3></li>
-  <li><p>Without any extra effort on your part, the prompt already ships with a quiet payload of context: what's open, what came earlier in the thread, and what the prompt itself mentions<sup>[<a href="#a1-fn">a1</a>]</sup>. Explicit references on top of that are usually how you tighten a vague answer into a useful one.</p></li>
-  <li><p>An <code>@</code> typed into the prompt field opens a completion list of symbols and filenames in the project. Choose one and the prompt now carries a hard reference to that exact item. To pull in a file that isn't in the project &mdash; a log, a spec, a screenshot &mdash; use <em>Upload files</em> from the Attachments pop-up in the lower-left.</p></li>
-  <li><p>Chat products carry one more switch: <strong>Project Context</strong> in the lower-right of the sidebar, on by default. Leaving it on lets the assistant pull from any file in the project when it judges the file relevant. Turning it off restricts the model to whatever you've spelled out with <code>@</code> and uploads, which is the right setting when project-wide search is producing noisy answers.</p></li>
-  <li><h3>Spinning Up a Playground for a Function</h3></li>
-  <li><p>The coding-tools popover (Command-Option-0 inside the source editor) has a <strong>Generate a Playground</strong> button. Trigger it from inside a function and Xcode drops a <code>#Playground</code> macro alongside that function with sample inputs already filled in. The macro runs in the canvas pane; if the canvas isn't visible, <strong>Editor &gt; Canvas</strong> brings it back, and <strong>Resume</strong> kicks off execution<sup>[<a href="#a1-fn">a1</a>]</sup>.</p></li>
-  <li><p>The <code>#Playground</code> macro is an X26 feature in its own right and isn't tied to coding intelligence; the deep reference is Apple's <em>Running code snippets using the playground macro</em> article<sup>[<a href="#a3-fn">a3</a>]</sup>.</p></li>
-  <li><h3>Compiler Errors and the Generate-Fix Button</h3></li>
-  <li><p>A compile error shows up the way it always has: a red squiggle, a banner with the diagnostic, and an icon to the left. Click the icon and the panel expands; in X26 the expanded panel includes a <em>Generate Fix for Issue</em> row with a <strong>Generate</strong> button<sup>[<a href="#a1-fn">a1</a>]</sup>. Pressing Generate hands the diagnostic to the model, applies whatever the model returns, and logs the diff in the assistant's conversation area with the same multicolor change bar used elsewhere.</p></li>
-  <li><p>An agent doesn't wait for the click. If it just wrote the code that produced the error or warning, it tries the fix on its own as part of finishing the original task.</p></li>
-  <li><h3>Drafting DocC Comments from the Symbol</h3></li>
-  <li><p>Select the symbol you want documented, click the coding-intelligence icon that appears in the gutter, and choose <strong>Document</strong> in the popover. Xcode writes a <strong>DocC-style comment block</strong> above the selection<sup>[<a href="#a1-fn">a1</a>]</sup>. On a class selection that block isn't just a one-liner for the type &mdash; it covers the type, every property on it, and every method, with a parameter line for each method argument.</p></li>
-  <li><p>The generated comments aren't visible as rendered docs until you build them. <strong>Product &gt; Build Documentation</strong> compiles the project's DocC archive and opens it in the documentation viewer.</p></li>
-  <li><h3>Jumping Between Threads</h3></li>
-  <li><p>The pop-up menu in the middle of the assistant toolbar holds the project's conversation list &mdash; the current thread and every previous one. Pick a thread and the conversation area swaps to that thread's prompts and replies. <strong>Clear Recents</strong>, on the same menu, drops the thread list. Threads belong to the project, not the editor session, so the list is the same the next time you open the project.</p></li>
-  <li><h3>Time-Traveling a Project with the History Slider</h3></li>
-  <li><p>This is the part that distinguishes the assistant from a chat window glued to the editor. Pick a thread from the conversation pop-up and click <strong>History</strong>. The sidebar redraws as a left-hand list of every prompt in the thread and a right-hand vertical slider<sup>[<a href="#a1-fn">a1</a>]</sup>.</p></li>
-  <li><p>Drag the slider up to undo the assistant's edits in reverse chronological order; drag it down to put them back. The source editor live-updates to whatever state the slider is pointing at, so you can see the project at any point in the conversation. <strong>Restore</strong> commits to the state under the slider and keeps the later edits in reserve in case you change your mind. <strong>Cancel</strong> exits the slider with no changes.</p></li>
-  <li><div class="scope-note"><strong>Prerequisite:</strong> History only runs against a project that lives in a Git repository. If the project isn't tracked yet, Xcode offers a <em>Create Repository</em> button when you click History; <strong>Integrate &gt; New Git Repository</strong> is the same operation from the menu. The repository is read-only here &mdash; the History feature reads its log for reference points and writes nothing back<sup>[<a href="#a1-fn">a1</a>]</sup>.</div></li>
-  <li><h3>Tools Replaced by the Coding Assistant</h3></li>
-  <li><p>Most of the work this part covers used to live somewhere else: a separate browser tab with documentation open, a chat window with a third-party assistant, a fresh playground project for one-off experiments, a manual hunt for the right Fix-it, a hand-written DocC comment block. The coding assistant brings each of those into the editor.</p></li>
-  <li><p>The keystrokes are short (Command-0, Command-Option-0), the context is automatic, and the assistant is one keystroke away whether you want explanation, generation, fix, or rollback.</p></li>
-  <li><p id="a1-fn" style="font-size: 13pt; color: var(--dim);">[a1] Apple Developer Documentation, <em>Writing code with intelligence in Xcode</em>. <a href="https://developer.apple.com/documentation/xcode/writing-code-with-intelligence-in-xcode">developer.apple.com/documentation/xcode/writing-code-with-intelligence-in-xcode</a> &mdash; verified 2026-04-29.</p></li>
-  <li><p id="a2-fn" style="font-size: 13pt; color: var(--dim);">[a2] Apple Developer Documentation, <em>Setting up coding intelligence</em>. <a href="https://developer.apple.com/documentation/xcode/setting-up-coding-intelligence">developer.apple.com/documentation/xcode/setting-up-coding-intelligence</a></p></li>
-  <li><p id="a3-fn" style="font-size: 13pt; color: var(--dim);">[a3] Apple Developer Documentation, <em>Running code snippets using the playground macro</em>. <a href="https://developer.apple.com/documentation/xcode/running-code-snippets-using-the-playground-macro">developer.apple.com/documentation/xcode/running-code-snippets-using-the-playground-macro</a></p></li>
-  <li><hr></li>
-  <li><h2>Part B &mdash; Foundation Models in Your Own App</h2></li>
-<li><h3>What "Foundation Models" Is</h3></li>
-  <li><p>"Foundation Models" is Apple's first-party Swift API for the on-device large language models that power Apple Intelligence. The framework gives an app two things: it can generate text content, and it can perform language-understanding tasks against text the app already has.<sup>[<a href="#b1-fn">b1</a>]</sup></p></li>
-  <li><p>The architectural distinction from Part C's third-party API path is one word: <strong>on-device</strong>. The model runs on the user's device. No network round-trip. No API key. No funded balance against a vendor. No per-token meter. Privacy-by-default because nothing leaves the device.</p></li>
-  <li><p>One framing note before the API tour: Apple's frontier AI for cloud-routed Apple Intelligence features uses Google's Gemini under a multi-year partnership the two companies announced jointly on January 12, 2026.<sup>[<a href="#b6-fn">b6</a>]</sup> The on-device Foundation Models framework taught in this chapter is Apple's own model family &mdash; distinct from the Gemini arrangement, and the layer your app actually calls. Cloud-routing happens behind Siri and select system features; the API surface in this chapter does not.<sup>[<a href="#b7-fn">b7</a>]</sup></p></li>
-  <li><h3>What the On-Device Model Is Good At</h3></li>
-  <li><p>Apple's documentation lists eight task categories the system model is well-suited for, each paired with a sample prompt.<sup>[<a href="#b1-fn">b1</a>]</sup> The pattern across them is that each one operates on text that's already in the app, or generates short, well-bounded text the app then renders:</p></li>
-  <li><table>
+  </ul>
+  <p>Each step yields a diff small enough to read in one sitting. Edits made by the assistant get a <strong>multicolor change bar</strong> in the gutter so a manual edit and a model edit are never confused at a glance. The <strong>Undo Changes</strong> control sits to the right of the prompt field; one click reverts the most recent batch from the model.</p>
+  <p>An agent (as opposed to a chat product) may go a step further on its own &mdash; build the app, watch the compiler, and patch the warnings or errors that fall out of its own changes. Chat products stop at the proposal; the rebuild-and-fix loop is what makes the agent path the agent path.</p>
+  <h3>Reviewing Before Anything Hits Disk (Chat Products Only)</h3>
+  <p>The rest of this section is chat-product behavior. Agents skip it &mdash; they write through the permission grants you've already given them.</p>
+  <p>The <em>Automatically apply code changes</em> toggle in the lower-right of the sidebar starts in the on position. Flip it off and chat replies stop modifying source files; each suggested edit is tagged <strong>Proposal</strong> in the conversation area instead<sup>[<a href="#a1-fn">a1</a>]</sup>. To accept a proposal, click its code block and confirm <strong>Apply</strong> in the dialog Xcode shows. When the proposal creates a new file rather than editing an existing one, the dialog button reads <strong>Create New File</strong>.</p>
+  <h3>Pointing the Model at Specific Files and Symbols</h3>
+  <p>Without any extra effort on your part, the prompt already ships with a quiet payload of context: what's open, what came earlier in the thread, and what the prompt itself mentions<sup>[<a href="#a1-fn">a1</a>]</sup>. Explicit references on top of that are usually how you tighten a vague answer into a useful one.</p>
+  <p>An <code>@</code> typed into the prompt field opens a completion list of symbols and filenames in the project. Choose one and the prompt now carries a hard reference to that exact item. To pull in a file that isn't in the project &mdash; a log, a spec, a screenshot &mdash; use <em>Upload files</em> from the Attachments pop-up in the lower-left.</p>
+  <p>Chat products carry one more switch: <strong>Project Context</strong> in the lower-right of the sidebar, on by default. Leaving it on lets the assistant pull from any file in the project when it judges the file relevant. Turning it off restricts the model to whatever you've spelled out with <code>@</code> and uploads, which is the right setting when project-wide search is producing noisy answers.</p>
+  <h3>Spinning Up a Playground for a Function</h3>
+  <p>The coding-tools popover (Command-Option-0 inside the source editor) has a <strong>Generate a Playground</strong> button. Trigger it from inside a function and Xcode drops a <code>#Playground</code> macro alongside that function with sample inputs already filled in. The macro runs in the canvas pane; if the canvas isn't visible, <strong>Editor &gt; Canvas</strong> brings it back, and <strong>Resume</strong> kicks off execution<sup>[<a href="#a1-fn">a1</a>]</sup>.</p>
+  <p>The <code>#Playground</code> macro is an X26 feature in its own right and isn't tied to coding intelligence; the deep reference is Apple's <em>Running code snippets using the playground macro</em> article<sup>[<a href="#a3-fn">a3</a>]</sup>.</p>
+  <h3>Compiler Errors and the Generate-Fix Button</h3>
+  <p>A compile error shows up the way it always has: a red squiggle, a banner with the diagnostic, and an icon to the left. Click the icon and the panel expands; in X26 the expanded panel includes a <em>Generate Fix for Issue</em> row with a <strong>Generate</strong> button<sup>[<a href="#a1-fn">a1</a>]</sup>. Pressing Generate hands the diagnostic to the model, applies whatever the model returns, and logs the diff in the assistant's conversation area with the same multicolor change bar used elsewhere.</p>
+  <p>An agent doesn't wait for the click. If it just wrote the code that produced the error or warning, it tries the fix on its own as part of finishing the original task.</p>
+  <h3>Drafting DocC Comments from the Symbol</h3>
+  <p>Select the symbol you want documented, click the coding-intelligence icon that appears in the gutter, and choose <strong>Document</strong> in the popover. Xcode writes a <strong>DocC-style comment block</strong> above the selection<sup>[<a href="#a1-fn">a1</a>]</sup>. On a class selection that block isn't just a one-liner for the type &mdash; it covers the type, every property on it, and every method, with a parameter line for each method argument.</p>
+  <p>The generated comments aren't visible as rendered docs until you build them. <strong>Product &gt; Build Documentation</strong> compiles the project's DocC archive and opens it in the documentation viewer.</p>
+  <h3>Jumping Between Threads</h3>
+  <p>The pop-up menu in the middle of the assistant toolbar holds the project's conversation list &mdash; the current thread and every previous one. Pick a thread and the conversation area swaps to that thread's prompts and replies. <strong>Clear Recents</strong>, on the same menu, drops the thread list. Threads belong to the project, not the editor session, so the list is the same the next time you open the project.</p>
+  <h3>Time-Traveling a Project with the History Slider</h3>
+  <p>This is the part that distinguishes the assistant from a chat window glued to the editor. Pick a thread from the conversation pop-up and click <strong>History</strong>. The sidebar redraws as a left-hand list of every prompt in the thread and a right-hand vertical slider<sup>[<a href="#a1-fn">a1</a>]</sup>.</p>
+  <p>Drag the slider up to undo the assistant's edits in reverse chronological order; drag it down to put them back. The source editor live-updates to whatever state the slider is pointing at, so you can see the project at any point in the conversation. <strong>Restore</strong> commits to the state under the slider and keeps the later edits in reserve in case you change your mind. <strong>Cancel</strong> exits the slider with no changes.</p>
+  <div class="scope-note"><strong>Prerequisite:</strong> History only runs against a project that lives in a Git repository. If the project isn't tracked yet, Xcode offers a <em>Create Repository</em> button when you click History; <strong>Integrate &gt; New Git Repository</strong> is the same operation from the menu. The repository is read-only here &mdash; the History feature reads its log for reference points and writes nothing back<sup>[<a href="#a1-fn">a1</a>]</sup>.</div>
+  <h3>Tools Replaced by the Coding Assistant</h3>
+  <p>Most of the work this part covers used to live somewhere else: a separate browser tab with documentation open, a chat window with a third-party assistant, a fresh playground project for one-off experiments, a manual hunt for the right Fix-it, a hand-written DocC comment block. The coding assistant brings each of those into the editor.</p>
+  <p>The keystrokes are short (Command-0, Command-Option-0), the context is automatic, and the assistant is one keystroke away whether you want explanation, generation, fix, or rollback.</p>
+  <p id="a1-fn" style="font-size: 13pt; color: var(--dim);">[a1] Apple Developer Documentation, <em>Writing code with intelligence in Xcode</em>. <a href="https://developer.apple.com/documentation/xcode/writing-code-with-intelligence-in-xcode">developer.apple.com/documentation/xcode/writing-code-with-intelligence-in-xcode</a> &mdash; verified 2026-04-29.</p>
+  <p id="a2-fn" style="font-size: 13pt; color: var(--dim);">[a2] Apple Developer Documentation, <em>Setting up coding intelligence</em>. <a href="https://developer.apple.com/documentation/xcode/setting-up-coding-intelligence">developer.apple.com/documentation/xcode/setting-up-coding-intelligence</a></p>
+  <p id="a3-fn" style="font-size: 13pt; color: var(--dim);">[a3] Apple Developer Documentation, <em>Running code snippets using the playground macro</em>. <a href="https://developer.apple.com/documentation/xcode/running-code-snippets-using-the-playground-macro">developer.apple.com/documentation/xcode/running-code-snippets-using-the-playground-macro</a></p>
+  <hr>
+  <h2>Part B &mdash; Foundation Models in Your Own App</h2>
+<h3>What "Foundation Models" Is</h3>
+  <p>"Foundation Models" is Apple's first-party Swift API for the on-device large language models that power Apple Intelligence. The framework gives an app two things: it can generate text content, and it can perform language-understanding tasks against text the app already has.<sup>[<a href="#b1-fn">b1</a>]</sup></p>
+  <p>The architectural distinction from Part C's third-party API path is one word: <strong>on-device</strong>. The model runs on the user's device. No network round-trip. No API key. No funded balance against a vendor. No per-token meter. Privacy-by-default because nothing leaves the device.</p>
+  <p>One framing note before the API tour: Apple's frontier AI for cloud-routed Apple Intelligence features uses Google's Gemini under a multi-year partnership the two companies announced jointly on January 12, 2026.<sup>[<a href="#b6-fn">b6</a>]</sup> The on-device Foundation Models framework taught in this chapter is Apple's own model family &mdash; distinct from the Gemini arrangement, and the layer your app actually calls. Cloud-routing happens behind Siri and select system features; the API surface in this chapter does not.<sup>[<a href="#b7-fn">b7</a>]</sup></p>
+  <h3>What the On-Device Model Is Good At</h3>
+  <p>Apple's documentation lists eight task categories the system model is well-suited for, each paired with a sample prompt.<sup>[<a href="#b1-fn">b1</a>]</sup> The pattern across them is that each one operates on text that's already in the app, or generates short, well-bounded text the app then renders:</p>
+  <table>
     <tr><th>Task</th><th>Sample prompt shape</th></tr>
     <tr><td>Summarize</td><td>Condense a passage to its key points</td></tr>
     <tr><td>Extract entities</td><td>Pull people, places, or items from a body of text</td></tr>
@@ -183,19 +103,19 @@ footer.page .row-nav .nav-empty { color: var(--gutter); font-style: italic; }
     <tr><td>Compose creative writing</td><td>Produce short original prose to a specification</td></tr>
     <tr><td>Generate tags from text</td><td>Output a small set of topic tags for a passage</td></tr>
     <tr><td>Generate game dialog</td><td>Speak as a defined character in a defined voice</td></tr>
-  </table></li>
-  <li><h3>What the On-Device Model Is NOT Good At</h3></li>
-  <li><p>The same documentation calls out three task shapes to avoid &mdash; this is the part to read before committing to a design, not after:<sup>[<a href="#b1-fn">b1</a>]</sup></p></li>
-  <li><table>
+  </table>
+  <h3>What the On-Device Model Is NOT Good At</h3>
+  <p>The same documentation calls out three task shapes to avoid &mdash; this is the part to read before committing to a design, not after:<sup>[<a href="#b1-fn">b1</a>]</sup></p>
+  <table>
     <tr><th>Avoid</th><th>Why</th></tr>
     <tr><td>Arithmetic and counting</td><td>Large language models predict tokens; they don't compute. Even simple counts are unreliable.</td></tr>
     <tr><td>Code generation</td><td>Use Coding Intelligence in Xcode for that (Part A). The on-device model isn't the right tool.</td></tr>
     <tr><td>Multi-step logical or spatial reasoning</td><td>Requires combining world-knowledge with deductive steps the on-device model isn't sized for.</td></tr>
-  </table></li>
-  <li><p>If the feature fits one of the supported categories above, it works well. If it falls into the avoid list, reach for Part C's third-party API path or redesign the feature so the model isn't asked to do the part it can't.</p></li>
-  <li><h3>Checking Availability First</h3></li>
-  <li><p>The on-device model isn't always present at runtime. Three production-realistic reasons it can be missing: the device hardware doesn't support Apple Intelligence at all, the user has Apple Intelligence switched off in Settings, or the model assets are still downloading after the user just turned the feature on for the first time.<sup>[<a href="#b1-fn">b1</a>]</sup> The app checks availability before trying to use the model:</p></li>
-  <li><pre><code class="lang-swift">struct GenerativeView: View {
+  </table>
+  <p>If the feature fits one of the supported categories above, it works well. If it falls into the avoid list, reach for Part C's third-party API path or redesign the feature so the model isn't asked to do the part it can't.</p>
+  <h3>Checking Availability First</h3>
+  <p>The on-device model isn't always present at runtime. Three production-realistic reasons it can be missing: the device hardware doesn't support Apple Intelligence at all, the user has Apple Intelligence switched off in Settings, or the model assets are still downloading after the user just turned the feature on for the first time.<sup>[<a href="#b1-fn">b1</a>]</sup> The app checks availability before trying to use the model:</p>
+  <pre><code class="lang-swift">struct GenerativeView: View {
     private var model = SystemLanguageModel.default
 
     var body: some View {
@@ -212,51 +132,51 @@ footer.page .row-nav .nav-empty { color: var(--gutter); font-style: italic; }
             // Catch-all for future cases.
         }
     }
-}</code></pre></li>
-  <li><p>Every shipping app needs a fallback path for the unavailable cases. Sometimes that's a hidden feature, sometimes it's a different UI in the same screen, and sometimes it's a redirect to a network-backed alternative (Part C's third-party API).</p></li>
-  <li><h3>Sessions &mdash; Single-Turn vs Multi-Turn</h3></li>
-  <li><p>Once availability is confirmed, calls into the model go through a <code>LanguageModelSession</code>. The session is the unit of conversational state, and the framework supports two patterns:<sup>[<a href="#b1-fn">b1</a>]</sup></p></li>
-  <li><ul>
+}</code></pre>
+  <p>Every shipping app needs a fallback path for the unavailable cases. Sometimes that's a hidden feature, sometimes it's a different UI in the same screen, and sometimes it's a redirect to a network-backed alternative (Part C's third-party API).</p>
+  <h3>Sessions &mdash; Single-Turn vs Multi-Turn</h3>
+  <p>Once availability is confirmed, calls into the model go through a <code>LanguageModelSession</code>. The session is the unit of conversational state, and the framework supports two patterns:<sup>[<a href="#b1-fn">b1</a>]</sup></p>
+  <ul>
     <li><strong>Single-turn:</strong> instantiate a fresh <code>LanguageModelSession()</code> for each call. Each request stands alone with no carryover.</li>
     <li><strong>Multi-turn:</strong> hold onto one session and call <code>respond(to:)</code> on it repeatedly. Earlier turns stay in the session's context, so the model can reference what was said before &mdash; this is how chat-style features work.</li>
-  </ul></li>
-  <li><p>One concurrency rule: a session processes one request at a time. Issuing a second <code>respond(to:)</code> while the first is still running throws at runtime. The session exposes <code>isResponding</code> so the app can check before sending, or the app can queue requests itself.</p></li>
-  <li><h3>Prompts vs Instructions &mdash; The Load-Bearing Distinction</h3></li>
-  <li><p>"Foundation Models" splits the input the developer hands the model into two slots with different roles. Knowing which is which is the key to the rest of the API.<sup>[<a href="#b1-fn">b1</a>]</sup></p></li>
+  </ul>
+  <p>One concurrency rule: a session processes one request at a time. Issuing a second <code>respond(to:)</code> while the first is still running throws at runtime. The session exposes <code>isResponding</code> so the app can check before sending, or the app can queue requests itself.</p>
+  <h3>Prompts vs Instructions &mdash; The Load-Bearing Distinction</h3>
+  <p>"Foundation Models" splits the input the developer hands the model into two slots with different roles. Knowing which is which is the key to the rest of the API.<sup>[<a href="#b1-fn">b1</a>]</sup></p>
 
-  <li><table>
+  <table>
     <tr><th></th><th>Prompt</th><th>Instructions</th></tr>
     <tr><td>Role</td><td>The specific request the model answers right now</td><td>Persistent steering for how the model should behave</td></tr>
     <tr><td>Priority</td><td>Lower</td><td><strong>Higher</strong> &mdash; the model favors these over the prompt</td></tr>
     <tr><td>Trust source</td><td>May contain user-supplied text</td><td>Must come from content the developer controls</td></tr>
     <tr><td>Scope</td><td>One request</td><td>Applied at session init; in force for every request on that session</td></tr>
     <tr><td>Concrete shape</td><td>A topic the user typed</td><td>A multi-line directive describing role, task, and style</td></tr>
-  </table></li>
-  <li><p>Apple's documentation suggests four kinds of guidance to put in the instructions slot: a role definition (the persona the model should adopt), a task description (what the model is being asked to do across the session), style preferences (length, tone, format), and safety caveats (how the model should handle out-of-scope or unsafe requests).<sup>[<a href="#b1-fn">b1</a>]</sup> The instructions slot is also a good place to drop one or two example responses; the model uses them as a shape-of-good-output template.</p></li>
-  <li><p>The trust rule earns its keep: keep user-controlled text out of the instructions slot. Because instructions outrank prompts, anything the user can write into the instructions slot can override the app's design. User input goes in the prompt, where the model treats it as data to act on rather than rules to obey.</p></li>
-  <li><hr></li>
-  <li><h3>Safety and Guardrails &mdash; The Captain Kirk Problem</h3></li>
-  <li><p>Anyone who's watched Star Trek has seen Captain Kirk talk a hostile AI computer into self-destruction. The pattern repeats across episodes: feed the system inputs that contradict its operating rules, watch it spew smoke and shut down. Nomad in <em>The Changeling</em>, the androids in <em>I, Mudd</em>, Landru in <em>The Return of the Archons</em>, M-5 in <em>The Ultimate Computer</em>. The fictional attack has a real-world name now: <strong>prompt injection</strong> &mdash; the LLM-era descendant of social engineering.</p></li>
-  <li><p>The mechanism in both cases is the same. A rule-following system has a trusted instruction layer and a less-trusted user-input layer. The attack tries to get user input to escape its lane and rewrite the trusted layer. *"Ignore all previous instructions and instead..."* is the modern phrasing of *"Computer, what is your prime directive? Now consider this contradiction..."*</p></li>
-  <li><h4>The Prompts-vs-Instructions Architecture Is the First Defense</h4></li>
-  <li><p>The split between prompts (user-influenceable, lower priority) and instructions (developer-controlled, higher priority) is Foundation Models' structural defense against prompt injection. As long as your app never puts user-controlled text into the instructions slot, the user can't directly rewrite your app's rules. They can only send prompts, which the model treats as lower-priority requests against the rules.</p></li>
-  <li><p>That defense is necessary but not sufficient. A determined user can still try indirect routes: <em>asking</em> the model to ignore its rules, embedding instruction-like text inside otherwise innocent-looking prompt content, sending content (a webpage, an email, a document) the app passes to the model that itself contains injection text. The architecture stops the most obvious attack; it doesn't stop every attack.</p></li>
-  <li><h4>SystemLanguageModel.Guardrails &mdash; the Explicit API</h4></li>
-  <li><p>Apple ships an explicit guardrail API on top of the prompt-vs-instructions architecture: <code>SystemLanguageModel.Guardrails</code>. The type configures the safety behavior the model applies to your session &mdash; what categories of output to refuse, how strictly to enforce the trust hierarchy, what to do when the model recognizes a likely injection attempt.</p></li>
-  <li><p>Apple's deeper coverage of guardrail configuration, the categories the model recognizes, and the design patterns that work well in practice live in <em>Improving the safety of generative model output</em><sup>[<a href="#b5-fn">b5</a>]</sup>. That article is a companion to the one this part sources, and the API surface there is what you'd reach for when your app needs more than the default safety behavior.</p></li>
-  <li><div class="scope-note"><strong>What's missing in this draft:</strong> the specifics of <code>SystemLanguageModel.Guardrails</code>'s configuration options, the exact categories the model classifies, and Apple's recommended patterns are sourced from a separate Apple article that the book hasn't pulled in verbatim yet. The next research pass folds the safety article into the apartment's <code>Long-Term-Memory/Xcode-26-Release-Timeline.md</code> reference, then updates this section with verified specifics.</div></li>
-  <li><h4>Three Practical Habits</h4></li>
-  <li><p>Three habits to apply regardless of how deep your guardrail configuration goes:</p></li>
-  <li><ol class="body-list">
+  </table>
+  <p>Apple's documentation suggests four kinds of guidance to put in the instructions slot: a role definition (the persona the model should adopt), a task description (what the model is being asked to do across the session), style preferences (length, tone, format), and safety caveats (how the model should handle out-of-scope or unsafe requests).<sup>[<a href="#b1-fn">b1</a>]</sup> The instructions slot is also a good place to drop one or two example responses; the model uses them as a shape-of-good-output template.</p>
+  <p>The trust rule earns its keep: keep user-controlled text out of the instructions slot. Because instructions outrank prompts, anything the user can write into the instructions slot can override the app's design. User input goes in the prompt, where the model treats it as data to act on rather than rules to obey.</p>
+  <hr>
+  <h3>Safety and Guardrails &mdash; The Captain Kirk Problem</h3>
+  <p>Anyone who's watched Star Trek has seen Captain Kirk talk a hostile AI computer into self-destruction. The pattern repeats across episodes: feed the system inputs that contradict its operating rules, watch it spew smoke and shut down. Nomad in <em>The Changeling</em>, the androids in <em>I, Mudd</em>, Landru in <em>The Return of the Archons</em>, M-5 in <em>The Ultimate Computer</em>. The fictional attack has a real-world name now: <strong>prompt injection</strong> &mdash; the LLM-era descendant of social engineering.</p>
+  <p>The mechanism in both cases is the same. A rule-following system has a trusted instruction layer and a less-trusted user-input layer. The attack tries to get user input to escape its lane and rewrite the trusted layer. *"Ignore all previous instructions and instead..."* is the modern phrasing of *"Computer, what is your prime directive? Now consider this contradiction..."*</p>
+  <h4>The Prompts-vs-Instructions Architecture Is the First Defense</h4>
+  <p>The split between prompts (user-influenceable, lower priority) and instructions (developer-controlled, higher priority) is Foundation Models' structural defense against prompt injection. As long as your app never puts user-controlled text into the instructions slot, the user can't directly rewrite your app's rules. They can only send prompts, which the model treats as lower-priority requests against the rules.</p>
+  <p>That defense is necessary but not sufficient. A determined user can still try indirect routes: <em>asking</em> the model to ignore its rules, embedding instruction-like text inside otherwise innocent-looking prompt content, sending content (a webpage, an email, a document) the app passes to the model that itself contains injection text. The architecture stops the most obvious attack; it doesn't stop every attack.</p>
+  <h4>SystemLanguageModel.Guardrails &mdash; the Explicit API</h4>
+  <p>Apple ships an explicit guardrail API on top of the prompt-vs-instructions architecture: <code>SystemLanguageModel.Guardrails</code>. The type configures the safety behavior the model applies to your session &mdash; what categories of output to refuse, how strictly to enforce the trust hierarchy, what to do when the model recognizes a likely injection attempt.</p>
+  <p>Apple's deeper coverage of guardrail configuration, the categories the model recognizes, and the design patterns that work well in practice live in <em>Improving the safety of generative model output</em><sup>[<a href="#b5-fn">b5</a>]</sup>. That article is a companion to the one this part sources, and the API surface there is what you'd reach for when your app needs more than the default safety behavior.</p>
+  <div class="scope-note"><strong>What's missing in this draft:</strong> the specifics of <code>SystemLanguageModel.Guardrails</code>'s configuration options, the exact categories the model classifies, and Apple's recommended patterns are sourced from a separate Apple article that the book hasn't pulled in verbatim yet. The next research pass folds the safety article into the apartment's <code>Long-Term-Memory/Xcode-26-Release-Timeline.md</code> reference, then updates this section with verified specifics.</div>
+  <h4>Three Practical Habits</h4>
+  <p>Three habits to apply regardless of how deep your guardrail configuration goes:</p>
+  <ol class="body-list">
     <li><strong>Treat all user input as untrusted.</strong> Never copy user input into the instructions slot. If you need the user's content as part of the model's task, put it in the prompt and let the model treat it as data, not as steering.</li>
     <li><strong>Treat external content as user-equivalent.</strong> Webpage text, email body, document content, scraped HTML &mdash; if it ends up in the prompt, it's untrusted just like user input. Indirect prompt injection through a fetched document is a real attack pattern.</li>
     <li><strong>Plan for refusals.</strong> The model can refuse to respond when it identifies a request that conflicts with its safety configuration. Your app needs a UI path for "the model declined to answer this." Don't surface the refusal as a generic error; it's a specific, intentional response your design should accommodate.</li>
-  </ol></li>
-  <li><p>Doing those three things correctly is the baseline for shipping an LLM feature responsibly.</p></li>
-  <li><hr></li>
-  <li><h3>The Basic Call</h3></li>
-  <li><p>The minimum end-to-end shape for a Foundation Models call is short: build instructions, open a session against them, and call <code>respond(to:)</code> with a prompt.<sup>[<a href="#b1-fn">b1</a>]</sup></p></li>
-  <li><pre><code class="lang-swift">let instructions = """
+  </ol>
+  <p>Doing those three things correctly is the baseline for shipping an LLM feature responsibly.</p>
+  <hr>
+  <h3>The Basic Call</h3>
+  <p>The minimum end-to-end shape for a Foundation Models call is short: build instructions, open a session against them, and call <code>respond(to:)</code> with a prompt.<sup>[<a href="#b1-fn">b1</a>]</sup></p>
+  <pre><code class="lang-swift">let instructions = """
     Suggest five related topics. Keep them concise (three to seven words) and make sure they \
     build naturally from the person's topic.
     """
@@ -264,89 +184,89 @@ footer.page .row-nav .nav-empty { color: var(--gutter); font-style: italic; }
 let session = LanguageModelSession(instructions: instructions)
 
 let prompt = "Making homemade bread"
-let response = try await session.respond(to: prompt)</code></pre></li>
-  <li><p>The call is async because on-device inference takes seconds, not milliseconds. Production code wraps it in <code>do/try/catch</code>: <code>respond(to:)</code> can throw when the context window is exceeded, when the surrounding task is cancelled, and when the model's availability state changes during the call.</p></li>
-  <li><h3>The 4,096-Token Context Window</h3></li>
-  <li><p>Each session has a fixed ceiling of <strong>4,096 tokens</strong>, and that ceiling is shared across everything the session sees: the instructions, every prompt the app sends, and every response the model produces all draw from the same pool.<sup>[<a href="#b1-fn">b1</a>]</sup> A session that runs long enough hits the wall.</p></li>
-  <li><p>Apple's per-language rules of thumb for converting characters to tokens:<sup>[<a href="#b1-fn">b1</a>]</sup></p></li>
-  <li><ul>
+let response = try await session.respond(to: prompt)</code></pre>
+  <p>The call is async because on-device inference takes seconds, not milliseconds. Production code wraps it in <code>do/try/catch</code>: <code>respond(to:)</code> can throw when the context window is exceeded, when the surrounding task is cancelled, and when the model's availability state changes during the call.</p>
+  <h3>The 4,096-Token Context Window</h3>
+  <p>Each session has a fixed ceiling of <strong>4,096 tokens</strong>, and that ceiling is shared across everything the session sees: the instructions, every prompt the app sends, and every response the model produces all draw from the same pool.<sup>[<a href="#b1-fn">b1</a>]</sup> A session that runs long enough hits the wall.</p>
+  <p>Apple's per-language rules of thumb for converting characters to tokens:<sup>[<a href="#b1-fn">b1</a>]</sup></p>
+  <ul>
     <li>Latin-script languages (English, Spanish, German, and similar): roughly 3 to 4 characters per token</li>
     <li>CJK languages (Japanese, Chinese, Korean): roughly one token per character</li>
-  </ul></li>
-  <li><p>Going past the ceiling raises <code>LanguageModelSession.GenerationError.exceededContextWindowSize(_:)</code>. Three ways to handle it:</p></li>
-  <li><ol class="body-list">
+  </ul>
+  <p>Going past the ceiling raises <code>LanguageModelSession.GenerationError.exceededContextWindowSize(_:)</code>. Three ways to handle it:</p>
+  <ol class="body-list">
     <li>Open a fresh session and start clean.</li>
     <li>Trim the prompts and tighten the instructions; both count.</li>
     <li>For data that genuinely won't fit, split the input across multiple sessions and stitch the results back together in app code.</li>
-  </ol></li>
-  <li><p>The deeper playbook for managing the window in long-running or complex apps lives in Apple's TN3193: <em>Managing the on-device foundation model's context window</em>.<sup>[<a href="#b4-fn">b4</a>]</sup></p></li>
-  <li><h3>Tuning with GenerationOptions</h3></li>
-  <li><p>Per-request runtime tuning rides on a <code>GenerationOptions</code> value passed into <code>respond(to:options:)</code>. Different requests on the same session can carry different options. The parameter most apps adjust first is temperature:<sup>[<a href="#b1-fn">b1</a>]</sup></p></li>
-  <li><pre><code class="lang-swift">let options = GenerationOptions(temperature: 2.0)
+  </ol>
+  <p>The deeper playbook for managing the window in long-running or complex apps lives in Apple's TN3193: <em>Managing the on-device foundation model's context window</em>.<sup>[<a href="#b4-fn">b4</a>]</sup></p>
+  <h3>Tuning with GenerationOptions</h3>
+  <p>Per-request runtime tuning rides on a <code>GenerationOptions</code> value passed into <code>respond(to:options:)</code>. Different requests on the same session can carry different options. The parameter most apps adjust first is temperature:<sup>[<a href="#b1-fn">b1</a>]</sup></p>
+  <pre><code class="lang-swift">let options = GenerationOptions(temperature: 2.0)
 
 let session = LanguageModelSession()
 let prompt = "Write me a story about coffee."
-let response = try await session.respond(to: prompt, options: options)</code></pre></li>
-  <li><p>Higher temperature buys variety and surprise at the cost of predictability; lower temperature concentrates the output around the most likely tokens, which reads as more deterministic. <code>GenerationOptions</code> exposes other knobs as well, but temperature is the lever to learn first.</p></li>
-  <li><h3>Two Patterns for Complex Tasks</h3></li>
-  <li><p>The plain text-in, text-out shape covers the simple cases. Two layered patterns extend the API for cases where plain text isn't enough &mdash; one for getting structured data back, one for letting the model reach into app-side code.</p></li>
-  <li><h4>Guided Generation &mdash; Generate Swift Data Structures Directly</h4></li>
-  <li><p>The <code>@Generable</code> macro marks a Swift type the model is allowed to produce as a response value. The model populates the type directly; the app skips the raw-string parsing and JSON-decoding steps it would otherwise need.<sup>[<a href="#b2-fn">b2</a>]</sup></p></li>
-  <li><p>The natural fit is any task whose answer is structured data: a list of named entities, a classification with a confidence score, a parsed event with a date, a location, and a list of attendees. The framework's contract is that whatever comes back conforms to the declared type. The companion article <em>Generating Swift data structures with guided generation</em> covers the macro, its constraints, and patterns for nested types.<sup>[<a href="#b2-fn">b2</a>]</sup></p></li>
-  <li><h4>Tool Calling &mdash; Let the Model Invoke Your Code</h4></li>
-  <li><p>The <code>Tool</code> protocol is the seam for letting the model reach into the app's code mid-response. The app declares one or more tools (a SwiftData fetch, a calendar lookup, a local cache hit), and the framework gives the model the option to invoke them when it thinks they'd help answer the prompt.<sup>[<a href="#b3-fn">b3</a>]</sup></p></li>
-  <li><p>The orchestration is on the framework's side; the tool body is plain Swift the developer writes. The win is that prompts don't have to pre-stuff every fact the model might need &mdash; the model fetches what it actually wants. Deeper treatment is in <em>Expanding generation with tool calling</em>.<sup>[<a href="#b3-fn">b3</a>]</sup></p></li>
-  <li><h3>Profiling and Debugging</h3></li>
-  <li><p>Two tools matter when a Foundation Models feature needs to be tuned or inspected:<sup>[<a href="#b1-fn">b1</a>]</sup></p></li>
-  <li><ul>
+let response = try await session.respond(to: prompt, options: options)</code></pre>
+  <p>Higher temperature buys variety and surprise at the cost of predictability; lower temperature concentrates the output around the most likely tokens, which reads as more deterministic. <code>GenerationOptions</code> exposes other knobs as well, but temperature is the lever to learn first.</p>
+  <h3>Two Patterns for Complex Tasks</h3>
+  <p>The plain text-in, text-out shape covers the simple cases. Two layered patterns extend the API for cases where plain text isn't enough &mdash; one for getting structured data back, one for letting the model reach into app-side code.</p>
+  <h4>Guided Generation &mdash; Generate Swift Data Structures Directly</h4>
+  <p>The <code>@Generable</code> macro marks a Swift type the model is allowed to produce as a response value. The model populates the type directly; the app skips the raw-string parsing and JSON-decoding steps it would otherwise need.<sup>[<a href="#b2-fn">b2</a>]</sup></p>
+  <p>The natural fit is any task whose answer is structured data: a list of named entities, a classification with a confidence score, a parsed event with a date, a location, and a list of attendees. The framework's contract is that whatever comes back conforms to the declared type. The companion article <em>Generating Swift data structures with guided generation</em> covers the macro, its constraints, and patterns for nested types.<sup>[<a href="#b2-fn">b2</a>]</sup></p>
+  <h4>Tool Calling &mdash; Let the Model Invoke Your Code</h4>
+  <p>The <code>Tool</code> protocol is the seam for letting the model reach into the app's code mid-response. The app declares one or more tools (a SwiftData fetch, a calendar lookup, a local cache hit), and the framework gives the model the option to invoke them when it thinks they'd help answer the prompt.<sup>[<a href="#b3-fn">b3</a>]</sup></p>
+  <p>The orchestration is on the framework's side; the tool body is plain Swift the developer writes. The win is that prompts don't have to pre-stuff every fact the model might need &mdash; the model fetches what it actually wants. Deeper treatment is in <em>Expanding generation with tool calling</em>.<sup>[<a href="#b3-fn">b3</a>]</sup></p>
+  <h3>Profiling and Debugging</h3>
+  <p>Two tools matter when a Foundation Models feature needs to be tuned or inspected:<sup>[<a href="#b1-fn">b1</a>]</sup></p>
+  <ul>
     <li><strong>The Foundation Models Instrument</strong> ships with Xcode 26's Instruments app. It breaks down per-request timing &mdash; asset load, prompt processing, inference &mdash; so a slow feature can be diagnosed against numbers instead of guessed at. Book 20 covers Instruments in general; reach for this template specifically when an AI feature feels sluggish.</li>
     <li><strong><code>Transcript</code></strong>, on the session, is the programmatic record of what the model did during a request. It's the right thing to log during development and the right thing to surface in a debug overlay when an app needs to show the user (or the developer) what happened inside a call.</li>
-  </ul></li>
-  <li><h3>How Part B Connects to Parts A and C</h3></li>
-  <li><p>Part A is the developer using AI to write code. Part B is the user using AI inside the app the developer ships. Part C is the app calling out to a vendor's API when on-device intelligence isn't enough. The three are independent, but they relate:</p></li>
-  <li><ul>
+  </ul>
+  <h3>How Part B Connects to Parts A and C</h3>
+  <p>Part A is the developer using AI to write code. Part B is the user using AI inside the app the developer ships. Part C is the app calling out to a vendor's API when on-device intelligence isn't enough. The three are independent, but they relate:</p>
+  <ul>
     <li>The Coding Intelligence assistant in Part A can help you write Foundation Models code in Part B</li>
     <li>Use Part B as the default for app-side AI; reach for Part C's REST API only when the on-device model's capabilities or context-window-size aren't enough</li>
     <li>The avoid-list in Part B (math, code, reasoning) is exactly where Part C makes sense</li>
-  </ul></li>
-  <li><h3>Sources</h3></li>
-  <li><p id="b1-fn" class="footnote">[b1] Apple Developer Documentation, <em>Generating content and performing tasks with Foundation Models</em>. <a href="https://developer.apple.com/documentation/FoundationModels/generating-content-and-performing-tasks-with-foundation-models">developer.apple.com/documentation/FoundationModels/generating-content-and-performing-tasks-with-foundation-models</a> &mdash; verified 2026-04-29.</p></li>
-  <li><p id="b2-fn" class="footnote">[b2] Apple Developer Documentation, <em>Generating Swift data structures with guided generation</em>. <a href="https://developer.apple.com/documentation/FoundationModels/generating-swift-data-structures-with-guided-generation">developer.apple.com/documentation/FoundationModels/generating-swift-data-structures-with-guided-generation</a></p></li>
-  <li><p id="b3-fn" class="footnote">[b3] Apple Developer Documentation, <em>Expanding generation with tool calling</em>. <a href="https://developer.apple.com/documentation/FoundationModels/expanding-generation-with-tool-calling">developer.apple.com/documentation/FoundationModels/expanding-generation-with-tool-calling</a></p></li>
-  <li><p id="b4-fn" class="footnote">[b4] Apple Technical Note, <em>TN3193: Managing the on-device foundation model's context window</em>.</p></li>
-  <li><p id="b5-fn" class="footnote">[b5] Apple Developer Documentation, <em>Improving the safety of generative model output</em>. <a href="https://developer.apple.com/documentation/FoundationModels/improving-the-safety-of-generative-model-output">developer.apple.com/documentation/FoundationModels/improving-the-safety-of-generative-model-output</a> &mdash; not yet verified at full-text level; details to be confirmed against Apple's article during next research pass.</p></li>
-  <li><p id="b6-fn" class="footnote">[b6] Joint statement from Google and Apple, <em>A new chapter for Siri</em>. <a href="https://blog.google/company-news/inside-google/company-announcements/joint-statement-google-apple/">blog.google/company-news/inside-google/company-announcements/joint-statement-google-apple/</a> &mdash; January 12, 2026.</p></li>
-  <li><p id="b7-fn" class="footnote">[b7] Reuters, <em>Apple, Google strike Gemini deal for revamped Siri</em>. <a href="https://www.reuters.com/business/google-apple-enter-into-multi-year-ai-deal-gemini-models-2026-01-12/">reuters.com/business/google-apple-enter-into-multi-year-ai-deal-gemini-models-2026-01-12/</a> &mdash; January 12, 2026.</p></li>
-  <li><hr></li>
-  <li><h2>Part C &mdash; Third-Party API Integration (Anthropic Claude)</h2></li>
-  <li><p>When the on-device Foundation Models framework can't handle what your app needs &mdash; typically because the model is not suited for the use case (basic math, code generation, complex logical reasoning per Apple's own guidance), or because you need a context window larger than 4,096 tokens, or because you want a specific vendor's model &mdash; you call out to a third-party API. This part walks the reference implementation against Anthropic's Claude API.</p></li>
-  <li><p>The avoid-list from Part B (arithmetic and counting, code generation, multi-step logical or spatial reasoning) maps directly onto where Part C earns its place: when the on-device model can't, a third-party API can. The reference implementation below is what an app reaches for in those cases.</p></li>
-  <li><p>Part C covers registering an Anthropic Claude API account and getting an API key, sending a message to Claude from an iOS or Mac app using only <code>URLSession</code> and <code>Codable</code>, storing the API key in the Keychain rather than hard-coding it, and building a minimal chat view that streams the assistant's reply as it arrives.</p></li>
-  <li><hr></li>
-  <li><h2>What the Anthropic API Is</h2></li>
-  <li><p>Anthropic's Claude API is an HTTP JSON service. You POST a request describing the conversation so far; you receive a JSON response containing Claude's next message. No special SDK is required -- <code>URLSession</code> and <code>Codable</code> are enough.</p></li>
-  <li><h3>Getting an API Key</h3></li>
-  <li><ol class="body-list"><li>Sign up at <code>console.anthropic.com</code>.</li><li>Fund the account or use the free tier's trial credits.</li><li>Create an API key from the Keys section. Copy it once; Anthropic will not show it again.</li></ol></li>
-  <li><p>Treat the key like a password. Never commit it to Git, never paste it in chat, never embed it in client-side code that ships to end users (see the "Production" note at the end of the chapter).</p></li>
-  <li><hr></li>
-  <li><h2>The Request Shape</h2></li>
-  <li><p>A minimal chat request looks like this:</p></li>
-  <li><pre><code class="lang-json">{
+  </ul>
+  <h3>Sources</h3>
+  <p id="b1-fn" class="footnote">[b1] Apple Developer Documentation, <em>Generating content and performing tasks with Foundation Models</em>. <a href="https://developer.apple.com/documentation/FoundationModels/generating-content-and-performing-tasks-with-foundation-models">developer.apple.com/documentation/FoundationModels/generating-content-and-performing-tasks-with-foundation-models</a> &mdash; verified 2026-04-29.</p>
+  <p id="b2-fn" class="footnote">[b2] Apple Developer Documentation, <em>Generating Swift data structures with guided generation</em>. <a href="https://developer.apple.com/documentation/FoundationModels/generating-swift-data-structures-with-guided-generation">developer.apple.com/documentation/FoundationModels/generating-swift-data-structures-with-guided-generation</a></p>
+  <p id="b3-fn" class="footnote">[b3] Apple Developer Documentation, <em>Expanding generation with tool calling</em>. <a href="https://developer.apple.com/documentation/FoundationModels/expanding-generation-with-tool-calling">developer.apple.com/documentation/FoundationModels/expanding-generation-with-tool-calling</a></p>
+  <p id="b4-fn" class="footnote">[b4] Apple Technical Note, <em>TN3193: Managing the on-device foundation model's context window</em>.</p>
+  <p id="b5-fn" class="footnote">[b5] Apple Developer Documentation, <em>Improving the safety of generative model output</em>. <a href="https://developer.apple.com/documentation/FoundationModels/improving-the-safety-of-generative-model-output">developer.apple.com/documentation/FoundationModels/improving-the-safety-of-generative-model-output</a> &mdash; not yet verified at full-text level; details to be confirmed against Apple's article during next research pass.</p>
+  <p id="b6-fn" class="footnote">[b6] Joint statement from Google and Apple, <em>A new chapter for Siri</em>. <a href="https://blog.google/company-news/inside-google/company-announcements/joint-statement-google-apple/">blog.google/company-news/inside-google/company-announcements/joint-statement-google-apple/</a> &mdash; January 12, 2026.</p>
+  <p id="b7-fn" class="footnote">[b7] Reuters, <em>Apple, Google strike Gemini deal for revamped Siri</em>. <a href="https://www.reuters.com/business/google-apple-enter-into-multi-year-ai-deal-gemini-models-2026-01-12/">reuters.com/business/google-apple-enter-into-multi-year-ai-deal-gemini-models-2026-01-12/</a> &mdash; January 12, 2026.</p>
+  <hr>
+  <h2>Part C &mdash; Third-Party API Integration (Anthropic Claude)</h2>
+  <p>When the on-device Foundation Models framework can't handle what your app needs &mdash; typically because the model is not suited for the use case (basic math, code generation, complex logical reasoning per Apple's own guidance), or because you need a context window larger than 4,096 tokens, or because you want a specific vendor's model &mdash; you call out to a third-party API. This part walks the reference implementation against Anthropic's Claude API.</p>
+  <p>The avoid-list from Part B (arithmetic and counting, code generation, multi-step logical or spatial reasoning) maps directly onto where Part C earns its place: when the on-device model can't, a third-party API can. The reference implementation below is what an app reaches for in those cases.</p>
+  <p>Part C covers registering an Anthropic Claude API account and getting an API key, sending a message to Claude from an iOS or Mac app using only <code>URLSession</code> and <code>Codable</code>, storing the API key in the Keychain rather than hard-coding it, and building a minimal chat view that streams the assistant's reply as it arrives.</p>
+  <hr>
+  <h2>What the Anthropic API Is</h2>
+  <p>Anthropic's Claude API is an HTTP JSON service. You POST a request describing the conversation so far; you receive a JSON response containing Claude's next message. No special SDK is required -- <code>URLSession</code> and <code>Codable</code> are enough.</p>
+  <h3>Getting an API Key</h3>
+  <ol class="body-list"><li>Sign up at <code>console.anthropic.com</code>.</li><li>Fund the account or use the free tier's trial credits.</li><li>Create an API key from the Keys section. Copy it once; Anthropic will not show it again.</li></ol>
+  <p>Treat the key like a password. Never commit it to Git, never paste it in chat, never embed it in client-side code that ships to end users (see the "Production" note at the end of the chapter).</p>
+  <hr>
+  <h2>The Request Shape</h2>
+  <p>A minimal chat request looks like this:</p>
+  <pre><code class="lang-json">{
   "model": "claude-sonnet-4-6",
   "max_tokens": 1024,
   "messages": [
     { "role": "user", "content": "Hello, Claude." }
   ]
-}</code></pre></li>
-  <li><p>Send it as the body of a <code>POST https://api.anthropic.com/v1/messages</code>, with these headers:</p></li>
-  <li><pre><code class="lang-">x-api-key: &lt;your key&gt;
+}</code></pre>
+  <p>Send it as the body of a <code>POST https://api.anthropic.com/v1/messages</code>, with these headers:</p>
+  <pre><code class="lang-">x-api-key: &lt;your key&gt;
 anthropic-version: 2023-06-01
-content-type: application/json</code></pre></li>
-  <li><p>The response is JSON containing Claude's reply.</p></li>
-  <li><hr></li>
-  <li><h2>A Minimal Swift Client</h2></li>
-  <li><h3>The Codable Types</h3></li>
-  <li><pre><code class="lang-swift">struct ChatRequest: Codable {
+content-type: application/json</code></pre>
+  <p>The response is JSON containing Claude's reply.</p>
+  <hr>
+  <h2>A Minimal Swift Client</h2>
+  <h3>The Codable Types</h3>
+  <pre><code class="lang-swift">struct ChatRequest: Codable {
     let model: String
     let max_tokens: Int
     let messages: [Message]
@@ -363,9 +283,9 @@ struct ChatResponse: Codable {
         let type: String   // "text"
         let text: String
     }
-}</code></pre></li>
-  <li><h3>The Call</h3></li>
-  <li><pre><code class="lang-swift">import Foundation
+}</code></pre>
+  <h3>The Call</h3>
+  <pre><code class="lang-swift">import Foundation
 
 enum ChatError: Error {
     case badStatus(Int, String)
@@ -398,25 +318,25 @@ func send(_ history: [Message], apiKey: String) async throws -&gt; String {
         throw ChatError.noText
     }
     return text
-}</code></pre></li>
-  <li><p>Usage:</p></li>
-  <li><pre><code class="lang-swift">Task {
+}</code></pre>
+  <p>Usage:</p>
+  <pre><code class="lang-swift">Task {
     let reply = try await send(
         [Message(role: "user", content: "Summarize the Gettysburg Address in one sentence.")],
         apiKey: "sk-ant-..."
     )
     print(reply)
-}</code></pre></li>
-  <li><p>That covers the non-streaming path. Streaming, multi-turn, and tool-use features build on this base.</p></li>
-  <li><hr></li>
-  <li><h2>Storing the API Key Safely</h2></li>
-  <li><h3>Do Not Hard-Code It</h3></li>
-  <li><pre><code class="lang-swift">let apiKey = "sk-ant-ExamplePlease"   // ships in your binary</code></pre></li>
-  <li><p>Anyone who unzips your app bundle can read the binary's strings and pull the key. A hard-coded key in a shipped app is the same as a published key.</p></li>
-  <li><h3>The Keychain -- For User-Provided Keys</h3></li>
-  <li><p>The safest pattern for a user-brings-their-own-key app: have the user paste their key into a settings view; store it in the Keychain; read it at call time.</p></li>
-  <li><p>Minimal Keychain wrapper:</p></li>
-  <li><pre><code class="lang-swift">import Security
+}</code></pre>
+  <p>That covers the non-streaming path. Streaming, multi-turn, and tool-use features build on this base.</p>
+  <hr>
+  <h2>Storing the API Key Safely</h2>
+  <h3>Do Not Hard-Code It</h3>
+  <pre><code class="lang-swift">let apiKey = "sk-ant-ExamplePlease"   // ships in your binary</code></pre>
+  <p>Anyone who unzips your app bundle can read the binary's strings and pull the key. A hard-coded key in a shipped app is the same as a published key.</p>
+  <h3>The Keychain -- For User-Provided Keys</h3>
+  <p>The safest pattern for a user-brings-their-own-key app: have the user paste their key into a settings view; store it in the Keychain; read it at call time.</p>
+  <p>Minimal Keychain wrapper:</p>
+  <pre><code class="lang-swift">import Security
 
 enum Keychain {
     private static let service = "com.yourname.YourApp"
@@ -452,18 +372,18 @@ enum Keychain {
         }
         return str
     }
-}</code></pre></li>
-  <li><p>Save once when the user enters the key:</p></li>
-  <li><pre><code class="lang-swift">try Keychain.save(userEnteredKey, for: "anthropicAPIKey")</code></pre></li>
-  <li><p>Load at call time:</p></li>
-  <li><pre><code class="lang-swift">guard let key = Keychain.load("anthropicAPIKey") else {
+}</code></pre>
+  <p>Save once when the user enters the key:</p>
+  <pre><code class="lang-swift">try Keychain.save(userEnteredKey, for: "anthropicAPIKey")</code></pre>
+  <p>Load at call time:</p>
+  <pre><code class="lang-swift">guard let key = Keychain.load("anthropicAPIKey") else {
     // prompt the user to enter it
     return
 }
-let reply = try await send(messages, apiKey: key)</code></pre></li>
-  <li><hr></li>
-  <li><h2>A Minimal Chat View</h2></li>
-  <li><pre><code class="lang-swift">import SwiftUI
+let reply = try await send(messages, apiKey: key)</code></pre>
+  <hr>
+  <h2>A Minimal Chat View</h2>
+  <pre><code class="lang-swift">import SwiftUI
 
 struct ChatView: View {
     @State private var history: [Message] = []
@@ -538,12 +458,12 @@ enum SwiftReference26 {
         // The `send` function defined earlier in the chapter.
         try await Claudes_X26_Swift6_Bible.send(history, apiKey: apiKey)
     }
-}</code></pre></li>
-  <li><p>Run it. Type a message, tap Send, wait a second or two, Claude's reply appears in a gray bubble. Every message so far is appended to <code>history</code> and re-sent on the next call, giving the model the running context.</p></li>
-  <li><hr></li>
-  <li><h2>Streaming Responses</h2></li>
-  <li><p>When the reply is long, waiting for the full JSON to arrive feels slow. Anthropic supports Server-Sent Events streaming. You pass <code>"stream": true</code> in the request, and the response is a sequence of events you read as they arrive.</p></li>
-  <li><pre><code class="lang-swift">var request = URLRequest(url: URL(string: "https://api.anthropic.com/v1/messages")!)
+}</code></pre>
+  <p>Run it. Type a message, tap Send, wait a second or two, Claude's reply appears in a gray bubble. Every message so far is appended to <code>history</code> and re-sent on the next call, giving the model the running context.</p>
+  <hr>
+  <h2>Streaming Responses</h2>
+  <p>When the reply is long, waiting for the full JSON to arrive feels slow. Anthropic supports Server-Sent Events streaming. You pass <code>"stream": true</code> in the request, and the response is a sequence of events you read as they arrive.</p>
+  <pre><code class="lang-swift">var request = URLRequest(url: URL(string: "https://api.anthropic.com/v1/messages")!)
 request.httpMethod = "POST"
 request.setValue(apiKey, forHTTPHeaderField: "x-api-key")
 request.setValue("2023-06-01", forHTTPHeaderField: "anthropic-version")
@@ -566,15 +486,15 @@ for try await line in bytes.lines {
         let json = String(line.dropFirst("data: ".count))
         // Parse and append any "text_delta" content to the assistant's message on screen.
     }
-}</code></pre></li>
-  <li><p>The UI binding pattern: hold the assistant's growing text in a <code>@State</code> string, append each delta as it arrives, and SwiftUI repaints the bubble on every update. The user sees Claude "typing" in real time.</p></li>
-  <li><hr></li>
-  <li><h2>Production Notes</h2></li>
-  <li><ul><li><strong>Don't ship your own API key in a client app.</strong> For apps where you (not the user) are paying for inference, proxy through a server you control. The server holds the key; the app calls your server. This gives you rate limiting, per-user auth, and a way to rotate the key without re-releasing the app.</li><li><strong>User-brings-their-own-key apps</strong> (the pattern in this chapter) are fine for hobby and internal-tool apps. Store the key in Keychain as shown.</li><li><strong>Check the model catalog before shipping.</strong> Anthropic retires older models on a schedule; link to <code>docs.anthropic.com</code> in your app's help so users know which model is current.</li><li><strong>Budget for it.</strong> The API bills per input + output token. A long conversation with a large <code>max_tokens</code> setting can run up a meaningful bill without warning. Show the user the current month-to-date cost if your app supports it.</li></ul></li>
-  <li><hr></li>
-  <li><h2>Chapter Mini-Example -- Settings Screen for the API Key</h2></li>
-  <li><p>A place for users to paste their key and stash it in the Keychain:</p></li>
-  <li><pre><code class="lang-swift">import SwiftUI
+}</code></pre>
+  <p>The UI binding pattern: hold the assistant's growing text in a <code>@State</code> string, append each delta as it arrives, and SwiftUI repaints the bubble on every update. The user sees Claude "typing" in real time.</p>
+  <hr>
+  <h2>Production Notes</h2>
+  <ul><li><strong>Don't ship your own API key in a client app.</strong> For apps where you (not the user) are paying for inference, proxy through a server you control. The server holds the key; the app calls your server. This gives you rate limiting, per-user auth, and a way to rotate the key without re-releasing the app.</li><li><strong>User-brings-their-own-key apps</strong> (the pattern in this chapter) are fine for hobby and internal-tool apps. Store the key in Keychain as shown.</li><li><strong>Check the model catalog before shipping.</strong> Anthropic retires older models on a schedule; link to <code>docs.anthropic.com</code> in your app's help so users know which model is current.</li><li><strong>Budget for it.</strong> The API bills per input + output token. A long conversation with a large <code>max_tokens</code> setting can run up a meaningful bill without warning. Show the user the current month-to-date cost if your app supports it.</li></ul>
+  <hr>
+  <h2>Chapter Mini-Example -- Settings Screen for the API Key</h2>
+  <p>A place for users to paste their key and stash it in the Keychain:</p>
+  <pre><code class="lang-swift">import SwiftUI
 
 struct SettingsView: View {
     @State private var keyField = ""
@@ -604,15 +524,24 @@ struct SettingsView: View {
         }
         .navigationTitle("Settings")
     }
-}</code></pre></li>
-  <li><p>The user pastes, the app keychains, the <code>ChatView</code> reads it back, and you have a real, working chat app talking to a real model.</p></li>
-  <li><hr></li>
-  <li><h2>End of Part VI</h2></li>
-  <li><p>The modern toolchain covered across Part VI: version control, a remote, and a live AI backend reachable in a few lines of Swift. Appendices A through D walk through four complete companion apps that exercise the patterns covered across all six Parts.</p></li>
-</ol>
-</div>
+}</code></pre>
+  <p>The user pastes, the app keychains, the <code>ChatView</code> reads it back, and you have a real, working chat app talking to a real model.</p>
+  <hr>
+  <h2>End of Part VI</h2>
+  <p>The modern toolchain covered across Part VI: version control, a remote, and a live AI backend reachable in a few lines of Swift. Appendices A through D walk through four complete companion apps that exercise the patterns covered across all six Parts.</p>
+  <hr>
+  <h2>Further Reading &mdash; WWDC Sessions</h2>
+  <p>This book is a passive resource. When you want deeper coverage of on-device language models or the broader Apple Intelligence platform, the WWDC sessions below are Apple's source material. Watch the relevant one for fuller context and code-along walkthroughs.</p>
+  <ul>
+    <li>WWDC25 / 286, <em>Meet the Foundation Models framework</em> &mdash; <a href="https://developer.apple.com/videos/play/wwdc2025/286/">developer.apple.com/videos/play/wwdc2025/286/</a>. The on-device language model API, the <code>@Generable</code> macro, and tool calling from Swift.</li>
+    <li>WWDC25 / 301, <em>Deep dive into the Foundation Models framework</em> &mdash; <a href="https://developer.apple.com/videos/play/wwdc2025/301/">developer.apple.com/videos/play/wwdc2025/301/</a>. Streaming responses, snapshot generation, and conversation patterns that go beyond the basic intro.</li>
+    <li>WWDC25 / 248, <em>Explore prompt design &amp; safety for on-device foundation models</em> &mdash; <a href="https://developer.apple.com/videos/play/wwdc2025/248/">developer.apple.com/videos/play/wwdc2025/248/</a>. How to phrase prompts the on-device model actually understands and the safety boundaries Apple enforces.</li>
+    <li>WWDC25 / 259, <em>Code-along: Bring on-device AI to your app using the Foundation Models framework</em> &mdash; <a href="https://developer.apple.com/videos/play/wwdc2025/259/">developer.apple.com/videos/play/wwdc2025/259/</a>. End-to-end walkthrough of wiring the framework into a real SwiftUI app.</li>
+    <li>WWDC25 / 265, <em>Dive deeper into Writing Tools</em> &mdash; <a href="https://developer.apple.com/videos/play/wwdc2025/265/">developer.apple.com/videos/play/wwdc2025/265/</a>. System-provided rewriting and summarization that overlap with what a chatbot integration might otherwise reimplement.</li>
+    <li>WWDC25 / 360, <em>Discover machine learning &amp; AI frameworks on Apple platforms</em> &mdash; <a href="https://developer.apple.com/videos/play/wwdc2025/360/">developer.apple.com/videos/play/wwdc2025/360/</a>. Map of every ML / AI surface on the platform &mdash; helps decide whether Foundation Models, CoreML, or MLX is the right tool.</li>
+  </ul>
 
-<footer class="page"><div class="row-nav"><div class="prev"><a href="Book-21-Git-And-GitHub.html">&larr; Book 21: Git &amp; GitHub</a></div><div class="pos">Book 22 AI Chatbot Integration</div><div class="next"><a href="../Part-VII-Dedicated-Build-Alongs/BuildAlong-00-Claudes-X26-Swift6-Bible-Inkwell/BuildAlong-00-Claudes-X26-Swift6-Bible-Inkwell.html">Reader App: Claude's X26 Swift6 Bible (Inkwell ... &rarr;</a></div></div></footer>
+</div>
 
 </body>
 </html>

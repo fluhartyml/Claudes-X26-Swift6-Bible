@@ -4,113 +4,33 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Book 10: TextEditor And AttributedString &mdash; Claude's Xcode 26 Swift Bible</title>
-<style>
-:root {
-  --bg: #000000;
-  --fg: #FFB000;
-  --bright: #FFD060;
-  --dim: #996600;
-  --codebg: #1a0d00;
-  --border: #664500;
-  --gutter: #4a3300;
-  --headerbg: #0a0600;
-}
-* { box-sizing: border-box; }
-html, body { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; height: 100%; }
-body {
-  background: var(--bg);
-  color: var(--fg);
-  font-family: "FiraCode Nerd Font Mono", "FiraCode Nerd Font", "Fira Code", "Menlo", "Courier New", monospace;
-  font-size: 18pt;
-  line-height: 1.55;
-  margin: 0;
-  padding: 0;
-  text-shadow: 0 0 1px rgba(255, 176, 0, 0.35);
-  display: flex;
-  flex-direction: column;
-}
-header.page, footer.page {
-  background: var(--headerbg);
-  color: var(--dim);
-  padding: 0.55rem 1.1rem;
-  font-size: 13pt;
-  display: flex;
-  flex-direction: column;
-  gap: 0.2rem;
-  flex: 0 0 auto;
-  z-index: 10;
-}
-header.page { border-bottom: 1px solid var(--border); }
-footer.page { border-top: 1px solid var(--border); padding-bottom: calc(0.55rem + env(safe-area-inset-bottom)); }
-header.page .path, footer.page .path { color: var(--fg); word-break: break-all; overflow-wrap: break-word; }
-header.page .pos, footer.page .pos { color: var(--bright); }
-/* The middle scrolls; header and footer stay put. */
-.content { flex: 1 1 auto; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 0.8rem 1rem 2rem 1rem; max-width: 1100px; margin: 0 auto; width: 100%; }
-h1 { color: var(--bright); font-weight: normal; font-size: 26pt; margin: 0.6rem 0 1rem 0; }
-h2 { color: var(--bright); font-weight: normal; font-size: 20pt; border-bottom: 1px solid var(--border); padding-bottom: 0.3rem; margin-top: 1.5rem; counter-set: h3 0 para 0; counter-increment: h2; }
-h2::before { content: counter(h2) ". "; color: var(--fg); }
-h3 { color: var(--bright); font-weight: normal; font-size: 18pt; margin-top: 1rem; counter-set: para 0; counter-increment: h3; }
-h3::before { content: counter(h2) "." counter(h3) " "; color: var(--fg); }
-p { margin: 0.4rem 0; counter-increment: para; }
-p::before { content: counter(h2) "." counter(h3) "." counter(para) " "; color: var(--dim); font-size: 13pt; margin-right: 0.4em; }
-code { color: var(--bright); background: var(--codebg); padding: 0.08em 0.35em; border: 1px solid #3a2400; border-radius: 3px; font-size: 0.92em; }
-pre { background: var(--codebg); border: 1px solid #3a2400; border-radius: 4px; padding: 0.7rem 0.9rem; overflow-x: auto; font-size: 14pt; }
-pre code { background: transparent; border: 0; padding: 0; }
-ul, ol.body-list { margin: 0.4rem 0 0.4rem 1.4rem; padding: 0; }
-a { color: var(--bright); font-weight: bold; text-decoration: none; border-bottom: 1px dotted var(--dim); }
-a:hover { background: #332200; }
-strong { color: var(--bright); }
-em { color: var(--fg); font-style: italic; }
-hr { border: 0; border-top: 1px solid var(--border); margin: 1rem 0; }
-ol.lines { list-style: none; counter-reset: line h2 h3 para; padding: 0; margin: 0; }
-ol.lines > li { counter-increment: line; padding: 0.15rem 0 0.15rem 3.6rem; position: relative; min-height: 1.2em; }
-ol.lines > li::before { content: counter(line); position: absolute; left: 0; top: 0.25rem; width: 2.8rem; text-align: right; color: var(--gutter); font-size: 13pt; padding-right: 0.5rem; border-right: 1px solid #2a1e00; }
-ol.lines > li > p, ol.lines > li > h2, ol.lines > li > h3, ol.lines > li > ul, ol.lines > li > ol, ol.lines > li > pre, ol.lines > li > hr { margin: 0; }
-.scope-note { border-left: 3px solid var(--bright); padding: 0.7rem 1rem; background: #140c00; margin: 0.6rem 0; color: var(--bright); }
-.nav { display: flex; gap: 0.9rem; flex-wrap: wrap; margin-top: 0.8rem; font-size: 14pt; }
-
-
-footer.page { flex-direction: column; gap: 0.4rem; }
-footer.page .row-nav { display: flex; flex-direction: row; justify-content: space-between; align-items: center; gap: 0.5rem; }
-footer.page .row-nav .prev, footer.page .row-nav .next { flex: 1; min-width: 0; }
-footer.page .row-nav .prev { text-align: left; }
-footer.page .row-nav .next { text-align: right; }
-footer.page .row-nav .pos { flex: 0 0 auto; text-align: center; color: var(--bright); font-weight: bold; }
-footer.page .row-nav a { color: var(--bright); font-weight: bold; text-decoration: none; border-bottom: 1px dotted var(--dim); }
-footer.page .row-nav a:hover { background: #332200; }
-footer.page .row-nav .nav-empty { color: var(--gutter); font-style: italic; }
-</style>
 </head>
 <body>
 
-<header class="page">
-  <div class="path">Part III The User Interface/Book 10 TextEditor And AttributedString</div>
-</header>
-
 <div class="content">
-<ol class="lines">
-  <li><h1>Book 10: TextEditor and AttributedString</h1></li>
-  <li><h2>Live Reference: QuickNote (TextEditor) + Inkwell (AttributedString)</h2></li>
-  <li><div class="scope-note"><strong>QuickNote</strong> uses <code>TextEditor</code> for the note body &mdash; the chapter's central pattern in production form. The note body is a multi-line free-form text area that grows with the keyboard, persists as a SwiftData string, and reads back identically across the app and its home-screen widget. Source: <a href="https://github.com/fluhartyml/QuickNote">github.com/fluhartyml/QuickNote</a>. <strong>Inkwell</strong> uses <code>AttributedString</code> to render Lexicon Quick-Define popups &mdash; when the reader taps any tinted Swift identifier in a source-mirror code block (in the Under the Hood tab), the popup that appears uses an attributed-string-driven layout to bold the headword, italicize the definition, and link related identifiers. The book renders itself with attributed strings at production scale. See Build-Along 00 (the meta chapter) for the full Inkwell architecture.</div></li>
-  <li><h2>TextEditor</h2></li>
-  <li><p><code>TextEditor</code> is SwiftUI's multi-line text input. Use it when <code>TextField</code> with <code>axis: .vertical</code> is not enough.</p></li>
-  <li><pre><code class="lang-swift">@State private var notes = ""
+
+  <h1>Book 10: TextEditor and AttributedString</h1>
+  <h2>Live Reference: QuickNote (TextEditor) + Claudes X26 Swift6 Bible (AttributedString)</h2>
+  <div class="scope-note"><strong>QuickNote</strong> uses <code>TextEditor</code> for the note body &mdash; the chapter's central pattern in production form. The note body is a multi-line free-form text area that grows with the keyboard, persists as a SwiftData string, and reads back identically across the app and its home-screen widget. Source: <a href="https://github.com/fluhartyml/QuickNote">github.com/fluhartyml/QuickNote</a>. <strong>Claudes X26 Swift6 Bible</strong> uses <code>AttributedString</code> to render Lexicon Quick-Define popups &mdash; on tap of a tinted Swift identifier in a source-mirror code block, the popup uses an attributed-string-driven layout to bold the headword, italicize the definition, and link related identifiers. Source: <a href="https://github.com/fluhartyml/Claudes-X26-Swift6-Bible">github.com/fluhartyml/Claudes-X26-Swift6-Bible</a>. See Build-Along 00 for the full architecture.</div>
+  <h2>TextEditor</h2>
+  <p><code>TextEditor</code> is SwiftUI's multi-line text input. Use it when <code>TextField</code> with <code>axis: .vertical</code> is not enough.</p>
+  <pre><code class="lang-swift">@State private var notes = ""
 
 TextEditor(text: $notes)
-    .frame(height: 200)</code></pre></li>
-  <li><h3>Styling TextEditor</h3></li>
-  <li><p>TextEditor has a default background and some built-in padding. You will almost always want to customize it.</p></li>
-  <li><pre><code class="lang-swift">TextEditor(text: $notes)
+    .frame(height: 200)</code></pre>
+  <h3>Styling TextEditor</h3>
+  <p>TextEditor has a default background and some built-in padding. You will almost always want to customize it.</p>
+  <pre><code class="lang-swift">TextEditor(text: $notes)
     .font(.body)
     .foregroundStyle(.primary)
     .scrollContentBackground(.hidden) // remove default background
     .background(.ultraThinMaterial)
     .clipShape(.rect(cornerRadius: 12))
-    .frame(minHeight: 100, maxHeight: 300)</code></pre></li>
-  <li><p><strong>Note:</strong> Use <code>.scrollContentBackground(.hidden)</code> to remove the default background, then apply your own <code>.background()</code>.</p></li>
-  <li><h3>Placeholder Text</h3></li>
-  <li><p>TextEditor has no built-in placeholder. Overlay one yourself:</p></li>
-  <li><pre><code class="lang-swift">ZStack(alignment: .topLeading) {
+    .frame(minHeight: 100, maxHeight: 300)</code></pre>
+  <p><strong>Note:</strong> Use <code>.scrollContentBackground(.hidden)</code> to remove the default background, then apply your own <code>.background()</code>.</p>
+  <h3>Placeholder Text</h3>
+  <p>TextEditor has no built-in placeholder. Overlay one yourself:</p>
+  <pre><code class="lang-swift">ZStack(alignment: .topLeading) {
     if notes.isEmpty {
         Text("Write your notes here...")
             .foregroundStyle(.tertiary)
@@ -120,106 +40,119 @@ TextEditor(text: $notes)
     }
     TextEditor(text: $notes)
         .scrollContentBackground(.hidden)
-}</code></pre></li>
-  <li><h3>Line Limit</h3></li>
-  <li><pre><code class="lang-swift">TextEditor(text: $notes)
-    .lineLimit(5...10) // constrain vertical growth</code></pre></li>
-  <li><h3>Disabling Editing</h3></li>
-  <li><pre><code class="lang-swift">TextEditor(text: .constant(readOnlyText))
+}</code></pre>
+  <h3>Line Limit</h3>
+  <pre><code class="lang-swift">TextEditor(text: $notes)
+    .lineLimit(5...10) // constrain vertical growth</code></pre>
+  <h3>Disabling Editing</h3>
+  <pre><code class="lang-swift">TextEditor(text: .constant(readOnlyText))
     // or
 TextEditor(text: $notes)
-    .disabled(true)</code></pre></li>
-  <li><h3>Find and Replace</h3></li>
-  <li><p>Enable the system find bar (Cmd+F on Mac, find UI on iPad):</p></li>
-  <li><pre><code class="lang-swift">@State private var isSearchPresented = false
+    .disabled(true)</code></pre>
+  <h3>Find and Replace</h3>
+  <p>Enable the system find bar (Cmd+F on Mac, find UI on iPad):</p>
+  <pre><code class="lang-swift">@State private var isSearchPresented = false
 
 TextEditor(text: $notes)
-    .findNavigator(isPresented: $isSearchPresented)</code></pre></li>
-  <li><p>Toggle <code>isSearchPresented</code> from a button or toolbar item to show/hide find and replace:</p></li>
-  <li><pre><code class="lang-swift">.toolbar {
+    .findNavigator(isPresented: $isSearchPresented)</code></pre>
+  <p>Toggle <code>isSearchPresented</code> from a button or toolbar item to show/hide find and replace:</p>
+  <pre><code class="lang-swift">.toolbar {
     Button("Find", systemImage: "magnifyingglass") {
         isSearchPresented.toggle()
     }
-}</code></pre></li>
-  <li><p><strong>Watch out:</strong> <code>.findNavigator</code> works on TextEditor, List, and Table. It does not work on plain <code>Text</code> views.</p></li>
-  <li><h3>Tracking Changes</h3></li>
-  <li><p>Use <code>onChange</code> to react to text edits:</p></li>
-  <li><pre><code class="lang-swift">TextEditor(text: $notes)
+}</code></pre>
+  <p><strong>Watch out:</strong> <code>.findNavigator</code> works on TextEditor, List, and Table. It does not work on plain <code>Text</code> views.</p>
+  <h3>Tracking Changes</h3>
+  <p>Use <code>onChange</code> to react to text edits:</p>
+  <pre><code class="lang-swift">TextEditor(text: $notes)
     .onChange(of: notes) { oldValue, newValue in
         wordCount = newValue.split(separator: " ").count
         hasUnsavedChanges = true
-    }</code></pre></li>
-  <li><p>The two-parameter <code>onChange</code> closure (old, new) is the current API. The single-parameter version is deprecated.</p></li>
-  <li><hr></li>
-  <li><h2>Text Selection</h2></li>
-  <li><p>Control whether text is selectable:</p></li>
-  <li><pre><code class="lang-swift">Text("Read-only but selectable")
-    .textSelection(.enabled)</code></pre></li>
-  <li><p>Apply to a container to enable selection for all text inside:</p></li>
-  <li><pre><code class="lang-swift">VStack {
+    }</code></pre>
+  <p>The two-parameter <code>onChange</code> closure (old, new) is the current API. The single-parameter version is deprecated.</p>
+  <hr>
+  <h2>Text Selection</h2>
+  <p>Control whether text is selectable:</p>
+  <pre><code class="lang-swift">Text("Read-only but selectable")
+    .textSelection(.enabled)</code></pre>
+  <p>Apply to a container to enable selection for all text inside:</p>
+  <pre><code class="lang-swift">VStack {
     Text("First line")
     Text("Second line")
     Text("Third line")
 }
-.textSelection(.enabled)</code></pre></li>
-  <li><hr></li>
-  <li><h2>AttributedString</h2></li>
-  <li><p><code>AttributedString</code> is Swift's native attributed string type. It replaces most uses of <code>NSAttributedString</code> in SwiftUI.</p></li>
-  <li><h3>Creating an AttributedString</h3></li>
-  <li><pre><code class="lang-swift">var str = AttributedString("Hello, world")
+.textSelection(.enabled)</code></pre>
+  <hr>
+  <h2>AttributedString</h2>
+  <p><code>AttributedString</code> is Swift's native attributed string type. It replaces most uses of <code>NSAttributedString</code> in SwiftUI.</p>
+  <h3>Creating an AttributedString</h3>
+  <pre><code class="lang-swift">var str = AttributedString("Hello, world")
 str.font = .title
 str.foregroundColor = .blue
 str.underlineStyle = .single
 
-Text(str)</code></pre></li>
-  <li><h3>Styling Ranges</h3></li>
-  <li><pre><code class="lang-swift">var str = AttributedString("Hello, bold world")
+Text(str)</code></pre>
+  <h3>Styling Ranges</h3>
+  <pre><code class="lang-swift">var str = AttributedString("Hello, bold world")
 if let range = str.range(of: "bold") {
     str[range].font = .body.bold()
     str[range].foregroundColor = .red
 }
-Text(str)</code></pre></li>
-  <li><h3>Combining AttributedStrings</h3></li>
-  <li><pre><code class="lang-swift">var greeting = AttributedString("Hello ")
+Text(str)</code></pre>
+  <h3>Combining AttributedStrings</h3>
+  <pre><code class="lang-swift">var greeting = AttributedString("Hello ")
 greeting.font = .headline
 
 var name = AttributedString("Michael")
 name.font = .headline
 name.foregroundColor = .blue
 
-Text(greeting + name)</code></pre></li>
-  <li><h3>Available Attributes</h3></li>
-  <li><p>Common attributes you can set on <code>AttributedString</code> or its ranges:</p></li>
-  <li><p>| Attribute | Type | Example | |---|---|---| | <code>.font</code> | <code>Font</code> | <code>.body</code>, <code>.title</code> | | <code>.foregroundColor</code> | <code>Color</code> | <code>.red</code>, <code>.blue</code> | | <code>.backgroundColor</code> | <code>Color</code> | <code>.yellow</code> | | <code>.strikethroughStyle</code> | <code>Text.LineStyle</code> | <code>.single</code>, <code>.double</code> | | <code>.underlineStyle</code> | <code>Text.LineStyle</code> | <code>.single</code> | | <code>.underlineColor</code> | <code>Color</code> | <code>.red</code> | | <code>.kern</code> | <code>CGFloat</code> | <code>2.0</code> | | <code>.tracking</code> | <code>CGFloat</code> | <code>1.5</code> | | <code>.baselineOffset</code> | <code>CGFloat</code> | <code>5.0</code> | | <code>.link</code> | <code>URL</code> | <code>URL(string: "...")</code> |</p></li>
-  <li><hr></li>
-  <li><h2>Markdown Parsing with AttributedString</h2></li>
-  <li><p><code>AttributedString</code> can parse Markdown directly:</p></li>
-  <li><pre><code class="lang-swift">let markdown = "This is **bold**, this is *italic*, and this is a [link](https://example.com)"
+Text(greeting + name)</code></pre>
+  <h3>Available Attributes</h3>
+  <p>Common attributes you can set on <code>AttributedString</code> or its ranges:</p>
+  <table>
+  <thead><tr><th>Attribute</th><th>Type</th><th>Example</th><th></th></tr></thead>
+  <tbody>
+  <tr><td><code>.font</code></td><td><code>Font</code></td><td><code>.body</code>, <code>.title</code></td><td></td></tr>
+  <tr><td><code>.foregroundColor</code></td><td><code>Color</code></td><td><code>.red</code>, <code>.blue</code></td><td></td></tr>
+  <tr><td><code>.backgroundColor</code></td><td><code>Color</code></td><td><code>.yellow</code></td><td></td></tr>
+  <tr><td><code>.strikethroughStyle</code></td><td><code>Text.LineStyle</code></td><td><code>.single</code>, <code>.double</code></td><td></td></tr>
+  <tr><td><code>.underlineStyle</code></td><td><code>Text.LineStyle</code></td><td><code>.single</code></td><td></td></tr>
+  <tr><td><code>.underlineColor</code></td><td><code>Color</code></td><td><code>.red</code></td><td></td></tr>
+  <tr><td><code>.kern</code></td><td><code>CGFloat</code></td><td><code>2.0</code></td><td></td></tr>
+  <tr><td><code>.tracking</code></td><td><code>CGFloat</code></td><td><code>1.5</code></td><td></td></tr>
+  <tr><td><code>.baselineOffset</code></td><td><code>CGFloat</code></td><td><code>5.0</code></td><td></td></tr>
+  </tbody>
+  </table>
+  <hr>
+  <h2>Markdown Parsing with AttributedString</h2>
+  <p><code>AttributedString</code> can parse Markdown directly:</p>
+  <pre><code class="lang-swift">let markdown = "This is **bold**, this is *italic*, and this is a [link](https://example.com)"
 
 if let attributed = try? AttributedString(markdown: markdown) {
     Text(attributed)
-}</code></pre></li>
-  <li><h3>Parsing Options</h3></li>
-  <li><pre><code class="lang-swift">let options = AttributedString.MarkdownParsingOptions(
+}</code></pre>
+  <h3>Parsing Options</h3>
+  <pre><code class="lang-swift">let options = AttributedString.MarkdownParsingOptions(
     interpretedSyntax: .inlineOnlyPreservingWhitespace
 )
 
-let str = try? AttributedString(markdown: source, options: options)</code></pre></li>
-  <li><p>Interpreted syntax options:</p></li>
-  <li><ul><li><code>.inlineOnlyPreservingWhitespace</code> -- inline markdown only, keeps whitespace as-is (best for single-line UI text)</li><li><code>.full</code> -- full CommonMark parsing including block elements</li></ul></li>
-  <li><h3>Handling Parse Failures</h3></li>
-  <li><pre><code class="lang-swift">do {
+let str = try? AttributedString(markdown: source, options: options)</code></pre>
+  <p>Interpreted syntax options:</p>
+  <ul><li><code>.inlineOnlyPreservingWhitespace</code> -- inline markdown only, keeps whitespace as-is (best for single-line UI text)</li><li><code>.full</code> -- full CommonMark parsing including block elements</li></ul>
+  <h3>Handling Parse Failures</h3>
+  <pre><code class="lang-swift">do {
     let attributed = try AttributedString(markdown: rawText)
     Text(attributed)
 } catch {
     Text(rawText) // fall back to plain text
-}</code></pre></li>
-  <li><p><strong>Watch out:</strong> The markdown parser is strict. Malformed markdown throws an error rather than rendering partially. Always have a fallback.</p></li>
-  <li><hr></li>
-  <li><h2>Custom Attributes</h2></li>
-  <li><p>You can define your own attributes for domain-specific styling.</p></li>
-  <li><h3>Define the Attribute</h3></li>
-  <li><pre><code class="lang-swift">enum HighlightAttribute: CodableAttributedStringKey {
+}</code></pre>
+  <p><strong>Watch out:</strong> The markdown parser is strict. Malformed markdown throws an error rather than rendering partially. Always have a fallback.</p>
+  <hr>
+  <h2>Custom Attributes</h2>
+  <p>You can define your own attributes for domain-specific styling.</p>
+  <h3>Define the Attribute</h3>
+  <pre><code class="lang-swift">enum HighlightAttribute: CodableAttributedStringKey {
     typealias Value = Bool
     static let name = "highlight"
 }
@@ -230,13 +163,13 @@ extension AttributeScopes {
     }
 
     var app: AppAttributes.Type { AppAttributes.self }
-}</code></pre></li>
-  <li><h3>Use the Custom Attribute</h3></li>
-  <li><pre><code class="lang-swift">var str = AttributedString("Important note")
-str.highlight = true</code></pre></li>
-  <li><h3>Render with Custom Styling</h3></li>
-  <li><p>Custom attributes do not auto-style in <code>Text</code>. You walk the runs and apply SwiftUI attributes based on your custom ones:</p></li>
-  <li><pre><code class="lang-swift">func styled(_ source: AttributedString) -&gt; AttributedString {
+}</code></pre>
+  <h3>Use the Custom Attribute</h3>
+  <pre><code class="lang-swift">var str = AttributedString("Important note")
+str.highlight = true</code></pre>
+  <h3>Render with Custom Styling</h3>
+  <p>Custom attributes do not auto-style in <code>Text</code>. You walk the runs and apply SwiftUI attributes based on your custom ones:</p>
+  <pre><code class="lang-swift">func styled(_ source: AttributedString) -&gt; AttributedString {
     var result = source
     for run in result.runs {
         if run.highlight == true {
@@ -245,35 +178,35 @@ str.highlight = true</code></pre></li>
         }
     }
     return result
-}</code></pre></li>
-  <li><h3>Walking Runs</h3></li>
-  <li><p><code>AttributedString.runs</code> gives you each contiguous range of uniform attributes:</p></li>
-  <li><pre><code class="lang-swift">for run in attributed.runs {
+}</code></pre>
+  <h3>Walking Runs</h3>
+  <p><code>AttributedString.runs</code> gives you each contiguous range of uniform attributes:</p>
+  <pre><code class="lang-swift">for run in attributed.runs {
     print("Text: \(attributed[run.range].characters)")
     print("Font: \(run.font ?? .body)")
     print("---")
-}</code></pre></li>
-  <li><hr></li>
-  <li><h2>NSAttributedString Bridging</h2></li>
-  <li><p>When you need to work with UIKit APIs or older code:</p></li>
-  <li><h3>AttributedString to NSAttributedString</h3></li>
-  <li><pre><code class="lang-swift">let modern = AttributedString("Hello")
-let legacy = NSAttributedString(modern)</code></pre></li>
-  <li><h3>NSAttributedString to AttributedString</h3></li>
-  <li><pre><code class="lang-swift">let legacy = NSAttributedString(string: "Hello", attributes: [
+}</code></pre>
+  <hr>
+  <h2>NSAttributedString Bridging</h2>
+  <p>When you need to work with UIKit APIs or older code:</p>
+  <h3>AttributedString to NSAttributedString</h3>
+  <pre><code class="lang-swift">let modern = AttributedString("Hello")
+let legacy = NSAttributedString(modern)</code></pre>
+  <h3>NSAttributedString to AttributedString</h3>
+  <pre><code class="lang-swift">let legacy = NSAttributedString(string: "Hello", attributes: [
     .foregroundColor: UIColor.red,
     .font: UIFont.boldSystemFont(ofSize: 18)
 ])
 
 let modern = AttributedString(legacy)
-Text(modern)</code></pre></li>
-  <li><p><strong>Watch out:</strong> Not all <code>NSAttributedString</code> attributes have <code>AttributedString</code> equivalents. UIKit-specific attributes like <code>.paragraphStyle</code> may not translate cleanly. Test the conversion.</p></li>
-  <li><h3>When You Still Need NSAttributedString</h3></li>
-  <li><ul><li>Core Text rendering</li><li>UIKit text views wrapped in <code>UIViewRepresentable</code></li><li>Specific paragraph style control (line height, alignment, tab stops) not yet in <code>AttributedString</code></li></ul></li>
-  <li><hr></li>
-  <li><h2>Practical Patterns</h2></li>
-  <li><h3>Rich Text Display</h3></li>
-  <li><pre><code class="lang-swift">struct RichTextView: View {
+Text(modern)</code></pre>
+  <p><strong>Watch out:</strong> Not all <code>NSAttributedString</code> attributes have <code>AttributedString</code> equivalents. UIKit-specific attributes like <code>.paragraphStyle</code> may not translate cleanly. Test the conversion.</p>
+  <h3>When You Still Need NSAttributedString</h3>
+  <ul><li>Core Text rendering</li><li>UIKit text views wrapped in <code>UIViewRepresentable</code></li><li>Specific paragraph style control (line height, alignment, tab stops) not yet in <code>AttributedString</code></li></ul>
+  <hr>
+  <h2>Practical Patterns</h2>
+  <h3>Rich Text Display</h3>
+  <pre><code class="lang-swift">struct RichTextView: View {
     let markdown: String
 
     var body: some View {
@@ -286,9 +219,9 @@ Text(modern)</code></pre></li>
                 .font(.body)
         }
     }
-}</code></pre></li>
-  <li><h3>Notes Editor with Word Count</h3></li>
-  <li><pre><code class="lang-swift">struct NotesEditor: View {
+}</code></pre>
+  <h3>Notes Editor with Word Count</h3>
+  <pre><code class="lang-swift">struct NotesEditor: View {
     @Binding var text: String
     @State private var wordCount = 0
     @State private var showFind = false
@@ -319,9 +252,9 @@ Text(modern)</code></pre></li>
             }
         }
     }
-}</code></pre></li>
-  <li><h3>Highlightable Log Viewer</h3></li>
-  <li><pre><code class="lang-swift">func highlightErrors(in log: String) -&gt; AttributedString {
+}</code></pre>
+  <h3>Highlightable Log Viewer</h3>
+  <pre><code class="lang-swift">func highlightErrors(in log: String) -&gt; AttributedString {
     var result = AttributedString(log)
 
     let lines = log.components(separatedBy: "\n")
@@ -349,14 +282,32 @@ Text(modern)</code></pre></li>
     }
 
     return result
-}</code></pre></li>
-  <li><hr></li>
-  <li><h2>Quick Reference</h2></li>
-  <li><p>| What | How | |---|---| | Multi-line input | <code>TextEditor(text: $binding)</code> | | Hide default background | <code>.scrollContentBackground(.hidden)</code> | | Find bar | <code>.findNavigator(isPresented: $bool)</code> | | Track changes | <code>.onChange(of: text) { old, new in }</code> | | Parse markdown | <code>try AttributedString(markdown: str)</code> | | Style a range | <code>attributed[range].font = .bold()</code> | | Walk attributes | <code>for run in attributed.runs { }</code> | | Bridge to NSAttributedString | <code>NSAttributedString(attributedString)</code> | | Enable text selection | <code>.textSelection(.enabled)</code> |</p></li>
-</ol>
-</div>
+}</code></pre>
+  <hr>
+  <h2>Quick Reference</h2>
+  <table>
+  <thead><tr><th>What</th><th>How</th><th></th></tr></thead>
+  <tbody>
+  <tr><td>Multi-line input</td><td><code>TextEditor(text: $binding)</code></td><td></td></tr>
+  <tr><td>Hide default background</td><td><code>.scrollContentBackground(.hidden)</code></td><td></td></tr>
+  <tr><td>Find bar</td><td><code>.findNavigator(isPresented: $bool)</code></td><td></td></tr>
+  <tr><td>Track changes</td><td><code>.onChange(of: text) { old, new in }</code></td><td></td></tr>
+  <tr><td>Parse markdown</td><td><code>try AttributedString(markdown: str)</code></td><td></td></tr>
+  <tr><td>Style a range</td><td><code>attributed[range].font = .bold()</code></td><td></td></tr>
+  <tr><td>Walk attributes</td><td><code>for run in attributed.runs { }</code></td><td></td></tr>
+  <tr><td>Bridge to NSAttributedString</td><td><code>NSAttributedString(attributedString)</code></td><td></td></tr>
+  </tbody>
+  </table>
+  <hr>
+  <h2>Further Reading &mdash; WWDC Sessions</h2>
+  <p>This book is a passive resource. When you want deeper coverage of <code>TextEditor</code> and <code>AttributedString</code>, the WWDC sessions below are Apple's source material.</p>
+  <ul>
+    <li>WWDC25 / 280, <em>Code-along: Cook up a rich text experience in SwiftUI with AttributedString</em> &mdash; <a href="https://developer.apple.com/videos/play/wwdc2025/280/">developer.apple.com/videos/play/wwdc2025/280/</a>. End-to-end walkthrough of a SwiftUI rich-text editor.</li>
+    <li>WWDC25 / 285, <em>Meet PaperKit</em> &mdash; <a href="https://developer.apple.com/videos/play/wwdc2025/285/">developer.apple.com/videos/play/wwdc2025/285/</a>. Annotation layer over text and image surfaces &mdash; a natural fit on top of <code>TextEditor</code>.</li>
+    <li>WWDC25 / 265, <em>Dive deeper into Writing Tools</em> &mdash; <a href="https://developer.apple.com/videos/play/wwdc2025/265/">developer.apple.com/videos/play/wwdc2025/265/</a>. The system rewrite / summarize / proofread surfaces that appear automatically inside <code>TextEditor</code>.</li>
+  </ul>
 
-<footer class="page"><div class="row-nav"><div class="prev"><a href="Book-09-Text-And-TextField.html">&larr; Book 9: Text and TextField</a></div><div class="pos">Book 10 TextEditor And AttributedString</div><div class="next"><a href="Book-11-FileManager-And-Documents.html">Book 11: FileManager and Documents &rarr;</a></div></div></footer>
+</div>
 
 </body>
 </html>

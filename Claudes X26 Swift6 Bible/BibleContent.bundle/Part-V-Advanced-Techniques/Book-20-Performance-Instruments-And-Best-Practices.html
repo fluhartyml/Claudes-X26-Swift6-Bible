@@ -4,203 +4,123 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Book 20: Performance Instruments And Best Practices &mdash; Claude's Xcode 26 Swift Bible</title>
-<style>
-:root {
-  --bg: #000000;
-  --fg: #FFB000;
-  --bright: #FFD060;
-  --dim: #996600;
-  --codebg: #1a0d00;
-  --border: #664500;
-  --gutter: #4a3300;
-  --headerbg: #0a0600;
-}
-* { box-sizing: border-box; }
-html, body { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; height: 100%; }
-body {
-  background: var(--bg);
-  color: var(--fg);
-  font-family: "FiraCode Nerd Font Mono", "FiraCode Nerd Font", "Fira Code", "Menlo", "Courier New", monospace;
-  font-size: 18pt;
-  line-height: 1.55;
-  margin: 0;
-  padding: 0;
-  text-shadow: 0 0 1px rgba(255, 176, 0, 0.35);
-  display: flex;
-  flex-direction: column;
-}
-header.page, footer.page {
-  background: var(--headerbg);
-  color: var(--dim);
-  padding: 0.55rem 1.1rem;
-  font-size: 13pt;
-  display: flex;
-  flex-direction: column;
-  gap: 0.2rem;
-  flex: 0 0 auto;
-  z-index: 10;
-}
-header.page { border-bottom: 1px solid var(--border); }
-footer.page { border-top: 1px solid var(--border); padding-bottom: calc(0.55rem + env(safe-area-inset-bottom)); }
-header.page .path, footer.page .path { color: var(--fg); word-break: break-all; overflow-wrap: break-word; }
-header.page .pos, footer.page .pos { color: var(--bright); }
-/* The middle scrolls; header and footer stay put. */
-.content { flex: 1 1 auto; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 0.8rem 1rem 2rem 1rem; max-width: 1100px; margin: 0 auto; width: 100%; }
-h1 { color: var(--bright); font-weight: normal; font-size: 26pt; margin: 0.6rem 0 1rem 0; }
-h2 { color: var(--bright); font-weight: normal; font-size: 20pt; border-bottom: 1px solid var(--border); padding-bottom: 0.3rem; margin-top: 1.5rem; counter-set: h3 0 para 0; counter-increment: h2; }
-h2::before { content: counter(h2) ". "; color: var(--fg); }
-h3 { color: var(--bright); font-weight: normal; font-size: 18pt; margin-top: 1rem; counter-set: para 0; counter-increment: h3; }
-h3::before { content: counter(h2) "." counter(h3) " "; color: var(--fg); }
-p { margin: 0.4rem 0; counter-increment: para; }
-p::before { content: counter(h2) "." counter(h3) "." counter(para) " "; color: var(--dim); font-size: 13pt; margin-right: 0.4em; }
-code { color: var(--bright); background: var(--codebg); padding: 0.08em 0.35em; border: 1px solid #3a2400; border-radius: 3px; font-size: 0.92em; }
-pre { background: var(--codebg); border: 1px solid #3a2400; border-radius: 4px; padding: 0.7rem 0.9rem; overflow-x: auto; font-size: 14pt; }
-pre code { background: transparent; border: 0; padding: 0; }
-ul, ol.body-list { margin: 0.4rem 0 0.4rem 1.4rem; padding: 0; }
-a { color: var(--bright); font-weight: bold; text-decoration: none; border-bottom: 1px dotted var(--dim); }
-a:hover { background: #332200; }
-strong { color: var(--bright); }
-em { color: var(--fg); font-style: italic; }
-hr { border: 0; border-top: 1px solid var(--border); margin: 1rem 0; }
-ol.lines { list-style: none; counter-reset: line h2 h3 para; padding: 0; margin: 0; }
-ol.lines > li { counter-increment: line; padding: 0.15rem 0 0.15rem 3.6rem; position: relative; min-height: 1.2em; }
-ol.lines > li::before { content: counter(line); position: absolute; left: 0; top: 0.25rem; width: 2.8rem; text-align: right; color: var(--gutter); font-size: 13pt; padding-right: 0.5rem; border-right: 1px solid #2a1e00; }
-ol.lines > li > p, ol.lines > li > h2, ol.lines > li > h3, ol.lines > li > ul, ol.lines > li > ol, ol.lines > li > pre, ol.lines > li > hr { margin: 0; }
-.scope-note { border-left: 3px solid var(--bright); padding: 0.7rem 1rem; background: #140c00; margin: 0.6rem 0; color: var(--bright); }
-.nav { display: flex; gap: 0.9rem; flex-wrap: wrap; margin-top: 0.8rem; font-size: 14pt; }
-
-
-footer.page { flex-direction: column; gap: 0.4rem; }
-footer.page .row-nav { display: flex; flex-direction: row; justify-content: space-between; align-items: center; gap: 0.5rem; }
-footer.page .row-nav .prev, footer.page .row-nav .next { flex: 1; min-width: 0; }
-footer.page .row-nav .prev { text-align: left; }
-footer.page .row-nav .next { text-align: right; }
-footer.page .row-nav .pos { flex: 0 0 auto; text-align: center; color: var(--bright); font-weight: bold; }
-footer.page .row-nav a { color: var(--bright); font-weight: bold; text-decoration: none; border-bottom: 1px dotted var(--dim); }
-footer.page .row-nav a:hover { background: #332200; }
-footer.page .row-nav .nav-empty { color: var(--gutter); font-style: italic; }
-</style>
 </head>
 <body>
 
-<header class="page">
-  <div class="path">Part V Advanced Techniques/Book 20 Performance Instruments And Best Practices</div>
-</header>
-
 <div class="content">
-<ol class="lines">
-  <li><h1>Book 20: Performance, Instruments, &amp; Best Practices</h1></li>
-  <li><p><strong>Claude's Xcode 26 Swift Bible</strong> -- Part V: Advanced Techniques</p></li>
-  <li><hr></li>
-  <li><h2>Live Reference: CryoTunes Player + Tally Matrix Clock</h2></li>
-  <li><div class="scope-note">Two production apps in this book's roster put the patterns in this chapter to work continuously. <strong>CryoTunes Player</strong> (<a href="https://github.com/fluhartyml/CryoTunesPlayer">github.com/fluhartyml/CryoTunesPlayer</a>) handles streaming MusicKit playback while keeping a SwiftUI animated transport row at 60fps &mdash; a real test of the actor-contention and <code>@StateObject</code> patterns this chapter covers. See Source Tour 18. <strong>Tally Matrix Clock</strong> (<a href="https://github.com/fluhartyml/Tally-Matrix-Clock">github.com/fluhartyml/Tally-Matrix-Clock</a>) re-renders an animated grid of squares every second on tvOS, where focus-engine performance and SwiftUI body churn matter more than on iPhone. See Source Tour 19.</div></li>
-  <li><hr></li>
-  <li><h2>X26 Performance Tools and Swift 6.2 Performance APIs</h2></li>
-  <li><p>Two things changed in the X26 era that matter for this chapter. Instruments shipped a serious refresh<sup>[<a href="#p1-fn">p1</a>]</sup>, and Swift 6.2 (then 6.3) added a handful of language features aimed straight at performance-sensitive code<sup>[<a href="#p2-fn">p2</a>]</sup>. Everything below in the rest of the chapter still stands &mdash; Time Profiler, Allocations, the SwiftUI instrument, the concurrency patterns. Treat what's in this section as the X26 layer that sits on top of those fundamentals.</p></li>
-  <li><h3>New Instruments Templates</h3></li>
-  <li><ul>
+
+  <h1>Book 20: Performance, Instruments, &amp; Best Practices</h1>
+  <p><strong>Claude's Xcode 26 Swift Bible</strong> -- Part V: Advanced Techniques</p>
+  <hr>
+  <h2>Live Reference: CryoTunes Player + Tally Matrix Clock</h2>
+  <div class="scope-note">Two production apps in this book's roster put the patterns in this chapter to work continuously. <strong>CryoTunes Player</strong> (<a href="https://github.com/fluhartyml/CryoTunesPlayer">github.com/fluhartyml/CryoTunesPlayer</a>) handles streaming MusicKit playback while keeping a SwiftUI animated transport row at 60fps &mdash; a real test of the actor-contention and <code>@StateObject</code> patterns this chapter covers. See Source Tour 18. <strong>Tally Matrix Clock</strong> (<a href="https://github.com/fluhartyml/Tally-Matrix-Clock">github.com/fluhartyml/Tally-Matrix-Clock</a>) re-renders an animated grid of squares every second on tvOS, where focus-engine performance and SwiftUI body churn matter more than on iPhone. See Source Tour 19.</div>
+  <hr>
+  <h2>X26 Performance Tools and Swift 6.2 Performance APIs</h2>
+  <p>Two things changed in the X26 era that matter for this chapter. Instruments shipped a serious refresh<sup>[<a href="#p1-fn">p1</a>]</sup>, and Swift 6.2 (then 6.3) added a handful of language features aimed straight at performance-sensitive code<sup>[<a href="#p2-fn">p2</a>]</sup>. Everything below in the rest of the chapter still stands &mdash; Time Profiler, Allocations, the SwiftUI instrument, the concurrency patterns. Treat what's in this section as the X26 layer that sits on top of those fundamentals.</p>
+  <h3>New Instruments Templates</h3>
+  <ul>
     <li><strong>Power Profiler</strong> &mdash; tells you where the watt-hours go. Run it against an iOS or iPadOS device and you'll see a per-subsystem breakdown for CPU, GPU, and networking, plus your app's contribution. You can either record a live trace from the Instruments library or open an <code>.atrc</code> file the device captured for you under Developer settings.</li>
     <li><strong>CPU Counters with Bottleneck Analysis</strong> &mdash; a guided wrapper over the raw CPU counter telemetry. The CPU Bottlenecks template sorts every cycle of sustainable CPU bandwidth into one of four buckets, named by Apple: Useful (the CPU made forward progress), Instruction Delivery (the front-end couldn't feed enough instructions), Instruction Processing (an instruction stalled waiting on data or its own cost), Discarded (a speculative path was taken and thrown away).</li>
     <li><strong>Processor Trace</strong> &mdash; logs every function call the CPU executed. Expensive to record, and the trace files are big. The payoff is that when sampling-based tools shrug at your perf bug, processor trace can usually point at the function.</li>
     <li><strong>Foundation Models Instrument</strong> &mdash; lines up against Book 22's framework work. It breaks an inference run into request timing, asset loading, prompt processing, and the inference step itself, so you can see which slice owns the latency.</li>
     <li><strong>SwiftUI (next-gen)</strong> &mdash; the new SwiftUI template, replacing the original. It logs every update SwiftUI runs, draws a Cause &amp; Effect Graph that traces <em>why</em> a body recomputed, and includes a "Show View Hierarchy" action so you can jump straight from the timeline to the offending subtree.</li>
-  </ul></li>
-  <li><p>When a SwiftUI screen feels heavy, run the next-gen SwiftUI instrument before anything else. The Cause &amp; Effect Graph names the source of each body recomputation: a state mutation you wrote, environment value churn, or an identity reset because a <code>ForEach</code> is missing a stable <code>id</code>. Three different problems with three different fixes &mdash; and the instrument labels them for you instead of leaving you to guess.</p></li>
-  <li><h3>Swift 6.2 / 6.3 Performance Language Additions</h3></li>
-  <li><p>Swift 6.2 came with X26 at launch, and Swift 6.3 followed in Xcode 26.4. Three additions across those releases pull their weight in performance-sensitive code:</p></li>
-  <li><ul>
+  </ul>
+  <p>When a SwiftUI screen feels heavy, run the next-gen SwiftUI instrument before anything else. The Cause &amp; Effect Graph names the source of each body recomputation: a state mutation you wrote, environment value churn, or an identity reset because a <code>ForEach</code> is missing a stable <code>id</code>. Three different problems with three different fixes &mdash; and the instrument labels them for you instead of leaving you to guess.</p>
+  <h3>Swift 6.2 / 6.3 Performance Language Additions</h3>
+  <p>Swift 6.2 came with X26 at launch, and Swift 6.3 followed in Xcode 26.4. Three additions across those releases pull their weight in performance-sensitive code:</p>
+  <ul>
     <li><strong><code>Span&lt;T&gt;</code> and <code>MutableSpan&lt;T&gt;</code></strong> &mdash; bounds-checked slice types. You can hand off a sub-range of a buffer without copying it, and the compiler is the one watching the boundaries instead of you. Anywhere you reach for <code>UnsafeBufferPointer</code> today is a candidate for replacement. <code>MutableSpan</code> is now valid as an <code>inout</code> parameter without the experimental flag the early betas required.</li>
     <li><strong><code>InlineArray&lt;N, T&gt;</code></strong> &mdash; a fixed-size array that lives on the stack instead of the heap. The use case is short, predictable data &mdash; a 3-component coordinate, a 16-byte hash, an RGBA pixel &mdash; where the heap allocation was always overkill.</li>
-  </ul></li>
-  <li><pre><code class="lang-swift">struct Point {
+  </ul>
+  <pre><code class="lang-swift">struct Point {
     var coordinates: InlineArray&lt;3, Double&gt;
-}</code></pre></li>
-  <li><ul>
+}</code></pre>
+  <ul>
     <li><strong><code>@concurrent</code> annotation</strong> &mdash; the explicit way to say "run this on the concurrent thread pool, not on whatever actor my caller is sitting on." It hands isolation off intentionally instead of letting Swift's default rules infer it.</li>
-  </ul></li>
-  <li><pre><code class="lang-swift">@concurrent
+  </ul>
+  <pre><code class="lang-swift">@concurrent
 func processData() async {
     // Runs on concurrent thread pool, not caller's context
-}</code></pre></li>
-  <li><p>Read <code>@concurrent</code> as the mirror image of <code>@MainActor</code>. <code>@MainActor</code> says "this stays on main." <code>@concurrent</code> says "this leaves." Spelling that out in the signature beats relying on Swift's default isolation inference, especially in code where the wrong choice costs you a frame.</p></li>
-  <li><h3><code>Data.bytes</code> and Span Access to Raw Bytes</h3></li>
-  <li><p><code>Data.bytes</code> hands you a <code>Span&lt;UInt8&gt;</code> over the raw bytes of a <code>Data</code> value. For read-only byte access this is the new shape: no closure, no pointer juggling, no <code>withUnsafeBytes</code> wrapper. Bounds safety is built into the type, so the entire family of off-by-one mistakes that used to live in this code path is gone before runtime.</p></li>
-  <li><p id="p1-fn" style="font-size: 13pt; color: var(--dim);">[p1] Apple, <em>Xcode 26 Release Notes</em> and <em>Xcode 26.4 Release Notes</em>. <a href="https://developer.apple.com/documentation/xcode-release-notes/xcode-26-release-notes">developer.apple.com/documentation/xcode-release-notes/xcode-26-release-notes</a>, <a href="https://developer.apple.com/documentation/xcode-release-notes/xcode-26_4-release-notes">xcode-26_4-release-notes</a> &mdash; verified 2026-04-29.</p></li>
-  <li><p id="p2-fn" style="font-size: 13pt; color: var(--dim);">[p2] Apartment Long-Term-Memory, <code>Swift-6-Quick-Reference-WWDC-2025.md</code> and <code>Xcode-26-Release-Timeline.md</code>, both verified against Apple release notes 2026-04-29.</p></li>
-  <li><hr></li>
-  <li><p>This chapter covers launching Instruments from Xcode and reading the three most-used templates (Time Profiler, Allocations, SwiftUI), spotting and reducing unnecessary SwiftUI <code>body</code> recomputations, the correct use of <code>@StateObject</code> vs. <code>@ObservedObject</code>, keeping actors from becoming bottlenecks in Swift 6 concurrency, and a set of habits that keep an app smooth as it grows.</p></li>
-  <li><hr></li>
-  <li><h2>When to Start Profiling</h2></li>
-  <li><p>Don't profile before there's a problem. Guessing what's slow is usually wrong, and guessing-based changes make code harder to read without making it faster.</p></li>
-  <li><p>Start profiling when you see one of these:</p></li>
-  <li><ul><li>The UI stutters while scrolling, typing, or animating.</li><li>The Xcode Debug Navigator shows CPU or memory climbing past what feels reasonable.</li><li>A specific action (save, open, search) feels laggy.</li></ul></li>
-  <li><p>Profile with real user scenarios on a real device, not the simulator. The simulator gives you roughly the host Mac's speed, which hides problems that bite on an actual iPhone.</p></li>
-  <li><hr></li>
-  <li><h2>Launching Instruments</h2></li>
-  <li><p>From Xcode: <strong>Product &gt; Profile</strong> (<code>⌘I</code>) with a physical device attached. Instruments opens the template picker. The three templates you use 95% of the time:</p></li>
-  <li><ul><li><strong>Time Profiler</strong> -- where is the app spending CPU?</li><li><strong>Allocations</strong> -- what objects are being created, how many, and how long do they live?</li><li><strong>SwiftUI</strong> -- which views are re-rendering, and how often?</li></ul></li>
-  <li><p>Start with Time Profiler when the symptom is "slow or stuttering." Start with SwiftUI when the symptom is "the screen flickers or my animations jump." Start with Allocations when memory is climbing.</p></li>
-  <li><hr></li>
-  <li><h2>Time Profiler</h2></li>
-  <li><p>Click Record, use the app the way the slow case uses it, click Stop. You get a flame-graph-style view: tall columns are where the CPU spent the most time.</p></li>
-  <li><h3>Reading the Trace</h3></li>
-  <li><ul><li><strong>Call tree</strong> in the bottom pane. Expand it by heaviest-first (right-click &gt; "Invert Call Tree" if you want the hottest leaves at the top).</li><li><strong>Bold entries</strong> are your app's code. Grayed-out entries are Apple frameworks.</li><li><strong>Percentage column</strong> tells you what fraction of wall-clock time was spent in that function.</li></ul></li>
-  <li><p>Look for code you wrote consuming a surprising percentage. If <code>ContentView.body</code> is eating 40% of CPU during a scroll, that's your fix.</p></li>
-  <li><h3>Flame-Graph View</h3></li>
-  <li><p>Switch the display to Flamegraph for a scrollable, visual summary. Wider bars = more time. Click a bar to jump to the source file.</p></li>
-  <li><hr></li>
-  <li><h2>SwiftUI Instrument</h2></li>
-  <li><p>The SwiftUI template records every view-body call. Two columns matter:</p></li>
-  <li><ul><li><strong>Call count</strong> -- how many times each view's <code>body</code> ran.</li><li><strong>Duration</strong> -- total time spent in that body.</li></ul></li>
-  <li><p>If a single <code>Text</code> row's <code>body</code> is being called thousands of times during a short interaction, something above it is re-rendering unnecessarily. That's almost always a fix in the parent: an observable-object update that's too coarse-grained, or a state change that shouldn't be triggering a repaint.</p></li>
-  <li><hr></li>
-  <li><h2>SwiftUI Performance Patterns</h2></li>
-  <li><h3><code>@StateObject</code> vs. <code>@ObservedObject</code></h3></li>
-  <li><p><strong>Rule:</strong> if the view creates the object, use <code>@StateObject</code>. If the object is handed in from outside, use <code>@ObservedObject</code>. <code>@StateObject</code> creates the object once and keeps it alive across re-renders; <code>@ObservedObject</code> assumes ownership lives elsewhere.</p></li>
-  <li><pre><code class="lang-swift">struct Child: View {
+}</code></pre>
+  <p>Read <code>@concurrent</code> as the mirror image of <code>@MainActor</code>. <code>@MainActor</code> says "this stays on main." <code>@concurrent</code> says "this leaves." Spelling that out in the signature beats relying on Swift's default isolation inference, especially in code where the wrong choice costs you a frame.</p>
+  <h3><code>Data.bytes</code> and Span Access to Raw Bytes</h3>
+  <p><code>Data.bytes</code> hands you a <code>Span&lt;UInt8&gt;</code> over the raw bytes of a <code>Data</code> value. For read-only byte access this is the new shape: no closure, no pointer juggling, no <code>withUnsafeBytes</code> wrapper. Bounds safety is built into the type, so the entire family of off-by-one mistakes that used to live in this code path is gone before runtime.</p>
+  <p id="p1-fn" style="font-size: 13pt; color: var(--dim);">[p1] Apple, <em>Xcode 26 Release Notes</em> and <em>Xcode 26.4 Release Notes</em>. <a href="https://developer.apple.com/documentation/xcode-release-notes/xcode-26-release-notes">developer.apple.com/documentation/xcode-release-notes/xcode-26-release-notes</a>, <a href="https://developer.apple.com/documentation/xcode-release-notes/xcode-26_4-release-notes">xcode-26_4-release-notes</a> &mdash; verified 2026-04-29.</p>
+  <p id="p2-fn" style="font-size: 13pt; color: var(--dim);">[p2] Apartment Long-Term-Memory, <code>Swift-6-Quick-Reference-WWDC-2025.md</code> and <code>Xcode-26-Release-Timeline.md</code>, both verified against Apple release notes 2026-04-29.</p>
+  <hr>
+  <p>This chapter covers launching Instruments from Xcode and reading the three most-used templates (Time Profiler, Allocations, SwiftUI), spotting and reducing unnecessary SwiftUI <code>body</code> recomputations, the correct use of <code>@StateObject</code> vs. <code>@ObservedObject</code>, keeping actors from becoming bottlenecks in Swift 6 concurrency, and a set of habits that keep an app smooth as it grows.</p>
+  <hr>
+  <h2>When to Start Profiling</h2>
+  <p>Don't profile before there's a problem. Guessing what's slow is usually wrong, and guessing-based changes make code harder to read without making it faster.</p>
+  <p>Start profiling when you see one of these:</p>
+  <ul><li>The UI stutters while scrolling, typing, or animating.</li><li>The Xcode Debug Navigator shows CPU or memory climbing past what feels reasonable.</li><li>A specific action (save, open, search) feels laggy.</li></ul>
+  <p>Profile with real user scenarios on a real device, not the simulator. The simulator gives you roughly the host Mac's speed, which hides problems that bite on an actual iPhone.</p>
+  <hr>
+  <h2>Launching Instruments</h2>
+  <p>From Xcode: <strong>Product &gt; Profile</strong> (<code>⌘I</code>) with a physical device attached. Instruments opens the template picker. The three templates you use 95% of the time:</p>
+  <ul><li><strong>Time Profiler</strong> -- where is the app spending CPU?</li><li><strong>Allocations</strong> -- what objects are being created, how many, and how long do they live?</li><li><strong>SwiftUI</strong> -- which views are re-rendering, and how often?</li></ul>
+  <p>Start with Time Profiler when the symptom is "slow or stuttering." Start with SwiftUI when the symptom is "the screen flickers or my animations jump." Start with Allocations when memory is climbing.</p>
+  <hr>
+  <h2>Time Profiler</h2>
+  <p>Click Record, use the app the way the slow case uses it, click Stop. You get a flame-graph-style view: tall columns are where the CPU spent the most time.</p>
+  <h3>Reading the Trace</h3>
+  <ul><li><strong>Call tree</strong> in the bottom pane. Expand it by heaviest-first (right-click &gt; "Invert Call Tree" if you want the hottest leaves at the top).</li><li><strong>Bold entries</strong> are your app's code. Grayed-out entries are Apple frameworks.</li><li><strong>Percentage column</strong> tells you what fraction of wall-clock time was spent in that function.</li></ul>
+  <p>Look for code you wrote consuming a surprising percentage. If <code>ContentView.body</code> is eating 40% of CPU during a scroll, that's your fix.</p>
+  <h3>Flame-Graph View</h3>
+  <p>Switch the display to Flamegraph for a scrollable, visual summary. Wider bars = more time. Click a bar to jump to the source file.</p>
+  <hr>
+  <h2>SwiftUI Instrument</h2>
+  <p>The SwiftUI template records every view-body call. Two columns matter:</p>
+  <ul><li><strong>Call count</strong> -- how many times each view's <code>body</code> ran.</li><li><strong>Duration</strong> -- total time spent in that body.</li></ul>
+  <p>If a single <code>Text</code> row's <code>body</code> is being called thousands of times during a short interaction, something above it is re-rendering unnecessarily. That's almost always a fix in the parent: an observable-object update that's too coarse-grained, or a state change that shouldn't be triggering a repaint.</p>
+  <hr>
+  <h2>SwiftUI Performance Patterns</h2>
+  <h3><code>@StateObject</code> vs. <code>@ObservedObject</code></h3>
+  <p><strong>Rule:</strong> if the view creates the object, use <code>@StateObject</code>. If the object is handed in from outside, use <code>@ObservedObject</code>. <code>@StateObject</code> creates the object once and keeps it alive across re-renders; <code>@ObservedObject</code> assumes ownership lives elsewhere.</p>
+  <pre><code class="lang-swift">struct Child: View {
     @StateObject private var model = Model()   // created once, persists
     var body: some View { Text(model.title) }
-}</code></pre></li>
-  <li><p>The <code>@Observable</code> macro (Swift 5.9+) avoids this trap entirely:</p></li>
-  <li><pre><code class="lang-swift">@Observable
+}</code></pre>
+  <p>The <code>@Observable</code> macro (Swift 5.9+) avoids this trap entirely:</p>
+  <pre><code class="lang-swift">@Observable
 final class Model { var title = "" }
 
 struct Child: View {
     @State private var model = Model()
     var body: some View { Text(model.title) }
-}</code></pre></li>
-  <li><h3>Passing Too Much Into a View</h3></li>
-  <li><p>Pass the minimum properties a view needs. The fewer inputs a view has, the fewer reasons it has to re-render. <code>ProfileCard(name: user.name)</code> only re-renders when the name changes, where <code>ProfileCard(user: user)</code> re-renders on any change to <code>user</code>:</p></li>
-  <li><pre><code class="lang-swift">ProfileCard(name: user.name)</code></pre></li>
-  <li><p>Or split the model into smaller <code>@Observable</code> classes so only the relevant piece triggers updates.</p></li>
-  <li><h3>Lists That Aren't Stable</h3></li>
-  <li><p><code>List</code> and <code>ForEach</code> rely on stable <code>id</code> values to animate inserts, deletes, and updates without re-rendering the whole list. Give every row a real identity:</p></li>
-  <li><pre><code class="lang-swift">ForEach(items, id: \.id) { item in Row(item: item) }</code></pre></li>
-  <li><p>Using <code>id: \.self</code> on mutable value types, or generating a fresh <code>UUID</code> on every render, defeats the identity check and forces a full redraw.</p></li>
-  <li><h3><code>AsyncImage</code> Without Caching</h3></li>
-  <li><p><code>AsyncImage</code> does no caching. If the user scrolls past an image, then back, it re-downloads. For serious image use, reach for a caching library (Kingfisher, Nuke) or cache manually in a model.</p></li>
-  <li><hr></li>
-  <li><h2>Actor Contention</h2></li>
-  <li><p>Swift 6's concurrency makes actors safe. It can also make them slow if a single actor is a choke point.</p></li>
-  <li><h3>The Problem</h3></li>
-  <li><pre><code class="lang-swift">actor ImageCache {
+}</code></pre>
+  <h3>Passing Too Much Into a View</h3>
+  <p>Pass the minimum properties a view needs. The fewer inputs a view has, the fewer reasons it has to re-render. <code>ProfileCard(name: user.name)</code> only re-renders when the name changes, where <code>ProfileCard(user: user)</code> re-renders on any change to <code>user</code>:</p>
+  <pre><code class="lang-swift">ProfileCard(name: user.name)</code></pre>
+  <p>Or split the model into smaller <code>@Observable</code> classes so only the relevant piece triggers updates.</p>
+  <h3>Lists That Aren't Stable</h3>
+  <p><code>List</code> and <code>ForEach</code> rely on stable <code>id</code> values to animate inserts, deletes, and updates without re-rendering the whole list. Give every row a real identity:</p>
+  <pre><code class="lang-swift">ForEach(items, id: \.id) { item in Row(item: item) }</code></pre>
+  <p>Using <code>id: \.self</code> on mutable value types, or generating a fresh <code>UUID</code> on every render, defeats the identity check and forces a full redraw.</p>
+  <h3><code>AsyncImage</code> Without Caching</h3>
+  <p><code>AsyncImage</code> does no caching. If the user scrolls past an image, then back, it re-downloads. For serious image use, reach for a caching library (Kingfisher, Nuke) or cache manually in a model.</p>
+  <hr>
+  <h2>Actor Contention</h2>
+  <p>Swift 6's concurrency makes actors safe. It can also make them slow if a single actor is a choke point.</p>
+  <h3>The Problem</h3>
+  <pre><code class="lang-swift">actor ImageCache {
     private var cache: [URL: UIImage] = [:]
     func image(for url: URL) async -&gt; UIImage { /* load and store */ }
-}</code></pre></li>
-  <li><p>If every view on screen asks the cache for its image, they all serialize through this one actor. The first one gets serviced fast, the rest queue up.</p></li>
-  <li><h3>The Fixes</h3></li>
-  <li><ol class="body-list"><li><strong>Narrow the <code>await</code>.</strong> If the work you do on the actor is just "look up in a dictionary," let the actor return the cached value fast, but perform the expensive load off-actor.</li></ol></li>
-  <li><ol class="body-list"><li><strong>Split the actor.</strong> Two actors can't compete with each other, and each serves a different slice of the work.</li></ol></li>
-  <li><ol class="body-list"><li><strong>Use <code>nonisolated</code> methods for reads that don't touch mutable state.</strong> Those don't go through the actor's execution queue.</li></ol></li>
-  <li><ol class="body-list"><li><strong>Use <code>.task</code> with IDs to cancel in-flight work.</strong> When a row scrolls offscreen, cancel the image load rather than letting it finish.</li></ol></li>
-  <li><hr></li>
-  <li><h2>Everyday Habits</h2></li>
-  <li><p>Habits that keep an app fast by default:</p></li>
-  <li><ul><li><strong>Keep view hierarchies shallow.</strong> Deep nesting makes SwiftUI's diffing more expensive and makes the code harder to read.</li><li><strong>Pull state up only as far as it needs to go.</strong> State owned by a grandparent triggers more re-renders than state owned by the immediate parent.</li><li><strong>Avoid expensive computations in <code>body</code>.</strong> Compute once in a helper method (or outside the view) and pass the result in.</li><li><strong>Prefer <code>@Observable</code> over <code>ObservableObject</code>.</strong> Finer-grained tracking means fewer spurious re-renders.</li><li><strong>Measure before and after.</strong> If you "optimized" something, run Instruments again to confirm. Most optimizations don't help; some make things worse.</li></ul></li>
-  <li><hr></li>
-  <li><h2>Chapter Mini-Example -- A Fast List With 10,000 Items</h2></li>
-  <li><p>A <code>List</code> that renders 10,000 rows smoothly, because it does the right things by default:</p></li>
-  <li><pre><code class="lang-swift">import SwiftUI
+}</code></pre>
+  <p>If every view on screen asks the cache for its image, they all serialize through this one actor. The first one gets serviced fast, the rest queue up.</p>
+  <h3>The Fixes</h3>
+  <ol class="body-list"><li><strong>Narrow the <code>await</code>.</strong> If the work you do on the actor is just "look up in a dictionary," let the actor return the cached value fast, but perform the expensive load off-actor.</li></ol>
+  <ol class="body-list"><li><strong>Split the actor.</strong> Two actors can't compete with each other, and each serves a different slice of the work.</li></ol>
+  <ol class="body-list"><li><strong>Use <code>nonisolated</code> methods for reads that don't touch mutable state.</strong> Those don't go through the actor's execution queue.</li></ol>
+  <ol class="body-list"><li><strong>Use <code>.task</code> with IDs to cancel in-flight work.</strong> When a row scrolls offscreen, cancel the image load rather than letting it finish.</li></ol>
+  <hr>
+  <h2>Everyday Habits</h2>
+  <p>Habits that keep an app fast by default:</p>
+  <ul><li><strong>Keep view hierarchies shallow.</strong> Deep nesting makes SwiftUI's diffing more expensive and makes the code harder to read.</li><li><strong>Pull state up only as far as it needs to go.</strong> State owned by a grandparent triggers more re-renders than state owned by the immediate parent.</li><li><strong>Avoid expensive computations in <code>body</code>.</strong> Compute once in a helper method (or outside the view) and pass the result in.</li><li><strong>Prefer <code>@Observable</code> over <code>ObservableObject</code>.</strong> Finer-grained tracking means fewer spurious re-renders.</li><li><strong>Measure before and after.</strong> If you "optimized" something, run Instruments again to confirm. Most optimizations don't help; some make things worse.</li></ul>
+  <hr>
+  <h2>Chapter Mini-Example -- A Fast List With 10,000 Items</h2>
+  <p>A <code>List</code> that renders 10,000 rows smoothly, because it does the right things by default:</p>
+  <pre><code class="lang-swift">import SwiftUI
 
 struct Row: Identifiable {
     let id: Int
@@ -222,17 +142,29 @@ struct BigList: View {
             }
         }
     }
-}</code></pre></li>
-  <li><p>Why this is fast:</p></li>
-  <li><ul><li><code>Row</code> has a stable <code>id: Int</code>. <code>List</code> can diff efficiently on inserts / deletes.</li><li>The row view has no <code>@ObservedObject</code> or heavy computation.</li><li>We don't wrap the list in a <code>GeometryReader</code> or force it into a custom layout.</li><li>The strings are computed up front, not rebuilt in <code>body</code>.</li></ul></li>
-  <li><p>Run Instruments (Time Profiler) on this; scrolling should spend near-zero CPU. That's the target trace shape for a smooth list.</p></li>
-  <li><hr></li>
-  <li><h2>What Book 21 Does</h2></li>
-  <li><p>Part V closes with performance. Part VI is the toolchain beyond the code itself. Book 21 covers Git and GitHub -- how to version your work, share it with a remote, and participate in the standard open-source workflow.</p></li>
-</ol>
-</div>
+}</code></pre>
+  <p>Why this is fast:</p>
+  <ul><li><code>Row</code> has a stable <code>id: Int</code>. <code>List</code> can diff efficiently on inserts / deletes.</li><li>The row view has no <code>@ObservedObject</code> or heavy computation.</li><li>We don't wrap the list in a <code>GeometryReader</code> or force it into a custom layout.</li><li>The strings are computed up front, not rebuilt in <code>body</code>.</li></ul>
+  <p>Run Instruments (Time Profiler) on this; scrolling should spend near-zero CPU. That's the target trace shape for a smooth list.</p>
+  <hr>
+  <h2>What Book 21 Does</h2>
+  <p>Part V closes with performance. Part VI is the toolchain beyond the code itself. Book 21 covers Git and GitHub -- how to version your work, share it with a remote, and participate in the standard open-source workflow.</p>
+  <hr>
+  <h2>Further Reading &mdash; WWDC Sessions</h2>
+  <p>This book is a passive resource. When you want deeper coverage of Instruments, profiling, or the performance work behind Apple silicon, the WWDC sessions below are Apple's source material. Watch the relevant one for fuller context.</p>
+  <ul>
+    <li>WWDC25 / 306, <em>Optimize SwiftUI performance with Instruments</em> &mdash; <a href="https://developer.apple.com/videos/play/wwdc2025/306/">developer.apple.com/videos/play/wwdc2025/306/</a>. The SwiftUI-specific Instruments template, identifying re-evaluation hot spots, and reading the long-frame timeline.</li>
+    <li>WWDC25 / 308, <em>Optimize CPU performance with Instruments</em> &mdash; <a href="https://developer.apple.com/videos/play/wwdc2025/308/">developer.apple.com/videos/play/wwdc2025/308/</a>. CPU profiling at the system level: hangs, hitches, and where Time Profiler points the finger.</li>
+    <li>WWDC25 / 312, <em>Improve memory usage and performance with Swift</em> &mdash; <a href="https://developer.apple.com/videos/play/wwdc2025/312/">developer.apple.com/videos/play/wwdc2025/312/</a>. Reducing allocations, copy-on-write reasoning, and the Swift compiler optimizations that get you wins for free.</li>
+    <li>WWDC25 / 226, <em>Profile and optimize power usage in your app</em> &mdash; <a href="https://developer.apple.com/videos/play/wwdc2025/226/">developer.apple.com/videos/play/wwdc2025/226/</a>. Battery cost as a first-class metric, with the Energy template in Instruments.</li>
+  </ul>
+  <h3>Prior-year background sessions</h3>
+  <ul>
+    <li>WWDC20 / 10602, <em>Optimize Metal Performance for Apple silicon Macs</em> &mdash; <a href="https://developer.apple.com/videos/play/wwdc2020/10602/">developer.apple.com/videos/play/wwdc2020/10602/</a>. The TBDR architecture explainer that still grounds every later Metal performance talk.</li>
+    <li>WWDC20 / 10632, <em>Harness Apple GPUs with Metal</em> &mdash; <a href="https://developer.apple.com/videos/play/wwdc2020/10632/">developer.apple.com/videos/play/wwdc2020/10632/</a>. Hidden Surface Removal, Tile Memory, programmable blending &mdash; the underpinnings of GPU performance on Apple silicon.</li>
+  </ul>
 
-<footer class="page"><div class="row-nav"><div class="prev"><a href="Book-19-Building-Custom-Views-And-Modifiers.html">&larr; Book 19: Building Custom Views &amp; Modifiers</a></div><div class="pos">Book 20 Performance Instruments And Best Practices</div><div class="next"><a href="../Part-VI-The-Modern-Toolchain/Book-21-Git-And-GitHub.html">Book 21: Git &amp; GitHub &rarr;</a></div></div></footer>
+</div>
 
 </body>
 </html>

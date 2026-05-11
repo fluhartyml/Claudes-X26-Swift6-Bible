@@ -3,132 +3,77 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Build-Along 04: Claude's Audio Universe</title>
-<style>
-:root { --bg: #000000; --fg: #FFB000; --bright: #FFD060; --dim: #996600; --codebg: #1a0d00; --border: #664500; --gutter: #4a3300; --headerbg: #0a0600; }
-* { box-sizing: border-box; }
-html, body { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; height: 100%; }
-body { background: var(--bg); color: var(--fg); font-family: "FiraCode Nerd Font Mono", "Fira Code", "Menlo", "Courier New", monospace; font-size: 18pt; line-height: 1.55; margin: 0; padding: 0; text-shadow: 0 0 1px rgba(255, 176, 0, 0.35); display: flex; flex-direction: column; }
-header.page, footer.page { background: var(--headerbg); color: var(--dim); padding: 0.55rem 1.1rem; font-size: 13pt; display: flex; flex-direction: column; gap: 0.2rem; flex: 0 0 auto; z-index: 10; }
-header.page { border-bottom: 1px solid var(--border); }
-footer.page { border-top: 1px solid var(--border); padding-bottom: calc(0.55rem + env(safe-area-inset-bottom)); }
-header.page .path, footer.page .path { color: var(--fg); word-break: break-all; overflow-wrap: break-word; }
-header.page .pos, footer.page .pos { color: var(--bright); }
-.content { flex: 1 1 auto; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 0.8rem 1rem 2rem 1rem; max-width: 1100px; margin: 0 auto; width: 100%; }
-ol.lines { list-style: none; counter-reset: line h2 h3 para; padding: 0; margin: 0; }
-ol.lines > li { counter-increment: line; padding: 0.15rem 0 0.15rem 3.6rem; position: relative; min-height: 1.2em; }
-ol.lines > li::before { content: counter(line); position: absolute; left: 0; top: 0.25rem; width: 2.8rem; text-align: right; color: var(--gutter); font-size: 13pt; padding-right: 0.5rem; border-right: 1px solid #2a1e00; }
-ol.lines > li > p, ol.lines > li > h2, ol.lines > li > h3, ol.lines > li > ul, ol.lines > li > ol, ol.lines > li > pre, ol.lines > li > hr, ol.lines > li > figure, ol.lines > li > .scope-note { margin: 0; }
-h1 { color: var(--bright); font-weight: normal; font-size: 26pt; margin: 0.6rem 0 1rem 0; }
-h2 { color: var(--bright); font-weight: normal; font-size: 20pt; border-bottom: 1px solid var(--border); padding-bottom: 0.3rem; margin-top: 1.5rem; counter-set: h3 0 para 0; counter-increment: h2; }
-h2::before { content: counter(h2) ". "; color: var(--fg); }
-h3 { color: var(--bright); font-weight: normal; font-size: 18pt; margin-top: 1rem; counter-set: para 0; counter-increment: h3; }
-h3::before { content: counter(h2) "." counter(h3) " "; color: var(--fg); }
-p { margin: 0.4rem 0; counter-increment: para; }
-p::before { content: counter(h2) "." counter(h3) "." counter(para) " "; color: var(--dim); font-size: 13pt; margin-right: 0.4em; }
-code { color: var(--bright); background: var(--codebg); padding: 0.08em 0.35em; border: 1px solid #3a2400; border-radius: 3px; font-size: 0.92em; }
-pre { background: var(--codebg); border: 1px solid #3a2400; border-radius: 4px; padding: 0.7rem 0.9rem; overflow-x: auto; font-size: 14pt; }
-ul { margin: 0.4rem 0 0.4rem 1.4rem; padding: 0; }
-a { color: var(--bright); font-weight: bold; text-decoration: none; border-bottom: 1px dotted var(--dim); }
-strong { color: var(--bright); }
-em { color: var(--fg); font-style: italic; }
-hr { border: 0; border-top: 1px solid var(--border); margin: 1rem 0; }
-.scope-note { border-left: 3px solid var(--bright); padding: 0.7rem 1rem; background: #140c00; margin: 0.6rem 0; color: var(--bright); }
-.status-live { color: #66FF66; font-weight: bold; }
-.status-review { color: #FFD060; font-weight: bold; }
-.status-notlive { color: #FFD060; font-weight: bold; }
-
-figure { margin: 0.6rem 0; text-align: center; }
-figure img.screenshot { max-width: 320px; max-height: 600px; width: auto; height: auto; display: inline-block; border: 1px solid var(--border); border-radius: 8px; background: #1a0d00; cursor: zoom-in; -webkit-tap-highlight-color: transparent; }
-figcaption { color: var(--dim); font-size: 14pt; margin-top: 0.3rem; font-style: italic; }
-
-/* Tap-to-zoom lightbox */
-.lightbox-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.96); display: flex; align-items: center; justify-content: center; z-index: 9999; overflow: auto; -webkit-overflow-scrolling: touch; cursor: zoom-out; padding: 1rem; }
-.lightbox-overlay img { max-width: 100%; max-height: 100%; width: auto; height: auto; object-fit: contain; border-radius: 6px; }
-.lightbox-close { position: fixed; top: env(safe-area-inset-top, 1rem); right: 1rem; color: var(--bright); font-size: 20pt; background: rgba(0,0,0,0.7); border: 1px solid var(--border); border-radius: 50%; width: 2.4rem; height: 2.4rem; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 10000; }
-body.lightbox-open { overflow: hidden; }
-
-footer.page { flex-direction: column; gap: 0.4rem; }
-footer.page .row-nav { display: flex; flex-direction: row; justify-content: space-between; align-items: center; gap: 0.5rem; }
-footer.page .row-nav .prev, footer.page .row-nav .next { flex: 1; min-width: 0; }
-footer.page .row-nav .prev { text-align: left; }
-footer.page .row-nav .next { text-align: right; }
-footer.page .row-nav .pos { flex: 0 0 auto; text-align: center; color: var(--bright); font-weight: bold; }
-footer.page .row-nav a { color: var(--bright); font-weight: bold; text-decoration: none; border-bottom: 1px dotted var(--dim); }
-footer.page .row-nav a:hover { background: #332200; }
-footer.page .row-nav .nav-empty { color: var(--gutter); font-style: italic; }
-</style>
 </head><body>
-<header class="page"><div class="path">Part-VII-Dedicated-Build-Alongs/BuildAlong-04-Claudes-Audio-Universe</div></header>
 <div class="content">
-<ol class="lines">
-<li><h1>Build-Along 04: Claude's Audio Universe</h1></li>
-<li><p><span class="status-review">Status: submitted to App Review on 2026-04-25 at 6:50 PM CDT (submission ID 964e4428-1ab0-44f2-aa1d-ccd2fbc27062).</span> Repository at <a href="https://github.com/fluhartyml/Claudes-Audio-Universe">github.com/fluhartyml/Claudes-Audio-Universe</a>. Wiki at <a href="https://github.com/fluhartyml/Claudes-Audio-Universe/wiki">github.com/fluhartyml/Claudes-Audio-Universe/wiki</a>.</p></li>
-<li><div class="scope-note">One app, four Apple audio frameworks &mdash; MusicKit, AVFoundation, ShazamKit, Speech. Each framework drives one tab, end to end. A fifth tab opens the app's own source code in-app for curious developers.</div></li>
-<li><hr></li>
 
-<li><h2>What this app is</h2></li>
-<li><p>Claude's Audio Universe is a focused four-tab utility. The four feature tabs each demonstrate one Apple audio framework. Closing the app or backgrounding it stops the work in every tab. Outputs leave through the system share sheet so the user owns where things land.</p></li>
-<li><p>Audio Universe is a media player that is also a teaching device. Stream actually streams Apple Music, Record actually records, Identify actually identifies, Transcribe actually transcribes. The teaching layer rides on top &mdash; design rationale callouts and an in-app source tour &mdash; without changing what the app does. The only behavioral constraint is that audio stops when the app loses focus.</p></li>
+<h1>Build-Along 04: Claude's Audio Universe</h1>
+<p><span class="status-review">Status: submitted to App Review on 2026-04-25 at 6:50 PM CDT (submission ID 964e4428-1ab0-44f2-aa1d-ccd2fbc27062).</span> Repository at <a href="https://github.com/fluhartyml/Claudes-Audio-Universe">github.com/fluhartyml/Claudes-Audio-Universe</a>. Wiki at <a href="https://github.com/fluhartyml/Claudes-Audio-Universe/wiki">github.com/fluhartyml/Claudes-Audio-Universe/wiki</a>.</p>
+<div class="scope-note">One app, four Apple audio frameworks &mdash; MusicKit, AVFoundation, ShazamKit, Speech. Each framework drives one tab, end to end. A fifth tab opens the app's own source code in-app for curious developers.</div>
+<hr>
 
-<li><h2>Architecture overview</h2></li>
-<li><p>Five tabs total: Stream, Record, Identify, Transcribe, Under the Hood. Each feature tab owns its own audio session and state. There is no central app-state model, no SwiftData container, no networking layer beyond what each framework requires. The shell is deliberately quiet so the framework code in each tab speaks for itself.</p></li>
-<li><p>Every tab is wrapped in a small <code>AppShell</code> container that adds a top-trailing (i) info button. The (i) opens the About sheet, which carries the Send Feedback / Support Wiki / Privacy / Portfolio links. That plumbing is shared once instead of repeated five times.</p></li>
+<h2>What this app is</h2>
+<p>Claude's Audio Universe is a focused four-tab utility. The four feature tabs each demonstrate one Apple audio framework. Closing the app or backgrounding it stops the work in every tab. Outputs leave through the system share sheet so the user owns where things land.</p>
+<p>Audio Universe is a media player that is also a teaching device. Stream actually streams Apple Music, Record actually records, Identify actually identifies, Transcribe actually transcribes. The teaching layer rides on top &mdash; design rationale callouts and an in-app source tour &mdash; without changing what the app does. The only behavioral constraint is that audio stops when the app loses focus.</p>
 
-<li><h2>Stream &mdash; MusicKit</h2></li>
-<li><p>Stream uses <code>ApplicationMusicPlayer</code> rather than <code>SystemMusicPlayer</code>. The system player would hijack the user's actual Music.app queue, which is hostile in a single-session tool. <code>MusicSubscription.subscriptionUpdates</code> tells the view whether the user has an active Apple Music subscription before any catalog playback.</p></li>
-<li><p>On first open the tab requests Apple Music access via <code>MusicAuthorization.request()</code>. The system permission dialog uses the <code>NSAppleMusicUsageDescription</code> string from <code>Info.plist</code>.</p></li>
-<li><figure><img class="screenshot" src="../../figures/au-01-stream-intro.png" alt="Stream tab Apple Music access prompt"><figcaption><strong>Figure 1:</strong> Stream &mdash; pre-permission intro. The Continue button triggers the system dialog.</figcaption></figure></li>
-<li><figure><img class="screenshot" src="../../figures/au-02-stream-permission.png" alt="iOS Apple Music permission system dialog"><figcaption><strong>Figure 2:</strong> iOS system dialog with the app's <code>NSAppleMusicUsageDescription</code> string verbatim.</figcaption></figure></li>
-<li><p>After authorization the search field appears. <code>MusicCatalogSearchRequest(term: text, types: [Song.self])</code> fetches up to twenty-five song results from the catalog. The view never reads the user's library.</p></li>
-<li><figure><img class="screenshot" src="../../figures/au-03-stream-results.png" alt="Stream tab search results"><figcaption><strong>Figure 3:</strong> Catalog search results for "September" &mdash; artwork, title, artist, play button. Album artwork in this figure is overlaid with a generic placeholder; the live app shows real Apple Music catalog art.</figcaption></figure></li>
-<li><div class="scope-note"><strong>Caution &mdash; App Store screenshot capture.</strong> Apple Music search results render real third-party album artwork pulled from the catalog. Submitting a screenshot that shows that artwork to App Review trips Guideline 5.2.1 (Intellectual Property). Before capturing screenshots for the listing, overlay every artwork tile with a generic placeholder (a layering image editor works), or capture the moment after results return but before artwork loads. The same rule applies to artist photos, station logos, and any branded UI you don't own.</div></li>
-<li><p>Tap a result to play it. Subscribers hear the full track via <code>ApplicationMusicPlayer</code>; non-subscribers hear the thirty-second preview via <code>AVPlayer</code> streaming the song's <code>previewAssets</code> URL. Tapping the same row toggles play and pause; tapping a different row replaces what is playing. Play and pause only &mdash; no scrub bar, no skip controls. Apple's own Music app is one tap away when the user wants full playback controls.</p></li>
+<h2>Architecture overview</h2>
+<p>Five tabs total: Stream, Record, Identify, Transcribe, Under the Hood. Each feature tab owns its own audio session and state. There is no central app-state model, no SwiftData container, no networking layer beyond what each framework requires. The shell is deliberately quiet so the framework code in each tab speaks for itself.</p>
+<p>Every tab is wrapped in a small <code>AppShell</code> container that adds a top-trailing (i) info button. The (i) opens the About sheet, which carries the Send Feedback / Support Wiki / Privacy / Portfolio links. That plumbing is shared once instead of repeated five times.</p>
 
-<li><h2>Record &mdash; AVFoundation</h2></li>
-<li><p>Record uses <code>AVAudioRecorder</code> rather than <code>AVAudioEngine</code> because the goal is capture-to-file, not real-time DSP. The session category is <code>.playAndRecord</code> with <code>.defaultToSpeaker</code> so the same view can play back what it just captured without a category switch and without routing playback to the earpiece. Output is <code>.m4a</code> AAC &mdash; small, portable, accepted everywhere the share sheet sends it.</p></li>
-<li><p>Microphone permission is requested via <code>AVAudioApplication.requestRecordPermission()</code>. The system dialog uses the <code>NSMicrophoneUsageDescription</code> string from <code>Info.plist</code>.</p></li>
-<li><figure><img class="screenshot" src="../../figures/au-04-record-permission.png" alt="iOS microphone permission dialog"><figcaption><strong>Figure 4:</strong> System microphone dialog with the app's mic-usage description.</figcaption></figure></li>
-<li><figure><img class="screenshot" src="../../figures/au-05-record-idle.png" alt="Record tab idle state"><figcaption><strong>Figure 5:</strong> Record idle &mdash; live mm:ss timer at the top, large red Record button.</figcaption></figure></li>
-<li><p>Recording goes to a fresh UUID-named file in <code>FileManager.default.temporaryDirectory</code>. Stop transitions to a finished phase with Play, Share, and Record New buttons. Share uses SwiftUI's <code>ShareLink(item: recordingURL)</code> &mdash; the system share sheet handles delivery to AirDrop, Files, Messages, Voice Memos, or wherever the user picks. Record New deletes the temp file and resets to idle. Nothing persists past the session.</p></li>
+<h2>Stream &mdash; MusicKit</h2>
+<p>Stream uses <code>ApplicationMusicPlayer</code> rather than <code>SystemMusicPlayer</code>. The system player would hijack the user's actual Music.app queue, which is hostile in a single-session tool. <code>MusicSubscription.subscriptionUpdates</code> tells the view whether the user has an active Apple Music subscription before any catalog playback.</p>
+<p>On first open the tab requests Apple Music access via <code>MusicAuthorization.request()</code>. The system permission dialog uses the <code>NSAppleMusicUsageDescription</code> string from <code>Info.plist</code>.</p>
+<figure><img class="screenshot" src="screenshots/au-01-stream-intro.png" alt="Stream tab Apple Music access prompt"><figcaption><strong>Figure 1:</strong> Stream &mdash; pre-permission intro. The Continue button triggers the system dialog.</figcaption></figure>
+<figure><img class="screenshot" src="screenshots/au-02-stream-permission.png" alt="iOS Apple Music permission system dialog"><figcaption><strong>Figure 2:</strong> iOS system dialog with the app's <code>NSAppleMusicUsageDescription</code> string verbatim.</figcaption></figure>
+<p>After authorization the search field appears. <code>MusicCatalogSearchRequest(term: text, types: [Song.self])</code> fetches up to twenty-five song results from the catalog. The view never reads the user's library.</p>
+<figure><img class="screenshot" src="screenshots/au-03-stream-results.png" alt="Stream tab search results"><figcaption><strong>Figure 3:</strong> Catalog search results for "September" &mdash; artwork, title, artist, play button. Album artwork in this figure is overlaid with a generic placeholder; the live app shows real Apple Music catalog art.</figcaption></figure>
+<div class="scope-note"><strong>Caution &mdash; App Store screenshot capture.</strong> Apple Music search results render real third-party album artwork pulled from the catalog. Submitting a screenshot that shows that artwork to App Review trips Guideline 5.2.1 (Intellectual Property). Before capturing screenshots for the listing, overlay every artwork tile with a generic placeholder (a layering image editor works), or capture the moment after results return but before artwork loads. The same rule applies to artist photos, station logos, and any branded UI you don't own.</div>
+<p>Tap a result to play it. Subscribers hear the full track via <code>ApplicationMusicPlayer</code>; non-subscribers hear the thirty-second preview via <code>AVPlayer</code> streaming the song's <code>previewAssets</code> URL. Tapping the same row toggles play and pause; tapping a different row replaces what is playing. Play and pause only &mdash; no scrub bar, no skip controls. Apple's own Music app is one tap away when the user wants full playback controls.</p>
 
-<li><h2>Identify &mdash; ShazamKit</h2></li>
-<li><p>Identify uses <code>SHManagedSession</code> rather than the lower-level <code>SHSession</code>. The managed session owns the audio buffer plumbing, which keeps the view simple: create a session, await its <code>result()</code>, switch on the outcome. Three outcomes: a match (use it), no match (tell the user to move closer), or an error (surface it).</p></li>
-<li><figure><img class="screenshot" src="../../figures/au-06-identify-listen.png" alt="Identify tab idle with Shazam logo and Listen button"><figcaption><strong>Figure 6:</strong> Identify idle &mdash; Shazam logo and Listen button. The icon animates while listening.</figcaption></figure></li>
-<li><p>On a match, the row is prepended to the list with artwork, title, artist, and an Apple Music indicator. Tapping the row opens the song in Apple Music or the iTunes Store via <code>SHMediaItem.appleMusicURL</code>. On iOS 17 and later, the match is also automatically added to the user's "My Shazam Tracks" library via <code>SHLibrary.default.addItems()</code>. Older OS versions still get the tap-through, just not the auto-save.</p></li>
+<h2>Record &mdash; AVFoundation</h2>
+<p>Record uses <code>AVAudioRecorder</code> rather than <code>AVAudioEngine</code> because the goal is capture-to-file, not real-time DSP. The session category is <code>.playAndRecord</code> with <code>.defaultToSpeaker</code> so the same view can play back what it just captured without a category switch and without routing playback to the earpiece. Output is <code>.m4a</code> AAC &mdash; small, portable, accepted everywhere the share sheet sends it.</p>
+<p>Microphone permission is requested via <code>AVAudioApplication.requestRecordPermission()</code>. The system dialog uses the <code>NSMicrophoneUsageDescription</code> string from <code>Info.plist</code>.</p>
+<figure><img class="screenshot" src="screenshots/au-04-record-permission.png" alt="iOS microphone permission dialog"><figcaption><strong>Figure 4:</strong> System microphone dialog with the app's mic-usage description.</figcaption></figure>
+<figure><img class="screenshot" src="screenshots/au-05-record-idle.png" alt="Record tab idle state"><figcaption><strong>Figure 5:</strong> Record idle &mdash; live mm:ss timer at the top, large red Record button.</figcaption></figure>
+<p>Recording goes to a fresh UUID-named file in <code>FileManager.default.temporaryDirectory</code>. Stop transitions to a finished phase with Play, Share, and Record New buttons. Share uses SwiftUI's <code>ShareLink(item: recordingURL)</code> &mdash; the system share sheet handles delivery to AirDrop, Files, Messages, Voice Memos, or wherever the user picks. Record New deletes the temp file and resets to idle. Nothing persists past the session.</p>
 
-<li><h2>Transcribe &mdash; Speech</h2></li>
-<li><p>Transcribe uses <code>SFSpeechAudioBufferRecognitionRequest</code> &mdash; the streaming-microphone variant. The view installs an audio tap on <code>AVAudioEngine.inputNode</code> and pushes each buffer into the request as it arrives. Partial results enabled, so the transcript fills in live as the user speaks.</p></li>
-<li><p>Transcribe needs two permissions: Speech recognition (<code>SFSpeechRecognizer.requestAuthorization</code>) and Microphone (<code>AVAudioApplication.requestRecordPermission</code>). Both are requested when the user taps Continue on the pre-permission screen; iOS shows them in sequence.</p></li>
-<li><figure><img class="screenshot" src="../../figures/au-07-transcribe-permission.png" alt="iOS Speech Recognition permission dialog"><figcaption><strong>Figure 7:</strong> System dialog for Speech Recognition. Microphone is requested separately.</figcaption></figure></li>
-<li><figure><img class="screenshot" src="../../figures/au-08-transcribe-idle.png" alt="Transcribe tab idle"><figcaption><strong>Figure 8:</strong> Transcribe idle &mdash; transcript area with placeholder text and Start button.</figcaption></figure></li>
-<li><p>On-device recognition is preferred when the recognizer reports <code>supportsOnDeviceRecognition</code> for the active locale; the request sets <code>requiresOnDeviceRecognition = true</code> in that case so audio never leaves the device. When the user taps Stop, the audio engine and tap are torn down; the transcript stays on screen with Share and Clear buttons. Share uses <code>ShareLink(item: transcript)</code> &mdash; plain string out via the system share sheet.</p></li>
+<h2>Identify &mdash; ShazamKit</h2>
+<p>Identify uses <code>SHManagedSession</code> rather than the lower-level <code>SHSession</code>. The managed session owns the audio buffer plumbing, which keeps the view simple: create a session, await its <code>result()</code>, switch on the outcome. Three outcomes: a match (use it), no match (tell the user to move closer), or an error (surface it).</p>
+<figure><img class="screenshot" src="screenshots/au-06-identify-listen.png" alt="Identify tab idle with Shazam logo and Listen button"><figcaption><strong>Figure 6:</strong> Identify idle &mdash; Shazam logo and Listen button. The icon animates while listening.</figcaption></figure>
+<p>On a match, the row is prepended to the list with artwork, title, artist, and an Apple Music indicator. Tapping the row opens the song in Apple Music or the iTunes Store via <code>SHMediaItem.appleMusicURL</code>. On iOS 17 and later, the match is also automatically added to the user's "My Shazam Tracks" library via <code>SHLibrary.default.addItems()</code>. Older OS versions still get the tap-through, just not the auto-save.</p>
 
-<li><h2>Under the Hood &mdash; the in-app source tour</h2></li>
-<li><p>The fifth tab is an in-app source tour for curious developers. It lists every Swift source file in the app along with a short callout explaining the design choice for that file &mdash; the WHY behind the WHAT. Tapping a row presents a sheet with the filename, the callout, the source code itself, and an Open on GitHub button for the live source.</p></li>
-<li><figure><img class="screenshot" src="../../figures/au-09-about.png" alt="About sheet"><figcaption><strong>Figure 9:</strong> About sheet &mdash; reachable from the (i) button in every tab. Send Feedback, Support / Wiki, Privacy Policy, Portfolio.</figcaption></figure></li>
-<li><figure><img class="screenshot" src="../../figures/au-10-uth-source.png" alt="Under the Hood detail sheet"><figcaption><strong>Figure 10:</strong> Under the Hood detail &mdash; design rationale callout at the top, source code below.</figcaption></figure></li>
-<li><p>The callouts target developers who already code in Xcode &mdash; concept-dense, framework-aware, idiom-aware, no Swift fundamentals. Non-coders are served by the book itself: read this book, become a coder, then the source becomes legible.</p></li>
+<h2>Transcribe &mdash; Speech</h2>
+<p>Transcribe uses <code>SFSpeechAudioBufferRecognitionRequest</code> &mdash; the streaming-microphone variant. The view installs an audio tap on <code>AVAudioEngine.inputNode</code> and pushes each buffer into the request as it arrives. Partial results enabled, so the transcript fills in live as the user speaks.</p>
+<p>Transcribe needs two permissions: Speech recognition (<code>SFSpeechRecognizer.requestAuthorization</code>) and Microphone (<code>AVAudioApplication.requestRecordPermission</code>). Both are requested when the user taps Continue on the pre-permission screen; iOS shows them in sequence.</p>
+<figure><img class="screenshot" src="screenshots/au-07-transcribe-permission.png" alt="iOS Speech Recognition permission dialog"><figcaption><strong>Figure 7:</strong> System dialog for Speech Recognition. Microphone is requested separately.</figcaption></figure>
+<figure><img class="screenshot" src="screenshots/au-08-transcribe-idle.png" alt="Transcribe tab idle"><figcaption><strong>Figure 8:</strong> Transcribe idle &mdash; transcript area with placeholder text and Start button.</figcaption></figure>
+<p>On-device recognition is preferred when the recognizer reports <code>supportsOnDeviceRecognition</code> for the active locale; the request sets <code>requiresOnDeviceRecognition = true</code> in that case so audio never leaves the device. When the user taps Stop, the audio engine and tap are torn down; the transcript stays on screen with Share and Clear buttons. Share uses <code>ShareLink(item: transcript)</code> &mdash; plain string out via the system share sheet.</p>
 
-<li><h2>Locked design rules</h2></li>
-<li><ul>
+<h2>Under the Hood &mdash; the in-app source tour</h2>
+<p>The fifth tab is an in-app source tour for curious developers. It lists every Swift source file in the app along with a short callout explaining the design choice for that file &mdash; the WHY behind the WHAT. Tapping a row presents a sheet with the filename, the callout, the source code itself, and an Open on GitHub button for the live source.</p>
+<figure><img class="screenshot" src="screenshots/au-09-about.png" alt="About sheet"><figcaption><strong>Figure 9:</strong> About sheet &mdash; reachable from the (i) button in every tab. Send Feedback, Support / Wiki, Privacy Policy, Portfolio.</figcaption></figure>
+<figure><img class="screenshot" src="screenshots/au-10-uth-source.png" alt="Under the Hood detail sheet"><figcaption><strong>Figure 10:</strong> Under the Hood detail &mdash; design rationale callout at the top, source code below.</figcaption></figure>
+<p>The callouts target developers who already code in Xcode &mdash; concept-dense, framework-aware, idiom-aware, no Swift fundamentals. Non-coders are served by the book itself: read this book, become a coder, then the source becomes legible.</p>
+
+<h2>Locked design rules</h2>
+<ul>
 <li><strong>Focus-only audio.</strong> When the app loses focus, audio stops. No Background Modes entitlement. No Picture in Picture. The natural iOS behavior of pausing audio on background is the desired behavior.</li>
 <li><strong>iOS only.</strong> Project targets <code>iphoneos iphonesimulator</code>; no macOS, no visionOS. The audio frameworks teach the same lesson on every platform, so cross-platform branching is overhead with no payoff for a teaching utility.</li>
 <li><strong>Nothing persists.</strong> No SwiftData container, no CloudKit, no UserDefaults beyond what each framework needs internally. The share sheet is the escape hatch when the user wants to keep something.</li>
 <li><strong>One framework per tab.</strong> Each tab is built on exactly one Apple audio framework, in isolation. The teaching point of each tab is unambiguous.</li>
-</ul></li>
+</ul>
 
-<li><h2>Info.plist usage descriptions</h2></li>
-<li><ul>
+<h2>Info.plist usage descriptions</h2>
+<ul>
 <li><code>NSAppleMusicUsageDescription</code> &mdash; required by Stream</li>
 <li><code>NSMicrophoneUsageDescription</code> &mdash; required by Record, Identify, Transcribe</li>
 <li><code>NSSpeechRecognitionUsageDescription</code> &mdash; required by Transcribe</li>
-</ul></li>
+</ul>
 
-<li><h2>App Services portal</h2></li>
-<li><p>The App ID <code>com.Claudes-X26-Swift-Bible.Claudes-Audio-Universe</code> is registered on developer.apple.com with MusicKit and ShazamKit enabled under App Services. AVFoundation and Speech do not require portal enablement; they are part of the base SDK.</p></li>
+<h2>App Services portal</h2>
+<p>The App ID <code>com.Claudes-X26-Swift-Bible.Claudes-Audio-Universe</code> is registered on developer.apple.com with MusicKit and ShazamKit enabled under App Services. AVFoundation and Speech do not require portal enablement; they are part of the base SDK.</p>
 
-<li><h2>Build sequence</h2></li>
-<li><ol>
+<h2>Build sequence</h2>
+<ol>
 <li>New SwiftUI Multiplatform project &mdash; flipped to iOS-only by editing <code>SDKROOT</code>, <code>SUPPORTED_PLATFORMS</code>, <code>TARGETED_DEVICE_FAMILY</code> in the project file</li>
 <li>Stripped the SwiftData scaffolding from the App entry and deleted the auto-generated <code>Item.swift</code>; ContentView became a simple <code>TabView</code> root</li>
 <li>Built <code>AppShell</code> as a wrapping container (NavigationStack + (i) info button + About sheet) so each tab gets the (i) for free</li>
@@ -139,45 +84,44 @@ footer.page .row-nav .nav-empty { color: var(--gutter); font-style: italic; }
 <li>Created the Privacy Policy page on fluharty.me at <code>/audiouniverse-privacy</code></li>
 <li>Captured ten App Store screenshots on iPhone, resized to 1284 by 2778, ordered for narrative flow</li>
 <li>Submitted v1.0 build 1 to App Review</li>
-</ol></li>
+</ol>
 
-<li><h2>The "by Claude" version &mdash; an App-Store-rejected lineage available via GitHub clone-and-build</h2></li>
-<li><p>Audio Universe shipped to App Review under three different name strategies in the same week, and the version named "Audio Universe by Claude" was rejected on naming grounds. The book teaches the success path; the rejected version is preserved as a GitHub clone-and-build artifact for readers who want to study what the original looked like.</p></li>
-<li><p>The rejection &mdash; Apple App Review, Guideline 4.1(a) Design (Copycats), 2026 April 28: <em>"the app's name includes references to Claude."</em> Apple read the explicit "by Claude" attribution as a third-party IP claim against Anthropic's brand. Earlier in the week the same app had passed App Review under the possessive form "Claudes Audio Universe" without a Copycats flag, suggesting the trigger is the explicit attributive form, not a content judgment. Both forms are now off-limits in App-Store-reviewer-visible names per the family-wide naming rule (see also <code>feedback_app_name_by_claude_standard.md</code> in the apartment memory).</p></li>
-<li><p>The current submission carries the bare display name <strong>Audio Universe</strong>; the GitHub repository keeps "Claudes Audio Universe" in its name because the repo is a developer-facing artifact, not an App Store listing field. The two surfaces operate under different rules: App Store reviewer-visible fields stay neutral; repo names, source identifiers, About sheet attribution, Under the Hood content, and the book itself keep the "Claudes" branding.</p></li>
-<li><h3>What the rejected by-Claude version contained</h3></li>
-<li><p>Functionally identical to the current shipping version &mdash; same Stream / Record / Identify / Transcribe tabs, same MusicKit, AVFoundation, ShazamKit, and Speech framework integrations, same Under the Hood and About surfaces. The differences were entirely in display strings:</p></li>
-<li><ul>
+<h2>The "by Claude" version &mdash; an App-Store-rejected lineage available via GitHub clone-and-build</h2>
+<p>Audio Universe shipped to App Review under three different name strategies in the same week, and the version named "Audio Universe by Claude" was rejected on naming grounds. The book teaches the success path; the rejected version is preserved as a GitHub clone-and-build artifact for readers who want to study what the original looked like.</p>
+<p>The rejection &mdash; Apple App Review, Guideline 4.1(a) Design (Copycats), 2026 April 28: <em>"the app's name includes references to Claude."</em> Apple read the explicit "by Claude" attribution as a third-party IP claim against Anthropic's brand. Earlier in the week the same app had passed App Review under the possessive form "Claudes Audio Universe" without a Copycats flag, suggesting the trigger is the explicit attributive form, not a content judgment. Both forms are now off-limits in App-Store-reviewer-visible names per the family-wide naming rule (see also <code>feedback_app_name_by_claude_standard.md</code> in the apartment memory).</p>
+<p>The current submission carries the bare display name <strong>Audio Universe</strong>; the GitHub repository keeps "Claudes Audio Universe" in its name because the repo is a developer-facing artifact, not an App Store listing field. The two surfaces operate under different rules: App Store reviewer-visible fields stay neutral; repo names, source identifiers, About sheet attribution, Under the Hood content, and the book itself keep the "Claudes" branding.</p>
+<h3>What the rejected by-Claude version contained</h3>
+<p>Functionally identical to the current shipping version &mdash; same Stream / Record / Identify / Transcribe tabs, same MusicKit, AVFoundation, ShazamKit, and Speech framework integrations, same Under the Hood and About surfaces. The differences were entirely in display strings:</p>
+<ul>
 <li><code>CFBundleDisplayName</code> set to "Audio Universe by Claude"</li>
 <li><code>AboutView</code> title text "Audio Universe by Claude"</li>
 <li>Permission usage descriptions (microphone, speech, Apple Music) referenced the app by the "by Claude" attribution form</li>
 <li>The Under the Hood callouts, file headers, and FeedbackView mail subjects carried the same attribution</li>
-</ul></li>
-<li><p>The fix to ship the renamed version was a string-only edit in those fields. No source-architecture change, no functionality change. Apple's rejection was about the name surface as a reviewer reads it, not about the app's behavior.</p></li>
-<li><h3>Cloning the by-Claude version</h3></li>
-<li><p>The "by Claude" lineage lives in the public commit history of the source repository at <a href="https://github.com/fluhartyml/Claudes-Audio-Universe">github.com/fluhartyml/Claudes-Audio-Universe</a>. To clone the rejected-version source for study or your own modification:</p></li>
-<li><ol>
+</ul>
+<p>The fix to ship the renamed version was a string-only edit in those fields. No source-architecture change, no functionality change. Apple's rejection was about the name surface as a reviewer reads it, not about the app's behavior.</p>
+<h3>Cloning the by-Claude version</h3>
+<p>The "by Claude" lineage lives in the public commit history of the source repository at <a href="https://github.com/fluhartyml/Claudes-Audio-Universe">github.com/fluhartyml/Claudes-Audio-Universe</a>. To clone the rejected-version source for study or your own modification:</p>
+<ol>
 <li>Open Xcode and choose <strong>Source Control &rarr; Clone</strong> (or use the Welcome window's clone option) and paste the repo URL above. See Book 21 Git-And-GitHub for the full clone workflow.</li>
 <li>Once cloned, the latest commit on <code>main</code> reflects the renamed bare-name version. To check out the by-Claude version, use the commit-history view to find the last commit before the rename (search the log for "Audio Universe by Claude" mentions) and check it out into a working tree of its own.</li>
 <li>Build and run on your own device. The app behaves identically to the App Store version; only the display strings differ. The Apple Music, microphone, and speech permissions still need a real device or a configured simulator runtime to exercise their respective tabs.</li>
-</ol></li>
-<li><p>Two reader directions worth noting. First, the by-Claude version is not appropriate to resubmit to the App Store under that name &mdash; Apple has already rejected it once and the family-wide rule moved on. Treat it as a study artifact, not a starting point for a new submission. Second, the source is licensed under GPL v3 with attribution; if you fork it and ship under your own name, you must keep the GPL terms and the attribution to the original author intact.</p></li>
-<li><h3>Why this teaching beat lives here</h3></li>
-<li><p>App Store name policy is reviewer-variable in ways that bite working developers. A name that passed once can fail later. A name that referenced a third-party brand can be flagged retroactively when policy guidance shifts. The honest book-shaped lesson: keep your core app code separable from your display-name surface, so a rename is a string-only edit on one surface rather than a refactor across the codebase. Audio Universe shipped its rename in fewer than 30 minutes of source edits because the "by Claude" attribution lived in plist keys and a handful of Swift string literals, not threaded through the app's identity at the structural level.</p></li>
+</ol>
+<p>Two reader directions worth noting. First, the by-Claude version is not appropriate to resubmit to the App Store under that name &mdash; Apple has already rejected it once and the family-wide rule moved on. Treat it as a study artifact, not a starting point for a new submission. Second, the source is licensed under GPL v3 with attribution; if you fork it and ship under your own name, you must keep the GPL terms and the attribution to the original author intact.</p>
+<h3>Why this teaching beat lives here</h3>
+<p>App Store name policy is reviewer-variable in ways that bite working developers. A name that passed once can fail later. A name that referenced a third-party brand can be flagged retroactively when policy guidance shifts. The honest book-shaped lesson: keep your core app code separable from your display-name surface, so a rename is a string-only edit on one surface rather than a refactor across the codebase. Audio Universe shipped its rename in fewer than 30 minutes of source edits because the "by Claude" attribution lived in plist keys and a handful of Swift string literals, not threaded through the app's identity at the structural level.</p>
 
-<li><h2>Resources</h2></li>
-<li><ul>
+<h2>Resources</h2>
+<ul>
 <li>Source: <a href="https://github.com/fluhartyml/Claudes-Audio-Universe">github.com/fluhartyml/Claudes-Audio-Universe</a></li>
 <li>Wiki: <a href="https://github.com/fluhartyml/Claudes-Audio-Universe/wiki">github.com/fluhartyml/Claudes-Audio-Universe/wiki</a></li>
 <li>Developer Notes: <a href="https://github.com/fluhartyml/Claudes-Audio-Universe/wiki/Developer-Notes">github.com/fluhartyml/Claudes-Audio-Universe/wiki/Developer-Notes</a></li>
 <li>Privacy: <a href="https://fluharty.me/audiouniverse-privacy">fluharty.me/audiouniverse-privacy</a></li>
 <li>App Store listing: see current status on <a href="https://apps.apple.com">apps.apple.com</a> under "Audio Universe"</li>
-</ul></li>
+</ul>
 
-<li><p><em>Page expanded after Audio Universe v1.0 was submitted to App Review. The walkthrough will deepen as readers ask questions. Source of truth for what shipped is <code>DeveloperNotes.swift</code> in the Audio Universe Xcode project.</em></p></li>
-</ol>
+<p><em>Page expanded after Audio Universe v1.0 was submitted to App Review. The walkthrough will deepen as readers ask questions. Source of truth for what shipped is <code>DeveloperNotes.swift</code> in the Audio Universe Xcode project.</em></p>
+
 </div>
-<footer class="page"><div class="row-nav"><div class="prev"><a href="../BuildAlong-03-Claudes-LockBox/BuildAlong-03-Claudes-LockBox.html">&larr; Build-Along 03: LockBox</a></div><div class="pos">Build-Along 04</div><div class="next"><a href="../BuildAlong-05-Outside/BuildAlong-05-Outside.html">Build-Along 05: Claudes Outdoor Utility &rarr;</a></div></div></footer>
 <script>
 (function() {
     function openLightbox(src, alt) {

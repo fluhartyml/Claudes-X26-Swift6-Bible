@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Appendix D: App Intents</title>
+</head><body>
+<div class="content">
+<h1>Appendix D: App Intents (User's Manual)</h1>
+<p><span class="status-live">Status: Public framework, iOS 16.0+ / iPadOS 16.0+ / macOS 13.0+, with substantial additions through iOS 26.</span> App Intents is Apple's framework for letting other parts of the system &mdash; Shortcuts, Spotlight, Siri, the Action Button, widgets, focus filters, control center &mdash; run pieces of your app without launching the full UI. Each thing an app can do is described as an <code>AppIntent</code> type. The system reads those types, indexes them, and exposes them everywhere the user might want to reach for them.</p>
+
+<h2>When to reach for it</h2>
+<p>Reach for App Intents whenever the user might want to do something your app can do without opening your app first. "Start a timer," "create a record," "show me today's items," "log a workout" &mdash; any verb your app already implements is a candidate. The same intent code surfaces in Shortcuts, in Spotlight results, in Siri, on the lock screen, in widgets, in interactive notifications, and in the new system snippet UI. Writing the intent once and letting the system route it is the whole point.</p>
+<p>Don't reach for App Intents when the action is purely visual and needs the full UI to make sense &mdash; a long form, a multi-step wizard, a video editor. Those belong inside the app. App Intents handles the verbs that can be expressed as a single self-contained operation.</p>
+
+<h2>The core type</h2>
+<p>An App Intent is a Swift type that conforms to <code>AppIntent</code>. The type carries a static <code>title</code>, an optional <code>description</code>, the parameters the intent needs, and a <code>perform()</code> method that does the work. <code>perform()</code> is async and throwing, and it returns an <code>IntentResult</code> describing what happened.</p>
+<pre><code>import AppIntents
+
+struct AddRecordIntent: AppIntent {
+    static let title: LocalizedStringResource = "Add Record"
+    static let description = IntentDescription("Adds a record to OPerationsHOS.")
+
+    @Parameter(title: "Title") var recordTitle: String
+    @Parameter(title: "Type") var type: RecordTypeEntity
+
+    func perform() async throws -&gt; some IntentResult &amp; ProvidesDialog {
+        let store = OperatorStore.shared
+        let item = store.add(title: recordTitle, type: type.rawType)
+        return .result(dialog: "Added \(item.title).")
+    }
+}</code></pre>
+<p>The conformance tells the compiler this type is reachable from the system. The static <code>title</code> is what the user sees in Shortcuts and Siri. <code>perform()</code> is where the work happens.</p>
+
+<h2>Parameters</h2>
+<p>An <code>@Parameter</code> wrapper turns a stored property into a typed slot that the system can ask the user to fill in. Strings, numbers, dates, durations, URLs, files, and any custom <code>AppEntity</code> or <code>AppEnum</code> are valid parameter types.</p>
+<p>Parameters carry a <code>title</code> string and optionally a <code>description</code>, a <code>default value</code>, an <code>inputOptions</code> set, and a <code>requestValueDialog</code> for the prompt the system shows when the parameter is missing. The wrapper handles all the UI plumbing &mdash; the developer only declares the type.</p>
+
+<h2>App Entities</h2>
+<p>An <code>AppEntity</code> is a strongly typed reference to one of the app's records. It exposes an <code>id</code>, a <code>displayRepresentation</code>, and (often) a <code>defaultQuery</code>. Entities let the system show meaningful pickers ("Which record?" rather than "Type a UUID") and let one intent pass its result into the next intent in a Shortcut.</p>
+<pre><code>struct RecordEntity: AppEntity {
+    let id: UUID
+    let title: String
+
+    static let typeDisplayRepresentation: TypeDisplayRepresentation = "Record"
+    static let defaultQuery = RecordQuery()
+
+    var displayRepresentation: DisplayRepresentation {
+        DisplayRepresentation(title: "\(title)")
+    }
+}
+
+struct RecordQuery: EntityQuery {
+    func entities(for identifiers: [UUID]) async throws -&gt; [RecordEntity] {
+        OperatorStore.shared.records(matching: identifiers).map { record in
+            RecordEntity(id: record.id, title: record.title)
+        }
+    }
+
+    func suggestedEntities() async throws -&gt; [RecordEntity] {
+        OperatorStore.shared.recent(limit: 10).map { record in
+            RecordEntity(id: record.id, title: record.title)
+        }
+    }
+}</code></pre>
+
+<h2>App Enums</h2>
+<p>An <code>AppEnum</code> is a Swift enum that the system can present as a parameter picker. Each case gets a <code>DisplayRepresentation</code>, and the type declares a <code>typeDisplayRepresentation</code> for the parameter prompt.</p>
+
+<h2>Result types</h2>
+<p>The <code>perform()</code> return type composes one or more roles from a small set of protocols: <code>ProvidesDialog</code> for a spoken or written response, <code>ReturnsValue</code> for a piece of typed data that flows into the next intent, <code>ShowsSnippetView</code> for a small custom SwiftUI view to display in the result, and <code>OpensIntent</code> for opening the app to a particular destination. Composing the protocols with <code>&amp;</code> lets one intent return all the shapes the system might use.</p>
+
+<h2>App Shortcuts</h2>
+<p>An <code>AppShortcutsProvider</code> declares a list of <code>AppShortcut</code> entries that ship with the app. Each shortcut wraps one intent, gives it a set of natural-language phrases, an SF Symbol, and a short description. Apple-provided shortcuts appear in the Shortcuts app the first time the user launches the app &mdash; no user setup required.</p>
+<pre><code>struct OperatorShortcuts: AppShortcutsProvider {
+    static var appShortcuts: [AppShortcut] {
+        AppShortcut(
+            intent: AddRecordIntent(),
+            phrases: [
+                "Add a record to \(.applicationName)",
+                "Log this in \(.applicationName)"
+            ],
+            shortTitle: "Add Record",
+            systemImageName: "plus.rectangle"
+        )
+    }
+}</code></pre>
+<p>The <code>\(.applicationName)</code> token resolves to the app's display name at runtime, so the same shortcut works on every device and in every locale.</p>
+
+<h2>What's new in 2025</h2>
+<p>Three additions are worth knowing about in the WWDC25 cycle:</p>
+<ul>
+<li><code>SnippetIntent</code> &mdash; a dedicated intent shape whose only job is returning a small SwiftUI view to be shown inline in the system snippet UI. Use it when the user wants a status read-out rather than an action: "What's on my schedule today" returns a snippet, not a side effect.</li>
+<li><code>UndoableIntent</code> &mdash; an intent that records its own undo. The system surfaces an Undo affordance after the intent runs, and a corresponding <code>undo()</code> method on the intent type reverses the change. Adopt it for any intent whose effect the user might regret immediately.</li>
+<li><code>supportedModes</code> &mdash; declares which surfaces an intent is appropriate for: Shortcuts only, Siri only, both, or neither. The default is "all surfaces," but actions that only make sense as voice commands (or only as Shortcuts steps) can narrow themselves explicitly.</li>
+</ul>
+
+<h2>Where the intent shows up</h2>
+<p>Once an <code>AppIntent</code> type is in the binary, the system indexes it. The same intent then surfaces in:</p>
+<ul>
+<li><strong>Shortcuts</strong> &mdash; the user can string the intent into a multi-step shortcut, possibly across multiple apps.</li>
+<li><strong>Spotlight</strong> &mdash; the intent appears as an actionable result when the user searches for its title or one of its phrases.</li>
+<li><strong>Siri</strong> &mdash; the intent runs when the user speaks one of its phrases.</li>
+<li><strong>Action Button</strong> (iPhone 15 Pro and later) &mdash; assignable as the button's action.</li>
+<li><strong>Control Center</strong> &mdash; with a matching <code>ControlWidget</code>, the intent runs from a custom control.</li>
+<li><strong>Widgets</strong> &mdash; an interactive widget can invoke the intent on tap.</li>
+<li><strong>Focus filters</strong> &mdash; the system can adjust the app's behavior per focus mode by running a configuration intent.</li>
+</ul>
+<p>The framework's promise is "write the action once, run it from anywhere the user expects to reach it." That promise mostly holds. The places it doesn't hold are usually places where the action requires a UI step that App Intents can't express &mdash; in which case <code>OpensIntent</code> is the escape hatch: the intent opens the app to the right place and the user finishes there.</p>
+
+<h2>Common mistakes</h2>
+<p>A handful of mistakes show up over and over:</p>
+<ul>
+<li><strong>Forgetting <code>typeDisplayRepresentation</code> on an <code>AppEntity</code> or <code>AppEnum</code>.</strong> The compiler accepts the type, but the parameter picker is empty or unlabeled at runtime.</li>
+<li><strong>Doing heavy work directly in <code>perform()</code>.</strong> The system runs the intent in an extension-like context with a tight time budget. Use the intent to dispatch work to the app's actor, return a dialog, and let the rest run inside the app.</li>
+<li><strong>Hardcoding strings instead of <code>LocalizedStringResource</code>.</strong> Titles, dialogs, and parameter prompts all need <code>LocalizedStringResource</code> to localize properly &mdash; otherwise the App Intents extractor warns and Shortcuts shows English everywhere.</li>
+<li><strong>Treating an intent as a method.</strong> Each <code>AppIntent</code> type is one verb. Resist the urge to add a switch inside <code>perform()</code> to make one type cover three actions &mdash; the system can't surface them separately and the user can't pick between them in Shortcuts.</li>
+</ul>
+
+<h2>Sources</h2>
+<ul>
+<li>Apple Developer Documentation, App Intents framework reference (verified 2026-05-10).</li>
+<li>Apple Developer Documentation, "Adopting App Intents to support system experiences" article (verified 2026-05-10).</li>
+<li>WWDC25 session 244, "Get to know App Intents."</li>
+<li>WWDC25 session 275, "Explore new advances in App Intents."</li>
+<li>WWDC25 session 260, "Develop for Shortcuts and Spotlight with App Intents."</li>
+<li>WWDC25 session 281, "Design interactive snippets."</li>
+</ul>
+</div>
+</body></html>
