@@ -94,6 +94,70 @@
 <li>Framework reference: <a href="https://developer.apple.com/documentation/alarmkit">developer.apple.com/documentation/alarmkit</a></li>
 </ul>
 
+<h2>Platform availability and the Mac build</h2>
+<p>AlarmKit ships on iOS 26+, iPadOS 26+, and Mac Catalyst 26+. <strong>Native macOS does not have AlarmKit.</strong> An app that builds for both iOS and native macOS has to guard every AlarmKit reference, or the macOS compile fails with <code>cannot find type 'AlarmManager' in scope</code>, <code>cannot find type 'AlarmButton' in scope</code>, and friends.</p>
+
+<h3>The <code>#if canImport(AlarmKit)</code> pattern</h3>
+<p>Two-level guarding works reliably:</p>
+<ol>
+<li>Guard the <code>import</code> statement so the symbol isn't imported on platforms that don't have it.</li>
+<li>Guard every reference to an AlarmKit type. This means the body of any function that uses <code>AlarmManager</code>, <code>AlarmButton</code>, <code>AlarmConfiguration</code>, etc.</li>
+</ol>
+<pre><code class="lang-swift">import Foundation
+import Observation
+import SwiftUI
+#if canImport(AlarmKit)
+import AlarmKit
+#endif
+
+@MainActor
+@Observable
+final class OPerationsHOSAlarmManager {
+    var lastError: String?
+
+    func schedule(itemID: String, duration: TimeInterval) async {
+#if canImport(AlarmKit)
+        let id = UUID()
+        let config = AlarmManager.AlarmConfiguration&lt;OPerationsHOSAlarmMetadata&gt;(
+            // ...
+        )
+        do {
+            try await AlarmManager.shared.schedule(id: id, configuration: config)
+        } catch {
+            lastError = error.localizedDescription
+        }
+#else
+        lastError = "AlarmKit is not available on this platform."
+#endif
+    }
+}</code></pre>
+
+<h3>The extension-level gotcha</h3>
+<p>An <code>extension</code> declaration with the type name in its first line is parsed before the body. The compiler can't find the type on a platform that doesn't have it, even if the body is fully <code>#if</code>-guarded. The fix is to wrap the entire <code>extension</code> block at the declaration level:</p>
+<pre><code class="lang-swift">// Wrong &mdash; macOS build fails on "cannot find type 'AlarmButton' in scope"
+extension AlarmButton {
+    static var stopButton: AlarmButton {
+#if canImport(AlarmKit)
+        AlarmButton(text: "Stop", textColor: .white, systemImageName: "stop.fill")
+#else
+        AlarmButton()  // doesn't help &mdash; AlarmButton itself doesn't exist on macOS
+#endif
+    }
+}
+
+// Right &mdash; the whole extension is omitted on platforms without AlarmKit
+#if canImport(AlarmKit)
+extension AlarmButton {
+    static var stopButton: AlarmButton {
+        AlarmButton(text: "Stop", textColor: .white, systemImageName: "stop.fill")
+    }
+}
+#endif</code></pre>
+
+<h3>Mac Catalyst versus native macOS</h3>
+<p>Mac Catalyst counts as <code>canImport(AlarmKit) == true</code> because Catalyst gets the iOS SDK. Native macOS apps don't. If an app's deployment includes native macOS, every AlarmKit code path needs an "AlarmKit unavailable" fallback &mdash; either a stub method that returns a "not supported on this platform" error, or a UI branch that hides alarm-related controls on macOS entirely.</p>
+<p>See also: Book 13's "Cross-Platform &mdash; What Doesn't Translate from iOS to Mac" section covers the broader pattern of iOS-only frameworks (AlarmKit, ActivityKit, parts of HealthKit) and the build-time tools for handling them across an iOS-plus-macOS app.</p>
+
 <h2>Sources</h2>
 <ul>
 <li>Apple Developer Documentation, AlarmKit reference (verified 2026-05-05).</li>
