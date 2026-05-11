@@ -6,7 +6,7 @@
 </head><body>
 <div class="content">
 <h1>Appendix B: CryoKit (Shared Package Source Tour)</h1>
-<p><span class="status-live">Status: LIVE as a Swift package.</span> CryoKit is a shared internal Swift package that both CryoTunes Player (Appendix E) and Tally Matrix Clock (Appendix F) depend on. This appendix is the book's one example of cross-app shared code &mdash; a curated package serving multiple production apps.</p>
+<p><span class="status-live">Status: LIVE as a Swift package.</span> CryoKit is a shared internal Swift package that both CryoTunes Player (Appendix E) and Tally Matrix Clock (Appendix R) depend on. This appendix is the book's one example of cross-app shared code &mdash; a curated package serving multiple production apps.</p>
 <div class="scope-note">Source tour only. CryoKit is deliberately bare-bones &mdash; no fonts, no aesthetic controls, no dependencies of its own. Its scope is data and logic, nothing else. That discipline is the lesson: a shared package earns its keep by staying narrow.</div>
 <h2>What CryoKit contains</h2>
 <ul>
@@ -26,7 +26,7 @@
 <h2>How the apps depend on it</h2>
 <ul>
 <li><strong>Appendix E (CryoTunes Player)</strong> imports CryoKit for its radio station catalog and playback logic.</li>
-<li><strong>Appendix F (Tally Matrix Clock)</strong> imports CryoKit for the station widget that sits alongside its clock + weather display.</li>
+<li><strong>Appendix R (Tally Matrix Clock)</strong> imports CryoKit for the station widget that sits alongside its clock + weather display.</li>
 </ul>
 <h2>The bare-bones rule</h2>
 <p>CryoKit stays deliberately narrow &mdash; no fonts, no styling, no view code. That's the rule: a shared package exports data and logic, not aesthetics. Each consuming app styles its own UI with its own design system. If CryoKit shipped fonts, two apps would be locked into the same look whether they wanted it or not. Keeping the package bare-bones keeps the consuming apps free.</p>

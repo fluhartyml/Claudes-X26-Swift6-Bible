@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Appendix P: NightGard Library Commander</title>
+</head><body>
+<div class="content">
+<h1>Appendix P: NightGard Library Commander (Shop Manual)</h1>
+<p><span class="status-live">Status: v1.0 pre-release. In development; must reach Mac App Store before book release per project memory. Sandboxed for Mac App Store distribution &mdash; the sandboxing is load-bearing and is not to be removed. GPL v3. Locked as CryoTunes companion supplemental in the book's appendix slot. Public repo at <a href="https://github.com/fluhartyml/NightGard-Library-Commander">github.com/fluhartyml/NightGard-Library-Commander</a>.</span> NightGard Library Commander is a Mac-only Apple Music library organization tool for users whose library has grown messy over the years &mdash; missing metadata, orphan playlists, uploaded-but-unmatched tracks, broken cloud status. The app cleans at the <strong>library level</strong> (MusicKit + AppleScript-on-macOS), never by moving physical audio files. Its sibling NightGard Commander handles the file-level work.</p>
+
+<h2>What it is</h2>
+<p>The project's reference audit at start named the problem precisely: 27,255 tracks across 45 playlists; 5,460 missing artist; 8,428 missing album; 7,226 missing genre; 11,247 matched; 3,122 subscription; 969 purchased; 6,651 uploaded; ~5,250 in problem cloud status. A long-tenured iCloud Music Library accumulates that kind of state, and Apple Music's own UI doesn't expose enough bulk tools to fix it. Library Commander is the bulk tool.</p>
+<p>v1.0 ships four panes:</p>
+<ol>
+<li><strong>Playlists.</strong> List all user playlists, multi-select, bulk delete, rename in place, group into folders where supported.</li>
+<li><strong>Library.</strong> Filter to uploaded + problem-state tracks (the two pools that benefit from cleanup), per-row catalog search to find canonical Apple Music versions, one-tap replace.</li>
+<li><strong>Playlist Locker.</strong> Backup all playlists to dated folders in iCloud Documents, list existing backups, restore from M3U, delete backups.</li>
+<li><strong>Stats.</strong> Live library-health dashboard &mdash; tracks, playlists, missing fields, cloud status distribution.</li>
+</ol>
+
+<h2>Architecture overview</h2>
+<p>Mac SwiftUI app, sandboxed, with two service layers:</p>
+<ul>
+<li><strong>App entry:</strong> <code>NightGard_Library_CommanderApp.swift</code> &mdash; <code>@main</code> scene.</li>
+<li><strong>Root:</strong> <code>ContentView.swift</code> &mdash; <code>NavigationSplitView</code> shell with the four-pane sidebar.</li>
+<li><strong>Panes (<code>Views/</code>):</strong>
+  <ul>
+    <li><code>PlaylistsPaneView.swift</code> &mdash; user-playlist list with multi-select, bulk operations, in-place rename.</li>
+    <li><code>LibraryPaneView.swift</code> &mdash; filtered track listing for uploaded + problem-state, with per-row catalog-search controls.</li>
+    <li><code>LockerPaneView.swift</code> &mdash; the Playlist Locker UI (backup, list, restore, delete).</li>
+    <li><code>StatsPaneView.swift</code> &mdash; library-health dashboard.</li>
+  </ul>
+</li>
+<li><strong>Services (<code>Services/</code>):</strong>
+  <ul>
+    <li><code>LibraryService.swift</code> &mdash; the MusicKit + AppleScript bridge. Reads the library via <code>MusicLibraryRequest&lt;Track&gt;</code> / <code>MusicLibraryRequest&lt;Playlist&gt;</code>; mutates via AppleScript-on-macOS where MusicKit's read-only or limited write surface doesn't cover the operation.</li>
+    <li><code>PlaylistLockerService.swift</code> &mdash; ported from the earlier TngrnGrvWr project, Apple-Music-only variant. Handles snapshot serialization, iCloud Documents writes, and M3U restore.</li>
+  </ul>
+</li>
+<li><strong>Notes:</strong> <code>NightGard_Library_Commander_DeveloperNotes.swift</code> &mdash; canonical reference with project audit numbers and the four-pane MVP roadmap.</li>
+</ul>
+
+<h2>Scope rules (the DRM line)</h2>
+<p>Library Commander touches only the parts of an Apple Music library that are safely mutable:</p>
+<ul>
+<li><strong>Uploaded tracks</strong> &mdash; tracks the user added to iCloud Music Library from their own files. The user owns these; the app can replace them with canonical Apple Music versions when a match exists.</li>
+<li><strong>Problem-state tracks</strong> &mdash; tracks Apple Music has flagged as "no longer available" or "error" in cloud status. These need user attention regardless; the app surfaces them in one place.</li>
+</ul>
+<p>It does <em>not</em> touch:</p>
+<ul>
+<li><strong>Matched tracks</strong> &mdash; Apple Music's canonical match for a previously-uploaded file. The matching is Apple's; the app respects it.</li>
+<li><strong>Subscription tracks</strong> &mdash; tracks added from the Apple Music catalog while subscribed.</li>
+<li><strong>Purchased tracks</strong> &mdash; iTunes-purchased tracks. DRM and licensing constraints rule these out.</li>
+</ul>
+<p>The DRM line is conservative on purpose. Touching purchased or subscription tracks risks corrupting the user's library or running afoul of licensing; the app stays in the lane where edits are unambiguously safe.</p>
+
+<h2>The Playlist Locker</h2>
+<p>The Locker is the lowest-risk feature in the app: it never modifies the user's playlists, only snapshots them. Backups go to a dated folder in iCloud Documents (the app declares the iCloud Documents capability in its entitlements). Each backup is a set of <code>.m3u</code> files &mdash; one per playlist &mdash; with the canonical track identifiers preserved. Restore reads the M3U files back and recreates the playlists with the tracks in the same order.</p>
+<p>Locker code is ported from an earlier project (TngrnGrvWr) and stripped to Apple-Music-only behavior. Cross-platform / non-Apple-Music sources aren't supported in v1.0.</p>
+
+<h2>The MusicKit + AppleScript split</h2>
+<p>Library Commander uses two Apple-provided surfaces because neither one alone covers the job:</p>
+<ul>
+<li><strong>MusicKit</strong> &mdash; modern Swift API; great for reading the library (<code>MusicLibraryRequest</code>), reasonable for some writes. Apple's preferred path.</li>
+<li><strong>AppleScript-on-macOS</strong> &mdash; older, but the only public surface for some library-level mutations that MusicKit doesn't expose. The Mac Music.app exposes a scripting dictionary; the app sends Apple events to it for those operations.</li>
+</ul>
+<p><code>LibraryService</code> picks the right tool per operation. The split is invisible to the panes &mdash; they call <code>LibraryService.deletePlaylists(_:)</code> or <code>LibraryService.renamePlaylist(_:to:)</code> and the service handles which mechanism to use.</p>
+
+<h2>Sandbox + entitlements</h2>
+<p>The app is sandboxed for Mac App Store distribution. Per project memory the sandboxing is load-bearing and is not to be removed.</p>
+<p>Required entitlements:</p>
+<ul>
+<li><strong>App Sandbox</strong> &mdash; the load-bearing one. All operations stay within the sandbox or go through user-mediated access (folder bookmarks, system Music.app via AppleScript with the appropriate permission prompt).</li>
+<li><strong>iCloud Documents</strong> &mdash; for Locker backups.</li>
+<li><strong>Apple Music</strong> &mdash; MusicKit needs the user's subscription state and library access.</li>
+<li><strong>AppleScript / Apple Events</strong> &mdash; required to send events to the Music.app. First-time use prompts the user for permission.</li>
+</ul>
+
+<h2>UX conventions (project-memory locked)</h2>
+<p>Several UX details are locked decisions:</p>
+<ul>
+<li><strong>Window size:</strong> 900&times;720 default.</li>
+<li><strong>Minimum font:</strong> 18pt throughout (same rule that came from Tally Matrix Clock; Library Commander inherits it).</li>
+<li><strong>Scan button:</strong> custom solid-blue focus-visible style with press animation, not a stock SwiftUI button.</li>
+<li><strong>In-flight messaging:</strong> "One moment please&hellip;" during long operations; "Cancelling&hellip;" when the user cancels mid-flight.</li>
+<li><strong>Status bar:</strong> footer status bar shows the current operation and queue state.</li>
+</ul>
+<p>These aren't preferences &mdash; they're locked. Future revisions don't drift on window size, font floor, or the custom button styling.</p>
+
+<h2>Roadmap status</h2>
+<p>v1.0 MVP scope (the four panes, 14 task items from <code>DeveloperNotes.swift</code>). Per project memory: <strong>no v1.1 and no slimmed iOS companion in the v1 horizon.</strong> v2.0 is the larger architectural shift &mdash; Mac-as-server + thin iOS client &mdash; covered separately when v1.0 ships and stabilizes.</p>
+
+<h2>Build + deployment</h2>
+<ul>
+<li><strong>App name:</strong> NightGard Library Commander.</li>
+<li><strong>Platform:</strong> macOS only.</li>
+<li><strong>Frameworks:</strong> SwiftUI (UI), MusicKit (library access), AppKit (for the AppleScript / Apple Events bridges), Foundation (M3U writing).</li>
+<li><strong>External services:</strong> Apple Music (requires the user's subscription for full functionality).</li>
+<li><strong>Distribution:</strong> Mac App Store after submission. Sandboxed.</li>
+<li><strong>Roadmap gate:</strong> Library Commander reaching the Mac App Store is a ship dependency for the book's official release.</li>
+</ul>
+
+<h2>Known gotchas</h2>
+<ul>
+<li><strong>Sandboxing is load-bearing.</strong> Per project memory, do NOT unsandbox the app. The Mac App Store requires sandboxing; any non-sandboxed direct-file-system reach belongs in NightGard Commander (the sibling), not here.</li>
+<li><strong>MusicKit write API doesn't cover everything.</strong> Some library mutations require AppleScript-on-macOS. The first time the app sends an Apple event to Music.app, macOS prompts the user for permission; without that permission, those operations fail.</li>
+<li><strong>iCloud Documents pickup can lag.</strong> Locker backups land in iCloud Documents; on a fresh Mac signed into the same iCloud account, the backups may take a few minutes to appear locally. The Locker UI shows the in-flight sync state.</li>
+<li><strong>The DRM line is enforced in code.</strong> The Library pane's filter is part of the architecture, not a UI checkbox the user can override. Matched / subscription / purchased tracks don't show in the editable list at all; they appear only in the Stats pane.</li>
+<li><strong>Sibling app coordination.</strong> File-level operations on the audio files themselves go to NightGard Commander, not here. If a user asks "why doesn't Library Commander fix this filename?" &mdash; the answer is "Library Commander is library-level; the sibling does file-level."</li>
+</ul>
+
+<h2>Sources</h2>
+<ul>
+<li>Project source: <a href="https://github.com/fluhartyml/NightGard-Library-Commander">github.com/fluhartyml/NightGard-Library-Commander</a> (verified 2026-05-10).</li>
+<li>Canonical roadmap: <code>NightGard Library Commander/NightGard_Library_Commander_DeveloperNotes.swift</code> in the project repo.</li>
+<li>Companion music apps: Appendix M (CryoTunes Player), Appendix W (Tally Matrix Clock), Appendix L (Cryo Playlist Manager).</li>
+<li>Sibling project: NightGard Commander &mdash; same family, file-level focus (see project repo).</li>
+<li>Apple Developer Documentation: MusicKit framework reference; Music.app AppleScript dictionary.</li>
+</ul>
+</div>
+</body></html>

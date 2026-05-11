@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Appendix S: QuickNote</title>
+</head><body>
+<div class="content">
+<h1>Appendix S: QuickNote (Shop Manual)</h1>
+<p><span class="status-live">Status: Live on the App Store. GPL v3. Public repo at <a href="https://github.com/fluhartyml/QuickNote">github.com/fluhartyml/QuickNote</a>. Build-Along chapter: Part VII Build-Along 02.</span> QuickNote is a small, focused note-taking app: one note title, a free-form body, a date, and a photo grid. SwiftData persists the notes; a home-screen widget mirrors the three most-recent. Book 09 (Text and TextField) and Book 16 (Extensions and Packages) both reach for this app as their primary Live Reference.</p>
+
+<h2>What it is</h2>
+<p>An iPhone-first quick-capture app for thoughts that need to land somewhere before they're forgotten. The note model is intentionally minimal: title, body, date, optional photos. No tags, no folders, no nested hierarchy &mdash; the app's job is to make capture fast, not to host an organizational system. SwiftData stores everything. A WidgetKit extension surfaces the most recent notes on the home screen without launching the full app.</p>
+
+<h2>Architecture overview</h2>
+<p>SwiftUI + SwiftData host app with a sibling WidgetKit extension target. The two targets share data through an App Group container.</p>
+<p>Host app file roles:</p>
+<ul>
+<li><strong>App entry:</strong> <code>QuickNoteApp.swift</code> &mdash; <code>@main</code> scene with the shared <code>modelContainer</code>.</li>
+<li><strong>Root and detail:</strong> <code>ContentView.swift</code> (notes index with <code>@Query</code> against the SwiftData store), <code>NoteDetailView.swift</code> (per-note edit surface with <code>TextField</code> title, <code>TextEditor</code> body, <code>DatePicker</code> date, photo grid).</li>
+<li><strong>Data model:</strong> <code>Note.swift</code> &mdash; SwiftData <code>@Model</code> with title, body, date, and photo data.</li>
+<li><strong>Auxiliary surfaces:</strong> <code>AboutView.swift</code>, <code>ContactDeveloperView.swift</code> (mail composer for feedback).</li>
+<li><strong>Under the Hood:</strong> <code>UnderTheHoodView.swift</code> + <code>UnderTheHoodContent.swift</code> (in-app source mirror).</li>
+<li><strong>Lexicon Quick-Define:</strong> <code>LexiconContent.swift</code>, <code>LexiconSheet.swift</code>, <code>IdentifierTaggedSourceView.swift</code> &mdash; same three-file pattern as Claude's Web Wrapper (Appendix J).</li>
+</ul>
+<p>Widget extension file roles:</p>
+<ul>
+<li><code>QuickNoteWidgetExtension/QuickNoteWidgetExtensionBundle.swift</code> &mdash; the <code>@main</code> widget bundle.</li>
+<li><code>QuickNoteWidgetExtension/QuickNoteWidgetExtension.swift</code> &mdash; the actual widget: <code>Widget</code> conformance, <code>TimelineProvider</code>, and the widget's SwiftUI <code>View</code> body.</li>
+<li><code>QuickNoteWidgetExtension/QuickNoteWidgetExtension.entitlements</code> &mdash; declares membership in the App Group container.</li>
+</ul>
+
+<h2>The data model</h2>
+<p>A single SwiftData <code>@Model</code> covers everything:</p>
+<pre><code class="lang-swift">@Model
+final class Note {
+    var title: String
+    var body: String
+    var date: Date
+    var photoData: [Data]   // small inline thumbnails; full-size images on disk
+
+    init(title: String = "", body: String = "", date: Date = .now, photoData: [Data] = []) {
+        self.title = title
+        self.body = body
+        self.date = date
+        self.photoData = photoData
+    }
+}</code></pre>
+<p>The <code>ModelContainer</code> is wired in <code>QuickNoteApp.swift</code> with the App Group container as its persistence location, so the widget can read the same store the host app writes to.</p>
+
+<h2>Input surface (Book 09 / Book 10 reference)</h2>
+<p>The Note Detail view is one of the cleanest production examples of <code>TextField</code> + <code>TextEditor</code> together:</p>
+<ul>
+<li><strong><code>TextField</code></strong> for the note title &mdash; single line, large semantic font, focused on first launch of a new note so the user can start typing immediately.</li>
+<li><strong><code>TextEditor</code></strong> for the note body &mdash; multi-line free-form text area that grows with the keyboard, persists as a SwiftData string, and reads back identically across the app and its home-screen widget.</li>
+<li><strong><code>DatePicker</code></strong> for the note's date &mdash; defaults to today, editable for backdating.</li>
+<li><strong><code>PhotosPicker</code></strong> for the photo grid &mdash; the user-mediated picker pattern from PhotosUI; no <code>NSPhotoLibraryUsageDescription</code> needed.</li>
+</ul>
+
+<h2>Widget extension (Book 16 reference)</h2>
+<p>The widget shows the three most-recent notes on the home screen. Architecture:</p>
+<ul>
+<li><strong>App Group container.</strong> Both targets declare membership in <code>group.com.fluharty.QuickNote</code> (or similar &mdash; the actual identifier lives in the entitlements file). The SwiftData store is created inside that container instead of the default sandbox, so both processes read and write the same file.</li>
+<li><strong>Read-only from the widget.</strong> The widget reads recent notes via <code>@Query</code> against the shared store but never writes back. The host app is the single writer.</li>
+<li><strong>Build number lockstep.</strong> The host app's <code>CURRENT_PROJECT_VERSION</code> must equal the widget extension's. App Store submission rejects the binary if they diverge. This trips up first-time widget builders constantly &mdash; it's not documented prominently but it's enforced strictly.</li>
+<li><strong>Timeline provider</strong> &mdash; the widget refreshes whenever the host app writes to SwiftData. <code>WidgetCenter.shared.reloadAllTimelines()</code> is called inside save handlers in the host app.</li>
+</ul>
+
+<h2>Sheets, alerts, contact</h2>
+<ul>
+<li><strong>About</strong> &mdash; standard About page from <code>AboutView.swift</code>, presented as a sheet from a toolbar info button.</li>
+<li><strong>Contact Developer</strong> &mdash; mail composer wrapped via <code>MFMailComposeViewController</code> bridged into SwiftUI.</li>
+<li><strong>Delete</strong> &mdash; swipe-to-delete on the notes list, no confirmation dialog (intentional &mdash; SwiftData undo is reliable, asking to confirm every delete is friction).</li>
+</ul>
+
+<h2>Build + deployment</h2>
+<ul>
+<li><strong>App name:</strong> QuickNote.</li>
+<li><strong>Platforms:</strong> iPhone primary; iPad and Mac (Designed for iPad) inherit the layout.</li>
+<li><strong>Frameworks:</strong> SwiftUI, SwiftData (host + widget), WidgetKit (widget), PhotosUI (photo picker), MessageUI (contact composer).</li>
+<li><strong>App Group:</strong> shared identifier across host and widget &mdash; required for the shared SwiftData store.</li>
+<li><strong>Privacy:</strong> No network. Notes stay on the device. <code>PhotosPicker</code> means no NSPhotoLibraryUsageDescription string is required.</li>
+</ul>
+
+<h2>Known gotchas</h2>
+<ul>
+<li><strong>Build number lockstep across host and widget.</strong> The two targets' <code>CURRENT_PROJECT_VERSION</code> values must match exactly or App Store submission fails. Bumping the host's build number means bumping the widget's in the same commit.</li>
+<li><strong>Widget can't write.</strong> The widget is a read-only mirror. Any "save from widget" feature would require an App Intent that runs in the host app's context, not direct SwiftData writes from the widget process.</li>
+<li><strong>SwiftData inside an App Group container.</strong> The default <code>ModelContainer</code> initializer puts the store in the host app's sandbox, which the widget can't reach. The container has to be initialized with a custom URL inside the App Group container instead. Forgetting this means the widget shows an empty timeline even though the host app has notes.</li>
+<li><strong>Photo data lives in two places.</strong> The <code>photoData: [Data]</code> array on the model holds small inline thumbnails. Full-size original photos are written to disk in the App Group container, with the model storing relative paths. This split keeps the SwiftData store small while letting the widget render thumbnails without disk fetches.</li>
+</ul>
+
+<h2>Sources</h2>
+<ul>
+<li>Project source: <a href="https://github.com/fluhartyml/QuickNote">github.com/fluhartyml/QuickNote</a> (verified 2026-05-10).</li>
+<li>Build-Along chapter: Part VII Build-Along 02.</li>
+<li>Book 09 cross-reference: <code>TextField</code> + <code>TextEditor</code> production patterns.</li>
+<li>Book 10 cross-reference: <code>TextEditor</code> note-body shape.</li>
+<li>Book 15 cross-reference: SwiftData <code>@Model</code> + <code>@Query</code> + <code>modelContainer</code> pattern (Appendix J covers the Bookmark variant; this app covers the App-Group-shared variant).</li>
+<li>Book 16 cross-reference: widget extension with App Group container.</li>
+<li>Book 19 cross-reference: <code>LexiconSheet</code> + <code>IdentifierTaggedSourceView</code>.</li>
+</ul>
+</div>
+</body></html>

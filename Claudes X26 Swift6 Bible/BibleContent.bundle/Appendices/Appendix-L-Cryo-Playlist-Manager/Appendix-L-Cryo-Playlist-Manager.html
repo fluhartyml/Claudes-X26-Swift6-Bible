@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Appendix L: Cryo Playlist Manager</title>
+</head><body>
+<div class="content">
+<h1>Appendix L: Cryo Playlist Manager (Shop Manual)</h1>
+<p><span class="status-live">Status: In submission for Mac App Store; ship dependency for the book's official release. GPL v3. Public repo at <a href="https://github.com/fluhartyml/Cryo-Playlist-Manager">github.com/fluhartyml/Cryo-Playlist-Manager</a>. Locked as an appendix reference per project memory.</span> Cryo Playlist Manager is the Mac-side companion to the Cryo music apps (CryoTunes Player in Appendix M, Tally Matrix Clock in Appendix W). It manages Apple Music playlists, imports from Spotify, and provides a Playlist Locker that prevents accidental dynamic changes to the user's curated lists. Built on MusicKit on the Apple side and the Spotify Web API on the Spotify side.</p>
+
+<h2>What it is</h2>
+<p>A macOS app for users who keep their music library serious. Three jobs:</p>
+<ol>
+<li><strong>Browse and curate Apple Music.</strong> The user's library shown in a Mac-native table, organized by station / decade / year groupings shared with the CryoTunes family.</li>
+<li><strong>Import from Spotify.</strong> Authenticate against the user's Spotify account, list their Spotify playlists, and replicate tracks into Apple Music where possible (matching by title + artist + duration).</li>
+<li><strong>Lock playlists.</strong> Apple Music can re-order or substitute tracks in dynamic playlists in ways that surprise the user. The Playlist Locker takes a snapshot of a playlist's contents and lets the user restore it if Apple Music drifts.</li>
+</ol>
+
+<h2>Architecture overview</h2>
+<p>SwiftUI Mac app with two service stacks (Apple Music via MusicKit, Spotify via Web API + OAuth). The project is organized into <code>Views/</code> and <code>Services/</code> folders for separation.</p>
+<ul>
+<li><strong>App entry:</strong> <code>Cryo_Playlist_ManagerApp.swift</code> &mdash; <code>@main</code> scene. Imports <code>SwiftUI</code> and <code>MusicKit</code>. One <code>WindowGroup</code> with <code>SpotifyService</code> injected via <code>.environment</code> so any view that needs Spotify can pull it from the environment.</li>
+<li><strong>Root:</strong> <code>ContentView.swift</code> &mdash; top-level sidebar / detail layout connecting the four views below.</li>
+<li><strong>Views (<code>Views/</code>):</strong>
+  <ul>
+    <li><code>MyMusicView.swift</code> &mdash; user's Apple Music library browse, table-style listing tuned for Mac.</li>
+    <li><code>StationBrowserView.swift</code> &mdash; the shared station catalog (Category &rarr; Decade &rarr; Year), same shape used by CryoTunes Player and Tally Matrix Clock.</li>
+    <li><code>PlaylistLockerView.swift</code> &mdash; the locked-playlist management surface (snapshot, restore, compare).</li>
+    <li><code>SpotifyPlaylistView.swift</code> &mdash; Spotify playlist list and per-playlist track view with the Apple Music match status.</li>
+    <li><code>SettingsView.swift</code> &mdash; Mac Settings scene for preferences (default station behavior, Spotify connection status, etc.).</li>
+  </ul>
+</li>
+<li><strong>Services (<code>Services/</code>):</strong>
+  <ul>
+    <li><code>PlaylistManager.swift</code> &mdash; the Apple Music side. Reads the user's library via MusicKit, executes add / remove / re-order operations against playlists.</li>
+    <li><code>PlaylistLockerService.swift</code> &mdash; the snapshot-and-restore engine. Writes locked playlist snapshots to local storage; compares against current Apple Music state on demand.</li>
+    <li><code>SpotifyAuthManager.swift</code> &mdash; OAuth flow with Spotify's authorization server. Stores tokens in the system keychain.</li>
+    <li><code>SpotifyService.swift</code> &mdash; the <code>@Observable</code> facade for the Spotify Web API. List playlists, list tracks, search the catalog. Injected into views via SwiftUI environment.</li>
+    <li><code>DislikeManager.swift</code> &mdash; per-track dislike list, mirrored from the CryoTunes pattern so the same dislikes propagate.</li>
+  </ul>
+</li>
+</ul>
+
+<h2>Mac-native design choices</h2>
+<p>This is a Mac-first app, not a Designed-for-iPad-on-Mac port:</p>
+<ul>
+<li><strong>Three-pane sidebar / list / detail layout.</strong> Sidebar with the four primary views (My Music, Stations, Locker, Spotify), middle pane with the list for the selected view, right pane with the per-item detail.</li>
+<li><strong>Table-style listings.</strong> Where the iOS apps use SwiftUI <code>List</code> with rich rows, this app uses Mac <code>Table</code> with column-style data (title, artist, duration, status). The Mac convention &mdash; sortable columns, multiple-row selection, keyboard navigation &mdash; is what users expect at this scale.</li>
+<li><strong>Mac Settings scene.</strong> <code>SettingsView</code> is wired as a separate <code>Settings</code> scene in the App body, not as a sheet from a toolbar button. This is the canonical Mac pattern.</li>
+<li><strong>Drag-and-drop.</strong> Tracks drag between playlists; playlists drag for re-ordering. The Mac AppKit drag-and-drop model is bridged through SwiftUI's <code>Transferable</code> protocol.</li>
+</ul>
+
+<h2>The Spotify side</h2>
+<p>Spotify integration uses the Spotify Web API with OAuth 2.0 (PKCE flow):</p>
+<ol>
+<li>User clicks Connect Spotify.</li>
+<li><code>SpotifyAuthManager</code> opens the system browser to Spotify's authorization endpoint with the PKCE challenge.</li>
+<li>User approves; Spotify redirects to the app's registered redirect URI.</li>
+<li>The app receives the authorization code, exchanges it for an access + refresh token, stores both in the system keychain.</li>
+<li><code>SpotifyService</code> uses the access token for subsequent API calls. When the token expires, the refresh token mints a new one without user interaction.</li>
+</ol>
+<p>The keychain storage means Spotify credentials survive restarts and reboots. The refresh-token flow means the user authenticates once.</p>
+
+<h2>The Playlist Locker</h2>
+<p>Apple Music has long-standing behavior where playlists can shift &mdash; tracks can be replaced with matched cloud versions, durations can change slightly, occasionally a track can drop out entirely. For a curator, that's an unwelcome surprise. The Locker takes a snapshot of a playlist's track list at lock time and stores it locally. Later, the user can compare the current Apple Music state against the snapshot and choose to restore (re-add missing tracks, re-order to match) or accept the drift (update the snapshot).</p>
+<p>The snapshot is per-playlist, with version history. The user can roll back to any previous snapshot, not just the most recent.</p>
+
+<h2>Build + deployment</h2>
+<ul>
+<li><strong>App name:</strong> Cryo Playlist Manager.</li>
+<li><strong>Platforms:</strong> macOS native (not Catalyst, not Designed-for-iPad).</li>
+<li><strong>Frameworks:</strong> SwiftUI (UI), MusicKit (Apple Music access), Foundation URLSession (Spotify Web API), Security framework (keychain via wrappers in <code>SpotifyAuthManager</code>).</li>
+<li><strong>External services:</strong> Spotify Web API (requires the user's Spotify account); Apple Music (requires the user's Apple Music subscription for full track access).</li>
+<li><strong>Distribution:</strong> Mac App Store after submission. Locked as appendix reference per project memory &mdash; the book's official release waits on this app reaching the store.</li>
+</ul>
+
+<h2>Subscription disclosure</h2>
+<p>This app needs <em>two</em> third-party subscriptions to operate at full capacity:</p>
+<ul>
+<li><strong>Apple Music subscription</strong> &mdash; for playback and full catalog access.</li>
+<li><strong>Spotify account</strong> &mdash; can be a free Spotify account for playlist read-only; a Premium account isn't required for the import use case.</li>
+</ul>
+<p>Per <code>feedback_disclose_subscription_requirements.md</code>, both requirements are stated upfront in the App Store description. The app's UI also surfaces the subscription state inline when a feature needs it (e.g., the Spotify view shows a Connect Spotify call-to-action when no account is linked).</p>
+
+<h2>Known gotchas</h2>
+<ul>
+<li><strong>Spotify-to-Apple-Music track matching isn't perfect.</strong> The matching algorithm (title + artist + duration tolerance) gets ~85&ndash;95% accuracy on mainstream catalogs; obscure tracks, regional releases, and live recordings often miss. The UI surfaces unmatched tracks explicitly so the user can hand-resolve them.</li>
+<li><strong>MusicKit's playlist write API is limited.</strong> Apple Music permits adding and removing tracks but not arbitrary metadata edits. The Locker has to work within those limits &mdash; "restore" means re-add the right tracks in the right order, not rewrite the playlist's name or description.</li>
+<li><strong>Spotify rate limits.</strong> Spotify's Web API enforces per-app rate limits that the bulk-import use case can easily hit. <code>SpotifyService</code> paces requests with a token-bucket style throttler; aggressive imports show a "slow down" inline state rather than failing outright.</li>
+<li><strong>Mac App Store sandbox + keychain.</strong> The app is sandboxed for Mac App Store distribution; keychain access for the OAuth tokens uses the app's own keychain group, not the user's login keychain. This means migrating to a new Mac requires re-authenticating Spotify; intentional, but worth knowing.</li>
+</ul>
+
+<h2>Sources</h2>
+<ul>
+<li>Project source: <a href="https://github.com/fluhartyml/Cryo-Playlist-Manager">github.com/fluhartyml/Cryo-Playlist-Manager</a> (verified 2026-05-10).</li>
+<li>Companion music apps: Appendix M (CryoTunes Player), Appendix W (Tally Matrix Clock).</li>
+<li>Shared data layer: Appendix B (CryoKit) &mdash; same station catalog and dislike-management patterns.</li>
+<li>Apple Developer Documentation: MusicKit reference.</li>
+<li>Spotify Developer Documentation: Web API reference, Authorization Code with PKCE flow.</li>
+</ul>
+</div>
+</body></html>

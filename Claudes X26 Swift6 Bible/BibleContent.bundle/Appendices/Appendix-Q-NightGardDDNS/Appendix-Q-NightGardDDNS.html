@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Appendix Q: NightGardDDNS</title>
+</head><body>
+<div class="content">
+<h1>Appendix Q: NightGardDDNS (Shop Manual)</h1>
+<p><span class="status-live">Status: v1.0.0 production ready. <strong>Self-distributed &mdash; not available on the App Store</strong> (the App Store doesn't allow this kind of app; see "Why not the App Store" below). GPL v3. Public repo at <a href="https://github.com/fluhartyml/NightGard">github.com/fluhartyml/NightGard</a> under <code>Modules/NightGardDDNS</code>. Distributed as a Swift Package (reusable library) plus a demo app.</span> NightGardDDNS provides automatic Dynamic DNS (DDNS) update functionality for macOS and iOS. It monitors the user's public IP address and updates a DDNS provider (currently DuckDNS) when the IP changes.</p>
+
+<h2>What it does</h2>
+<p>A user with a dynamic IP address from their ISP &mdash; meaning the public IP can change without warning &mdash; needs a way to keep a domain name pointing at their current address. Dynamic DNS providers (DuckDNS, No-IP, DynDNS) give the user a domain name; the user's job is to tell the provider whenever the IP changes. NightGardDDNS automates that telling-step.</p>
+<p>The flow:</p>
+<ol>
+<li>App launches; the user configures their DuckDNS domain and token in Settings.</li>
+<li>The app reads the local network IP via BSD sockets (<code>getifaddrs</code> on <code>en0</code> / <code>en1</code>).</li>
+<li>The app fetches the public IP via fallback services (ipify.org, icanhazip.com, ifconfig.me).</li>
+<li>If the public IP has changed since last check, the app POSTs an update to DuckDNS with the user's domain + token + new IP.</li>
+<li>The app repeats steps 2&ndash;4 on a configurable timer (default: every 5 minutes).</li>
+</ol>
+
+<h2>Architecture overview</h2>
+<p>Small project. Swift Package + demo app pattern.</p>
+<ul>
+<li><strong>App entry:</strong> <code>NightGardDDNSApp.swift</code> &mdash; <code>@main</code> scene.</li>
+<li><strong>Root:</strong> <code>ContentView.swift</code> &mdash; status display + start / stop service controls.</li>
+<li><strong>Settings:</strong> <code>SettingsView.swift</code> &mdash; configuration form (domain, token, update interval).</li>
+<li><strong>Service:</strong> <code>DDNSService.swift</code> &mdash; the <code>@Observable</code> <code>@MainActor</code> class that does the IP detection + DuckDNS update + timer scheduling.</li>
+<li><strong>Notes:</strong> <code>NightGardDDNS_DeveloperNotes.swift</code> &mdash; canonical reference with the full architecture writeup.</li>
+</ul>
+
+<h2>Settings persistence</h2>
+<p>Configuration (domain, token, update interval) persists in <code>UserDefaults</code>. No external dependencies, no SwiftData, no networking beyond the public-IP probe and the DuckDNS update. The token is sensitive (it's the key to updating the user's DDNS record) but the app stores it in <code>UserDefaults</code> for simplicity. A production hardening pass would migrate the token to the system keychain.</p>
+
+<h2>Why not the App Store</h2>
+<p>App Store policy effectively disallows this kind of app. Three concrete reasons:</p>
+<ul>
+<li><strong>Background networking on a timer is not the App Store's preferred model.</strong> NightGardDDNS runs a foreground-app timer that pings external services and posts updates to DuckDNS every few minutes. The App Store wants apps that respond to user actions; daemon-like always-on networking belongs in launchd or a network extension, neither of which fits a standard App Store app.</li>
+<li><strong>The app's primary purpose duplicates router / network-appliance functionality.</strong> Most routers ship with built-in DDNS clients; running one in a phone or laptop app is a workaround for routers that don't, or for users who want it portable. App Store guideline 4.2 (Minimum Functionality) and the broader "this should be a system tool, not an app" pattern push apps like this toward direct distribution.</li>
+<li><strong>It's a developer / sysadmin utility, not a consumer product.</strong> The configuration requires understanding what a DDNS provider is, what a token is, and what a domain points at. The App Store is positioned as a consumer storefront; this app's audience is people running their own network infrastructure.</li>
+</ul>
+<p>None of these are absolute App Store rejections every time, but together they make App Store distribution costly to attempt and likely to be rejected on review. Self-distribution sidesteps all three.</p>
+
+<h2>How to get it (self-distribution path)</h2>
+<p>NightGardDDNS is distributed through three paths:</p>
+<ol>
+<li><strong>GitHub clone-and-build.</strong> The repo is public; readers clone, open in Xcode, and build for their own device. This is the default path for the book's roster and the canonical way to get NightGardDDNS.</li>
+<li><strong>Swift Package import.</strong> Other Mac / iOS projects can add NightGardDDNS as a Swift Package dependency and use the library code directly &mdash; the demo app is the example, not the only deliverable. The package follows the "Lego brick" reuse pattern of the NightGard Module Library.</li>
+<li><strong>Mac Developer ID signed direct download</strong> (future). Mac distribution outside the App Store uses Apple's Developer ID signing + notarization process. The app gets signed and notarized, the user downloads it from a website, and macOS Gatekeeper accepts it because it's signed and notarized. iOS direct distribution is more constrained &mdash; AltStore, TestFlight, or enterprise certificates are the options &mdash; and NightGardDDNS doesn't currently target any of them for end-user iOS distribution.</li>
+</ol>
+
+<h2>The Module Library context</h2>
+<p>NightGardDDNS was extracted from a larger project (wWw NGPortal) in November 2025 as part of the NightGard Module Library initiative &mdash; a project to break common app functionality into reusable Swift packages developers can use to rapidly build applications without reinventing the same code. NightGardDDNS is one Lego brick; PlaylistLocker (Appendix P) is another. The pattern is: build the feature once for a real app, harden it, extract the reusable part into a package, ship both the demo app (to prove it works) and the package (so others can use it).</p>
+
+<h2>Build + deployment</h2>
+<ul>
+<li><strong>Name:</strong> NightGardDDNS.</li>
+<li><strong>Distribution:</strong> Self-distributed via GitHub clone-and-build and Swift Package import. Not on App Store.</li>
+<li><strong>Platforms:</strong> iOS 17+, macOS 14+.</li>
+<li><strong>Swift:</strong> 6.2+.</li>
+<li><strong>Frameworks:</strong> SwiftUI (UI), Foundation (<code>URLSession</code> for IP probes and DuckDNS POSTs, BSD sockets for local IP via <code>getifaddrs</code>), Observation (<code>@Observable</code> macro).</li>
+<li><strong>External services:</strong> DuckDNS (requires the user's free DuckDNS account), plus three public-IP-detection services (ipify.org, icanhazip.com, ifconfig.me) used as a fallback chain.</li>
+</ul>
+
+<h2>Smart update logic</h2>
+<p>The service is intentionally conservative about hitting DuckDNS:</p>
+<ul>
+<li><strong>Only updates when the public IP actually changed.</strong> Comparing the new IP against the last-known IP avoids spurious API calls when nothing has changed.</li>
+<li><strong>Immediate update on service start.</strong> The first run after launching the app posts an update so the user gets a quick "yes, it's working" feedback.</li>
+<li><strong>Periodic checks on the timer interval.</strong> Default 5 minutes. Configurable in Settings.</li>
+</ul>
+
+<h2>Known gotchas</h2>
+<ul>
+<li><strong>The token in <code>UserDefaults</code> is convenience-over-security.</strong> A hardening pass would migrate the DuckDNS token to the system keychain. For a single-user self-distributed app on the user's own device, the convenience is reasonable; for any wider distribution it should change.</li>
+<li><strong>Background timer is foreground-only.</strong> On iOS, the timer only fires while the app is in the foreground. If the user backgrounds the app or locks the device, updates stop until the next foreground session. On macOS, the timer fires as long as the app is running, which is the normal Mac expectation.</li>
+<li><strong>Public-IP probe services can fail.</strong> The fallback chain (ipify &rarr; icanhazip &rarr; ifconfig.me) handles single-service outages, but a network with all three blocked produces no update. The service surfaces the failure in the UI rather than retrying forever.</li>
+<li><strong>DuckDNS is the only provider currently supported.</strong> The API surface is provider-specific; supporting No-IP, DynDNS, or Cloudflare's DNS API would require a per-provider adapter. Worth doing for any wider audience; not in v1.0.0 scope.</li>
+<li><strong>App Store policies can change.</strong> The "why not App Store" reasoning here is current as of v1.0.0. If Apple's policies evolve to include DDNS utilities, the distribution model could revisit App Store submission &mdash; but the architecture (timer, background networking) would need its own pass too.</li>
+</ul>
+
+<h2>Sources</h2>
+<ul>
+<li>Project source: <a href="https://github.com/fluhartyml/NightGard">github.com/fluhartyml/NightGard</a> under <code>Modules/NightGardDDNS</code> (verified 2026-05-10).</li>
+<li>Canonical roadmap: <code>NightGardDDNS/NightGardDDNS_DeveloperNotes.swift</code> in the project repo.</li>
+<li>DuckDNS provider documentation: <a href="https://www.duckdns.org/spec.jsp">duckdns.org/spec.jsp</a>.</li>
+<li>Related: NightGard Module Library initiative (covers the "reusable Lego brick" packaging pattern).</li>
+</ul>
+</div>
+</body></html>

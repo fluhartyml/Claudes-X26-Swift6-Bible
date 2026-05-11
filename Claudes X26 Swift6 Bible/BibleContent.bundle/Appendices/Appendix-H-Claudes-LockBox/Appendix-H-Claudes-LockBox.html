@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Appendix H: Claudes LockBox</title>
+</head><body>
+<div class="content">
+<h1>Appendix H: Claudes LockBox (Shop Manual)</h1>
+<p><span class="status-live">Status: v1.0 submitted to App Store APR 16 2026, awaiting review. GPL v3. Public repo at <a href="https://github.com/fluhartyml/Claudes-LockBox">github.com/fluhartyml/Claudes-LockBox</a>. Build-Along chapter: Part VII Build-Along 03.</span> Claudes LockBox is a biometric vault for personal documents and photos: Face ID at launch, folders inside, items inside folders, attached camera shots or scanned PDFs at the item level. It's the Bible's primary Live Reference for gestures (Book 04), three-column navigation (Book 13), sheet vs. <code>fullScreenCover</code> (Book 12), and share-sheet integration (Book 14).</p>
+
+<h2>What it is</h2>
+<p>A SwiftUI iPhone / iPad / Mac (Designed for iPad on Mac) app that gates everything behind Face ID. After successful authentication, the user sees a sidebar of folders, the items inside the selected folder, and the per-item detail screen. Items hold photos taken with the camera, document pages scanned with VisionKit's document scanner, free-form text notes, and PIN-protected secure entries. The data lives in SwiftData, hosted in the app's sandbox &mdash; nothing leaves the device.</p>
+
+<h2>Architecture overview</h2>
+<p>Standard SwiftUI + SwiftData app with a Face-ID-gated entry view. Three-column <code>NavigationSplitView</code> after auth. Camera and document-scanner integrations are UIViewController-based, bridged into SwiftUI via <code>UIViewControllerRepresentable</code>.</p>
+<p>File roles:</p>
+<ul>
+<li><strong>App entry:</strong> <code>Claudes_LockBoxApp.swift</code> (the <code>@main</code> scene with the SwiftData model container), <code>LockScreenView.swift</code> (Face ID gate, falls through to <code>ContentView</code> on success), <code>ContentView.swift</code> (root after auth &mdash; hosts the TabView with Vault and Under-the-Hood tabs).</li>
+<li><strong>Three-column shell:</strong> <code>SidebarView.swift</code> (folders list, the leftmost column), <code>ItemListView.swift</code> (items inside the selected folder, the middle column), <code>ItemDetailView.swift</code> (the rightmost column).</li>
+<li><strong>Add sheets:</strong> <code>AddFolderView.swift</code> (new folder form), <code>AddItemView.swift</code> (new item form &mdash; presented via <code>fullScreenCover</code> rather than <code>.sheet</code>; the rationale is in the gotchas section below).</li>
+<li><strong>Photo capture and viewing:</strong>
+  <ul>
+    <li><code>CameraCaptureView.swift</code> &mdash; UIKit camera bridge.</li>
+    <li><code>DocumentScannerView.swift</code> &mdash; VisionKit document scanner bridge.</li>
+    <li><code>ImageViewerView.swift</code> &mdash; full-screen image viewer with five gesture patterns (covered in Book 04).</li>
+    <li><code>ShareSheetView.swift</code> &mdash; <code>UIActivityViewController</code> wrapped via <code>UIViewControllerRepresentable</code>.</li>
+  </ul>
+</li>
+<li><strong>Data model:</strong> <code>Folder.swift</code> and <code>VaultItem.swift</code> &mdash; SwiftData <code>@Model</code> classes with relationships.</li>
+<li><strong>Auxiliary surfaces:</strong> <code>AboutView.swift</code>, <code>FeedbackView.swift</code>.</li>
+<li><strong>Under-the-Hood tab:</strong>
+  <ul>
+    <li><code>UnderTheHoodView.swift</code> + <code>UnderTheHoodContent.swift</code> &mdash; the in-app source-mirror feature that lets the user browse the app's own SwiftUI views.</li>
+    <li><code>IdentifierTaggedSourceView.swift</code> &mdash; renders source with tappable Swift identifiers.</li>
+    <li><code>LexiconSheet.swift</code> + <code>LexiconContent.swift</code> &mdash; the popup that appears when a tapped identifier resolves to a Lexicon entry.</li>
+  </ul>
+</li>
+</ul>
+
+<h2>The Face ID gate</h2>
+<p><code>LockScreenView</code> is the app's first surface after launch. It calls <code>LAContext.evaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, ...)</code> with a localized reason string; success replaces the gate with <code>ContentView</code>. Failure shows the gate again with a retry affordance. There's a PIN fallback for devices without Face ID or when biometrics is unavailable.</p>
+<p>The lock screen is part of the SwiftUI view tree (not a presentation modal). On app backgrounding the gate re-asserts via scene phase changes &mdash; switching to another app and back re-prompts.</p>
+
+<h2>Data model</h2>
+<p>Two SwiftData entities and the relationships between them:</p>
+<ul>
+<li><strong><code>Folder</code></strong> &mdash; <code>id</code>, <code>name</code>, <code>createdDate</code>, plus a relationship to its <code>VaultItem</code>s with a cascade delete rule.</li>
+<li><strong><code>VaultItem</code></strong> &mdash; <code>id</code>, <code>title</code>, <code>body</code>, <code>createdDate</code>, plus image / page / PIN payload fields. The item belongs to one folder via the inverse relationship.</li>
+</ul>
+<p>The <code>ModelContainer</code> is wired in <code>Claudes_LockBoxApp.swift</code>. The <code>.modelContainer(for: [Folder.self, VaultItem.self])</code> call seeds the SwiftData stack; the views read via <code>@Query</code> and write via <code>@Environment(\.modelContext)</code> with explicit insert/delete.</p>
+
+<h2>Gestures (Image Viewer)</h2>
+<p><code>ImageViewerView.swift</code> hosts five gesture patterns in a single view, which is why Book 04 reaches for it as the chapter's worked example:</p>
+<ol>
+<li><strong>Tap a thumbnail</strong> &rarr; image opens full-screen.</li>
+<li><strong>Pinch</strong> &rarr; zoom in / out.</li>
+<li><strong>Double-tap</strong> &rarr; toggle between fit-to-screen and 3x zoom.</li>
+<li><strong>Drag</strong> (when zoomed in) &rarr; pan the image.</li>
+<li><strong>Pinch below 1x</strong> &rarr; snap back to fit-to-screen.</li>
+</ol>
+<p>Long-press on a thumbnail in the detail view presents a context menu with "View Full Size" and "Delete Page" options.</p>
+
+<h2>Sheets, alerts, share</h2>
+<ul>
+<li><strong>Add Item form &mdash; <code>fullScreenCover</code>, not <code>.sheet</code>.</strong> See gotchas below for why.</li>
+<li><strong>Image Viewer &mdash; <code>.sheet</code>.</strong> The pinch / zoom interaction is happier inside a sheet's resizable surface.</li>
+<li><strong>Photo context menus &mdash; SwiftUI contextual-menu pattern.</strong></li>
+<li><strong>Delete operations &mdash; confirmation dialogs.</strong></li>
+<li><strong>About sheet &mdash; <code>.sheet</code> from the sidebar's info button.</strong></li>
+<li><strong>Share sheet &mdash; <code>ShareSheetView</code> wraps <code>UIActivityViewController</code> via <code>UIViewControllerRepresentable</code>.</strong></li>
+</ul>
+
+<h2>Build + deployment</h2>
+<ul>
+<li><strong>App name:</strong> Claudes LockBox.</li>
+<li><strong>Platforms:</strong> iPhone, iPad, Mac (via Designed for iPad).</li>
+<li><strong>Frameworks:</strong> SwiftData (persistence), LocalAuthentication (Face ID), VisionKit (document scanner), AVFoundation (camera), UIKit (the wrapped UIViewControllers).</li>
+<li><strong>Privacy:</strong> No network. All data stays in the device sandbox. <code>NSCameraUsageDescription</code> for the camera; <code>NSFaceIDUsageDescription</code> for biometrics.</li>
+<li><strong>Submission:</strong> v1.0 submitted to App Store APR 16 2026. Awaiting review as of this manual's date.</li>
+</ul>
+
+<h2>Known gotchas</h2>
+<ul>
+<li><strong>Add Item is <code>fullScreenCover</code>, not <code>.sheet</code>.</strong> A <code>.sheet</code> at the iPhone partial-height presentation fights the keyboard &mdash; when the title field gains focus, the sheet's animated height adjustment clips the form. <code>fullScreenCover</code> takes the whole screen and the keyboard pushes content normally. Captured in Build-Along 03 &sect;10 as one of three polish fixes from a single build-day commit.</li>
+<li><strong>VisionKit document scanner needs camera permission.</strong> First scan triggers the camera permission prompt even though VisionKit is the surface; the underlying camera capture session is what the system asks about.</li>
+<li><strong>Image viewer overpinch snap-back is part of the chapter teaching.</strong> The "pinch below 1x snaps to fit-to-screen" behavior is a small UX-payoff detail Book 04 walks through &mdash; it's not a default, it's a few lines in <code>onChange(of: zoomScale)</code> that re-anchor the image.</li>
+<li><strong>Designed for iPad on Mac vs native macOS.</strong> LockBox runs on Mac via Designed-for-iPad-on-Apple-Silicon. A native macOS port would need <code>LAContext</code> Touch-ID-or-password fallback handling tuned for Mac biometrics, plus AppKit-flavored camera permissions. Not on the v1 roadmap.</li>
+</ul>
+
+<h2>Sources</h2>
+<ul>
+<li>Project source: <a href="https://github.com/fluhartyml/Claudes-LockBox">github.com/fluhartyml/Claudes-LockBox</a> (verified 2026-05-10).</li>
+<li>Build-Along chapter: Part VII Build-Along 03, with &sect;10 covering the <code>fullScreenCover</code> vs <code>.sheet</code> polish-day commit.</li>
+<li>Book 04 cross-reference: gestures (<code>ImageViewerView.swift</code> five-pattern walkthrough).</li>
+<li>Book 12 cross-reference: sheets, alerts, and confirmations.</li>
+<li>Book 13 cross-reference: three-column <code>NavigationSplitView</code>.</li>
+<li>Book 14 cross-reference: share sheet via wrapped UIKit controller.</li>
+<li>Book 19 cross-reference: <code>LexiconSheet</code> + <code>IdentifierTaggedSourceView</code> as custom-view examples.</li>
+</ul>
+</div>
+</body></html>

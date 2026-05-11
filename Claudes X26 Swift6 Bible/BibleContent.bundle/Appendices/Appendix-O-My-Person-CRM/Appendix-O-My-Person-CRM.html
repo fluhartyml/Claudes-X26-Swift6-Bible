@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Appendix O: My Person CRM</title>
+</head><body>
+<div class="content">
+<h1>Appendix O: My Person CRM (Shop Manual)</h1>
+<p><span class="status-live">Status: V1 in development. GPL v3. Public repo at <a href="https://github.com/fluhartyml/My-Person-CRM">github.com/fluhartyml/My-Person-CRM</a>. Build-Along chapter: Part VII Build-Along 07.</span> My Person CRM is a small personal CRM for iPhone &mdash; a private list of people the user wants to stay in touch with, plus a log of interactions per person. It bridges three Apple frameworks (Contacts, EventKit, SwiftData) without any external service. "CRM" is part of the public name &mdash; not abbreviated away in marketing copy.</p>
+
+<h2>What it is</h2>
+<p>A tracked-people index on the root screen. Tap a person, see their per-person detail with an interaction log. Add a new person by picking from the system Contacts via <code>CNContactPickerViewController</code>. Add an interaction by date + free-form note. Everything lives on-device in SwiftData. No network, no sync to a back-end, no analytics. The Contacts integration is read-only &mdash; the app stores a reference (an identifier and a snapshot of name + contact info), not the full <code>CNContact</code>.</p>
+
+<h2>Architecture overview</h2>
+<p>SwiftUI + SwiftData app with system Contacts and EventKit bridges. Small file count &mdash; the app's surface is the data model plus the two views around it.</p>
+<ul>
+<li><strong>App entry:</strong> <code>My_Person_CRMApp.swift</code> &mdash; <code>@main</code> scene with the SwiftData <code>ModelContainer</code> wired for the two model classes.</li>
+<li><strong>Root:</strong> <code>ContentView.swift</code> &mdash; the tracked-people <code>List</code> with swipe-to-delete, toolbar Add-Person and About buttons, and a <code>NavigationStack</code> that pushes to per-person detail.</li>
+<li><strong>Detail:</strong> <code>PersonDetailView.swift</code> &mdash; per-person view with a second <code>List</code> for the interaction log filtered by that person's identifier, a toolbar Edit + contextual menu, and an Add-Interaction button that presents <code>AddInteractionSheet</code>.</li>
+<li><strong>Add Interaction:</strong> <code>AddInteractionSheet.swift</code> &mdash; <code>.sheet(isPresented:)</code> presentation. <code>DatePicker</code> for the date, <code>TextEditor</code> for the note. Cancel and Save toolbar items.</li>
+<li><strong>Contact picker:</strong> <code>PersonPickerView.swift</code> &mdash; <code>UIViewControllerRepresentable</code> wrapping <code>CNContactPickerViewController</code>. The canonical "system picker as intermediary" pattern referenced in Book 06.</li>
+<li><strong>Service stores:</strong> <code>ContactsStore.swift</code> (Contacts framework wrapper), <code>CalendarStore.swift</code> (EventKit wrapper for adding interactions to the system calendar).</li>
+<li><strong>Data model:</strong> <code>Models.swift</code> &mdash; the two SwiftData <code>@Model</code> classes: <code>TrackedPerson</code> and <code>Interaction</code> with the relationship between them.</li>
+<li><strong>About:</strong> <code>AboutView.swift</code> &mdash; standard about page sheet from the toolbar info button.</li>
+</ul>
+
+<h2>Data model</h2>
+<p>Two SwiftData entities, related:</p>
+<pre><code class="lang-swift">@Model
+final class TrackedPerson {
+    var contactIdentifier: String?   // CNContact identifier, optional
+    var name: String
+    var phone: String?
+    var email: String?
+    var notes: String
+
+    @Relationship(deleteRule: .cascade) var interactions: [Interaction]
+
+    init(name: String, /* ... */) { /* ... */ }
+}
+
+@Model
+final class Interaction {
+    var date: Date
+    var note: String
+    var trackedPerson: TrackedPerson?
+
+    init(date: Date, note: String) { /* ... */ }
+}</code></pre>
+<p>The <code>contactIdentifier</code> on <code>TrackedPerson</code> is the link back to the user's Contacts entry; the app stores only the identifier and a snapshot of name / phone / email at add-time. When the user opens a tracked person, the app can ask Contacts for the current details if the identifier is still valid &mdash; or fall back to the stored snapshot if the Contacts entry has been deleted.</p>
+
+<h2>The Contacts picker (Book 06 reference)</h2>
+<p><code>PersonPickerView</code> wraps Apple's <code>CNContactPickerViewController</code> via <code>UIViewControllerRepresentable</code>. This is the canonical "system picker as intermediary, app receives only what the user chose" pattern. The flow:</p>
+<ol>
+<li>User taps the Add-Person toolbar button.</li>
+<li>The app presents <code>PersonPickerView</code> as a <code>.sheet</code>.</li>
+<li><code>CNContactPickerViewController</code> shows the system's Contacts browser. The app cannot read the contacts list itself &mdash; only the system can.</li>
+<li>User picks a contact (or cancels). The delegate fires with the chosen <code>CNContact</code>.</li>
+<li>The app receives only the picked contact &mdash; not the rest of the user's address book.</li>
+<li>The app stores the contact's identifier + snapshot in SwiftData as a new <code>TrackedPerson</code>.</li>
+</ol>
+<p>No contacts permission is required for this pattern. The system handles the privacy boundary &mdash; the app never sees a contact it didn't ask the user to pick.</p>
+
+<h2>Toolbar usage (Book 07 reference)</h2>
+<p>Four places where <code>.toolbar</code> with <code>ToolbarItem</code> appears in the app:</p>
+<ol>
+<li><strong>People list view</strong> &mdash; Add-Person button (leading? trailing? &mdash; check source for the exact placement) and About button.</li>
+<li><strong>Per-person detail view</strong> &mdash; Edit button and a contextual menu with additional actions.</li>
+<li><strong>Add Interaction sheet</strong> &mdash; Cancel and Save toolbar items.</li>
+<li><strong>About sheet</strong> &mdash; Done button.</li>
+</ol>
+<p>Each toolbar configuration is a small SwiftUI block; reading all four together is the textbook example of <code>.toolbar</code> patterns at different presentation depths.</p>
+
+<h2>EventKit hook (CalendarStore)</h2>
+<p>The Calendar integration is opt-in per interaction: when adding an interaction, the user can check a box to also add a matching event to the system Calendar. <code>CalendarStore</code> handles the EventKit permission, the <code>EKEvent</code> creation, and the save. If the user denies Calendar permission, the box is hidden and the rest of the Add-Interaction flow works unchanged. The app doesn't read the system Calendar &mdash; it only adds events when the user asks.</p>
+
+<h2>Build + deployment</h2>
+<ul>
+<li><strong>App name:</strong> My Person CRM.</li>
+<li><strong>Platforms:</strong> iPhone primary. iPad and Mac via Designed for iPad.</li>
+<li><strong>Frameworks:</strong> SwiftUI, SwiftData (persistence), Contacts (system picker), ContactsUI (the picker UI), EventKit (Calendar integration), UIKit (the wrapped <code>UIViewController</code>).</li>
+<li><strong>Required Info.plist keys:</strong> <code>NSContactsUsageDescription</code> only required if the app accesses contacts directly; the picker pattern avoids this. <code>NSCalendarsUsageDescription</code> required for the EventKit integration when the user opts in.</li>
+<li><strong>Privacy:</strong> Tracked-people data and interaction logs stay in SwiftData on-device. The picker pattern means the app never sees the user's full address book.</li>
+<li><strong>Distribution:</strong> V1 in development. App Store is bonus tier per the book's distribution rule; GitHub clone-and-build is the default path.</li>
+</ul>
+
+<h2>Known gotchas</h2>
+<ul>
+<li><strong>The picker pattern is permission-free.</strong> <code>CNContactPickerViewController</code> doesn't require <code>NSContactsUsageDescription</code> because the system mediates. If the app ever needs to read contacts directly (sync the tracked-people list against the user's address book, for example), the Contacts permission becomes mandatory and a new flow appears.</li>
+<li><strong>Contact identifiers can disappear.</strong> If the user deletes the underlying contact in Contacts.app, <code>CNContactStore.unifiedContact(withIdentifier:)</code> returns nil. The app falls back to the stored snapshot but should not crash on the missing identifier.</li>
+<li><strong>SwiftData cascade delete on TrackedPerson.</strong> Deleting a tracked person deletes their interactions. Intentional; the interaction log is meaningless without the person it's about.</li>
+<li><strong>CRM is in the public name on purpose.</strong> Don't auto-shorten to "My Person" in marketing or App Store copy.</li>
+</ul>
+
+<h2>Sources</h2>
+<ul>
+<li>Project source: <a href="https://github.com/fluhartyml/My-Person-CRM">github.com/fluhartyml/My-Person-CRM</a> (verified 2026-05-10).</li>
+<li>Build-Along chapter: Part VII Build-Along 07.</li>
+<li>Book 06 cross-reference: <code>CNContactPickerViewController</code> system-picker pattern.</li>
+<li>Book 07 cross-reference: <code>.toolbar</code> + <code>ToolbarItem</code> in four presentation contexts.</li>
+<li>Book 08 cross-reference: <code>List</code> for tracked-people index + swipe-to-delete + per-person interaction log.</li>
+<li>Book 12 cross-reference: <code>.sheet(isPresented:)</code> for Add Interaction; UIKit picker bridged into SwiftUI's sheet system.</li>
+<li>Book 13 cross-reference: <code>NavigationStack</code> + <code>NavigationLink</code> drill-in pattern.</li>
+<li>Book 15 cross-reference: SwiftData two-model pattern (TrackedPerson + Interaction with relationship + cascade delete).</li>
+</ul>
+</div>
+</body></html>
