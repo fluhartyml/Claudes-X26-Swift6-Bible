@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Appendix M: TipJar</title>
+</head><body>
+<div class="content">
+<h1>Appendix M: TipJar (Shop Manual)</h1>
+<p><span class="status-live">Status: Live on the App Store. GPL v3. Public repo at <a href="https://github.com/fluhartyml/TipJar">github.com/fluhartyml/TipJar</a>. Build-Along chapter: Part VII Build-Along 14.</span> TipJar is the book's minimum-viable StoreKit 2 reference &mdash; five Swift files, one <code>.storekit</code> configuration, three product tiers, and the full StoreKit 2 purchase / restore / error-handling pipeline visible end-to-end. It's the chapter's Live Reference for Book 06 (custom-styled tip-amount <code>Button</code>s) and a textbook teaching set for the three layers of error feedback in iOS UI.</p>
+
+<h2>What it is</h2>
+<p>A single-screen iPhone app: the user sees three tip-amount buttons (small / medium / large), taps one, and a StoreKit 2 purchase flow runs. Tapped state disables the buttons while the purchase is in flight; a successful purchase confirms via the system's StoreKit confirmation UI; a failure shows inline feedback rather than a system error. Restore-Purchases is available from a secondary action. There's no second screen, no settings, no navigation &mdash; the app is the buttons.</p>
+
+<h2>Architecture overview</h2>
+<p>The whole app is five files. Intentionally small &mdash; the chapter's job is to make the StoreKit 2 patterns visible without other surface area in the way.</p>
+<ul>
+<li><strong>App entry:</strong> <code>TipJarApp.swift</code> &mdash; <code>@main</code> scene hosting <code>ContentView</code>.</li>
+<li><strong>UI:</strong> <code>ContentView.swift</code> &mdash; the three tip-amount buttons, the in-flight disabled state, the Restore action, and the three error-feedback layers.</li>
+<li><strong>Product model:</strong> <code>Item.swift</code> &mdash; the local representation of a StoreKit product tier (small / medium / large) with display name, price string, and product identifier.</li>
+<li><strong>Store:</strong> <code>TipStore.swift</code> &mdash; the <code>@Observable</code> facade around StoreKit 2's <code>Product.products(for:)</code>, <code>Product.purchase(...)</code>, and the transaction listener.</li>
+<li><strong>StoreKit configuration:</strong> <code>TipProducts.storekit</code> &mdash; the Xcode-bundled StoreKit configuration file that lets the app run against locally-defined products in the simulator without round-tripping to App Store Connect for every build.</li>
+</ul>
+
+<h2>The StoreKit 2 flow</h2>
+<p>On launch, <code>TipStore</code> calls <code>Product.products(for:)</code> with the three product identifiers and stores the returned <code>Product</code> values for the UI. The view binds each button to one product. On tap:</p>
+<ol>
+<li>The view sets the store's <code>purchaseInFlight</code> flag, which disables every button.</li>
+<li>The store calls <code>product.purchase()</code> and <code>await</code>s the result.</li>
+<li>On <code>.success(let verification)</code>, the store verifies the transaction signature (<code>checkVerified</code>) and calls <code>.finish()</code>. The UI shows a confirmation.</li>
+<li>On <code>.userCancelled</code>, the flag drops; no error surfaces. The buttons re-enable.</li>
+<li>On <code>.pending</code> or thrown errors, the store sets an <code>error</code> property the UI shows.</li>
+</ol>
+<p>A background <code>Task</code> attached at <code>TipStore</code> init listens to <code>Transaction.updates</code> for refunds, family-sharing changes, and out-of-app transactions. The same listener handles Restore Purchases &mdash; tapping Restore calls <code>AppStore.sync()</code> and lets the listener route the resulting transactions.</p>
+
+<h2>Three layers of error feedback</h2>
+<p>The teaching set captured in three App Store screenshots (2026-05-02) walks through how this app surfaces problems:</p>
+<ol>
+<li><strong>Loading state.</strong> While <code>Product.products(for:)</code> is fetching the catalog at launch, the buttons show a placeholder skeleton. No buttons render until the products resolve. This is the cheapest, lowest-friction "the app is doing something" signal.</li>
+<li><strong>Modal alert.</strong> When a thrown <code>StoreKitError</code> happens mid-purchase (network, account, server), the app shows a SwiftUI <code>.alert(...)</code> with the localized error message. Modal alerts are reserved for situations where the user did something and the system has to interrupt to say "that didn't work."</li>
+<li><strong>Inline empty-state with retry.</strong> If <code>Product.products(for:)</code> returns an empty array at launch (no products configured, account not signed in, StoreKit configuration missing on a dev build), the view shows an inline empty state with a Retry button styled <code>.borderedProminent</code>. Tapping Retry re-runs the products fetch. The inline state is non-modal &mdash; the user can still see the app, leave, come back later &mdash; because the failure isn't tied to an action they just took.</li>
+</ol>
+<p>The three layers correspond to three error scopes: ambient (loading), user-action (alert), structural (inline retry). Each chapter that touches error handling can refer back to this app as the canonical worked example.</p>
+
+<h2>Custom button styling</h2>
+<p>The tip-amount buttons are not stock <code>.borderedProminent</code>. Each button is a <code>Button</code> wrapping a custom <code>HStack</code> with the amount label, a tip-jar SF Symbol, and a price string &mdash; the closest tap target is the whole button surface. Background, corner radius, shadow, and pressed-state animation are all view modifiers chained onto the button label, not a custom <code>ButtonStyle</code>. The <code>.disabled(store.purchaseInFlight)</code> modifier handles the in-flight state via SwiftUI's standard disabled appearance.</p>
+<p>Why custom styling instead of a <code>ButtonStyle</code>? The buttons need different visual treatments per tier (different SF Symbols, different accent tints) so the per-button modifier chain reads more directly than threading state into a shared <code>ButtonStyle</code>. The trade-off is a slightly bigger view body in <code>ContentView</code> in exchange for a more legible mapping from product to UI.</p>
+
+<h2>Build + deployment</h2>
+<ul>
+<li><strong>App name:</strong> TipJar.</li>
+<li><strong>Platforms:</strong> iPhone (iPad and Mac inherit via Designed for iPad).</li>
+<li><strong>Frameworks:</strong> SwiftUI, StoreKit (StoreKit 2 in-app purchase).</li>
+<li><strong>Networking:</strong> StoreKit's own. No custom <code>URLSession</code>, no analytics, no tracking.</li>
+<li><strong>Privacy:</strong> No personal data collected.</li>
+<li><strong>Subscription disclosure:</strong> None &mdash; products are non-consumable / consumable one-time purchases, not subscriptions.</li>
+</ul>
+
+<h2>Known gotchas</h2>
+<ul>
+<li><strong>The local <code>.storekit</code> file only works in Xcode's StoreKit Configuration scheme.</strong> Running against the local file means simulator purchases succeed without hitting App Store Connect, which is great for dev. But every release build has to be tested against the real App Store Connect products to verify the IDs match exactly. A mismatch produces the inline empty-state at launch in production &mdash; which the Retry button can't fix because the products genuinely don't exist for that account.</li>
+<li><strong>Transaction listener has to start at launch.</strong> If the listener starts only when the user taps a button, an out-of-app transaction (Family Sharing, refund) that happens between launches goes unhandled. The store kicks off the listener task in <code>init</code> precisely to avoid that gap.</li>
+<li><strong>Restore Purchases should be visible.</strong> App Review explicitly checks for a Restore Purchases path in apps that sell anything. The Restore action is wired to <code>AppStore.sync()</code>; without that action, review can reject the binary.</li>
+<li><strong>The "empty state at launch" failure mode is real.</strong> If a user opens the app on an Apple Account that has no payment method on file, or in a region where the app's products aren't available, the products array returns empty. The inline retry state handles this; without it, the app would look broken.</li>
+</ul>
+
+<h2>Sources</h2>
+<ul>
+<li>Project source: <a href="https://github.com/fluhartyml/TipJar">github.com/fluhartyml/TipJar</a> (verified 2026-05-10).</li>
+<li>Build-Along chapter: Part VII Build-Along 14.</li>
+<li>Book 06 cross-reference: custom-styled <code>Button</code> + <code>.borderedProminent</code> on Retry + <code>.disabled</code> in-flight pattern.</li>
+<li>Book 18 cross-reference: the three-layers-of-error-feedback teaching set.</li>
+<li>Book 16 cross-reference (limited): how a small focused app uses StoreKit without an extension target.</li>
+</ul>
+</div>
+</body></html>
