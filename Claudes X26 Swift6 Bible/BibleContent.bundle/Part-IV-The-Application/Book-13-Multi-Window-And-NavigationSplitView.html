@@ -206,6 +206,75 @@ Button("Close") { dismissWindow() }</code></pre>
   <p>Close the window, relaunch, the text is still there.</p>
   <p>For app-wide preferences -- "last-used color scheme," "font size" -- use <code>@AppStorage</code> instead; that writes into <code>UserDefaults</code> and is shared across every window.</p>
   <hr>
+  <h2>Cross-Platform &mdash; What Doesn't Translate from iOS to Mac</h2>
+  <p>SwiftUI bills itself as one framework that runs everywhere, and most of the time that promise holds. But a meaningful slice of the SwiftUI surface is iOS-only and refuses to compile on macOS. When an app is moving from iPad-and-iPhone to native Mac (the OPerationsHOS Phase 16 transition documented in <em>Appendix C: AlarmKit</em> and the OperatorOS notes), the iOS-only APIs surface as build errors. The pattern is always the same: a modifier or type that works fine for iOS turns into a "is unavailable in macOS" or "cannot find type" error the first time the app is targeted at <code>platform=macOS</code>.</p>
+
+  <h3>The Modifiers That Don't Survive macOS</h3>
+  <p>Three recurring offenders that fail to compile on macOS:</p>
+  <ul>
+    <li><strong><code>.listStyle(.insetGrouped)</code></strong> &mdash; iOS only. <code>InsetGroupedListStyle</code> doesn't exist on macOS. The error reads <code>'insetGrouped' is unavailable in macOS</code>.</li>
+    <li><strong><code>.searchable(text:, placement: .navigationBarDrawer(...))</code></strong> &mdash; the <code>.navigationBarDrawer</code> placement is iOS only because macOS has no navigation bar. The error reads <code>'navigationBarDrawer(displayMode:)' is unavailable in macOS</code>.</li>
+    <li><strong><code>Color(.systemBackground)</code></strong> &mdash; the <code>.systemBackground</code> token comes from <code>UIColor</code>, which doesn't exist on macOS. The error reads <code>reference to member 'systemBackground' cannot be resolved without a contextual type</code>.</li>
+  </ul>
+  <p>The <code>Color(.systemBackground)</code> case has a cross-platform replacement built into SwiftUI: <code>.background(.background.opacity(0.94))</code> works on both iOS and macOS because <code>.background</code> here is SwiftUI's semantic <code>ShapeStyle</code>, not a <code>UIColor</code> token.</p>
+
+  <h3>Frameworks That Don't Exist on macOS at All</h3>
+  <p><strong>AlarmKit</strong> is iOS 26+ only. The framework simply isn't in the macOS SDK. <strong>ActivityKit</strong> (the Live Activities API) is iOS-only as well &mdash; the lock screen and Dynamic Island it draws to don't exist on Mac. HealthKit is iOS / watchOS / Mac Catalyst only, not native macOS. ShazamKit and some MusicKit features have similar platform asymmetries. WidgetKit, by contrast, <em>is</em> available on macOS &mdash; Desktop widgets shipped in macOS Sonoma (14) and Notification Center widgets earlier &mdash; so a widget extension can be built for Mac, it just has to be configured for the macOS platform in the target's build settings.</p>
+  <p>For the frameworks that genuinely don't exist on macOS, the <code>import</code> statement and every reference to the framework's types has to be guarded.</p>
+  <p>The <code>#if canImport(FrameworkName)</code> pattern is the right tool:</p>
+  <pre><code class="lang-swift">#if canImport(AlarmKit)
+import AlarmKit
+#endif
+
+// Later, anywhere AlarmKit types are referenced:
+#if canImport(AlarmKit)
+extension AlarmButton {
+    static var stopButton: AlarmButton {
+        AlarmButton(text: "Stop", textColor: .white, systemImageName: "stop.fill")
+    }
+}
+#endif</code></pre>
+  <p>One gotcha: <code>#if canImport(AlarmKit)</code> inside the body of an <code>extension AlarmButton { }</code> declaration doesn't help. The compiler still has to parse the extension's declaration line, and the type <code>AlarmButton</code> doesn't exist on macOS, so the parse fails. The <code>#if</code> guard has to wrap the entire <code>extension</code> block, not just the body inside it.</p>
+
+  <h3>The <code>#if os(...)</code> Patterns</h3>
+  <p>For modifiers and types that exist on both platforms but in different forms, use compile-time platform checks. The two patterns:</p>
+  <pre><code class="lang-swift">// Single-platform-only modifier
+.someModifier()
+#if os(iOS)
+.listStyle(.insetGrouped)
+#endif
+
+// Different implementation per platform
+#if os(iOS)
+.searchable(text: $query, placement: .navigationBarDrawer(displayMode: .always))
+#else
+.searchable(text: $query)
+#endif</code></pre>
+  <p>The first form (single-platform) is for additive modifiers that only matter on one platform &mdash; <code>.listStyle(.insetGrouped)</code> on iOS, with the default style on macOS. The second form (different implementation) is for behaviors that need to exist on both platforms but with different arguments. Both compile cleanly on both platforms because the inactive branch is dropped before semantic analysis.</p>
+
+  <h3>iOS-Only Extensions and the Mac Build</h3>
+  <p>When an iOS app gains a Mac target, any iOS-only extensions (widget extensions, App Intents extensions, Live Activity extensions) have to be excluded from the macOS build. Xcode's project file represents the "embed" step that copies each extension into the host app's bundle. On a mixed-platform host, the embed step has to be told to skip iOS-only extensions when targeting macOS.</p>
+  <p>The fix lives in the <code>.pbxproj</code> file as a <code>platformFilter</code> attribute on the embed reference:</p>
+  <pre><code class="lang-pbxproj">/* Without filter (default) */
+C0...C2 /* MyWidgetExtension.appex in Embed Foundation Extensions */ = {
+    isa = PBXBuildFile;
+    fileRef = ...;
+    settings = { ATTRIBUTES = (RemoveHeadersOnCopy, ); };
+};
+
+/* With iOS-only filter */
+C0...C2 /* MyWidgetExtension.appex in Embed Foundation Extensions */ = {
+    isa = PBXBuildFile;
+    fileRef = ...;
+    platformFilter = ios;
+    settings = { ATTRIBUTES = (RemoveHeadersOnCopy, ); };
+};</code></pre>
+  <p>Setting this in Xcode's UI: select the host app target &rarr; Build Phases &rarr; Embed Foundation Extensions &rarr; click the extension &rarr; set the Filters dropdown to "iOS." Xcode writes the <code>platformFilter</code> line into the <code>.pbxproj</code> automatically. Without that filter, the macOS build fails with a hard error: <em>"This target is built for macOS but contains embedded content built for iOS, which is not allowed."</em></p>
+
+  <h3>How to Spot These Before the Build Does</h3>
+  <p>Apple's documentation flags platform availability on every symbol. The Availability section at the top of each reference page lists the platforms and versions the symbol exists on. When the section reads "iOS 16.0+" with no macOS row, the symbol is iOS-only. Reading the Availability section before adopting any modifier or type is the discipline that catches these issues in design rather than in build output.</p>
+  <p>The other reliable spotter is the build itself. Targeting <code>platform=macOS</code> early &mdash; even if Mac isn't the immediate release platform &mdash; surfaces iOS-only dependencies while the codebase is still small enough to fix them comfortably. The longer iOS-only assumptions accumulate, the more invasive the eventual Mac port becomes.</p>
+  <hr>
   <h2>Chapter Mini-Example -- A Two-Window Reader</h2>
   <p>Putting the pieces together, here is a small app with a library window and a detail window that opens when you click a book.</p>
   <pre><code class="lang-swift">import SwiftUI
