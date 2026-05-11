@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Appendix N: Snap & ScanKeeper</title>
+</head><body>
+<div class="content">
+<h1>Appendix N: Snap &amp; ScanKeeper (Shop Manual)</h1>
+<p><span class="status-live">Status: Live on the App Store. v1.1 approved Apr 6 2026. App Apple ID 6755695364. Bundle ID <code>com.NightGard.Snap-ScanKeeper</code>. Universal iPhone + iPad. iOS 16.0+. GPL v3. Public repo at <a href="https://github.com/fluhartyml/Snap-ScanKeeper">github.com/fluhartyml/Snap-ScanKeeper</a>.</span> Snap &amp; ScanKeeper is a focused VisionKit-powered document scanner that turns iPhone or iPad camera captures into PDFs and saves them to the user's Photos library. Privacy-first: everything happens on-device, no network, no cloud, no tracking. Book 11 (FileManager and Documents) Live Reference points at this app for the <code>FileManager</code>-driven save flow.</p>
+
+<h2>What it is</h2>
+<p>One screen: a scan button, a share button, and a settings gear. Tapping scan opens VisionKit's document camera; the user captures one or more pages with automatic edge detection and perspective correction; the app generates a PDF (or images, per the save-format setting) with a timestamp filename and writes it to a custom Photos album. Multi-page scans become multi-page PDFs. That's the whole product.</p>
+
+<h2>Architecture overview</h2>
+<p>Small, sharp, no SwiftData &mdash; the app doesn't model documents internally. The Photos library is the source of truth.</p>
+<ul>
+<li><strong>App entry:</strong> <code>Snap_ScanKeeperApp.swift</code> &mdash; <code>@main</code> scene.</li>
+<li><strong>UI:</strong> <code>ContentView.swift</code> &mdash; the one-screen surface (scan / share / settings).</li>
+<li><strong>Document scanner bridge:</strong> <code>DocumentScannerView.swift</code> &mdash; <code>UIViewControllerRepresentable</code> wrapping <code>VNDocumentCameraViewController</code>. The delegate hand-off returns the captured <code>VNDocumentCameraScan</code> to the SwiftUI layer.</li>
+<li><strong>Save pipeline:</strong> <code>PhotosManager.swift</code> &mdash; <code>@MainActor</code> singleton handling PDF generation (timestamp filename pattern <code>SnapScanKeeper-yyyy-MM-dd-HHmmss.pdf</code>), custom Photos album creation, and per-page image saves.</li>
+<li><strong>Settings:</strong> <code>SettingsView.swift</code> &mdash; Form with radio-button save-format selection (PDF only / images only / both / neither-just-share).</li>
+<li><strong>Feedback:</strong> <code>FeedbackView.swift</code> &mdash; mail composer for bug reports.</li>
+<li><strong>Notes:</strong> <code>SnapScanKeeper_DeveloperNotes.swift</code> &mdash; canonical roadmap with version history and submission notes.</li>
+</ul>
+
+<h2>The scan pipeline</h2>
+<ol>
+<li>User taps Scan. SwiftUI presents <code>DocumentScannerView</code> as a full-screen cover.</li>
+<li><code>VNDocumentCameraViewController</code> handles capture &mdash; live edge detection overlay, manual capture button, multi-page mode, retake / done flow. All Apple-provided.</li>
+<li>On done, the delegate receives a <code>VNDocumentCameraScan</code> with one or more <code>UIImage</code>s.</li>
+<li><code>PhotosManager</code> walks the images, generates a single PDF via UIKit's <code>UIGraphicsPDFRenderer</code>, and writes it (plus optional per-page images) to the custom Photos albums.</li>
+<li>The share button then surfaces the most-recent PDF via <code>UIActivityViewController</code>.</li>
+</ol>
+
+<h2>Save modes (four)</h2>
+<p>The Settings screen offers four save-format options:</p>
+<ol>
+<li><strong>PDF only</strong> &mdash; writes a single multi-page PDF to <code>Snap&amp;ScanKeeper PDFs</code> album.</li>
+<li><strong>Images only</strong> &mdash; writes one image per page to <code>Snap&amp;ScanKeeper Images</code> album.</li>
+<li><strong>Both</strong> &mdash; writes the PDF and the per-page images to their respective albums.</li>
+<li><strong>Share only (no save)</strong> &mdash; skips Photos entirely; the share sheet is the only way to get the scan out of the app. Useful for scans the user doesn't want to leave on the device.</li>
+</ol>
+
+<h2>Privacy posture</h2>
+<p>Everything happens on the device:</p>
+<ul>
+<li>No network access. No URLSession, no analytics SDK, no telemetry.</li>
+<li>VisionKit runs on-device. Pages never leave the camera-to-Photos pipeline.</li>
+<li>Photos permission is requested only when the user first saves &mdash; not at launch. The app can scan and share without ever asking, if the user always uses save-mode 4.</li>
+<li>Custom photo albums are created on first save; deleting them in Photos.app deletes the saves and the app re-creates the albums on the next save.</li>
+</ul>
+
+<h2>Build + deployment</h2>
+<ul>
+<li><strong>App name:</strong> Snap &amp; Scan Keeper.</li>
+<li><strong>Bundle ID:</strong> <code>com.NightGard.Snap-ScanKeeper</code>.</li>
+<li><strong>App Apple ID:</strong> 6755695364.</li>
+<li><strong>Platforms:</strong> iPhone + iPad universal.</li>
+<li><strong>Deployment floor:</strong> iOS 16.0+ &mdash; chosen because VisionKit's document camera and the Photos custom-album API both stabilized in iOS 16. iPadOS gets the same surface.</li>
+<li><strong>Frameworks:</strong> SwiftUI, VisionKit (document camera), PhotosUI / Photos (custom album writes), UIKit (PDF rendering via <code>UIGraphicsPDFRenderer</code>, share sheet via <code>UIActivityViewController</code>), MessageUI (feedback composer).</li>
+</ul>
+
+<h2>History &mdash; the rename trail</h2>
+<p>This app reached the App Store after three failed names: SnazzyScan, Swift-Scan, SnapKeeper. Each was submitted, rejected for various reasons (App Review issues, name conflicts, scope mismatches), and abandoned before this version was rebuilt under the current name. Mentioned here because the project on disk and the GitHub repo carry traces of the earlier names &mdash; old screenshots, old commit messages, old assets &mdash; that don't match the current product. When reading the source against this manual, expect occasional historical drift in comments and asset filenames.</p>
+
+<h2>Known gotchas</h2>
+<ul>
+<li><strong>Custom Photos album creation is asynchronous and can fail silently.</strong> The first save after a fresh install needs to <code>performChanges</code> to create the album before the asset can land in it. If the user has restricted Photos library permission to "Selected Photos," the album creation fails without an error in the standard sense &mdash; the user just doesn't see anything in Photos. <code>PhotosManager</code> handles this by re-checking authorization state before each save.</li>
+<li><strong>PDF page size pulled from the source image.</strong> <code>UIGraphicsPDFRenderer</code> wants a page bounds rect; using each scanned image's own size keeps the PDF visually correct. Hardcoding US Letter or A4 would distort the captured page.</li>
+<li><strong>VisionKit returns images, not PDFs.</strong> The PDF generation is the app's responsibility. If a future iOS adds a "VNDocumentCameraScan returns a PDF directly" API, this code becomes simpler &mdash; until then, the <code>UIGraphicsPDFRenderer</code> path is the load-bearing piece.</li>
+<li><strong>Pre-rename traces in the repo.</strong> See history section above; reading commits older than the rename can be confusing.</li>
+</ul>
+
+<h2>Sources</h2>
+<ul>
+<li>Project source: <a href="https://github.com/fluhartyml/Snap-ScanKeeper">github.com/fluhartyml/Snap-ScanKeeper</a> (verified 2026-05-10).</li>
+<li>Canonical roadmap: <code>Snap&amp;ScanKeeper/SnapScanKeeper_DeveloperNotes.swift</code> in the project repo.</li>
+<li>Live on App Store: App Apple ID 6755695364.</li>
+<li>Book 11 cross-reference: <code>FileManager</code> + custom-album save flow.</li>
+<li>Source Tour 20 in Part VII walks through this app's architecture.</li>
+</ul>
+</div>
+</body></html>
