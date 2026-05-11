@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Appendix G: CryoTunes Player</title>
+</head><body>
+<div class="content">
+<h1>Appendix G: CryoTunes Player (Shop Manual)</h1>
+<p><span class="status-live">Status: Live on the App Store as of 2026-03-26. Current version 2.4 (build 2.5). App Apple ID 6761222456. Bundle ID <code>com.Tangerine.CryoTunes-Player</code>. GPL v3. Public repo at <a href="https://github.com/fluhartyml/CryoTunesPlayer">github.com/fluhartyml/CryoTunesPlayer</a>. App Store: <a href="https://apps.apple.com/us/app/cryotunes-player/id6761222456">apps.apple.com/us/app/cryotunes-player/id6761222456</a>.</span> CryoTunes Player is a 90's-retro-inspired iPhone music player &mdash; ice-blue motif drawn from the Winamp / Napster / LimeWire visual era, MusicKit streaming underneath. It's the book's flagship music app and the host of the shared <strong>CryoKit</strong> data layer (covered in Appendix B).</p>
+
+<h2>What it is</h2>
+<p>An iPhone-only retro player whose look-and-feel sits firmly in the 90's: chunky transport controls, an LCD ticker, ice-blue chrome. Underneath that surface, all playback is modern Apple MusicKit. The station catalog (80+ entries) is the same one driving Tally Matrix Clock (Appendix H) &mdash; both apps share the <code>CryoKit</code> Swift package.</p>
+
+<h2>The CryoKit dependency &mdash; DIAMOND RULE</h2>
+<p>CryoTunes Player's data layer is the <strong>CryoKit</strong> Swift package, not source local to this project. Per the package's DIAMOND RULE (Appendix B): <em>nothing in CryoKit changes without express written consent from Michael, and Claude may never remove or subtract code there.</em> This rule exists because the same package backs Tally Matrix Clock on tvOS &mdash; an edit that makes sense for the music player can quietly break the clock.</p>
+<p>Anything touching stations, decades, year picks, or the station catalog itself lives in CryoKit. Anything touching the iPhone-specific UI &mdash; transport controls, LCD ticker, settings &mdash; lives in this project.</p>
+
+<h2>Architecture overview</h2>
+<p>The project is small. SwiftUI app, MusicKit-backed, no SwiftData (CryoKit handles the data side), shared package as the engine.</p>
+<p>File roles:</p>
+<ul>
+<li><strong>App entry:</strong> <code>CryoTunes_PlayerApp.swift</code> (the <code>@main</code> scene), <code>ContentView.swift</code> (the player surface).</li>
+<li><strong>Custom controls in <code>Views/</code>:</strong>
+  <ul>
+    <li><code>CryoTransportControls.swift</code> &mdash; the play / pause / skip / stop row plus the shuffle / repeat row and the like / dislike / share row. Three composed rows, one named view.</li>
+    <li><code>CryoStationPicker.swift</code> &mdash; the three-level station picker (Category &rarr; Decade &rarr; Year). Built from SwiftUI buttons, not Apple's <code>Picker</code> primitive &mdash; the design didn't fit a stock picker.</li>
+    <li><code>CryoSleepTimerPicker.swift</code> &mdash; sleep timer choices (30m / 1h / 2h / 4h), again as a button tree.</li>
+    <li><code>AlbumDetailView.swift</code> &mdash; album-art-focused detail surface with a context menu of song / artist / share actions.</li>
+  </ul>
+</li>
+<li><strong>Managers:</strong>
+  <ul>
+    <li><code>PlaylistManager.swift</code> &mdash; queue construction + current-track tracking.</li>
+    <li><code>FavoriteManager.swift</code> &mdash; per-song favorites, locally persisted.</li>
+    <li><code>DislikeManager.swift</code> &mdash; per-song dislikes that the playlist manager honors when constructing the next queue.</li>
+    <li><code>ShazamManager.swift</code> &mdash; ShazamKit song recognition (covered in detail by NightGard Commander's hardened version &mdash; see Appendix V).</li>
+    <li><code>StationFailureMonitor.swift</code> &mdash; watches for stations that produce empty queues and surfaces them in a quiet failure state.</li>
+  </ul>
+</li>
+<li><strong>Station model:</strong> <code>StationGrouping.swift</code> &mdash; the category / decade / year grouping logic that drives the picker.</li>
+<li><strong>Auxiliary surfaces:</strong> <code>SettingsView.swift</code>, <code>FeedbackView.swift</code> (segmented <code>Picker</code> for feedback type), <code>LCDTickerView.swift</code> (time + date + local weather via WeatherKit).</li>
+<li><strong>Notes:</strong> <code>DeveloperNotes.swift</code> (the canonical roadmap + App Store Connect block; mirror of the wiki Developer-Notes.md).</li>
+</ul>
+
+<h2>Three-level station navigation</h2>
+<p>Stations are organized as <strong>Category &rarr; Decade &rarr; Year</strong>. Popular Hits is the spine category (decades 1958 through 2025); Big Band, Jazz Age, Ragtime, and the other genre categories sit alongside it. The user picks Category, then Decade, then Year. Each leaf builds a MusicKit query that drives the playback queue.</p>
+<p>CryoStationPicker renders this as a button tree, not a SwiftUI <code>Picker</code>. The pattern matters &mdash; readers reaching Book 06 (Controls) see the "stock <code>Picker</code> can't carry every design" example land in this exact file.</p>
+
+<h2>Transport + playback</h2>
+<p>MusicKit's <code>ApplicationMusicPlayer.shared</code> drives playback. CryoTransportControls binds its play / pause buttons to player state and dispatches skip / stop directly. No <code>.toolbar</code> modifier is used here &mdash; the transport row is a hand-laid <code>HStack</code> because the design needed exact spacing, sizing, and pill backgrounds the system toolbar doesn't give. (Book 07 cross-references this as a worked example of when <code>.toolbar</code> isn't the right choice.)</p>
+
+<h2>LCD ticker + WeatherKit</h2>
+<p>The LCD ticker at the top of the player runs three lines on a timer: current time, current date, and local weather. WeatherKit is the source for the weather line. Permission UX is the standard one-time Core Location prompt; if denied, the line falls back to a static "&minus;&minus;" placeholder.</p>
+
+<h2>Station persistence and the silent-fail rule</h2>
+<p>The last-tuned station persists across launches, but <strong>the app never auto-plays on launch</strong>. The user re-taps the station to start playback. This is a deliberate "calm" choice &mdash; the player opens to where it was, doesn't blast audio into a quiet room.</p>
+<p>The silent-fail-on-station-tap behavior is intentional and locked since 2026-04-29: if a station tap produces an empty queue for any reason (network, subscription state, transient MusicKit error), the app shows no error overlay. The user just sees nothing happen. The <code>errorOverlay</code> binding was stripped on that date because the overlay was firing on transient conditions that resolved themselves a second later; the silent failure is the better UX. <code>StationFailureMonitor</code> still logs the failure for the next development pass, but it doesn't surface to the user.</p>
+
+<h2>Build + deployment</h2>
+<ul>
+<li><strong>App name:</strong> CryoTunes Player (App Store), package shipping as <code>CryoTunes-Player</code>.</li>
+<li><strong>Bundle ID:</strong> <code>com.Tangerine.CryoTunes-Player</code>.</li>
+<li><strong>App Apple ID:</strong> 6761222456.</li>
+<li><strong>Category:</strong> Music.</li>
+<li><strong>Platforms:</strong> iPhone only at v1.0. iPad and Mac are v1.1+ items (raise iOS minimum as needed; see roadmap).</li>
+<li><strong>Frameworks:</strong> MusicKit (streaming), WeatherKit (LCD weather line), ShazamKit (recognition).</li>
+<li><strong>Subscription disclosure:</strong> Apple Music subscription required. Per <code>feedback_disclose_subscription_requirements.md</code>, this gets stated upfront in App Store copy.</li>
+</ul>
+
+<h2>Known gotchas</h2>
+<ul>
+<li><strong>Custom background image &mdash; dropped from v1.0 canon.</strong> The PhotosPicker / persisted custom background feature was dropped 2026-05-03 because the image renders over the UI controls (z-order layering issue). The App Store description and <code>DeveloperNotes.swift</code> still reference cleanup work pending in that area. Future revival of the feature needs a proper layer fix, not another retry of the same approach.</li>
+<li><strong>Station tap silent failures are by design.</strong> Don't add error overlays back. The 2026-04-29 decision was that transient MusicKit failures resolve themselves and surfacing them annoys more than it helps.</li>
+<li><strong>CryoKit is read-only from this project.</strong> The package is shared with Tally Matrix Clock. Local edits to package source via Xcode's "Local" SPM mode have to be reviewed for the clock too before they ship.</li>
+<li><strong>App Store screenshots can't show third-party album art.</strong> Per <code>feedback_app_store_screenshot_ip_rule.md</code>, screenshots that reach App Store review must overlay generic placeholders for any branded IP. Album art shown in dev is fine; album art shown on App Store Connect is a rejection vector.</li>
+</ul>
+
+<h2>Roadmap status (from <code>DeveloperNotes.swift</code>)</h2>
+<h3>v1.0 &mdash; "Fidget Spinner" Release (Live)</h3>
+<table>
+<thead><tr><th>Feature</th><th>Status</th></tr></thead>
+<tbody>
+<tr><td>Xcode project setup</td><td>Done</td></tr>
+<tr><td>GitHub repo (fluhartyml/CryoTunesPlayer)</td><td>Done</td></tr>
+<tr><td>Wiki with hero icon</td><td>Done</td></tr>
+<tr><td>App icons (light + dark variants)</td><td>Done</td></tr>
+<tr><td>Retro 90s player UI (ice blue motif)</td><td>Done</td></tr>
+<tr><td>MusicKit streaming playback</td><td>Done</td></tr>
+<tr><td>80+ music stations (Category &rarr; Decade &rarr; Year)</td><td>Done</td></tr>
+<tr><td>Album art display with song title + artist</td><td>Done</td></tr>
+<tr><td>LCD ticker (time / date / WeatherKit)</td><td>Done</td></tr>
+<tr><td>Station persistence (no auto-play)</td><td>Done</td></tr>
+<tr><td>Custom background image (PhotosPicker, persisted)</td><td>Dropped 2026-05-03 (z-order)</td></tr>
+<tr><td>Sleep timer (30m / 1h / 2h / 4h)</td><td>Pending</td></tr>
+<tr><td>AirPlay 2 output picker</td><td>Pending</td></tr>
+<tr><td>Play / Pause / Skip / Stop controls</td><td>Done</td></tr>
+<tr><td>Now Playing info on lock screen</td><td>Pending</td></tr>
+<tr><td>Settings screen</td><td>Done</td></tr>
+</tbody>
+</table>
+
+<h3>v1.1+ &mdash; Future Enhancements</h3>
+<ul>
+<li>Tally Matrix Clock leader / follower sync via CloudKit.</li>
+<li>iCloud sync for settings + background image across devices.</li>
+<li>ShazamKit song recognition (NSMicrophoneUsageDescription required).</li>
+<li>Dark / light automatic icon switching (iOS 18+).</li>
+<li>Additional color themes beyond ice blue.</li>
+<li>Landscape mode.</li>
+<li>iPad support.</li>
+<li>Widget for home screen.</li>
+<li>Easter egg (hidden tap-title-or-idle-screen interaction).</li>
+<li>Queue position persistence (resume exact track on relaunch).</li>
+<li>Custom background image with proper z-order fix.</li>
+<li>Graceful error messages for no-subscription and no-network cases.</li>
+</ul>
+
+<h2>Sources</h2>
+<ul>
+<li>Project source: <a href="https://github.com/fluhartyml/CryoTunesPlayer">github.com/fluhartyml/CryoTunesPlayer</a> (verified 2026-05-10).</li>
+<li>Live on App Store: <a href="https://apps.apple.com/us/app/cryotunes-player/id6761222456">apps.apple.com/us/app/cryotunes-player/id6761222456</a>.</li>
+<li>Wiki: <a href="https://github.com/fluhartyml/CryoTunesPlayer/wiki">github.com/fluhartyml/CryoTunesPlayer/wiki</a>.</li>
+<li>Canonical roadmap: <code>CryoTunes Player/DeveloperNotes.swift</code> in the project repo.</li>
+<li>Shared data layer: Appendix B (CryoKit).</li>
+<li>Companion clock: Appendix H (Tally Matrix Clock).</li>
+<li>Hardened ShazamKit stack: Appendix V (NightGard Library Commander).</li>
+</ul>
+</div>
+</body></html>
