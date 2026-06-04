@@ -337,3 +337,192 @@
 // native vault browser for Apple platforms.
 //
 // ============================================================
+// CAPTURED TASK — AUTO-GENERATE THE TABLE OF CONTENTS
+// (recorded 2026-05-31 per Michael; do NOT implement as a tangent)
+// ============================================================
+//
+// DECISION (Michael, 2026-05-31): The hand-maintained
+// Front-of-Book/table-of-contents.html is a defect. It must be
+// removed from EPUB builds permanently, and THIS reader app must
+// generate its own Table of Contents automatically — the way Apple
+// Books does — instead of loading the manual HTML file.
+//
+// WHY the manual TOC is a bug:
+//   • In the EPUB, pandoc renames every chapter to ch###.xhtml, so
+//     the manual TOC's <a href> links (Book-NN-Title.html, etc.) all
+//     point at paths that no longer exist — every tap is dead. Apple
+//     Books v15 shipped this; v20 regressed it. The build script
+//     Workshop/Tools/build-epub.sh already filters it out
+//     (`! -name "table-of-contents.html"`). See apartment memory
+//     feedback_epub_excludes_manual_toc. It must NEVER re-enter a spine.
+//   • A hand-maintained TOC also rots every time the book's structure
+//     changes. Auto-generation removes the whole class of problem.
+//
+// WHAT TO BUILD (when picked up — not now):
+//   The pieces already exist. VaultNode.buildTree(at:) already walks
+//   the vault into an ORDERED tree (VaultNode.sortKey encodes reading
+//   order: Front-of-Book → Part I…VI → Appendices → figures). The
+//   auto-TOC is a SwiftUI view that renders that existing rootNode
+//   tree as a navigable contents list — no static HTML required.
+//
+// THE 4 DEPENDENCIES IN VaultModel.swift TO REPLACE:
+//   1. resolveVaultRoot() — validates the extracted vault by checking
+//      for "Front-of-Book/table-of-contents.html".
+//      → validate on a stable marker instead (a Part-I-* folder,
+//        claudex26-index.html, or simply a non-nil rootNode).
+//   2. setVaultRoot() — sets the default open document to the manual
+//      TOC html. → default to the generated TOC view.
+//   3. goHome() — opens the manual TOC html. → route Home to the
+//      generated TOC view.
+//   4. VaultNode.sortKey — special-cases "table-of-contents.html" to
+//      sort position 1. → drop that case once the file is retired.
+//
+// SEQUENCING / SAFETY:
+//   • Build + verify the auto-TOC FIRST. Only AFTER it works may the
+//     manual table-of-contents.html be retired from the vault. Do NOT
+//     delete the file before the replacement is proven — it is still
+//     the live Home/landing document today.
+//   • When auto-gen ships, update memory feedback_epub_excludes_manual_toc
+//     (its "keep the file on disk for the in-app reader" clause is
+//     superseded once the app no longer needs the file).
+//
+// STATUS: NOT STARTED — captured so it isn't forgotten, explicitly
+// deferred. Not to be coded as a tangent. — 2026-05-31
+//
+// ============================================================
+// EPUB IS THE PRODUCT — BUILD-TIME TRANSFORMS THE READER MUST
+// ADAPT TO (Michael, 2026-06-04)
+// ============================================================
+//
+// DECISION: The EPUB is most likely the product for sale (Apple
+// Books / Kindle / other EPUB venues). Therefore:
+//
+//   • The inkwell vault HTML stays the UNTOUCHED source of truth.
+//     Claude does not edit it. All enrichment and correction is
+//     applied at EPUB BUILD time (Workshop/Tools/build-epub.sh
+//     plus the proofing Corrections-Buffer).
+//   • THIS reader app must adapt in the future so the in-app
+//     reading experience matches the shipping EPUB and does not
+//     diverge from the product.
+//   • This section is the running spec of what the reader has to
+//     catch up to. It is recorded HERE (a reader-app file, OUTSIDE
+//     BibleContent.bundle) on purpose — so the source of truth is
+//     never modified just to capture these notes.
+//
+// THE MODEL:
+//   source (pristine content) -> build (applies transforms) ->
+//   EPUB (the product). The reader must mirror the build's
+//   transforms — or eventually render the built output — so that
+//   reader == product.
+//
+// ------------------------------------------------------------
+// THE OPEN TENSION (surfaced, not resolved):
+//   This reader renders the SOURCE directly. If corrections and
+//   enrichments live ONLY in the build, the in-app reader shows
+//   UN-enriched, UN-corrected text until it adapts. Two ways to
+//   reconcile — Michael to choose:
+//     (A) the reader runs the same transform/buffer pipeline
+//         before rendering, or
+//     (B) the reader switches to rendering the built EPUB output.
+//   Until then, expect reader-vs-EPUB divergence on the items below.
+// ------------------------------------------------------------
+//
+// TRANSFORMS / CHANGES  (each: what · where it lives · reader impact)
+//
+//   1. CROSS-LINK SURVIVAL  (~1537 links)
+//      What: pandoc renames every file to ch###.xhtml at package
+//      time but does NOT rewrite the hrefs, so every internal link
+//      dies in the EPUB (renders link-styled but inert — colored,
+//      underlined, does nothing when tapped).
+//      Where: the BUILD must rewrite internal link targets to the
+//      renamed files (or stop renaming). NEVER fix this in source —
+//      source links are human-readable and already work in this
+//      reader's decidePolicyFor intercept.
+//      Reader impact: nav already works on vault filenames; no
+//      change needed, but the reader is the REFERENCE for "links
+//      work" — the build output must match it. Generalizes the
+//      manual-TOC note in the section above.
+//
+//   2. GLOSSARY — real, shipping Back-of-Book section
+//      What: today the vault has NO glossary; a good 24-term
+//      glossary.xhtml is stranded in an abandoned project folder
+//      (~/Developer.complex/Claudes-Xcode-26-Swift-Bible/OEBPS/) and
+//      never ships. Decision: a concepts Glossary (brief, explicit
+//      definitions) is a real Back-of-Book section, INDEPENDENT of
+//      the Part-II Swift Lexicon (the deep keyword reference). A
+//      Swift word may carry a one-line glossary brief AND a full
+//      Lexicon entry; a pure concept (e.g. "Source of Truth") lives
+//      ONLY in the glossary. Term #25 added: "Source of Truth"
+//      (full approved text in Classroom/Proof-Copy/Corrections-
+//      Buffer.md, entry A2).
+//      Where: the BUILD includes the glossary file (builds last,
+//      with the Appendices).
+//      Reader impact: render the glossary and surface it in the
+//      sidebar tree / auto-generated TOC.
+//
+//   3. GLOSSARY NAVIGATION BEHAVIOR  (proven in Apple Books 2026-06-04)
+//      What: tap a glossary-linked term in the prose -> jump to its
+//      definition -> a Back control returns to the reading spot.
+//      Requires (a) glossary links wired INTO the prose, and
+//      (b) each glossary term starts its own page (page-break-before
+//      every term) so an anchor jump lands with the wanted term at
+//      the TOP of the page instead of trailing onto the next page.
+//      Without (b) the jump lands on the PREVIOUS term — verified
+//      failure, then verified fixed, 2026-06-04.
+//      Where: link-wiring + page-break CSS at BUILD.
+//      Reader impact: support the same tap->define->back flow and
+//      the per-term page-break landing.
+//
+//   4. OUTLINE NUMBERING — the one current source impurity
+//      What: paragraphs / sections are outline-numbered (I.1.2.1 …).
+//      Status: currently numbered IN PLACE in the inkwell
+//      (number-book.py, verified; pristine backup at
+//      ~/Developer.complex/inkwell/BibleContent.bundle.backup-2026-06-01-pre-numbering).
+//      Under the pristine-source model this SHOULD become a build
+//      step and the in-place numbering reverted from the backup.
+//      DECISION PENDING (Michael) — do NOT auto-revert.
+//      Reader impact: reader must display numbers (apply the same
+//      numbering step) so reader == product.
+//
+//   5. EPUB-ONLY TYPOGRAPHY / CSS
+//      • page-break-before on glossary terms (see #3).
+//      • non-breaking space welding a quoted symbol to its word
+//        (e.g. protocol 'Y') so a page break can't orphan it inside
+//        a table cell (Corrections-Buffer L1).
+//      • break-inside: avoid on table rows (secondary).
+//      Where: BUILD / EPUB stylesheet.
+//      Reader impact: match in the reader's stylesheet for parity.
+//
+//   6. PROSE CORRECTIONS  (the Corrections-Buffer)
+//      What: typo / wording / content fixes held in
+//      Classroom/Proof-Copy/Corrections-Buffer.md (e.g. the CEET
+//      typo, dropping "Michael's 18pt" attribution, the widget-
+//      scheme watch-out bullet).
+//      Where: applied at the V1.x COMPILE from the buffer; source
+//      untouched.
+//      Reader impact: see THE OPEN TENSION above — the reader shows
+//      uncorrected text until it applies the buffer or reads the
+//      built output.
+//
+//   7. MANUAL TABLE OF CONTENTS — see the captured-task section
+//      above. Same root cause (pandoc rename kills its links);
+//      already excluded from the build; reader to auto-generate.
+//
+// SYNC NOTE: per the UNDER THE HOOD section, Developer Notes are
+// mirrored in this .swift file, the wiki Developer-Notes.md, and the
+// in-app Under-the-Hood view. Propagate this section to those when
+// they are next updated.
+//
+// ------------------------------------------------------------
+// DEFERRAL (Michael, 2026-06-04): DO NOT TOUCH THE INKWELL.
+// Everything in this section is recorded so it isn't forgotten and
+// explicitly PARKED — we cross each bridge when it comes, not now.
+// Nothing here is a pending action. In particular:
+//   • Do NOT revert the in-place outline numbering (#4).
+//   • Do NOT resolve the reader-vs-EPUB tension yet (A vs B above).
+//   • Do NOT modify BibleContent.bundle to apply any of this.
+// These are design concerns captured for the future, not a to-do
+// list. Revisit only when Michael says the bridge has arrived.
+// ------------------------------------------------------------
+//
+// ============================================================
