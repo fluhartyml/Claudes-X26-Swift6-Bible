@@ -6,18 +6,18 @@
 </head><body>
 <div class="content">
 
-<h1>Build-Along 05: Claudes Outdoor Utility</h1>
+<h1><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.5</span>&nbsp;&nbsp;Build-Along 05: Claudes Outdoor Utility</h1>
 <p><span class="status-planning">Status: planning &amp; spec phase as of 2026-04-26.</span> v1.0 will scaffold and ship as five Apple frameworks composed into a single useful diary app. v2.0 demonstrates an upgrade arc by adding a third-party radar tile provider on top.</p>
 <div class="scope-note">A weather-stamped photo journal. One tap captures a photo, the current weather, your location, a title, and a free-text note &mdash; one entry, frozen in time. Browse past entries chronologically or pinned on a map. Useful out of the gate; teaching the framework composition is what the book gets out of it.</div>
 <hr>
 
-<h2>What this app is</h2>
-<p>Apple Photos remembers GPS coordinates for every photo (when you allow it) but it does not remember the weather. Claudes Outdoor Utility fills that gap. Each journal entry stores a title, a timestamp, a location, the weather conditions at that location and moment, an optional photo, and a free-text note. The map shows every place the user has logged. The log shows every moment chronologically. The app is a lightweight diary built around Apple's audio-of-place &mdash; weather plus location plus a picture &mdash; and it is genuinely useful before any teaching layer is added.</p>
-<p>Primary identity is a useful App Store app. Teaching layer rides on top: design rationale callouts in every Swift file plus an Under the Hood tab that shows the app's own source code in-app. Same secondary-teaching pattern locked in Build-Along 04 (Claudes Audio Universe).</p>
+<h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.5.1</span>&nbsp;&nbsp;What this app is</h2>
+<p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.5.1 &para;1</span> Apple Photos remembers GPS coordinates for every photo (when you allow it) but it does not remember the weather. Claudes Outdoor Utility fills that gap. Each journal entry stores a title, a timestamp, a location, the weather conditions at that location and moment, an optional photo, and a free-text note. The map shows every place the user has logged. The log shows every moment chronologically. The app is a lightweight diary built around Apple's audio-of-place &mdash; weather plus location plus a picture &mdash; and it is genuinely useful before any teaching layer is added.</p>
+<p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.5.1 &para;2</span> Primary identity is a useful App Store app. Teaching layer rides on top: design rationale callouts in every Swift file plus an Under the Hood tab that shows the app's own source code in-app. Same secondary-teaching pattern locked in Build-Along 04 (Claudes Audio Universe).</p>
 
-<h2>What v1.0 teaches</h2>
-<p>Five Apple frameworks composed into one product, no third-party dependencies:</p>
-<ul>
+<h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.5.2</span>&nbsp;&nbsp;What v1.0 teaches</h2>
+<p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.5.2 &para;1</span> Five Apple frameworks composed into one product, no third-party dependencies:</p>
+<span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">VII.5.2 &para;2</span><ul>
 <li><strong>CoreLocation</strong> &mdash; request when-in-use authorization, read the device's current coordinates, handle the authorization states cleanly</li>
 <li><strong>WeatherKit</strong> &mdash; fetch the current conditions for the user's coordinates at log time and freeze them into the entry</li>
 <li><strong>SwiftData</strong> &mdash; persist journal entries locally with a single <code>@Model</code> class, query them back with <code>@Query</code>, observe changes automatically through SwiftUI</li>
@@ -25,9 +25,9 @@
 <li><strong>MapKit</strong> &mdash; render a Home-tab map of every past entry as pins, render a per-entry detail map of one specific location</li>
 </ul>
 
-<h2>Project setup &mdash; the GitHub checkbox matters</h2>
-<p>Scaffold from Xcode &rarr; File &rarr; New &rarr; Project &rarr; iOS &rarr; App. Settings:</p>
-<ul>
+<h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.5.3</span>&nbsp;&nbsp;Project setup &mdash; the GitHub checkbox matters</h2>
+<p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.5.3 &para;1</span> Scaffold from Xcode &rarr; File &rarr; New &rarr; Project &rarr; iOS &rarr; App. Settings:</p>
+<span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">VII.5.3 &para;2</span><ul>
 <li>Product Name: <strong>Claudes Outdoor Utility</strong></li>
 <li>Organization Identifier: <code>com.Claudes-X26-Swift-Bible</code></li>
 <li>Interface: SwiftUI &middot; Language: Swift &middot; Storage: <strong>SwiftData</strong></li>
@@ -35,15 +35,15 @@
 </ul>
 <div class="caution"><strong>Caution &mdash; tick the Create Git Repository on my Mac checkbox at project creation time.</strong> Xcode places it on the same panel as the save location. If the box is unchecked, the project is created without an initialized git repo, and you have to retrofit it with <code>git init</code> + remote setup later &mdash; doable but a chore that desyncs Xcode's Source Control panel until you reload the project. Tick the checkbox once at creation and Xcode wires the repo, the first commit, the <code>.gitignore</code>, and the Source Control panel cleanly. Same lesson applies to every Xcode project on your roster: tick the box at create time.</div>
 
-<h2>Naming and bundle identity</h2>
-<p>Name discipline matters because the App Store rejects apps that read like demos or beta utilities (per Guideline 2.3.0 and the broader meaningful-app-experience requirement). Claudes Outdoor Utility names what the app does plainly and grants it a real product identity. Bundle ID: <code>com.Claudes-X26-Swift-Bible.Claudes-Outdoor-Utility</code>. GitHub repo: <a href="https://github.com/fluhartyml/Claudes-Outdoor-Utility">github.com/fluhartyml/Claudes-Outdoor-Utility</a>.</p>
+<h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.5.4</span>&nbsp;&nbsp;Naming and bundle identity</h2>
+<p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.5.4 &para;1</span> Name discipline matters because the App Store rejects apps that read like demos or beta utilities (per Guideline 2.3.0 and the broader meaningful-app-experience requirement). Claudes Outdoor Utility names what the app does plainly and grants it a real product identity. Bundle ID: <code>com.Claudes-X26-Swift-Bible.Claudes-Outdoor-Utility</code>. GitHub repo: <a href="https://github.com/fluhartyml/Claudes-Outdoor-Utility">github.com/fluhartyml/Claudes-Outdoor-Utility</a>.</p>
 
-<h2>Architecture overview</h2>
-<p>Three tabs: Home, New Entry, Log. Each one is wrapped in <code>AppShell</code> so the (i) info button + About sheet plumbing is shared across tabs (same pattern locked in Build-Along 04). The shell owns nothing beyond the (i)-button toolbar; each tab owns its own state, its own data flow, its own framework.</p>
-<p>One <code>@Model</code> drives the entire data layer. No central store object, no observable singleton, no service layer. SwiftData's <code>modelContext</code> environment value plus <code>@Query</code> property wrapper handle persistence and observation natively.</p>
+<h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.5.5</span>&nbsp;&nbsp;Architecture overview</h2>
+<p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.5.5 &para;1</span> Three tabs: Home, New Entry, Log. Each one is wrapped in <code>AppShell</code> so the (i) info button + About sheet plumbing is shared across tabs (same pattern locked in Build-Along 04). The shell owns nothing beyond the (i)-button toolbar; each tab owns its own state, its own data flow, its own framework.</p>
+<p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.5.5 &para;2</span> One <code>@Model</code> drives the entire data layer. No central store object, no observable singleton, no service layer. SwiftData's <code>modelContext</code> environment value plus <code>@Query</code> property wrapper handle persistence and observation natively.</p>
 
-<h2>Data model</h2>
-<pre><code>@Model final class OutsideLog {
+<h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.5.6</span>&nbsp;&nbsp;Data model</h2>
+<span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">VII.5.6 &para;1</span><pre><code>@Model final class OutsideLog {
     var id: UUID
     var timestamp: Date
     var title: String           // short user-supplied title
@@ -55,29 +55,29 @@
     var photoData: Data?        // raw bytes, untouched
     var note: String            // free text body
 }</code></pre>
-<p>The title is required at New Entry time so that every row in the Log tab is human-scannable months later. Empty-title entries become a bag of "Untitled" placeholders within weeks; requiring 2-5 words at log time costs almost nothing and pays off forever.</p>
+<p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.5.6 &para;2</span> The title is required at New Entry time so that every row in the Log tab is human-scannable months later. Empty-title entries become a bag of "Untitled" placeholders within weeks; requiring 2-5 words at log time costs almost nothing and pays off forever.</p>
 
-<h2>Photo &amp; location privacy &mdash; the rule</h2>
+<h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.5.7</span>&nbsp;&nbsp;Photo &amp; location privacy &mdash; the rule</h2>
 <div class="caution"><strong>Locked rule: never read or modify a photo's EXIF.</strong> The journal entry stores location in the <code>@Model</code> as <code>latitude</code> and <code>longitude</code>. The photo's bytes are stored exactly as the user gave them &mdash; no GPS injection into the in-app copy, no GPS stripping, no rewriting at all. The user's iOS Settings &rarr; Privacy &rarr; Location Services &rarr; Camera setting is the only authority on whether photos carry GPS EXIF in their pixels-plus-metadata blob. Many users keep camera location off so that texted photos do not leak their location; an app that "helpfully" injects EXIF GPS into its own internal copy defeats that decision the moment the user shares the entry. Treat photos as opaque media: accept, store, display, share &mdash; never modify.</div>
-<p>This is also a generalizable lesson worth carrying to any future app that mixes photos and location. The clean separation is: photo bytes are media, coordinates are journal metadata, and the two stay in their own lanes.</p>
+<p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.5.7 &para;1</span> This is also a generalizable lesson worth carrying to any future app that mixes photos and location. The clean separation is: photo bytes are media, coordinates are journal metadata, and the two stay in their own lanes.</p>
 
-<h2>Display rule &mdash; timestamp-led titles</h2>
-<p>Every place an entry surfaces (Log row, detail navigation title, map-pin callout), the dominant text reads:</p>
-<pre><code>YYYY MMM DD {title}</code></pre>
-<p>For example, <code>2026 APR 26 Beach walk at sunset</code>. Date-led-then-title is internally consistent with the apartment's screenshot folder naming convention and turns the Log into a chronologically scannable archive without sort-toggle complexity. Date is captured automatically; title is what the user types.</p>
+<h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.5.8</span>&nbsp;&nbsp;Display rule &mdash; timestamp-led titles</h2>
+<p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.5.8 &para;1</span> Every place an entry surfaces (Log row, detail navigation title, map-pin callout), the dominant text reads:</p>
+<span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">VII.5.8 &para;2</span><pre><code>YYYY MMM DD {title}</code></pre>
+<p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.5.8 &para;3</span> For example, <code>2026 APR 26 Beach walk at sunset</code>. Date-led-then-title is internally consistent with the apartment's screenshot folder naming convention and turns the Log into a chronologically scannable archive without sort-toggle complexity. Date is captured automatically; title is what the user types.</p>
 
-<h2>Map placement rule &mdash; one-entry views, map last</h2>
-<p>On per-entry views (New Entry sheet, Entry detail), the photo and the words lead. The map sits at the bottom of the layout as the geographic anchor, sized so it does not eat the visual real estate. On the Home tab, where the map IS the view's purpose (every entry pinned at once), the map fills the screen because that is its job. The principle: when a map represents one entry's data, it goes last; when it represents the whole archive at a glance, it leads.</p>
+<h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.5.9</span>&nbsp;&nbsp;Map placement rule &mdash; one-entry views, map last</h2>
+<p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.5.9 &para;1</span> On per-entry views (New Entry sheet, Entry detail), the photo and the words lead. The map sits at the bottom of the layout as the geographic anchor, sized so it does not eat the visual real estate. On the Home tab, where the map IS the view's purpose (every entry pinned at once), the map fills the screen because that is its job. The principle: when a map represents one entry's data, it goes last; when it represents the whole archive at a glance, it leads.</p>
 
-<h2>UI shape (sketch)</h2>
-<h3>Home tab</h3>
-<ul>
+<h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.5.10</span>&nbsp;&nbsp;UI shape (sketch)</h2>
+<h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.5.10.1</span>&nbsp;&nbsp;Home tab</h3>
+<span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">VII.5.10.1 &para;1</span><ul>
 <li>Map fills most of the tab, pinned with every past entry's location</li>
 <li>"This Day" recall card at the top (optional v1.0 polish): if any entries match today's calendar day in past years, surface them</li>
 <li>Tap a pin &rarr; push the matching Entry detail view</li>
 </ul>
-<h3>New Entry tab (or sheet)</h3>
-<ul>
+<h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.5.10.2</span>&nbsp;&nbsp;New Entry tab (or sheet)</h3>
+<span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">VII.5.10.2 &para;1</span><ul>
 <li>Title TextField at the top (placeholder "Title this entry", ~50 char practical limit)</li>
 <li>"Add Photo" button &rarr; presents a confirmation dialog with two choices: Take Photo (camera) or Choose from Library (PhotosPicker)</li>
 <li>Weather card auto-filled from WeatherKit (read-only, frozen at log time)</li>
@@ -85,14 +85,14 @@
 <li>Caption text showing the captured timestamp + coordinates</li>
 <li>Live small Map (~150 pt) at the bottom showing where the entry will pin</li>
 </ul>
-<h3>Log tab</h3>
-<ul>
+<h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.5.10.3</span>&nbsp;&nbsp;Log tab</h3>
+<span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">VII.5.10.3 &para;1</span><ul>
 <li>Reverse-chronological list of entries</li>
 <li>Each row: small cached map thumbnail (generated once via <code>MKMapSnapshotter</code>), date+title primary line, weather summary secondary line, photo thumbnail at the trailing edge</li>
 <li>Tap row &rarr; push Entry detail view</li>
 </ul>
-<h3>Entry detail view</h3>
-<ul>
+<h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.5.10.4</span>&nbsp;&nbsp;Entry detail view</h3>
+<span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">VII.5.10.4 &para;1</span><ul>
 <li>Hero photo at the top</li>
 <li>Weather card (the frozen snapshot from log time)</li>
 <li>The note</li>
@@ -101,8 +101,8 @@
 <li>Toolbar: Edit, Delete, Share</li>
 </ul>
 
-<h2>Locked design rules</h2>
-<ul>
+<h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.5.11</span>&nbsp;&nbsp;Locked design rules</h2>
+<span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">VII.5.11 &para;1</span><ul>
 <li><strong>iOS only.</strong> Project targets <code>iphoneos iphonesimulator</code>. macOS and visionOS skipped per the case-by-case platform rule (no pedagogical gain from cross-platform branching here)</li>
 <li><strong>SwiftData persists.</strong> Unlike Audio Universe (which was transient by design), Outdoor Utility's whole point is persistence. The diary survives restarts, reinstalls preserve through iOS Device Backup, and CloudKit-backed sync is a v2.x candidate</li>
 <li><strong>One framework per layer.</strong> Each Apple framework owns one slice of the app: CoreLocation owns coordinates, WeatherKit owns weather, SwiftData owns persistence, MapKit owns visual geography, PhotosUI/UIImagePickerController own image input. No leakage between layers</li>
@@ -111,17 +111,17 @@
 <li><strong>Map last on per-entry views, first on archive views.</strong> Locked above</li>
 </ul>
 
-<h2>Info.plist usage descriptions</h2>
-<ul>
+<h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.5.12</span>&nbsp;&nbsp;Info.plist usage descriptions</h2>
+<span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">VII.5.12 &para;1</span><ul>
 <li><code>NSLocationWhenInUseUsageDescription</code> &mdash; CoreLocation reads your location when you log a new entry</li>
 <li><code>NSCameraUsageDescription</code> &mdash; only when you choose Take Photo</li>
 <li><code>NSPhotoLibraryUsageDescription</code> &mdash; not needed; PhotosPicker is privacy-preserving and does not require library permission</li>
 </ul>
 
-<h2>App Services portal trip (one-time, before WeatherKit will work)</h2>
-<p>WeatherKit fails at runtime with a JWT-authentication error until the App ID has WeatherKit enabled on developer.apple.com. CoreLocation, MapKit, PhotosUI, and SwiftData do not need portal enablement &mdash; they are part of the base SDK. Only WeatherKit triggers this trip in v1.0.</p>
-<p>Step by step:</p>
-<ol>
+<h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.5.13</span>&nbsp;&nbsp;App Services portal trip (one-time, before WeatherKit will work)</h2>
+<p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.5.13 &para;1</span> WeatherKit fails at runtime with a JWT-authentication error until the App ID has WeatherKit enabled on developer.apple.com. CoreLocation, MapKit, PhotosUI, and SwiftData do not need portal enablement &mdash; they are part of the base SDK. Only WeatherKit triggers this trip in v1.0.</p>
+<p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.5.13 &para;2</span> Step by step:</p>
+<span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">VII.5.13 &para;3</span><ol>
 <li>Sign in at <a href="https://developer.apple.com">developer.apple.com</a> &rarr; <strong>Account</strong> &rarr; <strong>Certificates, Identifiers &amp; Profiles</strong> &rarr; <strong>Identifiers</strong></li>
 <li>Find the App ID for this project. If you let Xcode auto-register on first build, it appears with an <code>XC</code> prefix and the bundle ID matches what is in the project file. If it is not there, click <strong>+</strong> to register manually: select <strong>App IDs</strong> &rarr; <strong>App</strong>, paste the explicit bundle ID, fill the description</li>
 <li>Click into the App ID row to edit it</li>
@@ -134,22 +134,22 @@
 </ol>
 <div class="caution"><strong>Caution &mdash; enable WeatherKit on the canonical App ID, not a stale auto-registered one.</strong> If the project was renamed at any point (a typo fix, a name change after first build), Xcode's first-build auto-registration may have created an App ID under the OLD bundle ID. Apple's portal does not delete that stale entry when the project is renamed; both entries exist side by side. WeatherKit must be enabled on the App ID whose bundle ID matches the project's <em>current</em> bundle ID &mdash; the one the next build will sign with. Enabling it on the stale entry does nothing for the running app. Optional cleanup: delete the stale entry from Identifiers afterwards to keep the list legible.</div>
 
-<h2>WeatherKit attribution</h2>
-<p>Apple requires visible attribution for WeatherKit data: the phrase "Weather data provided by &#xF8FF; Weather" (using the Apple logo glyph at code point U+F8FF, which renders as the apple icon in any system font on Apple platforms) rendered alongside the data, linked to <a href="https://weatherkit.apple.com/legal-attribution.html"><code>weatherkit.apple.com/legal-attribution.html</code></a>. Apple's review team has rejected updates over missing or invisible WeatherKit attribution, even when prior versions were approved &mdash; treat this as load-bearing, not cosmetic.</p>
-<p>Two places carry the attribution in this app:</p>
-<ol>
+<h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.5.14</span>&nbsp;&nbsp;WeatherKit attribution</h2>
+<p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.5.14 &para;1</span> Apple requires visible attribution for WeatherKit data: the phrase "Weather data provided by &#xF8FF; Weather" (using the Apple logo glyph at code point U+F8FF, which renders as the apple icon in any system font on Apple platforms) rendered alongside the data, linked to <a href="https://weatherkit.apple.com/legal-attribution.html"><code>weatherkit.apple.com/legal-attribution.html</code></a>. Apple's review team has rejected updates over missing or invisible WeatherKit attribution, even when prior versions were approved &mdash; treat this as load-bearing, not cosmetic.</p>
+<p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.5.14 &para;2</span> Two places carry the attribution in this app:</p>
+<span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">VII.5.14 &para;3</span><ol>
 <li><strong>The About sheet</strong> &mdash; reachable from the (i) info button on every tab. A small row below the outbound-link buttons, above the GPL footer, with the entire phrase as a single tap target</li>
 <li><strong>The weather card itself</strong> &mdash; on the New Entry sheet and on the Entry detail view, the weather card carries the same attribution adjacent to the displayed conditions. The About-sheet attribution alone is not enough; reviewers want to see attribution on the same screen as the data</li>
 </ol>
-<p>Implementation pattern: wrap the whole phrase in a single <code>Link</code> so the entire row is one tap target. The apple glyph (U+F8FF) keeps the row tight without spelling out "Apple" as a separate word.</p>
-<pre><code>Link(destination: URL(string:
+<p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.5.14 &para;4</span> Implementation pattern: wrap the whole phrase in a single <code>Link</code> so the entire row is one tap target. The apple glyph (U+F8FF) keeps the row tight without spelling out "Apple" as a separate word.</p>
+<span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">VII.5.14 &para;5</span><pre><code>Link(destination: URL(string:
     "https://weatherkit.apple.com/legal-attribution.html")!) {
     Text("Weather data provided by \u{F8FF} Weather")
         .font(.caption)
 }</code></pre>
-<p>The legal-attribution page is a static HTML page Apple maintains that lists every data source WeatherKit pulls from (Apple Weather, The Weather Channel, BreezoMeter, and several meteorological agencies). The page is the canonical destination required by Apple's WeatherKit terms.</p>
+<p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.5.14 &para;6</span> The legal-attribution page is a static HTML page Apple maintains that lists every data source WeatherKit pulls from (Apple Weather, The Weather Channel, BreezoMeter, and several meteorological agencies). The page is the canonical destination required by Apple's WeatherKit terms.</p>
 <div class="caution"><strong>Caution &mdash; attribution belongs adjacent to <em>displayed</em> weather data, not always on screen.</strong> The About-sheet row covers the app-credits surface. The weather card needs attribution on its <strong>success</strong> branch, where Apple Weather data is actually rendered. Do NOT show the attribution in <strong>error</strong> states (no data to credit), <strong>loading</strong> states (no data yet), or <strong>idle/waiting</strong> states (still no data). Showing the attribution Link in an error state is actively harmful: extra interactive elements in the same row can hijack tap routing &mdash; a nearby Retry button can lose its tap to the Link. Code the card so the attribution row is conditionally rendered only in the success branch.</div>
-<pre><code>@ViewBuilder
+<span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">VII.5.14 &para;7</span><pre><code>@ViewBuilder
 private var weatherCard: some View {
     if fetchingWeather {
         ProgressView("Fetching weather…")
@@ -166,10 +166,10 @@ private var weatherCard: some View {
         // No attribution — no data yet
     }
 }</code></pre>
-<p>A more future-proof alternative is to read <code>WeatherService.shared.attribution</code> at runtime and link to whatever <code>legalPageURL</code> it returns &mdash; that survives Apple changing the static URL, at the cost of a network read before the row can render.</p>
+<p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.5.14 &para;8</span> A more future-proof alternative is to read <code>WeatherService.shared.attribution</code> at runtime and link to whatever <code>legalPageURL</code> it returns &mdash; that survives Apple changing the static URL, at the cost of a network read before the row can render.</p>
 
-<h2>Build sequence (for the actual scaffold)</h2>
-<ol>
+<h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.5.15</span>&nbsp;&nbsp;Build sequence (for the actual scaffold)</h2>
+<span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">VII.5.15 &para;1</span><ol>
 <li>Xcode &rarr; New Project with the settings + the Create Git Repository checkbox ticked</li>
 <li>Strip the multiplatform sprawl: edit <code>SDKROOT</code>, <code>SUPPORTED_PLATFORMS</code>, <code>TARGETED_DEVICE_FAMILY</code> in the project file to iOS-only</li>
 <li><code>DeveloperNotes.swift</code> &mdash; the architecture map (mission, frameworks, file map, locked rules, version plan, Info.plist keys) authored before any feature work</li>
@@ -184,20 +184,20 @@ private var weatherCard: some View {
 <li>App Store screenshots, listing, submit for review</li>
 </ol>
 
-<h2>v2.0 roadmap &mdash; the upgrade demonstration</h2>
-<p>v2.0 layers RainViewer's free-tier radar tiles on top of the v1.0 MapKit basemap, turning the Home tab into a "this is what's happening weather-wise where I have logged" view in real time. The upgrade is architecturally meaningful: it adds the app's first third-party API integration, its first <code>MKTileOverlay</code> subclass, its first UIKit-into-SwiftUI bridge (because the SwiftUI <code>Map</code> view does not yet expose tile overlays), and a second visible attribution layer.</p>
-<p>What v2.0 adds and teaches:</p>
-<ul>
+<h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.5.16</span>&nbsp;&nbsp;v2.0 roadmap &mdash; the upgrade demonstration</h2>
+<p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.5.16 &para;1</span> v2.0 layers RainViewer's free-tier radar tiles on top of the v1.0 MapKit basemap, turning the Home tab into a "this is what's happening weather-wise where I have logged" view in real time. The upgrade is architecturally meaningful: it adds the app's first third-party API integration, its first <code>MKTileOverlay</code> subclass, its first UIKit-into-SwiftUI bridge (because the SwiftUI <code>Map</code> view does not yet expose tile overlays), and a second visible attribution layer.</p>
+<p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.5.16 &para;2</span> What v2.0 adds and teaches:</p>
+<span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">VII.5.16 &para;3</span><ul>
 <li><strong>Third-party JSON API integration</strong> &mdash; <code>URLSession</code>, <code>Codable</code> decoding of the RainViewer manifest at <code>https://api.rainviewer.com/public/weather-maps.json</code></li>
 <li><strong>MKTileOverlay subclass</strong> &mdash; constructing tile URLs from the manifest, refreshing every ~10 minutes</li>
 <li><strong>UIViewRepresentable bridging</strong> &mdash; wrapping <code>MKMapView</code> in a SwiftUI-facing struct so MapKit's overlay APIs are reachable</li>
 <li><strong>Attribution discipline</strong> &mdash; "Powered by RainViewer" footer band on the Home tab per their free-tier ToS, plus the existing WeatherKit attribution. Two visible credits on the same screen, each with its own rules</li>
 <li><strong>The App Store update review cycle</strong> as its own teaching point &mdash; how a previously approved app moves through review when a substantial new feature lands, what reviewers look for in update submissions, attribution growth</li>
 </ul>
-<p>This page expands with the full v2.0 walkthrough once v2.0 actually ships, the same way Build-Along 04 (Claudes Audio Universe) gets deepened post-approval. The point of staging the radar work for v2.0 is that the v1.0 -&rarr; v2.0 arc itself becomes a teaching artifact: most beginner programming books show only the build-once-and-stop pattern. The book shows planning, shipping, soaking, and extending, modeled on the same sample app.</p>
+<p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.5.16 &para;4</span> This page expands with the full v2.0 walkthrough once v2.0 actually ships, the same way Build-Along 04 (Claudes Audio Universe) gets deepened post-approval. The point of staging the radar work for v2.0 is that the v1.0 -&rarr; v2.0 arc itself becomes a teaching artifact: most beginner programming books show only the build-once-and-stop pattern. The book shows planning, shipping, soaking, and extending, modeled on the same sample app.</p>
 
-<h2>Resources</h2>
-<ul>
+<h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.5.17</span>&nbsp;&nbsp;Resources</h2>
+<span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">VII.5.17 &para;1</span><ul>
 <li>Source: <a href="https://github.com/fluhartyml/Claudes-Outdoor-Utility">github.com/fluhartyml/Claudes-Outdoor-Utility</a></li>
 <li>Wiki: <a href="https://github.com/fluhartyml/Claudes-Outdoor-Utility/wiki">github.com/fluhartyml/Claudes-Outdoor-Utility/wiki</a></li>
 <li>Privacy: <a href="https://fluharty.me/outdoorutility-privacy">fluharty.me/outdoorutility-privacy</a></li>
@@ -205,7 +205,7 @@ private var weatherCard: some View {
 <li>RainViewer free-tier API (v2.0 dependency): <a href="https://www.rainviewer.com/api.html">rainviewer.com/api.html</a></li>
 </ul>
 
-<p><em>Page authored at the spec-lock moment, before v1.0 scaffold. Will expand into a full step-by-step walkthrough as the build progresses, then deepen again with v2.0 after that ships. Source of truth for what the app actually does is <code>DeveloperNotes.swift</code> in the Xcode project once it exists.</em></p>
+<p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.5.17 &para;2</span> <em>Page authored at the spec-lock moment, before v1.0 scaffold. Will expand into a full step-by-step walkthrough as the build progresses, then deepen again with v2.0 after that ships. Source of truth for what the app actually does is <code>DeveloperNotes.swift</code> in the Xcode project once it exists.</em></p>
 
 </div>
 </body></html>

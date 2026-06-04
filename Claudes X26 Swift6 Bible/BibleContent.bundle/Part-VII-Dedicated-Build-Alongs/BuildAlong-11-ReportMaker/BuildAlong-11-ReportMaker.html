@@ -8,17 +8,17 @@
 
 <div class="content">
 
-  <h1>Build-Along 11: ReportMaker &mdash; Trip, Charts, and PDF</h1>
+  <h1><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.11</span>&nbsp;&nbsp;Build-Along 11: ReportMaker &mdash; Trip, Charts, and PDF</h1>
   <p><span class="status-github">Distribution: GitHub clone-and-build, App Store target.</span> ReportMaker is a focused business expense tracker for one job: capture spending during a trip, then produce a clean PDF the user can email to whoever reimburses them. Apple does not ship one; Expensify, SAP Concur, and FreshBooks all do for a fee. ReportMaker is the small, native, no-account-required alternative.</p>
   <p>The repository: <a href="https://github.com/fluhartyml/ReportMaker">github.com/fluhartyml/ReportMaker</a>. Built atop SwiftData (<code>@Model</code> with an inverse <code>@Relationship</code>), Swift Charts (<code>BarMark</code>, <code>LineMark</code>), <code>PhotosPicker</code>, <code>UIGraphicsPDFRenderer</code> driving native <code>NSAttributedString</code> draws, and a <code>UIActivityViewController</code> bridge for the share sheet. iPhone and iPad universal target. No third-party SDKs, no accounts, no servers.</p>
   <div class="scope-note">This chapter is the first build-along that bundles four major frameworks &mdash; SwiftData, Swift Charts, PDFKit, PhotosUI &mdash; into a single product instead of demonstrating each in isolation. The lessons up to <a href="../BuildAlong-10-DragBetweenWindows/BuildAlong-10-DragBetweenWindows.html">Build-Along 10</a> have been single-concept; ReportMaker is where those concepts compose.</div>
   <hr>
-  <h2>The Brainstorm</h2>
-  <p>Every employee who flies for work has done the same chore at the end of a trip: collect receipts, sort them by category, total them, scan or photograph each one, paste everything into an email or a spreadsheet, and send it to whoever reimburses. The chore is universal and unloved.</p>
-  <p>The category is mature on the App Store. Expensify, SAP Concur, FreshBooks, and several others sell subscriptions to do exactly this. They sell because the chore is real and Apple does not ship a first-party version.</p>
-  <p>The opening for ReportMaker is what the existing apps share: account-required, server-backed, and priced for an accountant. A focused native app that does the chore well and stops there has room. ReportMaker keeps everything on-device, ships no telemetry, and writes a PDF the user owns.</p>
-  <p><strong>v0.1 spec:</strong></p>
-  <ul>
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.11.1</span>&nbsp;&nbsp;The Brainstorm</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.11.1 &para;1</span> Every employee who flies for work has done the same chore at the end of a trip: collect receipts, sort them by category, total them, scan or photograph each one, paste everything into an email or a spreadsheet, and send it to whoever reimburses. The chore is universal and unloved.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.11.1 &para;2</span> The category is mature on the App Store. Expensify, SAP Concur, FreshBooks, and several others sell subscriptions to do exactly this. They sell because the chore is real and Apple does not ship a first-party version.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.11.1 &para;3</span> The opening for ReportMaker is what the existing apps share: account-required, server-backed, and priced for an accountant. A focused native app that does the chore well and stops there has room. ReportMaker keeps everything on-device, ships no telemetry, and writes a PDF the user owns.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.11.1 &para;4</span> <strong>v0.1 spec:</strong></p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">VII.11.1 &para;5</span><ul>
     <li>One trip at a time, with a name, purpose, start date, and end date</li>
     <li>Per-trip expense list with category, amount, vendor, optional note, optional receipt photo, and date constrained to the trip's range</li>
     <li>Five categories: Hotel, Meals, Transport, Incidentals, Other (each with an SF Symbol)</li>
@@ -30,8 +30,8 @@
     <li>About sheet (icon, attribution, links)</li>
     <li>Light + dark icon variants. No tinted variant.</li>
   </ul>
-  <p>What is intentionally not in v0.1:</p>
-  <ul>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.11.1 &para;6</span> What is intentionally not in v0.1:</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">VII.11.1 &para;7</span><ul>
     <li>No multi-trip aggregation &mdash; the dashboard is per-trip</li>
     <li>No OCR auto-extraction from receipt photos &mdash; the user types the amount</li>
     <li>No mileage tracking &mdash; the category list does not include mileage; vehicle costs go under Transport with a manual amount</li>
@@ -39,9 +39,9 @@
     <li>No accounts, no server, no telemetry &mdash; nothing leaves the device unless the user invokes the share sheet</li>
   </ul>
   <hr>
-  <h2>The Architecture</h2>
-  <p>Eleven Swift files in the main target plus the asset catalog and the Info.plist.</p>
-  <pre><code>ReportMakerApp.swift       # @main &middot; SwiftData ModelContainer &middot; root WindowGroup
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.11.2</span>&nbsp;&nbsp;The Architecture</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.11.2 &para;1</span> Eleven Swift files in the main target plus the asset catalog and the Info.plist.</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">VII.11.2 &para;2</span><pre><code>ReportMakerApp.swift       # @main &middot; SwiftData ModelContainer &middot; root WindowGroup
 ContentView.swift          # Trip list + ContentUnavailableView + nav to detail
 Trip.swift                 # @Model &middot; expenses inverse relationship &middot; computed totals
 Expense.swift              # @Model &middot; ExpenseCategory enum + raw-string persistence
@@ -53,11 +53,11 @@ ShareSheet.swift           # UIViewControllerRepresentable wrapping UIActivityVi
 DeveloperNotes.swift       # Seven notes shown in Under the Hood
 UnderTheHoodView.swift     # Sectioned reader for the notes
 AboutView.swift            # Icon &middot; attribution &middot; links</code></pre>
-  <p>The flow of a single end-to-end pass: the user lands on <code>ContentView</code>, taps <strong>Add Trip</strong>, fills out the <code>AddTripSheet</code> form, saves. SwiftData inserts a <code>Trip</code> into the container. The new trip appears in the list. The user taps the trip, lands on <code>TripDetailView</code>, taps <strong>Add Expense</strong>, fills out the <code>AddExpenseSheet</code> form, optionally picks a receipt photo via <code>PhotosPicker</code>, saves. SwiftData inserts an <code>Expense</code> with its <code>trip</code> relationship pointing at the parent. The dashboard's category bar chart and day-over-day line chart re-render as the totals change. When the trip ends, the user taps <strong>Generate Report</strong>; <code>ReportPDFRenderer.makePDF(for:)</code> writes a multi-page PDF to the temporary directory and the share sheet pops up. The user emails or AirDrops the PDF, and ReportMaker is done.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.11.2 &para;3</span> The flow of a single end-to-end pass: the user lands on <code>ContentView</code>, taps <strong>Add Trip</strong>, fills out the <code>AddTripSheet</code> form, saves. SwiftData inserts a <code>Trip</code> into the container. The new trip appears in the list. The user taps the trip, lands on <code>TripDetailView</code>, taps <strong>Add Expense</strong>, fills out the <code>AddExpenseSheet</code> form, optionally picks a receipt photo via <code>PhotosPicker</code>, saves. SwiftData inserts an <code>Expense</code> with its <code>trip</code> relationship pointing at the parent. The dashboard's category bar chart and day-over-day line chart re-render as the totals change. When the trip ends, the user taps <strong>Generate Report</strong>; <code>ReportPDFRenderer.makePDF(for:)</code> writes a multi-page PDF to the temporary directory and the share sheet pops up. The user emails or AirDrops the PDF, and ReportMaker is done.</p>
   <hr>
-  <h2>SwiftData: @Model with an Inverse Relationship</h2>
-  <p>SwiftData replaced Core Data as the canonical Apple persistence layer at WWDC 2023, and by 2026 the SwiftUI templates ship with it as the default. ReportMaker uses two <code>@Model</code> classes joined by an inverse <code>@Relationship</code>.</p>
-  <pre><code class="lang-swift">@Model
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.11.3</span>&nbsp;&nbsp;SwiftData: @Model with an Inverse Relationship</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.11.3 &para;1</span> SwiftData replaced Core Data as the canonical Apple persistence layer at WWDC 2023, and by 2026 the SwiftUI templates ship with it as the default. ReportMaker uses two <code>@Model</code> classes joined by an inverse <code>@Relationship</code>.</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">VII.11.3 &para;2</span><pre><code class="lang-swift">@Model
 final class Trip {
     var name: String = ""
     var purpose: String = ""
@@ -70,7 +70,7 @@ final class Trip {
 
     init(name: String, purpose: String, startDate: Date, endDate: Date) { ... }
 }</code></pre>
-  <pre><code class="lang-swift">@Model
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">VII.11.3 &para;3</span><pre><code class="lang-swift">@Model
 final class Expense {
     var categoryRaw: String = ExpenseCategory.other.rawValue
     var amount: Decimal = Decimal(0)
@@ -80,17 +80,17 @@ final class Expense {
     var receiptImageData: Data? = nil
     var trip: Trip? = nil
 }</code></pre>
-  <p>Three details are load-bearing.</p>
-  <p><strong>The inverse relationship.</strong> The <code>@Relationship(deleteRule: .cascade, inverse: \Expense.trip)</code> declaration on <code>Trip.expenses</code> is paired with a plain <code>var trip: Trip?</code> on <code>Expense</code>. SwiftData reads the <code>inverse:</code> key path and links the two sides for you, so reading <code>trip.expenses</code> returns the same array that <code>expense.trip</code> belongs to. <code>.cascade</code> means deleting a <code>Trip</code> automatically deletes its expenses, which is the right semantic for this app &mdash; an expense without its trip is meaningless.</p>
-  <p><strong>Default values on every property.</strong> Every stored property on both models has a default value (<code>= ""</code>, <code>= Date()</code>, <code>= Decimal(0)</code>, <code>= nil</code>). SwiftData's automatic migrations and CloudKit's schema requirements both want defaults so that adding a new property to an existing model does not crash apps that have older records on disk. Bake the habit in from the first model.</p>
-  <p><strong>Enum stored as raw String.</strong> <code>ExpenseCategory</code> is a Swift enum with cases like <code>.hotel</code> and <code>.meals</code>, but the <code>@Model</code> stores <code>categoryRaw: String</code> rather than the enum directly. The enum is exposed as a computed get/set on top:</p>
-  <pre><code class="lang-swift">var category: ExpenseCategory {
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.11.3 &para;4</span> Three details are load-bearing.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.11.3 &para;5</span> <strong>The inverse relationship.</strong> The <code>@Relationship(deleteRule: .cascade, inverse: \Expense.trip)</code> declaration on <code>Trip.expenses</code> is paired with a plain <code>var trip: Trip?</code> on <code>Expense</code>. SwiftData reads the <code>inverse:</code> key path and links the two sides for you, so reading <code>trip.expenses</code> returns the same array that <code>expense.trip</code> belongs to. <code>.cascade</code> means deleting a <code>Trip</code> automatically deletes its expenses, which is the right semantic for this app &mdash; an expense without its trip is meaningless.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.11.3 &para;6</span> <strong>Default values on every property.</strong> Every stored property on both models has a default value (<code>= ""</code>, <code>= Date()</code>, <code>= Decimal(0)</code>, <code>= nil</code>). SwiftData's automatic migrations and CloudKit's schema requirements both want defaults so that adding a new property to an existing model does not crash apps that have older records on disk. Bake the habit in from the first model.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.11.3 &para;7</span> <strong>Enum stored as raw String.</strong> <code>ExpenseCategory</code> is a Swift enum with cases like <code>.hotel</code> and <code>.meals</code>, but the <code>@Model</code> stores <code>categoryRaw: String</code> rather than the enum directly. The enum is exposed as a computed get/set on top:</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">VII.11.3 &para;8</span><pre><code class="lang-swift">var category: ExpenseCategory {
     get { ExpenseCategory(rawValue: categoryRaw) ?? .other }
     set { categoryRaw = newValue.rawValue }
 }</code></pre>
-  <p>The reason is CloudKit. SwiftData can sync <code>String</code>; it cannot sync a Swift enum directly. Storing the raw value as the persisted property and the enum as a computed convenience keeps the model CloudKit-ready without giving up the type-safe call sites elsewhere in the app. Even though v0.1 does not enable CloudKit sync, the model is built so v0.2 only has to flip the container's <code>cloudKitDatabase</code> option.</p>
-  <p>The container itself is set up in <code>ReportMakerApp.swift</code>:</p>
-  <pre><code class="lang-swift">@main
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.11.3 &para;9</span> The reason is CloudKit. SwiftData can sync <code>String</code>; it cannot sync a Swift enum directly. Storing the raw value as the persisted property and the enum as a computed convenience keeps the model CloudKit-ready without giving up the type-safe call sites elsewhere in the app. Even though v0.1 does not enable CloudKit sync, the model is built so v0.2 only has to flip the container's <code>cloudKitDatabase</code> option.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.11.3 &para;10</span> The container itself is set up in <code>ReportMakerApp.swift</code>:</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">VII.11.3 &para;11</span><pre><code class="lang-swift">@main
 struct ReportMakerApp: App {
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([Trip.self, Expense.self])
@@ -103,14 +103,14 @@ struct ReportMakerApp: App {
             .modelContainer(sharedModelContainer)
     }
 }</code></pre>
-  <p>The <code>.modelContainer(_:)</code> modifier on the <code>WindowGroup</code> publishes the container into the SwiftUI environment. Any view downstream reads <code>@Environment(\.modelContext)</code> to insert or delete records, or uses <code>@Query</code> to fetch them. <code>ContentView</code> does both:</p>
-  <pre><code class="lang-swift">@Environment(\.modelContext) private var modelContext
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.11.3 &para;12</span> The <code>.modelContainer(_:)</code> modifier on the <code>WindowGroup</code> publishes the container into the SwiftUI environment. Any view downstream reads <code>@Environment(\.modelContext)</code> to insert or delete records, or uses <code>@Query</code> to fetch them. <code>ContentView</code> does both:</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">VII.11.3 &para;13</span><pre><code class="lang-swift">@Environment(\.modelContext) private var modelContext
 @Query(sort: \Trip.createdAt, order: .reverse) private var trips: [Trip]</code></pre>
-  <p><code>@Query</code> is the SwiftData equivalent of <code>@FetchRequest</code> from Core Data. The view re-renders automatically when the underlying records change, which is why deleting a trip from the list updates the UI without a manual refresh call.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.11.3 &para;14</span> <code>@Query</code> is the SwiftData equivalent of <code>@FetchRequest</code> from Core Data. The view re-renders automatically when the underlying records change, which is why deleting a trip from the list updates the UI without a manual refresh call.</p>
   <hr>
-  <h2>Computed Totals on the Model</h2>
-  <p>The trip dashboard does not run aggregation queries against SwiftData; the model itself exposes the totals as Swift computed properties. <code>Trip.total</code>, <code>Trip.totalsByCategory</code>, <code>Trip.totalsByDay</code>, and <code>Trip.sortedExpenses</code> all derive from the <code>expenses</code> relationship.</p>
-  <pre><code class="lang-swift">var total: Decimal {
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.11.4</span>&nbsp;&nbsp;Computed Totals on the Model</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.11.4 &para;1</span> The trip dashboard does not run aggregation queries against SwiftData; the model itself exposes the totals as Swift computed properties. <code>Trip.total</code>, <code>Trip.totalsByCategory</code>, <code>Trip.totalsByDay</code>, and <code>Trip.sortedExpenses</code> all derive from the <code>expenses</code> relationship.</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">VII.11.4 &para;2</span><pre><code class="lang-swift">var total: Decimal {
     var sum: Decimal = 0
     for expense in (expenses ?? []) { sum += expense.amount }
     return sum
@@ -135,13 +135,13 @@ var totalsByDay: [(Date, Decimal)] {
     }
     return bucket.sorted(by: { $0.key &lt; $1.key })
 }</code></pre>
-  <p>Two design choices to point out.</p>
-  <p><strong>Currency math uses <code>Decimal</code>, not <code>Double</code>.</strong> Floating-point arithmetic is famous for losing pennies: <code>0.1 + 0.2</code> is not <code>0.3</code> in <code>Double</code>. <code>Decimal</code> keeps base-10 arithmetic exact, which is what an expense report needs. The cost is that <code>Decimal</code> is not directly graphable in Swift Charts &mdash; the chart consumes <code>Double</code>, so the conversion happens at the chart boundary via <code>NSDecimalNumber(decimal:).doubleValue</code>. The model holds the truth in <code>Decimal</code>; only the visual layer downcasts.</p>
-  <p><strong>The shape of <code>totalsByCategory</code> matches what Swift Charts wants.</strong> An array of tuples, one per data point, identifiable by the first element. Most chart APIs in other ecosystems take parallel arrays (one for X, one for Y); Swift Charts takes a single sequence and pulls X and Y out of each element via <code>.value(_:)</code>. Computing the array on the model keeps the view code short and lets the chart's <code>id:</code> keypath be a clean <code>\.0</code>.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.11.4 &para;3</span> Two design choices to point out.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.11.4 &para;4</span> <strong>Currency math uses <code>Decimal</code>, not <code>Double</code>.</strong> Floating-point arithmetic is famous for losing pennies: <code>0.1 + 0.2</code> is not <code>0.3</code> in <code>Double</code>. <code>Decimal</code> keeps base-10 arithmetic exact, which is what an expense report needs. The cost is that <code>Decimal</code> is not directly graphable in Swift Charts &mdash; the chart consumes <code>Double</code>, so the conversion happens at the chart boundary via <code>NSDecimalNumber(decimal:).doubleValue</code>. The model holds the truth in <code>Decimal</code>; only the visual layer downcasts.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.11.4 &para;5</span> <strong>The shape of <code>totalsByCategory</code> matches what Swift Charts wants.</strong> An array of tuples, one per data point, identifiable by the first element. Most chart APIs in other ecosystems take parallel arrays (one for X, one for Y); Swift Charts takes a single sequence and pulls X and Y out of each element via <code>.value(_:)</code>. Computing the array on the model keeps the view code short and lets the chart's <code>id:</code> keypath be a clean <code>\.0</code>.</p>
   <hr>
-  <h2>Swift Charts: BarMark and LineMark</h2>
-  <p>The trip dashboard is two charts in two <code>List</code> sections. The bar chart shows totals by category; the line chart shows totals by day, but only when the trip spans more than one day.</p>
-  <pre><code class="lang-swift">if !trip.totalsByCategory.isEmpty {
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.11.5</span>&nbsp;&nbsp;Swift Charts: BarMark and LineMark</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.11.5 &para;1</span> The trip dashboard is two charts in two <code>List</code> sections. The bar chart shows totals by category; the line chart shows totals by day, but only when the trip spans more than one day.</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">VII.11.5 &para;2</span><pre><code class="lang-swift">if !trip.totalsByCategory.isEmpty {
     Section("By Category") {
         Chart(trip.totalsByCategory, id: \.0) { item in
             BarMark(
@@ -167,12 +167,12 @@ if trip.totalsByDay.count &gt; 1 {
         .frame(height: 200)
     }
 }</code></pre>
-  <p><code>Chart(_:id:content:)</code> takes the data, a key path to the identifier of each row, and a closure that returns one or more <code>ChartContent</code> marks per row. <code>BarMark</code> draws a bar; <code>LineMark</code> draws a connected line; <code>.symbol(Circle())</code> places a circular dot at each line vertex. <code>foregroundStyle(by:)</code> tells the chart to color each bar by category, picking a palette automatically; <code>.chartLegend(.hidden)</code> hides the legend because the bars are already labeled on the X axis.</p>
-  <p>The conditional <code>if trip.totalsByDay.count &gt; 1</code> is a small UX choice with real teaching value. A line chart of one point is just a dot &mdash; it teaches the reader of the report nothing. Hiding the section until there is enough data to make a line is honest: charts that would mislead are not drawn.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.11.5 &para;3</span> <code>Chart(_:id:content:)</code> takes the data, a key path to the identifier of each row, and a closure that returns one or more <code>ChartContent</code> marks per row. <code>BarMark</code> draws a bar; <code>LineMark</code> draws a connected line; <code>.symbol(Circle())</code> places a circular dot at each line vertex. <code>foregroundStyle(by:)</code> tells the chart to color each bar by category, picking a palette automatically; <code>.chartLegend(.hidden)</code> hides the legend because the bars are already labeled on the X axis.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.11.5 &para;4</span> The conditional <code>if trip.totalsByDay.count &gt; 1</code> is a small UX choice with real teaching value. A line chart of one point is just a dot &mdash; it teaches the reader of the report nothing. Hiding the section until there is enough data to make a line is honest: charts that would mislead are not drawn.</p>
   <hr>
-  <h2>PhotosPicker for Receipts</h2>
-  <p>iOS has historically had two paths for picking a photo: <code>UIImagePickerController</code> (UIKit) and the SwiftUI-native <code>PhotosPicker</code> introduced at WWDC 2022. <code>PhotosPicker</code> is the right choice in 2026 &mdash; it does not require <code>NSPhotoLibraryUsageDescription</code> in the Info.plist because the system runs the picker out-of-process and only hands back the bytes the user explicitly chose.</p>
-  <pre><code class="lang-swift">@State private var receiptItem: PhotosPickerItem?
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.11.6</span>&nbsp;&nbsp;PhotosPicker for Receipts</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.11.6 &para;1</span> iOS has historically had two paths for picking a photo: <code>UIImagePickerController</code> (UIKit) and the SwiftUI-native <code>PhotosPicker</code> introduced at WWDC 2022. <code>PhotosPicker</code> is the right choice in 2026 &mdash; it does not require <code>NSPhotoLibraryUsageDescription</code> in the Info.plist because the system runs the picker out-of-process and only hands back the bytes the user explicitly chose.</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">VII.11.6 &para;2</span><pre><code class="lang-swift">@State private var receiptItem: PhotosPickerItem?
 @State private var receiptData: Data?
 
 PhotosPicker(selection: $receiptItem, matching: .images, photoLibrary: .shared()) {
@@ -187,12 +187,12 @@ PhotosPicker(selection: $receiptItem, matching: .images, photoLibrary: .shared()
         }
     }
 }</code></pre>
-  <p>The picker binds to a <code>PhotosPickerItem</code>, which is a lazy reference, not the bytes themselves. To get the bytes, call <code>loadTransferable(type: Data.self)</code> in a <code>Task</code>; the call is asynchronous because the photo may live in iCloud Photo Library and need to be downloaded. Once the data lands, it is stored in the <code>Expense.receiptImageData</code> field and travels with the record.</p>
-  <p><strong>Storing image bytes inside the model is a deliberate v0.1 trade-off.</strong> SwiftData (and CloudKit) handle <code>Data</code> properties by writing them as blobs alongside the record. For a small expense report &mdash; tens of receipts per trip, hundreds of trips per year &mdash; the database stays comfortable. A production-scale app with thousands of receipts per user would offload the bytes to the file system or to <code>CKAsset</code> on CloudKit and store only a URL on the model. ReportMaker's scale does not need that, and the simplicity of "the bytes go with the record" is worth keeping until it stops working.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.11.6 &para;3</span> The picker binds to a <code>PhotosPickerItem</code>, which is a lazy reference, not the bytes themselves. To get the bytes, call <code>loadTransferable(type: Data.self)</code> in a <code>Task</code>; the call is asynchronous because the photo may live in iCloud Photo Library and need to be downloaded. Once the data lands, it is stored in the <code>Expense.receiptImageData</code> field and travels with the record.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.11.6 &para;4</span> <strong>Storing image bytes inside the model is a deliberate v0.1 trade-off.</strong> SwiftData (and CloudKit) handle <code>Data</code> properties by writing them as blobs alongside the record. For a small expense report &mdash; tens of receipts per trip, hundreds of trips per year &mdash; the database stays comfortable. A production-scale app with thousands of receipts per user would offload the bytes to the file system or to <code>CKAsset</code> on CloudKit and store only a URL on the model. ReportMaker's scale does not need that, and the simplicity of "the bytes go with the record" is worth keeping until it stops working.</p>
   <hr>
-  <h2>UIGraphicsPDFRenderer: Native Multi-Page PDFs</h2>
-  <p>The Generate Report button is the moment ReportMaker becomes a product instead of a shoebox. Tapping it calls <code>ReportPDFRenderer.makePDF(for: trip)</code>, which writes a real, multi-page PDF using <code>UIGraphicsPDFRenderer</code>.</p>
-  <pre><code class="lang-swift">enum ReportPDFRenderer {
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.11.7</span>&nbsp;&nbsp;UIGraphicsPDFRenderer: Native Multi-Page PDFs</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.11.7 &para;1</span> The Generate Report button is the moment ReportMaker becomes a product instead of a shoebox. Tapping it calls <code>ReportPDFRenderer.makePDF(for: trip)</code>, which writes a real, multi-page PDF using <code>UIGraphicsPDFRenderer</code>.</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">VII.11.7 &para;2</span><pre><code class="lang-swift">enum ReportPDFRenderer {
     static func makePDF(for trip: Trip) -&gt; URL? {
         let pageSize = CGSize(width: 612, height: 792)  // US Letter at 72 DPI
         let renderer = UIGraphicsPDFRenderer(bounds: CGRect(origin: .zero, size: pageSize))
@@ -213,10 +213,10 @@ PhotosPicker(selection: $receiptItem, matching: .images, photoLibrary: .shared()
         }
     }
 }</code></pre>
-  <p>The closure passed to <code>renderer.writePDF(to:_:)</code> receives a <code>UIGraphicsPDFRendererContext</code>, which is the drawing surface for the whole document. Inside the closure, each call to <code>context.beginPage()</code> opens a new page; everything drawn after that lands on the current page until the next <code>beginPage()</code>. Three pages get drawn: cover, expense table, then one page per receipt photo.</p>
-  <p><strong>The page size is US Letter at 72 DPI.</strong> 612 by 792 points is the standard PDF unit for an 8.5&times;11 inch page. PDF coordinates are in points, not pixels; the renderer rasterizes at print resolution automatically. Apple's PDF Reference Guide is the canonical source for these dimensions; for ReportMaker the only thing the chapter needs the reader to take away is &quot;612&times;792 is letter, 595&times;842 is A4, and the rest of the world's paper sizes are out there waiting for a future enhancement.&quot;</p>
-  <p>Each page is drawn with <code>NSAttributedString</code>'s <code>.draw(at:withAttributes:)</code> and <code>.draw(in:withAttributes:)</code> methods, which are the lowest-level Apple text-drawing APIs. The cover page builds attribute dictionaries for title, label, value, and total styles, then draws each line at a tracked <code>y</code> coordinate that increments after each draw:</p>
-  <pre><code class="lang-swift">var y: CGFloat = margin
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.11.7 &para;3</span> The closure passed to <code>renderer.writePDF(to:_:)</code> receives a <code>UIGraphicsPDFRendererContext</code>, which is the drawing surface for the whole document. Inside the closure, each call to <code>context.beginPage()</code> opens a new page; everything drawn after that lands on the current page until the next <code>beginPage()</code>. Three pages get drawn: cover, expense table, then one page per receipt photo.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.11.7 &para;4</span> <strong>The page size is US Letter at 72 DPI.</strong> 612 by 792 points is the standard PDF unit for an 8.5&times;11 inch page. PDF coordinates are in points, not pixels; the renderer rasterizes at print resolution automatically. Apple's PDF Reference Guide is the canonical source for these dimensions; for ReportMaker the only thing the chapter needs the reader to take away is &quot;612&times;792 is letter, 595&times;842 is A4, and the rest of the world's paper sizes are out there waiting for a future enhancement.&quot;</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.11.7 &para;5</span> Each page is drawn with <code>NSAttributedString</code>'s <code>.draw(at:withAttributes:)</code> and <code>.draw(in:withAttributes:)</code> methods, which are the lowest-level Apple text-drawing APIs. The cover page builds attribute dictionaries for title, label, value, and total styles, then draws each line at a tracked <code>y</code> coordinate that increments after each draw:</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">VII.11.7 &para;6</span><pre><code class="lang-swift">var y: CGFloat = margin
 
 ("Expense Report" as NSString).draw(
     at: CGPoint(x: margin, y: y),
@@ -229,8 +229,8 @@ y += 50
 y += 36
 
 // ...DATES, PURPOSE, DAYS, TOTAL, BY CATEGORY...</code></pre>
-  <p>Auto-pagination on the expense table is the one bit of bookkeeping in the renderer. As rows draw, <code>y</code> grows; when <code>y</code> exceeds <code>size.height - 80</code>, the table starts a new page:</p>
-  <pre><code class="lang-swift">for expense in trip.sortedExpenses {
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.11.7 &para;7</span> Auto-pagination on the expense table is the one bit of bookkeeping in the renderer. As rows draw, <code>y</code> grows; when <code>y</code> exceeds <code>size.height - 80</code>, the table starts a new page:</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">VII.11.7 &para;8</span><pre><code class="lang-swift">for expense in trip.sortedExpenses {
     if y &gt; size.height - 80 {
         context.beginPage()
         y = margin
@@ -238,8 +238,8 @@ y += 36
     // ...draw row...
     y += 22
 }</code></pre>
-  <p>The receipts pages are one image per page. <code>UIImage(data: expense.receiptImageData!)</code> reconstructs the image from the bytes that traveled with the model, then <code>image.draw(in: rect)</code> places it on the page. The aspect-ratio math fits the image into the available rectangle without distortion:</p>
-  <pre><code class="lang-swift">let availableWidth = size.width - margin * 2
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.11.7 &para;9</span> The receipts pages are one image per page. <code>UIImage(data: expense.receiptImageData!)</code> reconstructs the image from the bytes that traveled with the model, then <code>image.draw(in: rect)</code> places it on the page. The aspect-ratio math fits the image into the available rectangle without distortion:</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">VII.11.7 &para;10</span><pre><code class="lang-swift">let availableWidth = size.width - margin * 2
 let availableHeight = size.height - y - margin
 let aspect = image.size.width / image.size.height
 var drawWidth = availableWidth
@@ -249,11 +249,11 @@ if drawHeight &gt; availableHeight {
     drawWidth = drawHeight * aspect
 }
 image.draw(in: CGRect(x: margin, y: y, width: drawWidth, height: drawHeight))</code></pre>
-  <p>This is the canonical Apple approach for native PDF generation: <code>UIGraphicsPDFRenderer</code> for the document, <code>NSAttributedString</code> for text, <code>UIImage.draw(in:)</code> for images, page breaks called explicitly. There is no HTML-to-PDF conversion, no <code>UIView</code> snapshotting, no third-party dependency. Every &quot;Export PDF&quot; feature in iOS apps ends up at this same surface.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.11.7 &para;11</span> This is the canonical Apple approach for native PDF generation: <code>UIGraphicsPDFRenderer</code> for the document, <code>NSAttributedString</code> for text, <code>UIImage.draw(in:)</code> for images, page breaks called explicitly. There is no HTML-to-PDF conversion, no <code>UIView</code> snapshotting, no third-party dependency. Every &quot;Export PDF&quot; feature in iOS apps ends up at this same surface.</p>
   <hr>
-  <h2>The Share Sheet Bridge</h2>
-  <p>SwiftUI in 2026 still does not have a native share sheet for arbitrary file URLs. There is <code>ShareLink</code>, which works for <code>Transferable</code> values and simple URLs, but for a generated PDF that the user wants to email, AirDrop, or save to Files, the right surface is still <code>UIActivityViewController</code>. ReportMaker wraps it once in a 12-line file:</p>
-  <pre><code class="lang-swift">struct ShareSheet: UIViewControllerRepresentable {
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.11.8</span>&nbsp;&nbsp;The Share Sheet Bridge</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.11.8 &para;1</span> SwiftUI in 2026 still does not have a native share sheet for arbitrary file URLs. There is <code>ShareLink</code>, which works for <code>Transferable</code> values and simple URLs, but for a generated PDF that the user wants to email, AirDrop, or save to Files, the right surface is still <code>UIActivityViewController</code>. ReportMaker wraps it once in a 12-line file:</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">VII.11.8 &para;2</span><pre><code class="lang-swift">struct ShareSheet: UIViewControllerRepresentable {
     let items: [Any]
 
     func makeUIViewController(context: Context) -&gt; UIActivityViewController {
@@ -262,9 +262,9 @@ image.draw(in: CGRect(x: margin, y: y, width: drawWidth, height: drawHeight))</c
 
     func updateUIViewController(_ controller: UIActivityViewController, context: Context) {}
 }</code></pre>
-  <p><code>UIViewControllerRepresentable</code> is the SwiftUI bridge for any UIKit view controller that has not yet been ported. It is one of the most useful generalist patterns in the framework: when SwiftUI does not ship the surface, wrap UIKit. The pattern recurs in <code>PHPickerViewController</code>, <code>VNDocumentCameraViewController</code>, and any Apple SDK that has not finished its SwiftUI rewrite.</p>
-  <p>The trip detail view drives the bridge with a <code>.sheet</code> that fires after the PDF is generated:</p>
-  <pre><code class="lang-swift">@State private var generatedReportURL: URL?
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.11.8 &para;3</span> <code>UIViewControllerRepresentable</code> is the SwiftUI bridge for any UIKit view controller that has not yet been ported. It is one of the most useful generalist patterns in the framework: when SwiftUI does not ship the surface, wrap UIKit. The pattern recurs in <code>PHPickerViewController</code>, <code>VNDocumentCameraViewController</code>, and any Apple SDK that has not finished its SwiftUI rewrite.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.11.8 &para;4</span> The trip detail view drives the bridge with a <code>.sheet</code> that fires after the PDF is generated:</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">VII.11.8 &para;5</span><pre><code class="lang-swift">@State private var generatedReportURL: URL?
 @State private var showingShareSheet = false
 
 .sheet(isPresented: $showingShareSheet) {
@@ -278,24 +278,24 @@ private func generateReport() {
     generatedReportURL = url
     showingShareSheet = url != nil
 }</code></pre>
-  <p>The PDF lives in the temporary directory because there is no reason to keep it around after sharing. The source data is in SwiftData; the PDF is a derivative artifact and can be regenerated on demand.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.11.8 &para;6</span> The PDF lives in the temporary directory because there is no reason to keep it around after sharing. The source data is in SwiftData; the PDF is a derivative artifact and can be regenerated on demand.</p>
   <hr>
-  <h2>The Form Sheets</h2>
-  <p><code>AddTripSheet</code> and <code>AddExpenseSheet</code> are both built around SwiftUI's <code>Form</code> &mdash; the same primitive that powers the iOS Settings app. Each sheet is its own <code>NavigationStack</code> with a <code>Cancel</code> / <code>Save</code> toolbar pair.</p>
-  <p><strong>Date constraint on the expense.</strong> The expense date picker constrains itself to the trip's range:</p>
-  <pre><code class="lang-swift">DatePicker("Date", selection: $date,
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.11.9</span>&nbsp;&nbsp;The Form Sheets</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.11.9 &para;1</span> <code>AddTripSheet</code> and <code>AddExpenseSheet</code> are both built around SwiftUI's <code>Form</code> &mdash; the same primitive that powers the iOS Settings app. Each sheet is its own <code>NavigationStack</code> with a <code>Cancel</code> / <code>Save</code> toolbar pair.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.11.9 &para;2</span> <strong>Date constraint on the expense.</strong> The expense date picker constrains itself to the trip's range:</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">VII.11.9 &para;3</span><pre><code class="lang-swift">DatePicker("Date", selection: $date,
            in: trip.startDate...trip.endDate,
            displayedComponents: .date)</code></pre>
-  <p>The <code>in:</code> argument takes a <code>ClosedRange&lt;Date&gt;</code>, and SwiftUI dims any date outside the range. The user cannot enter an expense for a date the trip did not cover. This is the kind of validation that earns its keep on the model side and the UI side both.</p>
-  <p><strong>Decimal parsing tolerant of comma-as-decimal.</strong> The amount is a <code>TextField</code> bound to a <code>String</code>, parsed back to <code>Decimal</code> on save:</p>
-  <pre><code class="lang-swift">private var parsedAmount: Decimal? {
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.11.9 &para;4</span> The <code>in:</code> argument takes a <code>ClosedRange&lt;Date&gt;</code>, and SwiftUI dims any date outside the range. The user cannot enter an expense for a date the trip did not cover. This is the kind of validation that earns its keep on the model side and the UI side both.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.11.9 &para;5</span> <strong>Decimal parsing tolerant of comma-as-decimal.</strong> The amount is a <code>TextField</code> bound to a <code>String</code>, parsed back to <code>Decimal</code> on save:</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">VII.11.9 &para;6</span><pre><code class="lang-swift">private var parsedAmount: Decimal? {
     Decimal(string: amountString.replacingOccurrences(of: ",", with: "."))
 }</code></pre>
-  <p>Many European locales write decimals with a comma (<code>1,50</code>) where US locales use a period (<code>1.50</code>). Swapping comma for period before <code>Decimal(string:)</code> handles both forms with one line. The Save button stays disabled until <code>parsedAmount</code> is non-nil and greater than zero.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.11.9 &para;7</span> Many European locales write decimals with a comma (<code>1,50</code>) where US locales use a period (<code>1.50</code>). Swapping comma for period before <code>Decimal(string:)</code> handles both forms with one line. The Save button stays disabled until <code>parsedAmount</code> is non-nil and greater than zero.</p>
   <hr>
-  <h2>Empty State and Toolbar Conventions</h2>
-  <p>The trip list uses <code>ContentUnavailableView</code> &mdash; SwiftUI's WWDC 2023 addition that gives empty-state design a built-in surface so every app does not invent its own.</p>
-  <pre><code class="lang-swift">if trips.isEmpty {
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.11.10</span>&nbsp;&nbsp;Empty State and Toolbar Conventions</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.11.10 &para;1</span> The trip list uses <code>ContentUnavailableView</code> &mdash; SwiftUI's WWDC 2023 addition that gives empty-state design a built-in surface so every app does not invent its own.</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">VII.11.10 &para;2</span><pre><code class="lang-swift">if trips.isEmpty {
     ContentUnavailableView {
         Label("No Trips Yet", systemImage: "airplane.departure")
     } description: {
@@ -305,12 +305,12 @@ private func generateReport() {
             .buttonStyle(.borderedProminent)
     }
 }</code></pre>
-  <p>The toolbar pattern is consistent across the build-along apps: an info menu in the leading position holds <strong>Under the Hood</strong> and <strong>About</strong> entries; the primary action sits in the trailing position. <code>ContentView</code> places <strong>Add Trip</strong> in the trailing primaryAction slot; <code>TripDetailView</code> places <strong>Generate Report</strong> in the leading position and <strong>Add Expense</strong> in the trailing primaryAction slot, with the Generate Report button disabled until at least one expense exists.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.11.10 &para;3</span> The toolbar pattern is consistent across the build-along apps: an info menu in the leading position holds <strong>Under the Hood</strong> and <strong>About</strong> entries; the primary action sits in the trailing position. <code>ContentView</code> places <strong>Add Trip</strong> in the trailing primaryAction slot; <code>TripDetailView</code> places <strong>Generate Report</strong> in the leading position and <strong>Add Expense</strong> in the trailing primaryAction slot, with the Generate Report button disabled until at least one expense exists.</p>
   <hr>
-  <h2>Under the Hood and About</h2>
-  <p>Same shape as the other build-along apps. <code>DeveloperNotes.swift</code> holds an array of <code>(title, body)</code> pairs as plain Swift strings inside a <code>DeveloperNote</code> struct. <code>UnderTheHoodView.swift</code> renders that array as a sectioned <code>List</code>. <code>AboutView.swift</code> shows the icon, the tagline, the book attribution, and three links: <code>fluharty.me</code>, Send Feedback, Privacy.</p>
-  <p>Seven notes ship with v0.1:</p>
-  <ol class="body-list">
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.11.11</span>&nbsp;&nbsp;Under the Hood and About</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.11.11 &para;1</span> Same shape as the other build-along apps. <code>DeveloperNotes.swift</code> holds an array of <code>(title, body)</code> pairs as plain Swift strings inside a <code>DeveloperNote</code> struct. <code>UnderTheHoodView.swift</code> renders that array as a sectioned <code>List</code>. <code>AboutView.swift</code> shows the icon, the tagline, the book attribution, and three links: <code>fluharty.me</code>, Send Feedback, Privacy.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.11.11 &para;2</span> Seven notes ship with v0.1:</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">VII.11.11 &para;3</span><ol class="body-list">
     <li>Why ReportMaker exists</li>
     <li>Trip and Expense as @Model classes</li>
     <li>Swift Charts for the dashboard</li>
@@ -319,16 +319,16 @@ private func generateReport() {
     <li>ShareSheet via UIActivityViewController</li>
     <li>Distribution: App Store</li>
   </ol>
-  <p>The Under the Hood view is meant to age with the app: every nontrivial code change earns a note, so the reader who clones the repo at HEAD has the contemporaneous reasoning available without leaving the running app. When v0.2 wires up CloudKit sync, an eighth note lands here describing the flip.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.11.11 &para;4</span> The Under the Hood view is meant to age with the app: every nontrivial code change earns a note, so the reader who clones the repo at HEAD has the contemporaneous reasoning available without leaving the running app. When v0.2 wires up CloudKit sync, an eighth note lands here describing the flip.</p>
   <hr>
-  <h2>Distribution: GitHub Today, App Store Tomorrow</h2>
-  <p>ReportMaker breaks the pattern of the previous build-alongs. <a href="../BuildAlong-09-TouchAndMove/BuildAlong-09-TouchAndMove.html">Build-Along 09: TouchAndMove</a> and <a href="../BuildAlong-10-DragBetweenWindows/BuildAlong-10-DragBetweenWindows.html">Build-Along 10: DragBetweenWindows</a> are concept demos &mdash; their App Store reading would be &quot;limited functionality&quot; under Guideline 2.2, so the chapters route the reader to GitHub clone-and-build and stop. ReportMaker is different. Business expense tracking is a proven category with paying customers, and Apple does not ship a first-party version. A focused, native PDF-out app backed by SwiftData and PDFKit clears Guideline 2.2 on usefulness without rhetorical effort.</p>
-  <p>The chapter ships v0.1 to <a href="https://github.com/fluhartyml/ReportMaker">github.com/fluhartyml/ReportMaker</a> as a clone-and-build today. The roadmap to App Store v1.0 is short: a full iPhone shakedown across the empty / one-trip / multi-expense / generate-report / share / delete paths, the wiki written in Chilton style with figures, the privacy-policy URL at <code>fluharty.me/reportmaker-privacy</code>, the icon set finalized, and the App Store Connect listing built. None of that is teaching content for this chapter; it is the work the reader does on their own apps once the build-along is finished.</p>
-  <p>The Apps Appendix entry for ReportMaker carries the iPhone shakedown screenshots and the v0.1 build trail. The reader who wants to see the shipped artifact rather than the code path reads the appendix; the reader who wants to follow the construction reads this chapter.</p>
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.11.12</span>&nbsp;&nbsp;Distribution: GitHub Today, App Store Tomorrow</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.11.12 &para;1</span> ReportMaker breaks the pattern of the previous build-alongs. <a href="../BuildAlong-09-TouchAndMove/BuildAlong-09-TouchAndMove.html">Build-Along 09: TouchAndMove</a> and <a href="../BuildAlong-10-DragBetweenWindows/BuildAlong-10-DragBetweenWindows.html">Build-Along 10: DragBetweenWindows</a> are concept demos &mdash; their App Store reading would be &quot;limited functionality&quot; under Guideline 2.2, so the chapters route the reader to GitHub clone-and-build and stop. ReportMaker is different. Business expense tracking is a proven category with paying customers, and Apple does not ship a first-party version. A focused, native PDF-out app backed by SwiftData and PDFKit clears Guideline 2.2 on usefulness without rhetorical effort.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.11.12 &para;2</span> The chapter ships v0.1 to <a href="https://github.com/fluhartyml/ReportMaker">github.com/fluhartyml/ReportMaker</a> as a clone-and-build today. The roadmap to App Store v1.0 is short: a full iPhone shakedown across the empty / one-trip / multi-expense / generate-report / share / delete paths, the wiki written in Chilton style with figures, the privacy-policy URL at <code>fluharty.me/reportmaker-privacy</code>, the icon set finalized, and the App Store Connect listing built. None of that is teaching content for this chapter; it is the work the reader does on their own apps once the build-along is finished.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.11.12 &para;3</span> The Apps Appendix entry for ReportMaker carries the iPhone shakedown screenshots and the v0.1 build trail. The reader who wants to see the shipped artifact rather than the code path reads the appendix; the reader who wants to follow the construction reads this chapter.</p>
   <hr>
-  <h2>What to Read Next</h2>
-  <p>ReportMaker is the first chapter in which four major frameworks compose into one product. The next two build-alongs return to single-concept teaching at smaller scope: <a href="../BuildAlong-12-SwiftUICraft/BuildAlong-12-SwiftUICraft.html">Build-Along 12: SwiftUICraft</a> moves into custom <code>ViewModifier</code>s, <code>@Observable</code> at scale, and the WidgetKit + AppIntents + ActivityKit triad through the Routines app. <a href="../BuildAlong-13-CloudAndErrors/BuildAlong-13-CloudAndErrors.html">Build-Along 13: CloudAndErrors</a> moves into structured error handling and the <code>Result</code> type at the network boundary.</p>
-  <p>For the framework references touched in this chapter, <a href="../../Part-IV-The-Application/Book-15-SwiftData-And-CoreData.html">Book 15: SwiftData and Core Data</a> covers the <code>@Model</code> / <code>@Query</code> machinery in depth, <a href="../../Part-IV-The-Application/Book-17-Swift-Charts-And-PDFKit.html">Book 17: Swift Charts and PDFKit</a> covers the chart and PDF surfaces in depth, and <a href="../../Part-IV-The-Application/Book-14-Clipboard-DragDrop-ShareSheet.html">Book 14: Clipboard, Drag-and-Drop, Share Sheet</a> covers the <code>UIActivityViewController</code> bridge.</p>
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.11.13</span>&nbsp;&nbsp;What to Read Next</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.11.13 &para;1</span> ReportMaker is the first chapter in which four major frameworks compose into one product. The next two build-alongs return to single-concept teaching at smaller scope: <a href="../BuildAlong-12-SwiftUICraft/BuildAlong-12-SwiftUICraft.html">Build-Along 12: SwiftUICraft</a> moves into custom <code>ViewModifier</code>s, <code>@Observable</code> at scale, and the WidgetKit + AppIntents + ActivityKit triad through the Routines app. <a href="../BuildAlong-13-CloudAndErrors/BuildAlong-13-CloudAndErrors.html">Build-Along 13: CloudAndErrors</a> moves into structured error handling and the <code>Result</code> type at the network boundary.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.11.13 &para;2</span> For the framework references touched in this chapter, <a href="../../Part-IV-The-Application/Book-15-SwiftData-And-CoreData.html">Book 15: SwiftData and Core Data</a> covers the <code>@Model</code> / <code>@Query</code> machinery in depth, <a href="../../Part-IV-The-Application/Book-17-Swift-Charts-And-PDFKit.html">Book 17: Swift Charts and PDFKit</a> covers the chart and PDF surfaces in depth, and <a href="../../Part-IV-The-Application/Book-14-Clipboard-DragDrop-ShareSheet.html">Book 14: Clipboard, Drag-and-Drop, Share Sheet</a> covers the <code>UIActivityViewController</code> bridge.</p>
 
 </div>
 

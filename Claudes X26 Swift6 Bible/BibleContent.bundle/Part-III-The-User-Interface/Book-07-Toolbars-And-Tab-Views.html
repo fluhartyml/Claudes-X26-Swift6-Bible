@@ -9,15 +9,15 @@
 
 <div class="content">
 
-  <h1>Book 7: Toolbars and Tab Views</h1>
-  <h2>Live Reference: Six Shipping Apps</h2>
+  <h1><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.7</span>&nbsp;&nbsp;Book 7: Toolbars and Tab Views</h1>
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.7.1</span>&nbsp;&nbsp;Live Reference: Six Shipping Apps</h2>
   <div class="scope-note">Six apps in this book's roster ship the <code>.toolbar</code> modifier and <code>TabView</code> patterns this chapter covers: <strong>CryoTunes Player</strong>, <strong>Claudes LockBox</strong>, <strong>QuickNote</strong>, <strong>Audio Universe</strong>, <strong>Snap &amp; ScanKeeper</strong>, and <strong>My Person CRM</strong>. The most concentrated example is <strong>CryoTunes Player</strong> &mdash; its <code>CryoTransportControls.swift</code> shows toolbar-equivalent controls (transport buttons, mode toggles, share buttons) drawn from a clean SwiftUI <code>HStack</code> rather than the <code>.toolbar</code> modifier; the source side-by-side with this chapter contrasts when the modifier is the right tool and when a custom layout serves better. Source: <a href="https://github.com/fluhartyml/CryoTunesPlayer">github.com/fluhartyml/CryoTunesPlayer</a>. <strong>My Person CRM</strong> uses <code>.toolbar</code> with <code>ToolbarItem</code> in four places &mdash; the people-list view (Add-Person and About buttons), the per-person detail view (Edit + contextual menu), the Add Interaction sheet (Cancel + Save), and the About sheet (Done). Source: <a href="https://github.com/fluhartyml/My-Person-CRM">github.com/fluhartyml/My-Person-CRM</a>. See Source Tour 18 (CryoTunes), Build-Along 07 (My Person CRM).</div>
   <hr>
-  <h2>X26 Tab and Sidebar Updates</h2>
-  <p>Liquid Glass applies to the topmost layer of the interface &mdash; exactly where toolbars and tabs live. Apple's word: <em>"Key navigation elements like tab bars and sidebars float in this Liquid Glass layer to help people focus on the underlying content."</em><sup>[<a href="#t1-fn">t1</a>]</sup> Three new APIs land in X26 to take advantage of that.</p>
-  <h3>Search Tabs with <code>Tab(role: .search)</code></h3>
-  <p>If your tab bar has a search tab, mark it with the search role and the system handles the rest:</p>
-  <pre><code class="lang-swift">TabView {
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.7.2</span>&nbsp;&nbsp;X26 Tab and Sidebar Updates</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.7.2 &para;1</span> Liquid Glass applies to the topmost layer of the interface &mdash; exactly where toolbars and tabs live. Apple's word: <em>"Key navigation elements like tab bars and sidebars float in this Liquid Glass layer to help people focus on the underlying content."</em><sup>[<a href="#t1-fn">t1</a>]</sup> Three new APIs land in X26 to take advantage of that.</p>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.7.2.1</span>&nbsp;&nbsp;Search Tabs with <code>Tab(role: .search)</code></h3>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.7.2.1 &para;1</span> If your tab bar has a search tab, mark it with the search role and the system handles the rest:</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.7.2.1 &para;2</span><pre><code class="lang-swift">TabView {
     Tab("Browse", systemImage: "rectangle.stack") {
         BrowseView()
     }
@@ -28,21 +28,21 @@
         SearchView()
     }
 }</code></pre>
-  <p>What the role buys you: the search tab gets pulled out of the regular tab lineup and pinned to the trailing end of the bar, by itself. Every app that uses the role agrees on that location, so users learn it once and use it everywhere.<sup>[<a href="#t1-fn">t1</a>]</sup></p>
-  <h3>Auto-Minimizing Tab Bars with <code>tabBarMinimizeBehavior</code></h3>
-  <p>X26 will minimize the tab bar out of the way while the user is actively scrolling, freeing up vertical space for whatever they're reading. It's an opt-in &mdash; one modifier flips it on:<sup>[<a href="#t1-fn">t1</a>]</sup></p>
-  <pre><code class="lang-swift">TabView {
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.7.2.1 &para;3</span> What the role buys you: the search tab gets pulled out of the regular tab lineup and pinned to the trailing end of the bar, by itself. Every app that uses the role agrees on that location, so users learn it once and use it everywhere.<sup>[<a href="#t1-fn">t1</a>]</sup></p>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.7.2.2</span>&nbsp;&nbsp;Auto-Minimizing Tab Bars with <code>tabBarMinimizeBehavior</code></h3>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.7.2.2 &para;1</span> X26 will minimize the tab bar out of the way while the user is actively scrolling, freeing up vertical space for whatever they're reading. It's an opt-in &mdash; one modifier flips it on:<sup>[<a href="#t1-fn">t1</a>]</sup></p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.7.2.2 &para;2</span><pre><code class="lang-swift">TabView {
     // ...
 }
 .tabBarMinimizeBehavior(.onScrollDown)</code></pre>
-  <p>Two flavors. <code>.onScrollDown</code> tucks the bar away as the user scrolls down through new content and brings it back when they scroll up. <code>.onScrollUp</code> reverses the trigger. The right pick is whichever direction lines up with how the content in this tab is meant to be read.</p>
-  <h3>Tab Bar That Adapts to a Sidebar</h3>
-  <p>A tab bar that works on iPhone is often the wrong shape for iPad or Mac &mdash; those screens have room for a sidebar that an iPhone doesn't. <code>.sidebarAdaptable</code> is the SwiftUI tab style that lets one TabView serve both: the system promotes the tabs into a sidebar when the layout has space and falls back to a tab bar when it doesn't. One declaration, two presentations, no parallel code paths.<sup>[<a href="#t1-fn">t1</a>]</sup></p>
-  <p id="t1-fn" style="font-size: 13pt; color: var(--dim);">[t1] Apple Developer Documentation, <em>Adopting Liquid Glass</em>. <a href="https://developer.apple.com/documentation/TechnologyOverviews/adopting-liquid-glass">developer.apple.com/documentation/TechnologyOverviews/adopting-liquid-glass</a> &mdash; verified 2026-04-29.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.7.2.2 &para;3</span> Two flavors. <code>.onScrollDown</code> tucks the bar away as the user scrolls down through new content and brings it back when they scroll up. <code>.onScrollUp</code> reverses the trigger. The right pick is whichever direction lines up with how the content in this tab is meant to be read.</p>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.7.2.3</span>&nbsp;&nbsp;Tab Bar That Adapts to a Sidebar</h3>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.7.2.3 &para;1</span> A tab bar that works on iPhone is often the wrong shape for iPad or Mac &mdash; those screens have room for a sidebar that an iPhone doesn't. <code>.sidebarAdaptable</code> is the SwiftUI tab style that lets one TabView serve both: the system promotes the tabs into a sidebar when the layout has space and falls back to a tab bar when it doesn't. One declaration, two presentations, no parallel code paths.<sup>[<a href="#t1-fn">t1</a>]</sup></p>
+  <p id="t1-fn" style="font-size: 13pt; color: var(--dim);"><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.7.2.3 &para;2</span> [t1] Apple Developer Documentation, <em>Adopting Liquid Glass</em>. <a href="https://developer.apple.com/documentation/TechnologyOverviews/adopting-liquid-glass">developer.apple.com/documentation/TechnologyOverviews/adopting-liquid-glass</a> &mdash; verified 2026-04-29.</p>
   <hr>
-  <h2>The .toolbar Modifier</h2>
-  <p>The <code>.toolbar</code> modifier is the single entry point for adding buttons, menus, and controls to navigation bars, bottom bars, and keyboard accessories.</p>
-  <pre><code class="lang-swift">struct ItemListView: View {
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.7.3</span>&nbsp;&nbsp;The .toolbar Modifier</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.7.3 &para;1</span> The <code>.toolbar</code> modifier is the single entry point for adding buttons, menus, and controls to navigation bars, bottom bars, and keyboard accessories.</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.7.3 &para;2</span><pre><code class="lang-swift">struct ItemListView: View {
     var body: some View {
         List(items) { item in
             Text(item.name)
@@ -55,11 +55,11 @@
         }
     }
 }</code></pre>
-  <p>Without specifying a placement, the system puts the button where it makes sense for the platform — trailing on iOS, trailing in the toolbar on macOS.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.7.3 &para;3</span> Without specifying a placement, the system puts the button where it makes sense for the platform — trailing on iOS, trailing in the toolbar on macOS.</p>
   <hr>
-  <h2>ToolbarItem</h2>
-  <p>Use <code>ToolbarItem</code> when you need to control exactly where a button lands.</p>
-  <pre><code class="lang-swift">.toolbar {
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.7.4</span>&nbsp;&nbsp;ToolbarItem</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.7.4 &para;1</span> Use <code>ToolbarItem</code> when you need to control exactly where a button lands.</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.7.4 &para;2</span><pre><code class="lang-swift">.toolbar {
     ToolbarItem(placement: .primaryAction) {
         Button("Save") { save() }
     }
@@ -73,9 +73,9 @@
     }
 }</code></pre>
   <hr>
-  <h2>ToolbarItemGroup</h2>
-  <p>Group multiple items in the same placement.</p>
-  <pre><code class="lang-swift">.toolbar {
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.7.5</span>&nbsp;&nbsp;ToolbarItemGroup</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.7.5 &para;1</span> Group multiple items in the same placement.</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.7.5 &para;2</span><pre><code class="lang-swift">.toolbar {
     ToolbarItemGroup(placement: .primaryAction) {
         Button("Share", systemImage: "square.and.arrow.up") { share() }
         Button("Edit", systemImage: "pencil") { edit() }
@@ -83,10 +83,10 @@
     }
 }</code></pre>
   <hr>
-  <h2>Toolbar Placements</h2>
-  <h3>Semantic Placements (Preferred)</h3>
-  <p>These let the system decide the exact position based on platform conventions.</p>
-  <table>
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.7.6</span>&nbsp;&nbsp;Toolbar Placements</h2>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.7.6.1</span>&nbsp;&nbsp;Semantic Placements (Preferred)</h3>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.7.6.1 &para;1</span> These let the system decide the exact position based on platform conventions.</p>
+  <span class="onum onum-float" style="color:#8a7300;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;display:block;margin:.6em 0 .1em">Table 7.1</span><table>
   <thead><tr><th>Placement</th><th>iOS</th><th>macOS</th><th>Use For</th><th></th></tr></thead>
   <tbody>
   <tr><td><code>.automatic</code></td><td>Trailing nav bar</td><td>Toolbar area</td><td>Default, system decides</td><td></td></tr>
@@ -97,8 +97,8 @@
   <tr><td><code>.destructiveAction</code></td><td>Trailing nav bar</td><td>Trailing toolbar</td><td>Delete/Remove</td><td></td></tr>
   </tbody>
   </table>
-  <h3>Positional Placements</h3>
-  <table>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.7.6.2</span>&nbsp;&nbsp;Positional Placements</h3>
+  <span class="onum onum-float" style="color:#8a7300;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;display:block;margin:.6em 0 .1em">Table 7.2</span><table>
   <thead><tr><th>Placement</th><th>Where</th><th></th></tr></thead>
   <tbody>
   <tr><td><code>.topBarLeading</code></td><td>iOS: left side of nav bar</td><td></td></tr>
@@ -107,8 +107,8 @@
   <tr><td><code>.keyboard</code></td><td>iOS: above the keyboard</td><td></td></tr>
   </tbody>
   </table>
-  <h3>Bottom Bar</h3>
-  <pre><code class="lang-swift">.toolbar {
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.7.6.3</span>&nbsp;&nbsp;Bottom Bar</h3>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.7.6.3 &para;1</span><pre><code class="lang-swift">.toolbar {
     ToolbarItemGroup(placement: .bottomBar) {
         Button("Previous", systemImage: "chevron.left") { previous() }
         Spacer()
@@ -117,9 +117,9 @@
         Button("Next", systemImage: "chevron.right") { next() }
     }
 }</code></pre>
-  <h3>Keyboard Toolbar</h3>
-  <p>Add a "Done" button above the keyboard. Essential for dismissing number pads and other keyboards that lack a return key.</p>
-  <pre><code class="lang-swift">TextField("Amount", value: $amount, format: .number)
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.7.6.4</span>&nbsp;&nbsp;Keyboard Toolbar</h3>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.7.6.4 &para;1</span> Add a "Done" button above the keyboard. Essential for dismissing number pads and other keyboards that lack a return key.</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.7.6.4 &para;2</span><pre><code class="lang-swift">TextField("Amount", value: $amount, format: .number)
     .keyboardType(.decimalPad)
     .toolbar {
         ToolbarItemGroup(placement: .keyboard) {
@@ -129,29 +129,29 @@
             }
         }
     }</code></pre>
-  <h3>Watch Out</h3>
-  <ul><li><code>.keyboard</code> placement only shows when the keyboard is visible. If you have multiple text fields, the keyboard toolbar is shared — whichever field is focused gets it.</li><li><code>.bottomBar</code> does not appear if the view is inside a <code>TabView</code>. The tab bar occupies that space. Use <code>.tabBar</code> placement instead if you need items alongside tabs.</li></ul>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.7.6.5</span>&nbsp;&nbsp;Watch Out</h3>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.7.6.5 &para;1</span><ul><li><code>.keyboard</code> placement only shows when the keyboard is visible. If you have multiple text fields, the keyboard toolbar is shared — whichever field is focused gets it.</li><li><code>.bottomBar</code> does not appear if the view is inside a <code>TabView</code>. The tab bar occupies that space. Use <code>.tabBar</code> placement instead if you need items alongside tabs.</li></ul>
   <hr>
-  <h2>Toolbar Visibility</h2>
-  <p>Hide or show toolbars explicitly.</p>
-  <pre><code class="lang-swift">.toolbar(.hidden, for: .navigationBar)    // hide the nav bar
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.7.7</span>&nbsp;&nbsp;Toolbar Visibility</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.7.7 &para;1</span> Hide or show toolbars explicitly.</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.7.7 &para;2</span><pre><code class="lang-swift">.toolbar(.hidden, for: .navigationBar)    // hide the nav bar
 .toolbar(.visible, for: .bottomBar)       // force bottom bar visible
 .toolbar(.hidden, for: .tabBar)           // hide tab bar (e.g., in detail views)</code></pre>
-  <p>The <code>for:</code> parameter targets: <code>.navigationBar</code>, <code>.bottomBar</code>, <code>.tabBar</code>, <code>.windowToolbar</code> (macOS).</p>
-  <h3>Watch Out</h3>
-  <ul><li>Hiding <code>.tabBar</code> only works from a view inside a <code>TabView</code>. If you hide it from outside the tab hierarchy, nothing happens.</li><li>Use <code>.toolbar(.hidden, for: .tabBar)</code> on detail views where you want a full-screen experience. It animates smoothly.</li></ul>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.7.7 &para;3</span> The <code>for:</code> parameter targets: <code>.navigationBar</code>, <code>.bottomBar</code>, <code>.tabBar</code>, <code>.windowToolbar</code> (macOS).</p>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.7.7.1</span>&nbsp;&nbsp;Watch Out</h3>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.7.7.1 &para;1</span><ul><li>Hiding <code>.tabBar</code> only works from a view inside a <code>TabView</code>. If you hide it from outside the tab hierarchy, nothing happens.</li><li>Use <code>.toolbar(.hidden, for: .tabBar)</code> on detail views where you want a full-screen experience. It animates smoothly.</li></ul>
   <hr>
-  <h2>Toolbar on macOS vs iOS</h2>
-  <h3>macOS-Specific Toolbar Style</h3>
-  <pre><code class="lang-swift">WindowGroup {
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.7.8</span>&nbsp;&nbsp;Toolbar on macOS vs iOS</h2>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.7.8.1</span>&nbsp;&nbsp;macOS-Specific Toolbar Style</h3>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.7.8.1 &para;1</span><pre><code class="lang-swift">WindowGroup {
     ContentView()
 }
 .windowToolbarStyle(.unified)           // toolbar merges with title bar
 .windowToolbarStyle(.unifiedCompact)    // thinner merged toolbar
 .windowToolbarStyle(.expanded)          // toolbar below title bar</code></pre>
-  <h3>macOS Toolbar Customization</h3>
-  <p>Users can customize the macOS toolbar by default. To control what is customizable:</p>
-  <pre><code class="lang-swift">.toolbar(id: "main") {
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.7.8.2</span>&nbsp;&nbsp;macOS Toolbar Customization</h3>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.7.8.2 &para;1</span> Users can customize the macOS toolbar by default. To control what is customizable:</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.7.8.2 &para;2</span><pre><code class="lang-swift">.toolbar(id: "main") {
     ToolbarItem(id: "add", placement: .primaryAction) {
         Button("Add", systemImage: "plus") { }
     }
@@ -160,12 +160,12 @@
     }
 }
 .toolbarRole(.editor)  // changes toolbar behavior and appearance</code></pre>
-  <h3>Watch Out</h3>
-  <ul><li>On macOS, <code>.primaryAction</code> items are always visible. <code>.secondaryAction</code> items go into the customization palette and may be hidden by default.</li><li><code>ToolbarItem(id:)</code> requires a stable string identifier for toolbar customization persistence. Without IDs, user customizations are lost between launches.</li></ul>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.7.8.3</span>&nbsp;&nbsp;Watch Out</h3>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.7.8.3 &para;1</span><ul><li>On macOS, <code>.primaryAction</code> items are always visible. <code>.secondaryAction</code> items go into the customization palette and may be hidden by default.</li><li><code>ToolbarItem(id:)</code> requires a stable string identifier for toolbar customization persistence. Without IDs, user customizations are lost between launches.</li></ul>
   <hr>
-  <h2>TabView In Depth</h2>
-  <h3>Basic Tab Setup</h3>
-  <pre><code class="lang-swift">struct RootView: View {
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.7.9</span>&nbsp;&nbsp;TabView In Depth</h2>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.7.9.1</span>&nbsp;&nbsp;Basic Tab Setup</h3>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.7.9.1 &para;1</span><pre><code class="lang-swift">struct RootView: View {
     @State private var selectedTab: AppTab = .home
 
     var body: some View {
@@ -194,16 +194,16 @@
 enum AppTab: Hashable {
     case home, library, profile
 }</code></pre>
-  <h3>Badge Modifier</h3>
-  <pre><code class="lang-swift">Tab("Inbox", systemImage: "tray", value: .inbox) {
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.7.9.2</span>&nbsp;&nbsp;Badge Modifier</h3>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.7.9.2 &para;1</span><pre><code class="lang-swift">Tab("Inbox", systemImage: "tray", value: .inbox) {
     InboxView()
 }
 .badge(unreadCount)     // integer badge
 .badge("New")           // text badge</code></pre>
-  <p>Badges appear as a small indicator on the tab icon. On iOS, it is a red circle with the count. On macOS, it is a text overlay.</p>
-  <h3>Tab Sections (iPadOS / visionOS Sidebar)</h3>
-  <p>On iPadOS with sufficient width, <code>TabView</code> can render as a sidebar. Group tabs with <code>TabSection</code>.</p>
-  <pre><code class="lang-swift">TabView {
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.7.9.2 &para;2</span> Badges appear as a small indicator on the tab icon. On iOS, it is a red circle with the count. On macOS, it is a text overlay.</p>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.7.9.3</span>&nbsp;&nbsp;Tab Sections (iPadOS / visionOS Sidebar)</h3>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.7.9.3 &para;1</span> On iPadOS with sufficient width, <code>TabView</code> can render as a sidebar. Group tabs with <code>TabSection</code>.</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.7.9.3 &para;2</span><pre><code class="lang-swift">TabView {
     Tab("Home", systemImage: "house", value: .home) {
         HomeView()
     }
@@ -227,21 +227,21 @@ enum AppTab: Hashable {
     }
 }
 .tabViewStyle(.sidebarAdaptable)</code></pre>
-  <h3>Page-Style TabView</h3>
-  <p>For swipeable pages (onboarding, image galleries).</p>
-  <pre><code class="lang-swift">TabView {
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.7.9.4</span>&nbsp;&nbsp;Page-Style TabView</h3>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.7.9.4 &para;1</span> For swipeable pages (onboarding, image galleries).</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.7.9.4 &para;2</span><pre><code class="lang-swift">TabView {
     OnboardingPage1()
     OnboardingPage2()
     OnboardingPage3()
 }
 .tabViewStyle(.page)
 .indexViewStyle(.page(backgroundDisplayMode: .always))</code></pre>
-  <h3>Watch Out</h3>
-  <ul><li>Each tab should own its own <code>NavigationStack</code>. Wrapping the entire <code>TabView</code> in a single <code>NavigationStack</code> causes the nav bar to appear above tabs and navigation pushes replace the whole tab interface.</li><li><code>.tabViewStyle(.page)</code> hides the tab bar entirely. It shows dots instead. Do not mix page style with labeled tabs.</li><li>Tab order is the order you declare them. There is no reordering API like UIKit's "More" tab — though the sidebar-adaptable style on iPad does support reordering.</li></ul>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.7.9.5</span>&nbsp;&nbsp;Watch Out</h3>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.7.9.5 &para;1</span><ul><li>Each tab should own its own <code>NavigationStack</code>. Wrapping the entire <code>TabView</code> in a single <code>NavigationStack</code> causes the nav bar to appear above tabs and navigation pushes replace the whole tab interface.</li><li><code>.tabViewStyle(.page)</code> hides the tab bar entirely. It shows dots instead. Do not mix page style with labeled tabs.</li><li>Tab order is the order you declare them. There is no reordering API like UIKit's "More" tab — though the sidebar-adaptable style on iPad does support reordering.</li></ul>
   <hr>
-  <h2>Custom Tab Bar</h2>
-  <p>When the built-in tab bar does not meet your needs, build your own.</p>
-  <pre><code class="lang-swift">struct CustomTabBar: View {
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.7.10</span>&nbsp;&nbsp;Custom Tab Bar</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.7.10 &para;1</span> When the built-in tab bar does not meet your needs, build your own.</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.7.10 &para;2</span><pre><code class="lang-swift">struct CustomTabBar: View {
     @Binding var selectedTab: AppTab
 
     var body: some View {
@@ -285,20 +285,20 @@ struct RootView: View {
         }
     }
 }</code></pre>
-  <h3>Watch Out</h3>
-  <ul><li>Custom tab bars do not get the system safe area handling for free. You need to account for the home indicator on modern iPhones.</li><li>You lose automatic state preservation that <code>TabView</code> provides. Each <code>switch</code> case re-creates the view. Use <code>@State</code> or a view model to preserve state across tab switches.</li></ul>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.7.10.1</span>&nbsp;&nbsp;Watch Out</h3>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.7.10.1 &para;1</span><ul><li>Custom tab bars do not get the system safe area handling for free. You need to account for the home indicator on modern iPhones.</li><li>You lose automatic state preservation that <code>TabView</code> provides. Each <code>switch</code> case re-creates the view. Use <code>@State</code> or a view model to preserve state across tab switches.</li></ul>
   <hr>
-  <h2>Practical Tips</h2>
-  <ol class="body-list"><li><strong>Use semantic placements</strong> (<code>.primaryAction</code>, <code>.cancellationAction</code>) over positional ones (<code>.topBarTrailing</code>). Semantic placements adapt correctly across platforms.</li></ol>
-  <ol class="body-list"><li><strong>Keyboard toolbar is essential</strong> for number pads. Users cannot dismiss a <code>.decimalPad</code> or <code>.numberPad</code> keyboard without a Done button.</li></ol>
-  <ol class="body-list"><li><strong>Hide the tab bar in detail views</strong> with <code>.toolbar(.hidden, for: .tabBar)</code> for immersive content like photo viewers or media players.</li></ol>
-  <ol class="body-list"><li><strong>Keep toolbar items minimal.</strong> Two to three items max per placement. Overloaded toolbars confuse users and look cramped on smaller devices.</li></ol>
-  <ol class="body-list"><li><strong>Test on both iPhone and iPad.</strong> Toolbar items can shift positions dramatically between compact and regular size classes. What looks right on one screen may be wrong on another.</li></ol>
-  <ol class="body-list"><li><strong>18pt minimum</strong> applies to toolbar labels too. If you use custom toolbar views with text, keep them readable.</li></ol>
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.7.11</span>&nbsp;&nbsp;Practical Tips</h2>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.7.11 &para;1</span><ol class="body-list"><li><strong>Use semantic placements</strong> (<code>.primaryAction</code>, <code>.cancellationAction</code>) over positional ones (<code>.topBarTrailing</code>). Semantic placements adapt correctly across platforms.</li></ol>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.7.11 &para;2</span><ol class="body-list"><li><strong>Keyboard toolbar is essential</strong> for number pads. Users cannot dismiss a <code>.decimalPad</code> or <code>.numberPad</code> keyboard without a Done button.</li></ol>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.7.11 &para;3</span><ol class="body-list"><li><strong>Hide the tab bar in detail views</strong> with <code>.toolbar(.hidden, for: .tabBar)</code> for immersive content like photo viewers or media players.</li></ol>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.7.11 &para;4</span><ol class="body-list"><li><strong>Keep toolbar items minimal.</strong> Two to three items max per placement. Overloaded toolbars confuse users and look cramped on smaller devices.</li></ol>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.7.11 &para;5</span><ol class="body-list"><li><strong>Test on both iPhone and iPad.</strong> Toolbar items can shift positions dramatically between compact and regular size classes. What looks right on one screen may be wrong on another.</li></ol>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.7.11 &para;6</span><ol class="body-list"><li><strong>18pt minimum</strong> applies to toolbar labels too. If you use custom toolbar views with text, keep them readable.</li></ol>
   <hr>
-  <h2>Further Reading &mdash; WWDC Sessions</h2>
-  <p>This book is a passive resource. When you want deeper coverage of toolbars or tab views, the WWDC sessions below are Apple's source material.</p>
-  <ul>
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.7.12</span>&nbsp;&nbsp;Further Reading &mdash; WWDC Sessions</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.7.12 &para;1</span> This book is a passive resource. When you want deeper coverage of toolbars or tab views, the WWDC sessions below are Apple's source material.</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.7.12 &para;2</span><ul>
     <li>WWDC25 / 256, <em>What's new in SwiftUI</em> &mdash; <a href="https://developer.apple.com/videos/play/wwdc2025/256/">developer.apple.com/videos/play/wwdc2025/256/</a>. Toolbar and tab-view updates this release.</li>
     <li>WWDC25 / 323, <em>Build a SwiftUI app with the new design</em> &mdash; <a href="https://developer.apple.com/videos/play/wwdc2025/323/">developer.apple.com/videos/play/wwdc2025/323/</a>. <code>ToolbarSpacer</code>, search placement, and toolbar grouping in the new design.</li>
     <li>WWDC25 / 219, <em>Meet Liquid Glass</em> &mdash; <a href="https://developer.apple.com/videos/play/wwdc2025/219/">developer.apple.com/videos/play/wwdc2025/219/</a>. The material that toolbars now sit on, and the "avoid glass on glass" guidance.</li>

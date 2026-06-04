@@ -9,69 +9,69 @@
 
 <div class="content">
 
-  <h1>Book 4: Gestures &amp; Input</h1>
+  <h1><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.4</span>&nbsp;&nbsp;Book 4: Gestures &amp; Input</h1>
   <p><strong>Claude's Xcode 26 Swift Bible</strong> -- Part III: The User Interface</p>
   <hr>
-  <h2>Live Reference: Claudes LockBox image viewer</h2>
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.4.1</span>&nbsp;&nbsp;Live Reference: Claudes LockBox image viewer</h2>
   <div class="scope-note"><strong>Claudes LockBox</strong> ships every gesture this chapter covers in its photo viewer. A vault item's photo thumbnail opens full-screen on tap. Pinch-to-zoom is supported. Double-tap toggles between fit-to-screen and 3x zoom. Drag pans the image when zoomed in. Pinch below 1x snaps the image back to fit-to-screen. Long-press on a thumbnail in the detail view presents a contextual menu with "View Full Size" or "Delete Page" options. Five gesture patterns in one screen, all in <code>ImageViewerView.swift</code>. Source: <a href="https://github.com/fluhartyml/Claudes-LockBox">github.com/fluhartyml/Claudes-LockBox</a>. See Build-Along 03 &sect;11 for the build walkthrough; the snap-back-on-overpinch behavior is one of the small UX-payoff details this chapter's principles produce in production code.</div>
   <hr>
-  <h2>What This Chapter Is About</h2>
-  <p>Books 01 through 03 built up the language, SwiftUI's view model, and the scene/window structure of an Apple app. The app runs; views draw. This chapter covers user input: taps, swipes, drags, pinches, keyboard presses, Apple Pencil strokes.</p>
-  <p>SwiftUI covers this with two layers of API:</p>
-  <ul><li><strong>High-level shortcuts</strong> built into the common views -- <code>Button</code>, <code>TextField</code>, <code>Toggle</code>, <code>onTapGesture</code>, <code>onSubmit</code>. Most apps live here and go no deeper.</li><li><strong>The Gesture protocol</strong> -- a composable system for building, combining, and tracking touch gestures when the shortcuts don't cover what you need.</li></ul>
-  <p>This chapter walks both layers, covering ordinary input paths and the gesture-protocol APIs available for less common cases.</p>
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.4.2</span>&nbsp;&nbsp;What This Chapter Is About</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.4.2 &para;1</span> Books 01 through 03 built up the language, SwiftUI's view model, and the scene/window structure of an Apple app. The app runs; views draw. This chapter covers user input: taps, swipes, drags, pinches, keyboard presses, Apple Pencil strokes.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.4.2 &para;2</span> SwiftUI covers this with two layers of API:</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.4.2 &para;3</span><ul><li><strong>High-level shortcuts</strong> built into the common views -- <code>Button</code>, <code>TextField</code>, <code>Toggle</code>, <code>onTapGesture</code>, <code>onSubmit</code>. Most apps live here and go no deeper.</li><li><strong>The Gesture protocol</strong> -- a composable system for building, combining, and tracking touch gestures when the shortcuts don't cover what you need.</li></ul>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.4.2 &para;4</span> This chapter walks both layers, covering ordinary input paths and the gesture-protocol APIs available for less common cases.</p>
   <hr>
-  <h2>The Tap -- The Simplest Input</h2>
-  <p>A tap is a single, quick press-and-release in roughly the same spot. Every tappable element in an Apple app begins with a tap.</p>
-  <h3>onTapGesture</h3>
-  <p>The shortest form. Attach <code>.onTapGesture</code> to any view and hand it a closure.</p>
-  <pre><code class="lang-swift">Text("Hello")
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.4.3</span>&nbsp;&nbsp;The Tap -- The Simplest Input</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.4.3 &para;1</span> A tap is a single, quick press-and-release in roughly the same spot. Every tappable element in an Apple app begins with a tap.</p>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.4.3.1</span>&nbsp;&nbsp;onTapGesture</h3>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.4.3.1 &para;1</span> The shortest form. Attach <code>.onTapGesture</code> to any view and hand it a closure.</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.4.3.1 &para;2</span><pre><code class="lang-swift">Text("Hello")
     .onTapGesture {
         print("tapped")
     }</code></pre>
-  <p>That's it. The view becomes tappable; the closure fires every time.</p>
-  <p>You can ask for a specific number of taps:</p>
-  <pre><code class="lang-swift">Text("Double-tap me")
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.4.3.1 &para;3</span> That's it. The view becomes tappable; the closure fires every time.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.4.3.1 &para;4</span> You can ask for a specific number of taps:</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.4.3.1 &para;5</span><pre><code class="lang-swift">Text("Double-tap me")
     .onTapGesture(count: 2) {
         print("double-tap")
     }</code></pre>
-  <p>And you can read the tap location on iOS 16 and later:</p>
-  <pre><code class="lang-swift">GeometryReader { proxy in
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.4.3.1 &para;6</span> And you can read the tap location on iOS 16 and later:</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.4.3.1 &para;7</span><pre><code class="lang-swift">GeometryReader { proxy in
     Color.blue
         .onTapGesture { location in
             print("tapped at \(location)")
         }
 }</code></pre>
-  <p>The location is in the view's own coordinate space.</p>
-  <h3>Button vs onTapGesture</h3>
-  <p><code>Button</code> and <code>.onTapGesture</code> both handle taps. They are not interchangeable.</p>
-  <p>Use <code>Button</code> when the tap triggers an action the user can describe in words: "Save", "Delete", "Next". The system gets you accessibility, focus behavior on Apple TV, keyboard activation, and the platform-correct pressed state for free.</p>
-  <p>Use <code>.onTapGesture</code> when the tapped thing is a graphic element -- an image card, a color swatch, a shape on a canvas -- where a button's default styling would fight you.</p>
-  <p>A rough rule: if VoiceOver should read "Button" when it lands on the view, use <code>Button</code>. If it should read "Image" or "Graphic", use <code>.onTapGesture</code>.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.4.3.1 &para;8</span> The location is in the view's own coordinate space.</p>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.4.3.2</span>&nbsp;&nbsp;Button vs onTapGesture</h3>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.4.3.2 &para;1</span> <code>Button</code> and <code>.onTapGesture</code> both handle taps. They are not interchangeable.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.4.3.2 &para;2</span> Use <code>Button</code> when the tap triggers an action the user can describe in words: "Save", "Delete", "Next". The system gets you accessibility, focus behavior on Apple TV, keyboard activation, and the platform-correct pressed state for free.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.4.3.2 &para;3</span> Use <code>.onTapGesture</code> when the tapped thing is a graphic element -- an image card, a color swatch, a shape on a canvas -- where a button's default styling would fight you.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.4.3.2 &para;4</span> A rough rule: if VoiceOver should read "Button" when it lands on the view, use <code>Button</code>. If it should read "Image" or "Graphic", use <code>.onTapGesture</code>.</p>
   <hr>
-  <h2>The Long Press</h2>
-  <p>A long press fires after the user holds their finger down for at least 0.5 seconds without moving much.</p>
-  <pre><code class="lang-swift">Image(systemName: "star")
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.4.4</span>&nbsp;&nbsp;The Long Press</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.4.4 &para;1</span> A long press fires after the user holds their finger down for at least 0.5 seconds without moving much.</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.4.4 &para;2</span><pre><code class="lang-swift">Image(systemName: "star")
     .onLongPressGesture {
         print("long-pressed")
     }</code></pre>
-  <p>You can customize how long and how far the finger is allowed to drift:</p>
-  <pre><code class="lang-swift">Image(systemName: "star")
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.4.4 &para;3</span> You can customize how long and how far the finger is allowed to drift:</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.4.4 &para;4</span><pre><code class="lang-swift">Image(systemName: "star")
     .onLongPressGesture(minimumDuration: 1.0, maximumDistance: 10) {
         print("long-pressed")
     }</code></pre>
-  <p>Long-press is the gesture for "I want the extra menu." Context menus, share menus, and drag-to-reorder all start from it. SwiftUI's <code>.contextMenu</code> modifier wires the gesture automatically -- you rarely call <code>onLongPressGesture</code> yourself when a context menu is what you want.</p>
-  <pre><code class="lang-swift">Text("Item")
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.4.4 &para;5</span> Long-press is the gesture for "I want the extra menu." Context menus, share menus, and drag-to-reorder all start from it. SwiftUI's <code>.contextMenu</code> modifier wires the gesture automatically -- you rarely call <code>onLongPressGesture</code> yourself when a context menu is what you want.</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.4.4 &para;6</span><pre><code class="lang-swift">Text("Item")
     .contextMenu {
         Button("Rename") { /* ... */ }
         Button("Delete", role: .destructive) { /* ... */ }
     }</code></pre>
   <hr>
-  <h2>Drag</h2>
-  <p>A drag gesture reports the finger's position continuously from the first touch until the lift.</p>
-  <h3>DragGesture</h3>
-  <p><code>DragGesture</code> is a <code>Gesture</code> type. You hand it to the <code>.gesture</code> modifier and attach closures with <code>.onChanged</code> and <code>.onEnded</code>:</p>
-  <pre><code class="lang-swift">struct DragDot: View {
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.4.5</span>&nbsp;&nbsp;Drag</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.4.5 &para;1</span> A drag gesture reports the finger's position continuously from the first touch until the lift.</p>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.4.5.1</span>&nbsp;&nbsp;DragGesture</h3>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.4.5.1 &para;1</span> <code>DragGesture</code> is a <code>Gesture</code> type. You hand it to the <code>.gesture</code> modifier and attach closures with <code>.onChanged</code> and <code>.onEnded</code>:</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.4.5.1 &para;2</span><pre><code class="lang-swift">struct DragDot: View {
     @State private var offset: CGSize = .zero
 
     var body: some View {
@@ -90,11 +90,11 @@
             )
     }
 }</code></pre>
-  <p><code>value.translation</code> is a <code>CGSize</code> of how far the finger has moved since the gesture started. <code>value.location</code> is where the finger currently is. <code>value.startLocation</code> is where it first touched down.</p>
-  <p>The example above moves the dot while dragging and snaps it back on release.</p>
-  <h3>@GestureState vs @State</h3>
-  <p>If you write the drag example above with <code>@State</code> for the offset, you have to clear it yourself in <code>.onEnded</code>. Miss a case and the dot sticks. <code>@GestureState</code> fixes that.</p>
-  <pre><code class="lang-swift">struct DragDot: View {
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.4.5.1 &para;3</span> <code>value.translation</code> is a <code>CGSize</code> of how far the finger has moved since the gesture started. <code>value.location</code> is where the finger currently is. <code>value.startLocation</code> is where it first touched down.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.4.5.1 &para;4</span> The example above moves the dot while dragging and snaps it back on release.</p>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.4.5.2</span>&nbsp;&nbsp;@GestureState vs @State</h3>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.4.5.2 &para;1</span> If you write the drag example above with <code>@State</code> for the offset, you have to clear it yourself in <code>.onEnded</code>. Miss a case and the dot sticks. <code>@GestureState</code> fixes that.</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.4.5.2 &para;2</span><pre><code class="lang-swift">struct DragDot: View {
     @GestureState private var drag: CGSize = .zero
 
     var body: some View {
@@ -110,10 +110,10 @@
             )
     }
 }</code></pre>
-  <p><code>@GestureState</code> automatically resets to its initial value (<code>.zero</code>) as soon as the gesture ends or is cancelled by the system. You never write cleanup code, and you never have a stuck dot.</p>
-  <p>The rule of thumb: use <code>@GestureState</code> for the in-flight position you only care about while dragging, and <code>@State</code> for any state you want to persist after the gesture ends (like the dot's final resting spot).</p>
-  <p>A combined example -- a dot that stays where you drop it:</p>
-  <pre><code class="lang-swift">struct StickyDot: View {
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.4.5.2 &para;3</span> <code>@GestureState</code> automatically resets to its initial value (<code>.zero</code>) as soon as the gesture ends or is cancelled by the system. You never write cleanup code, and you never have a stuck dot.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.4.5.2 &para;4</span> The rule of thumb: use <code>@GestureState</code> for the in-flight position you only care about while dragging, and <code>@State</code> for any state you want to persist after the gesture ends (like the dot's final resting spot).</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.4.5.2 &para;5</span> A combined example -- a dot that stays where you drop it:</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.4.5.2 &para;6</span><pre><code class="lang-swift">struct StickyDot: View {
     @State private var position: CGSize = .zero
     @GestureState private var drag: CGSize = .zero
 
@@ -135,11 +135,11 @@
             )
     }
 }</code></pre>
-  <p>The <code>drag</code> value feeds the live offset; <code>position</code> remembers where the dot settled.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.4.5.2 &para;7</span> The <code>drag</code> value feeds the live offset; <code>position</code> remembers where the dot settled.</p>
   <hr>
-  <h2>Pinch and Rotate</h2>
-  <p><code>MagnifyGesture</code> and <code>RotateGesture</code> work the same way as <code>DragGesture</code> -- both are <code>Gesture</code> types you attach with <code>.gesture</code> and observe with <code>.onChanged</code> / <code>.onEnded</code> / <code>.updating</code>.</p>
-  <pre><code class="lang-swift">struct Zoomer: View {
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.4.6</span>&nbsp;&nbsp;Pinch and Rotate</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.4.6 &para;1</span> <code>MagnifyGesture</code> and <code>RotateGesture</code> work the same way as <code>DragGesture</code> -- both are <code>Gesture</code> types you attach with <code>.gesture</code> and observe with <code>.onChanged</code> / <code>.onEnded</code> / <code>.updating</code>.</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.4.6 &para;2</span><pre><code class="lang-swift">struct Zoomer: View {
     @State private var scale: CGFloat = 1.0
     @GestureState private var livePinch: CGFloat = 1.0
 
@@ -159,21 +159,21 @@
             )
     }
 }</code></pre>
-  <p><code>value.magnification</code> is the ratio between the current two-finger distance and the distance at the gesture's start. It begins at 1.0, grows as fingers spread, shrinks as they pinch.</p>
-  <p><code>RotateGesture</code> gives you a <code>value.rotation</code> as an <code>Angle</code>:</p>
-  <pre><code class="lang-swift">.gesture(
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.4.6 &para;3</span> <code>value.magnification</code> is the ratio between the current two-finger distance and the distance at the gesture's start. It begins at 1.0, grows as fingers spread, shrinks as they pinch.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.4.6 &para;4</span> <code>RotateGesture</code> gives you a <code>value.rotation</code> as an <code>Angle</code>:</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.4.6 &para;5</span><pre><code class="lang-swift">.gesture(
     RotateGesture()
         .onChanged { value in
             rotation = value.rotation
         }
 )</code></pre>
-  <p>Pinch and rotate are almost always used together on a photo or map view. SwiftUI lets you combine them.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.4.6 &para;6</span> Pinch and rotate are almost always used together on a photo or map view. SwiftUI lets you combine them.</p>
   <hr>
-  <h2>Combining Gestures</h2>
-  <p>Three composition operators let you describe how two gestures relate:</p>
-  <ul><li><code>.simultaneously(with:)</code> -- both gestures track at the same time</li><li><code>.sequenced(before:)</code> -- the second gesture only starts after the first ends</li><li><code>.exclusively(before:)</code> -- exactly one of the two recognizes; the other is dropped</li></ul>
-  <h3>Simultaneous -- Pinch and Rotate Together</h3>
-  <pre><code class="lang-swift">struct PhotoEditor: View {
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.4.7</span>&nbsp;&nbsp;Combining Gestures</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.4.7 &para;1</span> Three composition operators let you describe how two gestures relate:</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.4.7 &para;2</span><ul><li><code>.simultaneously(with:)</code> -- both gestures track at the same time</li><li><code>.sequenced(before:)</code> -- the second gesture only starts after the first ends</li><li><code>.exclusively(before:)</code> -- exactly one of the two recognizes; the other is dropped</li></ul>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.4.7.1</span>&nbsp;&nbsp;Simultaneous -- Pinch and Rotate Together</h3>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.4.7.1 &para;1</span><pre><code class="lang-swift">struct PhotoEditor: View {
     @State private var scale: CGFloat = 1.0
     @State private var rotation: Angle = .zero
 
@@ -193,10 +193,10 @@
             )
     }
 }</code></pre>
-  <p>When you combine gestures with <code>.simultaneously</code>, the closure receives a tuple-shaped value with <code>.first</code> and <code>.second</code>. Each side is optional because either gesture can be absent at any given instant.</p>
-  <h3>Sequenced -- Long Press Then Drag</h3>
-  <p>A long-press followed by a drag is the native "grab and move" gesture on iOS.</p>
-  <pre><code class="lang-swift">struct GrabAndMove: View {
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.4.7.1 &para;2</span> When you combine gestures with <code>.simultaneously</code>, the closure receives a tuple-shaped value with <code>.first</code> and <code>.second</code>. Each side is optional because either gesture can be absent at any given instant.</p>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.4.7.2</span>&nbsp;&nbsp;Sequenced -- Long Press Then Drag</h3>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.4.7.2 &para;1</span> A long-press followed by a drag is the native "grab and move" gesture on iOS.</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.4.7.2 &para;2</span><pre><code class="lang-swift">struct GrabAndMove: View {
     @State private var offset: CGSize = .zero
     @State private var isLifted = false
 
@@ -226,22 +226,22 @@
             )
     }
 }</code></pre>
-  <p>The sequenced value is itself an enum: <code>.first(...)</code> during the long press, <code>.second(..., dragValue)</code> during the drag that follows.</p>
-  <h3>Exclusively -- Pick One</h3>
-  <p>Use <code>.exclusively(before:)</code> when two gestures could both match and you want only one to win, in a specific priority.</p>
-  <pre><code class="lang-swift">let doubleTap = TapGesture(count: 2).onEnded { /* ... */ }
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.4.7.2 &para;3</span> The sequenced value is itself an enum: <code>.first(...)</code> during the long press, <code>.second(..., dragValue)</code> during the drag that follows.</p>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.4.7.3</span>&nbsp;&nbsp;Exclusively -- Pick One</h3>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.4.7.3 &para;1</span> Use <code>.exclusively(before:)</code> when two gestures could both match and you want only one to win, in a specific priority.</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.4.7.3 &para;2</span><pre><code class="lang-swift">let doubleTap = TapGesture(count: 2).onEnded { /* ... */ }
 let singleTap = TapGesture(count: 1).onEnded { /* ... */ }
 
 Text("Tap me")
     .gesture(doubleTap.exclusively(before: singleTap))</code></pre>
-  <p>Without <code>.exclusively</code>, a single-tap would fire inside every double-tap.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.4.7.3 &para;3</span> Without <code>.exclusively</code>, a single-tap would fire inside every double-tap.</p>
   <hr>
-  <h2>Focus and the Keyboard</h2>
-  <p>SwiftUI's text inputs (<code>TextField</code>, <code>SecureField</code>, <code>TextEditor</code>) handle keystrokes for you. What you usually need to manage is:</p>
-  <ol class="body-list"><li>Which field has the keyboard right now?</li><li>What happens when the user presses Return or Tab?</li><li>What keys should trigger app-level actions, regardless of which field is active?</li></ol>
-  <h3>@FocusState -- Who Has the Keyboard</h3>
-  <p><code>@FocusState</code> binds a property to "which field is focused." You read it to tell which field is active; you write it to move focus programmatically.</p>
-  <pre><code class="lang-swift">struct LoginForm: View {
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.4.8</span>&nbsp;&nbsp;Focus and the Keyboard</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.4.8 &para;1</span> SwiftUI's text inputs (<code>TextField</code>, <code>SecureField</code>, <code>TextEditor</code>) handle keystrokes for you. What you usually need to manage is:</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.4.8 &para;2</span><ol class="body-list"><li>Which field has the keyboard right now?</li><li>What happens when the user presses Return or Tab?</li><li>What keys should trigger app-level actions, regardless of which field is active?</li></ol>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.4.8.1</span>&nbsp;&nbsp;@FocusState -- Who Has the Keyboard</h3>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.4.8.1 &para;1</span> <code>@FocusState</code> binds a property to "which field is focused." You read it to tell which field is active; you write it to move focus programmatically.</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.4.8.1 &para;2</span><pre><code class="lang-swift">struct LoginForm: View {
     enum Field: Hashable { case username, password }
 
     @State private var username = ""
@@ -266,20 +266,20 @@ Text("Tap me")
         .onAppear { focus = .username }
     }
 }</code></pre>
-  <p><code>@FocusState</code> can be <code>Bool</code> (for a single-field form) or any <code>Hashable</code> enum (for multiple fields). Each <code>TextField</code> calls <code>.focused($focus, equals: someCase)</code> to claim its identity.</p>
-  <p><code>.submitLabel(.next)</code> sets the return key's label. <code>.onSubmit</code> fires when the user presses return.</p>
-  <h3>Keyboard Shortcuts</h3>
-  <p>For Mac apps and iPad apps connected to a hardware keyboard, <code>.keyboardShortcut</code> makes a <code>Button</code> respond to a key combo:</p>
-  <pre><code class="lang-swift">Button("Save") { save() }
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.4.8.1 &para;3</span> <code>@FocusState</code> can be <code>Bool</code> (for a single-field form) or any <code>Hashable</code> enum (for multiple fields). Each <code>TextField</code> calls <code>.focused($focus, equals: someCase)</code> to claim its identity.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.4.8.1 &para;4</span> <code>.submitLabel(.next)</code> sets the return key's label. <code>.onSubmit</code> fires when the user presses return.</p>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.4.8.2</span>&nbsp;&nbsp;Keyboard Shortcuts</h3>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.4.8.2 &para;1</span> For Mac apps and iPad apps connected to a hardware keyboard, <code>.keyboardShortcut</code> makes a <code>Button</code> respond to a key combo:</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.4.8.2 &para;2</span><pre><code class="lang-swift">Button("Save") { save() }
     .keyboardShortcut("s", modifiers: .command)
 
 Button("Close") { close() }
     .keyboardShortcut(.cancelAction) // Escape</code></pre>
-  <p>The second form uses a role instead of a specific key, so the system picks the right key for the current platform.</p>
-  <p>Shortcuts defined on buttons in a <code>Menu</code> appear as badges in the menu, just like a native app.</p>
-  <h3>onKeyPress -- Raw Keys</h3>
-  <p>When you need to respond to individual keys outside of a text field -- arrow keys in a game, space bar for play/pause -- use <code>.onKeyPress</code>:</p>
-  <pre><code class="lang-swift">struct CursorBox: View {
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.4.8.2 &para;3</span> The second form uses a role instead of a specific key, so the system picks the right key for the current platform.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.4.8.2 &para;4</span> Shortcuts defined on buttons in a <code>Menu</code> appear as badges in the menu, just like a native app.</p>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.4.8.3</span>&nbsp;&nbsp;onKeyPress -- Raw Keys</h3>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.4.8.3 &para;1</span> When you need to respond to individual keys outside of a text field -- arrow keys in a game, space bar for play/pause -- use <code>.onKeyPress</code>:</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.4.8.3 &para;2</span><pre><code class="lang-swift">struct CursorBox: View {
     @State private var position: CGPoint = .init(x: 100, y: 100)
 
     var body: some View {
@@ -294,15 +294,15 @@ Button("Close") { close() }
             .onKeyPress(.downArrow)  { position.y += 10; return .handled }
     }
 }</code></pre>
-  <p><code>.onKeyPress</code> requires the view to be <code>focusable</code>. Return <code>.handled</code> if the view consumed the key, <code>.ignored</code> to let it bubble up.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.4.8.3 &para;3</span> <code>.onKeyPress</code> requires the view to be <code>focusable</code>. Return <code>.handled</code> if the view consumed the key, <code>.ignored</code> to let it bubble up.</p>
   <hr>
-  <h2>Apple Pencil and iPad</h2>
-  <p>On iPad, Apple Pencil acts as a pointer device. Every drag gesture you have already written works with the Pencil automatically. Three Pencil-specific paths are worth knowing.</p>
-  <h3>Scribble</h3>
-  <p>Scribble turns Pencil handwriting inside a <code>TextField</code> into typed text. It works with no code -- every standard text input supports it as soon as the user enables Scribble in Settings. You get it for free.</p>
-  <h3>PencilKit</h3>
-  <p><code>PKCanvasView</code> is UIKit, but bridges cleanly into SwiftUI for apps that want a drawing surface:</p>
-  <pre><code class="lang-swift">import PencilKit
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.4.9</span>&nbsp;&nbsp;Apple Pencil and iPad</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.4.9 &para;1</span> On iPad, Apple Pencil acts as a pointer device. Every drag gesture you have already written works with the Pencil automatically. Three Pencil-specific paths are worth knowing.</p>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.4.9.1</span>&nbsp;&nbsp;Scribble</h3>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.4.9.1 &para;1</span> Scribble turns Pencil handwriting inside a <code>TextField</code> into typed text. It works with no code -- every standard text input supports it as soon as the user enables Scribble in Settings. You get it for free.</p>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.4.9.2</span>&nbsp;&nbsp;PencilKit</h3>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.4.9.2 &para;1</span> <code>PKCanvasView</code> is UIKit, but bridges cleanly into SwiftUI for apps that want a drawing surface:</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.4.9.2 &para;2</span><pre><code class="lang-swift">import PencilKit
 
 struct Sketchpad: UIViewRepresentable {
     @Binding var drawing: PKDrawing
@@ -329,32 +329,32 @@ struct Sketchpad: UIViewRepresentable {
         }
     }
 }</code></pre>
-  <p>Drop a <code>PKToolPicker</code> in front and you have a real sketching surface with pen, pencil, eraser, and color picker.</p>
-  <h3>Pencil Hover and Squeeze</h3>
-  <p>Apple Pencil Pro adds hover (a preview before touching) and squeeze (a side-barrel gesture). Both reach SwiftUI through <code>onPencilSqueeze</code> and <code>onContinuousHover</code> on iOS 17.5 and later. Reach for these when the app benefits from a gesture the finger can't produce.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.4.9.2 &para;3</span> Drop a <code>PKToolPicker</code> in front and you have a real sketching surface with pen, pencil, eraser, and color picker.</p>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.4.9.3</span>&nbsp;&nbsp;Pencil Hover and Squeeze</h3>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.4.9.3 &para;1</span> Apple Pencil Pro adds hover (a preview before touching) and squeeze (a side-barrel gesture). Both reach SwiftUI through <code>onPencilSqueeze</code> and <code>onContinuousHover</code> on iOS 17.5 and later. Reach for these when the app benefits from a gesture the finger can't produce.</p>
   <hr>
-  <h2>Hit Targets and Accessibility</h2>
-  <p>A touch is about 44 points wide. Interactive views should be at least 44x44 so users can actually hit them. Apple's Human Interface Guidelines publish this as the recommended minimum.</p>
-  <p>If your graphic is smaller, expand its tap area with <code>.contentShape</code>:</p>
-  <pre><code class="lang-swift">Image(systemName: "heart")
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.4.10</span>&nbsp;&nbsp;Hit Targets and Accessibility</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.4.10 &para;1</span> A touch is about 44 points wide. Interactive views should be at least 44x44 so users can actually hit them. Apple's Human Interface Guidelines publish this as the recommended minimum.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.4.10 &para;2</span> If your graphic is smaller, expand its tap area with <code>.contentShape</code>:</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.4.10 &para;3</span><pre><code class="lang-swift">Image(systemName: "heart")
     .font(.system(size: 16))
     .frame(width: 44, height: 44)
     .contentShape(Rectangle())
     .onTapGesture { /* ... */ }</code></pre>
-  <p><code>.contentShape</code> tells SwiftUI which area counts for hit-testing, separate from the visible shape. The heart draws at 16-point but responds to taps anywhere in the 44x44 frame.</p>
-  <p>Every interactive view should also carry an accessibility label:</p>
-  <pre><code class="lang-swift">Image(systemName: "heart.fill")
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.4.10 &para;4</span> <code>.contentShape</code> tells SwiftUI which area counts for hit-testing, separate from the visible shape. The heart draws at 16-point but responds to taps anywhere in the 44x44 frame.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.4.10 &para;5</span> Every interactive view should also carry an accessibility label:</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.4.10 &para;6</span><pre><code class="lang-swift">Image(systemName: "heart.fill")
     .onTapGesture { toggleFavorite() }
     .accessibilityLabel("Favorite")
     .accessibilityAddTraits(.isButton)</code></pre>
-  <p>VoiceOver now announces the view as a button named "Favorite." Without the traits and label, it reads "heart.fill, image."</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.4.10 &para;7</span> VoiceOver now announces the view as a button named "Favorite." Without the traits and label, it reads "heart.fill, image."</p>
   <hr>
-  <h2>What Book 05 Does</h2>
-  <p>Book 04 covered user input on a single view. Book 05 covers menus, navigation stacks, and <code>NavigationLink</code> &mdash; the APIs that move users between screens.</p>
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.4.11</span>&nbsp;&nbsp;What Book 05 Does</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.4.11 &para;1</span> Book 04 covered user input on a single view. Book 05 covers menus, navigation stacks, and <code>NavigationLink</code> &mdash; the APIs that move users between screens.</p>
   <hr>
-  <h2>Further Reading &mdash; WWDC Sessions</h2>
-  <p>This book is a passive resource. When you want deeper coverage of gestures and input, the WWDC sessions below are Apple's source material.</p>
-  <ul>
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.4.12</span>&nbsp;&nbsp;Further Reading &mdash; WWDC Sessions</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.4.12 &para;1</span> This book is a passive resource. When you want deeper coverage of gestures and input, the WWDC sessions below are Apple's source material.</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.4.12 &para;2</span><ul>
     <li>WWDC25 / 256, <em>What's new in SwiftUI</em> &mdash; <a href="https://developer.apple.com/videos/play/wwdc2025/256/">developer.apple.com/videos/play/wwdc2025/256/</a>. Gesture and input modifier updates for this release.</li>
     <li>WWDC25 / 219, <em>Meet Liquid Glass</em> &mdash; <a href="https://developer.apple.com/videos/play/wwdc2025/219/">developer.apple.com/videos/play/wwdc2025/219/</a>. The new design system's expectations for hit areas, focus, and touch response.</li>
     <li>WWDC25 / 281, <em>Design interactive snippets</em> &mdash; <a href="https://developer.apple.com/videos/play/wwdc2025/281/">developer.apple.com/videos/play/wwdc2025/281/</a>. Lightweight input surfaces that App Intents expose throughout the system.</li>

@@ -9,15 +9,15 @@
 
 <div class="content">
 
-  <h1>Book 21: Git &amp; GitHub</h1>
+  <h1><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VI.21</span>&nbsp;&nbsp;Book 21: Git &amp; GitHub</h1>
   <p><strong>Claude's Xcode 26 Swift Bible</strong> -- Part VI: The Modern Toolchain</p>
   <hr>
   <p>This chapter covers creating a Git repository for an Xcode project and making the first commit, the model behind <code>add</code>, <code>commit</code>, <code>branch</code>, and <code>merge</code>, working with a remote on GitHub (clone, push, pull, open a pull request), writing a <code>.gitignore</code> for an Xcode project, and tagging and publishing a release on GitHub.</p>
   <hr>
-  <h2>Live Reference: Every App in This Book</h2>
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VI.21.1</span>&nbsp;&nbsp;Live Reference: Every App in This Book</h2>
   <div class="scope-note">This chapter is the foundation for the book's distribution rule. <strong>GitHub clone-and-build is the default distribution path</strong> for every app shipping alongside this book. The flow: clone the repo, open the project in Xcode (Source Control &rarr; Clone), build for the target device, run. App Store distribution is the bonus tier for apps that grow into full-fledged shipped products. The clone-and-build workflow this chapter covers is the workflow every Build-Along chapter assumes the reader has at hand.</div>
-  <p>The complete app roster on GitHub:</p>
-  <ul>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VI.21.1 &para;1</span> The complete app roster on GitHub:</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">VI.21.1 &para;2</span><ul>
 <li><a href="https://github.com/fluhartyml/Claudes-X26-Swift6-Bible">Inkwell (this book's reader app)</a> &mdash; the meta example, see Build-Along 00</li>
 <li><a href="https://github.com/fluhartyml/Claudes-Web-Wrapper">Claudes Web Wrapper rebuild</a> &mdash; see Build-Along 01</li>
 <li><a href="https://github.com/fluhartyml/Wraply">Wraply (Web Wrapper legacy)</a> &mdash; see Build-Along 01 &sect;15 two-listing case</li>
@@ -35,75 +35,75 @@
 <li><a href="https://github.com/fluhartyml/Transcription-Keeper">Transcription Keeper</a> &mdash; see Source Tour 25</li>
 <li><a href="https://github.com/fluhartyml/TakeAChanceOnMeV1.0.2">Take A Chance On Me</a> &mdash; see Source Tour 26</li>
 </ul>
-  <p>All shipped under the GPL v3 license &mdash; share and share alike with attribution required. Clone any of them, study the source, fork your own variant, ship under your own name with the GPL terms preserved.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VI.21.1 &para;3</span> All shipped under the GPL v3 license &mdash; share and share alike with attribution required. Clone any of them, study the source, fork your own variant, ship under your own name with the GPL terms preserved.</p>
   <hr>
-  <h2>Why Version Control</h2>
-  <p>Every file in your project has a history. Without version control, you have one copy of each file and whatever Time Machine remembered last night. With Git, every saved state is a named point you can return to, compare against, or share.</p>
-  <p>Git is the version control system. GitHub is one of several places to host Git repositories on the internet. You can use Git locally without ever talking to GitHub; you start needing GitHub (or something like it) when you want to sync across machines or collaborate.</p>
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VI.21.2</span>&nbsp;&nbsp;Why Version Control</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VI.21.2 &para;1</span> Every file in your project has a history. Without version control, you have one copy of each file and whatever Time Machine remembered last night. With Git, every saved state is a named point you can return to, compare against, or share.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VI.21.2 &para;2</span> Git is the version control system. GitHub is one of several places to host Git repositories on the internet. You can use Git locally without ever talking to GitHub; you start needing GitHub (or something like it) when you want to sync across machines or collaborate.</p>
   <hr>
-  <h2>The Mental Model</h2>
-  <p>Git tracks three places your files can live:</p>
-  <ol class="body-list"><li><strong>Working tree</strong> -- the files you see and edit on disk.</li><li><strong>Staging area (index)</strong> -- files you've marked as "I want these changes in the next commit."</li><li><strong>Repository</strong> -- the stored history of past commits.</li></ol>
-  <p>A typical change flow:</p>
-  <ul><li>You edit a file. It lives only in the working tree.</li><li><code>git add thefile.swift</code> moves that change from the working tree into the staging area.</li><li><code>git commit</code> moves the staged changes into the repository as a single named snapshot.</li></ul>
-  <p>You can stage many files at once and commit them together. Each commit is a whole-project snapshot: everything tracked, at a moment in time.</p>
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VI.21.3</span>&nbsp;&nbsp;The Mental Model</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VI.21.3 &para;1</span> Git tracks three places your files can live:</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">VI.21.3 &para;2</span><ol class="body-list"><li><strong>Working tree</strong> -- the files you see and edit on disk.</li><li><strong>Staging area (index)</strong> -- files you've marked as "I want these changes in the next commit."</li><li><strong>Repository</strong> -- the stored history of past commits.</li></ol>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VI.21.3 &para;3</span> A typical change flow:</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">VI.21.3 &para;4</span><ul><li>You edit a file. It lives only in the working tree.</li><li><code>git add thefile.swift</code> moves that change from the working tree into the staging area.</li><li><code>git commit</code> moves the staged changes into the repository as a single named snapshot.</li></ul>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VI.21.3 &para;5</span> You can stage many files at once and commit them together. Each commit is a whole-project snapshot: everything tracked, at a moment in time.</p>
   <hr>
-  <h2>Cloning a Build-Along Repo (Xcode 26 Step-by-Step)</h2>
-  <p>Every Build-Along chapter in this book assumes the reader can pull the matching repo down from GitHub and open it in Xcode. This section is the step-by-step for doing exactly that, using Xcode 26's built-in Clone Git Repository flow. No Terminal required.</p>
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VI.21.4</span>&nbsp;&nbsp;Cloning a Build-Along Repo (Xcode 26 Step-by-Step)</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VI.21.4 &para;1</span> Every Build-Along chapter in this book assumes the reader can pull the matching repo down from GitHub and open it in Xcode. This section is the step-by-step for doing exactly that, using Xcode 26's built-in Clone Git Repository flow. No Terminal required.</p>
 
-  <h3>Opening Xcode for the First Time</h3>
-  <p>Launch Xcode from the Applications folder, the Dock, Launchpad, or Spotlight (Cmd-Space, type "Xcode," press Return). The first thing Xcode shows is the Welcome screen.</p>
-  <p>If Xcode is already open and the Welcome screen has been dismissed, bring it back with <strong>Window &rarr; Welcome to Xcode</strong> in the menu bar, or the keyboard shortcut <strong>Cmd-Shift-1</strong>.</p>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VI.21.4.1</span>&nbsp;&nbsp;Opening Xcode for the First Time</h3>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VI.21.4.1 &para;1</span> Launch Xcode from the Applications folder, the Dock, Launchpad, or Spotlight (Cmd-Space, type "Xcode," press Return). The first thing Xcode shows is the Welcome screen.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VI.21.4.1 &para;2</span> If Xcode is already open and the Welcome screen has been dismissed, bring it back with <strong>Window &rarr; Welcome to Xcode</strong> in the menu bar, or the keyboard shortcut <strong>Cmd-Shift-1</strong>.</p>
 
-  <h3>The Welcome Screen</h3>
-  <p>The Welcome screen has three primary actions on the left and a list of recent projects on the right.</p>
-  <p>The three actions:</p>
-  <ul>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VI.21.4.2</span>&nbsp;&nbsp;The Welcome Screen</h3>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VI.21.4.2 &para;1</span> The Welcome screen has three primary actions on the left and a list of recent projects on the right.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VI.21.4.2 &para;2</span> The three actions:</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">VI.21.4.2 &para;3</span><ul>
     <li><strong>Create New Project</strong> &mdash; starts from one of Xcode's templates (App, Framework, Multiplatform App, etc.).</li>
     <li><strong>Clone Git Repository</strong> &mdash; pulls an existing project from a Git host (GitHub, GitLab, Bitbucket, a self-hosted server) using its repository URL.</li>
     <li><strong>Open Existing Project</strong> &mdash; opens a project that's already on disk.</li>
   </ul>
-  <p>For a Build-Along chapter, the second option is the entry point.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VI.21.4.2 &para;4</span> For a Build-Along chapter, the second option is the entry point.</p>
 
-  <h3>Clone Git Repository &mdash; Step by Step</h3>
-  <ol class="body-list">
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VI.21.4.3</span>&nbsp;&nbsp;Clone Git Repository &mdash; Step by Step</h3>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">VI.21.4.3 &para;1</span><ol class="body-list">
     <li><strong>Click "Clone Git Repository"</strong> on the Welcome screen. A dialog appears asking for the repository URL.</li>
     <li><strong>Paste the repo URL</strong> into the field. Every Build-Along chapter prints the URL near the top of the chapter, in the form <code>https://github.com/fluhartyml/{ProjectName}.git</code>. The <code>.git</code> suffix is optional &mdash; Xcode accepts the URL with or without it.</li>
     <li><strong>Click "Clone."</strong> Xcode shows a save panel asking where the project should land on disk.</li>
     <li><strong>Pick a destination folder.</strong> The default is the home folder. Many readers keep a top-level <code>~/Developer/</code> folder for cloned projects; that's the convention this book uses, but the location doesn't affect the build &mdash; pick whatever stays organized.</li>
     <li><strong>Click "Clone"</strong> in the save panel. Xcode reaches out to GitHub, downloads the repo, and opens the project in a new window. The first clone of any given repo takes a few seconds; subsequent clones of the same repo are nearly instant because Git reuses cached objects.</li>
   </ol>
-  <p>Public repos clone without authentication. Private repos prompt for GitHub credentials the first time &mdash; Xcode stores the token in the system keychain for future clones.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VI.21.4.3 &para;2</span> Public repos clone without authentication. Private repos prompt for GitHub credentials the first time &mdash; Xcode stores the token in the system keychain for future clones.</p>
 
-  <h3>Where the Project Lands</h3>
-  <p>The cloned repo lands as a folder inside the chosen destination. The folder name matches the repo name from the URL. Inside, the structure is whatever the project author committed: an <code>.xcodeproj</code> bundle, a <code>README.md</code>, a <code>.gitignore</code>, source folders, a <code>.git</code> directory (hidden in Finder; visible to <code>ls -la</code> in Terminal) containing the full history.</p>
-  <p>Xcode opens the <code>.xcodeproj</code> automatically when the clone finishes. The folder on disk is the working tree from this chapter's mental model; the <code>.git</code> subdirectory is the repository.</p>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VI.21.4.4</span>&nbsp;&nbsp;Where the Project Lands</h3>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VI.21.4.4 &para;1</span> The cloned repo lands as a folder inside the chosen destination. The folder name matches the repo name from the URL. Inside, the structure is whatever the project author committed: an <code>.xcodeproj</code> bundle, a <code>README.md</code>, a <code>.gitignore</code>, source folders, a <code>.git</code> directory (hidden in Finder; visible to <code>ls -la</code> in Terminal) containing the full history.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VI.21.4.4 &para;2</span> Xcode opens the <code>.xcodeproj</code> automatically when the clone finishes. The folder on disk is the working tree from this chapter's mental model; the <code>.git</code> subdirectory is the repository.</p>
 
-  <h3>Building and Running the Cloned App</h3>
-  <ol class="body-list">
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VI.21.4.5</span>&nbsp;&nbsp;Building and Running the Cloned App</h3>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">VI.21.4.5 &para;1</span><ol class="body-list">
     <li><strong>Wait for Xcode to finish indexing.</strong> The activity indicator in the toolbar shows "Indexing&hellip;" briefly. Code completion and Quick Help don't fully work until indexing finishes &mdash; a small project takes a few seconds, a larger one a minute or two.</li>
     <li><strong>Pick a run destination</strong> from the scheme menu in the toolbar (the field just to the right of the Run / Stop buttons). For most Build-Along apps this is an iPhone or iPad simulator that matches the chapter's target device.</li>
     <li><strong>Press Cmd-R</strong> (or click the Run button). Xcode builds the project and launches it in the chosen simulator. The first build is slower than later builds because Xcode is compiling from scratch and caching artifacts in <code>~/Library/Developer/Xcode/DerivedData/</code>.</li>
     <li><strong>Read along.</strong> The Build-Along chapter walks through the source while the running app demonstrates the behavior. Stopping (Cmd-Period) and starting (Cmd-R) is cheap once the first build is cached.</li>
   </ol>
 
-  <h3>Updating a Cloned Repo Later</h3>
-  <p>When the upstream repo on GitHub gains new commits and the reader wants to pull them down into the local clone, the path inside Xcode is <strong>Integrate &rarr; Pull&hellip;</strong> in the menu bar. Xcode shows the changes and brings them in. The Terminal equivalent is <code>git pull</code> from the project directory.</p>
-  <p>For Build-Along chapters tied to specific versions of the source, the chapter notes a tag (for example <code>v1.0.0</code> or <code>book-snapshot-2026-05-10</code>). Checking out a specific tag is covered in the Tags and Releases section later in this chapter.</p>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VI.21.4.6</span>&nbsp;&nbsp;Updating a Cloned Repo Later</h3>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VI.21.4.6 &para;1</span> When the upstream repo on GitHub gains new commits and the reader wants to pull them down into the local clone, the path inside Xcode is <strong>Integrate &rarr; Pull&hellip;</strong> in the menu bar. Xcode shows the changes and brings them in. The Terminal equivalent is <code>git pull</code> from the project directory.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VI.21.4.6 &para;2</span> For Build-Along chapters tied to specific versions of the source, the chapter notes a tag (for example <code>v1.0.0</code> or <code>book-snapshot-2026-05-10</code>). Checking out a specific tag is covered in the Tags and Releases section later in this chapter.</p>
   <hr>
-  <h2>Creating a Repository</h2>
-  <p>From the project directory in Terminal:</p>
-  <pre><code class="lang-bash">cd ~/Developer/MyApp
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VI.21.5</span>&nbsp;&nbsp;Creating a Repository</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VI.21.5 &para;1</span> From the project directory in Terminal:</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">VI.21.5 &para;2</span><pre><code class="lang-bash">cd ~/Developer/MyApp
 git init
 git add .
 git commit -m "Initial commit"</code></pre>
-  <p>What just happened:</p>
-  <ul><li><code>git init</code> created a hidden <code>.git/</code> folder, which is the repository.</li><li><code>git add .</code> staged every file in the current directory.</li><li><code>git commit</code> took that snapshot with the message "Initial commit."</li></ul>
-  <p>Xcode also has a "Create Git repository" checkbox when you make a new project. Either path gets you to the same place.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VI.21.5 &para;3</span> What just happened:</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">VI.21.5 &para;4</span><ul><li><code>git init</code> created a hidden <code>.git/</code> folder, which is the repository.</li><li><code>git add .</code> staged every file in the current directory.</li><li><code>git commit</code> took that snapshot with the message "Initial commit."</li></ul>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VI.21.5 &para;5</span> Xcode also has a "Create Git repository" checkbox when you make a new project. Either path gets you to the same place.</p>
   <hr>
-  <h2>.gitignore for Xcode Projects</h2>
-  <p>A <code>.gitignore</code> file tells Git which paths to never track. Xcode generates a lot of user-specific junk that doesn't belong in shared history. A good starting <code>.gitignore</code>:</p>
-  <pre><code class="lang-"># macOS
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VI.21.6</span>&nbsp;&nbsp;.gitignore for Xcode Projects</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VI.21.6 &para;1</span> A <code>.gitignore</code> file tells Git which paths to never track. Xcode generates a lot of user-specific junk that doesn't belong in shared history. A good starting <code>.gitignore</code>:</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">VI.21.6 &para;2</span><pre><code class="lang-"># macOS
 .DS_Store
 .AppleDouble
 .LSOverride
@@ -129,11 +129,11 @@ Carthage/Build/
 # Secrets
 *.env
 *.env.local</code></pre>
-  <p>Drop that at the repo root <strong>before</strong> the first <code>git add .</code>. Files already tracked aren't automatically untracked by adding them here; that needs <code>git rm --cached</code>.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VI.21.6 &para;3</span> Drop that at the repo root <strong>before</strong> the first <code>git add .</code>. Files already tracked aren't automatically untracked by adding them here; that needs <code>git rm --cached</code>.</p>
   <hr>
-  <h2>Making Commits as You Work</h2>
-  <p>The everyday cycle:</p>
-  <pre><code class="lang-bash"># See what changed
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VI.21.7</span>&nbsp;&nbsp;Making Commits as You Work</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VI.21.7 &para;1</span> The everyday cycle:</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">VI.21.7 &para;2</span><pre><code class="lang-bash"># See what changed
 git status
 
 # Stage specific files
@@ -144,12 +144,12 @@ git add -u
 
 # Commit
 git commit -m "Wire up Home tab"</code></pre>
-  <h3>Good Commit Messages</h3>
-  <ul><li>Imperative mood: "Add sidebar toggle," not "Added sidebar toggle" or "Adds sidebar toggle."</li><li>Short subject (under ~60 chars).</li><li>Optional body explaining <strong>why</strong>, not what -- the diff shows what.</li><li>One logical change per commit. Don't mix a bug fix with a feature; make two commits.</li></ul>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VI.21.7.1</span>&nbsp;&nbsp;Good Commit Messages</h3>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">VI.21.7.1 &para;1</span><ul><li>Imperative mood: "Add sidebar toggle," not "Added sidebar toggle" or "Adds sidebar toggle."</li><li>Short subject (under ~60 chars).</li><li>Optional body explaining <strong>why</strong>, not what -- the diff shows what.</li><li>One logical change per commit. Don't mix a bug fix with a feature; make two commits.</li></ul>
   <hr>
-  <h2>Branches</h2>
-  <p>A branch is a named line of history. The default name is <code>main</code> (older repos use <code>master</code>).</p>
-  <pre><code class="lang-bash"># Create and switch to a new branch
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VI.21.8</span>&nbsp;&nbsp;Branches</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VI.21.8 &para;1</span> A branch is a named line of history. The default name is <code>main</code> (older repos use <code>master</code>).</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">VI.21.8 &para;2</span><pre><code class="lang-bash"># Create and switch to a new branch
 git checkout -b feature/import-csv
 
 # Do work, commit, etc.
@@ -162,58 +162,58 @@ git merge feature/import-csv
 
 # Delete the merged branch
 git branch -d feature/import-csv</code></pre>
-  <p>A feature in progress shouldn't sit in <code>main</code> until it's done. Branches keep <code>main</code> shippable while experiments live off to the side.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VI.21.8 &para;3</span> A feature in progress shouldn't sit in <code>main</code> until it's done. Branches keep <code>main</code> shippable while experiments live off to the side.</p>
   <hr>
-  <h2>GitHub -- The Remote</h2>
-  <p>GitHub is where your local repo lives on the internet. "Remote" is Git's word for "a copy of this repo somewhere else." The default remote name is <code>origin</code>.</p>
-  <h3>Create and Link a Remote Repo</h3>
-  <p>On GitHub, create an empty repository (no README, no .gitignore -- let the local one be the source of truth). Copy the HTTPS or SSH URL.</p>
-  <pre><code class="lang-bash">git remote add origin https://github.com/yourname/MyApp.git
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VI.21.9</span>&nbsp;&nbsp;GitHub -- The Remote</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VI.21.9 &para;1</span> GitHub is where your local repo lives on the internet. "Remote" is Git's word for "a copy of this repo somewhere else." The default remote name is <code>origin</code>.</p>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VI.21.9.1</span>&nbsp;&nbsp;Create and Link a Remote Repo</h3>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VI.21.9.1 &para;1</span> On GitHub, create an empty repository (no README, no .gitignore -- let the local one be the source of truth). Copy the HTTPS or SSH URL.</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">VI.21.9.1 &para;2</span><pre><code class="lang-bash">git remote add origin https://github.com/yourname/MyApp.git
 git branch -M main
 git push -u origin main</code></pre>
-  <ul><li><code>git remote add</code> registers the URL under the name <code>origin</code>.</li><li><code>git branch -M main</code> renames the current branch to <code>main</code> (in case your local default is different).</li><li><code>git push -u origin main</code> uploads the <code>main</code> branch and remembers the association (<code>-u</code> = "upstream").</li></ul>
-  <h3>Everyday Push / Pull</h3>
-  <pre><code class="lang-bash"># Grab the latest from GitHub (when someone else committed)
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">VI.21.9.1 &para;3</span><ul><li><code>git remote add</code> registers the URL under the name <code>origin</code>.</li><li><code>git branch -M main</code> renames the current branch to <code>main</code> (in case your local default is different).</li><li><code>git push -u origin main</code> uploads the <code>main</code> branch and remembers the association (<code>-u</code> = "upstream").</li></ul>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VI.21.9.2</span>&nbsp;&nbsp;Everyday Push / Pull</h3>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">VI.21.9.2 &para;1</span><pre><code class="lang-bash"># Grab the latest from GitHub (when someone else committed)
 git pull
 
 # Push your commits
 git push</code></pre>
   <hr>
-  <h2>Pull Requests</h2>
-  <p>A pull request (PR) is GitHub's way of saying "I'd like my branch merged into yours; here's the diff, please review."</p>
-  <p>Typical flow:</p>
-  <ol class="body-list"><li>Create a branch locally and push it to GitHub.</li></ol>
-  <p>``<code>bash git checkout -b feature/export-pdf # ... commits ... git push -u origin feature/export-pdf </code>``</p>
-  <ol class="body-list"><li>On GitHub, click "Compare &amp; pull request."</li><li>Fill in the title and description. Link related issues.</li><li>Reviewers comment. You push follow-up commits to the same branch; the PR updates automatically.</li><li>Merge when approved.</li></ol>
-  <p>For a solo-developer repo, PRs are still useful: they force you to look at the full diff before merging, which catches things you wouldn't see in individual commits.</p>
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VI.21.10</span>&nbsp;&nbsp;Pull Requests</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VI.21.10 &para;1</span> A pull request (PR) is GitHub's way of saying "I'd like my branch merged into yours; here's the diff, please review."</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VI.21.10 &para;2</span> Typical flow:</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">VI.21.10 &para;3</span><ol class="body-list"><li>Create a branch locally and push it to GitHub.</li></ol>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VI.21.10 &para;4</span> ``<code>bash git checkout -b feature/export-pdf # ... commits ... git push -u origin feature/export-pdf </code>``</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">VI.21.10 &para;5</span><ol class="body-list"><li>On GitHub, click "Compare &amp; pull request."</li><li>Fill in the title and description. Link related issues.</li><li>Reviewers comment. You push follow-up commits to the same branch; the PR updates automatically.</li><li>Merge when approved.</li></ol>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VI.21.10 &para;6</span> For a solo-developer repo, PRs are still useful: they force you to look at the full diff before merging, which catches things you wouldn't see in individual commits.</p>
   <hr>
-  <h2>Tags and Releases</h2>
-  <p>Tags are named pointers to a specific commit. You use them to mark releases.</p>
-  <pre><code class="lang-bash">git tag v1.0.0
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VI.21.11</span>&nbsp;&nbsp;Tags and Releases</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VI.21.11 &para;1</span> Tags are named pointers to a specific commit. You use them to mark releases.</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">VI.21.11 &para;2</span><pre><code class="lang-bash">git tag v1.0.0
 git push origin v1.0.0</code></pre>
-  <p>On GitHub, navigate to Releases and cut a release from the tag. You can attach a built <code>.ipa</code> or <code>.app</code> binary, write release notes, and mark it prerelease or production.</p>
-  <p>Version tags usually follow <strong>semantic versioning</strong>: <code>MAJOR.MINOR.PATCH</code>. Bump MAJOR for breaking changes, MINOR for new features, PATCH for bug fixes.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VI.21.11 &para;3</span> On GitHub, navigate to Releases and cut a release from the tag. You can attach a built <code>.ipa</code> or <code>.app</code> binary, write release notes, and mark it prerelease or production.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VI.21.11 &para;4</span> Version tags usually follow <strong>semantic versioning</strong>: <code>MAJOR.MINOR.PATCH</code>. Bump MAJOR for breaking changes, MINOR for new features, PATCH for bug fixes.</p>
   <hr>
-  <h2>Undoing Things</h2>
-  <h3>Undo Uncommitted Changes to a File</h3>
-  <pre><code class="lang-bash">git checkout -- Sources/ContentView.swift</code></pre>
-  <p>Resets that file to whatever was last committed. Be careful -- this loses your working changes.</p>
-  <h3>Undo a Commit You Haven't Pushed</h3>
-  <pre><code class="lang-bash">git reset --soft HEAD~1</code></pre>
-  <p>Moves <code>HEAD</code> back one commit but keeps the changes staged. You can fix them and recommit.</p>
-  <h3>Undo a Pushed Commit</h3>
-  <pre><code class="lang-bash">git revert &lt;commit-sha&gt;</code></pre>
-  <p>Creates a new commit that undoes the old one. Safe because history stays linear; nobody has to rebase their work.</p>
-  <p>Never use <code>git push --force</code> on a shared branch. It rewrites history and breaks every other clone of that branch.</p>
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VI.21.12</span>&nbsp;&nbsp;Undoing Things</h2>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VI.21.12.1</span>&nbsp;&nbsp;Undo Uncommitted Changes to a File</h3>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">VI.21.12.1 &para;1</span><pre><code class="lang-bash">git checkout -- Sources/ContentView.swift</code></pre>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VI.21.12.1 &para;2</span> Resets that file to whatever was last committed. Be careful -- this loses your working changes.</p>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VI.21.12.2</span>&nbsp;&nbsp;Undo a Commit You Haven't Pushed</h3>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">VI.21.12.2 &para;1</span><pre><code class="lang-bash">git reset --soft HEAD~1</code></pre>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VI.21.12.2 &para;2</span> Moves <code>HEAD</code> back one commit but keeps the changes staged. You can fix them and recommit.</p>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VI.21.12.3</span>&nbsp;&nbsp;Undo a Pushed Commit</h3>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">VI.21.12.3 &para;1</span><pre><code class="lang-bash">git revert &lt;commit-sha&gt;</code></pre>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VI.21.12.3 &para;2</span> Creates a new commit that undoes the old one. Safe because history stays linear; nobody has to rebase their work.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VI.21.12.3 &para;3</span> Never use <code>git push --force</code> on a shared branch. It rewrites history and breaks every other clone of that branch.</p>
   <hr>
-  <h2>The Xcode Source Control Integration</h2>
-  <p>Xcode has a Source Control menu that does the common Git operations through GUI. You can:</p>
-  <ul><li>View history per file with <strong>Source Control &gt; History</strong>.</li><li>Compare working changes against the last commit via the Changes tab in the navigator.</li><li>Commit from <strong>Source Control &gt; Commit</strong> (<code>⌥⌘C</code>).</li><li>Push and pull from <strong>Source Control &gt; Push / Pull</strong>.</li></ul>
-  <p>The GUI is fine for day-to-day work. Drop to Terminal for anything unusual -- interactive rebases, surgical resets, tag management. The CLI is more powerful; the GUI is faster for the common case.</p>
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VI.21.13</span>&nbsp;&nbsp;The Xcode Source Control Integration</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VI.21.13 &para;1</span> Xcode has a Source Control menu that does the common Git operations through GUI. You can:</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">VI.21.13 &para;2</span><ul><li>View history per file with <strong>Source Control &gt; History</strong>.</li><li>Compare working changes against the last commit via the Changes tab in the navigator.</li><li>Commit from <strong>Source Control &gt; Commit</strong> (<code>⌥⌘C</code>).</li><li>Push and pull from <strong>Source Control &gt; Push / Pull</strong>.</li></ul>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VI.21.13 &para;3</span> The GUI is fine for day-to-day work. Drop to Terminal for anything unusual -- interactive rebases, surgical resets, tag management. The CLI is more powerful; the GUI is faster for the common case.</p>
   <hr>
-  <h2>Chapter Mini-Example -- First Push to GitHub</h2>
-  <p>Walk through exactly what to type the first time you put a new Xcode project on GitHub.</p>
-  <pre><code class="lang-bash"># 1. Go to the project
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VI.21.14</span>&nbsp;&nbsp;Chapter Mini-Example -- First Push to GitHub</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VI.21.14 &para;1</span> Walk through exactly what to type the first time you put a new Xcode project on GitHub.</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">VI.21.14 &para;2</span><pre><code class="lang-bash"># 1. Go to the project
 cd ~/Developer/MyApp
 
 # 2. (If Xcode didn't already) initialize Git
@@ -236,14 +236,14 @@ git branch -M main
 
 # 9. First push
 git push -u origin main</code></pre>
-  <p>Refresh the GitHub repo page. Your code is up. Every future commit is one <code>git push</code> away from being backed up.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VI.21.14 &para;3</span> Refresh the GitHub repo page. Your code is up. Every future commit is one <code>git push</code> away from being backed up.</p>
   <hr>
-  <h2>What Book 22 Does</h2>
-  <p>You've got your code under version control and safely stored. Book 22 turns the lens outward: how to integrate an AI chatbot into your own app, using the Anthropic Claude API from Swift.</p>
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VI.21.15</span>&nbsp;&nbsp;What Book 22 Does</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VI.21.15 &para;1</span> You've got your code under version control and safely stored. Book 22 turns the lens outward: how to integrate an AI chatbot into your own app, using the Anthropic Claude API from Swift.</p>
   <hr>
-  <h2>Further Reading &mdash; WWDC Sessions</h2>
-  <p>This book is a passive resource. When you want deeper coverage of the Xcode-side source-control flow and the automation that surrounds it, the WWDC sessions below are Apple's source material.</p>
-  <ul>
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VI.21.16</span>&nbsp;&nbsp;Further Reading &mdash; WWDC Sessions</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VI.21.16 &para;1</span> This book is a passive resource. When you want deeper coverage of the Xcode-side source-control flow and the automation that surrounds it, the WWDC sessions below are Apple's source material.</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">VI.21.16 &para;2</span><ul>
     <li>WWDC25 / 247, <em>What's new in Xcode 26</em> &mdash; <a href="https://developer.apple.com/videos/play/wwdc2025/247/">developer.apple.com/videos/play/wwdc2025/247/</a>. Source-control panel updates, build-system + checkout flow improvements.</li>
     <li>WWDC25 / 324, <em>Automate your development process with the App Store Connect API</em> &mdash; <a href="https://developer.apple.com/videos/play/wwdc2025/324/">developer.apple.com/videos/play/wwdc2025/324/</a>. Webhooks, Build Upload API, and the Feedback API that turn GitHub Actions into a real release pipeline.</li>
   </ul>

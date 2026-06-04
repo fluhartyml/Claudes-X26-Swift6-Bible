@@ -9,21 +9,21 @@
 
 <div class="content">
 
-  <h1>Book 19: Building Custom Views &amp; Modifiers</h1>
+  <h1><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">V.19</span>&nbsp;&nbsp;Book 19: Building Custom Views &amp; Modifiers</h1>
   <p><strong>Claude's Xcode 26 Swift Bible</strong> -- Part V: Advanced Techniques</p>
   <hr>
-  <h2>Live Reference: Lexicon Sheet + CryoTransport Controls + Tally Matrix Squares + BodyReadings card helper</h2>
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">V.19.1</span>&nbsp;&nbsp;Live Reference: Lexicon Sheet + CryoTransport Controls + Tally Matrix Squares + BodyReadings card helper</h2>
   <div class="scope-note">Four concrete custom-view examples ship in the production source. <strong><code>LexiconSheet</code> + <code>IdentifierTaggedSourceView</code></strong> in <strong>Claudes X26 Swift6 Bible</strong> (<a href="https://github.com/fluhartyml/Claudes-X26-Swift6-Bible">github.com/fluhartyml/Claudes-X26-Swift6-Bible</a>) &mdash; the popup that appears on tap of a tinted Swift identifier in a source-mirror code block. <strong><code>CryoTransportControls</code></strong> in <strong>CryoTunes Player</strong> (<a href="https://github.com/fluhartyml/CryoTunesPlayer">github.com/fluhartyml/CryoTunesPlayer</a>) &mdash; a three-row composed view: transport row (play/pause/skip/stop), shuffle/repeat row, like/dislike/share row. A textbook example of decomposing a complex multi-button cluster into one named custom view. <strong><code>TallyMatrix1x3</code> + <code>TallyMatrix3x3</code> + <code>SquareView</code></strong> in <strong>Tally Matrix Clock</strong> (<a href="https://github.com/fluhartyml/Tally-Matrix-Clock">github.com/fluhartyml/Tally-Matrix-Clock</a>) &mdash; three custom views that compose: <code>SquareView</code> is a single lit/unlit square primitive; the two matrix views compose grids of squares for the tens and ones digits. See Source Tour 19 for the architectural walkthrough. <strong>BodyReadings</strong> shows the generic-helper-function flavor of view extraction: a private <code>readingCard(label:content:)</code> function annotated <code>@ViewBuilder</code> wraps the three vitals cards (heart rate, steps, live motion) in a unified card layout. Its <code>ContentView.swift</code> shows the difference between extracting a <code>View</code> struct and extracting a generic helper function with <code>@ViewBuilder</code> closure content. Source: <a href="https://github.com/fluhartyml/Body-Readings">github.com/fluhartyml/Body-Readings</a>.</div>
   <hr>
-  <h2>Liquid Glass for Custom Views &mdash; <code>glassEffect</code> and <code>GlassEffectContainer</code></h2>
-  <p>When a custom view needs to sit alongside the system's own Liquid Glass surfaces and feel like part of the same family, X26 gives you two SwiftUI tools<sup>[<a href="#cv1-fn">cv1</a>]</sup>:</p>
-  <ul>
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">V.19.2</span>&nbsp;&nbsp;Liquid Glass for Custom Views &mdash; <code>glassEffect</code> and <code>GlassEffectContainer</code></h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">V.19.2 &para;1</span> When a custom view needs to sit alongside the system's own Liquid Glass surfaces and feel like part of the same family, X26 gives you two SwiftUI tools<sup>[<a href="#cv1-fn">cv1</a>]</sup>:</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">V.19.2 &para;2</span><ul>
     <li><code>glassEffect(_:in:)</code> &mdash; paints the Liquid Glass material onto a single custom view</li>
     <li><code>GlassEffectContainer</code> &mdash; wraps a cluster of Liquid Glass views so they share one render pass and morph cleanly into each other during animation</li>
   </ul>
-  <p>The headline rule on <code>glassEffect(_:in:)</code> is restraint &mdash; Apple warns that <em>"overusing this material in multiple custom controls can provide a subpar user experience by distracting from that content."</em><sup>[<a href="#cv1-fn">cv1</a>]</sup> Pick the elements where Liquid Glass earns its weight: a primary call-to-action button, a focus-state highlight on a custom slider, the lone floating affordance on a canvas. Don't drop it into every card, row, or chrome surface; the material's job is to point the eye at content, and that job breaks the moment everything on screen is wearing it.</p>
-  <h3>Basic glassEffect</h3>
-  <pre><code class="lang-swift">struct PrimaryActionButton: View {
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">V.19.2 &para;3</span> The headline rule on <code>glassEffect(_:in:)</code> is restraint &mdash; Apple warns that <em>"overusing this material in multiple custom controls can provide a subpar user experience by distracting from that content."</em><sup>[<a href="#cv1-fn">cv1</a>]</sup> Pick the elements where Liquid Glass earns its weight: a primary call-to-action button, a focus-state highlight on a custom slider, the lone floating affordance on a canvas. Don't drop it into every card, row, or chrome surface; the material's job is to point the eye at content, and that job breaks the moment everything on screen is wearing it.</p>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">V.19.2.1</span>&nbsp;&nbsp;Basic glassEffect</h3>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">V.19.2.1 &para;1</span><pre><code class="lang-swift">struct PrimaryActionButton: View {
     let title: String
     let action: () -&gt; Void
 
@@ -37,10 +37,10 @@
         .glassEffect(.regular, in: .capsule)
     }
 }</code></pre>
-  <p>First argument: which flavor of the material you want. Second argument: the shape the material is poured into &mdash; a capsule for a pill button, a rounded rectangle for a card, and so on. From there the button gets the full optical treatment &mdash; refraction at the edges, a knob-style morph when focus lands on it, the scroll edge handoff &mdash; without you writing any of those animations yourself.</p>
-  <h3>GlassEffectContainer for Performance and Morphing</h3>
-  <p>When you have multiple custom Liquid Glass elements that need to morph between each other (think: a row of custom toggles, or a custom toolbar where elements expand and collapse), wrap them in a <code>GlassEffectContainer</code>:</p>
-  <pre><code class="lang-swift">GlassEffectContainer {
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">V.19.2.1 &para;2</span> First argument: which flavor of the material you want. Second argument: the shape the material is poured into &mdash; a capsule for a pill button, a rounded rectangle for a card, and so on. From there the button gets the full optical treatment &mdash; refraction at the edges, a knob-style morph when focus lands on it, the scroll edge handoff &mdash; without you writing any of those animations yourself.</p>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">V.19.2.2</span>&nbsp;&nbsp;GlassEffectContainer for Performance and Morphing</h3>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">V.19.2.2 &para;1</span> When you have multiple custom Liquid Glass elements that need to morph between each other (think: a row of custom toggles, or a custom toolbar where elements expand and collapse), wrap them in a <code>GlassEffectContainer</code>:</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">V.19.2.2 &para;2</span><pre><code class="lang-swift">GlassEffectContainer {
     Button("Edit") { startEditing() }
         .glassEffect(.regular, in: .capsule)
     Button("Done") { finishEditing() }
@@ -48,18 +48,18 @@
     Button("Cancel") { cancel() }
         .glassEffect(.regular, in: .capsule)
 }</code></pre>
-  <p>The container is doing two things at once. It collapses what would otherwise be N independent render passes into a single pass &mdash; cheaper for the GPU, especially on older hardware. And it owns the morph between siblings, so when one button expands and another collapses, the glass shape stretches between them instead of cross-fading. Skip the container and each modifier is on its own; the animation between buttons looks staccato instead of fluid.</p>
-  <h3>tvOS Pairs Liquid Glass with Focus</h3>
-  <p>If your app reaches Apple TV, add this to your checklist. On tvOS, a stock button or control switches to its Liquid Glass look when the remote's focus lands on it &mdash; the focus state is the trigger. To get the same behavior on your custom controls, opt into the focus engine through <code>focusable(_:)</code> and <code>isFocused</code>; the Liquid Glass appearance is keyed to those APIs and shows up on its own. Hardware floor: Apple TV 4K (2nd generation) and later render the effects. Apple TV HD keeps its pre-X26 styling.</p>
-  <p id="cv1-fn" style="font-size: 13pt; color: var(--dim);">[cv1] Apple Developer Documentation, <em>Adopting Liquid Glass</em>. <a href="https://developer.apple.com/documentation/TechnologyOverviews/adopting-liquid-glass">developer.apple.com/documentation/TechnologyOverviews/adopting-liquid-glass</a> &mdash; verified 2026-04-29.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">V.19.2.2 &para;3</span> The container is doing two things at once. It collapses what would otherwise be N independent render passes into a single pass &mdash; cheaper for the GPU, especially on older hardware. And it owns the morph between siblings, so when one button expands and another collapses, the glass shape stretches between them instead of cross-fading. Skip the container and each modifier is on its own; the animation between buttons looks staccato instead of fluid.</p>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">V.19.2.3</span>&nbsp;&nbsp;tvOS Pairs Liquid Glass with Focus</h3>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">V.19.2.3 &para;1</span> If your app reaches Apple TV, add this to your checklist. On tvOS, a stock button or control switches to its Liquid Glass look when the remote's focus lands on it &mdash; the focus state is the trigger. To get the same behavior on your custom controls, opt into the focus engine through <code>focusable(_:)</code> and <code>isFocused</code>; the Liquid Glass appearance is keyed to those APIs and shows up on its own. Hardware floor: Apple TV 4K (2nd generation) and later render the effects. Apple TV HD keeps its pre-X26 styling.</p>
+  <p id="cv1-fn" style="font-size: 13pt; color: var(--dim);"><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">V.19.2.3 &para;2</span> [cv1] Apple Developer Documentation, <em>Adopting Liquid Glass</em>. <a href="https://developer.apple.com/documentation/TechnologyOverviews/adopting-liquid-glass">developer.apple.com/documentation/TechnologyOverviews/adopting-liquid-glass</a> &mdash; verified 2026-04-29.</p>
   <hr>
-  <h2>What You'll Learn</h2>
-  <p>By the end of this chapter you can:</p>
-  <ul><li>Extract reusable SwiftUI views from copy-pasted snippets.</li><li>Write custom <code>ViewModifier</code> types and apply them with <code>.modifier</code> or a cleaner <code>.myStyle()</code> extension.</li><li>Use <code>@Environment</code> values to pass data deep into a view tree without threading it through every level.</li><li>Read child-view sizes and positions with <code>GeometryReader</code>.</li><li>Share data from child to parent with <code>PreferenceKey</code>.</li><li>Animate transitions between layouts with <code>.matchedGeometryEffect</code>.</li></ul>
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">V.19.3</span>&nbsp;&nbsp;What You'll Learn</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">V.19.3 &para;1</span> By the end of this chapter you can:</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">V.19.3 &para;2</span><ul><li>Extract reusable SwiftUI views from copy-pasted snippets.</li><li>Write custom <code>ViewModifier</code> types and apply them with <code>.modifier</code> or a cleaner <code>.myStyle()</code> extension.</li><li>Use <code>@Environment</code> values to pass data deep into a view tree without threading it through every level.</li><li>Read child-view sizes and positions with <code>GeometryReader</code>.</li><li>Share data from child to parent with <code>PreferenceKey</code>.</li><li>Animate transitions between layouts with <code>.matchedGeometryEffect</code>.</li></ul>
   <hr>
-  <h2>Extracting a Custom View</h2>
-  <p>The first step past "all code in one big <code>ContentView</code>" is pulling repeated shapes into their own <code>View</code> types.</p>
-  <pre><code class="lang-swift">struct AvatarRow: View {
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">V.19.4</span>&nbsp;&nbsp;Extracting a Custom View</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">V.19.4 &para;1</span> The first step past "all code in one big <code>ContentView</code>" is pulling repeated shapes into their own <code>View</code> types.</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">V.19.4 &para;2</span><pre><code class="lang-swift">struct AvatarRow: View {
     let name: String
     let imageName: String
 
@@ -76,17 +76,17 @@
         .padding()
     }
 }</code></pre>
-  <p>Used anywhere:</p>
-  <pre><code class="lang-swift">VStack {
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">V.19.4 &para;3</span> Used anywhere:</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">V.19.4 &para;4</span><pre><code class="lang-swift">VStack {
     AvatarRow(name: "Ada",    imageName: "person.circle")
     AvatarRow(name: "Max",    imageName: "person.circle.fill")
     AvatarRow(name: "Claude", imageName: "sparkles")
 }</code></pre>
-  <p><strong>Rule</strong>: the third time you write the same layout, turn it into a view.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">V.19.4 &para;5</span> <strong>Rule</strong>: the third time you write the same layout, turn it into a view.</p>
   <hr>
-  <h2>ViewModifier -- Reusable Styling</h2>
-  <p>When the thing you keep repeating is a <strong>stack of modifiers</strong>, not a layout, reach for <code>ViewModifier</code> instead of a new view.</p>
-  <pre><code class="lang-swift">struct CardStyle: ViewModifier {
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">V.19.5</span>&nbsp;&nbsp;ViewModifier -- Reusable Styling</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">V.19.5 &para;1</span> When the thing you keep repeating is a <strong>stack of modifiers</strong>, not a layout, reach for <code>ViewModifier</code> instead of a new view.</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">V.19.5 &para;2</span><pre><code class="lang-swift">struct CardStyle: ViewModifier {
     func body(content: Content) -&gt; some View {
         content
             .padding()
@@ -94,17 +94,17 @@
             .shadow(color: .black.opacity(0.12), radius: 6, y: 2)
     }
 }</code></pre>
-  <p>Apply it with <code>.modifier(CardStyle())</code>, or -- for a cleaner call site -- add a <code>View</code> extension:</p>
-  <pre><code class="lang-swift">extension View {
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">V.19.5 &para;3</span> Apply it with <code>.modifier(CardStyle())</code>, or -- for a cleaner call site -- add a <code>View</code> extension:</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">V.19.5 &para;4</span><pre><code class="lang-swift">extension View {
     func card() -&gt; some View { modifier(CardStyle()) }
 }
 
 // Usage
 Text("Hello")
     .card()</code></pre>
-  <p>Custom modifiers centralize a styling decision. A dozen views across the app, one definition, any future tweak happens in one place.</p>
-  <h3>Modifiers That Take Arguments</h3>
-  <pre><code class="lang-swift">struct BadgedStyle: ViewModifier {
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">V.19.5 &para;5</span> Custom modifiers centralize a styling decision. A dozen views across the app, one definition, any future tweak happens in one place.</p>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">V.19.5.1</span>&nbsp;&nbsp;Modifiers That Take Arguments</h3>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">V.19.5.1 &para;1</span><pre><code class="lang-swift">struct BadgedStyle: ViewModifier {
     let color: Color
     let count: Int
 
@@ -133,10 +133,10 @@ Image(systemName: "envelope")
     .font(.title)
     .badged(3)</code></pre>
   <hr>
-  <h2>Environment Values -- Passing State Without Plumbing</h2>
-  <p>When deeply nested views need the same value (theme, date formatter, API client), don't thread it through every initializer. Put it in the environment.</p>
-  <h3>Reading a Built-In Environment Value</h3>
-  <pre><code class="lang-swift">struct Banner: View {
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">V.19.6</span>&nbsp;&nbsp;Environment Values -- Passing State Without Plumbing</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">V.19.6 &para;1</span> When deeply nested views need the same value (theme, date formatter, API client), don't thread it through every initializer. Put it in the environment.</p>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">V.19.6.1</span>&nbsp;&nbsp;Reading a Built-In Environment Value</h3>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">V.19.6.1 &para;1</span><pre><code class="lang-swift">struct Banner: View {
     @Environment(\.colorScheme) private var scheme
 
     var body: some View {
@@ -144,9 +144,9 @@ Image(systemName: "envelope")
             .foregroundStyle(scheme == .dark ? .white : .black)
     }
 }</code></pre>
-  <h3>Defining Your Own Environment Value</h3>
-  <p>Define a key, extend <code>EnvironmentValues</code>, and set it with <code>.environment</code>:</p>
-  <pre><code class="lang-swift">private struct ThemeKey: EnvironmentKey {
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">V.19.6.2</span>&nbsp;&nbsp;Defining Your Own Environment Value</h3>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">V.19.6.2 &para;1</span> Define a key, extend <code>EnvironmentValues</code>, and set it with <code>.environment</code>:</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">V.19.6.2 &para;2</span><pre><code class="lang-swift">private struct ThemeKey: EnvironmentKey {
     static let defaultValue: Color = .blue
 }
 
@@ -173,11 +173,11 @@ VStack {
     ThemedButton(title: "Cancel")
 }
 .environment(\.theme, .orange)</code></pre>
-  <p>Every <code>ThemedButton</code> under that <code>.environment(...)</code> sees orange. Change the value once and every button updates.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">V.19.6.2 &para;3</span> Every <code>ThemedButton</code> under that <code>.environment(...)</code> sees orange. Change the value once and every button updates.</p>
   <hr>
-  <h2>GeometryReader -- Reading the Size Around You</h2>
-  <p><code>GeometryReader</code> gives its child view a <code>GeometryProxy</code> describing the size and safe-area it has been allocated.</p>
-  <pre><code class="lang-swift">struct SplitHalf: View {
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">V.19.7</span>&nbsp;&nbsp;GeometryReader -- Reading the Size Around You</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">V.19.7 &para;1</span> <code>GeometryReader</code> gives its child view a <code>GeometryProxy</code> describing the size and safe-area it has been allocated.</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">V.19.7 &para;2</span><pre><code class="lang-swift">struct SplitHalf: View {
     var body: some View {
         GeometryReader { geo in
             HStack(spacing: 0) {
@@ -187,22 +187,22 @@ VStack {
         }
     }
 }</code></pre>
-  <h3>When Not to Use GeometryReader</h3>
-  <p><code>GeometryReader</code> expands to fill the space it is offered, which often surprises newcomers. If all you need is "half the width," reach for <code>.frame(maxWidth: .infinity)</code> and let SwiftUI's normal layout system do the work.</p>
-  <p>Use <code>GeometryReader</code> when you genuinely need to compute something from the runtime size -- a custom layout, a parallax effect, a shape that depends on width / height.</p>
-  <h3><code>onGeometryChange</code> (iOS 18+)</h3>
-  <p>In iOS 18, <code>.onGeometryChange</code> observes a view's frame without wrapping it in <code>GeometryReader</code>:</p>
-  <pre><code class="lang-swift">Text("Hello")
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">V.19.7.1</span>&nbsp;&nbsp;When Not to Use GeometryReader</h3>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">V.19.7.1 &para;1</span> <code>GeometryReader</code> expands to fill the space it is offered, which often surprises newcomers. If all you need is "half the width," reach for <code>.frame(maxWidth: .infinity)</code> and let SwiftUI's normal layout system do the work.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">V.19.7.1 &para;2</span> Use <code>GeometryReader</code> when you genuinely need to compute something from the runtime size -- a custom layout, a parallax effect, a shape that depends on width / height.</p>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">V.19.7.2</span>&nbsp;&nbsp;<code>onGeometryChange</code> (iOS 18+)</h3>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">V.19.7.2 &para;1</span> In iOS 18, <code>.onGeometryChange</code> observes a view's frame without wrapping it in <code>GeometryReader</code>:</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">V.19.7.2 &para;2</span><pre><code class="lang-swift">Text("Hello")
     .onGeometryChange(for: CGSize.self) { proxy in
         proxy.size
     } action: { newSize in
         print("I am now", newSize)
     }</code></pre>
-  <p>Cleaner than <code>GeometryReader</code> when you only need a measurement, not a layout container.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">V.19.7.2 &para;3</span> Cleaner than <code>GeometryReader</code> when you only need a measurement, not a layout container.</p>
   <hr>
-  <h2>PreferenceKey -- Child to Parent Communication</h2>
-  <p>The environment passes data <strong>down</strong> the view tree. Preference keys pass data <strong>up</strong>.</p>
-  <pre><code class="lang-swift">private struct HeightKey: PreferenceKey {
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">V.19.8</span>&nbsp;&nbsp;PreferenceKey -- Child to Parent Communication</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">V.19.8 &para;1</span> The environment passes data <strong>down</strong> the view tree. Preference keys pass data <strong>up</strong>.</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">V.19.8 &para;2</span><pre><code class="lang-swift">private struct HeightKey: PreferenceKey {
     static let defaultValue: CGFloat = 0
     static func reduce(value: inout CGFloat, nextValue: () -&gt; CGFloat) {
         value = max(value, nextValue())
@@ -231,11 +231,11 @@ struct Parent: View {
         .onPreferenceChange(HeightKey.self) { rowHeight = $0 }
     }
 }</code></pre>
-  <p><code>reduce</code> is how SwiftUI combines values from multiple children; in this case we take the largest. Use preference keys when a parent needs to size itself based on its children, or when a child needs to say something specific to an ancestor.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">V.19.8 &para;3</span> <code>reduce</code> is how SwiftUI combines values from multiple children; in this case we take the largest. Use preference keys when a parent needs to size itself based on its children, or when a child needs to say something specific to an ancestor.</p>
   <hr>
-  <h2>matchedGeometryEffect -- Transitions Between Layouts</h2>
-  <p>When the same "thing" appears in two different layouts, <code>matchedGeometryEffect</code> animates it between them.</p>
-  <pre><code class="lang-swift">struct PhotoDetail: View {
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">V.19.9</span>&nbsp;&nbsp;matchedGeometryEffect -- Transitions Between Layouts</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">V.19.9 &para;1</span> When the same "thing" appears in two different layouts, <code>matchedGeometryEffect</code> animates it between them.</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">V.19.9 &para;2</span><pre><code class="lang-swift">struct PhotoDetail: View {
     @Namespace private var ns
     @State private var expanded = false
 
@@ -261,12 +261,12 @@ struct Parent: View {
         }
     }
 }</code></pre>
-  <p>Tap the image. SwiftUI notices the two views share the <code>id: "photo"</code> in the same namespace, and animates position + size from the small version to the full one (and back). You don't write any of the intermediate frames.</p>
-  <p><code>@Namespace</code> gives you a private namespace; reuse its value for every view pair you want matched.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">V.19.9 &para;3</span> Tap the image. SwiftUI notices the two views share the <code>id: "photo"</code> in the same namespace, and animates position + size from the small version to the full one (and back). You don't write any of the intermediate frames.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">V.19.9 &para;4</span> <code>@Namespace</code> gives you a private namespace; reuse its value for every view pair you want matched.</p>
   <hr>
-  <h2>Chapter Mini-Example -- A Badge Stack</h2>
-  <p>Putting custom views, a custom modifier, and an environment value together:</p>
-  <pre><code class="lang-swift">import SwiftUI
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">V.19.10</span>&nbsp;&nbsp;Chapter Mini-Example -- A Badge Stack</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">V.19.10 &para;1</span> Putting custom views, a custom modifier, and an environment value together:</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">V.19.10 &para;2</span><pre><code class="lang-swift">import SwiftUI
 
 private struct AccentKey: EnvironmentKey { static let defaultValue: Color = .blue }
 extension EnvironmentValues {
@@ -320,21 +320,21 @@ struct NotificationBar: View {
         .environment(\.accent, .orange)
     }
 }</code></pre>
-  <p>One reusable icon view, one reusable card modifier, one environment value -- and the bar's entire accent color lives in one spot.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">V.19.10 &para;3</span> One reusable icon view, one reusable card modifier, one environment value -- and the bar's entire accent color lives in one spot.</p>
   <hr>
-  <h2>What Book 20 Does</h2>
-  <p>Book 20 looks at the app as a running system: Instruments, profiling, and the habits that keep a SwiftUI app smooth as it grows.</p>
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">V.19.11</span>&nbsp;&nbsp;What Book 20 Does</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">V.19.11 &para;1</span> Book 20 looks at the app as a running system: Instruments, profiling, and the habits that keep a SwiftUI app smooth as it grows.</p>
   <hr>
-  <h2>Further Reading &mdash; WWDC Sessions</h2>
-  <p>This book is a passive resource. When you want deeper coverage of building custom views and modifiers, the WWDC sessions below are Apple's source material.</p>
-  <ul>
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">V.19.12</span>&nbsp;&nbsp;Further Reading &mdash; WWDC Sessions</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">V.19.12 &para;1</span> This book is a passive resource. When you want deeper coverage of building custom views and modifiers, the WWDC sessions below are Apple's source material.</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">V.19.12 &para;2</span><ul>
     <li>WWDC25 / 256, <em>What's new in SwiftUI</em> &mdash; <a href="https://developer.apple.com/videos/play/wwdc2025/256/">developer.apple.com/videos/play/wwdc2025/256/</a>. New <code>View</code> and <code>ViewModifier</code> additions this release.</li>
     <li>WWDC25 / 219, <em>Meet Liquid Glass</em> &mdash; <a href="https://developer.apple.com/videos/play/wwdc2025/219/">developer.apple.com/videos/play/wwdc2025/219/</a>. The material rules custom views need to honor to feel native.</li>
     <li>WWDC25 / 323, <em>Build a SwiftUI app with the new design</em> &mdash; <a href="https://developer.apple.com/videos/play/wwdc2025/323/">developer.apple.com/videos/play/wwdc2025/323/</a>. Adoption patterns including <code>GlassEffectContainer</code> for grouped morphing of custom controls.</li>
     <li>WWDC25 / 306, <em>Optimize SwiftUI performance with Instruments</em> &mdash; <a href="https://developer.apple.com/videos/play/wwdc2025/306/">developer.apple.com/videos/play/wwdc2025/306/</a>. Where custom view identity / equality issues show up in profiling.</li>
   </ul>
-  <h3>Prior-year background sessions</h3>
-  <ul>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">V.19.12.1</span>&nbsp;&nbsp;Prior-year background sessions</h3>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">V.19.12.1 &para;1</span><ul>
     <li>WWDC23 / 10149, <em>Discover Observation in SwiftUI</em> &mdash; <a href="https://developer.apple.com/videos/play/wwdc2023/10149/">developer.apple.com/videos/play/wwdc2023/10149/</a>. <code>@Observable</code> and the property-tracking model your custom views depend on for efficient updates.</li>
   </ul>
 

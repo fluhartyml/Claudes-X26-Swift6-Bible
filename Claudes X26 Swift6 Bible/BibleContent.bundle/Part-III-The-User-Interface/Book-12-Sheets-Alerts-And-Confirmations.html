@@ -9,21 +9,21 @@
 
 <div class="content">
 
-  <h1>Book 12: Sheets, Alerts, and Confirmations</h1>
-  <h2>Live Reference: Claudes LockBox</h2>
+  <h1><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.12</span>&nbsp;&nbsp;Book 12: Sheets, Alerts, and Confirmations</h1>
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.12.1</span>&nbsp;&nbsp;Live Reference: Claudes LockBox</h2>
   <div class="scope-note"><strong>Claudes LockBox</strong> ships every pattern in this chapter at production scale. The New Item form lives in a <code>fullScreenCover</code> (not a <code>.sheet</code> &mdash; see Build-Along 03 &sect;10 for why the <code>.sheet</code> height fights the iOS keyboard on phone-sized screens). The image viewer opens via <code>.sheet</code>. Long-press menus on photos use the SwiftUI contextual-menu pattern. Delete operations use confirmation dialogs. The About sheet opens from the sidebar's info button via <code>.sheet</code> again. Source: <a href="https://github.com/fluhartyml/Claudes-LockBox">github.com/fluhartyml/Claudes-LockBox</a>. See Build-Along 03 for the full walkthrough; the <code>fullScreenCover</code> vs <code>.sheet</code> decision is one of three polish fixes from a single commit on the build day, captured in Section 10 of that chapter. <strong>My Person CRM</strong> shows the same patterns at slightly larger scale: an Add Interaction sheet driven by <code>.sheet(isPresented:)</code>, an About sheet from the toolbar info button, plus a SwiftUI-wrapped <code>CNContactPickerViewController</code> presented as a sheet for picking a contact &mdash; the canonical example of a UIKit picker bridged into SwiftUI's sheet system. Source: <a href="https://github.com/fluhartyml/My-Person-CRM/wiki">github.com/fluhartyml/My-Person-CRM/wiki</a>. <strong>IntelligenceDemo</strong> uses <code>PhotosPicker</code> from <code>PhotosUI</code> instead of presenting a sheet itself &mdash; the picker IS the sheet, fired from a <code>PhotosPicker</code> control rather than a manual <code>.sheet</code> modifier. Source: <a href="https://github.com/fluhartyml/IntelligenceDemo/wiki">github.com/fluhartyml/IntelligenceDemo/wiki</a>. Worth contrasting: LockBox manually presents a UIKit camera, My Person CRM manually presents a UIKit contact picker, IntelligenceDemo lets <code>PhotosPicker</code> handle presentation entirely &mdash; three places on the spectrum from "the app drives the sheet" to "the framework drives the sheet for the app."</div>
   <hr>
-  <h2>X26 Updates to Sheets and Action Sheets</h2>
-  <p>Modal views pick up Liquid Glass in X26, plus a couple of shape changes worth knowing. Full sheets carry a larger corner radius. Half sheets sit slightly off the screen edge instead of butting up against it, leaving a thin gap where the view behind shows through<sup>[<a href="#s1-fn">s1</a>]</sup>. A half sheet that the user drags up to full height also fades from translucent to closer-to-solid as it goes, so the task gets visual priority once the sheet takes over the screen.</p>
-  <p>Two practical review tasks:</p>
-  <ul>
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.12.2</span>&nbsp;&nbsp;X26 Updates to Sheets and Action Sheets</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.12.2 &para;1</span> Modal views pick up Liquid Glass in X26, plus a couple of shape changes worth knowing. Full sheets carry a larger corner radius. Half sheets sit slightly off the screen edge instead of butting up against it, leaving a thin gap where the view behind shows through<sup>[<a href="#s1-fn">s1</a>]</sup>. A half sheet that the user drags up to full height also fades from translucent to closer-to-solid as it goes, so the task gets visual priority once the sheet takes over the screen.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.12.2 &para;2</span> Two practical review tasks:</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.12.2 &para;3</span><ul>
     <li><strong>Inside the sheet:</strong> walk the corners. A label, button, or text field that fit fine against the old square corner can land underneath the new curve and clip a letter or look squeezed.</li>
     <li><strong>Outside the sheet:</strong> for half sheets, look at what fills the new gap. Whatever was directly behind the sheet now shows through that strip. A loud background pattern there will pull the eye away from the sheet itself.</li>
   </ul>
-  <p>If you've added a custom visual effect view as a sheet or popover background, remove it. Apple's guidance is explicit: <em>"Audit the backgrounds of sheets and popovers... remove those custom background views to provide a consistent experience with other sheets across the system."</em><sup>[<a href="#s1-fn">s1</a>]</sup></p>
-  <h3>Action Sheets Originate from Their Source</h3>
-  <p>The bottom-of-screen action sheet is gone. In X26 the sheet attaches to whatever button or row the user tapped, and pops up next to that element. The rest of the screen stays live too &mdash; the user can scroll, tap something else, or dismiss by ignoring the sheet. The SwiftUI call is the same one you'd use for a confirmation dialog:</p>
-  <pre><code class="lang-swift">.confirmationDialog(
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.12.2 &para;4</span> If you've added a custom visual effect view as a sheet or popover background, remove it. Apple's guidance is explicit: <em>"Audit the backgrounds of sheets and popovers... remove those custom background views to provide a consistent experience with other sheets across the system."</em><sup>[<a href="#s1-fn">s1</a>]</sup></p>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.12.2.1</span>&nbsp;&nbsp;Action Sheets Originate from Their Source</h3>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.12.2.1 &para;1</span> The bottom-of-screen action sheet is gone. In X26 the sheet attaches to whatever button or row the user tapped, and pops up next to that element. The rest of the screen stays live too &mdash; the user can scroll, tap something else, or dismiss by ignoring the sheet. The SwiftUI call is the same one you'd use for a confirmation dialog:</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.12.2.1 &para;2</span><pre><code class="lang-swift">.confirmationDialog(
     "Delete this item?",
     isPresented: $showDeletePrompt,
     titleVisibility: .visible,
@@ -34,22 +34,22 @@
     }
     Button("Cancel", role: .cancel) {}
 }</code></pre>
-  <p>Tell the sheet which element it belongs to by passing a source view or item through the dialog's anchor configuration. Skip that step and you'll get the older bottom-edge slide-up as a fallback &mdash; functional, but no longer the X26 default look.</p>
-  <p id="s1-fn" style="font-size: 13pt; color: var(--dim);">[s1] Apple Developer Documentation, <em>Adopting Liquid Glass</em>. <a href="https://developer.apple.com/documentation/TechnologyOverviews/adopting-liquid-glass">developer.apple.com/documentation/TechnologyOverviews/adopting-liquid-glass</a> &mdash; verified 2026-04-29.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.12.2.1 &para;3</span> Tell the sheet which element it belongs to by passing a source view or item through the dialog's anchor configuration. Skip that step and you'll get the older bottom-edge slide-up as a fallback &mdash; functional, but no longer the X26 default look.</p>
+  <p id="s1-fn" style="font-size: 13pt; color: var(--dim);"><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.12.2.1 &para;4</span> [s1] Apple Developer Documentation, <em>Adopting Liquid Glass</em>. <a href="https://developer.apple.com/documentation/TechnologyOverviews/adopting-liquid-glass">developer.apple.com/documentation/TechnologyOverviews/adopting-liquid-glass</a> &mdash; verified 2026-04-29.</p>
   <hr>
-  <h2>Sheets</h2>
-  <h3>Basic Sheet</h3>
-  <p>Present a modal sheet with a boolean binding:</p>
-  <pre><code class="lang-swift">@State private var showSettings = false
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.12.3</span>&nbsp;&nbsp;Sheets</h2>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.12.3.1</span>&nbsp;&nbsp;Basic Sheet</h3>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.12.3.1 &para;1</span> Present a modal sheet with a boolean binding:</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.12.3.1 &para;2</span><pre><code class="lang-swift">@State private var showSettings = false
 
 Button("Settings") { showSettings = true }
     .sheet(isPresented: $showSettings) {
         SettingsView()
     }</code></pre>
-  <p>The sheet dismisses automatically when <code>showSettings</code> becomes <code>false</code>.</p>
-  <h3>Sheet with an Item</h3>
-  <p>Present a sheet driven by an optional identifiable value:</p>
-  <pre><code class="lang-swift">@State private var selectedProject: Project?
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.12.3.1 &para;3</span> The sheet dismisses automatically when <code>showSettings</code> becomes <code>false</code>.</p>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.12.3.2</span>&nbsp;&nbsp;Sheet with an Item</h3>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.12.3.2 &para;1</span> Present a sheet driven by an optional identifiable value:</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.12.3.2 &para;2</span><pre><code class="lang-swift">@State private var selectedProject: Project?
 
 List(projects) { project in
     Button(project.name) {
@@ -59,11 +59,11 @@ List(projects) { project in
 .sheet(item: $selectedProject) { project in
     ProjectDetailView(project: project)
 }</code></pre>
-  <p>The sheet appears when the value is non-nil and dismisses when it becomes <code>nil</code>. This is the preferred pattern when the sheet content depends on which item was tapped.</p>
-  <p><strong>Watch out:</strong> The item type must conform to <code>Identifiable</code>. If it doesn't, add conformance or use the boolean variant.</p>
-  <h3>Dismissing a Sheet from Inside</h3>
-  <p>Use the <code>dismiss</code> environment value:</p>
-  <pre><code class="lang-swift">struct SettingsView: View {
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.12.3.2 &para;3</span> The sheet appears when the value is non-nil and dismisses when it becomes <code>nil</code>. This is the preferred pattern when the sheet content depends on which item was tapped.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.12.3.2 &para;4</span> <strong>Watch out:</strong> The item type must conform to <code>Identifiable</code>. If it doesn't, add conformance or use the boolean variant.</p>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.12.3.3</span>&nbsp;&nbsp;Dismissing a Sheet from Inside</h3>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.12.3.3 &para;1</span> Use the <code>dismiss</code> environment value:</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.12.3.3 &para;2</span><pre><code class="lang-swift">struct SettingsView: View {
     @Environment(\.dismiss) private var dismiss
 
     var body: some View {
@@ -75,41 +75,41 @@ List(projects) { project in
         }
     }
 }</code></pre>
-  <p><strong>Watch out:</strong> Always wrap sheet content in a <code>NavigationStack</code> if you want a toolbar with Done/Cancel buttons. Without it, <code>.toolbar</code> has nowhere to render.</p>
-  <h3>Preventing Dismissal</h3>
-  <p>Stop the user from swiping down to dismiss:</p>
-  <pre><code class="lang-swift">.sheet(isPresented: $showEditor) {
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.12.3.3 &para;3</span> <strong>Watch out:</strong> Always wrap sheet content in a <code>NavigationStack</code> if you want a toolbar with Done/Cancel buttons. Without it, <code>.toolbar</code> has nowhere to render.</p>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.12.3.4</span>&nbsp;&nbsp;Preventing Dismissal</h3>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.12.3.4 &para;1</span> Stop the user from swiping down to dismiss:</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.12.3.4 &para;2</span><pre><code class="lang-swift">.sheet(isPresented: $showEditor) {
     EditorView()
         .interactiveDismissDisabled(hasUnsavedChanges)
 }</code></pre>
-  <p>Pass a boolean to conditionally prevent dismissal. When <code>true</code>, the swipe-down gesture is disabled and the user must use your explicit dismiss button.</p>
-  <h3>onDismiss Callback</h3>
-  <p>Run code when the sheet closes:</p>
-  <pre><code class="lang-swift">.sheet(isPresented: $showPicker, onDismiss: {
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.12.3.4 &para;3</span> Pass a boolean to conditionally prevent dismissal. When <code>true</code>, the swipe-down gesture is disabled and the user must use your explicit dismiss button.</p>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.12.3.5</span>&nbsp;&nbsp;onDismiss Callback</h3>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.12.3.5 &para;1</span> Run code when the sheet closes:</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.12.3.5 &para;2</span><pre><code class="lang-swift">.sheet(isPresented: $showPicker, onDismiss: {
     refreshData()
 }) {
     PhotoPicker()
 }</code></pre>
   <hr>
-  <h2>Sheet Detents</h2>
-  <p>Control how tall a sheet is on iPhone/iPad.</p>
-  <h3>Built-in Detents</h3>
-  <pre><code class="lang-swift">.sheet(isPresented: $showInfo) {
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.12.4</span>&nbsp;&nbsp;Sheet Detents</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.12.4 &para;1</span> Control how tall a sheet is on iPhone/iPad.</p>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.12.4.1</span>&nbsp;&nbsp;Built-in Detents</h3>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.12.4.1 &para;1</span><pre><code class="lang-swift">.sheet(isPresented: $showInfo) {
     InfoView()
         .presentationDetents([.medium, .large])
 }</code></pre>
-  <ul><li><code>.medium</code> -- half screen</li><li><code>.large</code> -- full height (default)</li></ul>
-  <p>The user can drag between the detents you provide.</p>
-  <h3>Fixed and Fractional Detents</h3>
-  <pre><code class="lang-swift">.presentationDetents([
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.12.4.1 &para;2</span><ul><li><code>.medium</code> -- half screen</li><li><code>.large</code> -- full height (default)</li></ul>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.12.4.1 &para;3</span> The user can drag between the detents you provide.</p>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.12.4.2</span>&nbsp;&nbsp;Fixed and Fractional Detents</h3>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.12.4.2 &para;1</span><pre><code class="lang-swift">.presentationDetents([
     .height(200),          // fixed 200pt
     .fraction(0.3),        // 30% of screen
     .medium,
     .large
 ])</code></pre>
-  <h3>Custom Detents</h3>
-  <p>For dynamic sizing:</p>
-  <pre><code class="lang-swift">struct CompactDetent: CustomPresentationDetent {
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.12.4.3</span>&nbsp;&nbsp;Custom Detents</h3>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.12.4.3 &para;1</span> For dynamic sizing:</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.12.4.3 &para;2</span><pre><code class="lang-swift">struct CompactDetent: CustomPresentationDetent {
     static func height(in context: Context) -&gt; CGFloat? {
         min(context.maxDetentValue, 400)
     }
@@ -117,35 +117,35 @@ List(projects) { project in
 
 // Usage
 .presentationDetents([.custom(CompactDetent.self), .large])</code></pre>
-  <h3>Detent Selection Binding</h3>
-  <p>Track and control which detent is active:</p>
-  <pre><code class="lang-swift">@State private var selectedDetent: PresentationDetent = .medium
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.12.4.4</span>&nbsp;&nbsp;Detent Selection Binding</h3>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.12.4.4 &para;1</span> Track and control which detent is active:</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.12.4.4 &para;2</span><pre><code class="lang-swift">@State private var selectedDetent: PresentationDetent = .medium
 
 .sheet(isPresented: $showPanel) {
     PanelView()
         .presentationDetents([.medium, .large], selection: $selectedDetent)
 }</code></pre>
-  <h3>Drag Indicator</h3>
-  <pre><code class="lang-swift">.presentationDragIndicator(.visible)   // show the grabber bar
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.12.4.5</span>&nbsp;&nbsp;Drag Indicator</h3>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.12.4.5 &para;1</span><pre><code class="lang-swift">.presentationDragIndicator(.visible)   // show the grabber bar
 .presentationDragIndicator(.hidden)    // hide it</code></pre>
-  <h3>Background Interaction</h3>
-  <p>Allow the user to interact with content behind the sheet:</p>
-  <pre><code class="lang-swift">.presentationBackgroundInteraction(.enabled(upThrough: .medium))</code></pre>
-  <p>This lets taps pass through to the parent view when the sheet is at <code>.medium</code> or smaller.</p>
-  <h3>Sheet Background and Corner Radius</h3>
-  <pre><code class="lang-swift">.presentationBackground(.ultraThinMaterial)
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.12.4.6</span>&nbsp;&nbsp;Background Interaction</h3>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.12.4.6 &para;1</span> Allow the user to interact with content behind the sheet:</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.12.4.6 &para;2</span><pre><code class="lang-swift">.presentationBackgroundInteraction(.enabled(upThrough: .medium))</code></pre>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.12.4.6 &para;3</span> This lets taps pass through to the parent view when the sheet is at <code>.medium</code> or smaller.</p>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.12.4.7</span>&nbsp;&nbsp;Sheet Background and Corner Radius</h3>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.12.4.7 &para;1</span><pre><code class="lang-swift">.presentationBackground(.ultraThinMaterial)
 .presentationCornerRadius(20)</code></pre>
   <hr>
-  <h2>fullScreenCover</h2>
-  <p>A modal that covers the entire screen. No swipe-to-dismiss gesture.</p>
-  <pre><code class="lang-swift">@State private var showOnboarding = false
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.12.5</span>&nbsp;&nbsp;fullScreenCover</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.12.5 &para;1</span> A modal that covers the entire screen. No swipe-to-dismiss gesture.</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.12.5 &para;2</span><pre><code class="lang-swift">@State private var showOnboarding = false
 
 .fullScreenCover(isPresented: $showOnboarding) {
     OnboardingView()
 }</code></pre>
-  <p>Works identically to <code>.sheet</code> in terms of API (boolean binding, item binding, <code>onDismiss</code>).</p>
-  <p><strong>Watch out:</strong> <code>fullScreenCover</code> has no swipe-to-dismiss. You must provide your own dismiss button. If you forget, the user is stuck.</p>
-  <pre><code class="lang-swift">struct OnboardingView: View {
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.12.5 &para;3</span> Works identically to <code>.sheet</code> in terms of API (boolean binding, item binding, <code>onDismiss</code>).</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.12.5 &para;4</span> <strong>Watch out:</strong> <code>fullScreenCover</code> has no swipe-to-dismiss. You must provide your own dismiss button. If you forget, the user is stuck.</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.12.5 &para;5</span><pre><code class="lang-swift">struct OnboardingView: View {
     @Environment(\.dismiss) private var dismiss
 
     var body: some View {
@@ -155,11 +155,11 @@ List(projects) { project in
         }
     }
 }</code></pre>
-  <p><code>fullScreenCover</code> does not support detents. It is always full screen.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.12.5 &para;6</span> <code>fullScreenCover</code> does not support detents. It is always full screen.</p>
   <hr>
-  <h2>Popover</h2>
-  <p>A floating bubble anchored to the source view. On iPad and Mac it appears as an actual popover. On iPhone it falls back to a sheet.</p>
-  <pre><code class="lang-swift">@State private var showTooltip = false
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.12.6</span>&nbsp;&nbsp;Popover</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.12.6 &para;1</span> A floating bubble anchored to the source view. On iPad and Mac it appears as an actual popover. On iPhone it falls back to a sheet.</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.12.6 &para;2</span><pre><code class="lang-swift">@State private var showTooltip = false
 
 Button("Info") { showTooltip = true }
     .popover(isPresented: $showTooltip) {
@@ -167,22 +167,22 @@ Button("Info") { showTooltip = true }
             .font(.body)
             .padding()
     }</code></pre>
-  <h3>Popover with Arrow Edge</h3>
-  <pre><code class="lang-swift">.popover(isPresented: $showPopover, arrowEdge: .top) {
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.12.6.1</span>&nbsp;&nbsp;Popover with Arrow Edge</h3>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.12.6.1 &para;1</span><pre><code class="lang-swift">.popover(isPresented: $showPopover, arrowEdge: .top) {
     PopoverContent()
 }</code></pre>
-  <p>Arrow edge options: <code>.top</code>, <code>.bottom</code>, <code>.leading</code>, <code>.trailing</code>. The system may override this if there is not enough space.</p>
-  <h3>Sizing a Popover</h3>
-  <p>On iPad/Mac, constrain the popover size:</p>
-  <pre><code class="lang-swift">.popover(isPresented: $showPopover) {
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.12.6.1 &para;2</span> Arrow edge options: <code>.top</code>, <code>.bottom</code>, <code>.leading</code>, <code>.trailing</code>. The system may override this if there is not enough space.</p>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.12.6.2</span>&nbsp;&nbsp;Sizing a Popover</h3>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.12.6.2 &para;1</span> On iPad/Mac, constrain the popover size:</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.12.6.2 &para;2</span><pre><code class="lang-swift">.popover(isPresented: $showPopover) {
     PopoverContent()
         .frame(width: 300, height: 400)
 }</code></pre>
-  <p><strong>Watch out:</strong> On iPhone, popovers become sheets. Do not rely on popover-specific behavior for iPhone layouts.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.12.6.2 &para;3</span> <strong>Watch out:</strong> On iPhone, popovers become sheets. Do not rely on popover-specific behavior for iPhone layouts.</p>
   <hr>
-  <h2>Alerts</h2>
-  <h3>Basic Alert</h3>
-  <pre><code class="lang-swift">@State private var showAlert = false
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.12.7</span>&nbsp;&nbsp;Alerts</h2>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.12.7.1</span>&nbsp;&nbsp;Basic Alert</h3>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.12.7.1 &para;1</span><pre><code class="lang-swift">@State private var showAlert = false
 
 Button("Delete") { showAlert = true }
     .alert("Delete Item?", isPresented: $showAlert) {
@@ -191,14 +191,14 @@ Button("Delete") { showAlert = true }
     } message: {
         Text("This action cannot be undone.")
     }</code></pre>
-  <h3>Alert with No Message</h3>
-  <pre><code class="lang-swift">.alert("Are you sure?", isPresented: $showAlert) {
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.12.7.2</span>&nbsp;&nbsp;Alert with No Message</h3>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.12.7.2 &para;1</span><pre><code class="lang-swift">.alert("Are you sure?", isPresented: $showAlert) {
     Button("Yes") { proceed() }
     Button("No", role: .cancel) { }
 }</code></pre>
-  <p>If you omit the <code>message:</code> parameter, the alert shows only the title and buttons.</p>
-  <h3>Alert with an Item</h3>
-  <pre><code class="lang-swift">@State private var errorToShow: AppError?
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.12.7.2 &para;2</span> If you omit the <code>message:</code> parameter, the alert shows only the title and buttons.</p>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.12.7.3</span>&nbsp;&nbsp;Alert with an Item</h3>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.12.7.3 &para;1</span><pre><code class="lang-swift">@State private var errorToShow: AppError?
 
 .alert("Error", isPresented: Binding(
     get: { errorToShow != nil },
@@ -208,8 +208,8 @@ Button("Delete") { showAlert = true }
 } message: {
     Text(errorToShow?.localizedDescription ?? "")
 }</code></pre>
-  <p>Or more cleanly, make your error type <code>Identifiable</code> and use the item variant:</p>
-  <pre><code class="lang-swift">struct AppError: Identifiable {
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.12.7.3 &para;2</span> Or more cleanly, make your error type <code>Identifiable</code> and use the item variant:</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.12.7.3 &para;3</span><pre><code class="lang-swift">struct AppError: Identifiable {
     let id = UUID()
     let message: String
 }
@@ -220,8 +220,8 @@ Button("Delete") { showAlert = true }
     // This closure does not exist in the standard API.
     // Use the pattern below instead.
 }</code></pre>
-  <p><strong>Practical pattern</strong> &mdash; alert-with-item:</p>
-  <pre><code class="lang-swift">@State private var alertMessage = ""
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.12.7.3 &para;4</span> <strong>Practical pattern</strong> &mdash; alert-with-item:</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.12.7.3 &para;5</span><pre><code class="lang-swift">@State private var alertMessage = ""
 @State private var showErrorAlert = false
 
 func handleError(_ error: Error) {
@@ -234,9 +234,9 @@ func handleError(_ error: Error) {
 } message: {
     Text(alertMessage)
 }</code></pre>
-  <h3>Alert with TextField</h3>
-  <p>Alerts can contain text fields:</p>
-  <pre><code class="lang-swift">@State private var showRename = false
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.12.7.4</span>&nbsp;&nbsp;Alert with TextField</h3>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.12.7.4 &para;1</span> Alerts can contain text fields:</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.12.7.4 &para;2</span><pre><code class="lang-swift">@State private var showRename = false
 @State private var newName = ""
 
 .alert("Rename", isPresented: $showRename) {
@@ -246,18 +246,18 @@ func handleError(_ error: Error) {
 } message: {
     Text("Enter a new name for this item.")
 }</code></pre>
-  <p><strong>Watch out:</strong> Alert text fields are iOS 16+ / macOS 13+.</p>
-  <h3>Button Roles</h3>
-  <ul><li><code>.destructive</code> -- red text, signals danger</li><li><code>.cancel</code> -- bold text, always placed in the "safe" position</li></ul>
-  <pre><code class="lang-swift">.alert("Reset?", isPresented: $showReset) {
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.12.7.4 &para;3</span> <strong>Watch out:</strong> Alert text fields are iOS 16+ / macOS 13+.</p>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.12.7.5</span>&nbsp;&nbsp;Button Roles</h3>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.12.7.5 &para;1</span><ul><li><code>.destructive</code> -- red text, signals danger</li><li><code>.cancel</code> -- bold text, always placed in the "safe" position</li></ul>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.12.7.5 &para;2</span><pre><code class="lang-swift">.alert("Reset?", isPresented: $showReset) {
     Button("Reset Everything", role: .destructive) { reset() }
     Button("Cancel", role: .cancel) { }
 }</code></pre>
-  <p>If you provide no <code>.cancel</code> button, the system adds one automatically.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.12.7.5 &para;3</span> If you provide no <code>.cancel</code> button, the system adds one automatically.</p>
   <hr>
-  <h2>Confirmation Dialog</h2>
-  <p>An action sheet on iPhone, a popover menu on iPad/Mac. Use for choices where the user picks from options.</p>
-  <pre><code class="lang-swift">@State private var showDialog = false
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.12.8</span>&nbsp;&nbsp;Confirmation Dialog</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.12.8 &para;1</span> An action sheet on iPhone, a popover menu on iPad/Mac. Use for choices where the user picks from options.</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.12.8 &para;2</span><pre><code class="lang-swift">@State private var showDialog = false
 
 Button("Share") { showDialog = true }
     .confirmationDialog("Share As", isPresented: $showDialog, titleVisibility: .visible) {
@@ -268,13 +268,13 @@ Button("Share") { showDialog = true }
     } message: {
         Text("Choose the export format.")
     }</code></pre>
-  <h3>Title Visibility</h3>
-  <pre><code class="lang-swift">.confirmationDialog("Title", isPresented: $show, titleVisibility: .visible) { }
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.12.8.1</span>&nbsp;&nbsp;Title Visibility</h3>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.12.8.1 &para;1</span><pre><code class="lang-swift">.confirmationDialog("Title", isPresented: $show, titleVisibility: .visible) { }
 .confirmationDialog("Title", isPresented: $show, titleVisibility: .hidden) { }
 .confirmationDialog("Title", isPresented: $show, titleVisibility: .automatic) { }</code></pre>
-  <p>On iPhone, <code>.automatic</code> hides the title. Set <code>.visible</code> if you want users to see it.</p>
-  <h3>Confirmation Dialog with Item</h3>
-  <pre><code class="lang-swift">@State private var itemToDelete: Item?
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.12.8.1 &para;2</span> On iPhone, <code>.automatic</code> hides the title. Set <code>.visible</code> if you want users to see it.</p>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.12.8.2</span>&nbsp;&nbsp;Confirmation Dialog with Item</h3>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.12.8.2 &para;1</span><pre><code class="lang-swift">@State private var itemToDelete: Item?
 
 .confirmationDialog("Delete", isPresented: Binding(
     get: { itemToDelete != nil },
@@ -291,9 +291,9 @@ Button("Share") { showDialog = true }
     Text("This will permanently remove the item.")
 }</code></pre>
   <hr>
-  <h2>Inspector</h2>
-  <p>The <code>.inspector</code> modifier presents a side panel on iPad/Mac and a sheet on iPhone. Ideal for detail/property panels.</p>
-  <pre><code class="lang-swift">@State private var showInspector = false
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.12.9</span>&nbsp;&nbsp;Inspector</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.12.9 &para;1</span> The <code>.inspector</code> modifier presents a side panel on iPad/Mac and a sheet on iPhone. Ideal for detail/property panels.</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.12.9 &para;2</span><pre><code class="lang-swift">@State private var showInspector = false
 
 NavigationStack {
     ContentView()
@@ -307,23 +307,23 @@ NavigationStack {
                 .inspectorColumnWidth(min: 200, ideal: 300, max: 400)
         }
 }</code></pre>
-  <h3>Inspector Column Width</h3>
-  <pre><code class="lang-swift">.inspectorColumnWidth(300)                          // fixed width
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.12.9.1</span>&nbsp;&nbsp;Inspector Column Width</h3>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.12.9.1 &para;1</span><pre><code class="lang-swift">.inspectorColumnWidth(300)                          // fixed width
 .inspectorColumnWidth(min: 200, ideal: 300, max: 400)  // flexible range</code></pre>
-  <p><strong>Watch out:</strong> <code>.inspector</code> was introduced in iOS 17 / macOS 14. On older systems, you need a different approach (NavigationSplitView sidebar, etc.).</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.12.9.1 &para;2</span> <strong>Watch out:</strong> <code>.inspector</code> was introduced in iOS 17 / macOS 14. On older systems, you need a different approach (NavigationSplitView sidebar, etc.).</p>
   <hr>
-  <h2>Presentation Order and Stacking</h2>
-  <h3>Multiple Sheets</h3>
-  <p>Each view gets one <code>.sheet</code>, one <code>.fullScreenCover</code>, one <code>.alert</code>, etc. To present two sheets independently, attach each modifier to a different view:</p>
-  <pre><code class="lang-swift">VStack {
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.12.10</span>&nbsp;&nbsp;Presentation Order and Stacking</h2>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.12.10.1</span>&nbsp;&nbsp;Multiple Sheets</h3>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.12.10.1 &para;1</span> Each view gets one <code>.sheet</code>, one <code>.fullScreenCover</code>, one <code>.alert</code>, etc. To present two sheets independently, attach each modifier to a different view:</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.12.10.1 &para;2</span><pre><code class="lang-swift">VStack {
     Button("Show A") { showA = true }
         .sheet(isPresented: $showA) { ViewA() }
 
     Button("Show B") { showB = true }
         .sheet(isPresented: $showB) { ViewB() }
 }</code></pre>
-  <p>Or use an enum to drive a single sheet:</p>
-  <pre><code class="lang-swift">enum ActiveSheet: Identifiable {
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.12.10.1 &para;3</span> Or use an enum to drive a single sheet:</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.12.10.1 &para;4</span><pre><code class="lang-swift">enum ActiveSheet: Identifiable {
     case settings, profile, editor
 
     var id: Self { self }
@@ -338,10 +338,10 @@ NavigationStack {
     case .editor: EditorView()
     }
 }</code></pre>
-  <p>This is the standard pattern for views that can present multiple different sheets.</p>
-  <h3>Sheet Over Sheet</h3>
-  <p>You can present a sheet from inside a sheet. The new sheet appears on top:</p>
-  <pre><code class="lang-swift">struct FirstSheet: View {
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.12.10.1 &para;5</span> This is the standard pattern for views that can present multiple different sheets.</p>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.12.10.2</span>&nbsp;&nbsp;Sheet Over Sheet</h3>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.12.10.2 &para;1</span> You can present a sheet from inside a sheet. The new sheet appears on top:</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.12.10.2 &para;2</span><pre><code class="lang-swift">struct FirstSheet: View {
     @State private var showSecond = false
 
     var body: some View {
@@ -351,11 +351,11 @@ NavigationStack {
             }
     }
 }</code></pre>
-  <p><strong>Watch out:</strong> Deep sheet stacking gets confusing for users. Limit to two levels at most.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.12.10.2 &para;3</span> <strong>Watch out:</strong> Deep sheet stacking gets confusing for users. Limit to two levels at most.</p>
   <hr>
-  <h2>Practical Patterns</h2>
-  <h3>Destructive Action Confirmation</h3>
-  <pre><code class="lang-swift">struct DeleteButton: View {
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.12.11</span>&nbsp;&nbsp;Practical Patterns</h2>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.12.11.1</span>&nbsp;&nbsp;Destructive Action Confirmation</h3>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.12.11.1 &para;1</span><pre><code class="lang-swift">struct DeleteButton: View {
     let itemName: String
     let onDelete: () -&gt; Void
     @State private var showConfirm = false
@@ -374,9 +374,9 @@ NavigationStack {
         }
     }
 }</code></pre>
-  <h3>Error Alert Modifier</h3>
-  <p>A reusable pattern for showing errors:</p>
-  <pre><code class="lang-swift">struct ErrorAlert: ViewModifier {
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.12.11.2</span>&nbsp;&nbsp;Error Alert Modifier</h3>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.12.11.2 &para;1</span> A reusable pattern for showing errors:</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.12.11.2 &para;2</span><pre><code class="lang-swift">struct ErrorAlert: ViewModifier {
     @Binding var error: Error?
 
     var isPresented: Binding&lt;Bool&gt; {
@@ -406,8 +406,8 @@ extension View {
 
 SomeView()
     .errorAlert($lastError)</code></pre>
-  <h3>Half-Sheet Settings Panel</h3>
-  <pre><code class="lang-swift">@State private var showSettings = false
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.12.11.3</span>&nbsp;&nbsp;Half-Sheet Settings Panel</h3>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.12.11.3 &para;1</span><pre><code class="lang-swift">@State private var showSettings = false
 
 .sheet(isPresented: $showSettings) {
     NavigationStack {
@@ -424,8 +424,8 @@ SomeView()
     .presentationBackground(.regularMaterial)
 }</code></pre>
   <hr>
-  <h2>Quick Reference</h2>
-  <table>
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.12.12</span>&nbsp;&nbsp;Quick Reference</h2>
+  <span class="onum onum-float" style="color:#8a7300;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;display:block;margin:.6em 0 .1em">Table 12.1</span><table>
   <thead><tr><th>What</th><th>How</th><th></th></tr></thead>
   <tbody>
   <tr><td>Sheet (boolean)</td><td><code>.sheet(isPresented: $bool) { }</code></td><td></td></tr>
@@ -445,9 +445,9 @@ SomeView()
   </tbody>
   </table>
   <hr>
-  <h2>Further Reading &mdash; WWDC Sessions</h2>
-  <p>This book is a passive resource. When you want deeper coverage of sheets, alerts, and confirmations, the WWDC sessions below are Apple's source material.</p>
-  <ul>
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.12.13</span>&nbsp;&nbsp;Further Reading &mdash; WWDC Sessions</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.12.13 &para;1</span> This book is a passive resource. When you want deeper coverage of sheets, alerts, and confirmations, the WWDC sessions below are Apple's source material.</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.12.13 &para;2</span><ul>
     <li>WWDC25 / 256, <em>What's new in SwiftUI</em> &mdash; <a href="https://developer.apple.com/videos/play/wwdc2025/256/">developer.apple.com/videos/play/wwdc2025/256/</a>. Sheet and alert presentation updates this release.</li>
     <li>WWDC25 / 281, <em>Design interactive snippets</em> &mdash; <a href="https://developer.apple.com/videos/play/wwdc2025/281/">developer.apple.com/videos/play/wwdc2025/281/</a>. Snippet surfaces that App Intents present in place of full sheets in many flows.</li>
     <li>WWDC25 / 230, <em>Wake up to the AlarmKit API</em> &mdash; <a href="https://developer.apple.com/videos/play/wwdc2025/230/">developer.apple.com/videos/play/wwdc2025/230/</a>. System-level alert presentation outside your process &mdash; alarms are a different surface than <code>.alert()</code>.</li>

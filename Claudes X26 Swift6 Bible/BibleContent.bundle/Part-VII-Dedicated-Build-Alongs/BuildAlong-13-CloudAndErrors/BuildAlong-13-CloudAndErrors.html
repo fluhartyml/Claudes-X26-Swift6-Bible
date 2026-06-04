@@ -3,18 +3,18 @@
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Build-Along 13: CloudAndErrors</title>
 </head><body>
-<div class="content"><h1>Build-Along 13: CloudAndErrors</h1>
+<div class="content"><h1><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.13</span>&nbsp;&nbsp;Build-Along 13: CloudAndErrors</h1>
 <p><span class="status-github">Distribution: GitHub clone-and-build.</span> Single-concept teaching app &mdash; CloudKit sync with proper error-handling plumbing (throws / Result / async). Does not grow into a full-fledged product on its own, so it ships as a GitHub repo readers clone and build themselves.</p>
 <div class="scope-note">MVP concept: a tiny list (grocery list, to-do list, any ordered strings) that syncs across a user's devices via CloudKit Public/Private DB, with every failure mode handled visibly so readers see exactly how to surface sync errors. The app IS the demo.</div>
-<h2>What CloudAndErrors will teach</h2>
-<ul>
+<h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.13.1</span>&nbsp;&nbsp;What CloudAndErrors will teach</h2>
+<span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">VII.13.1 &para;1</span><ul>
 <li><strong>CloudKit</strong> &mdash; <code>CKDatabase</code>, record types, subscriptions, push-driven invalidation, optimistic concurrency, iCloud account status.</li>
 <li><strong>Error handling discipline</strong> &mdash; <code>throws</code>, <code>Result&lt;Success, Failure&gt;</code>, structured <code>async throws</code>, proper error surfacing in SwiftUI via alerts and inline banners. Partial-failure scenarios (one record saves, another doesn't).</li>
 <li><strong>Signature layer:</strong> MVP + Under the Hood + About &amp; Send Feedback.</li>
 <li><strong>Distribution:</strong> GitHub clone-and-build.</li>
 </ul>
-<h2>Why GitHub clone-and-build not App Store</h2>
-<p>A "sync a list, show errors" app is pedagogically valuable but doesn't read as a real utility. Readers who want a synced list already have Reminders, Notes, and dozens of third-party apps. The App Store 2.2 bar for "you brought me a demo" would be triggered. Shipping as a GitHub repo readers clone is the honest path.</p>
-<h2>Current state</h2><ul><li>No Xcode project yet</li></ul>
-<h2>Next step</h2><p>Scaffolded after earlier build-alongs ship; GitHub clone-and-build distribution only (see Book 21 Git-And-GitHub for the clone workflow).</p></div>
+<h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.13.2</span>&nbsp;&nbsp;Why GitHub clone-and-build not App Store</h2>
+<p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.13.2 &para;1</span> A "sync a list, show errors" app is pedagogically valuable but doesn't read as a real utility. Readers who want a synced list already have Reminders, Notes, and dozens of third-party apps. The App Store 2.2 bar for "you brought me a demo" would be triggered. Shipping as a GitHub repo readers clone is the honest path.</p>
+<h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.13.3</span>&nbsp;&nbsp;Current state</h2><span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">VII.13.3 &para;1</span><ul><li>No Xcode project yet</li></ul>
+<h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.13.4</span>&nbsp;&nbsp;Next step</h2><p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.13.4 &para;1</span> Scaffolded after earlier build-alongs ship; GitHub clone-and-build distribution only (see Book 21 Git-And-GitHub for the clone workflow).</p></div>
 </body></html>

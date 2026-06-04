@@ -9,18 +9,18 @@
 
 <div class="content">
 
-  <h1>Book 5: Menus and Navigation</h1>
-  <h2>Live Reference: Claudes X26 Swift6 Bible + Claudes LockBox + CryoTunes Player</h2>
+  <h1><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.5</span>&nbsp;&nbsp;Book 5: Menus and Navigation</h1>
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.5.1</span>&nbsp;&nbsp;Live Reference: Claudes X26 Swift6 Bible + Claudes LockBox + CryoTunes Player</h2>
   <div class="scope-note">Three different production navigation shapes ship across the book's app roster. <strong>Claudes X26 Swift6 Bible</strong> uses a sidebar-and-detail <code>NavigationSplitView</code> for the book's Parts &rarr; Books &rarr; Chapters &rarr; Pages tree. <strong>Claudes LockBox</strong> uses a three-column <code>NavigationSplitView</code> (Folders &rarr; Items &rarr; Detail) plus a TabView at the root level. <strong>CryoTunes Player</strong> uses a flat tab-and-control-cluster pattern fitted to a music player's needs. The three sources side-by-side show how the same <code>NavigationStack</code> / <code>NavigationSplitView</code> / <code>TabView</code> primitives compose into very different feeling apps. Sources: <a href="https://github.com/fluhartyml/Claudes-X26-Swift6-Bible">github.com/fluhartyml/Claudes-X26-Swift6-Bible</a>, <a href="https://github.com/fluhartyml/Claudes-LockBox">github.com/fluhartyml/Claudes-LockBox</a>, <a href="https://github.com/fluhartyml/CryoTunesPlayer">github.com/fluhartyml/CryoTunesPlayer</a>. See Build-Along 00, Build-Along 03, Source Tour 18.</div>
   <hr>
-  <h2>X26 Menu and Toolbar Updates</h2>
-  <p>Menus in X26 pick up the Liquid Glass material on every platform and start showing system icons next to common actions, so a user can pick Cut, Copy, or Paste at a glance instead of reading the words<sup>[<a href="#mn1-fn">mn1</a>]</sup>. The bigger structural change is on iPadOS: every app gets a <strong>menu bar</strong> now, the same way Mac apps have always had one.<sup>[<a href="#mn1-fn">mn1</a>]</sup></p>
-  <h3>Adopt Standard Selectors for Menu Item Icons</h3>
-  <p>The way the icons get attached is selector-driven. When a menu item is wired up to a standard selector (Cut, Copy, Paste, and the rest of the platform's standard action vocabulary), the system reads that selector and pairs the right icon with it. Wire your standard actions to the standard selectors and the icons appear; if the action is custom, the selector is custom, and you supply your own icon.<sup>[<a href="#mn1-fn">mn1</a>]</sup></p>
-  <p>Related rule worth keeping near this one: whatever you put at the top of a contextual menu should also be the swipe action on the same row.<sup>[<a href="#mn1-fn">mn1</a>]</sup></p>
-  <h3>Toolbar Grouping with <code>ToolbarSpacer</code></h3>
-  <p>Toolbars get the new material, and along with it a way to declare which buttons belong in the same cluster. The tool for that is a fixed spacer dropped between groups:<sup>[<a href="#mn1-fn">mn1</a>]</sup></p>
-  <pre><code class="lang-swift">.toolbar {
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.5.2</span>&nbsp;&nbsp;X26 Menu and Toolbar Updates</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.5.2 &para;1</span> Menus in X26 pick up the Liquid Glass material on every platform and start showing system icons next to common actions, so a user can pick Cut, Copy, or Paste at a glance instead of reading the words<sup>[<a href="#mn1-fn">mn1</a>]</sup>. The bigger structural change is on iPadOS: every app gets a <strong>menu bar</strong> now, the same way Mac apps have always had one.<sup>[<a href="#mn1-fn">mn1</a>]</sup></p>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.5.2.1</span>&nbsp;&nbsp;Adopt Standard Selectors for Menu Item Icons</h3>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.5.2.1 &para;1</span> The way the icons get attached is selector-driven. When a menu item is wired up to a standard selector (Cut, Copy, Paste, and the rest of the platform's standard action vocabulary), the system reads that selector and pairs the right icon with it. Wire your standard actions to the standard selectors and the icons appear; if the action is custom, the selector is custom, and you supply your own icon.<sup>[<a href="#mn1-fn">mn1</a>]</sup></p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.5.2.1 &para;2</span> Related rule worth keeping near this one: whatever you put at the top of a contextual menu should also be the swipe action on the same row.<sup>[<a href="#mn1-fn">mn1</a>]</sup></p>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.5.2.2</span>&nbsp;&nbsp;Toolbar Grouping with <code>ToolbarSpacer</code></h3>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.5.2.2 &para;1</span> Toolbars get the new material, and along with it a way to declare which buttons belong in the same cluster. The tool for that is a fixed spacer dropped between groups:<sup>[<a href="#mn1-fn">mn1</a>]</sup></p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.5.2.2 &para;2</span><pre><code class="lang-swift">.toolbar {
     ToolbarItemGroup(placement: .primaryAction) {
         Button("Undo") { undo() }
         Button("Redo") { redo() }
@@ -31,17 +31,17 @@
         Menu("More") { /* ... */ }
     }
 }</code></pre>
-  <p>Buttons inside one group ride on a shared Liquid Glass plate. A <code>ToolbarSpacer(.fixed)</code> between groups gives each group its own plate. The wrong-look version is four unrelated buttons crammed onto a single plate; the right-look version splits by function &mdash; undo/redo on one plate, markup/more on another &mdash; with the spacer doing the visual separating.<sup>[<a href="#mn1-fn">mn1</a>]</sup></p>
-  <p>UIKit and AppKit ship parallel APIs (<code>fixed</code> spacer on UIKit, <code>ToolbarSpacer</code> on AppKit).<sup>[<a href="#mn1-fn">mn1</a>]</sup></p>
-  <h3>Use Icons for Common Actions; Always Provide Accessibility Labels</h3>
-  <p>For the standard verbs in a toolbar, an icon reads faster than a word and takes less space &mdash; reach for icons first.<sup>[<a href="#mn1-fn">mn1</a>]</sup> One rule about mixing them: a single group should be all icons or all text, not a checkerboard of both. And every icon, no matter how obvious you think it is, needs an <strong>accessibility label</strong> attached. VoiceOver and Voice Control users read the label; sighted users see the icon.<sup>[<a href="#mn1-fn">mn1</a>]</sup></p>
-  <h3>Hide Toolbar Items Properly</h3>
-  <p>You've probably seen an app with a blank gap in its toolbar &mdash; a slot that's clearly there but holds nothing. That's the symptom of hiding the inside of a toolbar item instead of the item. Apply <code>.hidden(_:)</code> at the item level instead of inside it, and the slot collapses with the item; no ghost gap left behind.<sup>[<a href="#mn1-fn">mn1</a>]</sup></p>
-  <p id="mn1-fn" style="font-size: 13pt; color: var(--dim);">[mn1] Apple Developer Documentation, <em>Adopting Liquid Glass</em>. <a href="https://developer.apple.com/documentation/TechnologyOverviews/adopting-liquid-glass">developer.apple.com/documentation/TechnologyOverviews/adopting-liquid-glass</a> &mdash; verified 2026-04-29.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.5.2.2 &para;3</span> Buttons inside one group ride on a shared Liquid Glass plate. A <code>ToolbarSpacer(.fixed)</code> between groups gives each group its own plate. The wrong-look version is four unrelated buttons crammed onto a single plate; the right-look version splits by function &mdash; undo/redo on one plate, markup/more on another &mdash; with the spacer doing the visual separating.<sup>[<a href="#mn1-fn">mn1</a>]</sup></p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.5.2.2 &para;4</span> UIKit and AppKit ship parallel APIs (<code>fixed</code> spacer on UIKit, <code>ToolbarSpacer</code> on AppKit).<sup>[<a href="#mn1-fn">mn1</a>]</sup></p>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.5.2.3</span>&nbsp;&nbsp;Use Icons for Common Actions; Always Provide Accessibility Labels</h3>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.5.2.3 &para;1</span> For the standard verbs in a toolbar, an icon reads faster than a word and takes less space &mdash; reach for icons first.<sup>[<a href="#mn1-fn">mn1</a>]</sup> One rule about mixing them: a single group should be all icons or all text, not a checkerboard of both. And every icon, no matter how obvious you think it is, needs an <strong>accessibility label</strong> attached. VoiceOver and Voice Control users read the label; sighted users see the icon.<sup>[<a href="#mn1-fn">mn1</a>]</sup></p>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.5.2.4</span>&nbsp;&nbsp;Hide Toolbar Items Properly</h3>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.5.2.4 &para;1</span> You've probably seen an app with a blank gap in its toolbar &mdash; a slot that's clearly there but holds nothing. That's the symptom of hiding the inside of a toolbar item instead of the item. Apply <code>.hidden(_:)</code> at the item level instead of inside it, and the slot collapses with the item; no ghost gap left behind.<sup>[<a href="#mn1-fn">mn1</a>]</sup></p>
+  <p id="mn1-fn" style="font-size: 13pt; color: var(--dim);"><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.5.2.4 &para;2</span> [mn1] Apple Developer Documentation, <em>Adopting Liquid Glass</em>. <a href="https://developer.apple.com/documentation/TechnologyOverviews/adopting-liquid-glass">developer.apple.com/documentation/TechnologyOverviews/adopting-liquid-glass</a> &mdash; verified 2026-04-29.</p>
   <hr>
-  <h2>NavigationStack</h2>
-  <p>The modern replacement for <code>NavigationView</code>. Use this for single-column, push-pop navigation on iPhone and iPad.</p>
-  <pre><code class="lang-swift">struct ContentView: View {
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.5.3</span>&nbsp;&nbsp;NavigationStack</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.5.3 &para;1</span> The modern replacement for <code>NavigationView</code>. Use this for single-column, push-pop navigation on iPhone and iPad.</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.5.3 &para;2</span><pre><code class="lang-swift">struct ContentView: View {
     var body: some View {
         NavigationStack {
             List {
@@ -55,9 +55,9 @@
         }
     }
 }</code></pre>
-  <h3>Programmatic Navigation with Path</h3>
-  <p>Use <code>NavigationPath</code> when you need to push/pop views from code — after a network call, a button tap, or a deep link.</p>
-  <pre><code class="lang-swift">struct AppView: View {
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.5.3.1</span>&nbsp;&nbsp;Programmatic Navigation with Path</h3>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.5.3.1 &para;1</span> Use <code>NavigationPath</code> when you need to push/pop views from code — after a network call, a button tap, or a deep link.</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.5.3.1 &para;2</span><pre><code class="lang-swift">struct AppView: View {
     @State private var path = NavigationPath()
 
     var body: some View {
@@ -94,9 +94,9 @@ struct StepView: View {
         .navigationTitle(step)
     }
 }</code></pre>
-  <h3>Typed Navigation Path</h3>
-  <p>When all your destinations share a single type, skip <code>NavigationPath</code> and use a plain array.</p>
-  <pre><code class="lang-swift">struct RecipeApp: View {
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.5.3.2</span>&nbsp;&nbsp;Typed Navigation Path</h3>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.5.3.2 &para;1</span> When all your destinations share a single type, skip <code>NavigationPath</code> and use a plain array.</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.5.3.2 &para;2</span><pre><code class="lang-swift">struct RecipeApp: View {
     @State private var path: [Recipe] = []
 
     var body: some View {
@@ -108,13 +108,13 @@ struct StepView: View {
         }
     }
 }</code></pre>
-  <h3>Watch Out</h3>
-  <ul><li><code>NavigationPath</code> is type-erased. It can hold any <code>Hashable</code> type, but you need a <code>.navigationDestination(for:)</code> registered for each type you append.</li><li>If you append a value with no matching destination, the push silently fails. No crash, no error. Just nothing happens.</li><li>Do not nest <code>NavigationStack</code> inside another <code>NavigationStack</code>. You get double navigation bars and broken behavior.</li></ul>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.5.3.3</span>&nbsp;&nbsp;Watch Out</h3>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.5.3.3 &para;1</span><ul><li><code>NavigationPath</code> is type-erased. It can hold any <code>Hashable</code> type, but you need a <code>.navigationDestination(for:)</code> registered for each type you append.</li><li>If you append a value with no matching destination, the push silently fails. No crash, no error. Just nothing happens.</li><li>Do not nest <code>NavigationStack</code> inside another <code>NavigationStack</code>. You get double navigation bars and broken behavior.</li></ul>
   <hr>
-  <h2>NavigationSplitView</h2>
-  <p>For two- or three-column layouts. iPad and Mac get real columns; iPhone collapses to a stack automatically.</p>
-  <h3>Two-Column</h3>
-  <pre><code class="lang-swift">struct TwoColumnView: View {
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.5.4</span>&nbsp;&nbsp;NavigationSplitView</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.5.4 &para;1</span> For two- or three-column layouts. iPad and Mac get real columns; iPhone collapses to a stack automatically.</p>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.5.4.1</span>&nbsp;&nbsp;Two-Column</h3>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.5.4.1 &para;1</span><pre><code class="lang-swift">struct TwoColumnView: View {
     @State private var selectedItem: Item?
 
     var body: some View {
@@ -134,8 +134,8 @@ struct StepView: View {
         }
     }
 }</code></pre>
-  <h3>Three-Column</h3>
-  <pre><code class="lang-swift">NavigationSplitView {
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.5.4.2</span>&nbsp;&nbsp;Three-Column</h3>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.5.4.2 &para;1</span><pre><code class="lang-swift">NavigationSplitView {
     // Sidebar (column 1)
     CategoryListView(selection: $selectedCategory)
 } content: {
@@ -149,30 +149,30 @@ struct StepView: View {
         ItemDetailView(item: selectedItem)
     }
 }</code></pre>
-  <h3>Controlling Column Visibility</h3>
-  <pre><code class="lang-swift">@State private var columnVisibility: NavigationSplitViewVisibility = .all
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.5.4.3</span>&nbsp;&nbsp;Controlling Column Visibility</h3>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.5.4.3 &para;1</span><pre><code class="lang-swift">@State private var columnVisibility: NavigationSplitViewVisibility = .all
 
 NavigationSplitView(columnVisibility: $columnVisibility) {
     Sidebar()
 } detail: {
     Detail()
 }</code></pre>
-  <p>Options: <code>.all</code>, <code>.doubleColumn</code>, <code>.detailOnly</code>, <code>.automatic</code>.</p>
-  <h3>Watch Out</h3>
-  <ul><li>On iPhone, <code>NavigationSplitView</code> collapses into a single navigation stack. The sidebar becomes the root list. This is automatic but test it — your layout assumptions may not hold.</li><li><code>selection</code> binding on <code>List</code> inside <code>NavigationSplitView</code> drives navigation. If you also use <code>NavigationLink(value:)</code>, you can get conflicts. Pick one approach.</li></ul>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.5.4.3 &para;2</span> Options: <code>.all</code>, <code>.doubleColumn</code>, <code>.detailOnly</code>, <code>.automatic</code>.</p>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.5.4.4</span>&nbsp;&nbsp;Watch Out</h3>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.5.4.4 &para;1</span><ul><li>On iPhone, <code>NavigationSplitView</code> collapses into a single navigation stack. The sidebar becomes the root list. This is automatic but test it — your layout assumptions may not hold.</li><li><code>selection</code> binding on <code>List</code> inside <code>NavigationSplitView</code> drives navigation. If you also use <code>NavigationLink(value:)</code>, you can get conflicts. Pick one approach.</li></ul>
   <hr>
-  <h2>NavigationLink</h2>
-  <p>Two forms exist: the modern value-based form and the older view-based form.</p>
-  <h3>Value-Based (Preferred)</h3>
-  <pre><code class="lang-swift">NavigationLink("Show Detail", value: myItem)</code></pre>
-  <p>Pair with <code>.navigationDestination(for:)</code> on a parent. The destination is declared once, not per link.</p>
-  <h3>View-Based (Legacy but Functional)</h3>
-  <pre><code class="lang-swift">NavigationLink("Show Detail") {
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.5.5</span>&nbsp;&nbsp;NavigationLink</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.5.5 &para;1</span> Two forms exist: the modern value-based form and the older view-based form.</p>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.5.5.1</span>&nbsp;&nbsp;Value-Based (Preferred)</h3>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.5.5.1 &para;1</span><pre><code class="lang-swift">NavigationLink("Show Detail", value: myItem)</code></pre>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.5.5.1 &para;2</span> Pair with <code>.navigationDestination(for:)</code> on a parent. The destination is declared once, not per link.</p>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.5.5.2</span>&nbsp;&nbsp;View-Based (Legacy but Functional)</h3>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.5.5.2 &para;1</span><pre><code class="lang-swift">NavigationLink("Show Detail") {
     DetailView(item: myItem)
 }</code></pre>
-  <p>This still works. The downside is that the destination view is created at the same time as the link, even if the user never taps it. For heavy views, that wastes memory.</p>
-  <h3>Custom Label</h3>
-  <pre><code class="lang-swift">NavigationLink(value: recipe) {
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.5.5.2 &para;2</span> This still works. The downside is that the destination view is created at the same time as the link, even if the user never taps it. For heavy views, that wastes memory.</p>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.5.5.3</span>&nbsp;&nbsp;Custom Label</h3>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.5.5.3 &para;1</span><pre><code class="lang-swift">NavigationLink(value: recipe) {
     HStack {
         Image(systemName: "fork.knife")
         VStack(alignment: .leading) {
@@ -182,19 +182,19 @@ NavigationSplitView(columnVisibility: $columnVisibility) {
     }
 }</code></pre>
   <hr>
-  <h2>Navigation Title</h2>
-  <pre><code class="lang-swift">.navigationTitle("Recipes")             // standard
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.5.6</span>&nbsp;&nbsp;Navigation Title</h2>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.5.6 &para;1</span><pre><code class="lang-swift">.navigationTitle("Recipes")             // standard
 .navigationTitle($editableTitle)         // editable title (iOS 16+)</code></pre>
-  <h3>Display Modes (iOS)</h3>
-  <pre><code class="lang-swift">.navigationBarTitleDisplayMode(.large)     // big title, scrolls to inline
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.5.6.1</span>&nbsp;&nbsp;Display Modes (iOS)</h3>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.5.6.1 &para;1</span><pre><code class="lang-swift">.navigationBarTitleDisplayMode(.large)     // big title, scrolls to inline
 .navigationBarTitleDisplayMode(.inline)    // small centered title
 .navigationBarTitleDisplayMode(.automatic) // inherits from parent</code></pre>
-  <h3>Watch Out</h3>
-  <ul><li><code>.navigationTitle</code> goes on the content inside the NavigationStack, not on the NavigationStack itself. Put it on the <code>List</code> or <code>VStack</code>, not the outer container.</li></ul>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.5.6.2</span>&nbsp;&nbsp;Watch Out</h3>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.5.6.2 &para;1</span><ul><li><code>.navigationTitle</code> goes on the content inside the NavigationStack, not on the NavigationStack itself. Put it on the <code>List</code> or <code>VStack</code>, not the outer container.</li></ul>
   <hr>
-  <h2>TabView</h2>
-  <h3>Basic Tabs</h3>
-  <pre><code class="lang-swift">struct MainView: View {
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.5.7</span>&nbsp;&nbsp;TabView</h2>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.5.7.1</span>&nbsp;&nbsp;Basic Tabs</h3>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.5.7.1 &para;1</span><pre><code class="lang-swift">struct MainView: View {
     @State private var selectedTab = 0
 
     var body: some View {
@@ -211,17 +211,17 @@ NavigationSplitView(columnVisibility: $columnVisibility) {
         }
     }
 }</code></pre>
-  <h3>Badge</h3>
-  <pre><code class="lang-swift">Tab("Inbox", systemImage: "tray", value: 0) {
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.5.7.2</span>&nbsp;&nbsp;Badge</h3>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.5.7.2 &para;1</span><pre><code class="lang-swift">Tab("Inbox", systemImage: "tray", value: 0) {
     InboxView()
 }
 .badge(unreadCount)</code></pre>
-  <h3>Watch Out</h3>
-  <ul><li>Each tab should contain its own <code>NavigationStack</code> if it needs navigation. Do not wrap the entire <code>TabView</code> in a <code>NavigationStack</code>.</li><li>Tab state resets when switching tabs unless you preserve it with <code>@State</code> or <code>@SceneStorage</code>.</li></ul>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.5.7.3</span>&nbsp;&nbsp;Watch Out</h3>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.5.7.3 &para;1</span><ul><li>Each tab should contain its own <code>NavigationStack</code> if it needs navigation. Do not wrap the entire <code>TabView</code> in a <code>NavigationStack</code>.</li><li>Tab state resets when switching tabs unless you preserve it with <code>@State</code> or <code>@SceneStorage</code>.</li></ul>
   <hr>
-  <h2>macOS Menu Bar</h2>
-  <h3>CommandGroup: Adding to Existing Menus</h3>
-  <pre><code class="lang-swift">@main
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.5.8</span>&nbsp;&nbsp;macOS Menu Bar</h2>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.5.8.1</span>&nbsp;&nbsp;CommandGroup: Adding to Existing Menus</h3>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.5.8.1 &para;1</span><pre><code class="lang-swift">@main
 struct MyApp: App {
     var body: some Scene {
         WindowGroup {
@@ -244,9 +244,9 @@ struct MyApp: App {
         }
     }
 }</code></pre>
-  <p>Common placements: <code>.newItem</code>, <code>.saveItem</code>, <code>.sidebar</code>, <code>.toolbar</code>, <code>.help</code>, <code>.pasteboard</code>, <code>.undoRedo</code>.</p>
-  <h3>CommandMenu: Custom Top-Level Menu</h3>
-  <pre><code class="lang-swift">.commands {
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.5.8.1 &para;2</span> Common placements: <code>.newItem</code>, <code>.saveItem</code>, <code>.sidebar</code>, <code>.toolbar</code>, <code>.help</code>, <code>.pasteboard</code>, <code>.undoRedo</code>.</p>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.5.8.2</span>&nbsp;&nbsp;CommandMenu: Custom Top-Level Menu</h3>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.5.8.2 &para;1</span><pre><code class="lang-swift">.commands {
     CommandMenu("Recipes") {
         Button("Import from File...") { importRecipes() }
             .keyboardShortcut("i", modifiers: [.command, .shift])
@@ -262,10 +262,10 @@ struct MyApp: App {
         }
     }
 }</code></pre>
-  <h3>Watch Out</h3>
-  <ul><li>Menu commands cannot directly access view state. Use <code>@FocusedValue</code> or <code>@FocusedBinding</code> to bridge between the menu bar and the focused view.</li><li><code>.commands</code> modifier goes on the <code>Scene</code>, not on a <code>View</code>.</li></ul>
-  <h3>FocusedValue Bridge</h3>
-  <pre><code class="lang-swift">// 1. Define the key
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.5.8.3</span>&nbsp;&nbsp;Watch Out</h3>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.5.8.3 &para;1</span><ul><li>Menu commands cannot directly access view state. Use <code>@FocusedValue</code> or <code>@FocusedBinding</code> to bridge between the menu bar and the focused view.</li><li><code>.commands</code> modifier goes on the <code>Scene</code>, not on a <code>View</code>.</li></ul>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.5.8.4</span>&nbsp;&nbsp;FocusedValue Bridge</h3>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.5.8.4 &para;1</span><pre><code class="lang-swift">// 1. Define the key
 struct FocusedRecipeKey: FocusedValueKey {
     typealias Value = Binding&lt;Recipe&gt;
 }
@@ -304,8 +304,8 @@ struct MyApp: App {
     }
 }</code></pre>
   <hr>
-  <h2>Context Menus</h2>
-  <pre><code class="lang-swift">Text("Hold me")
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.5.9</span>&nbsp;&nbsp;Context Menus</h2>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.5.9 &para;1</span><pre><code class="lang-swift">Text("Hold me")
     .contextMenu {
         Button("Copy", action: copyItem)
         Button("Delete", role: .destructive, action: deleteItem)
@@ -317,8 +317,8 @@ struct MyApp: App {
             Button("Mail", action: shareViaMail)
         }
     }</code></pre>
-  <h3>Context Menu with Preview</h3>
-  <pre><code class="lang-swift">Text(recipe.name)
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.5.9.1</span>&nbsp;&nbsp;Context Menu with Preview</h3>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.5.9.1 &para;1</span><pre><code class="lang-swift">Text(recipe.name)
     .contextMenu {
         Button("Edit") { editRecipe() }
         Button("Delete", role: .destructive) { deleteRecipe() }
@@ -326,20 +326,20 @@ struct MyApp: App {
         RecipePreviewCard(recipe: recipe)
             .frame(width: 300, height: 200)
     }</code></pre>
-  <h3>Watch Out</h3>
-  <ul><li>Context menus only support <code>Button</code>, <code>Divider</code>, <code>Menu</code>, <code>Toggle</code>, and <code>Picker</code>. No arbitrary views — no sliders, no text fields.</li><li>On macOS, context menus trigger on right-click. On iOS, long press.</li></ul>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.5.9.2</span>&nbsp;&nbsp;Watch Out</h3>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.5.9.2 &para;1</span><ul><li>Context menus only support <code>Button</code>, <code>Divider</code>, <code>Menu</code>, <code>Toggle</code>, and <code>Picker</code>. No arbitrary views — no sliders, no text fields.</li><li>On macOS, context menus trigger on right-click. On iOS, long press.</li></ul>
   <hr>
-  <h2>Practical Tips</h2>
-  <ol class="body-list"><li><strong>Start with NavigationStack.</strong> Only move to NavigationSplitView when you actually need columns (iPad/Mac sidebar layouts).</li></ol>
-  <ol class="body-list"><li><strong>Use value-based NavigationLink</strong> with <code>.navigationDestination(for:)</code>. It separates the "what to show" from the "where it lives" and enables programmatic navigation.</li></ol>
-  <ol class="body-list"><li><strong>Pop to root</strong> by resetting the path: <code>path = NavigationPath()</code> or <code>path.removeLast(path.count)</code>.</li></ol>
-  <ol class="body-list"><li><strong>Deep linking</strong>: Build your <code>NavigationPath</code> from URL components on app launch, then set it as the initial path.</li></ol>
-  <ol class="body-list"><li><strong>Test on all platforms.</strong> NavigationSplitView behaves very differently on iPhone vs iPad vs Mac. The compiler will not catch layout surprises.</li></ol>
-  <ol class="body-list"><li><strong>Keep NavigationStack out of reusable components.</strong> The view that owns the NavigationStack should be a top-level coordinator, not a leaf view.</li></ol>
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.5.10</span>&nbsp;&nbsp;Practical Tips</h2>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.5.10 &para;1</span><ol class="body-list"><li><strong>Start with NavigationStack.</strong> Only move to NavigationSplitView when you actually need columns (iPad/Mac sidebar layouts).</li></ol>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.5.10 &para;2</span><ol class="body-list"><li><strong>Use value-based NavigationLink</strong> with <code>.navigationDestination(for:)</code>. It separates the "what to show" from the "where it lives" and enables programmatic navigation.</li></ol>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.5.10 &para;3</span><ol class="body-list"><li><strong>Pop to root</strong> by resetting the path: <code>path = NavigationPath()</code> or <code>path.removeLast(path.count)</code>.</li></ol>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.5.10 &para;4</span><ol class="body-list"><li><strong>Deep linking</strong>: Build your <code>NavigationPath</code> from URL components on app launch, then set it as the initial path.</li></ol>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.5.10 &para;5</span><ol class="body-list"><li><strong>Test on all platforms.</strong> NavigationSplitView behaves very differently on iPhone vs iPad vs Mac. The compiler will not catch layout surprises.</li></ol>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.5.10 &para;6</span><ol class="body-list"><li><strong>Keep NavigationStack out of reusable components.</strong> The view that owns the NavigationStack should be a top-level coordinator, not a leaf view.</li></ol>
   <hr>
-  <h2>Further Reading &mdash; WWDC Sessions</h2>
-  <p>This book is a passive resource. When you want deeper coverage of menus and navigation, the WWDC sessions below are Apple's source material.</p>
-  <ul>
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.5.11</span>&nbsp;&nbsp;Further Reading &mdash; WWDC Sessions</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.5.11 &para;1</span> This book is a passive resource. When you want deeper coverage of menus and navigation, the WWDC sessions below are Apple's source material.</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.5.11 &para;2</span><ul>
     <li>WWDC25 / 256, <em>What's new in SwiftUI</em> &mdash; <a href="https://developer.apple.com/videos/play/wwdc2025/256/">developer.apple.com/videos/play/wwdc2025/256/</a>. Navigation-stack and menu updates this release.</li>
     <li>WWDC25 / 323, <em>Build a SwiftUI app with the new design</em> &mdash; <a href="https://developer.apple.com/videos/play/wwdc2025/323/">developer.apple.com/videos/play/wwdc2025/323/</a>. New <code>ToolbarSpacer</code>, search placement, and grouped morphing that affect menu surfaces.</li>
     <li>WWDC25 / 219, <em>Meet Liquid Glass</em> &mdash; <a href="https://developer.apple.com/videos/play/wwdc2025/219/">developer.apple.com/videos/play/wwdc2025/219/</a>. Material rules for menu chrome and context menus.</li>

@@ -8,16 +8,16 @@
 
 <div class="content">
 
-  <h1>Build-Along 08: IntelligenceDemo &mdash; Photo to Text in Two Files</h1>
+  <h1><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.8</span>&nbsp;&nbsp;Build-Along 08: IntelligenceDemo &mdash; Photo to Text in Two Files</h1>
   <p><span class="status-github">Distribution: GitHub clone-and-build.</span> IntelligenceDemo is the smallest possible app that puts the Vision framework's text recognition in front of a user. Pick a photo of a page, a sign, a receipt, or a handwritten note; the app reads the text on it and shows it back. Two Swift files, one screen, no persistence, no settings. The teaching point is the Vision API, isolated.</p>
   <p>The repository: <a href="https://github.com/fluhartyml/IntelligenceDemo">github.com/fluhartyml/IntelligenceDemo</a>. Built on <code>PhotosPicker</code> (PhotosUI) for input, <code>VNRecognizeTextRequest</code> (Vision) for recognition, and <code>async</code>/<code>await</code> to keep the recognition off the main thread. iPhone and iPad universal target.</p>
   <div class="scope-note">This chapter teaches OCR at demo scope &mdash; one feature, single screen, no surrounding product. Snap &amp; ScanKeeper, on the App Store under Michael's developer account, is the production evolution of the same Vision API into a full document-scanning utility. The build-along teaches the primitive; <a href="../SourceTour-20-Snap-ScanKeeper/SourceTour-20-Snap-ScanKeeper.html">Source Tour 20: Snap &amp; ScanKeeper</a> is the case study for what the same API looks like with persistence, document edges, and a shipping product wrapped around it.</div>
   <hr>
-  <h2>The Brainstorm</h2>
-  <p>The Vision framework has shipped on iOS since version 11 (2017), but the API has had a reputation for being intimidating. Most introductions reach for face detection, barcode reading, or saliency analysis &mdash; topics that need pages of explanation about request handlers, image orientation, and observation types before the reader sees a single character of recognized text. The reputation is unearned. Vision's text-recognition path is short, and once a reader has seen it work, the rest of Vision generalizes easily.</p>
-  <p>IntelligenceDemo strips the lesson down to its load-bearing parts: a photo source, a Vision request, an async wrapper, four UI states. No camera, no live capture, no document detection. The user picks an existing photo from the library; the app reads any text it finds.</p>
-  <p><strong>v1.0 spec:</strong></p>
-  <ul>
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.8.1</span>&nbsp;&nbsp;The Brainstorm</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.8.1 &para;1</span> The Vision framework has shipped on iOS since version 11 (2017), but the API has had a reputation for being intimidating. Most introductions reach for face detection, barcode reading, or saliency analysis &mdash; topics that need pages of explanation about request handlers, image orientation, and observation types before the reader sees a single character of recognized text. The reputation is unearned. Vision's text-recognition path is short, and once a reader has seen it work, the rest of Vision generalizes easily.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.8.1 &para;2</span> IntelligenceDemo strips the lesson down to its load-bearing parts: a photo source, a Vision request, an async wrapper, four UI states. No camera, no live capture, no document detection. The user picks an existing photo from the library; the app reads any text it finds.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.8.1 &para;3</span> <strong>v1.0 spec:</strong></p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">VII.8.1 &para;4</span><ul>
     <li>One screen, scrollable</li>
     <li><code>PhotosPicker</code> button at the top &mdash; "Pick a photo" / "Pick another photo"</li>
     <li>Selected image rendered inline below the picker</li>
@@ -26,8 +26,8 @@
     <li>Off-main-thread recognition via <code>async</code>/<code>await</code></li>
     <li>iPhone and iPad universal &mdash; same code, same UI</li>
   </ul>
-  <p>What is intentionally not in v1.0:</p>
-  <ul>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.8.1 &para;5</span> What is intentionally not in v1.0:</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">VII.8.1 &para;6</span><ul>
     <li>No camera capture &mdash; the user picks an existing photo, not takes a new one</li>
     <li>No document edge detection &mdash; the recognizer reads whatever is in the frame, no perspective correction, no cropping</li>
     <li>No saving recognized text &mdash; no SwiftData, no Files export, no share sheet; <code>.textSelection(.enabled)</code> lets the user copy what they want</li>
@@ -35,12 +35,12 @@
     <li>No handwriting-vs-print toggle &mdash; the recognizer figures it out</li>
   </ul>
   <hr>
-  <h2>The Architecture</h2>
-  <p>Two Swift files. Nothing else.</p>
-  <pre><code>IntelligenceDemoApp.swift   # @main &middot; one WindowGroup &middot; ContentView()
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.8.2</span>&nbsp;&nbsp;The Architecture</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.8.2 &para;1</span> Two Swift files. Nothing else.</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">VII.8.2 &para;2</span><pre><code>IntelligenceDemoApp.swift   # @main &middot; one WindowGroup &middot; ContentView()
 ContentView.swift           # PhotosPicker + Vision + four UI states</code></pre>
-  <p>The app entry is the SwiftUI default, unchanged from the Xcode template:</p>
-  <pre><code class="lang-swift">@main
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.8.2 &para;3</span> The app entry is the SwiftUI default, unchanged from the Xcode template:</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">VII.8.2 &para;4</span><pre><code class="lang-swift">@main
 struct IntelligenceDemoApp: App {
     var body: some Scene {
         WindowGroup {
@@ -48,22 +48,22 @@ struct IntelligenceDemoApp: App {
         }
     }
 }</code></pre>
-  <p>Everything else is in <code>ContentView.swift</code>. The whole file is 113 lines including imports, comments, and the SwiftUI Preview. That fits in one paragraph of mental model: pick a photo, run Vision on it, show the text.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.8.2 &para;5</span> Everything else is in <code>ContentView.swift</code>. The whole file is 113 lines including imports, comments, and the SwiftUI Preview. That fits in one paragraph of mental model: pick a photo, run Vision on it, show the text.</p>
   <hr>
-  <h2>The Four State Variables</h2>
-  <pre><code class="lang-swift">@State private var pickedItem: PhotosPickerItem?
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.8.3</span>&nbsp;&nbsp;The Four State Variables</h2>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">VII.8.3 &para;1</span><pre><code class="lang-swift">@State private var pickedItem: PhotosPickerItem?
 @State private var pickedImage: UIImage?
 @State private var extractedText: String = ""
 @State private var isProcessing: Bool = false</code></pre>
-  <p>Each one corresponds to a stage of the pipeline.</p>
-  <p><strong><code>pickedItem</code></strong> is what the picker writes to. A <code>PhotosPickerItem</code> is a lazy reference to a photo in the library &mdash; it is not the bytes themselves. The actual image data is fetched separately, asynchronously.</p>
-  <p><strong><code>pickedImage</code></strong> holds the decoded <code>UIImage</code> once the bytes have been loaded. The view binds to this to render the photo.</p>
-  <p><strong><code>extractedText</code></strong> holds the recognized text once Vision has finished. The view binds to this to show the result, with <code>.textSelection(.enabled)</code> so the user can copy it.</p>
-  <p><strong><code>isProcessing</code></strong> gates the spinner state. It flips <code>true</code> the moment a new photo arrives and flips back to <code>false</code> after Vision returns.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.8.3 &para;2</span> Each one corresponds to a stage of the pipeline.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.8.3 &para;3</span> <strong><code>pickedItem</code></strong> is what the picker writes to. A <code>PhotosPickerItem</code> is a lazy reference to a photo in the library &mdash; it is not the bytes themselves. The actual image data is fetched separately, asynchronously.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.8.3 &para;4</span> <strong><code>pickedImage</code></strong> holds the decoded <code>UIImage</code> once the bytes have been loaded. The view binds to this to render the photo.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.8.3 &para;5</span> <strong><code>extractedText</code></strong> holds the recognized text once Vision has finished. The view binds to this to show the result, with <code>.textSelection(.enabled)</code> so the user can copy it.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.8.3 &para;6</span> <strong><code>isProcessing</code></strong> gates the spinner state. It flips <code>true</code> the moment a new photo arrives and flips back to <code>false</code> after Vision returns.</p>
   <hr>
-  <h2>PhotosPicker, Briefly</h2>
-  <p><a href="../BuildAlong-11-ReportMaker/BuildAlong-11-ReportMaker.html">Build-Along 11: ReportMaker</a> covers <code>PhotosPicker</code> at length in the receipt-attach context. The same API works the same way here:</p>
-  <pre><code class="lang-swift">PhotosPicker(
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.8.4</span>&nbsp;&nbsp;PhotosPicker, Briefly</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.8.4 &para;1</span> <a href="../BuildAlong-11-ReportMaker/BuildAlong-11-ReportMaker.html">Build-Along 11: ReportMaker</a> covers <code>PhotosPicker</code> at length in the receipt-attach context. The same API works the same way here:</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">VII.8.4 &para;2</span><pre><code class="lang-swift">PhotosPicker(
     selection: $pickedItem,
     matching: .images,
     photoLibrary: .shared()
@@ -77,14 +77,14 @@ struct IntelligenceDemoApp: App {
     .background(Color.accentColor.opacity(0.15))
     .clipShape(RoundedRectangle(cornerRadius: 12))
 }</code></pre>
-  <p>The label changes copy ("Pick a photo" before any selection, "Pick another photo" once one exists) so the button stays useful after the first pick. The picker writes to <code>pickedItem</code>; <code>onChange</code> fires when that binding writes a non-nil value, kicking off the load:</p>
-  <pre><code class="lang-swift">.onChange(of: pickedItem) { _, newItem in
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.8.4 &para;3</span> The label changes copy ("Pick a photo" before any selection, "Pick another photo" once one exists) so the button stays useful after the first pick. The picker writes to <code>pickedItem</code>; <code>onChange</code> fires when that binding writes a non-nil value, kicking off the load:</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">VII.8.4 &para;4</span><pre><code class="lang-swift">.onChange(of: pickedItem) { _, newItem in
     Task { await load(item: newItem) }
 }</code></pre>
-  <p>The <code>Task { ... }</code> wraps the async call so SwiftUI's main-thread <code>onChange</code> closure can launch async work without becoming async itself.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.8.4 &para;5</span> The <code>Task { ... }</code> wraps the async call so SwiftUI's main-thread <code>onChange</code> closure can launch async work without becoming async itself.</p>
   <hr>
-  <h2>Loading the Image Bytes</h2>
-  <pre><code class="lang-swift">private func load(item: PhotosPickerItem?) async {
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.8.5</span>&nbsp;&nbsp;Loading the Image Bytes</h2>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">VII.8.5 &para;1</span><pre><code class="lang-swift">private func load(item: PhotosPickerItem?) async {
     guard let item else { return }
     extractedText = ""
     isProcessing = true
@@ -98,14 +98,14 @@ struct IntelligenceDemoApp: App {
     pickedImage = image
     extractedText = await recognizeText(in: image)
 }</code></pre>
-  <p>Three things happen here in order.</p>
-  <p><strong>Reset and gate the UI.</strong> Clear any previous text, flip the spinner on, and set up a <code>defer</code> to flip the spinner off no matter how the function exits. The <code>defer</code> guarantees the UI state stays consistent even if the load fails.</p>
-  <p><strong>Fetch the bytes.</strong> <code>loadTransferable(type: Data.self)</code> asks the picker item for its underlying bytes. The call is asynchronous because the photo may live in iCloud Photo Library and need to be downloaded first. <code>try?</code> swallows any error into <code>nil</code>; if either the data fetch or the <code>UIImage</code> construction fails, the function returns early with the spinner already on its way off.</p>
-  <p><strong>Recognize.</strong> Once the image is in hand, hand it to <code>recognizeText(in:)</code> and store the result. The <code>await</code> here keeps the call off the main thread until Vision finishes.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.8.5 &para;2</span> Three things happen here in order.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.8.5 &para;3</span> <strong>Reset and gate the UI.</strong> Clear any previous text, flip the spinner on, and set up a <code>defer</code> to flip the spinner off no matter how the function exits. The <code>defer</code> guarantees the UI state stays consistent even if the load fails.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.8.5 &para;4</span> <strong>Fetch the bytes.</strong> <code>loadTransferable(type: Data.self)</code> asks the picker item for its underlying bytes. The call is asynchronous because the photo may live in iCloud Photo Library and need to be downloaded first. <code>try?</code> swallows any error into <code>nil</code>; if either the data fetch or the <code>UIImage</code> construction fails, the function returns early with the spinner already on its way off.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.8.5 &para;5</span> <strong>Recognize.</strong> Once the image is in hand, hand it to <code>recognizeText(in:)</code> and store the result. The <code>await</code> here keeps the call off the main thread until Vision finishes.</p>
   <hr>
-  <h2>The Vision Request</h2>
-  <p>This is the chapter's centerpiece &mdash; the seven-line function that turns an image into text:</p>
-  <pre><code class="lang-swift">private func recognizeText(in image: UIImage) async -&gt; String {
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.8.6</span>&nbsp;&nbsp;The Vision Request</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.8.6 &para;1</span> This is the chapter's centerpiece &mdash; the seven-line function that turns an image into text:</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">VII.8.6 &para;2</span><pre><code class="lang-swift">private func recognizeText(in image: UIImage) async -&gt; String {
     guard let cgImage = image.cgImage else { return "" }
 
     let request = VNRecognizeTextRequest()
@@ -124,21 +124,21 @@ struct IntelligenceDemoApp: App {
         return "Recognition failed: \(error.localizedDescription)"
     }
 }</code></pre>
-  <p>Walk it line by line.</p>
-  <p><strong><code>image.cgImage</code></strong>. Vision works on Core Graphics images, not <code>UIImage</code>. The conversion is a property access; <code>cgImage</code> is non-nil for photos that came from the photo library, so the guard is mostly defensive.</p>
-  <p><strong><code>VNRecognizeTextRequest()</code></strong>. The recognizer is a <code>VNRequest</code> subclass that knows how to find text. Constructing it does no work; the request is a configuration object, not a running operation.</p>
-  <p><strong><code>recognitionLevel = .accurate</code></strong>. Vision offers two recognition levels: <code>.fast</code> and <code>.accurate</code>. Fast is for live-capture scenarios where the user is panning a camera and wants real-time hints; accurate is for the user-picks-a-photo case where they want the answer right and are willing to wait a fraction of a second longer. IntelligenceDemo is the second scenario.</p>
-  <p><strong><code>usesLanguageCorrection = true</code></strong>. The recognizer can apply a language model on top of the raw character predictions to fix likely typos &mdash; "rece1pt" becomes "receipt," "haw" between two unambiguous words is more likely "have." Turning the correction on is almost always the right call for natural-language text. For non-language tokens (license plates, serial numbers, code), turning it off is the right call. The default is on; the explicit assignment is for documentation.</p>
-  <p><strong><code>VNImageRequestHandler(cgImage: cgImage, options: [:])</code></strong>. The handler is the bridge between the request and the actual image. The <code>options</code> dictionary takes orientation hints if the image's metadata requires them; for photo-library images that have already been rotated to match their EXIF orientation, the empty dictionary is correct.</p>
-  <p><strong><code>try handler.perform([request])</code></strong>. The synchronous call that does the actual recognition. <code>perform([_:])</code> takes an array because a handler can run multiple Vision requests on the same image in one pass &mdash; text recognition plus face detection plus barcode reading, for example. IntelligenceDemo passes a single-request array because it only needs the one. The synchronous call is run inside an <code>async</code> function; the <code>await</code> at the call site keeps it from blocking the main thread.</p>
-  <p><strong><code>request.results</code></strong>. After <code>perform</code> returns, the request's <code>results</code> property holds an array of <code>VNRecognizedTextObservation</code>. Each observation corresponds to a region of detected text &mdash; typically one line, sometimes a paragraph. The <code>?? []</code> handles the documented case where <code>results</code> can be <code>nil</code> if the request was never run successfully.</p>
-  <p><strong><code>$0.topCandidates(1).first?.string</code></strong>. Each observation can have multiple candidate readings, ranked by confidence. <code>topCandidates(1)</code> asks for the single best candidate as an array (Vision's API is generous with candidates because some applications want to show the user "did you mean&hellip;?" alternatives). <code>.first?.string</code> pulls the top candidate's recognized text. <code>compactMap</code> drops any observation that somehow had zero candidates, which should never happen but the unwrap is free.</p>
-  <p><strong><code>.joined(separator: "\n")</code></strong>. Each observation is one line of text in the source image; joining with newlines reconstructs the rough layout. Vision does not preserve column structure, indentation, or font information; the output is a flat plain-text approximation of the visible characters. For a receipt, that means each line of the receipt becomes one line of output; for a paragraph of prose, the line breaks reflect where the original text wrapped on the page, not where sentences end.</p>
-  <p>The catch branch returns a human-readable error string instead of throwing. Because the function returns <code>String</code> (not <code>Result&lt;String, Error&gt;</code>), surfacing the error as text keeps the call site simple at the cost of conflating "no text found" (empty string) with "recognition failed" (error string). For a teaching demo, this trade is acceptable; production code would distinguish.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.8.6 &para;3</span> Walk it line by line.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.8.6 &para;4</span> <strong><code>image.cgImage</code></strong>. Vision works on Core Graphics images, not <code>UIImage</code>. The conversion is a property access; <code>cgImage</code> is non-nil for photos that came from the photo library, so the guard is mostly defensive.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.8.6 &para;5</span> <strong><code>VNRecognizeTextRequest()</code></strong>. The recognizer is a <code>VNRequest</code> subclass that knows how to find text. Constructing it does no work; the request is a configuration object, not a running operation.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.8.6 &para;6</span> <strong><code>recognitionLevel = .accurate</code></strong>. Vision offers two recognition levels: <code>.fast</code> and <code>.accurate</code>. Fast is for live-capture scenarios where the user is panning a camera and wants real-time hints; accurate is for the user-picks-a-photo case where they want the answer right and are willing to wait a fraction of a second longer. IntelligenceDemo is the second scenario.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.8.6 &para;7</span> <strong><code>usesLanguageCorrection = true</code></strong>. The recognizer can apply a language model on top of the raw character predictions to fix likely typos &mdash; "rece1pt" becomes "receipt," "haw" between two unambiguous words is more likely "have." Turning the correction on is almost always the right call for natural-language text. For non-language tokens (license plates, serial numbers, code), turning it off is the right call. The default is on; the explicit assignment is for documentation.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.8.6 &para;8</span> <strong><code>VNImageRequestHandler(cgImage: cgImage, options: [:])</code></strong>. The handler is the bridge between the request and the actual image. The <code>options</code> dictionary takes orientation hints if the image's metadata requires them; for photo-library images that have already been rotated to match their EXIF orientation, the empty dictionary is correct.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.8.6 &para;9</span> <strong><code>try handler.perform([request])</code></strong>. The synchronous call that does the actual recognition. <code>perform([_:])</code> takes an array because a handler can run multiple Vision requests on the same image in one pass &mdash; text recognition plus face detection plus barcode reading, for example. IntelligenceDemo passes a single-request array because it only needs the one. The synchronous call is run inside an <code>async</code> function; the <code>await</code> at the call site keeps it from blocking the main thread.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.8.6 &para;10</span> <strong><code>request.results</code></strong>. After <code>perform</code> returns, the request's <code>results</code> property holds an array of <code>VNRecognizedTextObservation</code>. Each observation corresponds to a region of detected text &mdash; typically one line, sometimes a paragraph. The <code>?? []</code> handles the documented case where <code>results</code> can be <code>nil</code> if the request was never run successfully.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.8.6 &para;11</span> <strong><code>$0.topCandidates(1).first?.string</code></strong>. Each observation can have multiple candidate readings, ranked by confidence. <code>topCandidates(1)</code> asks for the single best candidate as an array (Vision's API is generous with candidates because some applications want to show the user "did you mean&hellip;?" alternatives). <code>.first?.string</code> pulls the top candidate's recognized text. <code>compactMap</code> drops any observation that somehow had zero candidates, which should never happen but the unwrap is free.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.8.6 &para;12</span> <strong><code>.joined(separator: "\n")</code></strong>. Each observation is one line of text in the source image; joining with newlines reconstructs the rough layout. Vision does not preserve column structure, indentation, or font information; the output is a flat plain-text approximation of the visible characters. For a receipt, that means each line of the receipt becomes one line of output; for a paragraph of prose, the line breaks reflect where the original text wrapped on the page, not where sentences end.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.8.6 &para;13</span> The catch branch returns a human-readable error string instead of throwing. Because the function returns <code>String</code> (not <code>Result&lt;String, Error&gt;</code>), surfacing the error as text keeps the call site simple at the cost of conflating "no text found" (empty string) with "recognition failed" (error string). For a teaching demo, this trade is acceptable; production code would distinguish.</p>
   <hr>
-  <h2>The Four UI States</h2>
-  <p>The body's content branches on the state variables in a single chain:</p>
-  <pre><code class="lang-swift">if isProcessing {
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.8.7</span>&nbsp;&nbsp;The Four UI States</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.8.7 &para;1</span> The body's content branches on the state variables in a single chain:</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">VII.8.7 &para;2</span><pre><code class="lang-swift">if isProcessing {
     HStack {
         ProgressView()
         Text("Reading text…")
@@ -159,37 +159,37 @@ struct IntelligenceDemoApp: App {
     Text("Pick a photo of a page, sign, receipt, or note. The app will read the text on it.")
         .foregroundStyle(.secondary)
 }</code></pre>
-  <p>The chain reads top-down by priority:</p>
-  <ol class="body-list">
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.8.7 &para;3</span> The chain reads top-down by priority:</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">VII.8.7 &para;4</span><ol class="body-list">
     <li><strong>Processing</strong> wins over everything &mdash; if Vision is currently running, show the spinner.</li>
     <li><strong>Has text</strong> shows the result, selectable.</li>
     <li><strong>Has image but no text</strong> falls back to the "no text found" message. This branch fires when Vision returned zero observations &mdash; a photo of a blank wall, a sky, a person without any text in the frame.</li>
     <li><strong>Initial</strong> &mdash; no image picked yet &mdash; shows the prompt explaining what the user can do.</li>
   </ol>
-  <p>The order matters. Putting <code>extractedText.isEmpty</code> ahead of <code>isProcessing</code> would cause the spinner to never appear on a second pick, because the previous text is reset to <code>""</code> at the start of <code>load(item:)</code> &mdash; the empty-text branch would fire first and the user would see "No text found" briefly before recognition completed. Resetting <code>extractedText</code> before flipping <code>isProcessing</code> is intentional, and the chain order matches.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.8.7 &para;5</span> The order matters. Putting <code>extractedText.isEmpty</code> ahead of <code>isProcessing</code> would cause the spinner to never appear on a second pick, because the previous text is reset to <code>""</code> at the start of <code>load(item:)</code> &mdash; the empty-text branch would fire first and the user would see "No text found" briefly before recognition completed. Resetting <code>extractedText</code> before flipping <code>isProcessing</code> is intentional, and the chain order matches.</p>
   <hr>
-  <h2>What's Not Here</h2>
-  <p>Two practices that show up in production OCR apps are deliberately absent from IntelligenceDemo, and naming them is part of the lesson.</p>
-  <p><strong>No request-recognition-language list.</strong> <code>VNRecognizeTextRequest</code> exposes a <code>recognitionLanguages: [String]</code> property where the developer can specify ISO language codes ("en-US", "es-ES", "ja") to bias the recognizer. IntelligenceDemo leaves the property at its default (English). For a multilingual app, the right move is to expose a language picker and bias the recognizer at request time. Adding it is one property assignment.</p>
-  <p><strong>No custom words list.</strong> <code>customWords: [String]</code> lets the app push domain-specific vocabulary (proper nouns, product names, technical terms) into the language model so the recognizer prefers them when the raw character predictions are ambiguous. The receipt-scanner version of this app would add company names, store names, and currency symbols to <code>customWords</code> so "ammazom" gets corrected to "Amazon." IntelligenceDemo does not, because the demo runs on whatever photo the user picks and there is no domain to specialize for.</p>
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.8.8</span>&nbsp;&nbsp;What's Not Here</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.8.8 &para;1</span> Two practices that show up in production OCR apps are deliberately absent from IntelligenceDemo, and naming them is part of the lesson.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.8.8 &para;2</span> <strong>No request-recognition-language list.</strong> <code>VNRecognizeTextRequest</code> exposes a <code>recognitionLanguages: [String]</code> property where the developer can specify ISO language codes ("en-US", "es-ES", "ja") to bias the recognizer. IntelligenceDemo leaves the property at its default (English). For a multilingual app, the right move is to expose a language picker and bias the recognizer at request time. Adding it is one property assignment.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.8.8 &para;3</span> <strong>No custom words list.</strong> <code>customWords: [String]</code> lets the app push domain-specific vocabulary (proper nouns, product names, technical terms) into the language model so the recognizer prefers them when the raw character predictions are ambiguous. The receipt-scanner version of this app would add company names, store names, and currency symbols to <code>customWords</code> so "ammazom" gets corrected to "Amazon." IntelligenceDemo does not, because the demo runs on whatever photo the user picks and there is no domain to specialize for.</p>
   <hr>
-  <h2>Snap &amp; ScanKeeper: the Production Evolution</h2>
-  <p>Snap &amp; ScanKeeper is the live App Store evolution of the same Vision API. The build-along teaches the primitive; ScanKeeper is what the same primitive looks like when wrapped in a shipping product. The differences are worth naming because they map onto every "demo to product" gap.</p>
-  <ul>
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.8.9</span>&nbsp;&nbsp;Snap &amp; ScanKeeper: the Production Evolution</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.8.9 &para;1</span> Snap &amp; ScanKeeper is the live App Store evolution of the same Vision API. The build-along teaches the primitive; ScanKeeper is what the same primitive looks like when wrapped in a shipping product. The differences are worth naming because they map onto every "demo to product" gap.</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">VII.8.9 &para;2</span><ul>
     <li>ScanKeeper uses <code>VNDocumentCameraViewController</code> &mdash; the iOS-bundled document scanner &mdash; instead of <code>PhotosPicker</code>. The user holds the camera over the page; the scanner detects the page edges, applies perspective correction, and returns a clean image of just the document.</li>
     <li>ScanKeeper persists the scanned documents via SwiftData, so each scan is saved, searchable, and re-shareable.</li>
     <li>ScanKeeper exposes the recognized text as a searchable field, so a user can find "the Costco receipt from March" by typing a word that appeared on it.</li>
     <li>ScanKeeper handles the full App Store privacy pass: <code>NSCameraUsageDescription</code> in Info.plist, a clear in-app rationale, no telemetry, and an App Privacy disclosure for "Photos" with no tracking.</li>
   </ul>
-  <p>Read <a href="../SourceTour-20-Snap-ScanKeeper/SourceTour-20-Snap-ScanKeeper.html">Source Tour 20: Snap &amp; ScanKeeper</a> for the production-shape walkthrough; this chapter stays at demo scope on purpose, because the Vision call is easier to teach when nothing else is competing for the reader's attention.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.8.9 &para;3</span> Read <a href="../SourceTour-20-Snap-ScanKeeper/SourceTour-20-Snap-ScanKeeper.html">Source Tour 20: Snap &amp; ScanKeeper</a> for the production-shape walkthrough; this chapter stays at demo scope on purpose, because the Vision call is easier to teach when nothing else is competing for the reader's attention.</p>
   <hr>
-  <h2>Distribution: GitHub Clone-and-Build</h2>
-  <p>IntelligenceDemo does not ship to the App Store. App Review Guideline 2.2 reads single-feature demos as "limited functionality," and that reading is correct &mdash; the app does one thing and is over. The book route is to publish the source on GitHub under GPL v3 and let the reader clone, build, and run it themselves. The repo at <a href="https://github.com/fluhartyml/IntelligenceDemo">github.com/fluhartyml/IntelligenceDemo</a> is the source of truth.</p>
-  <p>Snap &amp; ScanKeeper, the production evolution, did clear App Review on its own merits because it does the same thing but with the persistence, edge detection, and search that move it from "shows a feature" to "is a product."</p>
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.8.10</span>&nbsp;&nbsp;Distribution: GitHub Clone-and-Build</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.8.10 &para;1</span> IntelligenceDemo does not ship to the App Store. App Review Guideline 2.2 reads single-feature demos as "limited functionality," and that reading is correct &mdash; the app does one thing and is over. The book route is to publish the source on GitHub under GPL v3 and let the reader clone, build, and run it themselves. The repo at <a href="https://github.com/fluhartyml/IntelligenceDemo">github.com/fluhartyml/IntelligenceDemo</a> is the source of truth.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.8.10 &para;2</span> Snap &amp; ScanKeeper, the production evolution, did clear App Review on its own merits because it does the same thing but with the persistence, edge detection, and search that move it from "shows a feature" to "is a product."</p>
   <hr>
-  <h2>What to Read Next</h2>
-  <p><a href="../BuildAlong-09-TouchAndMove/BuildAlong-09-TouchAndMove.html">Build-Along 09: TouchAndMove</a> stays at single-concept teaching scope, but moves the focus from machine perception to direct manipulation &mdash; one shape, every primary SwiftUI gesture wired up. Different framework family, same one-feature lesson shape.</p>
-  <p>For the framework references touched in this chapter, the Vision API surfaces in <a href="../../Part-V-Advanced-Techniques/Book-19-Building-Custom-Views-And-Modifiers.html">Book 19: Building Custom Views and Modifiers</a> in the context of how to wrap Apple SDK results into reusable SwiftUI components, and <code>PhotosPicker</code> is covered in depth in <a href="../BuildAlong-11-ReportMaker/BuildAlong-11-ReportMaker.html">Build-Along 11: ReportMaker</a> in the receipt-attach context.</p>
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.8.11</span>&nbsp;&nbsp;What to Read Next</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.8.11 &para;1</span> <a href="../BuildAlong-09-TouchAndMove/BuildAlong-09-TouchAndMove.html">Build-Along 09: TouchAndMove</a> stays at single-concept teaching scope, but moves the focus from machine perception to direct manipulation &mdash; one shape, every primary SwiftUI gesture wired up. Different framework family, same one-feature lesson shape.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.8.11 &para;2</span> For the framework references touched in this chapter, the Vision API surfaces in <a href="../../Part-V-Advanced-Techniques/Book-19-Building-Custom-Views-And-Modifiers.html">Book 19: Building Custom Views and Modifiers</a> in the context of how to wrap Apple SDK results into reusable SwiftUI components, and <code>PhotosPicker</code> is covered in depth in <a href="../BuildAlong-11-ReportMaker/BuildAlong-11-ReportMaker.html">Build-Along 11: ReportMaker</a> in the receipt-attach context.</p>
 
 </div>
 

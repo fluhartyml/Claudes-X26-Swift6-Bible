@@ -8,15 +8,15 @@
 
 <div class="content">
 
-  <h1>Build-Along 10: DragBetweenWindows &mdash; Cross-Scene Drag-and-Drop</h1>
+  <h1><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.10</span>&nbsp;&nbsp;Build-Along 10: DragBetweenWindows &mdash; Cross-Scene Drag-and-Drop</h1>
   <p><span class="status-github">Distribution: GitHub clone-and-build.</span> DragBetweenWindows is a single-concept teaching app. Two windows side by side; a list of colored tokens on the left, a drop zone on the right. Pick a token up with a long-press, drag it across the seam between the windows, drop it into the dashed rectangle. The drop list updates and the app is essentially over &mdash; the entire teaching point is the seam-crossing itself.</p>
   <p>The repository: <a href="https://github.com/fluhartyml/DragBetweenWindows">github.com/fluhartyml/DragBetweenWindows</a>. The wiki: <a href="https://github.com/fluhartyml/DragBetweenWindows/wiki">github.com/fluhartyml/DragBetweenWindows/wiki</a>. Built atop SwiftUI scenes (<code>WindowGroup(id:)</code>), the <code>Transferable</code> protocol, <code>CodableRepresentation</code>, and an <code>@Observable</code> class threaded through both windows via <code>.environment(_:)</code>.</p>
   <div class="scope-note"><strong>Hardware requirement:</strong> the demo runs on <strong>Mac (any model)</strong> and on <strong>M-series iPad</strong> (iPad Pro M1/M2/M4 or iPad Air M1/M2/M3) with Stage Manager on. <strong>A-series iPads</strong> (iPad mini, base iPad, older Pro/Air) cannot run the demo &mdash; Stage Manager is not supported on those chips, and without Stage Manager iPad has no way to show two windows at once. iPhone runs one window at a time and also cannot run the demo. The source code reads on any platform; the running demo does not.</div>
   <hr>
-  <h2>The Brainstorm</h2>
-  <p>Drag-and-drop within a single window is well-trodden territory. Most apps move things around inside themselves &mdash; reordering a list, dropping a file onto a sidebar. That is not interesting in 2026. What still teaches is <strong>cross-scene</strong> drag-and-drop: picking up a payload in one window and depositing it in another window of the same app. This is the gesture the Finder uses every time you drag a file from one Finder window to another, the gesture Mail uses to move a message into a folder pane, the gesture every Mac-native app eventually needs.</p>
-  <p><strong>v1.0 spec:</strong></p>
-  <ul>
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.10.1</span>&nbsp;&nbsp;The Brainstorm</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.10.1 &para;1</span> Drag-and-drop within a single window is well-trodden territory. Most apps move things around inside themselves &mdash; reordering a list, dropping a file onto a sidebar. That is not interesting in 2026. What still teaches is <strong>cross-scene</strong> drag-and-drop: picking up a payload in one window and depositing it in another window of the same app. This is the gesture the Finder uses every time you drag a file from one Finder window to another, the gesture Mail uses to move a message into a folder pane, the gesture every Mac-native app eventually needs.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.10.1 &para;2</span> <strong>v1.0 spec:</strong></p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">VII.10.1 &para;3</span><ul>
     <li>A Source window listing ten colored tokens (Crimson through Magenta) with names and hue values</li>
     <li>A Drop window with a dashed-bordered drop zone and an empty-state prompt</li>
     <li>Long-press-and-drag a token from Source to drop it into Drop</li>
@@ -27,28 +27,28 @@
     <li>About sheet (icon, attribution, links)</li>
     <li>Light + dark icon variants. No tinted variant.</li>
   </ul>
-  <p>What is intentionally NOT in v1.0:</p>
-  <ul>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.10.1 &para;4</span> What is intentionally NOT in v1.0:</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">VII.10.1 &para;5</span><ul>
     <li>No persistence beyond the session &mdash; SwiftData has no place here, and dropped tokens are not data the app needs to keep</li>
     <li>No iPhone alternative layout &mdash; the chapter teaches the Mac-and-iPad path; iPhone is a future companion concept</li>
     <li>No App Store submission &mdash; Apple's Guideline 2.2 reads gesture demos as &quot;limited functionality,&quot; and that is a fair reading</li>
     <li>No multi-select drag, no inter-app drag, no cross-process drag &mdash; one window to another window of the same process is enough</li>
   </ul>
   <hr>
-  <h2>The Architecture</h2>
-  <p>Seven Swift files plus the Info.plist and the AppIcon set. The model layer is one file. Each window is one file. The cross-cutting plumbing (developer notes, Under the Hood, About) is one file each.</p>
-  <pre><code>DragBetweenWindowsApp.swift   # @main &middot; declares two WindowGroups
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.10.2</span>&nbsp;&nbsp;The Architecture</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.10.2 &para;1</span> Seven Swift files plus the Info.plist and the AppIcon set. The model layer is one file. Each window is one file. The cross-cutting plumbing (developer notes, Under the Hood, About) is one file each.</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">VII.10.2 &para;2</span><pre><code>DragBetweenWindowsApp.swift   # @main &middot; declares two WindowGroups
 ContentView.swift             # Source list &middot; .draggable on each row
 DropWindowView.swift          # Drop zone &middot; .dropDestination &middot; isTargeted feedback
 Token.swift                   # Token model + Transferable + Dropbox @Observable
 DeveloperNotes.swift          # Six notes shown in Under the Hood
 UnderTheHoodView.swift        # Sectioned reader for the notes
 AboutView.swift               # Icon &middot; attribution &middot; links</code></pre>
-  <p>The flow of a single drag-and-drop, end to end: a touch lands on a row in Source, becomes a long-press, the long-press becomes a drag, SwiftUI asks <code>Token</code> for its <code>transferRepresentation</code>, encodes the token as JSON, and hands the encoded payload off to the system drag manager. The user's finger crosses into the Drop window. The Drop window's <code>.dropDestination(for: Token.self)</code> recognizes the type, redraws the dashed border in a hover state, and waits. The user lifts their finger inside the zone. SwiftUI decodes the JSON back into a <code>Token</code>, hands it to the drop closure, and the closure appends the token to the shared <code>Dropbox</code>.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.10.2 &para;3</span> The flow of a single drag-and-drop, end to end: a touch lands on a row in Source, becomes a long-press, the long-press becomes a drag, SwiftUI asks <code>Token</code> for its <code>transferRepresentation</code>, encodes the token as JSON, and hands the encoded payload off to the system drag manager. The user's finger crosses into the Drop window. The Drop window's <code>.dropDestination(for: Token.self)</code> recognizes the type, redraws the dashed border in a hover state, and waits. The user lifts their finger inside the zone. SwiftUI decodes the JSON back into a <code>Token</code>, hands it to the drop closure, and the closure appends the token to the shared <code>Dropbox</code>.</p>
   <hr>
-  <h2>Two Windows, One App</h2>
-  <p>SwiftUI calls a window a <em>scene</em>. An app declares scenes inside the body of its <code>App</code> struct. Each scene gets a stable id so other parts of the app can ask the system to open it.</p>
-  <pre><code class="lang-swift">@main
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.10.3</span>&nbsp;&nbsp;Two Windows, One App</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.10.3 &para;1</span> SwiftUI calls a window a <em>scene</em>. An app declares scenes inside the body of its <code>App</code> struct. Each scene gets a stable id so other parts of the app can ask the system to open it.</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">VII.10.3 &para;2</span><pre><code class="lang-swift">@main
 struct DragBetweenWindowsApp: App {
     @State private var dropbox = Dropbox()
 
@@ -64,21 +64,21 @@ struct DragBetweenWindowsApp: App {
         }
     }
 }</code></pre>
-  <p>Two <code>WindowGroup</code>s with the ids <code>&quot;source&quot;</code> and <code>&quot;drop&quot;</code>. Both receive the same <code>dropbox</code> instance via <code>.environment(_:)</code> &mdash; that is the seam through which state crosses windows. The <code>@State</code> on <code>dropbox</code> ties its lifetime to the App struct, which means it lives for the entire run of the app, not just for the lifetime of any one window.</p>
-  <p>Opening the second window from inside the first uses the <code>openWindow</code> environment action.</p>
-  <pre><code class="lang-swift">@Environment(\.openWindow) private var openWindow
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.10.3 &para;3</span> Two <code>WindowGroup</code>s with the ids <code>&quot;source&quot;</code> and <code>&quot;drop&quot;</code>. Both receive the same <code>dropbox</code> instance via <code>.environment(_:)</code> &mdash; that is the seam through which state crosses windows. The <code>@State</code> on <code>dropbox</code> ties its lifetime to the App struct, which means it lives for the entire run of the app, not just for the lifetime of any one window.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.10.3 &para;4</span> Opening the second window from inside the first uses the <code>openWindow</code> environment action.</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">VII.10.3 &para;5</span><pre><code class="lang-swift">@Environment(\.openWindow) private var openWindow
 
 Button {
     openWindow(id: &quot;drop&quot;)
 } label: {
     Image(systemName: &quot;rectangle.on.rectangle&quot;)
 }</code></pre>
-  <p>The id passed to <code>openWindow(id:)</code> has to match the id declared on the target <code>WindowGroup</code>. There is no compile-time check; if you typo <code>&quot;drop&quot;</code> as <code>&quot;dropp&quot;</code>, the button will silently do nothing. Treat these ids the way you treat URL routes &mdash; spell them once, in one place, and reach for that constant everywhere else if the app grows.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.10.3 &para;6</span> The id passed to <code>openWindow(id:)</code> has to match the id declared on the target <code>WindowGroup</code>. There is no compile-time check; if you typo <code>&quot;drop&quot;</code> as <code>&quot;dropp&quot;</code>, the button will silently do nothing. Treat these ids the way you treat URL routes &mdash; spell them once, in one place, and reach for that constant everywhere else if the app grows.</p>
   <hr>
-  <h2>Transferable, Not NSItemProvider</h2>
-  <p>SwiftUI's drag-and-drop machinery used to be wrapped around AppKit and UIKit's <code>NSItemProvider</code>, which was awkward to read and worse to write. Swift 5.7 introduced the <code>Transferable</code> protocol, and the SwiftUI APIs moved to it as the canonical path. <code>Transferable</code> is the one you reach for now.</p>
-  <p>To make a value type draggable, conform it to <code>Transferable</code> and declare a <code>transferRepresentation</code>. The simplest representation is <code>CodableRepresentation</code>, which uses <code>Codable</code> conformance to encode and decode the payload as JSON.</p>
-  <pre><code class="lang-swift">struct Token: Identifiable, Hashable, Codable, Transferable {
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.10.4</span>&nbsp;&nbsp;Transferable, Not NSItemProvider</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.10.4 &para;1</span> SwiftUI's drag-and-drop machinery used to be wrapped around AppKit and UIKit's <code>NSItemProvider</code>, which was awkward to read and worse to write. Swift 5.7 introduced the <code>Transferable</code> protocol, and the SwiftUI APIs moved to it as the canonical path. <code>Transferable</code> is the one you reach for now.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.10.4 &para;2</span> To make a value type draggable, conform it to <code>Transferable</code> and declare a <code>transferRepresentation</code>. The simplest representation is <code>CodableRepresentation</code>, which uses <code>Codable</code> conformance to encode and decode the payload as JSON.</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">VII.10.4 &para;3</span><pre><code class="lang-swift">struct Token: Identifiable, Hashable, Codable, Transferable {
     let id: UUID
     var name: String
     var hue: Double
@@ -95,14 +95,14 @@ Button {
 extension UTType {
     static let dragBetweenWindowsToken = UTType(exportedAs: &quot;me.fluharty.DragBetweenWindows.token&quot;)
 }</code></pre>
-  <p>The <code>contentType:</code> argument on <code>CodableRepresentation</code> tells the system the Uniform Type Identifier (UTI) of the encoded payload. UTIs are the same identifier system that lets a finder file know whether it is a JPEG, a PDF, or something custom. <code>Token</code> declares its own UTI &mdash; <code>me.fluharty.DragBetweenWindows.token</code> &mdash; because that is how cross-scene drag-and-drop knows which drop zones are willing to accept the payload.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.10.4 &para;4</span> The <code>contentType:</code> argument on <code>CodableRepresentation</code> tells the system the Uniform Type Identifier (UTI) of the encoded payload. UTIs are the same identifier system that lets a finder file know whether it is a JPEG, a PDF, or something custom. <code>Token</code> declares its own UTI &mdash; <code>me.fluharty.DragBetweenWindows.token</code> &mdash; because that is how cross-scene drag-and-drop knows which drop zones are willing to accept the payload.</p>
   <hr>
-  <h2>The UTType Trap (and the Built-In Fallback)</h2>
-  <p>There is a real trap here that you will hit the first time you run the app. Custom UTIs need to be <strong>registered</strong> with the operating system, and the way you register them is by declaring them in the app's Info.plist under <code>UTExportedTypeDeclarations</code>. If the UTI is not registered, the system does not know what <code>me.fluharty.DragBetweenWindows.token</code> is, the drag fingerprint never matches the drop target's <code>for: Token.self</code>, and the drop silently fails. The console prints:</p>
-  <pre><code>Type &quot;me.fluharty.DragBetweenWindows.token&quot; was expected to be declared
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.10.5</span>&nbsp;&nbsp;The UTType Trap (and the Built-In Fallback)</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.10.5 &para;1</span> There is a real trap here that you will hit the first time you run the app. Custom UTIs need to be <strong>registered</strong> with the operating system, and the way you register them is by declaring them in the app's Info.plist under <code>UTExportedTypeDeclarations</code>. If the UTI is not registered, the system does not know what <code>me.fluharty.DragBetweenWindows.token</code> is, the drag fingerprint never matches the drop target's <code>for: Token.self</code>, and the drop silently fails. The console prints:</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">VII.10.5 &para;2</span><pre><code>Type &quot;me.fluharty.DragBetweenWindows.token&quot; was expected to be declared
 and exported in the Info.plist of DragBetweenWindows.app, but it was not found.</code></pre>
-  <p>You have two ways out. The first is to add the Info.plist declaration, which looks like this in source form:</p>
-  <pre><code class="lang-xml">&lt;key&gt;UTExportedTypeDeclarations&lt;/key&gt;
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.10.5 &para;3</span> You have two ways out. The first is to add the Info.plist declaration, which looks like this in source form:</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">VII.10.5 &para;4</span><pre><code class="lang-xml">&lt;key&gt;UTExportedTypeDeclarations&lt;/key&gt;
 &lt;array&gt;
     &lt;dict&gt;
         &lt;key&gt;UTTypeIdentifier&lt;/key&gt;
@@ -117,9 +117,9 @@ and exported in the Info.plist of DragBetweenWindows.app, but it was not found.<
         &lt;dict/&gt;
     &lt;/dict&gt;
 &lt;/array&gt;</code></pre>
-  <p>That is correct. It is also six lines of XML the reader has to memorize and a habit of editing the Info.plist by hand that the reader does not need yet.</p>
-  <p>The second way out is to give up on the custom UTI entirely and use a built-in content type that is already registered with the system. The cleanest one is <code>.json</code>, since <code>Token</code> is already <code>Codable</code> and <code>CodableRepresentation</code> is already serializing as JSON. The change is one line:</p>
-  <pre><code class="lang-swift">// Custom UTI &mdash; requires Info.plist declaration
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.10.5 &para;5</span> That is correct. It is also six lines of XML the reader has to memorize and a habit of editing the Info.plist by hand that the reader does not need yet.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.10.5 &para;6</span> The second way out is to give up on the custom UTI entirely and use a built-in content type that is already registered with the system. The cleanest one is <code>.json</code>, since <code>Token</code> is already <code>Codable</code> and <code>CodableRepresentation</code> is already serializing as JSON. The change is one line:</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">VII.10.5 &para;7</span><pre><code class="lang-swift">// Custom UTI &mdash; requires Info.plist declaration
 static var transferRepresentation: some TransferRepresentation {
     CodableRepresentation(contentType: .dragBetweenWindowsToken)
 }
@@ -128,12 +128,12 @@ static var transferRepresentation: some TransferRepresentation {
 static var transferRepresentation: some TransferRepresentation {
     CodableRepresentation(contentType: .json)
 }</code></pre>
-  <p>The trade is straightforward. The custom UTI is &quot;production correct&quot; in the sense that an app shipping serious data types in pasteboard or document format ought to declare its types properly so other apps can recognize them. The <code>.json</code> path skips that ceremony and gets the in-app drag working immediately, at the cost of generality &mdash; any other app that drops JSON onto your zone would also match the <code>for: Token.self</code> filter, and the decode would fail at the boundary instead of the type-match boundary.</p>
-  <p>For a teaching app where the entire interaction is in-process, the <code>.json</code> path is the right choice. The lesson is &quot;reach for built-in content types before you reach for custom UTIs,&quot; and the lesson generalizes well: most apps never need a custom UTI in the first place.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.10.5 &para;8</span> The trade is straightforward. The custom UTI is &quot;production correct&quot; in the sense that an app shipping serious data types in pasteboard or document format ought to declare its types properly so other apps can recognize them. The <code>.json</code> path skips that ceremony and gets the in-app drag working immediately, at the cost of generality &mdash; any other app that drops JSON onto your zone would also match the <code>for: Token.self</code> filter, and the decode would fail at the boundary instead of the type-match boundary.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.10.5 &para;9</span> For a teaching app where the entire interaction is in-process, the <code>.json</code> path is the right choice. The lesson is &quot;reach for built-in content types before you reach for custom UTIs,&quot; and the lesson generalizes well: most apps never need a custom UTI in the first place.</p>
   <hr>
-  <h2>Shared State: the @Observable Dropbox</h2>
-  <p>The Source window does not know what is in the Drop window. The Drop window does not know which token was just dragged. Both windows talk through a shared store, which is the <code>Dropbox</code> class.</p>
-  <pre><code class="lang-swift">@Observable
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.10.6</span>&nbsp;&nbsp;Shared State: the @Observable Dropbox</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.10.6 &para;1</span> The Source window does not know what is in the Drop window. The Drop window does not know which token was just dragged. Both windows talk through a shared store, which is the <code>Dropbox</code> class.</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">VII.10.6 &para;2</span><pre><code class="lang-swift">@Observable
 final class Dropbox {
     var dropped: [Token] = []
 
@@ -146,13 +146,13 @@ final class Dropbox {
         dropped.removeAll()
     }
 }</code></pre>
-  <p>The <code>@Observable</code> macro is Swift 6's replacement for <code>ObservableObject</code> + <code>@Published</code>. It auto-generates change tracking for every stored property without having to mark each one. The class is shared across both windows by injecting the same instance into the environment of each <code>WindowGroup</code>:</p>
-  <pre><code class="lang-swift">.environment(dropbox)</code></pre>
-  <p>Inside each window's view, the dropbox is read out of the environment with <code>@Environment(Dropbox.self)</code>. SwiftUI handles the bookkeeping: when <code>accept(_:)</code> appends to <code>dropped</code>, the Drop window's list view re-renders. The Source window does not re-render, because it does not read <code>dropped</code> &mdash; only the Drop window does. That is the right kind of coupling: shared state, decoupled views.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.10.6 &para;3</span> The <code>@Observable</code> macro is Swift 6's replacement for <code>ObservableObject</code> + <code>@Published</code>. It auto-generates change tracking for every stored property without having to mark each one. The class is shared across both windows by injecting the same instance into the environment of each <code>WindowGroup</code>:</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">VII.10.6 &para;4</span><pre><code class="lang-swift">.environment(dropbox)</code></pre>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.10.6 &para;5</span> Inside each window's view, the dropbox is read out of the environment with <code>@Environment(Dropbox.self)</code>. SwiftUI handles the bookkeeping: when <code>accept(_:)</code> appends to <code>dropped</code>, the Drop window's list view re-renders. The Source window does not re-render, because it does not read <code>dropped</code> &mdash; only the Drop window does. That is the right kind of coupling: shared state, decoupled views.</p>
   <hr>
-  <h2>The Drop Zone: dropDestination + isTargeted</h2>
-  <p>A drop zone is any view with a <code>.dropDestination(for:action:isTargeted:)</code> modifier attached. The modifier takes three pieces: the type to accept, a closure that runs on drop, and a binding that flips between <code>true</code> and <code>false</code> while a drag is hovering over the zone.</p>
-  <pre><code class="lang-swift">@State private var isTargeted = false
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.10.7</span>&nbsp;&nbsp;The Drop Zone: dropDestination + isTargeted</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.10.7 &para;1</span> A drop zone is any view with a <code>.dropDestination(for:action:isTargeted:)</code> modifier attached. The modifier takes three pieces: the type to accept, a closure that runs on drop, and a binding that flips between <code>true</code> and <code>false</code> while a drag is hovering over the zone.</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">VII.10.7 &para;2</span><pre><code class="lang-swift">@State private var isTargeted = false
 
 RoundedRectangle(cornerRadius: 12, style: .continuous)
     .strokeBorder(style: StrokeStyle(lineWidth: 2, dash: [8, 6]))
@@ -169,37 +169,37 @@ RoundedRectangle(cornerRadius: 12, style: .continuous)
     } isTargeted: { hovering in
         isTargeted = hovering
     }</code></pre>
-  <p>The third argument is the one that makes the demo feel alive. As soon as the user's finger crosses the zone with a token in flight, <code>isTargeted</code> flips to <code>true</code>, the dashed border darkens to the accent color, and the label changes from &quot;Drop a token here&quot; to &quot;Release to drop.&quot; The user gets confirmation before they release, which removes the &quot;did it work?&quot; uncertainty that drag-and-drop without feedback always carries.</p>
-  <p>The drop closure receives an array because the drag system supports multi-item drags &mdash; the user could in principle drag a selection of tokens, not just one. v1.0 only sets up single-item drags so the array always has exactly one element, but the API shape is forward-compatible.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.10.7 &para;3</span> The third argument is the one that makes the demo feel alive. As soon as the user's finger crosses the zone with a token in flight, <code>isTargeted</code> flips to <code>true</code>, the dashed border darkens to the accent color, and the label changes from &quot;Drop a token here&quot; to &quot;Release to drop.&quot; The user gets confirmation before they release, which removes the &quot;did it work?&quot; uncertainty that drag-and-drop without feedback always carries.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.10.7 &para;4</span> The drop closure receives an array because the drag system supports multi-item drags &mdash; the user could in principle drag a selection of tokens, not just one. v1.0 only sets up single-item drags so the array always has exactly one element, but the API shape is forward-compatible.</p>
   <hr>
-  <h2>Hardware Requirements for the Demo</h2>
-  <p>The cross-window experience works on some Apple hardware and not others. The deciding factor is whether the device supports <strong>Stage Manager</strong>, the iPadOS feature Apple introduced with iPadOS 16 to bring real multi-window behavior to iPad. Stage Manager requires an M-series Apple Silicon chip on iPad; on Mac, multi-window has always been native to the platform.</p>
-  <p>The breakdown:</p>
-  <ul>
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.10.8</span>&nbsp;&nbsp;Hardware Requirements for the Demo</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.10.8 &para;1</span> The cross-window experience works on some Apple hardware and not others. The deciding factor is whether the device supports <strong>Stage Manager</strong>, the iPadOS feature Apple introduced with iPadOS 16 to bring real multi-window behavior to iPad. Stage Manager requires an M-series Apple Silicon chip on iPad; on Mac, multi-window has always been native to the platform.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.10.8 &para;2</span> The breakdown:</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">VII.10.8 &para;3</span><ul>
     <li><strong>Mac (any model)</strong> &mdash; the demo works. Multi-window is native to macOS. <code>openWindow(id:)</code> opens a real second window. Drag tokens across.</li>
     <li><strong>iPad Pro M1/M2/M4 or iPad Air M1/M2/M3, with Stage Manager enabled</strong> &mdash; the demo works. <code>openWindow(id:)</code> opens a real second iPad window inside the Stage Manager workspace; the user arranges the two side by side and drags across.</li>
     <li><strong>iPad mini (any), base iPad (any), or older iPad Pro/Air (A-series chips)</strong> &mdash; the demo <strong>cannot run</strong> on this hardware. Stage Manager is not supported on A-series iPads, and without Stage Manager, <code>openWindow(id:)</code> replaces the current window full-screen instead of opening a new one alongside. The reader can still read the source to learn the patterns, but the running demo needs Mac or M-series iPad.</li>
     <li><strong>iPhone (any model)</strong> &mdash; the demo cannot run. iPhone runs one window at a time as a hardware constraint, not a settings toggle. <code>openWindow(id:)</code> is a no-op. The second-window button is wired up but has nothing to act on.</li>
   </ul>
-  <p>For readers on M-series iPad, the path is:</p>
-  <ol class="body-list">
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.10.8 &para;4</span> For readers on M-series iPad, the path is:</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">VII.10.8 &para;5</span><ol class="body-list">
     <li><strong>Turn Stage Manager on.</strong> Control Center (swipe down from the top-right corner of the screen) &rarr; tap the Stage Manager tile (a small rectangle with three dots beside it). It highlights when on. Or: Settings &rarr; Multitasking &amp; Gestures &rarr; Stage Manager &rarr; toggle on.</li>
     <li><strong>Launch the app.</strong> Build-and-run from Xcode to a connected iPad, or open the installed app from the Home Screen.</li>
     <li><strong>Open the Drop window.</strong> Tap the second-window button (rectangle-on-rectangle icon) in the Source toolbar, to the left of the <strong>info</strong> button. The Drop window opens as a separate iPad window.</li>
     <li><strong>Arrange the windows side by side.</strong> Stage Manager piles new windows toward the center of the screen. Drag one window's title bar to the right or left edge so the two windows sit next to each other.</li>
     <li><strong>Drag a token.</strong> Long-press a token in the Source list, drag across into the dashed zone in the Drop window, release.</li>
   </ol>
-  <p>The chapter does not redesign the app for the unsupported hardware. A future revision may add a single-window inline variant (Source on top, Drop on bottom in one view) so iPhone and A-series iPad readers can experience an in-window drag, but v1.0 stays Mac-and-M-iPad in scope. The teaching content &mdash; <code>Transferable</code>, <code>.draggable</code>, <code>.dropDestination</code>, <code>@Observable</code> shared state &mdash; is platform-independent and reads in the source code regardless of where it can run.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.10.8 &para;6</span> The chapter does not redesign the app for the unsupported hardware. A future revision may add a single-window inline variant (Source on top, Drop on bottom in one view) so iPhone and A-series iPad readers can experience an in-window drag, but v1.0 stays Mac-and-M-iPad in scope. The teaching content &mdash; <code>Transferable</code>, <code>.draggable</code>, <code>.dropDestination</code>, <code>@Observable</code> shared state &mdash; is platform-independent and reads in the source code regardless of where it can run.</p>
   <hr>
-  <h2>The Mac Tab Trap</h2>
-  <p>This is the dead end every reader will hit on first run if they are testing the iPad target on an Apple Silicon Mac. macOS opens both <code>WindowGroup</code>s as <em>tabs of one window</em> instead of as two separate windows. The reader sees one tab labeled &quot;Drag Between Windows&quot; and another labeled &quot;Drop Window,&quot; clicks between them, and concludes the demo is broken &mdash; you can't drag between tabs.</p>
-  <p>The fix is to break a tab out of the tab bar into its own window. <strong>Hold a tab title and drag it down out of the tab bar.</strong> macOS will tear the tab off into a separate window. Position the two windows side by side on the desktop, and the drag-and-drop demo works as designed.</p>
-  <p>This behavior is not unique to DragBetweenWindows. It is how macOS handles multiple <code>WindowGroup</code>s in any SwiftUI app: tabbing is the default presentation, and the user (or in this case the reader) decides whether to break tabs out into their own windows. A native Mac app target would have the same behavior. The chapter calls it out here because cross-window drag-and-drop is the one teaching scenario where tabbing actively breaks the lesson.</p>
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.10.9</span>&nbsp;&nbsp;The Mac Tab Trap</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.10.9 &para;1</span> This is the dead end every reader will hit on first run if they are testing the iPad target on an Apple Silicon Mac. macOS opens both <code>WindowGroup</code>s as <em>tabs of one window</em> instead of as two separate windows. The reader sees one tab labeled &quot;Drag Between Windows&quot; and another labeled &quot;Drop Window,&quot; clicks between them, and concludes the demo is broken &mdash; you can't drag between tabs.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.10.9 &para;2</span> The fix is to break a tab out of the tab bar into its own window. <strong>Hold a tab title and drag it down out of the tab bar.</strong> macOS will tear the tab off into a separate window. Position the two windows side by side on the desktop, and the drag-and-drop demo works as designed.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.10.9 &para;3</span> This behavior is not unique to DragBetweenWindows. It is how macOS handles multiple <code>WindowGroup</code>s in any SwiftUI app: tabbing is the default presentation, and the user (or in this case the reader) decides whether to break tabs out into their own windows. A native Mac app target would have the same behavior. The chapter calls it out here because cross-window drag-and-drop is the one teaching scenario where tabbing actively breaks the lesson.</p>
   <hr>
-  <h2>Under the Hood and About</h2>
-  <p>Same pattern every Build-Along app uses. <code>DeveloperNotes.swift</code> holds an array of <code>(title, body)</code> pairs as plain strings. <code>UnderTheHoodView.swift</code> renders that array in a sectioned <code>List</code> wrapped in a <code>NavigationStack</code> and presented from the Source window's toolbar info menu. <code>AboutView.swift</code> shows the app icon, the tagline, the book attribution, and three links: <code>fluharty.me</code>, Send Feedback, Privacy.</p>
-  <p>Six notes ship with v1.0:</p>
-  <ol class="body-list">
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.10.10</span>&nbsp;&nbsp;Under the Hood and About</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.10.10 &para;1</span> Same pattern every Build-Along app uses. <code>DeveloperNotes.swift</code> holds an array of <code>(title, body)</code> pairs as plain strings. <code>UnderTheHoodView.swift</code> renders that array in a sectioned <code>List</code> wrapped in a <code>NavigationStack</code> and presented from the Source window's toolbar info menu. <code>AboutView.swift</code> shows the app icon, the tagline, the book attribution, and three links: <code>fluharty.me</code>, Send Feedback, Privacy.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.10.10 &para;2</span> Six notes ship with v1.0:</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">VII.10.10 &para;3</span><ol class="body-list">
     <li>Why DragBetweenWindows exists</li>
     <li>Two windows, one App</li>
     <li>Transferable, not NSItemProvider</li>
@@ -207,15 +207,15 @@ RoundedRectangle(cornerRadius: 12, style: .continuous)
     <li>isTargeted feedback</li>
     <li>Distribution</li>
   </ol>
-  <p>If a future revision swaps the custom UTI for <code>.json</code>, a seventh note lands here documenting that decision and the reasoning. The Under the Hood view is meant to age with the app: every nontrivial code change earns a note, so the reader who clones the repo at HEAD has the contemporaneous reasoning available without leaving the running app.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.10.10 &para;4</span> If a future revision swaps the custom UTI for <code>.json</code>, a seventh note lands here documenting that decision and the reasoning. The Under the Hood view is meant to age with the app: every nontrivial code change earns a note, so the reader who clones the repo at HEAD has the contemporaneous reasoning available without leaving the running app.</p>
   <hr>
-  <h2>Distribution: GitHub Clone-and-Build</h2>
-  <p>DragBetweenWindows does not go to the App Store. Apple's App Store Review Guideline 2.2 (&quot;Beta Testing&quot;) reads gesture-and-payload demos as &quot;limited functionality,&quot; and that reading is correct &mdash; the app does one thing and is over. The book route is to publish the source on GitHub under GPL v3 and let the reader clone, build, and run it themselves. The wiki at <a href="https://github.com/fluhartyml/DragBetweenWindows/wiki">github.com/fluhartyml/DragBetweenWindows/wiki</a> is the user manual; the chapter is the developer manual; and the repo is the source of truth.</p>
-  <p>This is the same distribution model as <a href="../BuildAlong-09-TouchAndMove/BuildAlong-09-TouchAndMove.html">Build-Along 09: TouchAndMove</a>. Both apps are concept demos that teach a specific SwiftUI primitive without pretending to be products. The reader gets the source, builds the app once, runs it once, and moves on to the next chapter.</p>
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.10.11</span>&nbsp;&nbsp;Distribution: GitHub Clone-and-Build</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.10.11 &para;1</span> DragBetweenWindows does not go to the App Store. Apple's App Store Review Guideline 2.2 (&quot;Beta Testing&quot;) reads gesture-and-payload demos as &quot;limited functionality,&quot; and that reading is correct &mdash; the app does one thing and is over. The book route is to publish the source on GitHub under GPL v3 and let the reader clone, build, and run it themselves. The wiki at <a href="https://github.com/fluhartyml/DragBetweenWindows/wiki">github.com/fluhartyml/DragBetweenWindows/wiki</a> is the user manual; the chapter is the developer manual; and the repo is the source of truth.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.10.11 &para;2</span> This is the same distribution model as <a href="../BuildAlong-09-TouchAndMove/BuildAlong-09-TouchAndMove.html">Build-Along 09: TouchAndMove</a>. Both apps are concept demos that teach a specific SwiftUI primitive without pretending to be products. The reader gets the source, builds the app once, runs it once, and moves on to the next chapter.</p>
   <hr>
-  <h2>What to Read Next</h2>
-  <p>The wiki carries the user manual: Quick Start, gesture-by-gesture tour, troubleshooting (including the Mac tab trap from earlier), figures, and icons. The wiki is updated whenever the app changes; this chapter freezes the v1.0 reasoning. <strong>Read the wiki to use the app. Read this chapter to understand it.</strong></p>
-  <p>The next Build-Along (<a href="../BuildAlong-11-ReportMaker/BuildAlong-11-ReportMaker.html">Build-Along 11: ReportMaker</a>) leaves the gesture/scene primitives behind and moves to document generation &mdash; producing PDFs from structured data, the kind of feature every Mac and iPad app eventually needs.</p>
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.10.12</span>&nbsp;&nbsp;What to Read Next</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.10.12 &para;1</span> The wiki carries the user manual: Quick Start, gesture-by-gesture tour, troubleshooting (including the Mac tab trap from earlier), figures, and icons. The wiki is updated whenever the app changes; this chapter freezes the v1.0 reasoning. <strong>Read the wiki to use the app. Read this chapter to understand it.</strong></p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.10.12 &para;2</span> The next Build-Along (<a href="../BuildAlong-11-ReportMaker/BuildAlong-11-ReportMaker.html">Build-Along 11: ReportMaker</a>) leaves the gesture/scene primitives behind and moves to document generation &mdash; producing PDFs from structured data, the kind of feature every Mac and iPad app eventually needs.</p>
 
 </div>
 

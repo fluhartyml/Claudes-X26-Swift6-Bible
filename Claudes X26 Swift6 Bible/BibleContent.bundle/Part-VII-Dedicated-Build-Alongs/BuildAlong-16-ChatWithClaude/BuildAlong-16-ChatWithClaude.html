@@ -3,11 +3,11 @@
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Build-Along 16: ChatWithClaude</title>
 </head><body>
-<div class="content"><h1>Build-Along 16: ChatWithClaude</h1>
+<div class="content"><h1><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.16</span>&nbsp;&nbsp;Build-Along 16: ChatWithClaude</h1>
 <p><span class="status-planning">Status: planning phase as of 2026-04-24.</span> App not yet scaffolded. Walkthrough fills in once v1.0 scaffolds; expanded planning notes below.</p>
 <div class="scope-note">MVP concept: a BYO-Anthropic-API-key chat workbench for Claude. Readers bring their own API key, saved securely in Keychain, and use the app to hold multiple long-running conversations with Claude across models (Opus / Sonnet / Haiku), with streaming responses, markdown rendering, token-cost tracking, and conversation export. Differentiates from Anthropic's official Claude app by being a workbench for the reader's own API usage &mdash; not a subscription client.</div>
-<h2>What ChatWithClaude will teach</h2>
-<ul>
+<h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.16.1</span>&nbsp;&nbsp;What ChatWithClaude will teach</h2>
+<span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">VII.16.1 &para;1</span><ul>
 <li><strong>Anthropic API</strong> &mdash; the <code>/v1/messages</code> streaming endpoint, server-sent events parsing, message turn structure, system prompts.</li>
 <li><strong>URLSession streaming</strong> &mdash; <code>URLSession.bytes(for:)</code> + <code>AsyncSequence</code> for incremental response rendering. Readers see a SwiftUI chat bubble fill in token by token.</li>
 <li><strong>Keychain</strong> &mdash; storing the API key via the Security framework, not UserDefaults. Real credential hygiene.</li>
@@ -18,28 +18,28 @@
 <li><strong>Signature layer:</strong> MVP + Under the Hood + About &amp; Send Feedback.</li>
 <li><strong>Distribution:</strong> App Store &mdash; BYO-API-key workbenches for LLMs are an established category (TypingMind, Msty) and Apple doesn't ship one. Clears 2.2 as a real utility.</li>
 </ul>
-<h2>Core flows</h2>
-<ul>
+<h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.16.2</span>&nbsp;&nbsp;Core flows</h2>
+<span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">VII.16.2 &para;1</span><ul>
 <li><strong>First launch</strong> &mdash; prompt for Anthropic API key, save to Keychain, test with a minimal <code>claude-haiku-4-5</code> ping before exiting the setup screen.</li>
 <li><strong>New conversation</strong> &mdash; pick a model (default Sonnet 4.6), optional system prompt preset, start chatting. Responses stream in real time.</li>
 <li><strong>Conversation list</strong> &mdash; reverse-chronological; each conversation shows title, model used, message count, total token cost, last-updated timestamp.</li>
 <li><strong>Export</strong> &mdash; share a conversation as markdown or PDF via the share sheet.</li>
 <li><strong>Cost tracking</strong> &mdash; token counts tallied per message + conversation, priced against current rates, surfaced in the cost column. Readers see the price of their own usage.</li>
 </ul>
-<h2>Model selection</h2>
-<ul>
+<h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.16.3</span>&nbsp;&nbsp;Model selection</h2>
+<span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">VII.16.3 &para;1</span><ul>
 <li><strong>Opus 4.7</strong> &mdash; flagship, hardest reasoning, slowest, most expensive.</li>
 <li><strong>Sonnet 4.6</strong> &mdash; balanced default for most work.</li>
 <li><strong>Haiku 4.5</strong> &mdash; fastest + cheapest for quick turn-around.</li>
 </ul>
-<p>Readers see the cost + latency tradeoff directly in-app as they switch models mid-conversation.</p>
-<h2>Why ChatWithClaude passes App Review on merit</h2>
-<p>BYO-API-key LLM clients are a mature category. Apple doesn't ship one. User brings their own account + key; the app never collects or transmits anyone else's data. Prompt caching as a built-in feature is genuinely differentiating &mdash; most competing clients don't implement it. Clean SwiftUI rendering of streamed markdown over the Anthropic API is the teaching payoff for the chapter.</p>
-<h2>Current state</h2>
-<ul>
+<p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.16.3 &para;2</span> Readers see the cost + latency tradeoff directly in-app as they switch models mid-conversation.</p>
+<h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.16.4</span>&nbsp;&nbsp;Why ChatWithClaude passes App Review on merit</h2>
+<p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.16.4 &para;1</span> BYO-API-key LLM clients are a mature category. Apple doesn't ship one. User brings their own account + key; the app never collects or transmits anyone else's data. Prompt caching as a built-in feature is genuinely differentiating &mdash; most competing clients don't implement it. Clean SwiftUI rendering of streamed markdown over the Anthropic API is the teaching payoff for the chapter.</p>
+<h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.16.5</span>&nbsp;&nbsp;Current state</h2>
+<span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">VII.16.5 &para;1</span><ul>
 <li>No Xcode project yet</li>
 <li>No DeveloperNotes map yet</li>
 </ul>
-<h2>Next step</h2>
-<p>Scaffolded after earlier build-alongs ship; App Store target.</p></div>
+<h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.16.6</span>&nbsp;&nbsp;Next step</h2>
+<p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.16.6 &para;1</span> Scaffolded after earlier build-alongs ship; App Store target.</p></div>
 </body></html>

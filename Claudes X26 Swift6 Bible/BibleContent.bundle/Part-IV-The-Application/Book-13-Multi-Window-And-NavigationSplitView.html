@@ -9,38 +9,38 @@
 
 <div class="content">
 
-  <h1>Book 13: Multi-Window &amp; NavigationSplitView</h1>
+  <h1><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">IV.13</span>&nbsp;&nbsp;Book 13: Multi-Window &amp; NavigationSplitView</h1>
   <p><strong>Claude's Xcode 26 Swift Bible</strong> -- Part IV: The Application</p>
   <hr>
   <p>This chapter covers multi-window apps, the <code>NavigationSplitView</code> three-column reader pattern, opening and closing windows from code, and persisting window state across launches. The patterns apply to LockBox (Appendix D) and QuickNote (Appendix C) when those apps move beyond a single screen toward sidebars, detail panes, and multiple open windows.</p>
   <hr>
-  <h2>Live Reference: Claudes X26 Swift6 Bible + Claudes LockBox + My Person CRM</h2>
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">IV.13.1</span>&nbsp;&nbsp;Live Reference: Claudes X26 Swift6 Bible + Claudes LockBox + My Person CRM</h2>
   <div class="scope-note">Three apps in this book's roster use the navigation patterns this chapter covers. <strong>Claudes X26 Swift6 Bible</strong> uses a sidebar-and-detail layout to navigate the book's Parts, Books, Chapters, and Pages. <strong>Claudes LockBox</strong> uses a three-column variant &mdash; Folders sidebar &rarr; Items in selected Folder &rarr; Item Detail &mdash; that reads cleanly on iPhone (stacked drill-in) and iPad / Mac (all three columns visible). <strong>My Person CRM</strong> uses the simpler <code>NavigationStack</code> + <code>NavigationLink</code> pattern &mdash; a flat list of tracked people drilling into a per-person detail screen. Its source shows the iPhone-first end of the same story this chapter tells: when <code>NavigationStack</code> is the right tool and when <code>NavigationSplitView</code> takes over. Sources: <a href="https://github.com/fluhartyml/Claudes-X26-Swift6-Bible">github.com/fluhartyml/Claudes-X26-Swift6-Bible</a>, <a href="https://github.com/fluhartyml/Claudes-LockBox">github.com/fluhartyml/Claudes-LockBox</a>, <a href="https://github.com/fluhartyml/My-Person-CRM">github.com/fluhartyml/My-Person-CRM</a>. See Build-Along 00 (Claudes X26 Swift6 Bible), Build-Along 03 (LockBox), Build-Along 07 (My Person CRM).</div>
   <hr>
-  <h2>X26 Updates to Split Views and Windows</h2>
-  <p>X26 rounds the corners of every window so the chrome echoes the rounded buttons, sheets, and controls inside. iPadOS picks up two new behaviors. iPad windows now show the close, minimize, and resize controls on their title bar. And iPad windows resize as a continuous gesture &mdash; drag the corner and the window follows your finger smoothly, all the way down to its minimum size, instead of snapping to one of a handful of preset widths<sup>[<a href="#v1-fn">v1</a>]</sup>.</p>
-  <p>For your code, three practical upgrades.</p>
-  <h3>Support Arbitrary Window Sizes</h3>
-  <p>Drop any code that pins windows to a fixed size or refuses arbitrary resize gestures. The X26 expectation is that the user picks the dimensions, your content reflows, and you provide safe areas so layout guides have something to work against. The system uses those safe areas to position window controls and the title bar without colliding with your views &mdash; if you don't declare them, that automatic adjustment can't run.</p>
-  <h3>Use Split Views for Fluid Column Resizing</h3>
-  <p>Stay on the stock <code>NavigationSplitView</code> and the column resize behavior comes wired up. Drag a divider and the columns rebalance smoothly across every intermediate width, not just at named breakpoints. The trade is straightforward: you don't write the animation code, but you also don't get to override how the columns negotiate space at half-widths &mdash; the system makes that call.</p>
-  <h3><code>backgroundExtensionEffect()</code> for Edge-to-Edge Hero Content</h3>
-  <p>X26 adds the <code>backgroundExtensionEffect()</code> modifier. It fakes the visual of a wide image running edge-to-edge under your sidebar &mdash; no actual content scrolls under the sidebar, the modifier just samples your hero view, blurs the sample, and paints it into the strip the sidebar occupies. The sidebar text stays sharp; the photo behind it looks unbroken. Apple's reference example is a product page where a landmark photo appears to span the whole window even though only the detail column is filled.</p>
-  <pre><code class="lang-swift">NavigationSplitView {
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">IV.13.2</span>&nbsp;&nbsp;X26 Updates to Split Views and Windows</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">IV.13.2 &para;1</span> X26 rounds the corners of every window so the chrome echoes the rounded buttons, sheets, and controls inside. iPadOS picks up two new behaviors. iPad windows now show the close, minimize, and resize controls on their title bar. And iPad windows resize as a continuous gesture &mdash; drag the corner and the window follows your finger smoothly, all the way down to its minimum size, instead of snapping to one of a handful of preset widths<sup>[<a href="#v1-fn">v1</a>]</sup>.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">IV.13.2 &para;2</span> For your code, three practical upgrades.</p>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">IV.13.2.1</span>&nbsp;&nbsp;Support Arbitrary Window Sizes</h3>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">IV.13.2.1 &para;1</span> Drop any code that pins windows to a fixed size or refuses arbitrary resize gestures. The X26 expectation is that the user picks the dimensions, your content reflows, and you provide safe areas so layout guides have something to work against. The system uses those safe areas to position window controls and the title bar without colliding with your views &mdash; if you don't declare them, that automatic adjustment can't run.</p>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">IV.13.2.2</span>&nbsp;&nbsp;Use Split Views for Fluid Column Resizing</h3>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">IV.13.2.2 &para;1</span> Stay on the stock <code>NavigationSplitView</code> and the column resize behavior comes wired up. Drag a divider and the columns rebalance smoothly across every intermediate width, not just at named breakpoints. The trade is straightforward: you don't write the animation code, but you also don't get to override how the columns negotiate space at half-widths &mdash; the system makes that call.</p>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">IV.13.2.3</span>&nbsp;&nbsp;<code>backgroundExtensionEffect()</code> for Edge-to-Edge Hero Content</h3>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">IV.13.2.3 &para;1</span> X26 adds the <code>backgroundExtensionEffect()</code> modifier. It fakes the visual of a wide image running edge-to-edge under your sidebar &mdash; no actual content scrolls under the sidebar, the modifier just samples your hero view, blurs the sample, and paints it into the strip the sidebar occupies. The sidebar text stays sharp; the photo behind it looks unbroken. Apple's reference example is a product page where a landmark photo appears to span the whole window even though only the detail column is filled.</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">IV.13.2.3 &para;2</span><pre><code class="lang-swift">NavigationSplitView {
     SidebarView()
 } detail: {
     HeroImage(landmark: landmark)
         .backgroundExtensionEffect()
 }</code></pre>
-  <p>Reach for <code>backgroundExtensionEffect()</code> when a single visual asset deserves the whole window: a header photo, a video poster frame, an oversized illustration on a marketing detail page. Anywhere the design wins by reading as edge-to-edge even though the sidebar is still on screen.</p>
-  <h3>Inspector Panels with <code>.inspector(isPresented:content:)</code></h3>
-  <p>If you're adding an inspector panel, use <code>.inspector(isPresented:content:)</code>. Building a third column by hand was reasonable in earlier OS versions; in X26 the stock modifier offers significantly more for free. The stock modifier sits inside <code>NavigationSplitView</code>, picks up safe areas, resizes fluidly with the rest of the window, and floats on the Liquid Glass surface the way the system expects &mdash; none of which a hand-rolled column gets for free.</p>
-  <p id="v1-fn" style="font-size: 13pt; color: var(--dim);">[v1] Apple Developer Documentation, <em>Adopting Liquid Glass</em>. <a href="https://developer.apple.com/documentation/TechnologyOverviews/adopting-liquid-glass">developer.apple.com/documentation/TechnologyOverviews/adopting-liquid-glass</a> &mdash; verified 2026-04-29.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">IV.13.2.3 &para;3</span> Reach for <code>backgroundExtensionEffect()</code> when a single visual asset deserves the whole window: a header photo, a video poster frame, an oversized illustration on a marketing detail page. Anywhere the design wins by reading as edge-to-edge even though the sidebar is still on screen.</p>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">IV.13.2.4</span>&nbsp;&nbsp;Inspector Panels with <code>.inspector(isPresented:content:)</code></h3>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">IV.13.2.4 &para;1</span> If you're adding an inspector panel, use <code>.inspector(isPresented:content:)</code>. Building a third column by hand was reasonable in earlier OS versions; in X26 the stock modifier offers significantly more for free. The stock modifier sits inside <code>NavigationSplitView</code>, picks up safe areas, resizes fluidly with the rest of the window, and floats on the Liquid Glass surface the way the system expects &mdash; none of which a hand-rolled column gets for free.</p>
+  <p id="v1-fn" style="font-size: 13pt; color: var(--dim);"><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">IV.13.2.4 &para;2</span> [v1] Apple Developer Documentation, <em>Adopting Liquid Glass</em>. <a href="https://developer.apple.com/documentation/TechnologyOverviews/adopting-liquid-glass">developer.apple.com/documentation/TechnologyOverviews/adopting-liquid-glass</a> &mdash; verified 2026-04-29.</p>
   <hr>
-  <h2>Scenes, Windows, and the App</h2>
-  <p>Every Apple app has one <code>App</code> type as its entry point. Inside it you declare one or more <strong>scenes</strong> -- the top-level containers that SwiftUI manages for you. A scene ends up as a window on Mac and iPad, and as the app's root screen on iPhone.</p>
-  <p>The simplest app has exactly one scene:</p>
-  <pre><code class="lang-swift">import SwiftUI
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">IV.13.3</span>&nbsp;&nbsp;Scenes, Windows, and the App</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">IV.13.3 &para;1</span> Every Apple app has one <code>App</code> type as its entry point. Inside it you declare one or more <strong>scenes</strong> -- the top-level containers that SwiftUI manages for you. A scene ends up as a window on Mac and iPad, and as the app's root screen on iPhone.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">IV.13.3 &para;2</span> The simplest app has exactly one scene:</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">IV.13.3 &para;3</span><pre><code class="lang-swift">import SwiftUI
 
 @main
 struct MyApp: App {
@@ -50,17 +50,17 @@ struct MyApp: App {
         }
     }
 }</code></pre>
-  <p><code>WindowGroup</code> is the scene type for "a window the user can open more than one of." On Mac, File &gt; New Window opens a second one. On iPad, it takes part in Split View / Slide Over / Stage Manager. On iPhone there is only one window; <code>WindowGroup</code> still works, it just never gets a sibling.</p>
-  <h3>The Other Scene Types</h3>
-  <p>You will meet three other scene types over a typical app's lifetime:</p>
-  <ul><li><code>Window</code> -- a single-instance window. Think Preferences on Mac; you don't want two of them open at once.</li><li><code>DocumentGroup</code> -- a scene wired to a file document type. Each open document gets its own window automatically. Covered in Book 11.</li><li><code>Settings</code> -- Mac's Preferences scene. Shows under the app menu as <code>⌘,</code>.</li></ul>
-  <p>For most of this chapter we stay with <code>WindowGroup</code>, which covers the common case.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">IV.13.3 &para;4</span> <code>WindowGroup</code> is the scene type for "a window the user can open more than one of." On Mac, File &gt; New Window opens a second one. On iPad, it takes part in Split View / Slide Over / Stage Manager. On iPhone there is only one window; <code>WindowGroup</code> still works, it just never gets a sibling.</p>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">IV.13.3.1</span>&nbsp;&nbsp;The Other Scene Types</h3>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">IV.13.3.1 &para;1</span> You will meet three other scene types over a typical app's lifetime:</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">IV.13.3.1 &para;2</span><ul><li><code>Window</code> -- a single-instance window. Think Preferences on Mac; you don't want two of them open at once.</li><li><code>DocumentGroup</code> -- a scene wired to a file document type. Each open document gets its own window automatically. Covered in Book 11.</li><li><code>Settings</code> -- Mac's Preferences scene. Shows under the app menu as <code>⌘,</code>.</li></ul>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">IV.13.3.1 &para;3</span> For most of this chapter we stay with <code>WindowGroup</code>, which covers the common case.</p>
   <hr>
-  <h2>NavigationSplitView -- Sidebar, Content, Detail</h2>
-  <p><code>NavigationSplitView</code> is SwiftUI's answer to the three-column layout you see in Mail, Notes, Files, and every well-built Mac / iPad app. It gives you a sidebar on the left, a content column in the middle, and a detail pane on the right.</p>
-  <h3>The Two-Column Form</h3>
-  <p>The simplest form has two columns -- sidebar and detail:</p>
-  <pre><code class="lang-swift">struct Library: View {
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">IV.13.4</span>&nbsp;&nbsp;NavigationSplitView -- Sidebar, Content, Detail</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">IV.13.4 &para;1</span> <code>NavigationSplitView</code> is SwiftUI's answer to the three-column layout you see in Mail, Notes, Files, and every well-built Mac / iPad app. It gives you a sidebar on the left, a content column in the middle, and a detail pane on the right.</p>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">IV.13.4.1</span>&nbsp;&nbsp;The Two-Column Form</h3>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">IV.13.4.1 &para;1</span> The simplest form has two columns -- sidebar and detail:</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">IV.13.4.1 &para;2</span><pre><code class="lang-swift">struct Library: View {
     let books = ["Swift in 26 Days", "SwiftUI by Example", "The Pragmatic Programmer"]
     @State private var selected: String?
 
@@ -81,11 +81,11 @@ struct MyApp: App {
         }
     }
 }</code></pre>
-  <p>On iPad and Mac: sidebar and detail appear side by side. On iPhone: the sidebar is the first screen and the detail is pushed when you tap a row.</p>
-  <p>The <code>selection:</code> binding is what makes the detail update when the user picks something in the sidebar. No <code>NavigationLink</code> needed.</p>
-  <h3>The Three-Column Form</h3>
-  <p>When your app has a real hierarchy -- categories, items, item-detail -- reach for the three-column form:</p>
-  <pre><code class="lang-swift">struct Mailbox: View {
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">IV.13.4.1 &para;3</span> On iPad and Mac: sidebar and detail appear side by side. On iPhone: the sidebar is the first screen and the detail is pushed when you tap a row.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">IV.13.4.1 &para;4</span> The <code>selection:</code> binding is what makes the detail update when the user picks something in the sidebar. No <code>NavigationLink</code> needed.</p>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">IV.13.4.2</span>&nbsp;&nbsp;The Three-Column Form</h3>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">IV.13.4.2 &para;1</span> When your app has a real hierarchy -- categories, items, item-detail -- reach for the three-column form:</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">IV.13.4.2 &para;2</span><pre><code class="lang-swift">struct Mailbox: View {
     let folders = ["Inbox", "Sent", "Drafts"]
     @State private var folder: String?
     @State private var messageID: Int?
@@ -112,12 +112,12 @@ struct MyApp: App {
         }
     }
 }</code></pre>
-  <p>Three columns on Mac and iPad Pro. Two columns on iPad regular width. Single column pushed through a stack on iPhone. You write the layout once; SwiftUI adapts it to the device.</p>
-  <h3>columnVisibility -- Controlling What's Open</h3>
-  <p><code>NavigationSplitView</code> takes a binding for <strong>column visibility</strong>. The cases cover the possible states:</p>
-  <ul><li><code>.all</code> -- every column visible (only actually shown when there is room).</li><li><code>.automatic</code> -- SwiftUI picks based on size class.</li><li><code>.detailOnly</code> -- sidebar and content hidden, detail takes the whole window.</li><li><code>.doubleColumn</code> -- sidebar hidden, content + detail visible.</li></ul>
-  <p>The binding lets you drive the UI in code:</p>
-  <pre><code class="lang-swift">struct Reader: View {
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">IV.13.4.2 &para;3</span> Three columns on Mac and iPad Pro. Two columns on iPad regular width. Single column pushed through a stack on iPhone. You write the layout once; SwiftUI adapts it to the device.</p>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">IV.13.4.3</span>&nbsp;&nbsp;columnVisibility -- Controlling What's Open</h3>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">IV.13.4.3 &para;1</span> <code>NavigationSplitView</code> takes a binding for <strong>column visibility</strong>. The cases cover the possible states:</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">IV.13.4.3 &para;2</span><ul><li><code>.all</code> -- every column visible (only actually shown when there is room).</li><li><code>.automatic</code> -- SwiftUI picks based on size class.</li><li><code>.detailOnly</code> -- sidebar and content hidden, detail takes the whole window.</li><li><code>.doubleColumn</code> -- sidebar hidden, content + detail visible.</li></ul>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">IV.13.4.3 &para;3</span> The binding lets you drive the UI in code:</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">IV.13.4.3 &para;4</span><pre><code class="lang-swift">struct Reader: View {
     @State private var columns: NavigationSplitViewVisibility = .automatic
 
     var body: some View {
@@ -136,15 +136,15 @@ struct MyApp: App {
     private var sidebar: some View { Text("Sidebar") }
     private var detail: some View { Text("Detail") }
 }</code></pre>
-  <p>Tapping Focus hides the sidebar so the reader can concentrate. The system still lets the user reveal it again via edge swipe (iOS) or the default sidebar icon (iPad / Mac).</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">IV.13.4.3 &para;5</span> Tapping Focus hides the sidebar so the reader can concentrate. The system still lets the user reveal it again via edge swipe (iOS) or the default sidebar icon (iPad / Mac).</p>
   <hr>
-  <h2>Opening Extra Windows</h2>
-  <p>On Mac and iPad you can open additional windows of your app's scenes. There are two sides to this: letting the user do it, and doing it in code.</p>
-  <h3>Letting the User Open Windows</h3>
-  <p><code>WindowGroup</code> already provides this. On Mac, File &gt; New Window appears automatically. On iPad, the user can drag the app's Dock icon to open a second window in Split View. You don't write any code.</p>
-  <h3>Opening a Window in Code</h3>
-  <p>Use the <code>openWindow</code> environment action.</p>
-  <pre><code class="lang-swift">struct Root: View {
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">IV.13.5</span>&nbsp;&nbsp;Opening Extra Windows</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">IV.13.5 &para;1</span> On Mac and iPad you can open additional windows of your app's scenes. There are two sides to this: letting the user do it, and doing it in code.</p>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">IV.13.5.1</span>&nbsp;&nbsp;Letting the User Open Windows</h3>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">IV.13.5.1 &para;1</span> <code>WindowGroup</code> already provides this. On Mac, File &gt; New Window appears automatically. On iPad, the user can drag the app's Dock icon to open a second window in Split View. You don't write any code.</p>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">IV.13.5.2</span>&nbsp;&nbsp;Opening a Window in Code</h3>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">IV.13.5.2 &para;1</span> Use the <code>openWindow</code> environment action.</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">IV.13.5.2 &para;2</span><pre><code class="lang-swift">struct Root: View {
     @Environment(\.openWindow) private var openWindow
 
     var body: some View {
@@ -153,8 +153,8 @@ struct MyApp: App {
         }
     }
 }</code></pre>
-  <p>For this to work, the scene has to have an <code>id:</code> parameter on the <code>App</code>:</p>
-  <pre><code class="lang-swift">@main
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">IV.13.5.2 &para;3</span> For this to work, the scene has to have an <code>id:</code> parameter on the <code>App</code>:</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">IV.13.5.2 &para;4</span><pre><code class="lang-swift">@main
 struct NotesApp: App {
     var body: some Scene {
         WindowGroup("Library", id: "library") {
@@ -166,10 +166,10 @@ struct NotesApp: App {
         }
     }
 }</code></pre>
-  <p>Now <code>openWindow(id: "note")</code> creates a new window with a fresh <code>NoteView</code>.</p>
-  <h3>Opening a Window With a Value</h3>
-  <p>If the opened window needs a value -- say, "open this specific note" -- give the scene a <code>for:</code> type:</p>
-  <pre><code class="lang-swift">@main
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">IV.13.5.2 &para;5</span> Now <code>openWindow(id: "note")</code> creates a new window with a fresh <code>NoteView</code>.</p>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">IV.13.5.3</span>&nbsp;&nbsp;Opening a Window With a Value</h3>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">IV.13.5.3 &para;1</span> If the opened window needs a value -- say, "open this specific note" -- give the scene a <code>for:</code> type:</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">IV.13.5.3 &para;2</span><pre><code class="lang-swift">@main
 struct NotesApp: App {
     var body: some Scene {
         WindowGroup("Library") { LibraryView() }
@@ -179,23 +179,23 @@ struct NotesApp: App {
         }
     }
 }</code></pre>
-  <p>Then open it with a value:</p>
-  <pre><code class="lang-swift">@Environment(\.openWindow) private var openWindow
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">IV.13.5.3 &para;3</span> Then open it with a value:</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">IV.13.5.3 &para;4</span><pre><code class="lang-swift">@Environment(\.openWindow) private var openWindow
 // ...
 openWindow(value: note.id)</code></pre>
-  <p>SwiftUI picks the <code>WindowGroup</code> whose <code>for:</code> type matches. The window is restored across launches because the value conforms to <code>Codable</code>.</p>
-  <h3>Dismissing a Window</h3>
-  <p>From inside the window you want to close:</p>
-  <pre><code class="lang-swift">@Environment(\.dismissWindow) private var dismissWindow
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">IV.13.5.3 &para;5</span> SwiftUI picks the <code>WindowGroup</code> whose <code>for:</code> type matches. The window is restored across launches because the value conforms to <code>Codable</code>.</p>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">IV.13.5.4</span>&nbsp;&nbsp;Dismissing a Window</h3>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">IV.13.5.4 &para;1</span> From inside the window you want to close:</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">IV.13.5.4 &para;2</span><pre><code class="lang-swift">@Environment(\.dismissWindow) private var dismissWindow
 
 Button("Close") { dismissWindow() }</code></pre>
-  <p>From outside, pass the same <code>id:</code> or <code>value:</code> you opened with:</p>
-  <pre><code class="lang-swift">dismissWindow(id: "note")</code></pre>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">IV.13.5.4 &para;3</span> From outside, pass the same <code>id:</code> or <code>value:</code> you opened with:</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">IV.13.5.4 &para;4</span><pre><code class="lang-swift">dismissWindow(id: "note")</code></pre>
   <hr>
-  <h2>State Restoration</h2>
-  <p>Users expect the app to come back the way they left it -- the same window open, same document, same scroll position. SwiftUI restores most of this automatically as long as you use the right property wrappers.</p>
-  <p><code>@SceneStorage</code> is the one you reach for most. It's like <code>@State</code> except SwiftUI persists it per scene across launches:</p>
-  <pre><code class="lang-swift">struct NoteView: View {
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">IV.13.6</span>&nbsp;&nbsp;State Restoration</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">IV.13.6 &para;1</span> Users expect the app to come back the way they left it -- the same window open, same document, same scroll position. SwiftUI restores most of this automatically as long as you use the right property wrappers.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">IV.13.6 &para;2</span> <code>@SceneStorage</code> is the one you reach for most. It's like <code>@State</code> except SwiftUI persists it per scene across launches:</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">IV.13.6 &para;3</span><pre><code class="lang-swift">struct NoteView: View {
     @SceneStorage("draft") private var draft = ""
     @SceneStorage("scrollPosition") private var scroll = 0
 
@@ -203,26 +203,26 @@ Button("Close") { dismissWindow() }</code></pre>
         TextEditor(text: $draft)
     }
 }</code></pre>
-  <p>Close the window, relaunch, the text is still there.</p>
-  <p>For app-wide preferences -- "last-used color scheme," "font size" -- use <code>@AppStorage</code> instead; that writes into <code>UserDefaults</code> and is shared across every window.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">IV.13.6 &para;4</span> Close the window, relaunch, the text is still there.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">IV.13.6 &para;5</span> For app-wide preferences -- "last-used color scheme," "font size" -- use <code>@AppStorage</code> instead; that writes into <code>UserDefaults</code> and is shared across every window.</p>
   <hr>
-  <h2>Cross-Platform &mdash; What Doesn't Translate from iOS to Mac</h2>
-  <p>SwiftUI bills itself as one framework that runs everywhere, and most of the time that promise holds. But a meaningful slice of the SwiftUI surface is iOS-only and refuses to compile on macOS. When an app is moving from iPad-and-iPhone to native Mac (the OPerationsHOS Phase 16 transition documented in <em>Appendix C: AlarmKit</em> and the OperatorOS notes), the iOS-only APIs surface as build errors. The pattern is always the same: a modifier or type that works fine for iOS turns into a "is unavailable in macOS" or "cannot find type" error the first time the app is targeted at <code>platform=macOS</code>.</p>
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">IV.13.7</span>&nbsp;&nbsp;Cross-Platform &mdash; What Doesn't Translate from iOS to Mac</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">IV.13.7 &para;1</span> SwiftUI bills itself as one framework that runs everywhere, and most of the time that promise holds. But a meaningful slice of the SwiftUI surface is iOS-only and refuses to compile on macOS. When an app is moving from iPad-and-iPhone to native Mac (the OPerationsHOS Phase 16 transition documented in <em>Appendix C: AlarmKit</em> and the OperatorOS notes), the iOS-only APIs surface as build errors. The pattern is always the same: a modifier or type that works fine for iOS turns into a "is unavailable in macOS" or "cannot find type" error the first time the app is targeted at <code>platform=macOS</code>.</p>
 
-  <h3>The Modifiers That Don't Survive macOS</h3>
-  <p>Three recurring offenders that fail to compile on macOS:</p>
-  <ul>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">IV.13.7.1</span>&nbsp;&nbsp;The Modifiers That Don't Survive macOS</h3>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">IV.13.7.1 &para;1</span> Three recurring offenders that fail to compile on macOS:</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">IV.13.7.1 &para;2</span><ul>
     <li><strong><code>.listStyle(.insetGrouped)</code></strong> &mdash; iOS only. <code>InsetGroupedListStyle</code> doesn't exist on macOS. The error reads <code>'insetGrouped' is unavailable in macOS</code>.</li>
     <li><strong><code>.searchable(text:, placement: .navigationBarDrawer(...))</code></strong> &mdash; the <code>.navigationBarDrawer</code> placement is iOS only because macOS has no navigation bar. The error reads <code>'navigationBarDrawer(displayMode:)' is unavailable in macOS</code>.</li>
     <li><strong><code>Color(.systemBackground)</code></strong> &mdash; the <code>.systemBackground</code> token comes from <code>UIColor</code>, which doesn't exist on macOS. The error reads <code>reference to member 'systemBackground' cannot be resolved without a contextual type</code>.</li>
   </ul>
-  <p>The <code>Color(.systemBackground)</code> case has a cross-platform replacement built into SwiftUI: <code>.background(.background.opacity(0.94))</code> works on both iOS and macOS because <code>.background</code> here is SwiftUI's semantic <code>ShapeStyle</code>, not a <code>UIColor</code> token.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">IV.13.7.1 &para;3</span> The <code>Color(.systemBackground)</code> case has a cross-platform replacement built into SwiftUI: <code>.background(.background.opacity(0.94))</code> works on both iOS and macOS because <code>.background</code> here is SwiftUI's semantic <code>ShapeStyle</code>, not a <code>UIColor</code> token.</p>
 
-  <h3>Frameworks That Don't Exist on macOS at All</h3>
-  <p><strong>AlarmKit</strong> is iOS 26+ only. The framework simply isn't in the macOS SDK. <strong>ActivityKit</strong> (the Live Activities API) is iOS-only as well &mdash; the lock screen and Dynamic Island it draws to don't exist on Mac. HealthKit is iOS / watchOS / Mac Catalyst only, not native macOS. ShazamKit and some MusicKit features have similar platform asymmetries. WidgetKit, by contrast, <em>is</em> available on macOS &mdash; Desktop widgets shipped in macOS Sonoma (14) and Notification Center widgets earlier &mdash; so a widget extension can be built for Mac, it just has to be configured for the macOS platform in the target's build settings.</p>
-  <p>For the frameworks that genuinely don't exist on macOS, the <code>import</code> statement and every reference to the framework's types has to be guarded.</p>
-  <p>The <code>#if canImport(FrameworkName)</code> pattern is the right tool:</p>
-  <pre><code class="lang-swift">#if canImport(AlarmKit)
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">IV.13.7.2</span>&nbsp;&nbsp;Frameworks That Don't Exist on macOS at All</h3>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">IV.13.7.2 &para;1</span> <strong>AlarmKit</strong> is iOS 26+ only. The framework simply isn't in the macOS SDK. <strong>ActivityKit</strong> (the Live Activities API) is iOS-only as well &mdash; the lock screen and Dynamic Island it draws to don't exist on Mac. HealthKit is iOS / watchOS / Mac Catalyst only, not native macOS. ShazamKit and some MusicKit features have similar platform asymmetries. WidgetKit, by contrast, <em>is</em> available on macOS &mdash; Desktop widgets shipped in macOS Sonoma (14) and Notification Center widgets earlier &mdash; so a widget extension can be built for Mac, it just has to be configured for the macOS platform in the target's build settings.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">IV.13.7.2 &para;2</span> For the frameworks that genuinely don't exist on macOS, the <code>import</code> statement and every reference to the framework's types has to be guarded.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">IV.13.7.2 &para;3</span> The <code>#if canImport(FrameworkName)</code> pattern is the right tool:</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">IV.13.7.2 &para;4</span><pre><code class="lang-swift">#if canImport(AlarmKit)
 import AlarmKit
 #endif
 
@@ -234,11 +234,11 @@ extension AlarmButton {
     }
 }
 #endif</code></pre>
-  <p>One gotcha: <code>#if canImport(AlarmKit)</code> inside the body of an <code>extension AlarmButton { }</code> declaration doesn't help. The compiler still has to parse the extension's declaration line, and the type <code>AlarmButton</code> doesn't exist on macOS, so the parse fails. The <code>#if</code> guard has to wrap the entire <code>extension</code> block, not just the body inside it.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">IV.13.7.2 &para;5</span> One gotcha: <code>#if canImport(AlarmKit)</code> inside the body of an <code>extension AlarmButton { }</code> declaration doesn't help. The compiler still has to parse the extension's declaration line, and the type <code>AlarmButton</code> doesn't exist on macOS, so the parse fails. The <code>#if</code> guard has to wrap the entire <code>extension</code> block, not just the body inside it.</p>
 
-  <h3>The <code>#if os(...)</code> Patterns</h3>
-  <p>For modifiers and types that exist on both platforms but in different forms, use compile-time platform checks. The two patterns:</p>
-  <pre><code class="lang-swift">// Single-platform-only modifier
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">IV.13.7.3</span>&nbsp;&nbsp;The <code>#if os(...)</code> Patterns</h3>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">IV.13.7.3 &para;1</span> For modifiers and types that exist on both platforms but in different forms, use compile-time platform checks. The two patterns:</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">IV.13.7.3 &para;2</span><pre><code class="lang-swift">// Single-platform-only modifier
 .someModifier()
 #if os(iOS)
 .listStyle(.insetGrouped)
@@ -250,12 +250,12 @@ extension AlarmButton {
 #else
 .searchable(text: $query)
 #endif</code></pre>
-  <p>The first form (single-platform) is for additive modifiers that only matter on one platform &mdash; <code>.listStyle(.insetGrouped)</code> on iOS, with the default style on macOS. The second form (different implementation) is for behaviors that need to exist on both platforms but with different arguments. Both compile cleanly on both platforms because the inactive branch is dropped before semantic analysis.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">IV.13.7.3 &para;3</span> The first form (single-platform) is for additive modifiers that only matter on one platform &mdash; <code>.listStyle(.insetGrouped)</code> on iOS, with the default style on macOS. The second form (different implementation) is for behaviors that need to exist on both platforms but with different arguments. Both compile cleanly on both platforms because the inactive branch is dropped before semantic analysis.</p>
 
-  <h3>iOS-Only Extensions and the Mac Build</h3>
-  <p>When an iOS app gains a Mac target, any iOS-only extensions (widget extensions, App Intents extensions, Live Activity extensions) have to be excluded from the macOS build. Xcode's project file represents the "embed" step that copies each extension into the host app's bundle. On a mixed-platform host, the embed step has to be told to skip iOS-only extensions when targeting macOS.</p>
-  <p>The fix lives in the <code>.pbxproj</code> file as a <code>platformFilter</code> attribute on the embed reference:</p>
-  <pre><code class="lang-pbxproj">/* Without filter (default) */
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">IV.13.7.4</span>&nbsp;&nbsp;iOS-Only Extensions and the Mac Build</h3>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">IV.13.7.4 &para;1</span> When an iOS app gains a Mac target, any iOS-only extensions (widget extensions, App Intents extensions, Live Activity extensions) have to be excluded from the macOS build. Xcode's project file represents the "embed" step that copies each extension into the host app's bundle. On a mixed-platform host, the embed step has to be told to skip iOS-only extensions when targeting macOS.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">IV.13.7.4 &para;2</span> The fix lives in the <code>.pbxproj</code> file as a <code>platformFilter</code> attribute on the embed reference:</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">IV.13.7.4 &para;3</span><pre><code class="lang-pbxproj">/* Without filter (default) */
 C0...C2 /* MyWidgetExtension.appex in Embed Foundation Extensions */ = {
     isa = PBXBuildFile;
     fileRef = ...;
@@ -269,15 +269,15 @@ C0...C2 /* MyWidgetExtension.appex in Embed Foundation Extensions */ = {
     platformFilter = ios;
     settings = { ATTRIBUTES = (RemoveHeadersOnCopy, ); };
 };</code></pre>
-  <p>Setting this in Xcode's UI: select the host app target &rarr; Build Phases &rarr; Embed Foundation Extensions &rarr; click the extension &rarr; set the Filters dropdown to "iOS." Xcode writes the <code>platformFilter</code> line into the <code>.pbxproj</code> automatically. Without that filter, the macOS build fails with a hard error: <em>"This target is built for macOS but contains embedded content built for iOS, which is not allowed."</em></p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">IV.13.7.4 &para;4</span> Setting this in Xcode's UI: select the host app target &rarr; Build Phases &rarr; Embed Foundation Extensions &rarr; click the extension &rarr; set the Filters dropdown to "iOS." Xcode writes the <code>platformFilter</code> line into the <code>.pbxproj</code> automatically. Without that filter, the macOS build fails with a hard error: <em>"This target is built for macOS but contains embedded content built for iOS, which is not allowed."</em></p>
 
-  <h3>How to Spot These Before the Build Does</h3>
-  <p>Apple's documentation flags platform availability on every symbol. The Availability section at the top of each reference page lists the platforms and versions the symbol exists on. When the section reads "iOS 16.0+" with no macOS row, the symbol is iOS-only. Reading the Availability section before adopting any modifier or type is the discipline that catches these issues in design rather than in build output.</p>
-  <p>The other reliable spotter is the build itself. Targeting <code>platform=macOS</code> early &mdash; even if Mac isn't the immediate release platform &mdash; surfaces iOS-only dependencies while the codebase is still small enough to fix them comfortably. The longer iOS-only assumptions accumulate, the more invasive the eventual Mac port becomes.</p>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">IV.13.7.5</span>&nbsp;&nbsp;How to Spot These Before the Build Does</h3>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">IV.13.7.5 &para;1</span> Apple's documentation flags platform availability on every symbol. The Availability section at the top of each reference page lists the platforms and versions the symbol exists on. When the section reads "iOS 16.0+" with no macOS row, the symbol is iOS-only. Reading the Availability section before adopting any modifier or type is the discipline that catches these issues in design rather than in build output.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">IV.13.7.5 &para;2</span> The other reliable spotter is the build itself. Targeting <code>platform=macOS</code> early &mdash; even if Mac isn't the immediate release platform &mdash; surfaces iOS-only dependencies while the codebase is still small enough to fix them comfortably. The longer iOS-only assumptions accumulate, the more invasive the eventual Mac port becomes.</p>
   <hr>
-  <h2>Chapter Mini-Example -- A Two-Window Reader</h2>
-  <p>Putting the pieces together, here is a small app with a library window and a detail window that opens when you click a book.</p>
-  <pre><code class="lang-swift">import SwiftUI
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">IV.13.8</span>&nbsp;&nbsp;Chapter Mini-Example -- A Two-Window Reader</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">IV.13.8 &para;1</span> Putting the pieces together, here is a small app with a library window and a detail window that opens when you click a book.</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">IV.13.8 &para;2</span><pre><code class="lang-swift">import SwiftUI
 
 struct Book: Identifiable, Hashable, Codable {
     let id: Int
@@ -337,14 +337,14 @@ struct BookDetailView: View {
         .frame(minWidth: 400, minHeight: 240)
     }
 }</code></pre>
-  <p>Clicking a book opens its detail in its own window. The slider position is preserved per-window across launches because <code>@SceneStorage</code> is scoped to the scene.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">IV.13.8 &para;3</span> Clicking a book opens its detail in its own window. The slider position is preserved per-window across launches because <code>@SceneStorage</code> is scoped to the scene.</p>
   <hr>
-  <h2>What Book 14 Does</h2>
-  <p>Book 14 covers moving content between windows, apps, and devices: clipboard, drag and drop, and share sheets.</p>
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">IV.13.9</span>&nbsp;&nbsp;What Book 14 Does</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">IV.13.9 &para;1</span> Book 14 covers moving content between windows, apps, and devices: clipboard, drag and drop, and share sheets.</p>
   <hr>
-  <h2>Further Reading &mdash; WWDC Sessions</h2>
-  <p>This book is a passive resource. When you want deeper coverage of multi-window and <code>NavigationSplitView</code>, the WWDC sessions below are Apple's source material.</p>
-  <ul>
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">IV.13.10</span>&nbsp;&nbsp;Further Reading &mdash; WWDC Sessions</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">IV.13.10 &para;1</span> This book is a passive resource. When you want deeper coverage of multi-window and <code>NavigationSplitView</code>, the WWDC sessions below are Apple's source material.</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">IV.13.10 &para;2</span><ul>
     <li>WWDC25 / 256, <em>What's new in SwiftUI</em> &mdash; <a href="https://developer.apple.com/videos/play/wwdc2025/256/">developer.apple.com/videos/play/wwdc2025/256/</a>. Navigation-stack and split-view updates this release.</li>
     <li>WWDC25 / 282, <em>Make your UIKit app more flexible</em> &mdash; <a href="https://developer.apple.com/videos/play/wwdc2025/282/">developer.apple.com/videos/play/wwdc2025/282/</a>. UIKit multiscene patterns and assistive scenes.</li>
     <li>WWDC25 / 290, <em>Set the scene with SwiftUI in visionOS</em> &mdash; <a href="https://developer.apple.com/videos/play/wwdc2025/290/">developer.apple.com/videos/play/wwdc2025/290/</a>. Scene composition beyond <code>WindowGroup</code> &mdash; useful framing even for non-visionOS apps.</li>

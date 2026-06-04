@@ -9,15 +9,15 @@
 
 <div class="content">
 
-  <h1>Book 3: Introducing Scenes &amp; Windows</h1>
+  <h1><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">I.3</span>&nbsp;&nbsp;Book 3: Introducing Scenes &amp; Windows</h1>
   <p><strong>Claude's Xcode 26 Swift Bible</strong> -- Part I: Introduction</p>
   <hr>
-  <h2>Live Reference: Claudes X26 Swift6 Bible + Claudes LockBox + CryoTunes Player</h2>
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">I.3.1</span>&nbsp;&nbsp;Live Reference: Claudes X26 Swift6 Bible + Claudes LockBox + CryoTunes Player</h2>
   <div class="scope-note">Three apps in this book's roster demonstrate the <code>App</code> protocol and scene wiring in three different shapes. <strong>Claudes X26 Swift6 Bible</strong> has a single <code>WindowGroup</code> hosting <code>LockScreenView</code> (its app entry), then <code>ContentView</code> after auth &mdash; see <code>Claudes_X26_Swift6_BibleApp.swift</code> at <a href="https://github.com/fluhartyml/Claudes-X26-Swift6-Bible">github.com/fluhartyml/Claudes-X26-Swift6-Bible</a>. <strong>Claudes LockBox</strong> does the same with a <code>WindowGroup</code> hosting a Face-ID gated <code>LockScreenView</code> that wraps the actual content &mdash; see <code>Claudes_LockBoxApp.swift</code> at <a href="https://github.com/fluhartyml/Claudes-LockBox">github.com/fluhartyml/Claudes-LockBox</a>. <strong>CryoTunes Player</strong> uses <code>WindowGroup</code> plus a <code>Settings</code> scene on Mac &mdash; see <code>CryoTunes_PlayerApp.swift</code> at <a href="https://github.com/fluhartyml/CryoTunesPlayer">github.com/fluhartyml/CryoTunesPlayer</a>. Three apps, three takes on the same App-protocol pattern. See Build-Along 00 (Claudes X26 Swift6 Bible), Build-Along 03 (LockBox), Source Tour 18 (CryoTunes).</div>
   <hr>
-  <h2>The App Protocol</h2>
-  <p>Every SwiftUI application starts with a struct that conforms to the <code>App</code> protocol and is marked <code>@main</code>. This is the entry point -- the thing that launches when the user taps your icon.</p>
-  <pre><code class="lang-swift">import SwiftUI
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">I.3.2</span>&nbsp;&nbsp;The App Protocol</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">I.3.2 &para;1</span> Every SwiftUI application starts with a struct that conforms to the <code>App</code> protocol and is marked <code>@main</code>. This is the entry point -- the thing that launches when the user taps your icon.</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">I.3.2 &para;2</span><pre><code class="lang-swift">import SwiftUI
 
 @main
 struct MyApp: App {
@@ -27,18 +27,18 @@ struct MyApp: App {
         }
     }
 }</code></pre>
-  <p>Notice the pattern: <code>App</code> has a <code>body</code> that returns <code>some Scene</code>, just like <code>View</code> has a <code>body</code> that returns <code>some View</code>. The hierarchy goes: <strong>App &gt; Scene &gt; View</strong>.</p>
-  <h3>Rules of @main</h3>
-  <ul><li>There is exactly <strong>one</strong> <code>@main</code> struct per target. Two <code>@main</code> structs in the same target is a compile error.</li><li>The <code>@main</code> struct must conform to <code>App</code>.</li><li>You initialize app-wide state here (SwiftData containers, shared observable objects, etc.).</li></ul>
-  <h3>Watch Out For</h3>
-  <ul><li>If Xcode says "no entry point found," make sure your <code>App</code> struct has the <code>@main</code> attribute and your file is included in the correct target.</li><li>If you rename your app struct, search for leftover references. The <code>@main</code> attribute is what matters, not the struct name.</li></ul>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">I.3.2 &para;3</span> Notice the pattern: <code>App</code> has a <code>body</code> that returns <code>some Scene</code>, just like <code>View</code> has a <code>body</code> that returns <code>some View</code>. The hierarchy goes: <strong>App &gt; Scene &gt; View</strong>.</p>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">I.3.2.1</span>&nbsp;&nbsp;Rules of @main</h3>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">I.3.2.1 &para;1</span><ul><li>There is exactly <strong>one</strong> <code>@main</code> struct per target. Two <code>@main</code> structs in the same target is a compile error.</li><li>The <code>@main</code> struct must conform to <code>App</code>.</li><li>You initialize app-wide state here (SwiftData containers, shared observable objects, etc.).</li></ul>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">I.3.2.2</span>&nbsp;&nbsp;Watch Out For</h3>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">I.3.2.2 &para;1</span><ul><li>If Xcode says "no entry point found," make sure your <code>App</code> struct has the <code>@main</code> attribute and your file is included in the correct target.</li><li>If you rename your app struct, search for leftover references. The <code>@main</code> attribute is what matters, not the struct name.</li></ul>
   <hr>
-  <h2>What a Scene Is</h2>
-  <p>A <strong>Scene</strong> is a container that manages one or more windows. On iOS, you usually have one scene showing one full-screen window. On macOS, scenes can create multiple windows.</p>
-  <p>Think of it this way:</p>
-  <ul><li><strong>App</strong> -- the process, the thing running in memory</li><li><strong>Scene</strong> -- a window manager (decides how many windows and what goes in them)</li><li><strong>View</strong> -- the actual pixels on screen</li></ul>
-  <p>SwiftUI provides several built-in scene types:</p>
-  <table>
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">I.3.3</span>&nbsp;&nbsp;What a Scene Is</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">I.3.3 &para;1</span> A <strong>Scene</strong> is a container that manages one or more windows. On iOS, you usually have one scene showing one full-screen window. On macOS, scenes can create multiple windows.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">I.3.3 &para;2</span> Think of it this way:</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">I.3.3 &para;3</span><ul><li><strong>App</strong> -- the process, the thing running in memory</li><li><strong>Scene</strong> -- a window manager (decides how many windows and what goes in them)</li><li><strong>View</strong> -- the actual pixels on screen</li></ul>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">I.3.3 &para;4</span> SwiftUI provides several built-in scene types:</p>
+  <span class="onum onum-float" style="color:#8a7300;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;display:block;margin:.6em 0 .1em">Table 3.1</span><table>
   <thead><tr><th>Scene Type</th><th>What It Does</th><th>Platforms</th><th></th></tr></thead>
   <tbody>
   <tr><td><code>WindowGroup</code></td><td>Main app content, supports multiple windows</td><td>All</td><td></td></tr>
@@ -48,9 +48,9 @@ struct MyApp: App {
   </tbody>
   </table>
   <hr>
-  <h2>WindowGroup</h2>
-  <p><code>WindowGroup</code> is the scene type you use 90% of the time. It creates the main window of your app.</p>
-  <pre><code class="lang-swift">@main
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">I.3.4</span>&nbsp;&nbsp;WindowGroup</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">I.3.4 &para;1</span> <code>WindowGroup</code> is the scene type you use 90% of the time. It creates the main window of your app.</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">I.3.4 &para;2</span><pre><code class="lang-swift">@main
 struct TallyMatrixApp: App {
     var body: some Scene {
         WindowGroup {
@@ -58,17 +58,17 @@ struct TallyMatrixApp: App {
         }
     }
 }</code></pre>
-  <h3>Multiple Windows (macOS)</h3>
-  <p>On macOS, <code>WindowGroup</code> automatically supports multiple windows. The user can press Cmd+N to open a new window, and each window gets its own independent instance of your content view.</p>
-  <p>On iOS and iPadOS, <code>WindowGroup</code> creates the single main window. On iPadOS, the system may create multiple scenes for Split View / Slide Over, each getting its own instance.</p>
-  <h3>Window Title and ID</h3>
-  <pre><code class="lang-swift">WindowGroup("Tally Matrix", id: "main") {
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">I.3.4.1</span>&nbsp;&nbsp;Multiple Windows (macOS)</h3>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">I.3.4.1 &para;1</span> On macOS, <code>WindowGroup</code> automatically supports multiple windows. The user can press Cmd+N to open a new window, and each window gets its own independent instance of your content view.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">I.3.4.1 &para;2</span> On iOS and iPadOS, <code>WindowGroup</code> creates the single main window. On iPadOS, the system may create multiple scenes for Split View / Slide Over, each getting its own instance.</p>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">I.3.4.2</span>&nbsp;&nbsp;Window Title and ID</h3>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">I.3.4.2 &para;1</span><pre><code class="lang-swift">WindowGroup("Tally Matrix", id: "main") {
     ContentView()
 }</code></pre>
-  <p>The string sets the window title on macOS. The <code>id</code> lets you distinguish between different window groups if you have more than one.</p>
-  <h3>Opening Specific Windows (macOS)</h3>
-  <p>If your app has multiple <code>WindowGroup</code> scenes, you can open a specific one programmatically:</p>
-  <pre><code class="lang-swift">@main
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">I.3.4.2 &para;2</span> The string sets the window title on macOS. The <code>id</code> lets you distinguish between different window groups if you have more than one.</p>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">I.3.4.3</span>&nbsp;&nbsp;Opening Specific Windows (macOS)</h3>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">I.3.4.3 &para;1</span> If your app has multiple <code>WindowGroup</code> scenes, you can open a specific one programmatically:</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">I.3.4.3 &para;2</span><pre><code class="lang-swift">@main
 struct MyApp: App {
     var body: some Scene {
         WindowGroup("Main", id: "main") {
@@ -92,12 +92,12 @@ struct ContentView: View {
         .font(.system(size: 18))
     }
 }</code></pre>
-  <h3>Watch Out For</h3>
-  <ul><li>On macOS, each window from a <code>WindowGroup</code> is an independent instance. If they share data, use an <code>@Observable</code> object passed through <code>.environment()</code>.</li><li>On tvOS, there is always exactly one full-screen window. <code>WindowGroup</code> still works; the system just never creates a second window.</li></ul>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">I.3.4.4</span>&nbsp;&nbsp;Watch Out For</h3>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">I.3.4.4 &para;1</span><ul><li>On macOS, each window from a <code>WindowGroup</code> is an independent instance. If they share data, use an <code>@Observable</code> object passed through <code>.environment()</code>.</li><li>On tvOS, there is always exactly one full-screen window. <code>WindowGroup</code> still works; the system just never creates a second window.</li></ul>
   <hr>
-  <h2>DocumentGroup</h2>
-  <p><code>DocumentGroup</code> is for document-based apps -- apps where the user creates, opens, and saves files (like a text editor, image editor, or spreadsheet).</p>
-  <pre><code class="lang-swift">@main
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">I.3.5</span>&nbsp;&nbsp;DocumentGroup</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">I.3.5 &para;1</span> <code>DocumentGroup</code> is for document-based apps -- apps where the user creates, opens, and saves files (like a text editor, image editor, or spreadsheet).</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">I.3.5 &para;2</span><pre><code class="lang-swift">@main
 struct MarkdownEditorApp: App {
     var body: some Scene {
         DocumentGroup(newDocument: MarkdownDocument()) { file in
@@ -105,8 +105,8 @@ struct MarkdownEditorApp: App {
         }
     }
 }</code></pre>
-  <p>Your document type must conform to <code>FileDocument</code> (for value types) or <code>ReferenceFileDocument</code> (for reference types).</p>
-  <pre><code class="lang-swift">struct MarkdownDocument: FileDocument {
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">I.3.5 &para;3</span> Your document type must conform to <code>FileDocument</code> (for value types) or <code>ReferenceFileDocument</code> (for reference types).</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">I.3.5 &para;4</span><pre><code class="lang-swift">struct MarkdownDocument: FileDocument {
     static var readableContentTypes: [UTType] { [.plainText] }
 
     var text: String
@@ -129,12 +129,12 @@ struct MarkdownEditorApp: App {
         return .init(regularFileWithContents: data)
     }
 }</code></pre>
-  <h3>Watch Out For</h3>
-  <ul><li><code>DocumentGroup</code> provides its own navigation (open/save panels on macOS, file browser on iOS). You do not build this UI yourself.</li><li>You must register your document's UTType in Info.plist under <code>CFBundleDocumentTypes</code> and <code>UTExportedTypeDeclarations</code> (for custom file types) or <code>UTImportedTypeDeclarations</code> (for existing types).</li></ul>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">I.3.5.1</span>&nbsp;&nbsp;Watch Out For</h3>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">I.3.5.1 &para;1</span><ul><li><code>DocumentGroup</code> provides its own navigation (open/save panels on macOS, file browser on iOS). You do not build this UI yourself.</li><li>You must register your document's UTType in Info.plist under <code>CFBundleDocumentTypes</code> and <code>UTExportedTypeDeclarations</code> (for custom file types) or <code>UTImportedTypeDeclarations</code> (for existing types).</li></ul>
   <hr>
-  <h2>Settings Scene (macOS Only)</h2>
-  <p>The <code>Settings</code> scene creates the standard Preferences window accessible via Cmd+, (or your app's menu &gt; Settings).</p>
-  <pre><code class="lang-swift">@main
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">I.3.6</span>&nbsp;&nbsp;Settings Scene (macOS Only)</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">I.3.6 &para;1</span> The <code>Settings</code> scene creates the standard Preferences window accessible via Cmd+, (or your app's menu &gt; Settings).</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">I.3.6 &para;2</span><pre><code class="lang-swift">@main
 struct MyApp: App {
     var body: some Scene {
         WindowGroup {
@@ -168,12 +168,12 @@ struct SettingsView: View {
         .padding()
     }
 }</code></pre>
-  <h3>Watch Out For</h3>
-  <ul><li><code>Settings</code> is macOS-only. On iOS, build your settings into the app's UI (a settings tab or gear icon) or use the Settings bundle for system Settings.app integration.</li><li>Do not use <code>Settings</code> for critical app configuration. Users expect settings to be optional -- the app should work without ever opening this window.</li></ul>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">I.3.6.1</span>&nbsp;&nbsp;Watch Out For</h3>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">I.3.6.1 &para;1</span><ul><li><code>Settings</code> is macOS-only. On iOS, build your settings into the app's UI (a settings tab or gear icon) or use the Settings bundle for system Settings.app integration.</li><li>Do not use <code>Settings</code> for critical app configuration. Users expect settings to be optional -- the app should work without ever opening this window.</li></ul>
   <hr>
-  <h2>Window Scene (macOS Only)</h2>
-  <p><code>Window</code> creates a single, non-duplicable window. Unlike <code>WindowGroup</code>, the user cannot open a second instance with Cmd+N.</p>
-  <pre><code class="lang-swift">@main
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">I.3.7</span>&nbsp;&nbsp;Window Scene (macOS Only)</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">I.3.7 &para;1</span> <code>Window</code> creates a single, non-duplicable window. Unlike <code>WindowGroup</code>, the user cannot open a second instance with Cmd+N.</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">I.3.7 &para;2</span><pre><code class="lang-swift">@main
 struct MyApp: App {
     var body: some Scene {
         WindowGroup {
@@ -187,11 +187,11 @@ struct MyApp: App {
         .defaultSize(width: 600, height: 400)
     }
 }</code></pre>
-  <p>Open it from code with <code>openWindow(id: "activity-log")</code>.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">I.3.7 &para;3</span> Open it from code with <code>openWindow(id: "activity-log")</code>.</p>
   <hr>
-  <h2>MenuBarExtra (macOS Only)</h2>
-  <p><code>MenuBarExtra</code> adds an icon to the macOS menu bar. It can show a dropdown menu or a popover-style window.</p>
-  <pre><code class="lang-swift">@main
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">I.3.8</span>&nbsp;&nbsp;MenuBarExtra (macOS Only)</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">I.3.8 &para;1</span> <code>MenuBarExtra</code> adds an icon to the macOS menu bar. It can show a dropdown menu or a popover-style window.</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">I.3.8 &para;2</span><pre><code class="lang-swift">@main
 struct StatusBarApp: App {
     var body: some Scene {
         MenuBarExtra("My App", systemImage: "star.fill") {
@@ -207,14 +207,14 @@ struct StatusBarApp: App {
         .menuBarExtraStyle(.window) // .window for a popover, .menu for a dropdown
     }
 }</code></pre>
-  <h3>Watch Out For</h3>
-  <ul><li>A <code>MenuBarExtra</code> app with no <code>WindowGroup</code> is a "menu bar only" app -- it has no dock icon and no main window. This is intentional for utilities.</li><li>To have both a dock icon and a menu bar presence, include both <code>WindowGroup</code> and <code>MenuBarExtra</code> in your app body.</li></ul>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">I.3.8.1</span>&nbsp;&nbsp;Watch Out For</h3>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">I.3.8.1 &para;1</span><ul><li>A <code>MenuBarExtra</code> app with no <code>WindowGroup</code> is a "menu bar only" app -- it has no dock icon and no main window. This is intentional for utilities.</li><li>To have both a dock icon and a menu bar presence, include both <code>WindowGroup</code> and <code>MenuBarExtra</code> in your app body.</li></ul>
   <hr>
-  <h2>App Lifecycle</h2>
-  <p>SwiftUI apps use the <code>App</code> protocol's lifecycle. There is no <code>AppDelegate</code> by default, though you can add one if needed.</p>
-  <h3>Scene Phase</h3>
-  <p>SwiftUI provides <code>scenePhase</code> to track whether your app is active, inactive, or in the background:</p>
-  <pre><code class="lang-swift">@main
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">I.3.9</span>&nbsp;&nbsp;App Lifecycle</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">I.3.9 &para;1</span> SwiftUI apps use the <code>App</code> protocol's lifecycle. There is no <code>AppDelegate</code> by default, though you can add one if needed.</p>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">I.3.9.1</span>&nbsp;&nbsp;Scene Phase</h3>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">I.3.9.1 &para;1</span> SwiftUI provides <code>scenePhase</code> to track whether your app is active, inactive, or in the background:</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">I.3.9.1 &para;2</span><pre><code class="lang-swift">@main
 struct MyApp: App {
     @Environment(\.scenePhase) private var scenePhase
 
@@ -239,19 +239,19 @@ struct MyApp: App {
         }
     }
 }</code></pre>
-  <h3>Scene Phase Values</h3>
-  <table>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">I.3.9.2</span>&nbsp;&nbsp;Scene Phase Values</h3>
+  <span class="onum onum-float" style="color:#8a7300;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;display:block;margin:.6em 0 .1em">Table 3.2</span><table>
   <thead><tr><th>Phase</th><th>Meaning</th><th></th></tr></thead>
   <tbody>
   <tr><td><code>.active</code></td><td>App is frontmost and receiving input</td><td></td></tr>
   <tr><td><code>.inactive</code></td><td>App is visible but not receiving input (transitioning, notification center open)</td><td></td></tr>
   </tbody>
   </table>
-  <h3>When to Use Each Phase</h3>
-  <ul><li><strong>Save data</strong> in <code>.background</code> -- this is your last chance before the system may terminate your app.</li><li><strong>Pause timers or animations</strong> in <code>.inactive</code>.</li><li><strong>Resume activity</strong> in <code>.active</code>.</li></ul>
-  <h3>Adding an AppDelegate (When You Need One)</h3>
-  <p>Some things still require an <code>AppDelegate</code> (push notification registration, certain third-party SDKs, handling URLs):</p>
-  <pre><code class="lang-swift">class AppDelegate: NSObject, UIApplicationDelegate {
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">I.3.9.3</span>&nbsp;&nbsp;When to Use Each Phase</h3>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">I.3.9.3 &para;1</span><ul><li><strong>Save data</strong> in <code>.background</code> -- this is your last chance before the system may terminate your app.</li><li><strong>Pause timers or animations</strong> in <code>.inactive</code>.</li><li><strong>Resume activity</strong> in <code>.active</code>.</li></ul>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">I.3.9.4</span>&nbsp;&nbsp;Adding an AppDelegate (When You Need One)</h3>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">I.3.9.4 &para;1</span> Some things still require an <code>AppDelegate</code> (push notification registration, certain third-party SDKs, handling URLs):</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">I.3.9.4 &para;2</span><pre><code class="lang-swift">class AppDelegate: NSObject, UIApplicationDelegate {
     func application(
         _ application: UIApplication,
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
@@ -271,26 +271,26 @@ struct MyApp: App {
         }
     }
 }</code></pre>
-  <p>On macOS, use <code>@NSApplicationDelegateAdaptor</code> instead.</p>
-  <h3>Watch Out For</h3>
-  <ul><li>Do not rely on <code>scenePhase</code> for saving critical data on tvOS. tvOS apps can be terminated without warning. Save continuously or after each user action.</li><li><code>scenePhase</code> on macOS applies per-scene (per-window), not per-app. Closing one window does not mean the app is backgrounded if another window is open.</li></ul>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">I.3.9.4 &para;3</span> On macOS, use <code>@NSApplicationDelegateAdaptor</code> instead.</p>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">I.3.9.5</span>&nbsp;&nbsp;Watch Out For</h3>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">I.3.9.5 &para;1</span><ul><li>Do not rely on <code>scenePhase</code> for saving critical data on tvOS. tvOS apps can be terminated without warning. Save continuously or after each user action.</li><li><code>scenePhase</code> on macOS applies per-scene (per-window), not per-app. Closing one window does not mean the app is backgrounded if another window is open.</li></ul>
   <hr>
-  <h2>Multi-Platform Considerations</h2>
-  <p>SwiftUI runs on every Apple platform from a shared codebase, but each platform has its own conventions to account for.</p>
-  <h3>iOS / iPadOS</h3>
-  <ul><li><strong>One WindowGroup</strong>, one full-screen window (iPadOS supports multitasking with multiple scenes).</li><li><strong>No Settings scene</strong> -- build settings into your app's UI.</li><li>Navigation typically uses <code>NavigationStack</code> or <code>NavigationSplitView</code>.</li><li>System bars: status bar at top, home indicator at bottom. Use <code>.ignoresSafeArea()</code> carefully.</li></ul>
-  <h3>macOS</h3>
-  <ul><li><strong>Multiple windows</strong> are the norm. Each <code>WindowGroup</code> window is independent.</li><li><strong>Settings scene</strong> via Cmd+,.</li><li><strong>Menu bar</strong> is important. SwiftUI generates a default menu; customize with <code>.commands()</code>.</li><li><strong>Window sizing</strong>: use <code>.defaultSize()</code>, <code>.frame(minWidth:maxWidth:)</code> on the content view.</li></ul>
-  <pre><code class="lang-swift">WindowGroup {
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">I.3.10</span>&nbsp;&nbsp;Multi-Platform Considerations</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">I.3.10 &para;1</span> SwiftUI runs on every Apple platform from a shared codebase, but each platform has its own conventions to account for.</p>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">I.3.10.1</span>&nbsp;&nbsp;iOS / iPadOS</h3>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">I.3.10.1 &para;1</span><ul><li><strong>One WindowGroup</strong>, one full-screen window (iPadOS supports multitasking with multiple scenes).</li><li><strong>No Settings scene</strong> -- build settings into your app's UI.</li><li>Navigation typically uses <code>NavigationStack</code> or <code>NavigationSplitView</code>.</li><li>System bars: status bar at top, home indicator at bottom. Use <code>.ignoresSafeArea()</code> carefully.</li></ul>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">I.3.10.2</span>&nbsp;&nbsp;macOS</h3>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">I.3.10.2 &para;1</span><ul><li><strong>Multiple windows</strong> are the norm. Each <code>WindowGroup</code> window is independent.</li><li><strong>Settings scene</strong> via Cmd+,.</li><li><strong>Menu bar</strong> is important. SwiftUI generates a default menu; customize with <code>.commands()</code>.</li><li><strong>Window sizing</strong>: use <code>.defaultSize()</code>, <code>.frame(minWidth:maxWidth:)</code> on the content view.</li></ul>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">I.3.10.2 &para;2</span><pre><code class="lang-swift">WindowGroup {
     ContentView()
         .frame(minWidth: 600, minHeight: 400)
 }
 .defaultSize(width: 800, height: 600)</code></pre>
-  <h3>tvOS</h3>
-  <ul><li><strong>Full-screen only.</strong> One window, no resizing, no multitasking.</li><li><strong>Focus-based navigation.</strong> No touch -- users navigate with the Siri Remote. See Chapter 4 for focus system details.</li><li><strong>10-foot UI.</strong> Everything must be large and readable from across the room. Your 18pt minimum is a <em>floor</em>, not a target -- consider 28pt+ for main content on TV.</li><li>No <code>Settings</code> scene, no <code>MenuBarExtra</code>.</li></ul>
-  <h3>visionOS</h3>
-  <ul><li><strong>Windows float in space.</strong> <code>WindowGroup</code> creates a 2D window in the user's environment.</li><li><strong>Volumes</strong>: use <code>.windowStyle(.volumetric)</code> for 3D content in a bounded box.</li><li><strong>Immersive spaces</strong>: <code>ImmersiveSpace</code> scene type for full 3D environments.</li><li>Eyes and hands replace touch. Standard SwiftUI controls work automatically with gaze-and-tap.</li></ul>
-  <pre><code class="lang-swift">@main
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">I.3.10.3</span>&nbsp;&nbsp;tvOS</h3>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">I.3.10.3 &para;1</span><ul><li><strong>Full-screen only.</strong> One window, no resizing, no multitasking.</li><li><strong>Focus-based navigation.</strong> No touch -- users navigate with the Siri Remote. See Chapter 4 for focus system details.</li><li><strong>10-foot UI.</strong> Everything must be large and readable from across the room. Your 18pt minimum is a <em>floor</em>, not a target -- consider 28pt+ for main content on TV.</li><li>No <code>Settings</code> scene, no <code>MenuBarExtra</code>.</li></ul>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">I.3.10.4</span>&nbsp;&nbsp;visionOS</h3>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">I.3.10.4 &para;1</span><ul><li><strong>Windows float in space.</strong> <code>WindowGroup</code> creates a 2D window in the user's environment.</li><li><strong>Volumes</strong>: use <code>.windowStyle(.volumetric)</code> for 3D content in a bounded box.</li><li><strong>Immersive spaces</strong>: <code>ImmersiveSpace</code> scene type for full 3D environments.</li><li>Eyes and hands replace touch. Standard SwiftUI controls work automatically with gaze-and-tap.</li></ul>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">I.3.10.4 &para;2</span><pre><code class="lang-swift">@main
 struct MyVisionApp: App {
     var body: some Scene {
         WindowGroup {
@@ -303,12 +303,12 @@ struct MyVisionApp: App {
         }
     }
 }</code></pre>
-  <h3>watchOS</h3>
-  <ul><li><strong>Single view, small screen.</strong> Focus on glanceable information.</li><li><code>NavigationStack</code> with simple lists is the standard pattern.</li><li>Digital Crown input via <code>.digitalCrownRotation()</code>.</li></ul>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">I.3.10.5</span>&nbsp;&nbsp;watchOS</h3>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">I.3.10.5 &para;1</span><ul><li><strong>Single view, small screen.</strong> Focus on glanceable information.</li><li><code>NavigationStack</code> with simple lists is the standard pattern.</li><li>Digital Crown input via <code>.digitalCrownRotation()</code>.</li></ul>
   <hr>
-  <h2>Conditional Compilation for Platforms</h2>
-  <p>When you need platform-specific code:</p>
-  <pre><code class="lang-swift">var body: some Scene {
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">I.3.11</span>&nbsp;&nbsp;Conditional Compilation for Platforms</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">I.3.11 &para;1</span> When you need platform-specific code:</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">I.3.11 &para;2</span><pre><code class="lang-swift">var body: some Scene {
     WindowGroup {
         ContentView()
     }
@@ -319,8 +319,8 @@ struct MyVisionApp: App {
     }
     #endif
 }</code></pre>
-  <p>Available compile-time checks:</p>
-  <table>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">I.3.11 &para;3</span> Available compile-time checks:</p>
+  <span class="onum onum-float" style="color:#8a7300;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;display:block;margin:.6em 0 .1em">Table 3.3</span><table>
   <thead><tr><th>Check</th><th>Matches</th><th></th></tr></thead>
   <tbody>
   <tr><td><code>#if os(iOS)</code></td><td>iPhone and iPad</td><td></td></tr>
@@ -332,12 +332,12 @@ struct MyVisionApp: App {
   <tr><td><code>#if canImport(UIKit)</code></td><td>UIKit is available (iOS, tvOS, visionOS)</td><td></td></tr>
   </tbody>
   </table>
-  <h3>Watch Out For</h3>
-  <ul><li><code>os(iOS)</code> matches both iPhone and iPad. Use <code>UIDevice.current.userInterfaceIdiom == .pad</code> at runtime to distinguish (but prefer adaptive layout over device checks).</li><li>Mac Catalyst apps match <code>os(iOS)</code>, not <code>os(macOS)</code>. Use <code>#if targetEnvironment(macCatalyst)</code> to detect Catalyst specifically.</li><li>Overusing <code>#if os(...)</code> makes code hard to maintain. Prefer designing views that adapt naturally with <code>GeometryReader</code>, <code>ViewThatFits</code>, or <code>NavigationSplitView</code>'s automatic collapsing behavior.</li></ul>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">I.3.11.1</span>&nbsp;&nbsp;Watch Out For</h3>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">I.3.11.1 &para;1</span><ul><li><code>os(iOS)</code> matches both iPhone and iPad. Use <code>UIDevice.current.userInterfaceIdiom == .pad</code> at runtime to distinguish (but prefer adaptive layout over device checks).</li><li>Mac Catalyst apps match <code>os(iOS)</code>, not <code>os(macOS)</code>. Use <code>#if targetEnvironment(macCatalyst)</code> to detect Catalyst specifically.</li><li>Overusing <code>#if os(...)</code> makes code hard to maintain. Prefer designing views that adapt naturally with <code>GeometryReader</code>, <code>ViewThatFits</code>, or <code>NavigationSplitView</code>'s automatic collapsing behavior.</li></ul>
   <hr>
-  <h2>Combining Multiple Scenes</h2>
-  <p>A real-world macOS app might combine several scene types:</p>
-  <pre><code class="lang-swift">@main
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">I.3.12</span>&nbsp;&nbsp;Combining Multiple Scenes</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">I.3.12 &para;1</span> A real-world macOS app might combine several scene types:</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">I.3.12 &para;2</span><pre><code class="lang-swift">@main
 struct ProductivityApp: App {
     @State private var appState = AppState()
 
@@ -370,25 +370,25 @@ struct ProductivityApp: App {
         .menuBarExtraStyle(.window)
     }
 }</code></pre>
-  <p>Pass shared <code>@Observable</code> state through <code>.environment()</code> so all scenes can access the same data.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">I.3.12 &para;3</span> Pass shared <code>@Observable</code> state through <code>.environment()</code> so all scenes can access the same data.</p>
   <hr>
-  <h2>Practical Tips</h2>
-  <ol class="body-list"><li><strong>Start with one WindowGroup.</strong> You can add Settings, MenuBarExtra, and extra windows later. Do not over-architect the scene structure before you need it.</li></ol>
-  <ol class="body-list"><li><strong>Test your macOS app with multiple windows early.</strong> Open two windows and make sure they do not fight over shared state. This catches bugs that are invisible in single-window testing.</li></ol>
-  <ol class="body-list"><li><strong>Save in <code>.background</code>, not just on button tap.</strong> Users force-quit apps, phones run out of battery, systems terminate background apps. The <code>.background</code> scene phase is your safety net.</li></ol>
-  <ol class="body-list"><li><strong>Use <code>.defaultSize()</code> on macOS windows.</strong> Without it, SwiftUI guesses a size based on content, which is often wrong.</li></ol>
-  <ol class="body-list"><li><strong>On tvOS, do not fight the focus system.</strong> SwiftUI handles focus automatically for standard controls. Custom focus behavior is covered in Chapter 4.</li></ol>
-  <ol class="body-list"><li><strong>Keep your App struct thin.</strong> Initialize state, define scenes, and stop. Business logic belongs in your model layer, not in the <code>App</code> body.</li></ol>
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">I.3.13</span>&nbsp;&nbsp;Practical Tips</h2>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">I.3.13 &para;1</span><ol class="body-list"><li><strong>Start with one WindowGroup.</strong> You can add Settings, MenuBarExtra, and extra windows later. Do not over-architect the scene structure before you need it.</li></ol>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">I.3.13 &para;2</span><ol class="body-list"><li><strong>Test your macOS app with multiple windows early.</strong> Open two windows and make sure they do not fight over shared state. This catches bugs that are invisible in single-window testing.</li></ol>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">I.3.13 &para;3</span><ol class="body-list"><li><strong>Save in <code>.background</code>, not just on button tap.</strong> Users force-quit apps, phones run out of battery, systems terminate background apps. The <code>.background</code> scene phase is your safety net.</li></ol>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">I.3.13 &para;4</span><ol class="body-list"><li><strong>Use <code>.defaultSize()</code> on macOS windows.</strong> Without it, SwiftUI guesses a size based on content, which is often wrong.</li></ol>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">I.3.13 &para;5</span><ol class="body-list"><li><strong>On tvOS, do not fight the focus system.</strong> SwiftUI handles focus automatically for standard controls. Custom focus behavior is covered in Chapter 4.</li></ol>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">I.3.13 &para;6</span><ol class="body-list"><li><strong>Keep your App struct thin.</strong> Initialize state, define scenes, and stop. Business logic belongs in your model layer, not in the <code>App</code> body.</li></ol>
   <hr>
-  <h2>Further Reading &mdash; WWDC Sessions</h2>
-  <p>This book is a passive resource. When you want deeper coverage of scenes, windows, or multi-window architectures, the WWDC sessions below are Apple's source material.</p>
-  <ul>
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">I.3.14</span>&nbsp;&nbsp;Further Reading &mdash; WWDC Sessions</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">I.3.14 &para;1</span> This book is a passive resource. When you want deeper coverage of scenes, windows, or multi-window architectures, the WWDC sessions below are Apple's source material.</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">I.3.14 &para;2</span><ul>
     <li>WWDC25 / 256, <em>What's new in SwiftUI</em> &mdash; <a href="https://developer.apple.com/videos/play/wwdc2025/256/">developer.apple.com/videos/play/wwdc2025/256/</a>. Scene and window updates land here every year.</li>
     <li>WWDC25 / 290, <em>Set the scene with SwiftUI in visionOS</em> &mdash; <a href="https://developer.apple.com/videos/play/wwdc2025/290/">developer.apple.com/videos/play/wwdc2025/290/</a>. Scene types beyond <code>WindowGroup</code> &mdash; volumes, immersive spaces, and remote scenes.</li>
     <li>WWDC25 / 282, <em>Make your UIKit app more flexible</em> &mdash; <a href="https://developer.apple.com/videos/play/wwdc2025/282/">developer.apple.com/videos/play/wwdc2025/282/</a>. Multiscene + multi-window patterns from the UIKit side, including assistive scenes.</li>
   </ul>
   <hr>
-  <p><em>Claude's Xcode 26 Swift Bible -- Book 3</em> <em>By Michael Fluharty. Swift 6, Xcode 26.</em></p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">I.3.14 &para;3</span> <em>Claude's Xcode 26 Swift Bible -- Book 3</em> <em>By Michael Fluharty. Swift 6, Xcode 26.</em></p>
 
 </div>
 

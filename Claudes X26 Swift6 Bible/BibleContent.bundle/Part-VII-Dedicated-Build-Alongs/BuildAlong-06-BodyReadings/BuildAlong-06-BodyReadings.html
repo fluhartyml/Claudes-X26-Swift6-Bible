@@ -9,14 +9,14 @@
 
 <div class="content">
 
-  <h1>Build-Along 06: BodyReadings &mdash; HealthKit and CoreMotion Together</h1>
+  <h1><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.6</span>&nbsp;&nbsp;Build-Along 06: BodyReadings &mdash; HealthKit and CoreMotion Together</h1>
   <p>BodyReadings is a single-screen iPhone app that shows three live readings: your latest heart rate (from Apple Health), today's step count, and a three-axis live accelerometer meter. Phosphor-green CRT aesthetic. The whole app is small enough that the load-bearing pieces fit in this chapter. Build it once, see HealthKit and CoreMotion working side by side.</p>
   <p>The repository: <a href="https://github.com/fluhartyml/Body-Readings">github.com/fluhartyml/Body-Readings</a>. The wiki: <a href="https://github.com/fluhartyml/Body-Readings/wiki">github.com/fluhartyml/Body-Readings/wiki</a>. Clone-and-build, no App Store release planned in Volume 1's window.</p>
   <hr>
-  <h2>The Brainstorm</h2>
-  <p>Two of the most-requested iOS frameworks for new developers are HealthKit and CoreMotion. They are different in shape: HealthKit is a database of stored samples that you query asynchronously; CoreMotion is a live sensor stream that you subscribe to. A teaching app that demonstrates both side by side has to land authorization, async query, and live callback in the same screen without crowding the UI.</p>
-  <p><strong>v0.1 spec:</strong></p>
-  <ul>
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.6.1</span>&nbsp;&nbsp;The Brainstorm</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.6.1 &para;1</span> Two of the most-requested iOS frameworks for new developers are HealthKit and CoreMotion. They are different in shape: HealthKit is a database of stored samples that you query asynchronously; CoreMotion is a live sensor stream that you subscribe to. A teaching app that demonstrates both side by side has to land authorization, async query, and live callback in the same screen without crowding the UI.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.6.1 &para;2</span> <strong>v0.1 spec:</strong></p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">VII.6.1 &para;3</span><ul>
     <li>Heart rate &mdash; latest BPM from Apple Health, with the timestamp of the reading</li>
     <li>Steps today &mdash; running count from midnight</li>
     <li>Live motion &mdash; three meters (X, Y, Z) bouncing in real time</li>
@@ -25,17 +25,17 @@
     <li>Single screen, no navigation, no settings</li>
     <li>iPhone-only (iPad works but is not the target form factor)</li>
   </ul>
-  <p>What is intentionally NOT in v0.1:</p>
-  <ul>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.6.1 &para;4</span> What is intentionally NOT in v0.1:</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">VII.6.1 &para;5</span><ul>
     <li>No persistence &mdash; every value is read fresh from Health or sensor</li>
     <li>No charts &mdash; that is a later chapter (Swift Charts on top of HealthKit)</li>
     <li>No widget &mdash; HealthKit + Widgets is its own concurrency story</li>
     <li>No Apple Watch companion &mdash; doubles the build, separate chapter material</li>
   </ul>
   <hr>
-  <h2>The Architecture</h2>
-  <p>Two stores own the state. SwiftUI views observe them directly. Nothing else holds state.</p>
-  <pre><code class="lang-swift">@MainActor @Observable
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.6.2</span>&nbsp;&nbsp;The Architecture</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.6.2 &para;1</span> Two stores own the state. SwiftUI views observe them directly. Nothing else holds state.</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">VII.6.2 &para;2</span><pre><code class="lang-swift">@MainActor @Observable
 final class HealthStore {
     static let isAvailable = HKHealthStore.isHealthDataAvailable()
     private let store = HKHealthStore()
@@ -51,7 +51,7 @@ final class HealthStore {
     var hasRequestedAuth = false
     // ...
 }</code></pre>
-  <pre><code class="lang-swift">@MainActor @Observable
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">VII.6.2 &para;3</span><pre><code class="lang-swift">@MainActor @Observable
 final class MotionStore {
     private let manager = CMMotionManager()
 
@@ -62,9 +62,9 @@ final class MotionStore {
     var isAvailable: Bool { manager.isAccelerometerAvailable }
     // ...
 }</code></pre>
-  <p><code>@MainActor</code> on both stores keeps every method on the main thread, which is correct for state that drives UI. <code>@Observable</code> (Swift 5.9+) replaces the older <code>ObservableObject</code> + <code>@Published</code> dance &mdash; SwiftUI re-renders the views that read changed properties, automatically.</p>
-  <p>The app entry injects both stores via <code>.environment</code> and starts the motion stream as soon as the view appears. Note what is <strong>not</strong> in <code>.task</code> &mdash; the Health authorization request. That comes later.</p>
-  <pre><code class="lang-swift">@main
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.6.2 &para;4</span> <code>@MainActor</code> on both stores keeps every method on the main thread, which is correct for state that drives UI. <code>@Observable</code> (Swift 5.9+) replaces the older <code>ObservableObject</code> + <code>@Published</code> dance &mdash; SwiftUI re-renders the views that read changed properties, automatically.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.6.2 &para;5</span> The app entry injects both stores via <code>.environment</code> and starts the motion stream as soon as the view appears. Note what is <strong>not</strong> in <code>.task</code> &mdash; the Health authorization request. That comes later.</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">VII.6.2 &para;6</span><pre><code class="lang-swift">@main
 struct Body_ReadingsApp: App {
     @State private var health = HealthStore()
     @State private var motion = MotionStore()
@@ -79,12 +79,12 @@ struct Body_ReadingsApp: App {
     }
 }</code></pre>
   <hr>
-  <h2>HealthKit: The Authorization Flow</h2>
-  <p>HealthKit requires the user's explicit permission for every data type the app reads. The system shows a permission sheet with a toggle for each type; the user flips them on (or doesn't) and taps Allow. Two essential rules apply.</p>
-  <p><strong>Rule one:</strong> the system dialog's toggles default to OFF. The user must flip them on to grant access. If the user taps Allow without flipping anything, the app sees no data &mdash; and Apple intentionally hides whether that happened.</p>
-  <p><strong>Rule two:</strong> Apple's privacy design hides whether the user denied READ access. <code>authorizationStatus(for:)</code> returns <code>.sharingDenied</code> for both "user denied" and "user has not been asked." The only honest way to know whether you have read access is to attempt the read and see if data comes back.</p>
-  <p>The authorization call itself is straightforward async/await:</p>
-  <pre><code class="lang-swift">func requestAuthorization() async {
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.6.3</span>&nbsp;&nbsp;HealthKit: The Authorization Flow</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.6.3 &para;1</span> HealthKit requires the user's explicit permission for every data type the app reads. The system shows a permission sheet with a toggle for each type; the user flips them on (or doesn't) and taps Allow. Two essential rules apply.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.6.3 &para;2</span> <strong>Rule one:</strong> the system dialog's toggles default to OFF. The user must flip them on to grant access. If the user taps Allow without flipping anything, the app sees no data &mdash; and Apple intentionally hides whether that happened.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.6.3 &para;3</span> <strong>Rule two:</strong> Apple's privacy design hides whether the user denied READ access. <code>authorizationStatus(for:)</code> returns <code>.sharingDenied</code> for both "user denied" and "user has not been asked." The only honest way to know whether you have read access is to attempt the read and see if data comes back.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.6.3 &para;4</span> The authorization call itself is straightforward async/await:</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">VII.6.3 &para;5</span><pre><code class="lang-swift">func requestAuthorization() async {
     hasRequestedAuth = true
     lastError = nil
     guard Self.isAvailable else {
@@ -104,12 +104,12 @@ struct Body_ReadingsApp: App {
         didFinishInitialLoad = true
     }
 }</code></pre>
-  <p>The <code>toShare</code> parameter is empty &mdash; this app only reads, never writes. Read-only access doesn't need the data types enumerated in the entitlements file; only writes do.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.6.3 &para;6</span> The <code>toShare</code> parameter is empty &mdash; this app only reads, never writes. Read-only access doesn't need the data types enumerated in the entitlements file; only writes do.</p>
   <hr>
-  <h2>HealthKit: The Two Queries</h2>
-  <p>Heart rate uses <code>HKSampleQuery</code> &mdash; the right tool for "give me the most recent N samples of type X." Steps use <code>HKStatisticsQuery</code> with <code>.cumulativeSum</code> &mdash; the right tool for "give me the running total over a window."</p>
-  <h3>Latest heart rate</h3>
-  <pre><code class="lang-swift">private func loadLatestHeartRate() async {
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.6.4</span>&nbsp;&nbsp;HealthKit: The Two Queries</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.6.4 &para;1</span> Heart rate uses <code>HKSampleQuery</code> &mdash; the right tool for "give me the most recent N samples of type X." Steps use <code>HKStatisticsQuery</code> with <code>.cumulativeSum</code> &mdash; the right tool for "give me the running total over a window."</p>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.6.4.1</span>&nbsp;&nbsp;Latest heart rate</h3>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">VII.6.4.1 &para;1</span><pre><code class="lang-swift">private func loadLatestHeartRate() async {
     await withCheckedContinuation { continuation in
         let sortDescriptor = NSSortDescriptor(
             key: HKSampleSortIdentifierEndDate, ascending: false
@@ -136,10 +136,10 @@ struct Body_ReadingsApp: App {
         store.execute(query)
     }
 }</code></pre>
-  <p>Three things make this work. <code>withCheckedContinuation</code> bridges HealthKit's NSObject-callback API to Swift <code>async</code>: we suspend the calling task, execute the query, and resume the continuation when the callback fires. <code>[weak self]</code> avoids the closure retaining the store. <code>Task { @MainActor in ... }</code> hops back to main before touching <code>@Observable</code> properties &mdash; HealthKit delivers callbacks on a private queue, so writing observable state directly from there would be a concurrency violation.</p>
-  <p>The unit conversion deserves a beat. Heart rate is stored in HealthKit as count/sec internally, but BPM is the user-facing number. <code>HKUnit.count().unitDivided(by: .minute())</code> reads as "counts per minute" &mdash; literally beats per minute. The same conversion idiom works for any other rate unit you might need (counts per second, steps per hour, etc.).</p>
-  <h3>Today's steps</h3>
-  <pre><code class="lang-swift">private func loadTodaysSteps() async {
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.6.4.1 &para;2</span> Three things make this work. <code>withCheckedContinuation</code> bridges HealthKit's NSObject-callback API to Swift <code>async</code>: we suspend the calling task, execute the query, and resume the continuation when the callback fires. <code>[weak self]</code> avoids the closure retaining the store. <code>Task { @MainActor in ... }</code> hops back to main before touching <code>@Observable</code> properties &mdash; HealthKit delivers callbacks on a private queue, so writing observable state directly from there would be a concurrency violation.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.6.4.1 &para;3</span> The unit conversion deserves a beat. Heart rate is stored in HealthKit as count/sec internally, but BPM is the user-facing number. <code>HKUnit.count().unitDivided(by: .minute())</code> reads as "counts per minute" &mdash; literally beats per minute. The same conversion idiom works for any other rate unit you might need (counts per second, steps per hour, etc.).</p>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.6.4.2</span>&nbsp;&nbsp;Today's steps</h3>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">VII.6.4.2 &para;1</span><pre><code class="lang-swift">private func loadTodaysSteps() async {
     await withCheckedContinuation { continuation in
         let calendar = Calendar.current
         let startOfDay = calendar.startOfDay(for: Date())
@@ -164,12 +164,12 @@ struct Body_ReadingsApp: App {
         store.execute(query)
     }
 }</code></pre>
-  <p>Why <code>HKStatisticsQuery</code> with <code>.cumulativeSum</code> instead of fetching individual step samples and summing them? HealthKit deduplicates step samples across data sources &mdash; the iPhone pedometer and an Apple Watch on the same wrist would otherwise double-count overlapping windows. The statistics query runs Apple's deduplication for us. Naive summation would silently double the step count for any user wearing a Watch.</p>
-  <p><code>Calendar.current.startOfDay(for: Date())</code> honors the device's calendar and time zone. Using a UTC-based predicate would cause "today's steps" to roll over at random hours for non-UTC users.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.6.4.2 &para;2</span> Why <code>HKStatisticsQuery</code> with <code>.cumulativeSum</code> instead of fetching individual step samples and summing them? HealthKit deduplicates step samples across data sources &mdash; the iPhone pedometer and an Apple Watch on the same wrist would otherwise double-count overlapping windows. The statistics query runs Apple's deduplication for us. Naive summation would silently double the step count for any user wearing a Watch.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.6.4.2 &para;3</span> <code>Calendar.current.startOfDay(for: Date())</code> honors the device's calendar and time zone. Using a UTC-based predicate would cause "today's steps" to roll over at random hours for non-UTC users.</p>
   <hr>
-  <h2>CoreMotion: The Live Stream</h2>
-  <p>CoreMotion is the simpler half. No async/await dance, no NSObject callback bridge &mdash; the framework already supports a closure-based callback that fires on the queue you specify.</p>
-  <pre><code class="lang-swift">func start() {
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.6.5</span>&nbsp;&nbsp;CoreMotion: The Live Stream</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.6.5 &para;1</span> CoreMotion is the simpler half. No async/await dance, no NSObject callback bridge &mdash; the framework already supports a closure-based callback that fires on the queue you specify.</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">VII.6.5 &para;2</span><pre><code class="lang-swift">func start() {
     guard manager.isAccelerometerAvailable, !isStreaming else { return }
     manager.accelerometerUpdateInterval = 1.0 / 30.0   // 30 Hz
     manager.startAccelerometerUpdates(to: .main) { [weak self] data, _ in
@@ -180,38 +180,38 @@ struct Body_ReadingsApp: App {
     }
     isStreaming = true
 }</code></pre>
-  <p>Two design choices live in this short method.</p>
-  <p><strong>30 Hz update interval.</strong> The accelerometer hardware can deliver up to 100 Hz, but UI bars don't need more than ~24 Hz to feel live. 30 Hz is the safe middle &mdash; smooth animation, negligible battery cost. Setting <code>accelerometerUpdateInterval</code> after <code>startAccelerometerUpdates</code> has no effect on the current stream; set it first.</p>
-  <p><strong>Updates delivered on <code>.main</code>.</strong> Because the callback writes to <code>@Observable</code> properties that drive SwiftUI views, delivering on the main queue means we can write directly without an actor hop. SwiftUI re-renders automatically the next runloop tick.</p>
-  <p>The values you see in <code>x</code>, <code>y</code>, <code>z</code> are in g-units (1g &asymp; 9.81 m/s&sup2;). At rest with the iPhone face-up, expect roughly <code>(0, 0, -1)</code> &mdash; gravity pulling down through the screen. Rotate the phone and the components redistribute; shake it and they spike past 1.0g.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.6.5 &para;3</span> Two design choices live in this short method.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.6.5 &para;4</span> <strong>30 Hz update interval.</strong> The accelerometer hardware can deliver up to 100 Hz, but UI bars don't need more than ~24 Hz to feel live. 30 Hz is the safe middle &mdash; smooth animation, negligible battery cost. Setting <code>accelerometerUpdateInterval</code> after <code>startAccelerometerUpdates</code> has no effect on the current stream; set it first.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.6.5 &para;5</span> <strong>Updates delivered on <code>.main</code>.</strong> Because the callback writes to <code>@Observable</code> properties that drive SwiftUI views, delivering on the main queue means we can write directly without an actor hop. SwiftUI re-renders automatically the next runloop tick.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.6.5 &para;6</span> The values you see in <code>x</code>, <code>y</code>, <code>z</code> are in g-units (1g &asymp; 9.81 m/s&sup2;). At rest with the iPhone face-up, expect roughly <code>(0, 0, -1)</code> &mdash; gravity pulling down through the screen. Rotate the phone and the components redistribute; shake it and they spike past 1.0g.</p>
   <hr>
-  <h2>Permissions and Entitlements</h2>
-  <p>Two surfaces have to agree for HealthKit to work: the entitlements file and the Info.plist usage description.</p>
-  <p><strong>Body_Readings.entitlements:</strong></p>
-  <pre><code class="lang-xml">&lt;key&gt;com.apple.developer.healthkit&lt;/key&gt;
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.6.6</span>&nbsp;&nbsp;Permissions and Entitlements</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.6.6 &para;1</span> Two surfaces have to agree for HealthKit to work: the entitlements file and the Info.plist usage description.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.6.6 &para;2</span> <strong>Body_Readings.entitlements:</strong></p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">VII.6.6 &para;3</span><pre><code class="lang-xml">&lt;key&gt;com.apple.developer.healthkit&lt;/key&gt;
 &lt;true/&gt;
 &lt;key&gt;com.apple.developer.healthkit.access&lt;/key&gt;
 &lt;array/&gt;</code></pre>
-  <p>The empty array is correct &mdash; only "share" (write) data types need to be enumerated; read-only access doesn't.</p>
-  <p><strong>Info.plist:</strong></p>
-  <pre><code class="lang-xml">&lt;key&gt;NSHealthShareUsageDescription&lt;/key&gt;
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.6.6 &para;4</span> The empty array is correct &mdash; only "share" (write) data types need to be enumerated; read-only access doesn't.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.6.6 &para;5</span> <strong>Info.plist:</strong></p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">VII.6.6 &para;6</span><pre><code class="lang-xml">&lt;key&gt;NSHealthShareUsageDescription&lt;/key&gt;
 &lt;string&gt;Body Readings shows your latest heart rate and today's step count from Apple Health.&lt;/string&gt;
 &lt;key&gt;NSMotionUsageDescription&lt;/key&gt;
 &lt;string&gt;Body Readings shows live accelerometer values so you can see how the phone senses movement.&lt;/string&gt;</code></pre>
-  <p>Both strings are user-visible &mdash; iOS shows them inside the system permission dialogs verbatim. Write them in the user's voice, not the developer's.</p>
-  <p>The cleanest way to wire all of this in Xcode is the Capabilities tab: target &rarr; Signing &amp; Capabilities &rarr; <strong>+ Capability</strong> &rarr; <strong>HealthKit</strong>. That single click adds the framework reference, writes the entitlement, and prompts for the Info.plist key. CoreMotion does not need a capability &mdash; the <code>NSMotionUsageDescription</code> in Info.plist is sufficient.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.6.6 &para;7</span> Both strings are user-visible &mdash; iOS shows them inside the system permission dialogs verbatim. Write them in the user's voice, not the developer's.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.6.6 &para;8</span> The cleanest way to wire all of this in Xcode is the Capabilities tab: target &rarr; Signing &amp; Capabilities &rarr; <strong>+ Capability</strong> &rarr; <strong>HealthKit</strong>. That single click adds the framework reference, writes the entitlement, and prompts for the Info.plist key. CoreMotion does not need a capability &mdash; the <code>NSMotionUsageDescription</code> in Info.plist is sufficient.</p>
   <hr>
-  <h2>The Auth-Timeout Story</h2>
-  <p>The first real-device test failed in an instructive way. The app's launch flow originally called <code>requestAuthorization</code> from the App's <code>.task</code> modifier:</p>
-  <pre><code class="lang-swift">// Original v0.1 design
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.6.7</span>&nbsp;&nbsp;The Auth-Timeout Story</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.6.7 &para;1</span> The first real-device test failed in an instructive way. The app's launch flow originally called <code>requestAuthorization</code> from the App's <code>.task</code> modifier:</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">VII.6.7 &para;2</span><pre><code class="lang-swift">// Original v0.1 design
 .task {
     await health.requestAuthorization()
     motion.start()
 }</code></pre>
-  <p>On the simulator the call worked fine. On a real iPhone, the system returned <strong>"Authorization session timed out"</strong> &mdash; with no permission dialog ever appearing. The error surfaced in the UI and the heart rate / steps cards stayed empty.</p>
-  <p>The diagnosis: <code>.task</code> fires very early in the view lifecycle, before the app's window is fully presented. HealthKit needs a presentable view hierarchy to show its sheet; calling <code>requestAuthorization</code> before that's ready fails silently with the timeout error. Simulator timing is forgiving enough that the bug doesn't reproduce; real-device timing surfaces it immediately.</p>
-  <p>The fix: replace the auto-trigger with a manual <strong>CONNECT TO HEALTH</strong> button in the UI. The user taps it; by the time their finger is on the button, the view hierarchy is unambiguously ready. The button calls <code>requestAuthorization</code> from inside its action closure, and the system dialog presents reliably every time.</p>
-  <pre><code class="lang-swift">private var connectButton: some View {
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.6.7 &para;3</span> On the simulator the call worked fine. On a real iPhone, the system returned <strong>"Authorization session timed out"</strong> &mdash; with no permission dialog ever appearing. The error surfaced in the UI and the heart rate / steps cards stayed empty.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.6.7 &para;4</span> The diagnosis: <code>.task</code> fires very early in the view lifecycle, before the app's window is fully presented. HealthKit needs a presentable view hierarchy to show its sheet; calling <code>requestAuthorization</code> before that's ready fails silently with the timeout error. Simulator timing is forgiving enough that the bug doesn't reproduce; real-device timing surfaces it immediately.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.6.7 &para;5</span> The fix: replace the auto-trigger with a manual <strong>CONNECT TO HEALTH</strong> button in the UI. The user taps it; by the time their finger is on the button, the view hierarchy is unambiguously ready. The button calls <code>requestAuthorization</code> from inside its action closure, and the system dialog presents reliably every time.</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">VII.6.7 &para;6</span><pre><code class="lang-swift">private var connectButton: some View {
     Button {
         Task {
             isRequestingAuth = true
@@ -223,22 +223,22 @@ struct Body_ReadingsApp: App {
     }
     .disabled(isRequestingAuth)
 }</code></pre>
-  <p>Two lessons travel with this fix.</p>
-  <ol class="body-list">
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.6.7 &para;7</span> Two lessons travel with this fix.</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">VII.6.7 &para;8</span><ol class="body-list">
     <li><strong>Don't auto-prompt on launch.</strong> Even when the timing works, auto-prompting is annoying for users who already granted access (the call is idempotent and harmless, but a spinner flashes). With a manual button, authorized users skip straight to readings; new users tap CONNECT once.</li>
     <li><strong>Cached denials.</strong> Once iOS records a denial, <code>requestAuthorization</code> returns immediately on every subsequent call without re-presenting the dialog. The user must go to Settings &rarr; Privacy &amp; Security &rarr; Health &rarr; [App] to grant access manually. There is no API to re-prompt. The app's UI surfaces an OPEN SETTINGS button that deep-links to that page when readings stay blank after auth, so the user has a clear escape hatch.</li>
   </ol>
   <hr>
-  <h2>The Three UI States</h2>
-  <p>BodyReadings cards have to render correctly in three distinct states. A reader can hit any of them depending on whether they've granted access yet.</p>
-  <p><strong>Pre-auth:</strong> the user hasn't tapped CONNECT yet. <code>hasRequestedAuth == false</code>. Cards show <em>NOT CONNECTED</em>. The CONNECT TO HEALTH button is visible.</p>
-  <p><strong>In-flight:</strong> the user tapped CONNECT, the system dialog appeared, the user is responding. <code>hasRequestedAuth == true</code> AND <code>didFinishInitialLoad == false</code>. Cards show <em>READING&hellip;</em>. The button shows a spinner.</p>
-  <p><strong>Resolved:</strong> the auth call returned. <code>didFinishInitialLoad == true</code>. Cards show actual data, OR the <em>NO RECENT READING</em> / <em>0</em> empty state, OR an error message with a TRY AGAIN button. If readings are blank, the OPEN SETTINGS button appears below.</p>
-  <p>Why three states instead of two? Empty <code>heartRate</code> is ambiguous. It could mean "still loading" OR "loaded but the read returned nothing." The UI needs to show different things for those two cases (spinner vs explanatory text). A separate <code>didFinishInitialLoad</code> Bool disambiguates them. Earlier versions of similar apps got infinite spinners on quiet failures &mdash; bad UX, hard to diagnose. The current shape is the lesson learned.</p>
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.6.8</span>&nbsp;&nbsp;The Three UI States</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.6.8 &para;1</span> BodyReadings cards have to render correctly in three distinct states. A reader can hit any of them depending on whether they've granted access yet.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.6.8 &para;2</span> <strong>Pre-auth:</strong> the user hasn't tapped CONNECT yet. <code>hasRequestedAuth == false</code>. Cards show <em>NOT CONNECTED</em>. The CONNECT TO HEALTH button is visible.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.6.8 &para;3</span> <strong>In-flight:</strong> the user tapped CONNECT, the system dialog appeared, the user is responding. <code>hasRequestedAuth == true</code> AND <code>didFinishInitialLoad == false</code>. Cards show <em>READING&hellip;</em>. The button shows a spinner.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.6.8 &para;4</span> <strong>Resolved:</strong> the auth call returned. <code>didFinishInitialLoad == true</code>. Cards show actual data, OR the <em>NO RECENT READING</em> / <em>0</em> empty state, OR an error message with a TRY AGAIN button. If readings are blank, the OPEN SETTINGS button appears below.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.6.8 &para;5</span> Why three states instead of two? Empty <code>heartRate</code> is ambiguous. It could mean "still loading" OR "loaded but the read returned nothing." The UI needs to show different things for those two cases (spinner vs explanatory text). A separate <code>didFinishInitialLoad</code> Bool disambiguates them. Earlier versions of similar apps got infinite spinners on quiet failures &mdash; bad UX, hard to diagnose. The current shape is the lesson learned.</p>
   <hr>
-  <h2>The Heart Animation</h2>
-  <p>One small visual touch makes the readout feel alive: the heart icon pulses, and the pulse tempo is tied to the actual BPM.</p>
-  <pre><code class="lang-swift">Image(systemName: "heart.fill")
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.6.9</span>&nbsp;&nbsp;The Heart Animation</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.6.9 &para;1</span> One small visual touch makes the readout feel alive: the heart icon pulses, and the pulse tempo is tied to the actual BPM.</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">VII.6.9 &para;2</span><pre><code class="lang-swift">Image(systemName: "heart.fill")
     .font(.system(size: 44))
     .foregroundStyle(Color.phosphor)
     .scaleEffect(pulse ? 1.12 : 0.94)
@@ -253,11 +253,11 @@ private var heartAnimationDuration: Double {
     guard let bpm = health.heartRate, bpm > 0 else { return 0.6 }
     return min(1.5, max(0.3, 60.0 / bpm / 2.0))
 }</code></pre>
-  <p><code>60.0 / bpm</code> gives seconds-per-beat; dividing by 2 gives a half-cycle (one beat = scale up + scale down). Clamps prevent UI weirdness at extreme values: 0.3s minimum stops the icon from buzzing at 200 BPM, 1.5s maximum keeps a slow heart from looking frozen.</p>
-  <p>If <code>bpm</code> is nil (pre-auth or no data), the animation falls back to a neutral 0.6s tempo so the heart still pulses gently &mdash; a static heart icon would read as broken.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.6.9 &para;3</span> <code>60.0 / bpm</code> gives seconds-per-beat; dividing by 2 gives a half-cycle (one beat = scale up + scale down). Clamps prevent UI weirdness at extreme values: 0.3s minimum stops the icon from buzzing at 200 BPM, 1.5s maximum keeps a slow heart from looking frozen.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.6.9 &para;4</span> If <code>bpm</code> is nil (pre-auth or no data), the animation falls back to a neutral 0.6s tempo so the heart still pulses gently &mdash; a static heart icon would read as broken.</p>
   <hr>
-  <h2>What This Build-Along Teaches</h2>
-  <ul>
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.6.10</span>&nbsp;&nbsp;What This Build-Along Teaches</h2>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">VII.6.10 &para;1</span><ul>
     <li><strong>HealthKit authorization</strong> &mdash; the modern async <code>requestAuthorization(toShare: read:)</code> shape, the read-only entitlement pattern, the privacy-by-design auth-status semantics</li>
     <li><strong>Bridging callback APIs to async</strong> via <code>withCheckedContinuation</code> &mdash; the pattern Apple's older NSObject-style frameworks need to play nicely with Swift concurrency</li>
     <li><strong><code>HKSampleQuery</code> for "latest sample"</strong> &mdash; sort descending by <code>endDate</code>, limit 1, no predicate</li>
@@ -270,18 +270,18 @@ private var heartAnimationDuration: Double {
     <li><strong>BPM-tied animation tempo</strong> &mdash; tying SwiftUI animation duration to live data so the UI <em>feels</em> the data</li>
   </ul>
   <hr>
-  <h2>Cloning and Building</h2>
-  <p>BodyReadings is a clone-and-build app for Volume 1 &mdash; not currently distributed via the App Store. To get a working copy:</p>
-  <ol class="body-list">
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.6.11</span>&nbsp;&nbsp;Cloning and Building</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.6.11 &para;1</span> BodyReadings is a clone-and-build app for Volume 1 &mdash; not currently distributed via the App Store. To get a working copy:</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">VII.6.11 &para;2</span><ol class="body-list">
     <li>Open Xcode and choose <strong>Source Control &rarr; Clone</strong>; paste <code>https://github.com/fluhartyml/Body-Readings</code>.</li>
     <li>Pick a real iPhone destination (the simulator works for verifying the auth flow but has no Health data; you'll see <em>NO RECENT READING</em> and 0 steps).</li>
     <li>&#8984;R to build and run.</li>
     <li>On first launch, tap <strong>CONNECT TO HEALTH</strong>. iOS shows the permission dialog &mdash; flip Heart Rate and Steps toggles ON, then tap Allow.</li>
     <li>Heart rate, steps, and live motion all populate.</li>
   </ol>
-  <p>The wiki at <a href="https://github.com/fluhartyml/Body-Readings/wiki">github.com/fluhartyml/Body-Readings/wiki</a> carries the full Chilton-depth shop manual: every Swift file documented, every Apple API contract spelled out, every architectural decision logged, every failure mode mapped to its recovery. Whether you read this chapter and the wiki together depends on how deep you want to go &mdash; the chapter teaches the pattern; the wiki is the reference.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.6.11 &para;3</span> The wiki at <a href="https://github.com/fluhartyml/Body-Readings/wiki">github.com/fluhartyml/Body-Readings/wiki</a> carries the full Chilton-depth shop manual: every Swift file documented, every Apple API contract spelled out, every architectural decision logged, every failure mode mapped to its recovery. Whether you read this chapter and the wiki together depends on how deep you want to go &mdash; the chapter teaches the pattern; the wiki is the reference.</p>
   <hr>
-  <p><em>BodyReadings was built and verified on real iPhone in a single afternoon on 2026-05-03. Adding it to Volume 1 demonstrates a working pattern: when an app fits the curriculum and gets built cleanly, it earns its chapter regardless of when it was scheduled.</em></p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">VII.6.11 &para;4</span> <em>BodyReadings was built and verified on real iPhone in a single afternoon on 2026-05-03. Adding it to Volume 1 demonstrates a working pattern: when an app fits the curriculum and gets built cleanly, it earns its chapter regardless of when it was scheduled.</em></p>
 
 </div>
 

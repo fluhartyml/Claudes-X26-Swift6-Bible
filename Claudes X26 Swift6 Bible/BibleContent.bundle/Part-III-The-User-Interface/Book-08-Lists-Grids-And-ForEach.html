@@ -9,17 +9,17 @@
 
 <div class="content">
 
-  <h1>Book 8: Lists, Grids, and ForEach</h1>
-  <h2>Live Reference: Claudes X26 Swift6 Bible + Claudes LockBox + QuickNote + My Person CRM</h2>
+  <h1><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.8</span>&nbsp;&nbsp;Book 8: Lists, Grids, and ForEach</h1>
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.8.1</span>&nbsp;&nbsp;Live Reference: Claudes X26 Swift6 Bible + Claudes LockBox + QuickNote + My Person CRM</h2>
   <div class="scope-note"><strong>Claudes X26 Swift6 Bible</strong> uses <code>List</code> for its sidebar navigation &mdash; every Part, Book, Chapter, and Page is a list row driven by <code>@Query</code> against the bundle's content tree. <strong>Claudes LockBox</strong> uses <code>List</code> for the items-in-folder column (the middle of the three-column layout) plus a <code>LazyVGrid</code> for the photo thumbnail strip in vault item detail. <strong>QuickNote</strong> uses <code>List</code> for the notes index, sorted by date, with <code>@Query</code> on the SwiftData model. <strong>My Person CRM</strong> uses <code>List</code> for the tracked-people index with swipe-to-delete; the per-person detail screen uses a second <code>List</code> for the interaction log filtered by that person's identifier. All four apps put <code>List</code> and <code>ForEach</code> to production work. Sources: <a href="https://github.com/fluhartyml/Claudes-X26-Swift6-Bible">github.com/fluhartyml/Claudes-X26-Swift6-Bible</a>, <a href="https://github.com/fluhartyml/Claudes-LockBox">github.com/fluhartyml/Claudes-LockBox</a>, <a href="https://github.com/fluhartyml/QuickNote">github.com/fluhartyml/QuickNote</a>, <a href="https://github.com/fluhartyml/My-Person-CRM">github.com/fluhartyml/My-Person-CRM</a>. See Build-Along 00 (Claudes X26 Swift6 Bible), Build-Along 03 (LockBox), Build-Along 02 (QuickNote), Build-Along 07 (My Person CRM).</div>
   <hr>
-  <h2>X26 Updates to Lists, Tables, and Forms</h2>
-  <p>X26 ships taller rows and more padding for <code>List</code>, <code>Table</code>, and <code>Form</code>, plus a larger corner radius on sections so list groupings echo the rounded shape of nearby controls<sup>[<a href="#l1-fn">l1</a>]</sup>. You get all of it for free in most apps. As long as you haven't hand-set row heights or section insets, a rebuild against the X26 SDK is the whole adoption story.</p>
-  <h3>Section Headers Use Title-Style Capitalization</h3>
-  <p>This one needs your attention even on standard components. Section headers in lists, tables, and forms now render in <strong>title-style capitalization</strong> &mdash; "Profile", not "PROFILE". Pre-X26 the system flipped your header to all-caps no matter what you handed it, so a lot of source code carries the header in capitals out of habit. Read your header strings and switch them to title case so they sit cleanly next to the system's own.</p>
-  <h3>Adopt Forms with the Grouped Style</h3>
-  <p>For forms, <code>Form</code> with the grouped style picks up the X26 layout updates with no extra code:</p>
-  <pre><code class="lang-swift">Form {
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.8.2</span>&nbsp;&nbsp;X26 Updates to Lists, Tables, and Forms</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.8.2 &para;1</span> X26 ships taller rows and more padding for <code>List</code>, <code>Table</code>, and <code>Form</code>, plus a larger corner radius on sections so list groupings echo the rounded shape of nearby controls<sup>[<a href="#l1-fn">l1</a>]</sup>. You get all of it for free in most apps. As long as you haven't hand-set row heights or section insets, a rebuild against the X26 SDK is the whole adoption story.</p>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.8.2.1</span>&nbsp;&nbsp;Section Headers Use Title-Style Capitalization</h3>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.8.2.1 &para;1</span> This one needs your attention even on standard components. Section headers in lists, tables, and forms now render in <strong>title-style capitalization</strong> &mdash; "Profile", not "PROFILE". Pre-X26 the system flipped your header to all-caps no matter what you handed it, so a lot of source code carries the header in capitals out of habit. Read your header strings and switch them to title case so they sit cleanly next to the system's own.</p>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.8.2.2</span>&nbsp;&nbsp;Adopt Forms with the Grouped Style</h3>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.8.2.2 &para;1</span> For forms, <code>Form</code> with the grouped style picks up the X26 layout updates with no extra code:</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.8.2.2 &para;2</span><pre><code class="lang-swift">Form {
     Section("Profile") {
         TextField("Name", text: $name)
         TextField("Email", text: $email)
@@ -33,13 +33,13 @@
     }
 }
 .formStyle(.grouped)</code></pre>
-  <p>Grouped is the same form style iOS has used for years. X26 only retunes the dimensions. The Mac side picks up the matching metric updates, so a form built once now looks the same on iPhone, iPad, and Mac without per-platform tweaks.</p>
-  <p id="l1-fn" style="font-size: 13pt; color: var(--dim);">[l1] Apple Developer Documentation, <em>Adopting Liquid Glass</em>. <a href="https://developer.apple.com/documentation/TechnologyOverviews/adopting-liquid-glass">developer.apple.com/documentation/TechnologyOverviews/adopting-liquid-glass</a> &mdash; verified 2026-04-29.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.8.2.2 &para;3</span> Grouped is the same form style iOS has used for years. X26 only retunes the dimensions. The Mac side picks up the matching metric updates, so a form built once now looks the same on iPhone, iPad, and Mac without per-platform tweaks.</p>
+  <p id="l1-fn" style="font-size: 13pt; color: var(--dim);"><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.8.2.2 &para;4</span> [l1] Apple Developer Documentation, <em>Adopting Liquid Glass</em>. <a href="https://developer.apple.com/documentation/TechnologyOverviews/adopting-liquid-glass">developer.apple.com/documentation/TechnologyOverviews/adopting-liquid-glass</a> &mdash; verified 2026-04-29.</p>
   <hr>
-  <h2>List</h2>
-  <p>The primary container for data display in SwiftUI. Provides scrolling, cell recycling, selection, swipe actions, and platform-native styling for free.</p>
-  <h3>Basic List</h3>
-  <pre><code class="lang-swift">struct ItemListView: View {
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.8.3</span>&nbsp;&nbsp;List</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.8.3 &para;1</span> The primary container for data display in SwiftUI. Provides scrolling, cell recycling, selection, swipe actions, and platform-native styling for free.</p>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.8.3.1</span>&nbsp;&nbsp;Basic List</h3>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.8.3.1 &para;1</span><pre><code class="lang-swift">struct ItemListView: View {
     let items: [Item]
 
     var body: some View {
@@ -48,18 +48,18 @@
         }
     }
 }</code></pre>
-  <p>This requires <code>Item</code> to conform to <code>Identifiable</code>. If it does not, provide a key path:</p>
-  <pre><code class="lang-swift">List(names, id: \.self) { name in
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.8.3.1 &para;2</span> This requires <code>Item</code> to conform to <code>Identifiable</code>. If it does not, provide a key path:</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.8.3.1 &para;3</span><pre><code class="lang-swift">List(names, id: \.self) { name in
     Text(name)
 }</code></pre>
-  <h3>Static Content</h3>
-  <pre><code class="lang-swift">List {
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.8.3.2</span>&nbsp;&nbsp;Static Content</h3>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.8.3.2 &para;1</span><pre><code class="lang-swift">List {
     Text("First")
     Text("Second")
     Text("Third")
 }</code></pre>
-  <h3>Mixed Static and Dynamic</h3>
-  <pre><code class="lang-swift">List {
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.8.3.3</span>&nbsp;&nbsp;Mixed Static and Dynamic</h3>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.8.3.3 &para;1</span><pre><code class="lang-swift">List {
     Section("Favorites") {
         ForEach(favorites) { item in
             Text(item.name)
@@ -73,39 +73,39 @@
     }
 }</code></pre>
   <hr>
-  <h2>ForEach</h2>
-  <p><code>ForEach</code> is not a loop — it is a view that generates views from a collection.</p>
-  <h3>With Identifiable Data</h3>
-  <pre><code class="lang-swift">ForEach(recipes) { recipe in
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.8.4</span>&nbsp;&nbsp;ForEach</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.8.4 &para;1</span> <code>ForEach</code> is not a loop — it is a view that generates views from a collection.</p>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.8.4.1</span>&nbsp;&nbsp;With Identifiable Data</h3>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.8.4.1 &para;1</span><pre><code class="lang-swift">ForEach(recipes) { recipe in
     RecipeRow(recipe: recipe)
 }</code></pre>
-  <h3>With id Key Path</h3>
-  <pre><code class="lang-swift">ForEach(names, id: \.self) { name in
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.8.4.2</span>&nbsp;&nbsp;With id Key Path</h3>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.8.4.2 &para;1</span><pre><code class="lang-swift">ForEach(names, id: \.self) { name in
     Text(name)
 }</code></pre>
-  <h3>With Index</h3>
-  <pre><code class="lang-swift">ForEach(Array(items.enumerated()), id: \.element.id) { index, item in
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.8.4.3</span>&nbsp;&nbsp;With Index</h3>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.8.4.3 &para;1</span><pre><code class="lang-swift">ForEach(Array(items.enumerated()), id: \.element.id) { index, item in
     Text("\(index + 1). \(item.name)")
 }</code></pre>
-  <h3>Range-Based</h3>
-  <pre><code class="lang-swift">ForEach(0..&lt;5) { index in
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.8.4.4</span>&nbsp;&nbsp;Range-Based</h3>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.8.4.4 &para;1</span><pre><code class="lang-swift">ForEach(0..&lt;5) { index in
     Text("Row \(index)")
 }</code></pre>
-  <h3>Watch Out</h3>
-  <ul><li><code>ForEach</code> with a range (<code>0..&lt;count</code>) requires the range to be constant. If <code>count</code> changes, use <code>ForEach(0..&lt;count, id: \.self)</code> — but better yet, use a real data collection.</li><li>The <code>id</code> parameter is critical for performance. SwiftUI uses it to track which rows changed. If two items share the same ID, you get undefined behavior — wrong rows update, animations break.</li></ul>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.8.4.5</span>&nbsp;&nbsp;Watch Out</h3>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.8.4.5 &para;1</span><ul><li><code>ForEach</code> with a range (<code>0..&lt;count</code>) requires the range to be constant. If <code>count</code> changes, use <code>ForEach(0..&lt;count, id: \.self)</code> — but better yet, use a real data collection.</li><li>The <code>id</code> parameter is critical for performance. SwiftUI uses it to track which rows changed. If two items share the same ID, you get undefined behavior — wrong rows update, animations break.</li></ul>
   <hr>
-  <h2>Identifiable Protocol</h2>
-  <pre><code class="lang-swift">struct Recipe: Identifiable {
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.8.5</span>&nbsp;&nbsp;Identifiable Protocol</h2>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.8.5 &para;1</span><pre><code class="lang-swift">struct Recipe: Identifiable {
     let id = UUID()
     var name: String
     var cuisine: String
 }</code></pre>
-  <p><code>Identifiable</code> requires a single property: <code>id</code>. It can be any <code>Hashable</code> type — <code>UUID</code>, <code>Int</code>, <code>String</code>.</p>
-  <h3>Watch Out</h3>
-  <ul><li><code>let id = UUID()</code> generates a new ID every time the struct is created. If you recreate structs from network data, use a stable identifier from the server instead.</li></ul>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.8.5 &para;2</span> <code>Identifiable</code> requires a single property: <code>id</code>. It can be any <code>Hashable</code> type — <code>UUID</code>, <code>Int</code>, <code>String</code>.</p>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.8.5.1</span>&nbsp;&nbsp;Watch Out</h3>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.8.5.1 &para;1</span><ul><li><code>let id = UUID()</code> generates a new ID every time the struct is created. If you recreate structs from network data, use a stable identifier from the server instead.</li></ul>
   <hr>
-  <h2>Sections</h2>
-  <pre><code class="lang-swift">List {
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.8.6</span>&nbsp;&nbsp;Sections</h2>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.8.6 &para;1</span><pre><code class="lang-swift">List {
     Section("Breakfast") {
         ForEach(breakfastItems) { item in
             Text(item.name)
@@ -122,14 +122,14 @@
         Text("All items under 500 calories")
     }
 }</code></pre>
-  <h3>Collapsible Sections (iOS 17+)</h3>
-  <pre><code class="lang-swift">Section("Advanced", isExpanded: $isAdvancedExpanded) {
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.8.6.1</span>&nbsp;&nbsp;Collapsible Sections (iOS 17+)</h3>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.8.6.1 &para;1</span><pre><code class="lang-swift">Section("Advanced", isExpanded: $isAdvancedExpanded) {
     Toggle("Debug Mode", isOn: $debugMode)
     Toggle("Verbose Logging", isOn: $verboseLogging)
 }</code></pre>
   <hr>
-  <h2>Swipe Actions</h2>
-  <pre><code class="lang-swift">List {
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.8.7</span>&nbsp;&nbsp;Swipe Actions</h2>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.8.7 &para;1</span><pre><code class="lang-swift">List {
     ForEach(messages) { message in
         MessageRow(message: message)
             .swipeActions(edge: .trailing) {
@@ -156,12 +156,12 @@
             }
     }
 }</code></pre>
-  <h3>Watch Out</h3>
-  <ul><li>The first trailing swipe action with <code>role: .destructive</code> gets a full-swipe gesture for quick deletion. Be careful — users may trigger it accidentally.</li><li>Swipe actions only work inside a <code>List</code>. They do nothing in a <code>ScrollView</code> or <code>LazyVStack</code>.</li></ul>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.8.7.1</span>&nbsp;&nbsp;Watch Out</h3>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.8.7.1 &para;1</span><ul><li>The first trailing swipe action with <code>role: .destructive</code> gets a full-swipe gesture for quick deletion. Be careful — users may trigger it accidentally.</li><li>Swipe actions only work inside a <code>List</code>. They do nothing in a <code>ScrollView</code> or <code>LazyVStack</code>.</li></ul>
   <hr>
-  <h2>onDelete and onMove</h2>
-  <p>The classic List editing modifiers. These work on <code>ForEach</code>, not on <code>List</code> directly.</p>
-  <pre><code class="lang-swift">List {
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.8.8</span>&nbsp;&nbsp;onDelete and onMove</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.8.8 &para;1</span> The classic List editing modifiers. These work on <code>ForEach</code>, not on <code>List</code> directly.</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.8.8 &para;2</span><pre><code class="lang-swift">List {
     ForEach(items) { item in
         Text(item.name)
     }
@@ -179,23 +179,23 @@ func deleteItems(at offsets: IndexSet) {
 func moveItems(from source: IndexSet, to destination: Int) {
     items.move(fromOffsets: source, toOffset: destination)
 }</code></pre>
-  <h3>Watch Out</h3>
-  <ul><li><code>onDelete</code> adds the standard swipe-to-delete gesture. If you also use <code>.swipeActions</code>, <code>onDelete</code> is ignored — <code>.swipeActions</code> takes priority.</li><li><code>onMove</code> only works when the List is in edit mode. Add an <code>EditButton()</code> to the toolbar.</li></ul>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.8.8.1</span>&nbsp;&nbsp;Watch Out</h3>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.8.8.1 &para;1</span><ul><li><code>onDelete</code> adds the standard swipe-to-delete gesture. If you also use <code>.swipeActions</code>, <code>onDelete</code> is ignored — <code>.swipeActions</code> takes priority.</li><li><code>onMove</code> only works when the List is in edit mode. Add an <code>EditButton()</code> to the toolbar.</li></ul>
   <hr>
-  <h2>Refreshable</h2>
-  <p>Pull-to-refresh. The closure is <code>async</code>, so you can <code>await</code> network calls directly.</p>
-  <pre><code class="lang-swift">List(items) { item in
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.8.9</span>&nbsp;&nbsp;Refreshable</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.8.9 &para;1</span> Pull-to-refresh. The closure is <code>async</code>, so you can <code>await</code> network calls directly.</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.8.9 &para;2</span><pre><code class="lang-swift">List(items) { item in
     Text(item.name)
 }
 .refreshable {
     await loadItems()
 }</code></pre>
-  <h3>Watch Out</h3>
-  <ul><li><code>.refreshable</code> only works on scrollable views (<code>List</code>, <code>ScrollView</code>). It does nothing on a plain <code>VStack</code>.</li><li>The refresh indicator stays visible until the <code>async</code> closure completes. If your network call is fast, the spinner may flash briefly. That is expected.</li></ul>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.8.9.1</span>&nbsp;&nbsp;Watch Out</h3>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.8.9.1 &para;1</span><ul><li><code>.refreshable</code> only works on scrollable views (<code>List</code>, <code>ScrollView</code>). It does nothing on a plain <code>VStack</code>.</li><li>The refresh indicator stays visible until the <code>async</code> closure completes. If your network call is fast, the spinner may flash briefly. That is expected.</li></ul>
   <hr>
-  <h2>Searchable</h2>
-  <p>Adds a search bar to a <code>NavigationStack</code> or <code>NavigationSplitView</code>.</p>
-  <pre><code class="lang-swift">struct RecipeListView: View {
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.8.10</span>&nbsp;&nbsp;Searchable</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.8.10 &para;1</span> Adds a search bar to a <code>NavigationStack</code> or <code>NavigationSplitView</code>.</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.8.10 &para;2</span><pre><code class="lang-swift">struct RecipeListView: View {
     @State private var searchText = ""
     let recipes: [Recipe]
 
@@ -216,31 +216,31 @@ func moveItems(from source: IndexSet, to destination: Int) {
         }
     }
 }</code></pre>
-  <h3>Search Suggestions</h3>
-  <pre><code class="lang-swift">.searchable(text: $searchText) {
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.8.10.1</span>&nbsp;&nbsp;Search Suggestions</h3>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.8.10.1 &para;1</span><pre><code class="lang-swift">.searchable(text: $searchText) {
     ForEach(suggestions, id: \.self) { suggestion in
         Text(suggestion).searchCompletion(suggestion)
     }
 }</code></pre>
-  <h3>Search Scopes</h3>
-  <pre><code class="lang-swift">.searchable(text: $searchText)
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.8.10.2</span>&nbsp;&nbsp;Search Scopes</h3>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.8.10.2 &para;1</span><pre><code class="lang-swift">.searchable(text: $searchText)
 .searchScopes($searchScope) {
     Text("All").tag(SearchScope.all)
     Text("Name").tag(SearchScope.name)
     Text("Ingredient").tag(SearchScope.ingredient)
 }</code></pre>
-  <h3>Watch Out</h3>
-  <ul><li><code>.searchable</code> must be inside a <code>NavigationStack</code> or <code>NavigationSplitView</code>. Outside of navigation, the search bar does not appear.</li><li>The search bar placement varies by platform. On iOS it is under the navigation title; on macOS it is in the toolbar.</li></ul>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.8.10.3</span>&nbsp;&nbsp;Watch Out</h3>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.8.10.3 &para;1</span><ul><li><code>.searchable</code> must be inside a <code>NavigationStack</code> or <code>NavigationSplitView</code>. Outside of navigation, the search bar does not appear.</li><li>The search bar placement varies by platform. On iOS it is under the navigation title; on macOS it is in the toolbar.</li></ul>
   <hr>
-  <h2>List Styles</h2>
-  <pre><code class="lang-swift">List { ... }
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.8.11</span>&nbsp;&nbsp;List Styles</h2>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.8.11 &para;1</span><pre><code class="lang-swift">List { ... }
     .listStyle(.plain)          // no grouped background
     .listStyle(.inset)          // padded from edges
     .listStyle(.grouped)        // iOS grouped sections
     .listStyle(.insetGrouped)   // rounded grouped sections (iOS default in many contexts)
     .listStyle(.sidebar)        // macOS sidebar style, disclosure triangles</code></pre>
-  <h3>Row Customization</h3>
-  <pre><code class="lang-swift">List {
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.8.11.1</span>&nbsp;&nbsp;Row Customization</h3>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.8.11.1 &para;1</span><pre><code class="lang-swift">List {
     ForEach(items) { item in
         Text(item.name)
             .listRowBackground(Color.yellow.opacity(0.2))
@@ -249,26 +249,26 @@ func moveItems(from source: IndexSet, to destination: Int) {
     }
 }</code></pre>
   <hr>
-  <h2>Selection</h2>
-  <h3>Single Selection</h3>
-  <pre><code class="lang-swift">@State private var selected: Item.ID?
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.8.12</span>&nbsp;&nbsp;Selection</h2>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.8.12.1</span>&nbsp;&nbsp;Single Selection</h3>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.8.12.1 &para;1</span><pre><code class="lang-swift">@State private var selected: Item.ID?
 
 List(items, selection: $selected) { item in
     Text(item.name)
 }</code></pre>
-  <h3>Multiple Selection</h3>
-  <pre><code class="lang-swift">@State private var selected: Set&lt;Item.ID&gt; = []
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.8.12.2</span>&nbsp;&nbsp;Multiple Selection</h3>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.8.12.2 &para;1</span><pre><code class="lang-swift">@State private var selected: Set&lt;Item.ID&gt; = []
 
 List(items, selection: $selected) { item in
     Text(item.name)
 }
 .toolbar { EditButton() }</code></pre>
-  <p>Multiple selection requires edit mode on iOS. On macOS, it works directly with Command-click and Shift-click.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.8.12.2 &para;2</span> Multiple selection requires edit mode on iOS. On macOS, it works directly with Command-click and Shift-click.</p>
   <hr>
-  <h2>LazyVGrid and LazyHGrid</h2>
-  <p>For grid layouts. These live inside a <code>ScrollView</code>, not a <code>List</code>.</p>
-  <h3>LazyVGrid (Vertical Scrolling Grid)</h3>
-  <pre><code class="lang-swift">let columns = [
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.8.13</span>&nbsp;&nbsp;LazyVGrid and LazyHGrid</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.8.13 &para;1</span> For grid layouts. These live inside a <code>ScrollView</code>, not a <code>List</code>.</p>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.8.13.1</span>&nbsp;&nbsp;LazyVGrid (Vertical Scrolling Grid)</h3>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.8.13.1 &para;1</span><pre><code class="lang-swift">let columns = [
     GridItem(.adaptive(minimum: 150))
 ]
 
@@ -280,8 +280,8 @@ ScrollView {
     }
     .padding()
 }</code></pre>
-  <h3>LazyHGrid (Horizontal Scrolling Grid)</h3>
-  <pre><code class="lang-swift">let rows = [
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.8.13.2</span>&nbsp;&nbsp;LazyHGrid (Horizontal Scrolling Grid)</h3>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.8.13.2 &para;1</span><pre><code class="lang-swift">let rows = [
     GridItem(.fixed(100)),
     GridItem(.fixed(100))
 ]
@@ -295,33 +295,33 @@ ScrollView(.horizontal) {
     .padding()
 }</code></pre>
   <hr>
-  <h2>GridItem</h2>
-  <p><code>GridItem</code> defines how columns (in <code>LazyVGrid</code>) or rows (in <code>LazyHGrid</code>) are sized.</p>
-  <h3>.fixed</h3>
-  <p>Exact size. The column is always this wide.</p>
-  <pre><code class="lang-swift">GridItem(.fixed(120))</code></pre>
-  <h3>.flexible</h3>
-  <p>Grows to fill available space, within optional min/max bounds.</p>
-  <pre><code class="lang-swift">GridItem(.flexible())                           // fills available space
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.8.14</span>&nbsp;&nbsp;GridItem</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.8.14 &para;1</span> <code>GridItem</code> defines how columns (in <code>LazyVGrid</code>) or rows (in <code>LazyHGrid</code>) are sized.</p>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.8.14.1</span>&nbsp;&nbsp;.fixed</h3>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.8.14.1 &para;1</span> Exact size. The column is always this wide.</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.8.14.1 &para;2</span><pre><code class="lang-swift">GridItem(.fixed(120))</code></pre>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.8.14.2</span>&nbsp;&nbsp;.flexible</h3>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.8.14.2 &para;1</span> Grows to fill available space, within optional min/max bounds.</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.8.14.2 &para;2</span><pre><code class="lang-swift">GridItem(.flexible())                           // fills available space
 GridItem(.flexible(minimum: 100, maximum: 200)) // bounded</code></pre>
-  <h3>.adaptive</h3>
-  <p>Fits as many columns as possible within the available width. This is the most useful for responsive grids.</p>
-  <pre><code class="lang-swift">GridItem(.adaptive(minimum: 150))
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.8.14.3</span>&nbsp;&nbsp;.adaptive</h3>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.8.14.3 &para;1</span> Fits as many columns as possible within the available width. This is the most useful for responsive grids.</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.8.14.3 &para;2</span><pre><code class="lang-swift">GridItem(.adaptive(minimum: 150))
 // On a 390pt iPhone: 2 columns
 // On a 1024pt iPad: 6 columns
 // Adjusts automatically when the device rotates</code></pre>
-  <h3>Combining Grid Items</h3>
-  <pre><code class="lang-swift">let columns = [
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.8.14.4</span>&nbsp;&nbsp;Combining Grid Items</h3>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.8.14.4 &para;1</span><pre><code class="lang-swift">let columns = [
     GridItem(.fixed(60)),           // narrow first column
     GridItem(.flexible()),          // fills remaining space
     GridItem(.flexible())           // shares remaining space
 ]</code></pre>
-  <h3>Watch Out</h3>
-  <ul><li><code>.adaptive</code> creates as many columns as fit. You do not control the exact count — it is calculated from available width and the minimum size. If you want exactly 3 columns, use three <code>.flexible()</code> items.</li><li>Grid items accept <code>spacing</code> and <code>alignment</code> parameters: <code>GridItem(.flexible(), spacing: 8, alignment: .top)</code>.</li></ul>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.8.14.5</span>&nbsp;&nbsp;Watch Out</h3>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.8.14.5 &para;1</span><ul><li><code>.adaptive</code> creates as many columns as fit. You do not control the exact count — it is calculated from available width and the minimum size. If you want exactly 3 columns, use three <code>.flexible()</code> items.</li><li>Grid items accept <code>spacing</code> and <code>alignment</code> parameters: <code>GridItem(.flexible(), spacing: 8, alignment: .top)</code>.</li></ul>
   <hr>
-  <h2>ScrollView</h2>
-  <h3>Basic Scroll View</h3>
-  <pre><code class="lang-swift">ScrollView {
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.8.15</span>&nbsp;&nbsp;ScrollView</h2>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.8.15.1</span>&nbsp;&nbsp;Basic Scroll View</h3>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.8.15.1 &para;1</span><pre><code class="lang-swift">ScrollView {
     VStack(spacing: 12) {
         ForEach(items) { item in
             ItemCard(item: item)
@@ -329,8 +329,8 @@ GridItem(.flexible(minimum: 100, maximum: 200)) // bounded</code></pre>
     }
     .padding()
 }</code></pre>
-  <h3>Horizontal Scroll</h3>
-  <pre><code class="lang-swift">ScrollView(.horizontal, showsIndicators: false) {
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.8.15.2</span>&nbsp;&nbsp;Horizontal Scroll</h3>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.8.15.2 &para;1</span><pre><code class="lang-swift">ScrollView(.horizontal, showsIndicators: false) {
     HStack(spacing: 16) {
         ForEach(featured) { item in
             FeaturedCard(item: item)
@@ -339,8 +339,8 @@ GridItem(.flexible(minimum: 100, maximum: 200)) // bounded</code></pre>
     }
     .padding(.horizontal)
 }</code></pre>
-  <h3>Scroll Position (iOS 17+)</h3>
-  <pre><code class="lang-swift">@State private var scrollPosition: Item.ID?
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.8.15.3</span>&nbsp;&nbsp;Scroll Position (iOS 17+)</h3>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.8.15.3 &para;1</span><pre><code class="lang-swift">@State private var scrollPosition: Item.ID?
 
 ScrollView {
     LazyVStack {
@@ -351,21 +351,21 @@ ScrollView {
     .scrollTargetLayout()
 }
 .scrollPosition(id: $scrollPosition)</code></pre>
-  <p>Programmatically scroll by setting <code>scrollPosition</code> to an item's ID.</p>
-  <h3>Watch Out</h3>
-  <ul><li><code>ScrollView</code> does not recycle views. Every view in a <code>ScrollView</code> is created immediately unless you use <code>LazyVStack</code> or <code>LazyHStack</code> inside it.</li><li><code>.scrollIndicators(.hidden)</code> hides the scrollbar. Use it for horizontal carousels. Avoid hiding it for vertical content — users need the scrollbar to orient themselves.</li></ul>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.8.15.3 &para;2</span> Programmatically scroll by setting <code>scrollPosition</code> to an item's ID.</p>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.8.15.4</span>&nbsp;&nbsp;Watch Out</h3>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.8.15.4 &para;1</span><ul><li><code>ScrollView</code> does not recycle views. Every view in a <code>ScrollView</code> is created immediately unless you use <code>LazyVStack</code> or <code>LazyHStack</code> inside it.</li><li><code>.scrollIndicators(.hidden)</code> hides the scrollbar. Use it for horizontal carousels. Avoid hiding it for vertical content — users need the scrollbar to orient themselves.</li></ul>
   <hr>
-  <h2>LazyVStack and LazyHStack</h2>
-  <p>These create views on demand as they scroll into view. Essential for large data sets.</p>
-  <pre><code class="lang-swift">ScrollView {
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.8.16</span>&nbsp;&nbsp;LazyVStack and LazyHStack</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.8.16 &para;1</span> These create views on demand as they scroll into view. Essential for large data sets.</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.8.16 &para;2</span><pre><code class="lang-swift">ScrollView {
     LazyVStack(spacing: 12) {
         ForEach(items) { item in
             ItemRow(item: item)
         }
     }
 }</code></pre>
-  <h3>Pinned Headers</h3>
-  <pre><code class="lang-swift">ScrollView {
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.8.16.1</span>&nbsp;&nbsp;Pinned Headers</h3>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.8.16.1 &para;1</span><pre><code class="lang-swift">ScrollView {
     LazyVStack(spacing: 12, pinnedViews: [.sectionHeaders]) {
         ForEach(sections) { section in
             Section {
@@ -382,8 +382,8 @@ ScrollView {
         }
     }
 }</code></pre>
-  <h3>Performance: Lazy vs Eager</h3>
-  <table>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.8.16.2</span>&nbsp;&nbsp;Performance: Lazy vs Eager</h3>
+  <span class="onum onum-float" style="color:#8a7300;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;display:block;margin:.6em 0 .1em">Table 8.1</span><table>
   <thead><tr><th>Container</th><th>View Creation</th><th>Use When</th><th></th></tr></thead>
   <tbody>
   <tr><td><code>VStack</code></td><td>All at once</td><td>Small collections (under 50 items)</td><td></td></tr>
@@ -391,21 +391,21 @@ ScrollView {
   <tr><td><code>List</code></td><td>On demand (with recycling)</td><td>Data lists needing swipe actions, selection</td><td></td></tr>
   </tbody>
   </table>
-  <h3>Watch Out</h3>
-  <ul><li><code>LazyVStack</code> creates views as they scroll in, but does not destroy them when they scroll out. For very long lists (thousands of items), memory grows over time. <code>List</code> handles this better because it recycles cells.</li><li>Do not put a <code>LazyVStack</code> inside a <code>List</code>. The List already handles lazy loading. Nesting them causes layout conflicts.</li><li><code>LazyVStack</code> does not support swipe actions, onDelete, or onMove. Those are <code>List</code>-only features.</li><li><code>LazyVStack</code> alignment defaults to <code>.center</code>. For left-aligned content, use <code>LazyVStack(alignment: .leading)</code>.</li></ul>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.8.16.3</span>&nbsp;&nbsp;Watch Out</h3>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.8.16.3 &para;1</span><ul><li><code>LazyVStack</code> creates views as they scroll in, but does not destroy them when they scroll out. For very long lists (thousands of items), memory grows over time. <code>List</code> handles this better because it recycles cells.</li><li>Do not put a <code>LazyVStack</code> inside a <code>List</code>. The List already handles lazy loading. Nesting them causes layout conflicts.</li><li><code>LazyVStack</code> does not support swipe actions, onDelete, or onMove. Those are <code>List</code>-only features.</li><li><code>LazyVStack</code> alignment defaults to <code>.center</code>. For left-aligned content, use <code>LazyVStack(alignment: .leading)</code>.</li></ul>
   <hr>
-  <h2>Practical Tips</h2>
-  <ol class="body-list"><li><strong>Use <code>List</code> by default</strong> for data that needs selection, swipe actions, or editing. Switch to <code>ScrollView</code> + <code>LazyVStack</code> when you need custom layouts or grid arrangements.</li></ol>
-  <ol class="body-list"><li><strong>Always provide stable IDs.</strong> Using array indices as IDs causes incorrect animations and state bugs when items are inserted or removed.</li></ol>
-  <ol class="body-list"><li><strong>Use <code>.adaptive</code> GridItem</strong> for responsive layouts that work across iPhone, iPad, and Mac without conditional logic.</li></ol>
-  <ol class="body-list"><li><strong>Combine <code>.searchable</code> and <code>.refreshable</code></strong> on the same List for a standard data browsing experience with minimal code.</li></ol>
-  <ol class="body-list"><li><strong>Test with large data sets.</strong> A list that works fine with 10 items may stutter at 10,000. Profile with Instruments if scrolling feels slow.</li></ol>
-  <ol class="body-list"><li><strong>Prefer <code>LazyVStack</code> over <code>VStack</code></strong> inside a <code>ScrollView</code> any time the content count is dynamic or could grow. The memory difference is significant.</li></ol>
-  <ol class="body-list"><li><strong>Section headers and footers</strong> in List get automatic styling. In <code>LazyVStack</code> with <code>pinnedViews</code>, you style them yourself — but you get sticky headers for free.</li></ol>
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.8.17</span>&nbsp;&nbsp;Practical Tips</h2>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.8.17 &para;1</span><ol class="body-list"><li><strong>Use <code>List</code> by default</strong> for data that needs selection, swipe actions, or editing. Switch to <code>ScrollView</code> + <code>LazyVStack</code> when you need custom layouts or grid arrangements.</li></ol>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.8.17 &para;2</span><ol class="body-list"><li><strong>Always provide stable IDs.</strong> Using array indices as IDs causes incorrect animations and state bugs when items are inserted or removed.</li></ol>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.8.17 &para;3</span><ol class="body-list"><li><strong>Use <code>.adaptive</code> GridItem</strong> for responsive layouts that work across iPhone, iPad, and Mac without conditional logic.</li></ol>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.8.17 &para;4</span><ol class="body-list"><li><strong>Combine <code>.searchable</code> and <code>.refreshable</code></strong> on the same List for a standard data browsing experience with minimal code.</li></ol>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.8.17 &para;5</span><ol class="body-list"><li><strong>Test with large data sets.</strong> A list that works fine with 10 items may stutter at 10,000. Profile with Instruments if scrolling feels slow.</li></ol>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.8.17 &para;6</span><ol class="body-list"><li><strong>Prefer <code>LazyVStack</code> over <code>VStack</code></strong> inside a <code>ScrollView</code> any time the content count is dynamic or could grow. The memory difference is significant.</li></ol>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.8.17 &para;7</span><ol class="body-list"><li><strong>Section headers and footers</strong> in List get automatic styling. In <code>LazyVStack</code> with <code>pinnedViews</code>, you style them yourself — but you get sticky headers for free.</li></ol>
   <hr>
-  <h2>Further Reading &mdash; WWDC Sessions</h2>
-  <p>This book is a passive resource. When you want deeper coverage of lists, grids, and <code>ForEach</code>, the WWDC sessions below are Apple's source material.</p>
-  <ul>
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.8.18</span>&nbsp;&nbsp;Further Reading &mdash; WWDC Sessions</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.8.18 &para;1</span> This book is a passive resource. When you want deeper coverage of lists, grids, and <code>ForEach</code>, the WWDC sessions below are Apple's source material.</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.8.18 &para;2</span><ul>
     <li>WWDC25 / 256, <em>What's new in SwiftUI</em> &mdash; <a href="https://developer.apple.com/videos/play/wwdc2025/256/">developer.apple.com/videos/play/wwdc2025/256/</a>. List + grid updates this release.</li>
     <li>WWDC25 / 306, <em>Optimize SwiftUI performance with Instruments</em> &mdash; <a href="https://developer.apple.com/videos/play/wwdc2025/306/">developer.apple.com/videos/play/wwdc2025/306/</a>. Where <code>ForEach</code> + identity issues show up in the long-frame timeline.</li>
     <li>WWDC25 / 219, <em>Meet Liquid Glass</em> &mdash; <a href="https://developer.apple.com/videos/play/wwdc2025/219/">developer.apple.com/videos/play/wwdc2025/219/</a>. Surface rules for cells inside scrollable lists and grids.</li>

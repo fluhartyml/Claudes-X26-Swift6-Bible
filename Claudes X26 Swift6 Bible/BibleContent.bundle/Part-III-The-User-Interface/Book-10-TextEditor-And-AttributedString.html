@@ -9,28 +9,28 @@
 
 <div class="content">
 
-  <h1>Book 10: TextEditor and AttributedString</h1>
-  <h2>Live Reference: QuickNote (TextEditor) + Claudes X26 Swift6 Bible (AttributedString)</h2>
+  <h1><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.10</span>&nbsp;&nbsp;Book 10: TextEditor and AttributedString</h1>
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.10.1</span>&nbsp;&nbsp;Live Reference: QuickNote (TextEditor) + Claudes X26 Swift6 Bible (AttributedString)</h2>
   <div class="scope-note"><strong>QuickNote</strong> uses <code>TextEditor</code> for the note body &mdash; the chapter's central pattern in production form. The note body is a multi-line free-form text area that grows with the keyboard, persists as a SwiftData string, and reads back identically across the app and its home-screen widget. Source: <a href="https://github.com/fluhartyml/QuickNote">github.com/fluhartyml/QuickNote</a>. <strong>Claudes X26 Swift6 Bible</strong> uses <code>AttributedString</code> to render Lexicon Quick-Define popups &mdash; on tap of a tinted Swift identifier in a source-mirror code block, the popup uses an attributed-string-driven layout to bold the headword, italicize the definition, and link related identifiers. Source: <a href="https://github.com/fluhartyml/Claudes-X26-Swift6-Bible">github.com/fluhartyml/Claudes-X26-Swift6-Bible</a>. See Build-Along 00 for the full architecture.</div>
-  <h2>TextEditor</h2>
-  <p><code>TextEditor</code> is SwiftUI's multi-line text input. Use it when <code>TextField</code> with <code>axis: .vertical</code> is not enough.</p>
-  <pre><code class="lang-swift">@State private var notes = ""
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.10.2</span>&nbsp;&nbsp;TextEditor</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.10.2 &para;1</span> <code>TextEditor</code> is SwiftUI's multi-line text input. Use it when <code>TextField</code> with <code>axis: .vertical</code> is not enough.</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.10.2 &para;2</span><pre><code class="lang-swift">@State private var notes = ""
 
 TextEditor(text: $notes)
     .frame(height: 200)</code></pre>
-  <h3>Styling TextEditor</h3>
-  <p>TextEditor has a default background and some built-in padding. You will almost always want to customize it.</p>
-  <pre><code class="lang-swift">TextEditor(text: $notes)
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.10.2.1</span>&nbsp;&nbsp;Styling TextEditor</h3>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.10.2.1 &para;1</span> TextEditor has a default background and some built-in padding. You will almost always want to customize it.</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.10.2.1 &para;2</span><pre><code class="lang-swift">TextEditor(text: $notes)
     .font(.body)
     .foregroundStyle(.primary)
     .scrollContentBackground(.hidden) // remove default background
     .background(.ultraThinMaterial)
     .clipShape(.rect(cornerRadius: 12))
     .frame(minHeight: 100, maxHeight: 300)</code></pre>
-  <p><strong>Note:</strong> Use <code>.scrollContentBackground(.hidden)</code> to remove the default background, then apply your own <code>.background()</code>.</p>
-  <h3>Placeholder Text</h3>
-  <p>TextEditor has no built-in placeholder. Overlay one yourself:</p>
-  <pre><code class="lang-swift">ZStack(alignment: .topLeading) {
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.10.2.1 &para;3</span> <strong>Note:</strong> Use <code>.scrollContentBackground(.hidden)</code> to remove the default background, then apply your own <code>.background()</code>.</p>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.10.2.2</span>&nbsp;&nbsp;Placeholder Text</h3>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.10.2.2 &para;1</span> TextEditor has no built-in placeholder. Overlay one yourself:</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.10.2.2 &para;2</span><pre><code class="lang-swift">ZStack(alignment: .topLeading) {
     if notes.isEmpty {
         Text("Write your notes here...")
             .foregroundStyle(.tertiary)
@@ -41,66 +41,66 @@ TextEditor(text: $notes)
     TextEditor(text: $notes)
         .scrollContentBackground(.hidden)
 }</code></pre>
-  <h3>Line Limit</h3>
-  <pre><code class="lang-swift">TextEditor(text: $notes)
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.10.2.3</span>&nbsp;&nbsp;Line Limit</h3>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.10.2.3 &para;1</span><pre><code class="lang-swift">TextEditor(text: $notes)
     .lineLimit(5...10) // constrain vertical growth</code></pre>
-  <h3>Disabling Editing</h3>
-  <pre><code class="lang-swift">TextEditor(text: .constant(readOnlyText))
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.10.2.4</span>&nbsp;&nbsp;Disabling Editing</h3>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.10.2.4 &para;1</span><pre><code class="lang-swift">TextEditor(text: .constant(readOnlyText))
     // or
 TextEditor(text: $notes)
     .disabled(true)</code></pre>
-  <h3>Find and Replace</h3>
-  <p>Enable the system find bar (Cmd+F on Mac, find UI on iPad):</p>
-  <pre><code class="lang-swift">@State private var isSearchPresented = false
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.10.2.5</span>&nbsp;&nbsp;Find and Replace</h3>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.10.2.5 &para;1</span> Enable the system find bar (Cmd+F on Mac, find UI on iPad):</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.10.2.5 &para;2</span><pre><code class="lang-swift">@State private var isSearchPresented = false
 
 TextEditor(text: $notes)
     .findNavigator(isPresented: $isSearchPresented)</code></pre>
-  <p>Toggle <code>isSearchPresented</code> from a button or toolbar item to show/hide find and replace:</p>
-  <pre><code class="lang-swift">.toolbar {
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.10.2.5 &para;3</span> Toggle <code>isSearchPresented</code> from a button or toolbar item to show/hide find and replace:</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.10.2.5 &para;4</span><pre><code class="lang-swift">.toolbar {
     Button("Find", systemImage: "magnifyingglass") {
         isSearchPresented.toggle()
     }
 }</code></pre>
-  <p><strong>Watch out:</strong> <code>.findNavigator</code> works on TextEditor, List, and Table. It does not work on plain <code>Text</code> views.</p>
-  <h3>Tracking Changes</h3>
-  <p>Use <code>onChange</code> to react to text edits:</p>
-  <pre><code class="lang-swift">TextEditor(text: $notes)
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.10.2.5 &para;5</span> <strong>Watch out:</strong> <code>.findNavigator</code> works on TextEditor, List, and Table. It does not work on plain <code>Text</code> views.</p>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.10.2.6</span>&nbsp;&nbsp;Tracking Changes</h3>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.10.2.6 &para;1</span> Use <code>onChange</code> to react to text edits:</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.10.2.6 &para;2</span><pre><code class="lang-swift">TextEditor(text: $notes)
     .onChange(of: notes) { oldValue, newValue in
         wordCount = newValue.split(separator: " ").count
         hasUnsavedChanges = true
     }</code></pre>
-  <p>The two-parameter <code>onChange</code> closure (old, new) is the current API. The single-parameter version is deprecated.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.10.2.6 &para;3</span> The two-parameter <code>onChange</code> closure (old, new) is the current API. The single-parameter version is deprecated.</p>
   <hr>
-  <h2>Text Selection</h2>
-  <p>Control whether text is selectable:</p>
-  <pre><code class="lang-swift">Text("Read-only but selectable")
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.10.3</span>&nbsp;&nbsp;Text Selection</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.10.3 &para;1</span> Control whether text is selectable:</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.10.3 &para;2</span><pre><code class="lang-swift">Text("Read-only but selectable")
     .textSelection(.enabled)</code></pre>
-  <p>Apply to a container to enable selection for all text inside:</p>
-  <pre><code class="lang-swift">VStack {
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.10.3 &para;3</span> Apply to a container to enable selection for all text inside:</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.10.3 &para;4</span><pre><code class="lang-swift">VStack {
     Text("First line")
     Text("Second line")
     Text("Third line")
 }
 .textSelection(.enabled)</code></pre>
   <hr>
-  <h2>AttributedString</h2>
-  <p><code>AttributedString</code> is Swift's native attributed string type. It replaces most uses of <code>NSAttributedString</code> in SwiftUI.</p>
-  <h3>Creating an AttributedString</h3>
-  <pre><code class="lang-swift">var str = AttributedString("Hello, world")
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.10.4</span>&nbsp;&nbsp;AttributedString</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.10.4 &para;1</span> <code>AttributedString</code> is Swift's native attributed string type. It replaces most uses of <code>NSAttributedString</code> in SwiftUI.</p>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.10.4.1</span>&nbsp;&nbsp;Creating an AttributedString</h3>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.10.4.1 &para;1</span><pre><code class="lang-swift">var str = AttributedString("Hello, world")
 str.font = .title
 str.foregroundColor = .blue
 str.underlineStyle = .single
 
 Text(str)</code></pre>
-  <h3>Styling Ranges</h3>
-  <pre><code class="lang-swift">var str = AttributedString("Hello, bold world")
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.10.4.2</span>&nbsp;&nbsp;Styling Ranges</h3>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.10.4.2 &para;1</span><pre><code class="lang-swift">var str = AttributedString("Hello, bold world")
 if let range = str.range(of: "bold") {
     str[range].font = .body.bold()
     str[range].foregroundColor = .red
 }
 Text(str)</code></pre>
-  <h3>Combining AttributedStrings</h3>
-  <pre><code class="lang-swift">var greeting = AttributedString("Hello ")
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.10.4.3</span>&nbsp;&nbsp;Combining AttributedStrings</h3>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.10.4.3 &para;1</span><pre><code class="lang-swift">var greeting = AttributedString("Hello ")
 greeting.font = .headline
 
 var name = AttributedString("Michael")
@@ -108,9 +108,9 @@ name.font = .headline
 name.foregroundColor = .blue
 
 Text(greeting + name)</code></pre>
-  <h3>Available Attributes</h3>
-  <p>Common attributes you can set on <code>AttributedString</code> or its ranges:</p>
-  <table>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.10.4.4</span>&nbsp;&nbsp;Available Attributes</h3>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.10.4.4 &para;1</span> Common attributes you can set on <code>AttributedString</code> or its ranges:</p>
+  <span class="onum onum-float" style="color:#8a7300;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;display:block;margin:.6em 0 .1em">Table 10.1</span><table>
   <thead><tr><th>Attribute</th><th>Type</th><th>Example</th><th></th></tr></thead>
   <tbody>
   <tr><td><code>.font</code></td><td><code>Font</code></td><td><code>.body</code>, <code>.title</code></td><td></td></tr>
@@ -125,34 +125,34 @@ Text(greeting + name)</code></pre>
   </tbody>
   </table>
   <hr>
-  <h2>Markdown Parsing with AttributedString</h2>
-  <p><code>AttributedString</code> can parse Markdown directly:</p>
-  <pre><code class="lang-swift">let markdown = "This is **bold**, this is *italic*, and this is a [link](https://example.com)"
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.10.5</span>&nbsp;&nbsp;Markdown Parsing with AttributedString</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.10.5 &para;1</span> <code>AttributedString</code> can parse Markdown directly:</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.10.5 &para;2</span><pre><code class="lang-swift">let markdown = "This is **bold**, this is *italic*, and this is a [link](https://example.com)"
 
 if let attributed = try? AttributedString(markdown: markdown) {
     Text(attributed)
 }</code></pre>
-  <h3>Parsing Options</h3>
-  <pre><code class="lang-swift">let options = AttributedString.MarkdownParsingOptions(
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.10.5.1</span>&nbsp;&nbsp;Parsing Options</h3>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.10.5.1 &para;1</span><pre><code class="lang-swift">let options = AttributedString.MarkdownParsingOptions(
     interpretedSyntax: .inlineOnlyPreservingWhitespace
 )
 
 let str = try? AttributedString(markdown: source, options: options)</code></pre>
-  <p>Interpreted syntax options:</p>
-  <ul><li><code>.inlineOnlyPreservingWhitespace</code> -- inline markdown only, keeps whitespace as-is (best for single-line UI text)</li><li><code>.full</code> -- full CommonMark parsing including block elements</li></ul>
-  <h3>Handling Parse Failures</h3>
-  <pre><code class="lang-swift">do {
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.10.5.1 &para;2</span> Interpreted syntax options:</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.10.5.1 &para;3</span><ul><li><code>.inlineOnlyPreservingWhitespace</code> -- inline markdown only, keeps whitespace as-is (best for single-line UI text)</li><li><code>.full</code> -- full CommonMark parsing including block elements</li></ul>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.10.5.2</span>&nbsp;&nbsp;Handling Parse Failures</h3>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.10.5.2 &para;1</span><pre><code class="lang-swift">do {
     let attributed = try AttributedString(markdown: rawText)
     Text(attributed)
 } catch {
     Text(rawText) // fall back to plain text
 }</code></pre>
-  <p><strong>Watch out:</strong> The markdown parser is strict. Malformed markdown throws an error rather than rendering partially. Always have a fallback.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.10.5.2 &para;2</span> <strong>Watch out:</strong> The markdown parser is strict. Malformed markdown throws an error rather than rendering partially. Always have a fallback.</p>
   <hr>
-  <h2>Custom Attributes</h2>
-  <p>You can define your own attributes for domain-specific styling.</p>
-  <h3>Define the Attribute</h3>
-  <pre><code class="lang-swift">enum HighlightAttribute: CodableAttributedStringKey {
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.10.6</span>&nbsp;&nbsp;Custom Attributes</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.10.6 &para;1</span> You can define your own attributes for domain-specific styling.</p>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.10.6.1</span>&nbsp;&nbsp;Define the Attribute</h3>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.10.6.1 &para;1</span><pre><code class="lang-swift">enum HighlightAttribute: CodableAttributedStringKey {
     typealias Value = Bool
     static let name = "highlight"
 }
@@ -164,12 +164,12 @@ extension AttributeScopes {
 
     var app: AppAttributes.Type { AppAttributes.self }
 }</code></pre>
-  <h3>Use the Custom Attribute</h3>
-  <pre><code class="lang-swift">var str = AttributedString("Important note")
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.10.6.2</span>&nbsp;&nbsp;Use the Custom Attribute</h3>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.10.6.2 &para;1</span><pre><code class="lang-swift">var str = AttributedString("Important note")
 str.highlight = true</code></pre>
-  <h3>Render with Custom Styling</h3>
-  <p>Custom attributes do not auto-style in <code>Text</code>. You walk the runs and apply SwiftUI attributes based on your custom ones:</p>
-  <pre><code class="lang-swift">func styled(_ source: AttributedString) -&gt; AttributedString {
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.10.6.3</span>&nbsp;&nbsp;Render with Custom Styling</h3>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.10.6.3 &para;1</span> Custom attributes do not auto-style in <code>Text</code>. You walk the runs and apply SwiftUI attributes based on your custom ones:</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.10.6.3 &para;2</span><pre><code class="lang-swift">func styled(_ source: AttributedString) -&gt; AttributedString {
     var result = source
     for run in result.runs {
         if run.highlight == true {
@@ -179,34 +179,34 @@ str.highlight = true</code></pre>
     }
     return result
 }</code></pre>
-  <h3>Walking Runs</h3>
-  <p><code>AttributedString.runs</code> gives you each contiguous range of uniform attributes:</p>
-  <pre><code class="lang-swift">for run in attributed.runs {
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.10.6.4</span>&nbsp;&nbsp;Walking Runs</h3>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.10.6.4 &para;1</span> <code>AttributedString.runs</code> gives you each contiguous range of uniform attributes:</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.10.6.4 &para;2</span><pre><code class="lang-swift">for run in attributed.runs {
     print("Text: \(attributed[run.range].characters)")
     print("Font: \(run.font ?? .body)")
     print("---")
 }</code></pre>
   <hr>
-  <h2>NSAttributedString Bridging</h2>
-  <p>When you need to work with UIKit APIs or older code:</p>
-  <h3>AttributedString to NSAttributedString</h3>
-  <pre><code class="lang-swift">let modern = AttributedString("Hello")
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.10.7</span>&nbsp;&nbsp;NSAttributedString Bridging</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.10.7 &para;1</span> When you need to work with UIKit APIs or older code:</p>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.10.7.1</span>&nbsp;&nbsp;AttributedString to NSAttributedString</h3>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.10.7.1 &para;1</span><pre><code class="lang-swift">let modern = AttributedString("Hello")
 let legacy = NSAttributedString(modern)</code></pre>
-  <h3>NSAttributedString to AttributedString</h3>
-  <pre><code class="lang-swift">let legacy = NSAttributedString(string: "Hello", attributes: [
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.10.7.2</span>&nbsp;&nbsp;NSAttributedString to AttributedString</h3>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.10.7.2 &para;1</span><pre><code class="lang-swift">let legacy = NSAttributedString(string: "Hello", attributes: [
     .foregroundColor: UIColor.red,
     .font: UIFont.boldSystemFont(ofSize: 18)
 ])
 
 let modern = AttributedString(legacy)
 Text(modern)</code></pre>
-  <p><strong>Watch out:</strong> Not all <code>NSAttributedString</code> attributes have <code>AttributedString</code> equivalents. UIKit-specific attributes like <code>.paragraphStyle</code> may not translate cleanly. Test the conversion.</p>
-  <h3>When You Still Need NSAttributedString</h3>
-  <ul><li>Core Text rendering</li><li>UIKit text views wrapped in <code>UIViewRepresentable</code></li><li>Specific paragraph style control (line height, alignment, tab stops) not yet in <code>AttributedString</code></li></ul>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.10.7.2 &para;2</span> <strong>Watch out:</strong> Not all <code>NSAttributedString</code> attributes have <code>AttributedString</code> equivalents. UIKit-specific attributes like <code>.paragraphStyle</code> may not translate cleanly. Test the conversion.</p>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.10.7.3</span>&nbsp;&nbsp;When You Still Need NSAttributedString</h3>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.10.7.3 &para;1</span><ul><li>Core Text rendering</li><li>UIKit text views wrapped in <code>UIViewRepresentable</code></li><li>Specific paragraph style control (line height, alignment, tab stops) not yet in <code>AttributedString</code></li></ul>
   <hr>
-  <h2>Practical Patterns</h2>
-  <h3>Rich Text Display</h3>
-  <pre><code class="lang-swift">struct RichTextView: View {
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.10.8</span>&nbsp;&nbsp;Practical Patterns</h2>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.10.8.1</span>&nbsp;&nbsp;Rich Text Display</h3>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.10.8.1 &para;1</span><pre><code class="lang-swift">struct RichTextView: View {
     let markdown: String
 
     var body: some View {
@@ -220,8 +220,8 @@ Text(modern)</code></pre>
         }
     }
 }</code></pre>
-  <h3>Notes Editor with Word Count</h3>
-  <pre><code class="lang-swift">struct NotesEditor: View {
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.10.8.2</span>&nbsp;&nbsp;Notes Editor with Word Count</h3>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.10.8.2 &para;1</span><pre><code class="lang-swift">struct NotesEditor: View {
     @Binding var text: String
     @State private var wordCount = 0
     @State private var showFind = false
@@ -253,8 +253,8 @@ Text(modern)</code></pre>
         }
     }
 }</code></pre>
-  <h3>Highlightable Log Viewer</h3>
-  <pre><code class="lang-swift">func highlightErrors(in log: String) -&gt; AttributedString {
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.10.8.3</span>&nbsp;&nbsp;Highlightable Log Viewer</h3>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.10.8.3 &para;1</span><pre><code class="lang-swift">func highlightErrors(in log: String) -&gt; AttributedString {
     var result = AttributedString(log)
 
     let lines = log.components(separatedBy: "\n")
@@ -284,8 +284,8 @@ Text(modern)</code></pre>
     return result
 }</code></pre>
   <hr>
-  <h2>Quick Reference</h2>
-  <table>
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.10.9</span>&nbsp;&nbsp;Quick Reference</h2>
+  <span class="onum onum-float" style="color:#8a7300;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;display:block;margin:.6em 0 .1em">Table 10.2</span><table>
   <thead><tr><th>What</th><th>How</th><th></th></tr></thead>
   <tbody>
   <tr><td>Multi-line input</td><td><code>TextEditor(text: $binding)</code></td><td></td></tr>
@@ -299,9 +299,9 @@ Text(modern)</code></pre>
   </tbody>
   </table>
   <hr>
-  <h2>Further Reading &mdash; WWDC Sessions</h2>
-  <p>This book is a passive resource. When you want deeper coverage of <code>TextEditor</code> and <code>AttributedString</code>, the WWDC sessions below are Apple's source material.</p>
-  <ul>
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.10.10</span>&nbsp;&nbsp;Further Reading &mdash; WWDC Sessions</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.10.10 &para;1</span> This book is a passive resource. When you want deeper coverage of <code>TextEditor</code> and <code>AttributedString</code>, the WWDC sessions below are Apple's source material.</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.10.10 &para;2</span><ul>
     <li>WWDC25 / 280, <em>Code-along: Cook up a rich text experience in SwiftUI with AttributedString</em> &mdash; <a href="https://developer.apple.com/videos/play/wwdc2025/280/">developer.apple.com/videos/play/wwdc2025/280/</a>. End-to-end walkthrough of a SwiftUI rich-text editor.</li>
     <li>WWDC25 / 285, <em>Meet PaperKit</em> &mdash; <a href="https://developer.apple.com/videos/play/wwdc2025/285/">developer.apple.com/videos/play/wwdc2025/285/</a>. Annotation layer over text and image surfaces &mdash; a natural fit on top of <code>TextEditor</code>.</li>
     <li>WWDC25 / 265, <em>Dive deeper into Writing Tools</em> &mdash; <a href="https://developer.apple.com/videos/play/wwdc2025/265/">developer.apple.com/videos/play/wwdc2025/265/</a>. The system rewrite / summarize / proofread surfaces that appear automatically inside <code>TextEditor</code>.</li>

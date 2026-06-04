@@ -9,13 +9,13 @@
 
 <div class="content">
 
-  <h1>Book 11: FileManager and Documents</h1>
-  <h2>Live Reference: Snap &amp; ScanKeeper + Claudes X26 Swift6 Bible</h2>
+  <h1><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.11</span>&nbsp;&nbsp;Book 11: FileManager and Documents</h1>
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.11.1</span>&nbsp;&nbsp;Live Reference: Snap &amp; ScanKeeper + Claudes X26 Swift6 Bible</h2>
   <div class="scope-note"><strong>Snap &amp; ScanKeeper</strong> uses <code>FileManager</code> to organize scanned documents &mdash; folders, file moves, file deletes, file enumeration. Photos save to the user's Photos library; document scans save into the app's own folder hierarchy via FileManager calls. Source: <a href="https://github.com/fluhartyml/Snap-ScanKeeper">github.com/fluhartyml/Snap-ScanKeeper</a>. See Source Tour 20. <strong>Claudes X26 Swift6 Bible</strong> uses <code>FileManager</code> to extract <code>BibleContent.bundle</code> from the app target into Application Support on first launch &mdash; a complete on-device extract-from-bundle pattern in <code>VaultBundleExtractor.swift</code>. The bundle has a flat layout in the binary; the extractor sorts each file into its proper subfolder (Books to <code>Part-N/</code>, Build-Alongs to <code>Part-VII-Dedicated-Build-Alongs/{folder}/</code>, etc.) using a <code>targetPath(forFlat:)</code> routing function. Source: <a href="https://github.com/fluhartyml/Claudes-X26-Swift6-Bible">github.com/fluhartyml/Claudes-X26-Swift6-Bible</a>. See Build-Along 00.</div>
-  <h2>FileManager Basics</h2>
-  <p><code>FileManager.default</code> is your entry point for all file system operations. It is a singleton -- use <code>FileManager.default</code> everywhere.</p>
-  <h3>Key Directories</h3>
-  <pre><code class="lang-swift">let fm = FileManager.default
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.11.2</span>&nbsp;&nbsp;FileManager Basics</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.11.2 &para;1</span> <code>FileManager.default</code> is your entry point for all file system operations. It is a singleton -- use <code>FileManager.default</code> everywhere.</p>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.11.2.1</span>&nbsp;&nbsp;Key Directories</h3>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.11.2.1 &para;1</span><pre><code class="lang-swift">let fm = FileManager.default
 
 // App's Documents directory (user-visible, backed up to iCloud)
 let docs = fm.urls(for: .documentDirectory, in: .userDomainMask).first!
@@ -28,41 +28,41 @@ let appSupport = fm.urls(for: .applicationSupportDirectory, in: .userDomainMask)
 
 // Temporary directory (purged regularly)
 let tmp = fm.temporaryDirectory</code></pre>
-  <h3>The App Sandbox</h3>
-  <p>Every iOS/iPadOS/macOS sandboxed app gets its own container. Your app can only read/write inside its own sandbox without explicit user permission.</p>
-  <p>The sandbox contains:</p>
-  <ul><li><strong>Documents/</strong> -- User-facing files. Backed up. Visible in Files app if you set <code>UIFileSharingEnabled</code> and <code>LSSupportsOpeningDocumentsInPlace</code> in Info.plist.</li><li><strong>Library/Application Support/</strong> -- App data the user doesn't need to see. Backed up.</li><li><strong>Library/Caches/</strong> -- Recreatable data. Not backed up. System can purge.</li><li><strong>tmp/</strong> -- Scratch space. Not backed up. Purged between launches.</li></ul>
-  <p><strong>Watch out:</strong> On macOS, non-sandboxed apps can access the full filesystem. But App Store apps must be sandboxed. Always code for the sandbox.</p>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.11.2.2</span>&nbsp;&nbsp;The App Sandbox</h3>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.11.2.2 &para;1</span> Every iOS/iPadOS/macOS sandboxed app gets its own container. Your app can only read/write inside its own sandbox without explicit user permission.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.11.2.2 &para;2</span> The sandbox contains:</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.11.2.2 &para;3</span><ul><li><strong>Documents/</strong> -- User-facing files. Backed up. Visible in Files app if you set <code>UIFileSharingEnabled</code> and <code>LSSupportsOpeningDocumentsInPlace</code> in Info.plist.</li><li><strong>Library/Application Support/</strong> -- App data the user doesn't need to see. Backed up.</li><li><strong>Library/Caches/</strong> -- Recreatable data. Not backed up. System can purge.</li><li><strong>tmp/</strong> -- Scratch space. Not backed up. Purged between launches.</li></ul>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.11.2.2 &para;4</span> <strong>Watch out:</strong> On macOS, non-sandboxed apps can access the full filesystem. But App Store apps must be sandboxed. Always code for the sandbox.</p>
   <hr>
-  <h2>Reading and Writing Files</h2>
-  <h3>String I/O</h3>
-  <pre><code class="lang-swift">let fileURL = docs.appendingPathComponent("notes.txt")
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.11.3</span>&nbsp;&nbsp;Reading and Writing Files</h2>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.11.3.1</span>&nbsp;&nbsp;String I/O</h3>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.11.3.1 &para;1</span><pre><code class="lang-swift">let fileURL = docs.appendingPathComponent("notes.txt")
 
 // Write
 try "Hello, file system".write(to: fileURL, atomically: true, encoding: .utf8)
 
 // Read
 let contents = try String(contentsOf: fileURL, encoding: .utf8)</code></pre>
-  <p><code>atomically: true</code> writes to a temp file first, then renames. This prevents corruption if the write is interrupted.</p>
-  <h3>Data I/O</h3>
-  <pre><code class="lang-swift">let dataURL = docs.appendingPathComponent("photo.jpg")
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.11.3.1 &para;2</span> <code>atomically: true</code> writes to a temp file first, then renames. This prevents corruption if the write is interrupted.</p>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.11.3.2</span>&nbsp;&nbsp;Data I/O</h3>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.11.3.2 &para;1</span><pre><code class="lang-swift">let dataURL = docs.appendingPathComponent("photo.jpg")
 
 // Write
 try imageData.write(to: dataURL)
 
 // Read
 let loaded = try Data(contentsOf: dataURL)</code></pre>
-  <h3>Check If a File Exists</h3>
-  <pre><code class="lang-swift">if fm.fileExists(atPath: fileURL.path) {
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.11.3.3</span>&nbsp;&nbsp;Check If a File Exists</h3>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.11.3.3 &para;1</span><pre><code class="lang-swift">if fm.fileExists(atPath: fileURL.path) {
     // file is there
 }</code></pre>
-  <p><strong>Watch out:</strong> <code>fileExists</code> takes a <code>String</code> path, not a <code>URL</code>. Use <code>.path</code> on the URL. On newer APIs, use <code>.path()</code> for the non-deprecated version.</p>
-  <h3>Create Directories</h3>
-  <pre><code class="lang-swift">let subdir = docs.appendingPathComponent("Exports", isDirectory: true)
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.11.3.3 &para;2</span> <strong>Watch out:</strong> <code>fileExists</code> takes a <code>String</code> path, not a <code>URL</code>. Use <code>.path</code> on the URL. On newer APIs, use <code>.path()</code> for the non-deprecated version.</p>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.11.3.4</span>&nbsp;&nbsp;Create Directories</h3>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.11.3.4 &para;1</span><pre><code class="lang-swift">let subdir = docs.appendingPathComponent("Exports", isDirectory: true)
 try fm.createDirectory(at: subdir, withIntermediateDirectories: true)</code></pre>
-  <p><code>withIntermediateDirectories: true</code> creates parent folders if they don't exist. Like <code>mkdir -p</code>.</p>
-  <h3>Copy, Move, Delete</h3>
-  <pre><code class="lang-swift">// Copy
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.11.3.4 &para;2</span> <code>withIntermediateDirectories: true</code> creates parent folders if they don't exist. Like <code>mkdir -p</code>.</p>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.11.3.5</span>&nbsp;&nbsp;Copy, Move, Delete</h3>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.11.3.5 &para;1</span><pre><code class="lang-swift">// Copy
 try fm.copyItem(at: sourceURL, to: destinationURL)
 
 // Move / Rename
@@ -70,28 +70,28 @@ try fm.moveItem(at: oldURL, to: newURL)
 
 // Delete
 try fm.removeItem(at: fileURL)</code></pre>
-  <p><strong>Watch out:</strong> All of these throw if the destination already exists (for copy/move) or the source doesn't exist (for delete). Wrap in do-catch.</p>
-  <h3>List Directory Contents</h3>
-  <pre><code class="lang-swift">let items = try fm.contentsOfDirectory(at: docs, includingPropertiesForKeys: [.isDirectoryKey])
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.11.3.5 &para;2</span> <strong>Watch out:</strong> All of these throw if the destination already exists (for copy/move) or the source doesn't exist (for delete). Wrap in do-catch.</p>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.11.3.6</span>&nbsp;&nbsp;List Directory Contents</h3>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.11.3.6 &para;1</span><pre><code class="lang-swift">let items = try fm.contentsOfDirectory(at: docs, includingPropertiesForKeys: [.isDirectoryKey])
 for item in items {
     print(item.lastPathComponent)
 }</code></pre>
-  <h3>File Attributes</h3>
-  <pre><code class="lang-swift">let attrs = try fm.attributesOfItem(atPath: fileURL.path)
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.11.3.7</span>&nbsp;&nbsp;File Attributes</h3>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.11.3.7 &para;1</span><pre><code class="lang-swift">let attrs = try fm.attributesOfItem(atPath: fileURL.path)
 let size = attrs[.size] as? Int64 ?? 0
 let modified = attrs[.modificationDate] as? Date</code></pre>
   <hr>
-  <h2>JSON with Codable</h2>
-  <p>The standard pattern for persisting structured data to disk.</p>
-  <h3>Define Your Model</h3>
-  <pre><code class="lang-swift">struct Project: Codable {
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.11.4</span>&nbsp;&nbsp;JSON with Codable</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.11.4 &para;1</span> The standard pattern for persisting structured data to disk.</p>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.11.4.1</span>&nbsp;&nbsp;Define Your Model</h3>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.11.4.1 &para;1</span><pre><code class="lang-swift">struct Project: Codable {
     var name: String
     var version: String
     var tags: [String]
     var lastModified: Date
 }</code></pre>
-  <h3>Encode to JSON and Save</h3>
-  <pre><code class="lang-swift">let project = Project(name: "Tally Matrix", version: "3.0", tags: ["tvOS"], lastModified: .now)
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.11.4.2</span>&nbsp;&nbsp;Encode to JSON and Save</h3>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.11.4.2 &para;1</span><pre><code class="lang-swift">let project = Project(name: "Tally Matrix", version: "3.0", tags: ["tvOS"], lastModified: .now)
 
 let encoder = JSONEncoder()
 encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
@@ -99,24 +99,24 @@ encoder.dateEncodingStrategy = .iso8601
 
 let data = try encoder.encode(project)
 try data.write(to: docs.appendingPathComponent("project.json"))</code></pre>
-  <h3>Load and Decode</h3>
-  <pre><code class="lang-swift">let url = docs.appendingPathComponent("project.json")
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.11.4.3</span>&nbsp;&nbsp;Load and Decode</h3>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.11.4.3 &para;1</span><pre><code class="lang-swift">let url = docs.appendingPathComponent("project.json")
 let data = try Data(contentsOf: url)
 
 let decoder = JSONDecoder()
 decoder.dateDecodingStrategy = .iso8601
 
 let project = try decoder.decode(Project.self, from: data)</code></pre>
-  <h3>Common Encoding/Decoding Strategies</h3>
-  <pre><code class="lang-swift">// Dates
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.11.4.4</span>&nbsp;&nbsp;Common Encoding/Decoding Strategies</h3>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.11.4.4 &para;1</span><pre><code class="lang-swift">// Dates
 encoder.dateEncodingStrategy = .iso8601            // "2026-04-03T12:00:00Z"
 encoder.dateEncodingStrategy = .secondsSince1970   // 1775332800.0
 
 // Keys
 encoder.keyEncodingStrategy = .convertToSnakeCase  // lastModified -&gt; last_modified
 decoder.keyDecodingStrategy = .convertFromSnakeCase</code></pre>
-  <h3>CodingKeys for Custom Mapping</h3>
-  <pre><code class="lang-swift">struct Track: Codable {
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.11.4.5</span>&nbsp;&nbsp;CodingKeys for Custom Mapping</h3>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.11.4.5 &para;1</span><pre><code class="lang-swift">struct Track: Codable {
     var trackName: String
     var artistName: String
     var durationMs: Int
@@ -127,11 +127,11 @@ decoder.keyDecodingStrategy = .convertFromSnakeCase</code></pre>
         case durationMs = "duration_ms"
     }
 }</code></pre>
-  <p><strong>Watch out:</strong> Once you define <code>CodingKeys</code>, you must list every property you want encoded/decoded. Anything left out is excluded.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.11.4.5 &para;2</span> <strong>Watch out:</strong> Once you define <code>CodingKeys</code>, you must list every property you want encoded/decoded. Anything left out is excluded.</p>
   <hr>
-  <h2>PropertyList Encoding</h2>
-  <p>For simpler data that fits the plist format (strings, numbers, dates, booleans, arrays, dictionaries):</p>
-  <pre><code class="lang-swift">let encoder = PropertyListEncoder()
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.11.5</span>&nbsp;&nbsp;PropertyList Encoding</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.11.5 &para;1</span> For simpler data that fits the plist format (strings, numbers, dates, booleans, arrays, dictionaries):</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.11.5 &para;2</span><pre><code class="lang-swift">let encoder = PropertyListEncoder()
 encoder.outputFormat = .xml // or .binary
 
 let data = try encoder.encode(settings)
@@ -139,12 +139,12 @@ try data.write(to: docs.appendingPathComponent("settings.plist"))
 
 let decoder = PropertyListDecoder()
 let loaded = try decoder.decode(Settings.self, from: Data(contentsOf: url))</code></pre>
-  <p>JSON is almost always the better choice. Use plist only when interoperating with Apple APIs that expect it.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.11.5 &para;3</span> JSON is almost always the better choice. Use plist only when interoperating with Apple APIs that expect it.</p>
   <hr>
-  <h2>Security-Scoped Bookmarks</h2>
-  <p>When the user picks a file outside your sandbox (via a file picker), you get temporary access. To keep access across launches, create a bookmark.</p>
-  <h3>Save a Bookmark</h3>
-  <pre><code class="lang-swift">// After user picks a file via fileImporter
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.11.6</span>&nbsp;&nbsp;Security-Scoped Bookmarks</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.11.6 &para;1</span> When the user picks a file outside your sandbox (via a file picker), you get temporary access. To keep access across launches, create a bookmark.</p>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.11.6.1</span>&nbsp;&nbsp;Save a Bookmark</h3>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.11.6.1 &para;1</span><pre><code class="lang-swift">// After user picks a file via fileImporter
 func saveBookmark(for url: URL) throws {
     guard url.startAccessingSecurityScopedResource() else {
         throw FileError.accessDenied
@@ -160,8 +160,8 @@ func saveBookmark(for url: URL) throws {
     // Persist bookmarkData (e.g., in UserDefaults or a file)
     UserDefaults.standard.set(bookmarkData, forKey: "savedFileBookmark")
 }</code></pre>
-  <h3>Resolve a Bookmark</h3>
-  <pre><code class="lang-swift">func resolveBookmark() throws -&gt; URL {
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.11.6.2</span>&nbsp;&nbsp;Resolve a Bookmark</h3>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.11.6.2 &para;1</span><pre><code class="lang-swift">func resolveBookmark() throws -&gt; URL {
     guard let data = UserDefaults.standard.data(forKey: "savedFileBookmark") else {
         throw FileError.noBookmark
     }
@@ -186,11 +186,11 @@ func saveBookmark(for url: URL) throws {
     return url
     // Caller must call url.stopAccessingSecurityScopedResource() when done
 }</code></pre>
-  <p><strong>Watch out:</strong> Always call <code>stopAccessingSecurityScopedResource()</code> when done. The system limits how many security-scoped resources you can access simultaneously.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.11.6.2 &para;2</span> <strong>Watch out:</strong> Always call <code>stopAccessingSecurityScopedResource()</code> when done. The system limits how many security-scoped resources you can access simultaneously.</p>
   <hr>
-  <h2>File Coordination</h2>
-  <p>When multiple processes might access the same file (e.g., your app and an app extension), use <code>NSFileCoordinator</code>:</p>
-  <pre><code class="lang-swift">let coordinator = NSFileCoordinator()
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.11.7</span>&nbsp;&nbsp;File Coordination</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.11.7 &para;1</span> When multiple processes might access the same file (e.g., your app and an app extension), use <code>NSFileCoordinator</code>:</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.11.7 &para;2</span><pre><code class="lang-swift">let coordinator = NSFileCoordinator()
 var error: NSError?
 
 coordinator.coordinate(writingItemAt: fileURL, options: [], error: &amp;error) { url in
@@ -200,17 +200,17 @@ coordinator.coordinate(writingItemAt: fileURL, options: [], error: &amp;error) {
 if let error {
     print("Coordination failed: \(error)")
 }</code></pre>
-  <p>For reading:</p>
-  <pre><code class="lang-swift">coordinator.coordinate(readingItemAt: fileURL, options: [], error: &amp;error) { url in
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.11.7 &para;3</span> For reading:</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.11.7 &para;4</span><pre><code class="lang-swift">coordinator.coordinate(readingItemAt: fileURL, options: [], error: &amp;error) { url in
     if let data = try? Data(contentsOf: url) {
         // use data
     }
 }</code></pre>
-  <p><strong>Watch out:</strong> File coordination is mandatory when using shared containers (App Groups). Without it, you risk data corruption when the app and its widget both write to the same file.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.11.7 &para;5</span> <strong>Watch out:</strong> File coordination is mandatory when using shared containers (App Groups). Without it, you risk data corruption when the app and its widget both write to the same file.</p>
   <hr>
-  <h2>UTType (Uniform Type Identifiers)</h2>
-  <p><code>UTType</code> describes file types. Import <code>UniformTypeIdentifiers</code>:</p>
-  <pre><code class="lang-swift">import UniformTypeIdentifiers
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.11.8</span>&nbsp;&nbsp;UTType (Uniform Type Identifiers)</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.11.8 &para;1</span> <code>UTType</code> describes file types. Import <code>UniformTypeIdentifiers</code>:</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.11.8 &para;2</span><pre><code class="lang-swift">import UniformTypeIdentifiers
 
 let jsonType = UTType.json           // public.json
 let pngType = UTType.png             // public.png
@@ -224,13 +224,13 @@ extension UTType {
 // Check conformance
 let type = UTType(filenameExtension: "txt")
 type?.conforms(to: .plainText) // true</code></pre>
-  <p>Use <code>UTType</code> with file importers/exporters, document types, and drag and drop.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.11.8 &para;3</span> Use <code>UTType</code> with file importers/exporters, document types, and drag and drop.</p>
   <hr>
-  <h2>Document-Based Apps</h2>
-  <p>SwiftUI provides <code>DocumentGroup</code> for apps centered around file documents.</p>
-  <h3>FileDocument Protocol</h3>
-  <p>For value-type documents (structs):</p>
-  <pre><code class="lang-swift">import SwiftUI
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.11.9</span>&nbsp;&nbsp;Document-Based Apps</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.11.9 &para;1</span> SwiftUI provides <code>DocumentGroup</code> for apps centered around file documents.</p>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.11.9.1</span>&nbsp;&nbsp;FileDocument Protocol</h3>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.11.9.1 &para;1</span> For value-type documents (structs):</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.11.9.1 &para;2</span><pre><code class="lang-swift">import SwiftUI
 import UniformTypeIdentifiers
 
 struct MarkdownDocument: FileDocument {
@@ -255,9 +255,9 @@ struct MarkdownDocument: FileDocument {
         return FileWrapper(regularFileWithContents: data)
     }
 }</code></pre>
-  <h3>ReferenceFileDocument</h3>
-  <p>For reference-type documents (classes), use <code>ReferenceFileDocument</code>. This works with <code>@Observable</code> or <code>ObservableObject</code> classes and supports undo:</p>
-  <pre><code class="lang-swift">@Observable
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.11.9.2</span>&nbsp;&nbsp;ReferenceFileDocument</h3>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.11.9.2 &para;1</span> For reference-type documents (classes), use <code>ReferenceFileDocument</code>. This works with <code>@Observable</code> or <code>ObservableObject</code> classes and supports undo:</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.11.9.2 &para;2</span><pre><code class="lang-swift">@Observable
 class ProjectDocument: ReferenceFileDocument {
     static var readableContentTypes: [UTType] { [.json] }
 
@@ -281,8 +281,8 @@ class ProjectDocument: ReferenceFileDocument {
         FileWrapper(regularFileWithContents: snapshot)
     }
 }</code></pre>
-  <h3>DocumentGroup in the App</h3>
-  <pre><code class="lang-swift">@main
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.11.9.3</span>&nbsp;&nbsp;DocumentGroup in the App</h3>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.11.9.3 &para;1</span><pre><code class="lang-swift">@main
 struct MyApp: App {
     var body: some Scene {
         DocumentGroup(newDocument: MarkdownDocument()) { file in
@@ -291,16 +291,16 @@ struct MyApp: App {
         }
     }
 }</code></pre>
-  <p>This gives you:</p>
-  <ul><li>Open/save dialogs</li><li>File browser on iOS</li><li>Recent documents on macOS</li><li>Autosave</li><li>iCloud document sync (if enabled)</li></ul>
-  <h3>Registering Document Types</h3>
-  <p>In your target's Info.plist (or via Xcode's Info tab), declare your document types:</p>
-  <ul><li><strong>Exported Type Identifiers</strong> -- for types your app owns</li><li><strong>Imported Type Identifiers</strong> -- for types defined elsewhere</li><li><strong>Document Types</strong> -- what your app can open</li></ul>
-  <p><strong>Watch out:</strong> If your document type does not appear in the system file picker, your UTType registration is wrong. Double-check the identifier string matches between your <code>UTType</code> extension and your Info.plist.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.11.9.3 &para;2</span> This gives you:</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.11.9.3 &para;3</span><ul><li>Open/save dialogs</li><li>File browser on iOS</li><li>Recent documents on macOS</li><li>Autosave</li><li>iCloud document sync (if enabled)</li></ul>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.11.9.4</span>&nbsp;&nbsp;Registering Document Types</h3>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.11.9.4 &para;1</span> In your target's Info.plist (or via Xcode's Info tab), declare your document types:</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.11.9.4 &para;2</span><ul><li><strong>Exported Type Identifiers</strong> -- for types your app owns</li><li><strong>Imported Type Identifiers</strong> -- for types defined elsewhere</li><li><strong>Document Types</strong> -- what your app can open</li></ul>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.11.9.4 &para;3</span> <strong>Watch out:</strong> If your document type does not appear in the system file picker, your UTType registration is wrong. Double-check the identifier string matches between your <code>UTType</code> extension and your Info.plist.</p>
   <hr>
-  <h2>Practical Patterns</h2>
-  <h3>Safe JSON Persistence Manager</h3>
-  <pre><code class="lang-swift">struct PersistenceManager&lt;T: Codable&gt; {
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.11.10</span>&nbsp;&nbsp;Practical Patterns</h2>
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.11.10.1</span>&nbsp;&nbsp;Safe JSON Persistence Manager</h3>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.11.10.1 &para;1</span><pre><code class="lang-swift">struct PersistenceManager&lt;T: Codable&gt; {
     let fileName: String
 
     private var fileURL: URL {
@@ -335,8 +335,8 @@ struct MyApp: App {
 let manager = PersistenceManager&lt;[Project]&gt;(fileName: "projects.json")
 try manager.save(projects)
 let loaded = try manager.load()</code></pre>
-  <h3>File Importer/Exporter in SwiftUI</h3>
-  <pre><code class="lang-swift">struct ContentView: View {
+  <h3><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.11.10.2</span>&nbsp;&nbsp;File Importer/Exporter in SwiftUI</h3>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.11.10.2 &para;1</span><pre><code class="lang-swift">struct ContentView: View {
     @State private var showImporter = false
     @State private var showExporter = false
     @State private var document = MarkdownDocument(text: "Hello")
@@ -365,10 +365,10 @@ let loaded = try manager.load()</code></pre>
         }
     }
 }</code></pre>
-  <p><strong>Watch out:</strong> Always call <code>startAccessingSecurityScopedResource()</code> on URLs from <code>fileImporter</code>. The URL is security-scoped and won't be readable without it.</p>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.11.10.2 &para;2</span> <strong>Watch out:</strong> Always call <code>startAccessingSecurityScopedResource()</code> on URLs from <code>fileImporter</code>. The URL is security-scoped and won't be readable without it.</p>
   <hr>
-  <h2>Quick Reference</h2>
-  <table>
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.11.11</span>&nbsp;&nbsp;Quick Reference</h2>
+  <span class="onum onum-float" style="color:#8a7300;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;display:block;margin:.6em 0 .1em">Table 11.1</span><table>
   <thead><tr><th>What</th><th>How</th><th></th></tr></thead>
   <tbody>
   <tr><td>Documents directory</td><td><code>FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!</code></td><td></td></tr>
@@ -386,9 +386,9 @@ let loaded = try manager.load()</code></pre>
   </tbody>
   </table>
   <hr>
-  <h2>Further Reading &mdash; WWDC Sessions</h2>
-  <p>This book is a passive resource. When you want deeper coverage of file management or document-based apps, the WWDC sessions below are Apple's source material.</p>
-  <ul>
+  <h2><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.11.12</span>&nbsp;&nbsp;Further Reading &mdash; WWDC Sessions</h2>
+  <p><span class="onum" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em">III.11.12 &para;1</span> This book is a passive resource. When you want deeper coverage of file management or document-based apps, the WWDC sessions below are Apple's source material.</p>
+  <span class="onum onum-block" style="color:#9a9a9a;font-family:ui-monospace,Menlo,monospace;font-size:.72em;font-weight:600;letter-spacing:.02em;display:block;margin:.6em 0 .1em">III.11.12 &para;2</span><ul>
     <li>WWDC25 / 256, <em>What's new in SwiftUI</em> &mdash; <a href="https://developer.apple.com/videos/play/wwdc2025/256/">developer.apple.com/videos/play/wwdc2025/256/</a>. <code>DocumentGroup</code> and file-importer / exporter updates this release.</li>
     <li>WWDC25 / 285, <em>Meet PaperKit</em> &mdash; <a href="https://developer.apple.com/videos/play/wwdc2025/285/">developer.apple.com/videos/play/wwdc2025/285/</a>. Annotation surface that frequently rides on top of documents your app opens.</li>
     <li>WWDC25 / 246, <em>Integrate privacy into your development process</em> &mdash; <a href="https://developer.apple.com/videos/play/wwdc2025/246/">developer.apple.com/videos/play/wwdc2025/246/</a>. Privacy expectations around file pickers, security-scoped URLs, and user-mediated access.</li>
